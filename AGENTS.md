@@ -39,3 +39,4 @@ Each card in `index.html` must follow the aesthetic established by `gibush.html`
 | `gibush.html` | `/pages/gibush.html` | 101 פעילויות גיבוש והיכרות | פעילויות וגיבוש |
 | `safesurf.html` | `/pages/safesurf.html` | רולטת מוגנות וגלישה בטוחה ברשת | מוגנות ורשת |
 | `waze.html` | `/pages/waze.html` | Class Waze - ניווט וניהול חכם בכיתה | חינוך והוראה |
+| `schedule.html` | `/pages/schedule.html` | מחולל לו״ז יומי מעוצב | חינוך והוראה |
