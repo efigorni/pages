@@ -1,0 +1,41 @@
+# Guidelines for AI Agents Working on this Repository
+
+## Repository Overview
+This repository (`efigorni/pages`) hosts standalone, single-file HTML web applications, educational tools, games, and activity hubs deployed automatically via **GitHub Pages**:
+🔗 **Live Base URL**: `https://efigorni.github.io/pages/`
+
+---
+
+## 🚨 MANDATORY INSTRUCTIONS
+
+### 1. Always Update `index.html` When Adding / Modifying Pages
+Whenever you create, import, rename, or delete an HTML page:
+- **YOU MUST update `index.html`** to add or update a card linking to the new page.
+- Every page in this repository **must** have a corresponding card in the `index.html` directory grid.
+
+### 2. Card Design Standard in `index.html`
+Each card in `index.html` must follow the aesthetic established by `gibush.html`:
+- **Direction / Language**: Hebrew RTL (`dir="rtl"`, `lang="he"`).
+- **Fonts**: `Secular One` (display / titles), `Assistant` (body).
+- **Card Structure**:
+  - `motif`: Decorative colored abstract SVG in top corner.
+  - `card-cat`: Category tag with colored indicator dot (e.g., חינוך והוראה, פעילויות חברתיות, מוגנות ברשת, כלי עזר).
+  - `card-t`: Bold, clear Hebrew title in Secular One.
+  - `card-s`: 1-2 sentences explaining what the page does.
+  - `card-f`: Footer with tag / badges and a "פתח אפליקציה &larr;" button/arrow link.
+  - Choose a unique theme color per card (e.g., `--teal`, `--purple`, `--orange`, `--moss`, `--blue`, `--rose`).
+
+### 3. File Architecture & Best Practices
+- **Standalone Files**: All web applications should preferably be standalone, self-contained HTML files containing all their inline CSS and JavaScript (or using standard reliable CDNs) so they work seamlessly on GitHub Pages.
+- **RTL & Mobile Responsive**: Ensure all pages work well on mobile, tablet, and desktop screens with proper Hebrew RTL support (`<html lang="he" dir="rtl">`).
+- **Clean Naming**: Use clean, descriptive lowercase filenames (e.g., `waze.html`, `safesurf.html`, `gibush.html`).
+
+---
+
+## Current Pages Catalog
+
+| File | URL | Description | Category |
+| :--- | :--- | :--- | :--- |
+| `gibush.html` | `/pages/gibush.html` | 101 פעילויות גיבוש והיכרות | פעילויות וגיבוש |
+| `safesurf.html` | `/pages/safesurf.html` | רולטת מוגנות וגלישה בטוחה ברשת | מוגנות ורשת |
+| `waze.html` | `/pages/waze.html` | Class Waze - ניווט וניהול חכם בכיתה | חינוך והוראה |
