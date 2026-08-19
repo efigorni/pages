@@ -609,9 +609,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
       opacity: 0;
       visibility: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       transition: opacity .25s var(--ease), visibility .25s;
     }
     .modal-backdrop.open {
@@ -625,28 +627,31 @@
       width: 100%;
       max-width: 720px;
       max-height: 90vh;
+      max-height: calc(100dvh - 32px);
       display: flex;
       flex-direction: column;
       box-shadow: var(--shadow-float);
       transform: scale(0.96) translateY(10px);
       transition: transform .25s var(--ease);
       overflow: hidden;
+      margin: auto;
     }
     .modal-backdrop.open .modal-card {
       transform: scale(1) translateY(0);
     }
 
     .modal-head {
-      padding: 24px 28px 18px;
+      padding: 20px 24px 16px;
       border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: #faf8f5;
+      flex-shrink: 0;
     }
     .modal-title {
       font-family: var(--display);
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 400;
       color: var(--ink);
       margin: 0;
@@ -655,8 +660,8 @@
       gap: 10px;
     }
     .modal-close {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -676,51 +681,68 @@
     }
 
     .modal-body {
-      padding: 24px 28px;
+      padding: 20px 24px 36px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      flex: 1 1 auto;
+      min-height: 0;
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 20px;
     }
+    .modal-body::-webkit-scrollbar { width: 6px; }
+    .modal-body::-webkit-scrollbar-track { background: transparent; }
+    .modal-body::-webkit-scrollbar-thumb { background: #d3cdc4; border-radius: 4px; }
+    .modal-body::-webkit-scrollbar-thumb:hover { background: #b8b0a5; }
 
     /* Steps grid */
+    .steps-section-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+      margin: 0 0 -6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     .steps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
     }
     .step-item {
       background: var(--ground);
       border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 14px;
+      padding: 14px;
       display: flex;
-      gap: 14px;
+      gap: 12px;
       align-items: flex-start;
     }
     .step-num {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: var(--teal-deep);
       color: #fff;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 13.5px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(63,143,141,.3);
+      box-shadow: 0 2px 6px rgba(63,143,141,.25);
     }
     .step-text h4 {
-      margin: 0 0 4px;
-      font-size: 15px;
+      margin: 0 0 3px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--ink);
     }
     .step-text p {
       margin: 0;
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--ink-2);
       line-height: 1.45;
     }
@@ -732,15 +754,18 @@
       background: #fdfdfc;
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(63,143,141,.08);
+      flex-shrink: 0;
+      margin-top: 4px;
     }
     .prompt-box-header {
       background: var(--teal-soft);
-      padding: 12px 18px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       border-bottom: 1px solid rgba(63,143,141,.2);
+      flex-wrap: wrap;
     }
     .prompt-box-header span {
       font-weight: 800;
@@ -756,12 +781,13 @@
       gap: 6px;
       background: var(--teal-deep);
       color: #fff;
-      padding: 7px 14px;
+      padding: 7px 15px;
       border-radius: 99px;
       font-size: 13px;
       font-weight: 800;
       box-shadow: 0 2px 8px rgba(63,143,141,.25);
       transition: all .16s var(--ease);
+      cursor: pointer;
     }
     .btn-copy-prompt:hover {
       background: #2e6d6b;
@@ -772,7 +798,7 @@
     .prompt-content {
       padding: 16px 18px;
       font-family: var(--body);
-      font-size: 13.5px;
+      font-size: 13px;
       color: #2b2723;
       line-height: 1.6;
       white-space: pre-wrap;
@@ -782,18 +808,19 @@
     }
 
     .modal-foot {
-      padding: 16px 28px;
+      padding: 14px 24px;
       border-top: 1px solid var(--line);
       display: flex;
       justify-content: flex-end;
       background: #faf8f5;
+      flex-shrink: 0;
     }
     .btn-modal-done {
       background: var(--ink);
       color: #fff;
-      padding: 9px 24px;
+      padding: 8px 22px;
       border-radius: 99px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       transition: background .16s;
     }
@@ -851,9 +878,20 @@
       .header-in { padding: 18px 16px; }
       main { padding: 20px 16px 60px; }
       .control-card { padding: 18px 16px; }
-      .modal-card { max-height: 96vh; }
-      .modal-head { padding: 18px 20px; }
-      .modal-body { padding: 18px 20px; }
+      .modal-backdrop { padding: 8px; align-items: flex-start; }
+      .modal-card { max-height: calc(100dvh - 16px); border-radius: 18px; margin: 4px auto; }
+      .modal-head { padding: 14px 16px; }
+      .modal-title { font-size: 17px; }
+      .modal-body { padding: 14px 16px 18px; gap: 14px; }
+      .modal-foot { padding: 10px 16px; }
+      .prompt-box-header { padding: 10px 12px; }
+      .prompt-content { max-height: 150px; font-size: 12px; padding: 10px 12px; }
+      .steps-grid { grid-template-columns: 1fr; gap: 8px; }
+      .step-item { padding: 10px 12px; gap: 10px; }
+      .step-num { width: 24px; height: 24px; font-size: 11.5px; }
+      .step-text h4 { font-size: 13px; }
+      .step-text p { font-size: 11.5px; }
+      .btn-copy-prompt { padding: 6px 12px; font-size: 12px; }
       .btn-secondary-row { grid-template-columns: 1fr; }
       #scheduleContainer {
         padding: 24px 16px 20px;
@@ -1077,21 +1115,24 @@
 
       <div class="modal-body">
         
-        <!-- Step by step instructions for normal users -->
+        <!-- Step by step instructions for users -->
+        <div class="steps-section-title">
+          <span>ℹ️</span> איך זה עובד ב-4 צעדים פשוטים?
+        </div>
         <div class="steps-grid">
           <div class="step-item">
             <div class="step-num">1</div>
             <div class="step-text">
-              <h4>פתחו את ה-AI המועדף עליכם</h4>
-              <p>היכנסו ל-ChatGPT, Google Gemini, Claude או Copilot בדפדפן או באפליקציה.</p>
+              <h4>פתחו צ'אט AI</h4>
+              <p>היכנסו ל-ChatGPT, Gemini, Claude או Copilot.</p>
             </div>
           </div>
 
           <div class="step-item">
             <div class="step-num">2</div>
             <div class="step-text">
-              <h4>צרפו את הלו״ז בכל צורה</h4>
-              <p>העלו צילום מסך, תמונה מודפסת, קובץ Excel / Word, הודעת וואטסאפ או סתם טקסט חופשי.</p>
+              <h4>צרפו את הלו״ז</h4>
+              <p>העלו צילום מסך, תמונה, אקסל או טקסט.</p>
             </div>
           </div>
 
@@ -1099,15 +1140,15 @@
             <div class="step-num">3</div>
             <div class="step-text">
               <h4>הדביקו את הפרומפט</h4>
-              <p>העתיקו את ההנחיות המוכנות מלמטה והדביקו אותן בצ'אט יחד עם הקובץ/תמונה.</p>
+              <p>העתיקו את הפרומפט מלמטה והדביקו בצ'אט.</p>
             </div>
           </div>
 
           <div class="step-item">
             <div class="step-num">4</div>
             <div class="step-text">
-              <h4>הדביקו כאן והורידו תמונה!</h4>
-              <p>העתיקו את קוד ה-JSON שהתקבל, לחצו על "הדבק מהלוח", והלו״ז המעוצב שלכם מוכן מיד.</p>
+              <h4>הדביקו כאן ויש תמונה!</h4>
+              <p>העתיקו את ה-JSON שהתקבל ולחצו "הדבק מהלוח".</p>
             </div>
           </div>
         </div>
@@ -1115,7 +1156,7 @@
         <!-- AI Prompt Box with 1-click Copy -->
         <div class="prompt-box">
           <div class="prompt-box-header">
-            <span>📋 הפרומפט המדויק להעתקה לצ'אט:</span>
+            <span>📋 הפרומפט להעתקה לצ'אט של ה-AI:</span>
             <button class="btn-copy-prompt" id="copyPromptBtn">
               <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               העתק פרומפט בלחיצה
