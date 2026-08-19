@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רולטה מוגנות ברשת</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Rubik', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fcfcfc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+        h1 {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            color: #7f8c8d;
+            text-align: center;
+            font-size: 42px;
+            font-weight: 700;
+        }
+        .instructions {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 20px 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border: 2px solid #eef2f5;
+            max-width: 600px;
+            width: 90%;
+            text-align: right;
+        }
+        .instructions strong {
+            color: #2c3e50;
+            font-size: 22px;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .instructions ul {
+            margin: 0;
+            padding-right: 25px;
+            color: #55606f;
+            font-size: 19px;
+            line-height: 1.6;
+            list-style-type: square;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        .start-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #5bb39a;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        .wheel-container {
+            position: relative;
+            width: 650px;
+            height: 650px;
+            margin-bottom: 40px;
+            max-width: 90vw;
+            max-height: 90vw;
+        }
+        .pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            margin-left: -20px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 45px solid #7f8c8d;
+            z-index: 10;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 8px solid #ffffff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        .wheel::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            background: #ffffff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1), 0 0 10px rgba(0,0,0,0.2);
+            z-index: 5;
+        }
+        .slice-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 300px;
+            transform-origin: 0% 50%;
+            margin-top: -40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-right: 15px;
+            padding-left: 55px;
+            box-sizing: border-box;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 17px;
+            line-height: 1.25;
+            direction: rtl;
+            z-index: 2;
+        }
+        
+        /* Mobile responsive adjustments */
+        @media (max-width: 750px) {
+            .wheel-container {
+                width: 350px;
+                height: 350px;
+            }
+            .slice-text {
+                width: 165px !important;
+                font-size: 11px !important;
+                padding-right: 10px !important;
+                padding-left: 25px !important;
+                margin-top: -30px !important;
+                height: 60px !important;
+            }
+            .wheel::after {
+                width: 50px;
+                height: 50px;
+            }
+            .instructions ul { font-size: 16px; }
+            .start-text { font-size: 24px; }
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        button {
+            color: #2c3e50;
+            font-family: 'Rubik', sans-serif;
+            border: none;
+            padding: 15px 40px;
+            font-size: 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+        #spinBtn {
+            background-color: #a8d5e2;
+            box-shadow: 0 6px 15px rgba(168, 213, 226, 0.5);
+        }
+        #spinBtn:hover {
+            background-color: #92c9d8;
+            transform: translateY(-2px);
+        }
+        #stopBtn {
+            background-color: #f9d5e5;
+            box-shadow: 0 6px 15px rgba(249, 213, 229, 0.5);
+            display: none;
+        }
+        #stopBtn:hover {
+            background-color: #f2c2d6;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(2px);
+        }
+        button:disabled {
+            background-color: #dcdde1;
+            color: #718093;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Modal for displaying the big result */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            background: white;
+            padding: 60px;
+            border-radius: 30px;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border: 4px solid #f0f4f8;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        #modal-text {
+            font-size: 46px;
+            color: #2c3e50;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 40px;
+        }
+        @media (max-width: 600px) {
+            #modal-text { font-size: 32px; }
+            .modal-content { padding: 40px 20px; }
+        }
+        .close-btn {
+            background-color: #a8d5e2;
+            color: #2c3e50;
+            padding: 12px 40px;
+            font-size: 22px;
+            margin: 0;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(168, 213, 226, 0.5);
+            transition: all 0.2s;
+        }
+        .close-btn:hover {
+            background-color: #92c9d8;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>רולטה מוגנות ברשת</h1>
+
+    <div class="instructions">
+        <strong>הוראות:</strong>
+        <ul>
+            <li>לחץ/י על "סובב את הרולטה" להתחלה.</li>
+            <li>לחץ/י על "עצור" כדי לעצור את הגלגל.</li>
+            <li>כאשר הגלגל נעצר תקריא את המשפט שנבחר.</li>
+            <li>בחר עמדה: מסכים/ה, לא מסכים/ה או מתלבט/ת.</li>
+        </ul>
+    </div>
+
+    <div class="start-text">יאללה מתחילים!</div>
+
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel"></div>
+    </div>
+
+    <div class="controls">
+        <button id="spinBtn">סובב את הרולטה</button>
+        <button id="stopBtn">עצור</button>
+    </div>
+
+    <!-- Modal for Result -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <div id="modal-text">המשפט יופיע כאן</div>
+            <button class="close-btn" onclick="closeModal()">המשך לפעילות</button>
+        </div>
+    </div>
+
+    <script>
+        const sentences = [
+            "מפרסמים תמונות של אחרים גם ללא הסכמתם.",
+            "נפגשים פנים אל פנים רק עם אנשים שמכירים.",
+            "משתתפים באתגרי רשת.",
+            "אנחנו מכירים את חוק הסרטונים.",
+            "בזמן מפגש חברתי שמים את הטלפון בצד ומקדישים זמן לאדם שפגשנו.",
+            "כשקונים ברשת יש סכנות, ולכן עדיף להימנע מכך.",
+            "אם מישהו מעליב אותי ברשת, אני מיד מגיב/ה.",
+            "אם קורה לי משהו לא נעים ברשת, יש לי למי לפנות לעזרה.",
+            "כל מי שמציג את עצמו בפניי הוא באמת האדם שהוא מציג.",
+            "הרשת היא מקום בטוח.",
+            "אין דבר כזה בריונות ברשת.",
+            "ההורים שלי יודעים לאן אני גולש/ת.",
+            "אני מציב/ה לעצמי גבולות ברשת."
+        ];
+
+        const colors = [
+            '#ffb3ba', '#ffdfba', '#ffffba', '#baffc9', 
+            '#bae1ff', '#e8bafc', '#fbd4e6', '#f5e6cc', 
+            '#d4f0f0', '#e5e8b6', '#ffd1d1', '#d4e2d4', 
+            '#e6cbf3'
+        ];
+
+        const numSlices = sentences.length;
+        const sliceAngle = 360 / numSlices;
+        const wheel = document.getElementById('wheel');
+        const spinBtn = document.getElementById('spinBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const modal = document.getElementById('resultModal');
+        const modalText = document.getElementById('modal-text');
+
+        // Build wheel background
+        let gradientParts = [];
+        for (let i = 0; i < numSlices; i++) {
+            let start = i * sliceAngle;
+            let end = (i + 1) * sliceAngle;
+            gradientParts.push(colors[i % colors.length] + ' ' + start + 'deg ' + end + 'deg');
+        }
+        wheel.style.background = 'conic-gradient(from 90deg, ' + gradientParts.join(', ') + ')';
+
+        // Build wheel text
+        for (let i = 0; i < numSlices; i++) {
+            let div = document.createElement('div');
+            div.className = 'slice-text';
+            div.innerText = sentences[i];
+            let angle = (i * sliceAngle) + (sliceAngle / 2);
+            div.style.transform = 'rotate(' + angle + 'deg)';
+            wheel.appendChild(div);
+        }
+
+        let currentRotation = 0;
+        let animationFrameId = null;
+        let isSpinning = false;
+        let isStopping = false;
+
+        // Variables for smooth stopping
+        let stopStartTime = null;
+        let stopStartRotation = 0;
+        let targetRotation = 0;
+        const slowDownDuration = 3000;
+
+        function animateContinuousSpin() {
+            if (!isStopping) {
+                currentRotation += 12; // Constant speed
+                wheel.style.transform = 'rotate(' + currentRotation + 'deg)';
+                animationFrameId = requestAnimationFrame(animateContinuousSpin);
+            }
+        }
+
+        function animateStop(currentTime) {
+            if (!stopStartTime) stopStartTime = currentTime;
+            let elapsed = currentTime - stopStartTime;
+            let progress = elapsed / slowDownDuration;
+
+            if (progress < 1) {
+                // Ease-out cubic formula
+                let easeOut = 1 - Math.pow(1 - progress, 3);
+                currentRotation = stopStartRotation + ((targetRotation - stopStartRotation) * easeOut);
+                wheel.style.transform = 'rotate(' + currentRotation + 'deg)';
+                animationFrameId = requestAnimationFrame(animateStop);
+            } else {
+                currentRotation = targetRotation;
+                wheel.style.transform = 'rotate(' + currentRotation + 'deg)';
+                isSpinning = false;
+                isStopping = false;
+                
+                spinBtn.style.display = 'inline-block';
+                stopBtn.style.display = 'none';
+
+                determineWinner();
+            }
+        }
+
+        function startSpin() {
+            if (isSpinning) return;
+            
+            isSpinning = true;
+            spinBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+            
+            animationFrameId = requestAnimationFrame(animateContinuousSpin);
+        }
+
+        function stopSpin() {
+            if (!isSpinning || isStopping) return;
+            isStopping = true;
+            stopBtn.disabled = true; // Prevent multiple clicks
+            
+            // Calculate a target rotation for a smooth stop
+            stopStartRotation = currentRotation;
+            
+            // Pick a random final winning index
+            let winningIndex = Math.floor(Math.random() * numSlices);
+            let sliceCenterAngle = (winningIndex * sliceAngle) + (sliceAngle / 2);
+            
+            let fullSpins = 360 * 3; // Spin a few more times before stopping
+            let currentMod = currentRotation % 360;
+            let targetMod = (270 - sliceCenterAngle + 360) % 360;
+            let extraRotation = (targetMod - currentMod + 360) % 360;
+            
+            targetRotation = currentRotation + fullSpins + extraRotation;
+            stopStartTime = null; // Reset for animation
+
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = requestAnimationFrame(animateStop);
+        }
+
+        function determineWinner() {
+            let normalizedRotation = currentRotation % 360;
+            let pointerAngle = (270 - normalizedRotation + 360) % 360;
+            let winningIndex = Math.floor(pointerAngle / sliceAngle);
+            
+            modalText.innerText = sentences[winningIndex];
+            modal.style.display = 'flex';
+            stopBtn.disabled = false; // Re-enable for next round
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        spinBtn.addEventListener('click', startSpin);
+        stopBtn.addEventListener('click', stopSpin);
+    </script>
+</body>
+</html>
