@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Waze - ניווט חכם בכיתה</title>
+    <style>
+        :root {
+            --primary-color: #007bb5;
+            --secondary-color: #e1f5fe;
+            --text-dark: #333;
+            --text-light: #fff;
+            --accent-color: #ff9800;
+            --bg-color: #f4f7f6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: #fff;
+            min-height: 100vh;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        .header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .screen.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #b3e5fc;
+        }
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* סגנון לבחירת אפשרויות */
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option-label:hover {
+            border-color: var(--primary-color);
+            background: #f0f8ff;
+        }
+        .option-label input[type="radio"] {
+            margin-left: 10px;
+            transform: scale(1.2);
+        }
+
+        .question-box {
+            background: #fff3e0;
+            border-right: 4px solid var(--accent-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .question-box h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #e65100;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background 0.3s, transform 0.1s;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: #005f8a;
+        }
+        .btn:active {
+            transform: translateY(2px);
+        }
+        .navigation-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: #fff;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+        .nav-btn {
+            background: #f1f3f4;
+            color: #5f6368;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background: #e8eaed;
+            color: #202124;
+        }
+        .nav-btn.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        .nav-btn.primary:hover {
+            background: #005f8a;
+        }
+        .nav-btn:disabled {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .progress-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ccc;
+            transition: 0.3s;
+        }
+        .step-dot.active {
+            background: var(--primary-color);
+            transform: scale(1.2);
+        }
+        
+        .summary-box {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .summary-box h4 {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <h1>🚗 Class Waze</h1>
+        <p>ניווט חכם בכיתה. מורה בטוח. תלמידים בדרך.</p>
+    </div>
+
+    <div class="content">
+        <!-- מסך פתיחה -->
+        <div class="screen active" id="screen-0">
+            <div style="text-align: center; font-size: 80px; margin: 20px 0;">🗺️</div>
+            <h2 style="text-align: center; color: var(--primary-color);">ברוכים הבאים למנוע הניווט החינוכי!</h2>
+            <p style="text-align: center; font-size: 16px; line-height: 1.5;">
+                מורה יקר/ה,<br>
+                בכל שלב בניווט תוכל/י לבחור את הגורם לבעיה, לכתוב רפלקציה קצרה, ובסוף המסלול תקבלי הצעות פעולה מעשיות להמשך הדרך.
+            </p>
+            <button class="btn" onclick="nextScreen()">🎯 התחל ניווט חינוכי</button>
+        </div>
+
+        <!-- מסך 1: זיהוי התקלות שבדרך -->
+        <div class="screen" id="screen-1">
+            <div class="progress-container">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+            <h2 style="color: var(--primary-color);">מסך 1: זיהוי התקלות שבדרך</h2>
+            <p>מהו אירוע המשמעת שאיתו אתה מתמודד כעת?</p>
+            
+            <div class="card">
+                <h3>🔍 בחר את גורם ההפרעה המרכזי:</h3>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="cause" value="ארגון"> 📦 ארגון (נהלים לא ברורים, אין סדר)</label>
+                    <label class="option-label"><input type="radio" name="cause" value="אקלים כיתתי"> 💖 אקלים כיתתי (חוסר כבוד, מתחים)</label>
+                    <label class="option-label"><input type="radio" name="cause" value="אירועים חיצוניים"> ⛈️ אירועים חיצוניים (עייפות, בעיות בבית)</label>
+                    <label class="option-label"><input type="radio" name="cause" value="הוראה"> 👨‍🏫 הוראה (קצב מהיר/איטי, הסבר ארוך)</label>
+                    <label class="option-label"><input type="radio" name="cause" value="מוטיבציה"> 🔋 מוטיבציה (שעמום, חוסר חיבור)</label>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h4>🤔 שאלות לבירור עצמי:</h4>
+                <p>האם הגורם שבחרת נמצא בשליטתך כמורה? איך האירוע נראה בפועל?</p>
+                <textarea id="ref1" rows="3" placeholder="כתוב כאן את מחשבותיך..."></textarea>
+            </div>
+        </div>
+
+        <!-- מסך 2: יעד הניווט -->
+        <div class="screen" id="screen-2">
+            <div class="progress-container">
+                <div class="step-dot"></div>
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+            <h2 style="color: var(--primary-color);">מסך 2: יעד הניווט</h2>
+            <p>כשכיתה מרגישה טוב – כולם יכולים ללמוד ולהצליח.</p>
+            
+            <div class="card">
+                <h3>💖 איזה מרכיב באקלים החיובי חסר כעת?</h3>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="climate" value="תמיכה"> 🤝 תמיכה (היעדר תמיכה רגשית/חברתית)</label>
+                    <label class="option-label"><input type="radio" name="climate" value="פתיחות"> 🚪 פתיחות (חוסר מקום לביטוי עצמי או יצירתיות)</label>
+                    <label class="option-label"><input type="radio" name="climate" value="שוויוניות"> ⚖️ שוויוניות (תחושת אפליה או חוסר הוגנות)</label>
+                    <label class="option-label"><input type="radio" name="climate" value="סדר ומנהל"> 📋 סדר ומנהל (חוסר בביטחון ואזור מאורגן)</label>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h4>🤔 שאלות לבירור עצמי:</h4>
+                <p>איך החוסר במרכיב זה הוביל לאירוע המשמעת המדובר?</p>
+                <textarea id="ref2" rows="3" placeholder="כתוב כאן את מחשבותיך..."></textarea>
+            </div>
+        </div>
+
+        <!-- מסך 3: מסלולים קבועים -->
+        <div class="screen" id="screen-3">
+            <div class="progress-container">
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+            <h2 style="color: var(--primary-color);">מסך 3: מסלולים קבועים</h2>
+            <p>שגרות חוסכות זמן ומפחיתות הפרעות.</p>
+            
+            <div class="card">
+                <h3>⏱️ מה המצב של השגרות בכיתה?</h3>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="routine" value="אין שגרה"> ❌ אין שגרה ברורה לסיטואציה הזו</label>
+                    <label class="option-label"><input type="radio" name="routine" value="לא מתורגלת"> 🔄 יש שגרה אך היא לא תורגלה מספיק</label>
+                    <label class="option-label"><input type="radio" name="routine" value="יותר מדי שגרות"> 🤯 יותר מדי שגרות שמעמיסות על התלמידים</label>
+                    <label class="option-label"><input type="radio" name="routine" value="שגרה משתנה"> 🔀 שינוי הכללים והשגרות בכל שיעור</label>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h4>🤔 שאלות לבירור עצמי:</h4>
+                <p>כיצד מצב השגרות הזה הוביל לאירוע? האם התלמידים ידעו מה לעשות?</p>
+                <textarea id="ref3" rows="3" placeholder="כתוב כאן את מחשבותיך..."></textarea>
+            </div>
+        </div>
+
+        <!-- מסך 4: הגדרות הנהג -->
+        <div class="screen" id="screen-4">
+            <div class="progress-container">
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+            </div>
+            <h2 style="color: var(--primary-color);">מסך 4: הגדרות הנהג</h2>
+            
+            <div class="card">
+                <h3>👩‍🏫 איזה סוג מורה היית באירוע הזה?</h3>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="teacher" value="מכוון למשימות וקשר"> 🌟 מכוון למשימות וקשר (מורה לדוגמה)</label>
+                    <label class="option-label"><input type="radio" name="teacher" value="טכנאי חינוך"> ⚙️ מכוון למשימות אך אדיש לתלמידים ("טכנאי חינוך")</label>
+                    <label class="option-label"><input type="radio" name="teacher" value="נשמה"> ❤️ קשר גבוה אך לא מכוון למשימות ("נשמה")</label>
+                    <label class="option-label"><input type="radio" name="teacher" value="לא מכוון ואדיש"> 🧊 לא מכוון למשימות ואדיש לתלמידים</label>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h4>🤔 שאלות לבירור עצמי:</h4>
+                <p>איזה קשר קיים בין הסגנון שבחרת לבין בעיית המשמעת שנוצרה?</p>
+                <textarea id="ref4" rows="3" placeholder="כתוב כאן את מחשבותיך..."></textarea>
+            </div>
+        </div>
+
+        <!-- מסך 5: חוקי התנועה -->
+        <div class="screen" id="screen-5">
+            <div class="progress-container">
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot active"></div>
+            </div>
+            <h2 style="color: var(--primary-color);">מסך 5: חוקי התנועה (מודל ברמ"ה)</h2>
+            
+            <div class="card">
+                <h3>📜 מה הבעיה בכללים הנוכחיים ביחס לאירוע?</h3>
+                <div class="options-group">
+                    <label class="option-label"><input type="radio" name="rules" value="לא ברור"> ❓ הכלל לא מנוסח בצורה ברורה וקצרה</label>
+                    <label class="option-label"><input type="radio" name="rules" value="לא רלוונטי"> 🎯 הכלל לא רלוונטי או יש יותר מדי כללים</label>
+                    <label class="option-label"><input type="radio" name="rules" value="לא מעשי"> ⚙️ הכלל לא ניתן ליישום ברגע האמת</label>
+                    <label class="option-label"><input type="radio" name="rules" value="לא הוגן"> ⚖️ הכלל אינו שוויוני או לא מכבד את כולם</label>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <h4>🤔 שאלות לבירור עצמי:</h4>
+                <p>אילו חוקים חסרים, שאולי היעדרם הוביל לאירוע?</p>
+                <textarea id="ref5" rows="3" placeholder="כתוב כאן את מחשבותיך..."></textarea>
+            </div>
+            
+            <button class="btn" style="background-color: #4caf50;" onclick="generateSummary()">✅ סיום ניווט ויצירת מפת פעולה</button>
+        </div>
+
+        <!-- מסך 6: סיכום ומסלולי פעולה -->
+        <div class="screen" id="screen-6">
+            <h2 style="color: #4caf50; text-align: center;">הגעת ליעד! 🏁</h2>
+            <p style="text-align: center;">להלן סיכום הניווט והצעות הפעולה שלך:</p>
+            
+            <div id="summary-content">
+                <!-- ימולא דינמית באמצעות JS -->
+            </div>
+            
+            <button class="btn" onclick="location.reload()">🔄 התחל ניווט חדש</button>
+        </div>
+    </div>
+
+    <!-- בר ניווט תחתון -->
+    <div class="navigation-bar" id="nav-bar" style="display: none;">
+        <button class="nav-btn" id="prev-btn" onclick="prevScreen()">חזור</button>
+        <button class="nav-btn primary" id="next-btn" onclick="nextScreen()">הבא ➔</button>
+    </div>
+</div>
+
+<script>
+    let currentScreenIndex = 0;
+    const totalScreens = 7; // 0 to 6
+
+    function updateUI() {
+        for(let i=0; i<totalScreens; i++){
+            let screen = document.getElementById('screen-' + i);
+            if(screen) {
+                screen.classList.remove('active');
+            }
+        }
+        
+        let activeScreen = document.getElementById('screen-' + currentScreenIndex);
+        if(activeScreen) {
+            activeScreen.classList.add('active');
+        }
+
+        let navBar = document.getElementById('nav-bar');
+        if(currentScreenIndex === 0 || currentScreenIndex >= totalScreens - 2) { 
+            // Hide navbar on first screen and summary screen
+            navBar.style.display = 'none';
+            if (currentScreenIndex === 5) {
+               navBar.style.display = 'flex';
+               document.getElementById('next-btn').style.display = 'none';
+            }
+        } else {
+            navBar.style.display = 'flex';
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        let prevBtn = document.getElementById('prev-btn');
+        if(currentScreenIndex === 1) {
+            prevBtn.disabled = true;
+        } else {
+            prevBtn.disabled = false;
+        }
+    }
+
+    function nextScreen() {
+        if(currentScreenIndex < totalScreens - 1) {
+            currentScreenIndex++;
+            updateUI();
+        }
+    }
+
+    function prevScreen() {
+        if(currentScreenIndex > 1) { 
+            currentScreenIndex--;
+            updateUI();
+        }
+    }
+    
+    function generateSummary() {
+        // Collect selections
+        const cause = document.querySelector('input[name="cause"]:checked')?.value || 'לא הוגדר גורם';
+        const climate = document.querySelector('input[name="climate"]:checked')?.value || 'לא הוגדר מרכיב';
+        const routine = document.querySelector('input[name="routine"]:checked')?.value || 'לא הוגדר מצב שגרה';
+        const teacher = document.querySelector('input[name="teacher"]:checked')?.value || 'לא הוגדר סגנון';
+        const rules = document.querySelector('input[name="rules"]:checked')?.value || 'לא הוגדרה בעיה בכללים';
+
+        // Suggestions DB
+        const suggestions = {
+            cause: {
+                "ארגון": "הכן צ'ק ליסט לסידור הכיתה לפני תחילת השיעור הבא. וודא שהנהלים ברורים מראש.",
+                "אקלים כיתתי": "יזום שיחת בוקר קצרה לבירור מתחים. הקצה זמן לחיבור בין-אישי.",
+                "אירועים חיצוניים": "גלה אמפתיה, תן משימה חלופית קלה לתלמיד העייף ושוחח איתו בסוף השיעור.",
+                "הוראה": "שנה את קצב השיעור - חלק למשימות קצרות יותר, והוסף גיוון (סרטון, פעילות קבוצתית).",
+                "מוטיבציה": "חבר את נושא השיעור לתחומי העניין של התלמידים. תן להם בחירה במשימות."
+            },
+            climate: {
+                "תמיכה": "חלק חיזוקים חיוביים ספציפיים לתלמידים במהלך השיעור.",
+                "פתיחות": "אפשר זמן של 'סיעור מוחות' בו אין תשובות שגויות.",
+                "שוויוניות": "הקפד לפנות לתלמידים שונים ולא רק לאלו שמצביעים תמיד.",
+                "סדר ומנהל": "רענן את מערכת הכללים וכתוב אותם במקום בולט בכיתה."
+            },
+            routine: {
+                "אין שגרה": "בחר פעולה אחת קבועה שחסרה לך (למשל, איך נכנסים לכיתה) והתחל ללמד אותה מחר.",
+                "לא מתורגלת": "עצור את הלמידה והקדש 5 דקות לתרגול השגרה מחדש ('מסבירים, מדגימים, מתרגלים').",
+                "יותר מדי שגרות": "צמצם את השגרות ל-3 הבסיסיות ביותר וודא שכולם עומדים בהן תחילה.",
+                "שגרה משתנה": "התחייב לשגרה אחת בלבד ואל תשנה אותה במהלך השבועיים הקרובים."
+            },
+            rules: {
+                "לא ברור": "נסח מחדש את הכלל כך שיהיה משפט אחד קצר, חיובי וברור לכולם.",
+                "לא רלוונטי": "מחק כללים שאינם מהותיים, התמקד בכללים שמשפיעים על ביטחון ולמידה.",
+                "לא מעשי": "התאם את הכלל לגיל התלמידים כך שיוכלו באמת לעמוד בו.",
+                "לא הוגן": "בדוק אם הכלל נאכף על כולם באותה מידה, ותקן במידת הצורך."
+            }
+        };
+
+        const summaryHTML = `
+            <div class="summary-box">
+                <h4>🎯 פעולה מומלצת לגורם ההפרעה (${cause}):</h4>
+                <p>${suggestions.cause[cause] || 'נסה לזהות שוב את גורם ההפרעה המדויק כדי לקבל עצה.'}</p>
+            </div>
+            <div class="summary-box">
+                <h4>💖 בניית האקלים (${climate}):</h4>
+                <p>${suggestions.climate[climate] || 'חשוב למפות את האקלים כדי לשפר אותו.'}</p>
+            </div>
+            <div class="summary-box">
+                <h4>⏱️ תיקון השגרה (${routine}):</h4>
+                <p>${suggestions.routine[routine] || 'שגרות הן המפתח! נסה לחשוב איזו שגרה חסרה.'}</p>
+            </div>
+            <div class="summary-box">
+                <h4>📜 עריכת הכללים (בעיה: ${rules}):</h4>
+                <p>${suggestions.rules[rules] || 'חזור למודל ברמ"ה ונסח כללים חדשים.'}</p>
+            </div>
+            
+            <div style="margin-top:20px; padding:15px; background:#f9f9f9; border-radius:8px; border:1px solid #ddd;">
+                <h4 style="margin-top:0;">💡 הרפלקציה האישית שלך מכלל המסכים נשמרה.</h4>
+                <p style="font-size:14px;">השתמש בתובנות שכתבת, יחד עם הצעות הפעולה מעלה, כדי לנווט את השיעור הבא בהצלחה. כדאי להעתיק את התוכן אם תרצה לשמור אותו להמשך.</p>
+            </div>
+        `;
+
+        document.getElementById('summary-content').innerHTML = summaryHTML;
+        
+        currentScreenIndex = 6;
+        updateUI();
+    }
+</script>
+
+</body>
+</html>
