@@ -40,3 +40,5 @@ Each card in `index.html` must follow the aesthetic established by `gibush.html`
 | `safesurf.html` | `/pages/safesurf.html` | רולטת מוגנות וגלישה בטוחה ברשת | מוגנות ורשת |
 | `waze.html` | `/pages/waze.html` | Class Waze - ניווט וניהול חכם בכיתה | חינוך והוראה |
 | `schedule.html` | `/pages/schedule.html` | מחולל לו״ז יומי מעוצב | חינוך והוראה |
+| `massa_z.html` | `/pages/massa_z.html` | הכ״חות שבדרך - רולטת מסע כיתה ז׳ | פעילויות וגיבוש |
+

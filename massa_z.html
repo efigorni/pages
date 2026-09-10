@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>הכ״חות שבדרך - רולטת מסע כיתה ז׳</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --primary-light: #e0e7ff;
+      --accent: #f97316;
+      --accent-hover: #ea580c;
+      --accent-light: #ffedd5;
+      --teal: #06b6d4;
+      --teal-dark: #0e7490;
+      --emerald: #10b981;
+      --purple: #8b5cf6;
+      --ink: #1e1b4b;
+      --ink-muted: #475569;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --shadow-sm: 0 2px 8px rgba(79, 70, 229, 0.06);
+      --shadow-md: 0 8px 24px rgba(79, 70, 229, 0.12);
+      --shadow-lg: 0 20px 40px rgba(79, 70, 229, 0.18);
+      --font-display: 'Secular One', 'Assistant', sans-serif;
+      --font-body: 'Assistant', sans-serif;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.07) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(249, 115, 22, 0.04) 0px, transparent 60%);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header Nav */
+    .top-nav {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      color: var(--primary);
+      border-color: var(--primary-light);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Main Container */
+    .app-container {
+      width: 100%;
+      max-width: 900px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      padding: 36px 32px 32px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .app-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #4f46e5, #06b6d4, #f97316);
+    }
+
+    /* Header Titles */
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+    }
+
+    .header-badge .badge-icon {
+      font-size: 16px;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 46px);
+      font-weight: 400;
+      color: var(--primary-dark);
+      line-height: 1.15;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      font-size: clamp(17px, 2.8vw, 21px);
+      color: var(--ink-muted);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    /* Progress & Tracker Bar */
+    .tracker-box {
+      width: 100%;
+      max-width: 600px;
+      background: #f1f5f9;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tracker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .tracker-header .counter {
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4f46e5, #06b6d4);
+      width: 0%;
+      border-radius: 99px;
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Central Roulette Stage */
+    .stage-wrapper {
+      width: 100%;
+      max-width: 720px;
+      margin-bottom: 28px;
+      perspective: 1000px;
+    }
+
+    .card-display {
+      background: linear-gradient(135deg, #4338ca 0%, #3b82f6 50%, #06b6d4 100%);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 24px;
+      box-shadow: 0 14px 35px rgba(67, 56, 202, 0.3);
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 3px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .card-display:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 18px 42px rgba(67, 56, 202, 0.4);
+    }
+
+    .card-display.spinning {
+      animation: pulse-spin 0.2s infinite alternate;
+      border-color: rgba(249, 115, 22, 0.8);
+      background: linear-gradient(135deg, #3730a3 0%, #2563eb 50%, #0891b2 100%);
+    }
+
+    @keyframes pulse-spin {
+      0% { transform: scale(0.98); opacity: 0.88; }
+      100% { transform: scale(1.01); opacity: 1; }
+    }
+
+    .card-display.landing {
+      animation: land-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes land-bounce {
+      0% { transform: scale(0.9); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .station-tag {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .station-number {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fed7aa;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+      display: none;
+    }
+
+    .card-text {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 4.2vw, 36px);
+      font-weight: 400;
+      line-height: 1.3;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+      max-width: 600px;
+      transition: opacity 0.15s ease;
+    }
+
+    .card-hint {
+      margin-top: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(0, 0, 0, 0.15);
+      padding: 4px 14px;
+      border-radius: 99px;
+    }
+
+    /* Discussion Prompt Box (Appears after draw) */
+    .prompt-box {
+      width: 100%;
+      max-width: 720px;
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin-top: -14px;
+      margin-bottom: 26px;
+      text-align: right;
+      display: none;
+      animation: fadeInDown 0.4s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .prompt-box.active {
+      display: block;
+    }
+
+    .prompt-title {
+      font-weight: 800;
+      color: #166534;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .prompt-content {
+      color: #14532d;
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    /* Spin Button */
+    .spin-btn-container {
+      margin-bottom: 30px;
+    }
+
+    .btn-spin {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: clamp(20px, 3.2vw, 26px);
+      padding: 16px 44px;
+      border-radius: 99px;
+      border: 0;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4), 0 3px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      outline: none;
+    }
+
+    .btn-spin:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 14px 30px rgba(249, 115, 22, 0.5), 0 4px 10px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+    }
+
+    .btn-spin:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 6px 15px rgba(249, 115, 22, 0.35);
+    }
+
+    .btn-spin:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-spin .btn-icon {
+      font-size: 26px;
+      transition: transform 0.4s ease;
+    }
+
+    .btn-spin:hover .btn-icon {
+      transform: rotate(20deg) scale(1.15);
+    }
+
+    /* Stations Trail / History Accordion */
+    .stations-panel {
+      width: 100%;
+      border-top: 1.5px solid var(--border);
+      padding-top: 24px;
+      text-align: right;
+    }
+
+    .stations-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-size: 19px;
+      color: var(--ink);
+      padding: 6px 4px;
+    }
+
+    .stations-toggle:hover {
+      color: var(--primary);
+    }
+
+    .stations-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      transition: transform 0.25s ease;
+    }
+
+    .stations-toggle[aria-expanded="true"] svg {
+      transform: rotate(180deg);
+    }
+
+    .stations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .station-item {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      transition: all 0.2s ease;
+    }
+
+    .station-item.completed {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #166534;
+    }
+
+    .station-item.active {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      color: #1e40af;
+      box-shadow: 0 0 0 2px #bfdbfe;
+    }
+
+    .station-item-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .station-item.completed .station-item-icon {
+      background: #22c55e;
+      color: #ffffff;
+    }
+
+    .station-item.active .station-item-icon {
+      background: #3b82f6;
+      color: #ffffff;
+    }
+
+    .station-item-title {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Modal / Alert Overlay for Reset / Completion */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.9);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-backdrop.open .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      font-size: 52px;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .modal-desc {
+      font-size: 16px;
+      color: var(--ink-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .modal-btn {
+      padding: 10px 22px;
+      border-radius: 99px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .modal-btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .modal-btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .modal-btn-secondary {
+      background: #f1f5f9;
+      color: var(--ink-muted);
+    }
+
+    .modal-btn-secondary:hover {
+      background: #e2e8f0;
+      color: var(--ink);
+    }
+
+    /* Footer info */
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 13.5px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive styling */
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 24px 18px 20px;
+      }
+      .card-display {
+        min-height: 180px;
+        padding: 20px 16px;
+      }
+      .btn-spin {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 24px;
+      }
+      .stations-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Controls Bar -->
+  <nav class="top-nav">
+    <a href="index.html" class="nav-btn">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      חזרה לפורטל הראשי
+    </a>
+
+    <div class="nav-actions">
+      <!-- Sound toggle -->
+      <button class="nav-btn" id="sound-btn" onclick="toggleSound()" aria-label="הפעל או השתק צלילים" title="צלילים">
+        <svg id="sound-icon-on" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg id="sound-icon-off" viewBox="0 0 24 24" style="display:none;"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        <span id="sound-label">צליל פעיל</span>
+      </button>
+
+      <!-- Reset button -->
+      <button class="nav-btn" onclick="openResetModal()" aria-label="איפוס המסע" title="איפוס המסע">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        איפוס
+      </button>
+
+      <!-- Fullscreen button -->
+      <button class="nav-btn" onclick="toggleFullscreen()" aria-label="מסך מלא" title="מסך מלא">
+        <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main App Card -->
+  <main class="app-container">
+    
+    <div class="header-badge">
+      <span class="badge-icon">🎒</span>
+      כישורי חיים &bull; שכבת ז׳
+    </div>
+
+    <h1>הכ״חות שבדרך</h1>
+    <p class="subtitle">מסע כישורי חיים, העצמה וגיבוש כיתתי</p>
+
+    <!-- Tracker & Progress Bar -->
+    <div class="tracker-box">
+      <div class="tracker-header">
+        <span>התקדמות במסע</span>
+        <span id="counter-text" class="counter">תחנות שנותרו להגרלה: 10 מתוך 10</span>
+      </div>
+      <div class="progress-track" aria-label="התקדמות המסע">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Central Interactive Roulette Stage -->
+    <div class="stage-wrapper">
+      <div id="card" class="card-display" onclick="spinRoulette()" tabindex="0" role="button" aria-label="כרטיס הגרלת תחנה">
+        <div class="station-tag">תחנת מסע</div>
+        <div id="station-number" class="station-number">תחנה 1</div>
+        <div id="card-text" class="card-text">לחצו על הכפתור כדי לצאת לתחנה הבאה! 🎲</div>
+        <div id="card-hint" class="card-hint">הקליקו כאן או על הכפתור מטה להגרלה</div>
+      </div>
+    </div>
+
+    <!-- Discussion Prompt Card (Explains the station and gives guidance) -->
+    <div id="prompt-box" class="prompt-box">
+      <div class="prompt-title">
+        <span>💡 שאלת פתיחה ומשימה כיתתית:</span>
+      </div>
+      <div id="prompt-content" class="prompt-content"></div>
+    </div>
+
+    <!-- Spin Button -->
+    <div class="spin-btn-container">
+      <button id="spin-btn" onclick="spinRoulette()" class="btn-spin" aria-label="סובבו את הרולטה">
+        <span class="btn-icon">🎲</span>
+        <span id="spin-btn-text">סובבו את הרולטה</span>
+      </button>
+    </div>
+
+    <!-- Stations Overview & History Grid -->
+    <div class="stations-panel">
+      <button class="stations-toggle" id="stations-toggle-btn" onclick="toggleStationsGrid()" aria-expanded="true">
+        <span>מפת תחנות המסע (10)</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      
+      <div class="stations-grid" id="stations-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Reset Confirmation Modal -->
+  <div class="modal-backdrop" id="reset-modal">
+    <div class="modal-card">
+      <div class="modal-icon">🔄</div>
+      <h2 class="modal-title">איפוס המסע?</h2>
+      <p class="modal-desc">פעולה זו תאפס את כל התחנות שכבר הוגרלו ותתחיל את המסע מחדש עבור הכיתה.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-secondary" onclick="closeResetModal()">ביטול</button>
+        <button class="modal-btn modal-btn-primary" onclick="confirmReset()">כן, אפס מסע</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completion Celebration Modal -->
+  <div class="modal-backdrop" id="finish-modal">
+    <div class="modal-card">
+      <div class="modal-icon">🏆</div>
+      <h2 class="modal-title">כל הכבוד לשכבת ז׳!</h2>
+      <p class="modal-desc">סיימתם בהצלחה את כל 10 התחנות במסע "הכ״חות שבדרך". הכוחות והכלים שאספתם ילוו אתכם לאורך כל השנה!</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" onclick="closeFinishModalAndReset()">התחל מסע חדש 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>רולטת מסע כיתה ז׳ &bull; <a href="index.html">פורטל האפליקציות והפעילויות</a></p>
+  </footer>
+
+  <script>
+    // --- Topics & Detailed Discussion Prompts ---
+    const stationsData = [
+      {
+        id: 1,
+        title: "חוזה כיתתי - הצידה שלנו לדרך 📝",
+        shortTitle: "חוזה כיתתי",
+        icon: "📝",
+        prompt: "מהם 3 הכללים החשובים ביותר שיובילו אותנו להצלחה ולתחושת ביטחון משותפת השנה?"
+      },
+      {
+        id: 2,
+        title: "שייכות לקבוצה - המקום שלי בכיתה 🫂",
+        shortTitle: "שייכות לקבוצה",
+        icon: "🫂",
+        prompt: "מה גורם לכל אחד ואחת מאיתנו להרגיש רצוי, מוערך ובטוח בכיתה שלנו?"
+      },
+      {
+        id: 3,
+        title: "סובלנות, חברות ומניעת אלימות 🕊️",
+        shortTitle: "סובלנות וחברות",
+        icon: "🕊️",
+        prompt: "איך נוכל להפוך את הכיתה למרחב מוגן, מכיל ואכפתי שבו מבררים מחלוקות בהידברות?"
+      },
+      {
+        id: 4,
+        title: "התנהלות מיטבית ברשת 📱",
+        shortTitle: "התנהלות ברשת",
+        icon: "📱",
+        prompt: "איך שומרים על שיח מכבד ונעים בקבוצות הווטסאפ הכיתתיות ונמנעים מפגיעה באחרים?"
+      },
+      {
+        id: 5,
+        title: "מסע הלמידה שלי והתמודדות עם אתגרים 🧗‍♀️",
+        shortTitle: "מסע הלמידה ואתגרים",
+        icon: "🧗‍♀️",
+        prompt: "מה עוזר לי כשאני נתקל/ת בקושי לימודי או אישי, ואיך אפשר לבקש עזרה בלי להתבייש?"
+      },
+      {
+        id: 6,
+        title: "לחץ חברתי - איך לעמוד על שלי? 🛑",
+        shortTitle: "עמידה מול לחץ חברתי",
+        icon: "🛑",
+        prompt: "איך אומרים 'לא' בביטחון כשהחבר'ה לוחצים על משהו שלא מתאים לנו, ועדיין נשארים חברים?"
+      },
+      {
+        id: 7,
+        title: "בעד עצמי - הערכה עצמית ודימוי חיובי ⭐",
+        shortTitle: "הערכה עצמית ודימוי",
+        icon: "⭐",
+        prompt: "מהו הכוח, הכישרון או התכונה המיוחדת שאני מביא/ה איתי למסע הכיתתי?"
+      },
+      {
+        id: 8,
+        title: "איפה אני ומה הגבול שלי? 🚧",
+        shortTitle: "הגבולות האישיים שלי",
+        icon: "🚧",
+        prompt: "איך מזהים ומציבים גבולות אישיים בריאים, ואיך לומדים לכבד את הגבולות של חברינו?"
+      },
+      {
+        id: 9,
+        title: "סטריאוטיפים וקבלת האחר 🤝",
+        shortTitle: "קבלת האחר",
+        icon: "🤝",
+        prompt: "איך מביטים מעבר לרושם ראשוני ומגלים את היופי והעושר שבשוני בינינו?"
+      },
+      {
+        id: 10,
+        title: "עומדים לצד ולא מהצד - עוזרים לחבר בצרה 🛡️",
+        shortTitle: "עוזרים לחבר בצרה",
+        icon: "🛡️",
+        prompt: "מה ההבדל בין להיות צופה מהצד לבין להושיט יד, ואיך כל אחד מאיתנו יכול להשפיע לטובה?"
+      }
+    ];
+
+    // State
+    let availableStationIds = stationsData.map(s => s.id);
+    let completedStationIds = [];
+    let currentStation = null;
+    let isSpinning = false;
+    let soundEnabled = true;
+
+    // --- Web Audio Synthesizer for High-Quality FX ---
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          audioCtx = new AudioContext();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTickSound() {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440 + Math.random() * 120, ctx.currentTime);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.06);
+      } catch (e) {}
+    }
+
+    function playSuccessChime() {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.09);
+          gain.gain.setValueAtTime(0.18, ctx.currentTime + idx * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.09 + 0.4);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.09);
+          osc.stop(ctx.currentTime + idx * 0.09 + 0.4);
+        });
+      } catch (e) {}
+    }
+
+    function playVictoryFanfare() {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const chords = [
+          { freq: 523.25, delay: 0 },
+          { freq: 659.25, delay: 0.1 },
+          { freq: 783.99, delay: 0.2 },
+          { freq: 1046.50, delay: 0.3 },
+          { freq: 1318.51, delay: 0.45 }
+        ];
+        chords.forEach(c => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(c.freq, ctx.currentTime + c.delay);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime + c.delay);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + c.delay + 0.6);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + c.delay);
+          osc.stop(ctx.currentTime + c.delay + 0.6);
+        });
+      } catch (e) {}
+    }
+
+    // --- UI Update Functions ---
+    function updateProgress() {
+      const remainingCount = availableStationIds.length;
+      const totalCount = stationsData.length;
+      const completedCount = totalCount - remainingCount;
+      const percentage = (completedCount / totalCount) * 100;
+
+      document.getElementById('counter-text').innerText = `תחנות שנותרו להגרלה: ${remainingCount} מתוך ${totalCount}`;
+      document.getElementById('progress-fill').style.width = `${percentage}%`;
+
+      const spinBtnText = document.getElementById('spin-btn-text');
+      if (remainingCount === 0) {
+        spinBtnText.innerText = 'כל התחנות הוגרלו! 🏆 (איפוס)';
+      } else {
+        spinBtnText.innerText = 'סובבו את הרולטה';
+      }
+
+      renderStationsGrid();
+    }
+
+    function renderStationsGrid() {
+      const grid = document.getElementById('stations-grid');
+      grid.innerHTML = '';
+
+      stationsData.forEach(station => {
+        const isCompleted = completedStationIds.includes(station.id);
+        const isActive = currentStation && currentStation.id === station.id;
+
+        const item = document.createElement('div');
+        item.className = `station-item ${isCompleted ? 'completed' : ''} ${isActive ? 'active' : ''}`;
+        item.innerHTML = `
+          <div class="station-item-icon">${isCompleted ? '✓' : station.id}</div>
+          <div class="station-item-title" title="${station.title}">${station.title}</div>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
+    // --- Roulette Spin Core Logic ---
+    function spinRoulette() {
+      if (isSpinning) return;
+
+      // If all stations are drawn, trigger reset
+      if (availableStationIds.length === 0) {
+        openResetModal();
+        return;
+      }
+
+      isSpinning = true;
+      const card = document.getElementById('card');
+      const cardText = document.getElementById('card-text');
+      const cardHint = document.getElementById('card-hint');
+      const stationNumber = document.getElementById('station-number');
+      const promptBox = document.getElementById('prompt-box');
+      const spinBtn = document.getElementById('spin-btn');
+
+      card.classList.add('spinning');
+      card.classList.remove('landing');
+      cardHint.style.display = 'none';
+      stationNumber.style.display = 'none';
+      promptBox.classList.remove('active');
+      spinBtn.disabled = true;
+
+      // Animation loop
+      let step = 0;
+      const totalSteps = 22;
+      let delay = 60;
+
+      function nextStep() {
+        step++;
+        
+        // Random visual topic display during spinning
+        const randomStation = stationsData[Math.floor(Math.random() * stationsData.length)];
+        cardText.innerText = randomStation.title;
+        playTickSound();
+
+        if (step < totalSteps) {
+          // Gradually slow down
+          if (step > 14) delay += 25;
+          setTimeout(nextStep, delay);
+        } else {
+          // Final landing
+          const chosenIndex = Math.floor(Math.random() * availableStationIds.length);
+          const chosenId = availableStationIds[chosenIndex];
+          const finalStation = stationsData.find(s => s.id === chosenId);
+
+          availableStationIds.splice(chosenIndex, 1);
+          completedStationIds.push(chosenId);
+          currentStation = finalStation;
+
+          card.classList.remove('spinning');
+          card.classList.add('landing');
+          
+          stationNumber.innerText = `תחנה ${finalStation.id}`;
+          stationNumber.style.display = 'block';
+          cardText.innerText = finalStation.title;
+          
+          // Display Discussion Prompt
+          document.getElementById('prompt-content').innerText = finalStation.prompt;
+          promptBox.classList.add('active');
+
+          playSuccessChime();
+
+          // Confetti celebration
+          if (typeof confetti === 'function') {
+            confetti({
+              particleCount: 70,
+              spread: 65,
+              origin: { y: 0.65 }
+            });
+          }
+
+          updateProgress();
+          spinBtn.disabled = false;
+          isSpinning = false;
+
+          // If all stations completed, show completion celebration
+          if (availableStationIds.length === 0) {
+            setTimeout(() => {
+              playVictoryFanfare();
+              if (typeof confetti === 'function') {
+                confetti({
+                  particleCount: 150,
+                  spread: 100,
+                  origin: { y: 0.5 }
+                });
+              }
+              document.getElementById('finish-modal').classList.add('open');
+            }, 1200);
+          }
+        }
+      }
+
+      nextStep();
+    }
+
+    // --- Stations Accordion Toggle ---
+    function toggleStationsGrid() {
+      const btn = document.getElementById('stations-toggle-btn');
+      const grid = document.getElementById('stations-grid');
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      
+      btn.setAttribute('aria-expanded', !isExpanded);
+      grid.style.display = isExpanded ? 'none' : 'grid';
+    }
+
+    // --- Sound Toggle ---
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-icon-on').style.display = soundEnabled ? 'block' : 'none';
+      document.getElementById('sound-icon-off').style.display = soundEnabled ? 'none' : 'block';
+      document.getElementById('sound-label').innerText = soundEnabled ? 'צליל פעיל' : 'מושתק';
+    }
+
+    // --- Fullscreen Toggle ---
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // --- Modal Controls ---
+    function openResetModal() {
+      document.getElementById('reset-modal').classList.add('open');
+    }
+
+    function closeResetModal() {
+      document.getElementById('reset-modal').classList.remove('open');
+    }
+
+    function confirmReset() {
+      availableStationIds = stationsData.map(s => s.id);
+      completedStationIds = [];
+      currentStation = null;
+      
+      document.getElementById('card-text').innerText = 'לחצו על הכפתור כדי לצאת לתחנה הבאה! 🎲';
+      document.getElementById('station-number').style.display = 'none';
+      document.getElementById('card-hint').style.display = 'block';
+      document.getElementById('prompt-box').classList.remove('active');
+      
+      closeResetModal();
+      updateProgress();
+    }
+
+    function closeFinishModalAndReset() {
+      document.getElementById('finish-modal').classList.remove('open');
+      confirmReset();
+    }
+
+    // --- Keyboard Navigation (Space / Enter to Spin) ---
+    window.addEventListener('keydown', (e) => {
+      if ((e.code === 'Space' || e.code === 'Enter') && !e.target.matches('input, textarea, button')) {
+        e.preventDefault();
+        spinRoulette();
+      }
+    });
+
+    // Initialize UI on load
+    updateProgress();
+  </script>
+</body>
+</html>
