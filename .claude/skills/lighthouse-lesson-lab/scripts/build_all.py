@@ -46,6 +46,7 @@ def motif(i: int, c: str) -> str:
 
 def main(argv: list[str]) -> int:
     quiet = '-q' in argv
+    print(LL.skill_version())
     LL.sync_assets()
     kit = LL.Kit()
     inv = LL.inventory()

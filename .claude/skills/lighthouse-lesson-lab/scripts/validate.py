@@ -17,6 +17,8 @@ import re
 import sys
 from pathlib import Path
 
+import yaml
+
 sys.dont_write_bytecode = True  # keep the skill folder free of __pycache__
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import lessonlib as LL  # noqa: E402
@@ -114,6 +116,16 @@ COLON_HINT = ('YAML קרא את השורה כמילון, בגלל ": " (נקוד
               'או כתבי אותה כבלוק: "- >-" ובשורה הבאה הטקסט '
               '(YAML read this line as a key: value mapping — quote it, or write it as a >- block)')
 BLOCK_KEY_RE = re.compile(r'[a-z_]+')
+EMPTY_ITEM = ('פריט ריק ("-" בלי טקסט, או שורה שמתחילה ב-"#", ש-YAML קורא כהערה) — מחקי את השורה, או כתבי בה טקסט; '
+              'טקסט שמתחיל ב-"#" — במירכאות')
+# skill-fixes #29: " #" (a space, then #) opens a YAML comment, so a plain (unquoted) value silently loses everything
+# after it: `sub: $ כסף · # תכנון` is read as "$ כסף ·", and `- # — דורש תכנון` as an empty item
+COMMENT_HINT = ('אם זה חלק מהטקסט — עטפי את הערך במירכאות, או כתבי אותו כבלוק `>-`; אם זו הערה — בשורה משלה '
+                '(YAML read " #" as the start of a comment)')
+HEBREW_RE = re.compile('[א-ת]')
+# skill-fixes #28: verbatim source text that is too long for a slide
+FIT_QUOTE = ('ציטוט מילולי ארוך — תוויות קצרות שלך על השקף, והנוסח המלא ב-quote במערך, להקראה (schema.md, '
+             '"ציטוט ארוך מדי לשקף").')
 
 
 class Report:
@@ -173,13 +185,43 @@ def text_items(r: Report, where: str, items) -> None:
         if isinstance(x, dict):
             r.err('yaml-item', f'{w}: "{_line(x)}" — {COLON_HINT}')
         elif x is None:
-            r.err('yaml-item', f'{w}: פריט ריק ("-" בלי טקסט) — מחקי את השורה, או כתבי בה טקסט')
+            r.err('yaml-item', f'{w}: {EMPTY_ITEM}')
         elif isinstance(x, bool):
             r.err('yaml-item', f'{w}: YAML קרא את הפריט כ-{x} — עטפי אותו במירכאות')
         elif isinstance(x, (int, float)):
             r.err('yaml-item', f'{w}: YAML קרא את הפריט כמספר ({x}) — עטפי אותו במירכאות (למשל "1:05")')
         else:
             r.err('yaml-item', f'{w}: רשימה בתוך רשימה — כל פריט הוא שורת טקסט אחת ("- ערך")')
+
+
+def comment_cuts(raw: str) -> list[tuple[int, str, str]]:
+    """(line, the value as YAML read it, the words it dropped) for every plain (unquoted) value that a comment cut
+    short: " #" later on its line, or a "#" line right under it, indented where the value would continue. Only values
+    with Hebrew in them, or left empty — a comment after a number, an id or a quoted or block value is a real
+    comment (skill-fixes #29)."""
+    try:
+        root = yaml.compose(raw, Loader=yaml.SafeLoader)
+    except yaml.YAMLError:
+        return []
+    lines, out = raw.split('\n'), []
+    stack = [(root, 1)]  # (node, the least indent of a line that continues it)
+    while stack:
+        node, cont = stack.pop()
+        if isinstance(node, yaml.MappingNode):  # the keys are field names
+            stack.extend((v, k.start_mark.column + 1) for k, v in node.value)
+        elif isinstance(node, yaml.SequenceNode):
+            stack.extend((x, node.start_mark.column + 1) for x in node.value)
+        elif isinstance(node, yaml.ScalarNode) and node.style is None and node.end_mark.line < len(lines):
+            if node.value and not HEBREW_RE.search(node.value):
+                continue
+            end = node.end_mark
+            m = re.match(r'[ \t]+#(.*)', lines[end.line][end.column:])
+            nxt = lines[end.line + 1] if end.line + 1 < len(lines) else ''
+            if m:
+                out.append((end.line + 1, node.value, m.group(1).rstrip()))
+            elif node.value and nxt.lstrip().startswith('#') and len(nxt) - len(nxt.lstrip()) >= cont:
+                out.append((end.line + 2, node.value, nxt.strip()[1:]))
+    return sorted(out)
 
 
 def slide_verbatim(v: dict) -> set:
@@ -457,6 +499,10 @@ def latin_allowed(r: Report, data: dict) -> list[tuple[str, re.Pattern]]:
 def check(data: dict, kit: LL.Kit | None = None) -> Report:
     r = Report(data.get('_slug', '?'))
     kit = kit or LL.Kit()
+    for line, kept, cut in comment_cuts(data.get('_raw', '')):
+        shown = f'"…{kept[-40:]}"' if len(kept) > 40 else f'"{kept}"' if kept else 'ריק'
+        r.warn('yaml-comment', f'lesson.yaml, שורה {line}: " #" פותח הערה ב-YAML — הערך נקרא {shown}, '
+                               f'והמילים "#{cut[:40]}" נמחקו. {COMMENT_HINT}')
     _typecheck(r, 'lesson', data, TOP)
     for k in ('takeaways', 'prep'):
         text_items(r, k, data.get(k))
@@ -927,12 +973,28 @@ def check_slide(r: Report, where: str, v: dict, kit: LL.Kit, lesson_dir: Path, b
         for i, p in enumerate(pts):
             if isinstance(p, str) and len(p) > 80:
                 r.warn('slide-words', f'{where}.points[{i}]: {len(p)} תווים (עד 80)')
+    hint = FIT_QUOTE if slide_verbatim(v) else f'קצרי, או פצלי לשני שקפים. {FIT_QUOTE}'
+    check_fit(r, where, v.get('kicker'), v.get('title'), v.get('sub'), v.get('points'), hint=hint)
+
+
+def check_fit(r: Report, where: str, kicker=None, title=None, sub=None, points=None, *, wide: bool = False,
+              link: bool = False, hint: str = ''):
+    """The height of the words on the slide, estimated from the deck's type (lessonlib.slide_fit, skill-fixes #27).
+    The estimate errs low, so the warning comes only when the words really are taller than the text box."""
+    height, lines = LL.slide_fit(kicker, title, sub, points, wide=wide, link=link)
+    if height <= LL.FIT_BOX_H + 1:
+        return
+    parts = [f'{label} {lines[k]}' for k, label in (('title', 'כותרת'), ('sub', 'שורת משנה')) if lines.get(k)]
+    if lines.get('points'):
+        parts.append('נקודות ' + '+'.join(map(str, lines['points'])))
+    r.warn('slide-fit', f'{where}: המילים גבוהות מאזור הטקסט של השקף — בערך {height:.0f} פיקסלים מתוך '
+                        f'{LL.FIT_BOX_H} (שורות: {", ".join(parts)}). {hint} shoot.py מודד בדיוק')
 
 
 def unknown_block(w: str, typ, v) -> tuple[str, str]:
     """(code, message) for a body item that is not a block — often a line of text that YAML read as a mapping."""
     if typ == '?' and v is None:
-        return 'yaml-item', f'{w}: פריט ריק ("-" בלי טקסט) — מחקי את השורה, או כתבי בה טקסט'
+        return 'yaml-item', f'{w}: {EMPTY_ITEM}'
     if typ == '?' and isinstance(v, dict):
         msg = f'{w}: כמה מפתחות בפריט אחד ({", ".join(map(str, list(v)[:4]))}) — כל בלוק הוא פריט משלו, בשורת "- " משלו'
         if any(not BLOCK_KEY_RE.fullmatch(str(k)) for k in v):
@@ -1033,6 +1095,9 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
                 r.err('schema', f'{w}.length: במירכאות ("2:16") — ורק אם אומת')
             if isinstance(v.get('clip'), dict):
                 check_clip(r, f'{w}.clip', v)
+            # the slide "לפני שצופים" (derive): the kicker, before as its title, and the button to the video
+            check_fit(r, w, 'לפני שצופים', v.get('before'), link=True,
+                      hint='before הוא שאלה אחת קצרה לפני הצפייה — קצרי אותו.')
         if typ == 'handout':
             if not (v.get('items') or v.get('text')):
                 r.err('schema', f'{w}: צריך items או text')
@@ -1046,6 +1111,9 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
                 r.err('exit', f'{w}.prompts: לפחות שאלה אחת')
             elif isinstance(pr, list) and len(pr) > 3:
                 r.warn('exit', f'{w}.prompts: {len(pr)} שאלות — 2–3 שאלות קצרות')
+            # the exit slide (derive): its own kicker, the title, the prompts as points, on the wider text column
+            check_fit(r, w, 'כרטיס יציאה', v.get('title'), points=pr, wide=True,
+                      hint='כרטיס יציאה: 2–3 שאלות קצרות — קצרי אותן.')
     if not track:
         if kind == 'messages' and types.count('messages') != 1:
             r.err('messages', f'{where}: שלב "חשוב לזכור" מכיל בדיוק בלוק messages אחד')
@@ -1080,6 +1148,7 @@ def validate_dir(lesson_dir: Path, kit: LL.Kit | None = None) -> Report:
 
 def main(argv: list[str]) -> int:
     dirs = [Path(a) for a in argv if not a.startswith('-')] or LL.lesson_dirs()
+    print(LL.skill_version())
     kit = LL.Kit()
     bad = 0
     for d in dirs:

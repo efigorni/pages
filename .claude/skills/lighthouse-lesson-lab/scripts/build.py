@@ -10,6 +10,7 @@
 Also syncs lesson-lab/lessons/_assets/ (css, js, the art kit, reveal.js 5.2.1). Never touches the hub
 (lessons/index.html — build_all.py rebuilds it in the control wave, D34) and never makes the PDF
 (export_pdf.py, D36). Exit code 1 when any lesson has a validation error.
+The first line is the skill version (lessonlib.skill_version): when it changes mid-run, the skill was updated.
 """
 from __future__ import annotations
 
@@ -47,6 +48,7 @@ def main(argv: list[str]) -> int:
     if not dirs:
         print(__doc__)
         return 2
+    print(LL.skill_version())
     LL.sync_assets()
     kit = LL.Kit()
     bad = 0

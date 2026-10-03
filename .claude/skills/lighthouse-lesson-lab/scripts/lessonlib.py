@@ -6,12 +6,15 @@ The rules live in validate.py; build.py, build_all.py and export_pdf.py call int
 """
 from __future__ import annotations
 
+import hashlib
 import io
 import json
 import os
 import re
 import tarfile
 import tempfile
+import time
+import unicodedata
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -232,6 +235,131 @@ def months_of(month: str) -> list[str]:
     if not idx:
         return []
     return list(MONTHS[min(idx):max(idx) + 1])
+
+
+# ----------------------------------------------------------------------------- do the words fit the slide?
+# skill-fixes #27: the height of a slide's words, estimated from the text, so the validator warns before shoot.py
+# measures. The box and the type mirror assets/slides.css — change both together. The slide is 1440×810, and .frame
+# (padding 64/96/96, gap 56, a picture column of 620 — 460 on the exit ticket) leaves the words 572px (732) × 650px:
+# the box shoot.py checks. Calibrated on all 1625 slides of 100 built decks: the line counts are Chrome's, except
+# for a line that ends a hair's breadth from the edge.
+FIT_BOX_H = 650
+FIT_COL = {'': 572, 's-exit': 732}
+FIT_TYPE = {  # element: (advance table, font size px, line height px, letter-spacing em)
+    'kicker': ('bold', 30, 30.0, 0.0),      # .kicker — Assistant 800; reveal's line height (1)
+    'title': ('display', 66, 75.9, -0.01),  # h2 — Secular One, line-height 1.15, letter-spacing -.01em
+    'sub': ('body', 36, 50.4, 0.0),         # .sub — line-height 1.4, max-width 26ch
+    'points': ('body', 36, 46.8, 0.0),      # .pts li — line-height 1.3
+}
+FIT_MARGIN = {'kicker': (0, 14), 'title': (0, 18), 'sub': (0, 14), 'points': (22, 0), 'link': (26, 0)}  # top, bottom
+FIT_SUB_CH = 26              # .sub max-width, in widths of "0"
+FIT_POINT_NUMBER = 64        # .pts li padding-right: the column of the number
+FIT_POINT_BOX = 14 + 14 + 2  # .pts li padding-top + padding-bottom + border-top
+FIT_LINK_H = 58              # .go (the video button) — 30px + padding 14/14
+# A line that ends a hair's breadth from the edge counts as fitting: the estimate errs low, so a warning means words
+# that really are too tall. shoot.py measures exactly.
+FIT_SLACK = 1.005
+
+# Advance widths of the deck fonts (Google Fonts, measured in Chrome with canvas measureText), in thousandths of an em.
+# Combining marks (niqqud, cantillation) take no room; a character that is not here counts as ADV_OTHER.
+_ADV_CHARS = (' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~'
+              '\xa0·־אבגדהוזחטיךכלםמןנסעףפץצקרשת׳״–—‘’“”„•…₪←→')
+_ADV_DATA = {
+    'body': (  # Assistant 400 — .sub, .pts li
+        '200 282 409 492 492 817 600 242 297 297 412 492 242 308 242 352 492 451 492 492 492 492 492 492 492 492 '
+        '242 242 492 492 492 419 839 539 585 569 613 524 490 614 648 257 475 573 481 721 644 661 562 661 563 530 '
+        '533 643 509 782 505 468 539 297 352 297 492 500 540 501 551 454 552 492 284 500 540 242 242 487 250 825 '
+        '543 540 552 552 340 416 331 540 459 710 436 459 419 297 237 297 492 200 242 315 560 526 372 535 546 224 '
+        '361 563 553 224 503 471 476 580 605 224 368 565 531 547 541 466 516 549 472 630 605 213 388 480 800 242 '
+        '242 409 409 409 298 998 734 1000 1000'
+    ),
+    'bold': (  # Assistant 800 — .kicker, **bold**
+        '200 360 580 540 540 860 690 320 360 360 472 540 320 340 320 334 540 492 540 540 540 540 540 540 540 540 '
+        '320 320 540 540 540 478 924 584 612 586 642 556 536 646 682 316 520 628 530 776 672 692 608 692 630 564 '
+        '564 672 572 824 588 544 542 360 334 360 540 500 560 536 580 472 580 526 360 546 582 288 290 568 298 868 '
+        '582 560 580 580 418 452 400 578 544 798 540 542 474 360 278 360 540 200 320 336 649 552 452 546 588 278 '
+        '383 613 612 278 517 493 510 598 662 278 388 627 601 573 566 570 583 613 497 705 651 302 492 480 800 320 '
+        '320 580 580 580 360 994 896 1000 1000'
+    ),
+    'display': (  # Secular One — titles; its bold is synthetic, with the same advances
+        '200 391 608 693 581 786 684 346 399 400 570 650 346 541 336 507 586 438 517 486 574 491 542 473 561 542 '
+        '386 410 650 650 650 511 823 679 569 594 685 530 517 688 716 301 338 615 485 911 719 741 547 746 560 541 '
+        '568 696 644 1022 673 607 590 324 488 324 674 585 600 557 577 480 577 563 452 577 606 398 303 545 393 943 '
+        '612 604 577 577 399 469 421 599 547 850 545 542 503 378 490 378 650 200 306 450 583 536 407 526 586 333 '
+        '400 605 591 326 470 504 473 609 633 330 389 616 562 546 564 509 515 590 468 737 656 306 568 696 962 316 '
+        '306 578 578 568 463 896 1091 1000 1000'
+    ),
+}
+ADVANCE = {k: dict(zip(_ADV_CHARS, (int(x) / 1000 for x in v.split()))) for k, v in _ADV_DATA.items()}
+assert all(len(v.split()) == len(_ADV_CHARS) for v in _ADV_DATA.values()), 'a width table and _ADV_CHARS differ'
+ADV_OTHER = 0.55
+
+
+def advance(ch: str, table: str) -> float:
+    """The advance width of one character, in em."""
+    return 0.0 if unicodedata.combining(ch) else ADVANCE[table].get(ch, ADV_OTHER)
+
+
+def text_lines(text, width: float, table: str, size: float, spacing: float = 0.0) -> int:
+    """How many lines `text` takes in a box `width` px wide, the way Chrome wraps it: greedy, breaking at spaces only;
+    a line break in the text (YAML `|`, rendered <br>) starts a new line; **bold** in Assistant 800. 0 when empty."""
+    s = str(text or '').strip()
+    if not s:
+        return 0
+    room, lines, line, word, gap = width * FIT_SLACK, 1, 0.0, 0.0, 0.0
+
+    def place():  # the word just read goes on this line, or opens the next one
+        nonlocal lines, line, word, gap
+        if word:
+            if line and line + gap + word > room:
+                lines, line = lines + 1, word
+            else:
+                line += gap + word
+            word, gap = 0.0, 0.0
+
+    for i, part in enumerate(re.split(r'\*\*(.+?)\*\*', s, flags=re.S)):  # odd parts were **bold**
+        t = 'bold' if i % 2 and table == 'body' else table
+        for ch in part:
+            if ch == '\n':
+                place()
+                lines, line, gap = lines + 1, 0.0, 0.0
+            elif ch in ' \t':
+                place()
+                if line:  # spaces collapse into one, and a line never starts with one
+                    gap = (advance(' ', t) + spacing) * size
+            else:
+                word += (advance(ch, t) + spacing) * size
+    place()
+    return lines
+
+
+def slide_fit(kicker='', title='', sub='', points=(), *, wide: bool = False, link: bool = False) -> tuple[float, dict]:
+    """(the estimated height in px of the words of one deck slide — the block shoot.py measures against FIT_BOX_H —,
+    the number of lines of each element: {'kicker': n, 'title': n, 'sub': n, 'points': [n, …]})."""
+    col = FIT_COL['s-exit' if wide else '']
+    width = {'kicker': col, 'title': col, 'sub': FIT_SUB_CH * advance('0', 'body') * FIT_TYPE['sub'][1],
+             'points': col - FIT_POINT_NUMBER}
+    parts, lines = [], {}
+    for key, text in (('kicker', kicker), ('title', title), ('sub', sub)):
+        table, size, lh, spacing = FIT_TYPE[key]
+        n = text_lines(text if isinstance(text, str) else '', width[key], table, size, spacing)
+        if n:
+            parts.append((key, n * lh))
+            lines[key] = n
+    pts = [p for p in (points if isinstance(points, list) else []) if isinstance(p, str)]
+    if pts:
+        table, size, lh, spacing = FIT_TYPE['points']
+        lines['points'] = [text_lines(p, width['points'], table, size, spacing) for p in pts]
+        parts.append(('points', sum(n * lh + FIT_POINT_BOX for n in lines['points'])))
+    if link:
+        parts.append(('link', FIT_LINK_H))
+    height, prev = 0.0, None
+    for key, h in parts:
+        if prev:  # block margins collapse; the button is inline-flex, so its margin adds to the one above it
+            above, below = FIT_MARGIN[prev][1], FIT_MARGIN[key][0]
+            height += above + below if key == 'link' else max(above, below)
+        height, prev = height + h, key
+    return height, lines
 
 
 # ----------------------------------------------------------------------------- load
@@ -765,3 +893,24 @@ def sync_assets() -> list[str]:
 def lesson_dirs(root: Path = LESSONS) -> list[Path]:
     return sorted(p for p in Path(root).iterdir() if p.is_dir() and not p.name.startswith(('_', '.'))
                   and (p / 'lesson.yaml').exists())
+
+
+# ----------------------------------------------------------------------------- skill version
+
+VERSIONED = ('templates', 'scripts', 'assets')  # everything a build reads from the skill
+
+
+def skill_version() -> str:
+    """One line for the top of build.py / validate.py: a hash of the contents of templates/, scripts/ and assets/,
+    and the newest file among them — so an agent sees that the skill changed in the middle of its run
+    (skill-fixes #26)."""
+    h, newest = hashlib.sha256(), (0.0, '')
+    for top in VERSIONED:
+        for p in sorted((SKILL / top).rglob('*')):
+            rel = p.relative_to(SKILL)
+            if not p.is_file() or any(part.startswith('.') or part == '__pycache__' for part in rel.parts):
+                continue
+            h.update(rel.as_posix().encode() + b'\0' + p.read_bytes() + b'\0')
+            newest = max(newest, (p.stat().st_mtime, rel.as_posix()))
+    when = time.strftime('%Y-%m-%d %H:%M', time.localtime(newest[0])) if newest[1] else '?'
+    return f'סקיל lighthouse-lesson-lab · גרסה {h.hexdigest()[:8]} · שינוי אחרון {when} ({newest[1]})'
