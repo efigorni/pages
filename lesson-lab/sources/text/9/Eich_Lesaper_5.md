@@ -239,6 +239,8 @@
 
 נצפה
 
+קישורים: https://www.youtube.com/embed/q7b48xccsvw?feature=oembed
+
 **הערות מנחה:**
 
 https://www.youtube.com/shorts/q7b48xccsvw
@@ -465,6 +467,8 @@ https://www.youtube.com/shorts/q7b48xccsvw
 
 צפייה בסרטון מסכם
 
+קישורים: https://www.youtube.com/embed/LPy0rKdr6hk?feature=oembed
+
 **הערות מנחה:**
 
 סרטון נוסף – לבחירת המורה.
@@ -473,6 +477,8 @@ https://www.youtube.com/shorts/q7b48xccsvw
 ## שקף 23  (1 תמונות · 1 וידאו)
 
 סרטון מסכם
+
+קישורים: https://www.youtube.com/embed/kRtiI3I1-6s?start=8&feature=oembed
 
 **הערות מנחה:**
 

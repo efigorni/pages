@@ -4,7 +4,7 @@
 - פרק: התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)
 - יחידה: נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת
 - מקור: https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Golshim_Leshinuy.pptx
-- שקפים: 39 · מילים בשקפים: 3043 · מילים בהערות: 997
+- שקפים: 39 · מילים בשקפים: 3046 · מילים בהערות: 997
 
 ## שקף 1  (3 תמונות)
 
@@ -253,7 +253,7 @@
 לצפייה בפרק לחצו כאן.
 יש להקרין את דקות 1:25-2:10
 
-קישורים: https://www.youtube.com/watch?v=zIKwV5iVVio
+קישורים: https://www.youtube.com/embed/zIKwV5iVVio?feature=oembed · https://www.youtube.com/watch?v=zIKwV5iVVio
 
 **הערות מנחה:**
 
@@ -472,6 +472,8 @@
  בני נוער...
 
 ## שקף 22
+
+שאלות לדיון בכיתה
 
 איך הרגשתם במהלך הפעילות?
  מה הבנתם על עצמכם? מהן הסיבות המנחות אתכם בבחירת התנהגות מסוימת ברשת?

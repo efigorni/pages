@@ -270,6 +270,8 @@
 
 סרטון: המדריך למתבגרת
 
+קישורים: https://www.youtube.com/embed/aCwd83TClUE?list=PLvOBUEO1Dk21XPCkXBDErH0ndO9pczsX4
+
 **הערות מנחה:**
 
 מצורף קישור לסרטון:
@@ -280,6 +282,8 @@ https://www.youtube.com/watch?v=aCwd83TClUE&list=PLvOBUEO1Dk21XPCkXBDErH0ndO9pcz
 ## שקף 18  (1 תמונות)
 
 סרטון: המחזור החודשי
+
+קישורים: https://www.youtube.com/embed/FABAUJH_gqU?feature=oembed
 
 **הערות מנחה:**
 
@@ -313,6 +317,8 @@ https://youtu.be/FABAUJH_gqU
 
 כיצד מרגישים עם השינויים? המתבגרים – שינויים חלק א'
 
+קישורים: https://www.youtube.com/embed/rCV0pxlsEPA?feature=oembed
+
 **הערות מנחה:**
 
 מצורף קישור לסרטון "כיצד מרגישים עם השינויים? המתבגרים – שינויים חלק א'": 
@@ -323,6 +329,8 @@ https://youtu.be/rCV0pxlsEPA
 ## שקף 21
 
 כיצד מרגישים עם השינויים? המתבגרים – שינויים חלק ב'
+
+קישורים: https://www.youtube.com/embed/5bMVXsX4Xuc?feature=oembed
 
 **הערות מנחה:**
 

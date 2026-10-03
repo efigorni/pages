@@ -4,7 +4,7 @@
 - פרק: מיניות בריאה ומניעת פגיעה מינית (מרץ)
 - יחידה: נקודת מבט: פיתוח ראייה ביקורתית במציאות פוסט מודרנית
 - מקור: https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Mabat_Al_Haskama.pptx
-- שקפים: 27 · מילים בשקפים: 950 · מילים בהערות: 653
+- שקפים: 27 · מילים בשקפים: 953 · מילים בהערות: 653
 
 ## שקף 1  (3 תמונות)
 
@@ -194,6 +194,8 @@
 מבקשים מראש הקבוצה לקרוא את המשפטים שכתבו החברים לקבוצה ומוצאים יחד את המשותף בין המשפטים
 
 ## שקף 12  (1 תמונות)
+
+שאלות לדיון בכיתה
 
 מה גיליתם? האם מצאתם קווים משותפים בין התשובות של חברי הקבוצה?
 האם הרצון שלי תמיד ברור לי?
@@ -393,6 +395,8 @@
 https://www.canva.com/design/DAE8WcPy1hE/BREkdFvFnnTtBGZgdVCbKg/view?utm_content=DAE8WcPy1hE&utm_campaign=designshare&utm_medium=link&utm_source=viewer
 
 ## שקף 23  (2 תמונות · 1 וידאו)
+
+קישורים: https://www.youtube.com/embed/2uHlis2-ioY?feature=oembed
 
 **הערות מנחה:**
 

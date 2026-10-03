@@ -262,6 +262,8 @@
 
 סרטון- התבגרות מינית
 
+קישורים: https://www.youtube.com/embed/EQ4YUZlJPVI?feature=oembed
+
 **הערות מנחה:**
 
 קישור לסרטון "התבגרות מינית ": https://www.youtube.com/watch?v=EQ4YUZlJPVI
@@ -295,6 +297,8 @@
 סרטון: כיצד מרגישים עם השינויים?
  המתבגרים – שינויים חלק א'
 
+קישורים: https://www.youtube.com/embed/rCV0pxlsEPA?feature=oembed
+
 **הערות מנחה:**
 
 מצורף קישור לסרטון כיצד מרגישים עם השינויים? המתבגרים – שינויים חלק א': 
@@ -306,6 +310,8 @@ https://youtu.be/rCV0pxlsEPA
 
 סרטון: כיצד מרגישים עם השינויים? 
 המתבגרים – שינויים חלק ב'
+
+קישורים: https://www.youtube.com/embed/5bMVXsX4Xuc?feature=oembed
 
 **הערות מנחה:**
 

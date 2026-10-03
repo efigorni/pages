@@ -4,7 +4,7 @@
 - פרק: מיניות בריאה ומניעת פגיעה מינית (מרץ)
 - יחידה: נקודת מבט: פיתוח ראייה ביקורתית במציאות פוסט מודרנית
 - מקור: https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Netya_Minit.pptx
-- שקפים: 34 · מילים בשקפים: 1238 · מילים בהערות: 1349
+- שקפים: 34 · מילים בשקפים: 1254 · מילים בהערות: 1349
 
 ## שקף 1  (3 תמונות)
 
@@ -612,6 +612,8 @@ https://meyda.education.gov.il/files/shefi/miniutumeniatpgia/Yeda_Tieoreti_Mehca
 
 ## שקף 27  (1 תמונות · 1 וידאו)
 
+קישורים: https://www.youtube.com/embed/y4YjZRi5Zeg?feature=oembed
+
 **הערות מנחה:**
 
 צפייה בסרטון ודיון.
@@ -656,6 +658,8 @@ https://www.youtube.com/watch?v=y4YjZRi5Zeg
 
 ## שקף 30  (1 וידאו)
 
+קישורים: https://www.youtube.com/embed/ZFSNGp1__h0?feature=oembed
+
 **הערות מנחה:**
 
 סיכום השיעור:
@@ -663,7 +667,15 @@ https://www.youtube.com/watch?v=y4YjZRi5Zeg
 https://www.youtube.com/watch?v=ZFSNGp1__h0
 ולסכם את השיעור באמצעות השאלות בשקף.
 
-## שקף 31  (1 תמונות)
+## שקף 31  (1 תמונות · SmartArt)
+
+משהו שהתחזק אצלי
+
+משהו חדש שגיליתי
+
+הכעיס אותי/ הפריע לי
+
+שאלות שהתעוררו בי
 
 **הערות מנחה:**
 
@@ -673,6 +685,8 @@ https://www.youtube.com/watch?v=ZFSNGp1__h0
 ולסכם את השיעור באמצעות השאלות בשקף.
 
 ## שקף 32
+
+מה למדנו היום?
 
 נטייה מינית היא היבט אחד בו בני אדם יכולים להיות שונים זה מזה. 
 נטייה מינית אינה עניין של בחירה.
