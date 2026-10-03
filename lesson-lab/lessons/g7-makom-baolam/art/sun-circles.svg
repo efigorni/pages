@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שמש מעגלי השתייכות: "אני" במרכז, ובכל קרן קבוצה (מקור: שקפים 12–13) -->
+  <g filter="url(#rough)">
+    <g stroke="#f7ae4d" stroke-width="11" stroke-linecap="round">
+      <line x1="310" y1="270" x2="310" y2="84"/><line x1="310" y1="270" x2="474" y2="175"/><line x1="310" y1="270" x2="474" y2="365"/>
+      <line x1="310" y1="270" x2="310" y2="456"/><line x1="310" y1="270" x2="146" y2="365"/><line x1="310" y1="270" x2="146" y2="175"/>
+    </g>
+    <circle cx="310" cy="270" r="84" fill="#f7ae4d"/>
+    <g fill="#ffffff" stroke="#63b1af" stroke-width="7">
+      <circle cx="310" cy="78" r="72"/><circle cx="478" cy="172" r="72"/><circle cx="478" cy="368" r="72"/>
+      <circle cx="310" cy="462" r="72"/><circle cx="142" cy="368" r="72"/><circle cx="142" cy="172" r="72"/>
+    </g>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-size="31">
+    <text x="310" y="274" font-size="48">אני</text>
+    <text x="310" y="81">משפחה</text>
+    <text x="478" y="175">חברים</text>
+    <text x="478" y="371">כיתה</text>
+    <text x="310" y="465">חוג</text>
+    <text x="142" y="353">תנועת</text><text x="142" y="387">נוער</text>
+    <text x="142" y="175">שכונה</text>
+  </g>
+</svg>
