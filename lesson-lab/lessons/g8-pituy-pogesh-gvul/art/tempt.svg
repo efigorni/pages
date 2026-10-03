@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- פיתוי: דמות, ומעליה ענן מחשבה ובתוכו קופסת מתנה (אין קופסת מתנה בערכה) -->
+  <g filter="url(#rough)">
+    <use href="#kid-stand" x="50" y="230" width="140" height="280" color="#63b1af"/>
+    <use href="#thought" x="250" y="24" width="330" height="313.5" transform="matrix(-1 0 0 1 830 0)"/>
+    <rect x="360" y="138" width="116" height="92" rx="6" fill="#8c82c1"/>
+    <rect x="350" y="116" width="136" height="32" rx="6" fill="#8c82c1"/>
+    <rect x="350" y="116" width="136" height="32" rx="6" fill="#13100e" fill-opacity="0.13"/>
+    <rect x="408" y="116" width="20" height="114" fill="#f7ae4d"/>
+    <path d="M418 114 C396 86 368 90 374 106 C379 118 402 118 418 114 Z" fill="#f7ae4d"/>
+    <path d="M418 114 C440 86 468 90 462 106 C457 118 434 118 418 114 Z" fill="#f7ae4d"/>
+  </g>
+</svg>

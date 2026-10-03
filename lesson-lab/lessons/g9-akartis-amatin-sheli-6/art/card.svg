@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כרטיס הביטחון: כרטיס ובו מגן, לב, שמש וטלפון, ושורות כתיבה ליד כל אחד (ציור ייעודי — אין כרטיס כזה בערכה) -->
+  <g filter="url(#rough)">
+    <rect x="90" y="110" width="440" height="320" rx="24" fill="#ffffff"/>
+    <path d="M90 172 V134 A24 24 0 0 1 114 110 H506 A24 24 0 0 1 530 134 V172 Z" fill="#63b1af"/>
+    <path d="M90 172 H530" stroke="#13100e" stroke-width="4" opacity=".13"/>
+    <rect x="90" y="110" width="440" height="320" rx="24" fill="none" stroke="#13100e" stroke-width="5"/>
+    <use href="#shield" x="424" y="198" width="72" height="80" color="#8c82c1"/>
+    <path d="M330 216 H404" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <path d="M342 240 H404" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <path d="M360 264 H404" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <use href="#heart" x="216" y="204" width="80" height="72" color="#e57373"/>
+    <path d="M128 216 H200" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <path d="M140 240 H200" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <path d="M158 264 H200" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <use href="#sun" x="420" y="318" width="80" height="80" color="#f7ae4d"/>
+    <path d="M330 336 H404" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <path d="M342 360 H404" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <path d="M360 384 H404" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <use href="#phone" x="232" y="316" width="50" height="83" color="#13100e"/>
+    <path d="M128 336 H200" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <path d="M140 360 H200" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+    <path d="M158 384 H200" stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".4"/>
+  </g>
+</svg>

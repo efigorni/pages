@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שער: שתי טיפות אושר — טורקיז גדולה (אישית) וכתומה (כיתתית) — ושמש קטנה. טיפה: ציור ייעודי, אין בערכה -->
+  <g filter="url(#rough)">
+    <use href="#sun" x="70" y="40" width="150" height="150" color="#f7ae4d"/>
+    <g transform="translate(250 120) scale(1.6)">
+      <path d="M75 0 C90 40 150 85 150 145 A75 75 0 0 1 0 145 C0 85 60 40 75 0 Z" fill="#63b1af"/>
+      <path d="M150 145 A75 75 0 0 1 75 220 Q132 200 150 145 Z" fill="#13100e" fill-opacity=".13"/>
+    </g>
+    <g transform="translate(70 270)">
+      <path d="M75 0 C90 40 150 85 150 145 A75 75 0 0 1 0 145 C0 85 60 40 75 0 Z" fill="#f7ae4d"/>
+      <path d="M150 145 A75 75 0 0 1 75 220 Q132 200 150 145 Z" fill="#13100e" fill-opacity=".13"/>
+    </g>
+  </g>
+</svg>

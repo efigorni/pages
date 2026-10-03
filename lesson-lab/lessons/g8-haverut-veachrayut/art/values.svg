@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ערכי החברות של שקף 11 במקור — ענן של 19 ערכים (תרשים מהמקור: מילה לכל חלק) -->
+  <g filter="url(#rough)">
+    <rect x="385" y="18" width="179" height="54" rx="27" fill="#e6f2f1" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="56" y="18" width="317" height="54" rx="27" fill="#fdf0dd" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="372" y="81" width="159" height="54" rx="27" fill="#eeecf7" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="221" y="81" width="139" height="54" rx="27" fill="#e7f1ec" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="89" y="81" width="119" height="54" rx="27" fill="#e6f2f1" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="411" y="144" width="159" height="54" rx="27" fill="#fdf0dd" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="240" y="144" width="159" height="54" rx="27" fill="#eeecf7" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="50" y="144" width="179" height="54" rx="27" fill="#e7f1ec" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="401" y="207" width="159" height="54" rx="27" fill="#e6f2f1" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="231" y="207" width="159" height="54" rx="27" fill="#fdf0dd" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="60" y="207" width="159" height="54" rx="27" fill="#eeecf7" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="336" y="270" width="218" height="54" rx="27" fill="#e7f1ec" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="66" y="270" width="258" height="54" rx="27" fill="#e6f2f1" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="257" y="333" width="278" height="54" rx="27" fill="#fdf0dd" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="86" y="333" width="159" height="54" rx="27" fill="#eeecf7" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="342" y="396" width="218" height="54" rx="27" fill="#e7f1ec" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="211" y="396" width="119" height="54" rx="27" fill="#e6f2f1" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="60" y="396" width="139" height="54" rx="27" fill="#fdf0dd" stroke="#13100e" stroke-width="3.5"/>
+    <rect x="181" y="459" width="258" height="54" rx="27" fill="#eeecf7" stroke="#13100e" stroke-width="3.5"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="34" fill="#13100e" text-anchor="middle">
+    <text x="475" y="56">אכפתיות</text>
+    <text x="215" y="56">מנהיגות והשפעה</text>
+    <text x="451" y="119">מסירות</text>
+    <text x="290" y="119">נתינה</text>
+    <text x="149" y="119">דאגה</text>
+    <text x="491" y="182">נדיבות</text>
+    <text x="320" y="182">נאמנות</text>
+    <text x="139" y="182">מצוינות</text>
+    <text x="481" y="245">אחריות</text>
+    <text x="310" y="245">פתיחות</text>
+    <text x="139" y="245">אמינות</text>
+    <text x="445" y="308">חופש הפרט</text>
+    <text x="195" y="308">דוגמה אישית</text>
+    <text x="395" y="371">לכבד את האחר</text>
+    <text x="165" y="371">הדדיות</text>
+    <text x="451" y="434">חום וחיבה</text>
+    <text x="270" y="434">כנות</text>
+    <text x="129" y="434">הערכה</text>
+    <text x="310" y="497">ביטחון עצמי</text>
+  </g>
+</svg>

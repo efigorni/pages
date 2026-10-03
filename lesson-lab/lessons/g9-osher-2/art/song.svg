@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- השיר: מחשב נייד ועל המסך לב, ותווים מעליו (תווים — ציור ייעודי, אין בערכה) -->
+  <g filter="url(#rough)">
+    <use href="#laptop" x="170" y="250" width="360" height="240" color="#13100e"/>
+    <use href="#heart" x="293" y="285" width="114" height="103" color="#e57373"/>
+    <g fill="#13100e">
+      <ellipse cx="140" cy="190" rx="24" ry="17" transform="rotate(-20 140 190)"/>
+      <rect x="157" y="80" width="8" height="110" rx="3"/>
+      <path d="M165 80 C195 95 207 122 190 152 C190 127 180 112 165 106 Z"/>
+      <ellipse cx="402" cy="186" rx="24" ry="17" transform="rotate(-20 402 186)"/>
+      <ellipse cx="482" cy="166" rx="24" ry="17" transform="rotate(-20 482 166)"/>
+      <rect x="419" y="72" width="8" height="114" rx="3"/>
+      <rect x="499" y="52" width="8" height="114" rx="3"/>
+      <path d="M419 72 L507 52 L507 72 L419 92 Z"/>
+    </g>
+  </g>
+</svg>

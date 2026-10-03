@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- החבילה: קופסת מתנה עטופה בסרט, ולידה כרטיס ״נא לא לגעת״ עם פס ורוד של גבול (אין קופסת מתנה בערכה) -->
+  <g filter="url(#rough)">
+    <rect x="76" y="258" width="248" height="226" rx="10" fill="#8c82c1"/>
+    <rect x="76" y="258" width="248" height="34" fill="#13100e" fill-opacity="0.13"/>
+    <rect x="56" y="210" width="288" height="62" rx="10" fill="#8c82c1"/>
+    <rect x="56" y="210" width="288" height="62" rx="10" fill="#13100e" fill-opacity="0.13"/>
+    <rect x="180" y="210" width="40" height="274" fill="#f7ae4d"/>
+    <rect x="76" y="352" width="248" height="34" fill="#f7ae4d"/>
+    <path d="M200 206 C156 150 98 156 112 190 C122 214 170 214 200 206 Z" fill="#f7ae4d"/>
+    <path d="M200 206 C244 150 302 156 288 190 C278 214 230 214 200 206 Z" fill="#f7ae4d"/>
+    <path d="M200 206 C156 150 98 156 112 190 C122 214 170 214 200 206 Z" fill="#13100e" fill-opacity="0.13"/>
+    <circle cx="200" cy="204" r="16" fill="#f7ae4d"/>
+    <rect x="370" y="330" width="226" height="130" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="370" y="330" width="226" height="30" rx="8" fill="#e57373"/>
+  </g>
+  <text x="483" y="423" font-family="Secular One, Arial Hebrew, sans-serif" font-size="34" fill="#13100e" text-anchor="middle">נא לא לגעת</text>
+</svg>

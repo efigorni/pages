@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שרשרת השמחה: חוט עם דגלונים, ושלוש דמויות מתחתיו (ציור ייעודי — אין דגלונים בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M40 56 Q310 146 580 56" fill="none" stroke="#13100e" stroke-width="5" stroke-linecap="round"/>
+    <path d="M69.7 65.4 L118.3 78.3 L94.0 154.2 Z" fill="#63b1af" stroke="#63b1af" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M94.0 72.2 L118.3 78.3 L94.0 154.2 Z" fill="#13100e" opacity=".13"/>
+    <path d="M156.1 86.4 L204.7 94.2 L180.4 172.6 Z" fill="#f7ae4d" stroke="#f7ae4d" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M180.4 90.6 L204.7 94.2 L180.4 172.6 Z" fill="#13100e" opacity=".13"/>
+    <path d="M242.5 98.2 L291.1 100.8 L266.8 181.8 Z" fill="#8c82c1" stroke="#8c82c1" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M266.8 99.8 L291.1 100.8 L266.8 181.8 Z" fill="#13100e" opacity=".13"/>
+    <path d="M328.9 100.8 L377.5 98.2 L353.2 181.8 Z" fill="#63b1af" stroke="#63b1af" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M353.2 99.8 L377.5 98.2 L353.2 181.8 Z" fill="#13100e" opacity=".13"/>
+    <path d="M415.3 94.2 L463.9 86.4 L439.6 172.6 Z" fill="#f7ae4d" stroke="#f7ae4d" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M439.6 90.6 L463.9 86.4 L439.6 172.6 Z" fill="#13100e" opacity=".13"/>
+    <path d="M501.7 78.3 L550.3 65.4 L526.0 154.2 Z" fill="#8c82c1" stroke="#8c82c1" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M526.0 72.2 L550.3 65.4 L526.0 154.2 Z" fill="#13100e" opacity=".13"/>
+    <circle cx="40" cy="56" r="8" fill="#13100e"/>
+    <circle cx="580" cy="56" r="8" fill="#13100e"/>
+    <use href="#group3" x="130" y="254" width="360" height="270"/>
+  </g>
+</svg>

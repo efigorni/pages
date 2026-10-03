@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שתי טיפות אושר: טיפה אישית גדולה (טורקיז), ולוח שעליו טיפות כיתתיות קטנות (כתומות). טיפה: ציור ייעודי -->
+  <g filter="url(#rough)">
+    <use href="#board" x="300" y="50" width="290" height="212"/>
+    <g fill="#f7ae4d">
+      <path transform="translate(345 92) scale(.36)" d="M75 0 C90 40 150 85 150 145 A75 75 0 0 1 0 145 C0 85 60 40 75 0 Z"/>
+      <path transform="translate(425 118) scale(.36)" d="M75 0 C90 40 150 85 150 145 A75 75 0 0 1 0 145 C0 85 60 40 75 0 Z"/>
+      <path transform="translate(505 90) scale(.36)" d="M75 0 C90 40 150 85 150 145 A75 75 0 0 1 0 145 C0 85 60 40 75 0 Z"/>
+    </g>
+    <g transform="translate(60 200) scale(1.4)">
+      <path d="M75 0 C90 40 150 85 150 145 A75 75 0 0 1 0 145 C0 85 60 40 75 0 Z" fill="#63b1af"/>
+      <path d="M150 145 A75 75 0 0 1 75 220 Q132 200 150 145 Z" fill="#13100e" fill-opacity=".13"/>
+    </g>
+  </g>
+</svg>

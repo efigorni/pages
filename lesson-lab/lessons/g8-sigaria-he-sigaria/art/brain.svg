@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מוח במבט מהצד, ומגן קטן לידו — ״למוח אין חלקי חילוף״ (אין מוח בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M370 352 L392 452 Q394 466 380 466 L352 466 Q340 466 340 452 L336 352 Z" fill="#8c82c1"/>
+    <path d="M370 352 L392 452 Q394 466 380 466 L352 466 Q340 466 340 452 L336 352 Z" fill="#13100e" fill-opacity="0.13"/>
+    <ellipse cx="452" cy="352" rx="70" ry="44" fill="#8c82c1"/>
+    <ellipse cx="452" cy="352" rx="70" ry="44" fill="#13100e" fill-opacity="0.13"/>
+    <path d="M150 296 C104 256 116 160 192 132 C222 80 306 70 348 102 C398 70 482 98 494 160 C548 182 552 270 506 300 C494 344 440 364 396 352 C364 382 300 384 268 356 C226 372 168 350 150 296 Z" fill="#8c82c1"/>
+    <path d="M196 176 C232 196 220 238 254 252" fill="none" stroke="#eeecf7" stroke-width="9" stroke-linecap="round"/>
+    <path d="M284 116 C296 158 336 158 334 200" fill="none" stroke="#eeecf7" stroke-width="9" stroke-linecap="round"/>
+    <path d="M370 132 C410 142 410 186 450 196" fill="none" stroke="#eeecf7" stroke-width="9" stroke-linecap="round"/>
+    <path d="M188 294 C228 280 258 304 298 292" fill="none" stroke="#eeecf7" stroke-width="9" stroke-linecap="round"/>
+    <path d="M330 252 C362 230 400 252 424 230" fill="none" stroke="#eeecf7" stroke-width="9" stroke-linecap="round"/>
+    <path d="M420 304 C446 286 470 296 482 266" fill="none" stroke="#eeecf7" stroke-width="9" stroke-linecap="round"/>
+    <use href="#shield" x="40" y="370" width="130" height="144.4" color="#63b1af"/>
+  </g>
+</svg>
