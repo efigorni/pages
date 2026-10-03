@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>גלריית רכיבים — מערך שיעור</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lesson.css">
+<style>
+  .cls { direction: ltr; text-align: left; font: 600 12px/1.4 ui-monospace, Menlo, monospace; color: #6c60b0; background: #eeecf7; display: inline-block; padding: 2px 8px; border-radius: 6px; margin: 26px 0 6px; }
+</style>
+</head>
+<body>
+<!--
+  מפת הרכיבים של lesson.css. כל דוגמה מסומנת בשם המחלקה שלה.
+  כותבי אפשרויות לפיקר: העתיקו מבנים מכאן, לא תוכן.
+-->
+<header class="hero">
+  <div class="hero-art"></div>
+  <div class="wrap">
+    <p class="lesson-unit">חברות, סובלנות ומניעת אלימות · אוקטובר</p>
+    <h1 class="lesson-title">שם השיעור</h1>
+    <p class="lesson-sub">משפט אחד שמסביר על מה השיעור ולמה הוא חשוב עכשיו.</p>
+    <div class="meta"><span>כיתה ז׳</span><span>45 דקות</span><span>מליאה + זוגות</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="cls">.lesson-card > .row</span>
+  <section class="lesson-card">
+    <div class="row"><b>שאלת השיעור</b><p class="question-big">איפה אני מרגיש.ה שיש לי מקום?</p></div>
+    <div class="row"><b>ייקחו איתם</b><ul><li>מטרה ראשונה</li><li>מטרה שנייה</li></ul></div>
+    <div class="row"><b>צריך להכין</b><p>דפים, טושים, מצגת שקפים 3–7.</p></div>
+  </section>
+
+  <h2 class="sec">מהלך השיעור<small>.sec + small</small></h2>
+
+  <span class="cls">.flow > .step > .step-rail(.step-min + .step-node[data-k]) + .step-body(.open-phase|.talk-phase|.close-phase)</span>
+  <div class="flow">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body open-phase">
+        <div class="step-head"><h3 class="step-title">קדימה ללמידה</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span><span class="pr" data-f="think">כולם כותבים</span><span class="beam">עניין ורלוונטיות</span></div>
+        <div class="board">כתבו במחברת: מקום אחד שבו אתם מרגישים בבית, ולמה.</div>
+        <div class="say"><q>יש לכם שלוש דקות. כותבים לבד, בשקט.</q></div>
+        <div class="say q"><q>מי מוכן.ה לשתף משפט אחד ממה שכתב.ה?</q></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">5′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">משימה בזוגות</h3><span class="dur">12 דק׳</span></div>
+        <span class="cls">.task > .task-what + .task-how</span>
+        <div class="task">
+          <div class="task-what"><b>מה עושים?</b> קוראים את הסיפור ומסמנים שני רגעים שבהם הדמות הרגישה שאין לה מקום.</div>
+          <div class="task-how">
+            <div><b>זמן</b>8 דקות</div>
+            <div><b>הרכב</b>זוגות, לפי השולחנות</div>
+            <div><b>כללים</b>מתייעצים בלחש; מי שמסיים — שאלת אתגר</div>
+            <div><b>במליאה</b>3 זוגות משתפים רגע אחד</div>
+          </div>
+        </div>
+        <span class="cls">.ladder (פיגום / אתגר)</span>
+        <div class="ladder"><div><b>שאלת עזר</b>מה הדמות עשתה רגע לפני?</div><div><b>שאלת אתגר</b>מה הייתה צריכה לשמוע כדי להרגיש שייכת?</div></div>
+        <span class="cls">.why + cite</span>
+        <div class="why">עבודה עצמאית על משימה בשיעור מאפשרת לתלמיד.ה להתנסות, לתרגל וללמוד באופן פעיל.<cite>חותם על זה · הוצאה למשימה</cite></div>
+        <span class="cls">.tip</span>
+        <div class="tip">אם הכיתה סוערת — אפשר לעבוד ביחידים ולוותר על הזוגות.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">17′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body talk-phase">
+        <div class="step-head"><h3 class="step-title">שיח במליאה</h3><span class="dur">15 דק׳</span></div>
+        <span class="cls">.timer[data-sec]</span>
+        <p><span class="timer" data-sec="30"></span> זמן חשיבה לפני שמצביעים</p>
+        <span class="cls">.choice (בחירה)</span>
+        <div class="choice"><div><b>לכתוב</b>מכתב קצר לדמות</div><div><b>לצייר</b>את המקום הבטוח שלה</div><div><b>לדבר</b>להקליט הודעה קולית</div></div>
+        <span class="cls">.safe</span>
+        <div class="safe">אם תלמיד.ה משתף.ת בחוויה של פגיעה — עוצרים בעדינות, מודים, וממשיכים איתו.ה בשיחה אישית אחרי השיעור. מעדכנים את היועצת.</div>
+        <p>משפט עם <span class="fill">[דוגמה מהכיתה שלכם]</span> למילוי.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">40′</div><span class="step-node" data-k="close"></span></div>
+      <div class="step-body close-phase">
+        <div class="step-head"><h3 class="step-title">כרטיס יציאה</h3><span class="dur">5 דק׳</span></div>
+        <span class="cls">.exit</span>
+        <div class="exit"><h4>כרטיס יציאה</h4><ol><li>דבר אחד שלמדתי היום על עצמי:<span class="line"></span></li><li>שאלה שנשארה לי:<span class="line"></span></li></ol></div>
+      </div>
+    </div>
+  </div>
+
+  <span class="cls">.cards > .card(.motif[data-k] + .card-min + .card-t + .card-s + .tags)</span>
+  <div class="cards">
+    <div class="card" style="--c:var(--orange-deep)"><span class="motif" data-k="open"></span><span class="card-min">0′–5′</span><h3 class="card-t">קדימה ללמידה</h3><p class="card-s">כתיבה אישית קצרה על הלוח.</p><div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span></div></div>
+    <div class="card" style="--c:var(--purple-deep)"><span class="motif" data-k="talk"></span><span class="card-min">17′–32′</span><h3 class="card-t">שיח במליאה</h3><p class="card-s">שלושה סבבים, זמן חשיבה לפני כל סבב.</p><div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span></div></div>
+  </div>
+
+  <span class="cls">table.plan (td.t לזמן)</span>
+  <table class="plan">
+    <thead><tr><th>זמן</th><th>שלב</th><th>מה עושים</th><th>פרקטיקה</th></tr></thead>
+    <tbody>
+      <tr><td class="t">0′</td><td>פתיחה</td><td>כתיבה אישית על הלוח</td><td><div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span></div></td></tr>
+      <tr><td class="t">5′</td><td>זוגות</td><td>קריאת סיפור וסימון רגעים</td><td><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></td></tr>
+    </tbody>
+  </table>
+
+  <span class="cls">.proj (שקף הקרנה) > .motif + .proj-kicker + .proj-q + .proj-foot</span>
+  <div class="proj"><span class="motif" data-k="talk"></span><div class="proj-kicker">חושבים לבד · 30 שניות</div><p class="proj-q">איפה אתם מרגישים שיש לכם מקום?</p><div class="proj-foot"><span>שקף 2 מתוך 6</span><span class="timer" data-sec="30"></span></div></div>
+
+  <span class="cls">.say.whisper (הערה למורה בגוף ראשון)</span>
+  <div class="say whisper">שימו לב מי לא כתב כלום — לשם תגיעו ראשונים.</div>
+
+  <div class="foot">גלריית רכיבים · lesson.css</div>
+</main>
+<script src="lesson.js"></script>
+</body>
+</html>

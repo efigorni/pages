@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מכוונים את המערך</title>
+<!--
+  פיקר לכיול מערכי שיעור: נקודה אחת בכל פעם, 2–4 גרסאות לכל נקודה, כל גרסה מוצגת חיה
+  (preview.html בתוך iframe). הבחירות נשמרות ל-picker/picks.json כשמריצים
+  python3 tools/serve.py, ול-localStorage בכל מקרה.
+  הגרסאות עצמן: picker/options/*.html — כל <section> נושא data-pt / data-opt / data-label / data-note,
+  ונתוני הנקודה (data-title / data-gloss / data-anchor / data-multi / data-vw / data-h) על אחד הסקשנים שלה.
+-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Ccircle%20cx%3D%2758%27%20cy%3D%2744%27%20r%3D%2734%27%20fill%3D%27%23f7ae4d%27%2F%3E%3Ccircle%20cx%3D%2740%27%20cy%3D%2760%27%20r%3D%2728%27%20fill%3D%27%2363b1af%27%20fill-opacity%3D%27.85%27%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #63b1af; --teal-deep: #3f8f8d; --teal-soft: #e6f2f1;
+    --orange: #f7ae4d; --orange-deep: #e08f36; --orange-soft: #fdf0dd;
+    --purple-deep: #6c60b0; --purple-soft: #eeecf7; --moss: #619f88;
+    --ink: #13100e; --ink-2: #4a443f; --ink-3: #847c74; --ink-4: #b3aaa0;
+    --paper: #ffffff; --ground: #f6f3ef; --ground-2: #efeae3; --line: #e8e2da; --line-2: #d9d1c6;
+    --bad: #c2473a;
+    --display: "Secular One", "Arial Hebrew", system-ui, sans-serif;
+    --body: "Assistant", "Arial Hebrew", system-ui, sans-serif;
+    --r: 16px; --r-sm: 10px; --side: 300px; --top: 60px;
+    --shadow-1: 0 1px 2px rgba(19,16,14,.04), 0 4px 14px rgba(19,16,14,.05);
+    --shadow-2: 0 2px 6px rgba(19,16,14,.06), 0 18px 44px rgba(19,16,14,.13);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink); font: 400 15px/1.5 var(--body);
+    display: grid; grid-template-rows: var(--top) 1fr; grid-template-columns: var(--side) 1fr;
+    grid-template-areas: "top top" "side main"; overflow: hidden; -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--purple-deep); outline-offset: 2px; border-radius: 6px; }
+  kbd { font: 700 11px/1 ui-monospace, Menlo, monospace; color: var(--ink-3); background: var(--paper); border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: 5px; padding: 3px 5px; direction: ltr; display: inline-block; }
+
+  /* ---------- top bar ---------- */
+  #top { grid-area: top; display: flex; align-items: center; gap: 16px; padding: 0 18px; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .brand svg { width: 30px; height: 30px; }
+  .brand b { font-family: var(--display); font-weight: 400; font-size: 20px; letter-spacing: -.01em; }
+  .brand span { color: var(--ink-3); font-size: 14px; font-weight: 600; }
+  #progress { flex: 1; display: flex; align-items: center; gap: 12px; min-width: 0; }
+  #progress .bar { flex: 1; height: 8px; border-radius: 99px; background: var(--ground-2); overflow: hidden; }
+  #progress .bar i { display: block; height: 100%; width: 0; background: linear-gradient(to left, var(--orange), var(--teal)); border-radius: 99px; transition: width .35s ease; }
+  #progress .txt { font-weight: 700; font-size: 13.5px; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  #save-status { font-size: 12.5px; font-weight: 700; padding: 5px 11px; border-radius: 99px; border: 1.5px solid var(--line); color: var(--ink-3); white-space: nowrap; }
+  #save-status.ok { color: var(--teal-deep); border-color: #bfe0de; background: var(--teal-soft); }
+  #save-status.local { color: var(--orange-deep); border-color: #f3d3a5; background: var(--orange-soft); }
+  .tb-btn { padding: 8px 13px; border-radius: 99px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink-2); font-weight: 700; font-size: 13.5px; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; transition: border-color .15s, background .15s; text-decoration: none; }
+  .tb-btn:hover { border-color: var(--line-2); background: var(--ground); color: var(--ink); }
+  .tb-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .tb-btn.primary:hover { background: var(--purple-deep); border-color: var(--purple-deep); }
+  .tb-btn.primary kbd { background: rgba(255,255,255,.12); color: #fff; border-color: rgba(255,255,255,.3); }
+
+  /* ---------- sidebar ---------- */
+  #side { grid-area: side; background: var(--paper); border-inline-start: 1px solid var(--line); overflow: auto; padding: 8px 0 30px; }
+  #side .filters { padding: 8px 16px 10px; font-size: 13px; color: var(--ink-3); font-weight: 600; }
+  #side .filters label { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+  #side .chapter { padding: 16px 16px 6px; font-family: var(--display); font-size: 15.5px; color: var(--ink); }
+  #side .chapter small { display: block; font-family: var(--body); font-size: 12.5px; color: var(--ink-3); font-weight: 600; margin-top: 1px; }
+  #side .pt { display: grid; grid-template-columns: 34px 1fr 24px; gap: 8px; align-items: center; width: 100%; text-align: right; padding: 7px 16px; border-inline-start: 3px solid transparent; color: var(--ink-2); }
+  #side .pt:hover { background: var(--ground); }
+  #side .pt.is-current { background: var(--teal-soft); border-inline-start-color: var(--teal-deep); color: var(--ink); }
+  #side .pt .id { font-weight: 700; font-size: 12px; color: var(--ink-3); direction: ltr; text-align: right; font-variant-numeric: tabular-nums; }
+  #side .pt .t { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #side .pt .st { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-size: 13px; border: 1.5px solid var(--line-2); color: var(--ink-4); }
+  #side .pt .st.picked { background: var(--teal-deep); border-color: transparent; color: #fff; }
+  #side .pt .st.none { background: var(--ground-2); border-color: transparent; color: var(--ink-3); }
+  #side.only-unpicked .pt.is-picked { display: none; }
+
+  /* ---------- main ---------- */
+  #main { grid-area: main; overflow: auto; padding: 22px 26px 50px; display: flex; flex-direction: column; gap: 16px; }
+  #point-head { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: start; }
+  #point-head .crumbs { font-size: 13px; font-weight: 700; color: var(--ink-3); display: flex; gap: 10px; align-items: center; margin-bottom: 6px; }
+  #point-head .crumbs b { color: var(--teal-deep); direction: ltr; }
+  #point-head .crumbs .multi { color: var(--purple-deep); background: var(--purple-soft); padding: 2px 9px; border-radius: 99px; font-size: 12px; }
+  #point-head h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 29px; line-height: 1.2; letter-spacing: -.01em; }
+  #pt-gloss { margin: 8px 0 0; color: var(--ink-2); font-size: 16px; max-width: 78ch; line-height: 1.55; }
+  #pt-anchor { margin: 8px 0 0; font-size: 13.5px; color: var(--ink-3); font-weight: 600; }
+  #pt-anchor:empty { display: none; }
+  #point-head .nav { display: flex; gap: 8px; align-items: center; padding-top: 18px; }
+  #point-head .nav .cnt { font-weight: 700; font-size: 13px; color: var(--ink-3); padding: 0 4px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  #options { display: grid; gap: 16px; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); }
+  #options.column { grid-template-columns: 1fr; }
+  .opt { background: var(--paper); border: 1.5px solid var(--line); border-radius: var(--r); overflow: hidden; display: flex; flex-direction: column; min-width: 0; position: relative; box-shadow: var(--shadow-1); transition: border-color .15s, box-shadow .15s; }
+  .opt:hover { border-color: var(--line-2); }
+  .opt.is-picked { border-color: var(--teal-deep); box-shadow: 0 0 0 2px var(--teal-deep), var(--shadow-2); }
+  .opt header { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--line); min-height: 50px; }
+  .opt .letter { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-size: 16px; background: var(--ground); color: var(--ink-2); border: 1.5px solid var(--line-2); flex: none; }
+  .opt.is-picked .letter { background: var(--teal-deep); color: #fff; border-color: transparent; }
+  .opt .label { font-weight: 700; font-size: 15px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .opt header .sp { flex: 1; }
+  .icon-btn { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; color: var(--ink-3); border: 1.5px solid transparent; flex: none; }
+  .icon-btn:hover { background: var(--ground); color: var(--ink); border-color: var(--line); }
+  .icon-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+  .opt .frame { position: relative; height: var(--h, 560px); background: var(--ground); }
+  .opt .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  .opt footer { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-top: 1px solid var(--line); }
+  .opt footer .note { flex: 1; font-size: 13.5px; color: var(--ink-2); line-height: 1.45; min-width: 0; }
+  .pick-btn { padding: 8px 14px; border-radius: 99px; border: 1.5px solid var(--line-2); background: var(--paper); color: var(--ink); font-weight: 800; font-size: 13.5px; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; flex: none; }
+  .pick-btn:hover { border-color: var(--teal-deep); color: var(--teal-deep); }
+  .opt.is-picked .pick-btn { background: var(--teal-deep); color: #fff; border-color: transparent; }
+  .opt.is-picked .pick-btn kbd { background: rgba(255,255,255,.15); color: #fff; border-color: rgba(255,255,255,.35); }
+
+  #below { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: start; }
+  #note-wrap label { display: block; font-weight: 700; font-size: 14px; color: var(--ink-2); margin-bottom: 6px; }
+  #note { width: 100%; min-height: 78px; resize: vertical; background: var(--paper); border: 1.5px solid var(--line); border-radius: var(--r-sm); color: var(--ink); padding: 10px 12px; font: 400 15px/1.5 var(--body); }
+  #note:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 4px var(--teal-soft); }
+  #none-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 13.5px; color: var(--ink-3); }
+  #btn-none.on { background: var(--ground-2); border-color: var(--line-2); color: var(--ink); }
+  #keys { font-size: 12.5px; color: var(--ink-3); display: grid; gap: 7px; padding-top: 26px; }
+  #keys div { display: flex; gap: 6px; align-items: center; white-space: nowrap; }
+
+  /* ---------- overlays ---------- */
+  .overlay { position: fixed; inset: 0; z-index: 50; display: none; }
+  .overlay.show { display: flex; }
+  #zoom { background: rgba(19,16,14,.55); backdrop-filter: blur(4px); flex-direction: column; }
+  #zoom .zbar { display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: var(--paper); border-bottom: 1px solid var(--line); }
+  #zoom .zt { font-family: var(--display); font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #zoom .zt small { font-family: var(--body); font-weight: 600; color: var(--ink-3); font-size: 13.5px; margin-inline-start: 8px; }
+  #zoom .ztabs { display: flex; gap: 6px; }
+  #zoom .ztabs button { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--line-2); font-family: var(--display); font-size: 16px; color: var(--ink-2); background: var(--paper); }
+  #zoom .ztabs button.on { background: var(--ink); color: #fff; border-color: transparent; }
+  #zoom .ztabs button.picked { box-shadow: 0 0 0 3px var(--teal); }
+  #zoom .sp { flex: 1; }
+  #zoom .zframe { flex: 1; min-height: 0; display: flex; justify-content: center; padding: 20px; }
+  #zoom .zframe .box { width: min(1040px, 100%); height: 100%; background: var(--ground); border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow-2); }
+  #zoom iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+  #summary, #welcome { background: rgba(19,16,14,.5); backdrop-filter: blur(4px); overflow: auto; padding: 40px 0; align-items: flex-start; justify-content: center; }
+  .sheet { width: min(980px, 94%); background: var(--paper); border-radius: 22px; padding: 28px 30px 30px; box-shadow: var(--shadow-2); }
+  .sheet h2 { margin: 0 0 4px; font-family: var(--display); font-weight: 400; font-size: 27px; }
+  .sheet .sub { color: var(--ink-3); font-size: 14.5px; margin-bottom: 18px; font-weight: 600; }
+  .sheet .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
+  #sum-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  #sum-table th { text-align: right; font-size: 12.5px; color: var(--ink-3); font-weight: 700; padding: 8px 10px; border-bottom: 1.5px solid var(--line); }
+  #sum-table td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  #sum-table td.id { font-weight: 700; color: var(--ink-3); white-space: nowrap; direction: ltr; text-align: right; }
+  #sum-table td.opt b { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--teal-deep); color: #fff; font-family: var(--display); font-weight: 400; margin-inline-end: 6px; }
+  #sum-table td.opt.none { color: var(--bad); font-weight: 700; }
+  #sum-table td.n { color: var(--ink-2); font-size: 13.5px; max-width: 330px; }
+  #sum-table tr.chapter td { padding-top: 18px; font-family: var(--display); font-size: 16px; color: var(--ink); border-bottom: 1.5px solid var(--line); }
+  .welcome-body { font-size: 16.5px; line-height: 1.65; color: var(--ink-2); max-width: 70ch; }
+  .welcome-body ol { padding-inline-start: 22px; margin: 10px 0 16px; }
+  .welcome-body li { margin: 6px 0; }
+  .welcome-art { float: left; width: 110px; height: 110px; margin: -6px 0 0 6px; }
+
+  #toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; border-radius: 99px; padding: 9px 18px; font-size: 14px; font-weight: 700; z-index: 99; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  #toast.show { opacity: 1; }
+  #loading { grid-area: main; display: grid; place-items: center; color: var(--ink-3); font-size: 16px; font-weight: 600; text-align: center; padding: 30px; }
+  #loading.hidden, #main.hidden { display: none; }
+  @media (max-width: 1150px) { body { --side: 250px; } #options { grid-template-columns: repeat(min(var(--n, 3), 2), minmax(0, 1fr)); } }
+  @media (max-width: 820px) {
+    body { grid-template-columns: 1fr; grid-template-areas: "top" "main"; }
+    #side { display: none; }
+    #options { grid-template-columns: 1fr; }
+    #progress .bar, .brand span, #btn-layout, #btn-next-unpicked { display: none; }
+    #below { grid-template-columns: 1fr; } #keys { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="brand">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="58" cy="44" r="34" fill="#f7ae4d"/><circle cx="40" cy="60" r="28" fill="#63b1af" fill-opacity=".85"/></svg>
+    <b>מכוונים את המערך</b><span>כיול סגנון למערכי כישורי חיים</span>
+  </div>
+  <div id="progress"><span class="txt" id="progress-txt">0 מתוך 0</span><div class="bar"><i id="progress-bar"></i></div></div>
+  <span id="save-status">…</span>
+  <button class="tb-btn" id="btn-help" title="איך זה עובד">איך זה עובד?</button>
+  <button class="tb-btn" id="btn-layout" title="גרסאות זו לצד זו או זו מתחת לזו (L)">פריסה <kbd>L</kbd></button>
+  <button class="tb-btn" id="btn-next-unpicked" title="לנקודה הבאה שעוד לא בחרתם בה (N)">הבאה שלא נבחרה <kbd>N</kbd></button>
+  <button class="tb-btn primary" id="btn-summary" title="סיכום ושמירה (S)">סיכום <kbd>S</kbd></button>
+</header>
+
+<nav id="side" aria-label="נקודות לכיול">
+  <div class="filters"><label><input type="checkbox" id="only-unpicked"> רק מה שעוד לא נבחר</label></div>
+  <div id="side-list"></div>
+</nav>
+
+<div id="loading">טוען את הגרסאות…</div>
+
+<main id="main" class="hidden">
+  <div id="point-head">
+    <div>
+      <div class="crumbs"><b id="pt-id">—</b><span id="pt-chapter"></span><span class="multi" id="pt-multi" hidden>אפשר לבחור יותר מאחת</span></div>
+      <h1 id="pt-title"></h1>
+      <p id="pt-gloss"></p>
+      <p id="pt-anchor"></p>
+    </div>
+    <div class="nav">
+      <button class="tb-btn" id="btn-prev" title="הנקודה הקודמת (→)">→ הקודמת</button>
+      <span class="cnt" id="pt-count">0 / 0</span>
+      <button class="tb-btn" id="btn-next" title="הנקודה הבאה (←)">הבאה ←</button>
+    </div>
+  </div>
+
+  <section id="options" aria-label="הגרסאות"></section>
+
+  <div id="below">
+    <div id="note-wrap">
+      <label for="note">מה חשבתם? (נשמר יחד עם הבחירה)</label>
+      <textarea id="note" placeholder="למשל: ב׳, אבל עם פחות מלל בשלב הפתיחה…"></textarea>
+      <div id="none-row"><button class="tb-btn" id="btn-none" title="אין לנו העדפה בנקודה הזו (0)">אין לנו העדפה <kbd>0</kbd></button><span>גם זו תשובה — נבחר בשבילכם.</span></div>
+    </div>
+    <div id="keys">
+      <div><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> בחירה</div>
+      <div><kbd>⇧1</kbd><kbd>⇧2</kbd><kbd>⇧3</kbd> הגדלה · <kbd>Z</kbd> הגדלת הנבחרת</div>
+      <div><kbd>←</kbd> הבאה · <kbd>→</kbd> הקודמת · <kbd>Enter</kbd> הבאה</div>
+      <div><kbd>N</kbd> הבאה שלא נבחרה · <kbd>S</kbd> סיכום · <kbd>Esc</kbd> סגירה</div>
+    </div>
+  </div>
+</main>
+
+<div id="zoom" class="overlay" role="dialog" aria-modal="true" aria-label="הגדלה">
+  <div class="zbar">
+    <span class="zt" id="zoom-title"></span>
+    <div class="ztabs" id="zoom-tabs"></div>
+    <span class="sp"></span>
+    <a class="tb-btn" id="zoom-open" target="_blank" rel="noopener">בלשונית חדשה</a>
+    <button class="tb-btn primary" id="zoom-pick">בוחרים <kbd>Enter</kbd></button>
+    <button class="tb-btn" id="zoom-close">סגירה <kbd>Esc</kbd></button>
+  </div>
+  <div class="zframe"><div class="box"><iframe id="zoom-frame" title="גרסה בהגדלה"></iframe></div></div>
+</div>
+
+<div id="summary" class="overlay" role="dialog" aria-modal="true" aria-label="סיכום">
+  <div class="sheet">
+    <h2>סיכום הבחירות</h2>
+    <div class="sub" id="summary-sub"></div>
+    <div class="actions">
+      <button class="tb-btn" id="sum-copy">העתקת הבחירות</button>
+      <a class="tb-btn" id="sum-download" download="picks.json" href="#">הורדת picks.json</a>
+      <button class="tb-btn" id="sum-first-unpicked">לנקודה הראשונה שלא נבחרה</button>
+      <span style="flex:1"></span>
+      <button class="tb-btn" id="sum-reset" style="color:var(--bad)">איפוס כל הבחירות</button>
+      <button class="tb-btn primary" id="sum-close">סגירה <kbd>Esc</kbd></button>
+    </div>
+    <table id="sum-table"></table>
+  </div>
+</div>
+
+<div id="welcome" class="overlay" role="dialog" aria-modal="true" aria-label="איך זה עובד">
+  <div class="sheet">
+    <svg class="welcome-art" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#8c82c1" stroke-width="2"><circle cx="50" cy="50" r="10"/><circle cx="50" cy="50" r="20"/><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="40"/></g><circle cx="66" cy="36" r="16" fill="#f7ae4d"/></svg>
+    <h2>מכוונים את המערך</h2>
+    <div class="sub">סבב ראשון: בוחרים סגנון, לפני שבונים את כל השנה</div>
+    <div class="welcome-body" id="welcome-body">
+      <p>לקחנו שיעורים אמיתיים של ז׳ מ״הכ״חות שבדרך״ — בעיקר ״מקום בעולם״ ו״סיפור במניפה״ של אוקטובר — וכתבנו כל חלק שלהם בכמה גרסאות. בכל נקודה בוחרים את הגרסה שהכי מתאימה לכם, ומוסיפים הערה אם משהו חסר או מיותר. יש כ־30 נקודות בשישה פרקים; זה לוקח בערך 40 דקות, ואפשר לעצור ולחזור.</p>
+      <ol>
+        <li><b>קוראים</b> את הגרסאות זו לצד זו. אפשר לגלול בתוך כל גרסה, ולהגדיל עם הכפתור שבפינה (או <kbd>⇧1</kbd>).</li>
+        <li><b>בוחרים</b> בכפתור שמתחת לגרסה, או במקשים <kbd>1</kbd>–<kbd>4</kbd>. אם לא אכפת לכם — <kbd>0</kbd>.</li>
+        <li><b>כותבים הערה</b> כשרוצים שילוב (״א׳, אבל עם הטיימר של ג׳״). ההערות שוות זהב.</li>
+        <li><b>מסיימים בסיכום</b> (<kbd>S</kbd>). הכול נשמר אוטומטית — אפשר לעצור ולחזור.</li>
+      </ol>
+      <p>אחרי הסבב הזה נבנה שיעור שלם לפי הבחירות שלכם, תעירו עליו, נדייק — ורק אז נהפוך את זה לכלי שבונה את כל השיעורים של השנה.</p>
+    </div>
+    <div class="actions" style="margin-top:18px"><button class="tb-btn primary" id="welcome-go">מתחילים</button></div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+  var LS_KEY = 'lesson-lab-picker:v1';
+  var HEB = { a: 'א', b: 'ב', c: 'ג', d: 'ד' };
+  var S = { cfg: null, points: [], byId: {}, idx: 0, picks: {}, serverOk: false, layout: 'row', zoomOpt: null, saveTimer: null };
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove('show'); }, 1700); }
+
+  /* ------------------------------------------------------------ loading */
+  async function loadBundles() {
+    var cfg = await (await fetch('bundles.json', { cache: 'no-store' })).json();
+    S.cfg = cfg;
+    var points = [];
+    for (var i = 0; i < cfg.bundles.length; i++) {
+      var b = cfg.bundles[i];
+      var res = await fetch('options/' + b.file, { cache: 'no-store' });
+      if (!res.ok) { console.warn('bundle missing', b.file); continue; }
+      var doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+      var seen = {};
+      doc.querySelectorAll('section[data-pt]').forEach(function (sec) {
+        var id = sec.getAttribute('data-pt');
+        var p = seen[id];
+        if (!p) { p = { id: id, bundle: b.file, chapter: b.chapter, chapterSub: b.sub || '', chapterIdx: i, options: [] }; seen[id] = p; points.push(p); }
+        ['title', 'gloss', 'anchor', 'vw', 'h'].forEach(function (k) { if (!p[k] && sec.getAttribute('data-' + k)) p[k] = sec.getAttribute('data-' + k); });
+        if (sec.hasAttribute('data-multi')) p.multi = true;
+        p.options.push({ opt: (sec.getAttribute('data-opt') || 'a').toLowerCase(), label: sec.getAttribute('data-label') || '', note: sec.getAttribute('data-note') || '' });
+      });
+    }
+    points.forEach(function (p, i) { p.index = i; p.options.sort(function (x, y) { return x.opt < y.opt ? -1 : 1; }); S.byId[p.id] = p; });
+    S.points = points;
+  }
+
+  async function loadPicks() {
+    var local = null, remote = null;
+    try { local = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch (e) { }
+    try {
+      var r = await fetch('/api/picks', { cache: 'no-store' });
+      if (r.ok && (r.headers.get('content-type') || '').indexOf('json') >= 0) { remote = await r.json(); S.serverOk = true; }
+    } catch (e) { S.serverOk = false; }
+    var lu = local && local.updated ? Date.parse(local.updated) : 0;
+    var ru = remote && remote.updated ? Date.parse(remote.updated) : 0;
+    var src = ru >= lu ? remote : local;
+    S.picks = (src && src.picks) || {};
+    setSaveStatus(S.serverOk ? 'ok' : 'local', S.serverOk ? 'נשמר לקובץ' : 'נשמר בדפדפן בלבד');
+  }
+  function setSaveStatus(cls, txt) { var el = $('save-status'); el.className = cls; el.textContent = txt; }
+  function payload() { return { version: 1, kit: 'lesson-lab', updated: new Date().toISOString(), picks: S.picks }; }
+  function persist() {
+    var body = payload();
+    try { localStorage.setItem(LS_KEY, JSON.stringify(body)); } catch (e) { }
+    clearTimeout(S.saveTimer);
+    setSaveStatus('local', 'שומר…');
+    S.saveTimer = setTimeout(async function () {
+      try {
+        var r = await fetch('/api/picks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        if (!r.ok) throw new Error(r.status);
+        S.serverOk = true; setSaveStatus('ok', 'נשמר לקובץ');
+      } catch (e) { S.serverOk = false; setSaveStatus('local', 'נשמר בדפדפן בלבד'); }
+    }, 300);
+    renderProgress(); renderSide();
+  }
+
+  /* ------------------------------------------------------------ helpers */
+  function pickOf(p) { var k = S.picks[p.id]; return k ? k.opt : null; }
+  function isPicked(p, opt) { var k = pickOf(p); return Array.isArray(k) ? k.indexOf(opt) >= 0 : k === opt; }
+  function answered(p) { var k = pickOf(p); return Array.isArray(k) ? k.length > 0 : !!k; }
+  function pickLabel(p) { var k = pickOf(p); if (!k) return ''; if (k === 'none') return '—'; if (Array.isArray(k)) return k.map(function (x) { return HEB[x]; }).join(''); return HEB[k]; }
+  function current() { return S.points[S.idx]; }
+  function previewUrl(p, opt) { return 'preview.html?b=' + encodeURIComponent(p.bundle) + '&pt=' + encodeURIComponent(p.id) + '&opt=' + opt; }
+
+  /* ------------------------------------------------------------ render */
+  function renderProgress() {
+    var n = S.points.filter(answered).length, t = S.points.length;
+    $('progress-txt').textContent = n + ' מתוך ' + t + ' נקודות';
+    $('progress-bar').style.width = (t ? n / t * 100 : 0) + '%';
+  }
+  function renderSide() {
+    var html = '', lastCh = null;
+    S.points.forEach(function (p) {
+      if (p.chapter !== lastCh) { lastCh = p.chapter; html += '<div class="chapter">' + esc(p.chapter) + (p.chapterSub ? '<small>' + esc(p.chapterSub) + '</small>' : '') + '</div>'; }
+      var k = pickOf(p), lbl = pickLabel(p);
+      html += '<button class="pt' + (p.index === S.idx ? ' is-current' : '') + (answered(p) ? ' is-picked' : '') + '" data-i="' + p.index + '">' +
+        '<span class="id">' + esc(p.id) + '</span><span class="t" title="' + esc(p.title) + '">' + esc(p.title) + '</span>' +
+        '<span class="st' + (k === 'none' ? ' none' : (answered(p) ? ' picked' : '')) + '">' + esc(lbl) + '</span></button>';
+    });
+    $('side-list').innerHTML = html;
+    var cur = $('side-list').querySelector('.pt.is-current');
+    if (cur) cur.scrollIntoView({ block: 'nearest' });
+  }
+  function pickBtnHtml(p, o, i) {
+    var on = isPicked(p, o.opt);
+    var txt = p.multi ? (on ? 'מסומנת ✓' : 'מסמנים את ' + HEB[o.opt]) : (on ? 'נבחרה ✓' : 'בוחרים ב־' + HEB[o.opt]);
+    return txt + ' <kbd>' + (i + 1) + '</kbd>';
+  }
+  function renderPoint() {
+    var p = current(); if (!p) return;
+    history.replaceState(null, '', '#' + encodeURIComponent(p.id));
+    $('pt-id').textContent = p.id;
+    $('pt-chapter').textContent = p.chapter;
+    $('pt-multi').hidden = !p.multi;
+    $('pt-title').textContent = p.title || '';
+    $('pt-gloss').textContent = p.gloss || '';
+    $('pt-anchor').textContent = p.anchor ? 'על בסיס: ' + p.anchor : '';
+    $('pt-count').textContent = (p.index + 1) + ' / ' + S.points.length;
+    $('note').value = (S.picks[p.id] && S.picks[p.id].note) || '';
+    $('btn-none').classList.toggle('on', pickOf(p) === 'none');
+    var box = $('options');
+    box.style.setProperty('--n', p.options.length);
+    box.className = S.layout === 'column' ? 'column' : '';
+    box.innerHTML = p.options.map(function (o, i) {
+      return '<article class="opt' + (isPicked(p, o.opt) ? ' is-picked' : '') + '" data-opt="' + o.opt + '" style="--h:' + (S.layout === 'column' ? Math.max(+p.h || 560, 640) : (+p.h || 560)) + 'px">' +
+        '<header><span class="letter">' + HEB[o.opt] + '</span><span class="label" title="' + esc(o.label) + '">' + esc(o.label) + '</span><span class="sp"></span>' +
+        '<button class="icon-btn zoom" title="הגדלה (Shift+' + (i + 1) + ')" data-opt="' + o.opt + '" aria-label="הגדלת גרסה ' + HEB[o.opt] + '"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button></header>' +
+        '<div class="frame"><iframe src="' + previewUrl(p, o.opt) + '" title="' + esc(o.label) + '" loading="eager"></iframe></div>' +
+        '<footer><span class="note">' + esc(o.note) + '</span><button class="pick-btn" data-opt="' + o.opt + '">' + pickBtnHtml(p, o, i) + '</button></footer>' +
+        '</article>';
+    }).join('');
+    renderSide(); renderProgress();
+    $('main').scrollTop = 0;
+  }
+  function refreshPickedState() {
+    var p = current();
+    document.querySelectorAll('#options .opt').forEach(function (card, i) {
+      var o = p.options[i];
+      card.classList.toggle('is-picked', isPicked(p, o.opt));
+      card.querySelector('.pick-btn').innerHTML = pickBtnHtml(p, o, i);
+    });
+    $('btn-none').classList.toggle('on', pickOf(p) === 'none');
+    if (S.zoomOpt) renderZoomTabs();
+  }
+
+  /* ------------------------------------------------------------ actions */
+  function goto(i) {
+    if (i < 0 || i >= S.points.length) return;
+    saveNote();
+    S.idx = i; renderPoint();
+    if (S.zoomOpt) closeZoom();
+  }
+  function pick(opt) {
+    var p = current(); if (!p) return;
+    var prev = S.picks[p.id] || {};
+    var note = $('note').value || prev.note || '';
+    var val;
+    if (opt === 'none') val = prev.opt === 'none' ? null : 'none';
+    else if (!p.options.some(function (o) { return o.opt === opt; })) return;
+    else if (p.multi) {
+      var arr = Array.isArray(prev.opt) ? prev.opt.slice() : [];
+      var at = arr.indexOf(opt); if (at >= 0) arr.splice(at, 1); else arr.push(opt); arr.sort();
+      val = arr.length ? arr : null;
+    } else val = opt;
+    if (val == null && !note) delete S.picks[p.id];
+    else S.picks[p.id] = { opt: val, note: note, at: new Date().toISOString() };
+    persist(); refreshPickedState();
+    toast(val == null ? 'הבחירה בוטלה' : (val === 'none' ? 'נרשם: אין העדפה' : 'נבחר: ' + pickLabel(p)));
+  }
+  function saveNote() {
+    var p = current(); if (!p) return;
+    var v = $('note').value, cur = S.picks[p.id];
+    if ((cur ? cur.note || '' : '') === v) return;
+    if (!cur && !v) return;
+    S.picks[p.id] = Object.assign({ opt: null }, cur || {}, { note: v, at: new Date().toISOString() });
+    if (S.picks[p.id].opt == null && !v) delete S.picks[p.id];
+    persist();
+  }
+  function nextUnpicked(from) {
+    var start = from == null ? S.idx + 1 : from;
+    for (var k = 0; k < S.points.length; k++) {
+      var i = (start + k) % S.points.length;
+      if (!answered(S.points[i])) { goto(i); return true; }
+    }
+    toast('כל הנקודות נבחרו 🎉'); return false;
+  }
+
+  /* ------------------------------------------------------------ zoom */
+  function openZoom(opt) { if (!current()) return; S.zoomOpt = opt; $('zoom').classList.add('show'); renderZoom(); }
+  function renderZoom() {
+    var p = current(), o = p.options.filter(function (x) { return x.opt === S.zoomOpt; })[0];
+    if (!o) return;
+    $('zoom-title').innerHTML = HEB[o.opt] + ' · ' + esc(o.label) + '<small>' + esc(p.title) + '</small>';
+    $('zoom-frame').src = previewUrl(p, o.opt) + '&zoom=1';
+    $('zoom-open').href = previewUrl(p, o.opt) + '&zoom=1';
+    renderZoomTabs();
+  }
+  function renderZoomTabs() {
+    var p = current();
+    $('zoom-tabs').innerHTML = p.options.map(function (o) {
+      return '<button data-opt="' + o.opt + '" class="' + (o.opt === S.zoomOpt ? 'on' : '') + (isPicked(p, o.opt) ? ' picked' : '') + '" title="' + esc(o.label) + '">' + HEB[o.opt] + '</button>';
+    }).join('');
+    var on = isPicked(p, S.zoomOpt);
+    $('zoom-pick').innerHTML = (on ? (p.multi ? 'מסומנת ✓' : 'נבחרה ✓') : (p.multi ? 'מסמנים את ' : 'בוחרים ב־') + HEB[S.zoomOpt]) + ' <kbd>Enter</kbd>';
+  }
+  function closeZoom() { S.zoomOpt = null; $('zoom').classList.remove('show'); $('zoom-frame').src = 'about:blank'; }
+
+  /* ------------------------------------------------------------ summary */
+  function openSummary() {
+    saveNote();
+    var n = S.points.filter(answered).length, t = S.points.length;
+    $('summary-sub').textContent = 'נבחרו ' + n + ' מתוך ' + t + ' נקודות · ' + (S.serverOk ? 'הכול שמור בקובץ picks.json — Claude יקרא אותו ישירות' : 'נשמר בדפדפן הזה בלבד. כדי שהבחירות יגיעו אליי, הריצו את השרת או הורידו את הקובץ');
+    var html = '<tr><th>נקודה</th><th>מה בודקים</th><th>הבחירה</th><th>הערה</th></tr>', lastCh = null;
+    S.points.forEach(function (p) {
+      if (p.chapter !== lastCh) { lastCh = p.chapter; html += '<tr class="chapter"><td colspan="4">' + esc(p.chapter) + '</td></tr>'; }
+      var k = pickOf(p), lbl;
+      if (!answered(p)) lbl = 'עוד לא נבחר';
+      else if (k === 'none') lbl = 'אין העדפה';
+      else lbl = (Array.isArray(k) ? k : [k]).map(function (x) { var o = p.options.filter(function (y) { return y.opt === x; })[0]; return '<b>' + HEB[x] + '</b>' + esc(o ? o.label : ''); }).join('<br>');
+      html += '<tr><td class="id">' + esc(p.id) + '</td><td>' + esc(p.title) + '</td><td class="opt' + (answered(p) ? '' : ' none') + '">' + lbl + '</td><td class="n">' + esc((S.picks[p.id] && S.picks[p.id].note) || '') + '</td></tr>';
+    });
+    $('sum-table').innerHTML = html;
+    $('sum-download').href = URL.createObjectURL(new Blob([JSON.stringify(payload(), null, 1)], { type: 'application/json' }));
+    $('summary').classList.add('show');
+  }
+  function closeSummary() { $('summary').classList.remove('show'); }
+  function openWelcome() { $('welcome').classList.add('show'); }
+  function closeWelcome() { $('welcome').classList.remove('show'); try { localStorage.setItem(LS_KEY + ':welcomed', '1'); } catch (e) { } }
+
+  /* ------------------------------------------------------------ events */
+  $('options').addEventListener('click', function (e) {
+    var z = e.target.closest('.zoom'); if (z) { openZoom(z.getAttribute('data-opt')); return; }
+    var b = e.target.closest('.pick-btn'); if (b) pick(b.getAttribute('data-opt'));
+  });
+  $('side-list').addEventListener('click', function (e) { var b = e.target.closest('.pt'); if (b) goto(+b.getAttribute('data-i')); });
+  $('btn-prev').addEventListener('click', function () { goto(S.idx - 1); });
+  $('btn-next').addEventListener('click', function () { goto(S.idx + 1); });
+  $('btn-next-unpicked').addEventListener('click', function () { nextUnpicked(); });
+  $('btn-summary').addEventListener('click', openSummary);
+  $('btn-help').addEventListener('click', openWelcome);
+  $('welcome-go').addEventListener('click', closeWelcome);
+  $('btn-none').addEventListener('click', function () { pick('none'); });
+  $('btn-layout').addEventListener('click', function () { S.layout = S.layout === 'row' ? 'column' : 'row'; try { localStorage.setItem(LS_KEY + ':layout', S.layout); } catch (e) { } renderPoint(); });
+  $('only-unpicked').addEventListener('change', function (e) { $('side').classList.toggle('only-unpicked', e.target.checked); });
+  $('note').addEventListener('change', saveNote);
+  $('note').addEventListener('blur', saveNote);
+  $('zoom-close').addEventListener('click', closeZoom);
+  $('zoom-pick').addEventListener('click', function () { if (S.zoomOpt) pick(S.zoomOpt); });
+  $('zoom-tabs').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { S.zoomOpt = b.getAttribute('data-opt'); renderZoom(); } });
+  $('sum-close').addEventListener('click', closeSummary);
+  $('sum-copy').addEventListener('click', function () { navigator.clipboard.writeText(JSON.stringify(payload(), null, 1)).then(function () { toast('הבחירות הועתקו'); }); });
+  $('sum-first-unpicked').addEventListener('click', function () { closeSummary(); nextUnpicked(0); });
+  $('sum-reset').addEventListener('click', function () { if (confirm('לאפס את כל הבחירות וההערות?')) { S.picks = {}; persist(); renderPoint(); closeSummary(); toast('אופס'); } });
+  window.addEventListener('hashchange', function () { var p = S.byId[decodeURIComponent(location.hash.slice(1))]; if (p && p.index !== S.idx) goto(p.index); });
+
+  document.addEventListener('keydown', function (e) {
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'textarea' || tag === 'input') { if (e.key === 'Escape') e.target.blur(); return; }
+    var zoomOpen = $('zoom').classList.contains('show'), sumOpen = $('summary').classList.contains('show'), welOpen = $('welcome').classList.contains('show');
+    if (e.key === 'Escape') { if (zoomOpen) closeZoom(); else if (sumOpen) closeSummary(); else if (welOpen) closeWelcome(); return; }
+    if (sumOpen || welOpen) return;
+    var p = current(); if (!p) return;
+    var k = e.key, code = e.code || '';
+    var digit = /^Digit[0-4]$/.test(code) ? +code.slice(5) : (/^[0-4]$/.test(k) ? +k : -1);
+    if (digit >= 1 && e.shiftKey) { var zo = 'abcd'[digit - 1]; if (p.options.some(function (x) { return x.opt === zo; })) openZoom(zo); e.preventDefault(); return; }
+    if (digit === 0 && !e.metaKey && !e.ctrlKey) { pick('none'); e.preventDefault(); return; }
+    if (digit >= 1 && !e.metaKey && !e.ctrlKey) { var opt = 'abcd'[digit - 1]; if (zoomOpen) { S.zoomOpt = opt; renderZoom(); } pick(opt); e.preventDefault(); return; }
+    if (k === 'ArrowLeft') { if (zoomOpen) { var i = p.options.findIndex(function (x) { return x.opt === S.zoomOpt; }); if (i < p.options.length - 1) { S.zoomOpt = p.options[i + 1].opt; renderZoom(); } } else goto(S.idx + 1); e.preventDefault(); return; }
+    if (k === 'ArrowRight') { if (zoomOpen) { var j = p.options.findIndex(function (x) { return x.opt === S.zoomOpt; }); if (j > 0) { S.zoomOpt = p.options[j - 1].opt; renderZoom(); } } else goto(S.idx - 1); e.preventDefault(); return; }
+    if (k === 'Enter') { if (zoomOpen) pick(S.zoomOpt); else goto(S.idx + 1); e.preventDefault(); return; }
+    var lk = (k || '').toLowerCase();
+    if (code === 'KeyN' || lk === 'n' || k === 'מ') { nextUnpicked(); return; }
+    if (code === 'KeyL' || lk === 'l' || k === 'ך') { $('btn-layout').click(); return; }
+    if (code === 'KeyS' || lk === 's' || k === 'ד') { openSummary(); return; }
+    if (code === 'KeyZ' || lk === 'z' || k === 'ז') { var pk = pickOf(p); openZoom(pk && pk !== 'none' ? (Array.isArray(pk) ? pk[0] : pk) : p.options[0].opt); return; }
+  });
+
+  /* ------------------------------------------------------------ boot */
+  (async function boot() {
+    try { await loadBundles(); await loadPicks(); }
+    catch (e) { $('loading').innerHTML = 'לא הצלחתי לטעון: ' + esc(e.message) + '<br><small>מריצים את tools/serve.py ופותחים את /picker/</small>'; return; }
+    if (!S.points.length) { $('loading').textContent = 'אין עדיין נקודות — מוסיפים קבצים ל-picker/options/ ומפרטים אותם ב-bundles.json.'; return; }
+    try { S.layout = localStorage.getItem(LS_KEY + ':layout') || 'row'; } catch (e) { }
+    var start = S.byId[decodeURIComponent(location.hash.slice(1))];
+    if (start) S.idx = start.index;
+    else { var firstUn = S.points.findIndex(function (p) { return !answered(p); }); S.idx = firstUn < 0 ? 0 : firstUn; }
+    $('loading').classList.add('hidden'); $('main').classList.remove('hidden');
+    renderPoint();
+    var welcomed = null; try { welcomed = localStorage.getItem(LS_KEY + ':welcomed'); } catch (e) { }
+    if (!welcomed) openWelcome();
+  })();
+})();
+</script>
+</body>
+</html>

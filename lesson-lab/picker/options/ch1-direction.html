@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><title>פרק 1 · הכיוון</title>
+<!-- פרק 1 · הכיוון. עוגן: מקום בעולם (A). נקודה 1.2 מוסיפה את סיפור במניפה (A2) ואת השפעה חברתית (B). -->
+<style data-bundle-style>
+/* פרק 1 · תוספות מקומיות בלבד; כל סלקטור תחת .b-ch1 */
+.b-ch1 .ctx + h2 { margin-top: 4px; }
+.b-ch1 .flow .step-title { margin: 0; }
+.b-ch1 .lesson-card > h3 { margin: 0 0 8px; }
+
+/* 1.2 · שלושה שיעורים זה לצד זה */
+.b-ch1 .b-tri { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 18px 0 14px; }
+.b-ch1 .b-col h3 { margin: 0; font-size: 19px; }
+.b-ch1 .b-sub { margin: 0 0 10px; font-size: 13px; font-weight: 700; color: var(--ink-3); }
+.b-ch1 .b-seq { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; max-width: none; }
+.b-ch1 .b-seq li { --c: var(--teal); margin: 0; padding: 8px 11px 9px; background: var(--paper); border: 1.5px solid var(--line); border-inline-start: 5px solid var(--c); border-radius: var(--r-sm); line-height: 1.35; }
+.b-ch1 .b-seq li[data-k="open"] { --c: var(--orange); }
+.b-ch1 .b-seq li[data-k="talk"] { --c: var(--purple); }
+.b-ch1 .b-seq li[data-k="close"] { --c: var(--moss); }
+.b-ch1 .b-seq li.b-fix { background: color-mix(in srgb, var(--c) 22%, white); border-color: transparent; border-inline-start-color: var(--c); }
+.b-ch1 .b-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.b-ch1 .b-top b { font-family: var(--display); font-weight: 400; font-size: 16px; }
+.b-ch1 .b-hint { display: block; font-size: 13.5px; color: var(--ink-2); margin-top: 1px; }
+.b-ch1 .b-seq .tags { margin: 6px 0 0; }
+
+/* 1.3 · פס זמן 0–45 */
+.b-ch1 .b-time { margin: 16px 0 0; }
+.b-ch1 .b-blocks { display: flex; gap: 7px; margin-bottom: 6px; }
+.b-ch1 .b-blocks span { flex: 1; text-align: center; font-size: 13.5px; font-weight: 700; color: var(--ink-2); padding-bottom: 3px; border-bottom: 2px solid var(--ink-3); }
+.b-ch1 .b-bar { display: flex; height: 58px; border-radius: var(--r-sm); overflow: hidden; }
+.b-ch1 .b-seg { --c: var(--teal); flex: none; width: calc(var(--m) / 45 * 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 2px; background: var(--c); color: var(--ink); font-size: 12px; font-weight: 700; line-height: 1.25; white-space: nowrap; overflow: hidden; }
+.b-ch1 .b-seg + .b-seg { border-inline-start: 2px solid var(--paper); }
+.b-ch1 .b-seg.b-cut { border-inline-start-width: 7px; }
+.b-ch1 .b-seg small { font-size: 11.5px; font-weight: 600; opacity: .75; }
+.b-ch1 .b-seg[data-k="open"] { --c: var(--orange); }
+.b-ch1 .b-seg[data-k="talk"] { --c: var(--purple); }
+.b-ch1 .b-seg[data-k="close"] { --c: var(--moss); }
+.b-ch1 .b-seg[data-k="free"] { background: repeating-linear-gradient(-45deg, var(--orange-soft) 0 7px, var(--paper) 7px 14px); color: var(--ink-2); box-shadow: inset 0 0 0 2px var(--orange); }
+.b-ch1 .b-ticks { position: relative; height: 18px; margin-top: 5px; font-size: 12px; font-weight: 700; color: var(--ink-3); }
+.b-ch1 .b-ticks span { position: absolute; top: 0; inset-inline-start: calc(var(--t) / 45 * 100%); transform: translateX(50%); }
+.b-ch1 .b-key { margin: 10px 0 0; font-size: 15px; color: var(--ink-2); }
+@media (max-width: 720px) { .b-ch1 .b-tri { grid-template-columns: 1fr; gap: 20px; } }
+</style></head><body>
+
+<!-- ===================================================================== 1.1 -->
+
+<section data-pt="1.1" data-opt="a"
+  data-title="כמה משנים את המקור?"
+  data-gloss="השיעור של שפ״י הוא נקודת המוצא. כמה רחוק מותר ללכת ממנו? זו ההחלטה הכי גדולה, והיא משפיעה על כל השאר."
+  data-anchor="מקום בעולם · למצוא מקום, שיעור 1"
+  data-h="720"
+  data-label="המקור + שכבת חותם"
+  data-note="הכי קרוב למקור — ועמוס: 8 שלבים ב־45 דקות."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">מתווה של כל השיעור</p>
+  <h2>מקום בעולם <span class="t">8 שלבים · 45 דק׳</span></h2>
+  <p>כל שלבי שפ״י נשארים, באותו סדר ובאותן שאלות. מעליהם שכבה דקה של חותם: משימה על הלוח בכניסה, זמן חשיבה לפני שאלות למליאה, ו״בכוונתי״ שהופך לכרטיס יציאה כתוב.</p>
+
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">קדימה ללמידה והנחיות לשיח</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span><span class="beam">עניין ורלוונטיות</span></div>
+        <p><b>חדש:</b> על הלוח כשנכנסים — ״איפה אתם מרגישים הכי בבית? כתבו מקום אחד, ולמה.״ אחרי שני שיתופים: ההנחיות לשיח מיטבי מהמצגת.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">5′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">כדור שלג מתגלגל</h3><span class="dur">10 דק׳</span></div>
+        <div class="tags"><span class="beam">שיתופיות בלמידה</span></div>
+        <p>זוגות: 10 משפטים ששומעים בבית ← רביעיות: 10 מאכלים שאוהבים ויודעים להכין ← שמיניות: 8 חוויות משותפות מהפסקות ומטיולים.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">15′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">רפלקציה</h3><span class="dur">4 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>שלוש השאלות של שפ״י: מה עזר לכם לשתף פעולה? איך היה לספר על עצמכם? מה הפתיע אתכם? <b>חדש:</b> עשר שניות של שקט לפני כל תשובה.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">19′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">שמש מעגלי השתייכות</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="beam">עניין ורלוונטיות</span></div>
+        <p>״לאילו קבוצות אתם שייכים?״ — הדוגמאות נכתבות על הלוח סביב השמש. ואז: באיזה מעגל נוח לכם, ומה מאפשר לכם להרגיש בו שייכות?</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">25′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">המשגה: אהוב · נחוץ · יכול</h3><span class="dur">4 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">זמן חשיבה</span></div>
+        <p>״ובעצם, מהי בכלל שייכות עבורכם?״ <b>חדש:</b> חצי דקה לחשוב לפני שעונים. ואז השקף: אהוב · נחוץ · יכול — ולפעמים לוקח זמן ״למצוא מקום״.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">29′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">דף אישי ו״רציתי לומר לך ש…״</h3><span class="dur">7 דק׳</span></div>
+        <div class="tags"><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>כתיבה אישית שלא משתפים: ״מה יכול לעזור לי כדי להשתייך לכיתה?״ ועוד משפטים להשלמה. הדף השני, ״רציתי לומר לך ש…״, נמסר לכם.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">36′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מה צריך כדי שכולם ירגישו שייכים?</h3><span class="dur">4 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">אחריות ובחירה</span></div>
+        <p>שיתוף בעקבות הדף: ״במהלך הכתיבה הבנתי ש… הרגשתי ש…״. <b>חדש:</b> זמן חשיבה לפני שמצביעים — לא רק הידיים הראשונות.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">40′</div><span class="step-node" data-k="close"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מסרים מרכזיים וכרטיס יציאה</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>שלושת המסרים: לכל אחד קצב משלו, זה מצב זמני, ולכל אחד ואחת יש יכולת להשפיע. <b>חדש:</b> ״בכוונתי…״ נכתב על פתק ונאסף בדלת.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <h3>מה השתנה לעומת המקור</h3>
+    <div class="row"><b>נשאר</b><p>כל שמונת השלבים של שפ״י, באותו סדר, עם אותן שאלות ואותם דפים.</p></div>
+    <div class="row"><b>השתנה</b><p>נוספו משימת כניסה על הלוח, זמן חשיבה לפני שאלות למליאה, ו״בכוונתי״ שנכתב ונאסף ככרטיס יציאה.</p></div>
+    <div class="row"><b>יצא</b><p>שום דבר.</p></div>
+    <div class="row"><b>המחיר</b><p>פחות משש דקות לשלב, בממוצע. כל עיכוב נלקח מהסוף — בדרך כלל מהדף האישי ומ״בכוונתי״.</p></div>
+  </div>
+</div>
+</section>
+
+<section data-pt="1.1" data-opt="b"
+  data-label="עריכה מחדש"
+  data-note="שומר על הפעילויות המרכזיות, מסדר אותן לקשת אחת ומוריד עומס."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">מתווה של כל השיעור</p>
+  <h2>מקום בעולם <span class="t">7 שלבים · 45 דק׳</span></h2>
+  <p>אותן פעילויות מרכזיות, בסדר שבונה קשת אחת: מהבית שלי, אל מה שמשותף לנו, אל המעגלים שלי — ומשם אל מה שנעשה כדי שלכולם יהיה מקום בכיתה.</p>
+
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">קדימה ללמידה</h3><span class="dur">4 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span><span class="beam">עניין ורלוונטיות</span></div>
+        <p>על הלוח כשנכנסים: ״איפה אתם מרגישים הכי בבית? כתבו מקום אחד, ולמה.״ שומעים שניים־שלושה ״למה״ — הם יחזרו בהמשך השיעור.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">4′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">כדור שלג מקוצר</h3><span class="dur">8 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>זוגות: 10 משפטים ששומעים בבית ← רביעיות: 10 מאכלים שאוהבים ויודעים להכין. ההוראות כתובות על הלוח לאורך כל המשימה.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">12′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מה עזר לכם לשתף פעולה?</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="talk">Think–Pair–Share</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>דקה לבד, שתיים בזוגות, ואז שיתוף — שאלה אחת לעומק במקום שלוש. גשר: ״הקבוצות היום היו זמניות. ובחיים?״</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">18′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">שמש המעגלים שלי</h3><span class="dur">8 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">כולם כותבים</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>מציירים שמש אישית: ״אני״ במרכז, ומסביב משפחה, חברים, חוג, תנועת נוער, שכונה. מקיפים את המעגל שהכי נוח בו, וכותבים מה עושה אותו לנוח.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">26′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">המשגה מתוך מה שכתבו</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span><span class="beam">עניין ורלוונטיות</span></div>
+        <p>אוספים תשובות מהשמש ומהפתיחה, וממיינים על הלוח לשלושה טורים: אהוב · נחוץ · יכול. ומוסיפים: ״לפעמים לוקח זמן למצוא מקום — וזה זמני.״</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">32′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">פתקים לקיר</h3><span class="dur">8 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">אחריות ובחירה</span></div>
+        <p>״לכל אחד ואחת יש יכולת להשפיע.״ כל זוג כותב על פתק פעולה אחת שתעזור לכולם להרגיש שייכים, ותולה על הקיר. קוראים בקול חמישה.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">40′</div><span class="step-node" data-k="close"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">כרטיס יציאה</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>״בכוונתי: דבר אחד שאעשה השבוע כדי שנכיר ונתגבש ככיתה.״ ושורת רשות שנשארת בינינו: ״רציתי לומר לך ש…״.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <h3>מה השתנה לעומת המקור</h3>
+    <div class="row"><b>נשאר</b><p>כדור השלג, שמש המעגלים, אהוב · נחוץ · יכול, ״מה צריך כדי שכולם ירגישו שייכים?״ ו״בכוונתי״.</p></div>
+    <div class="row"><b>השתנה</b><p>שלוש שאלות הרפלקציה הפכו לשאלה אחת בזוגות. את ההמשגה בונים ממה שהכיתה כתבה, והמסרים נאמרים בתוכה. השיתוף בסוף הופך לפתקים על הקיר.</p></div>
+    <div class="row"><b>יצא</b><p>השמיניות, שלב ההנחיות לשיח והדף האישי (אפשר לתת הביתה). ״רציתי לומר לך ש…״ עבר לכרטיס היציאה.</p></div>
+    <div class="row"><b>המחיר</b><p>אין סבב בקבוצות של שמונה, והדף האישי לא נכתב בכיתה.</p></div>
+  </div>
+</div>
+</section>
+
+<section data-pt="1.1" data-opt="c"
+  data-label="בנייה מחדש סביב המטרות"
+  data-note="אותן מטרות, מבנה חדש לגמרי; יותר בחירה ושיתופיות — ויותר הכנה."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">מתווה של כל השיעור</p>
+  <h2>מקום בעולם <span class="t">6 שלבים · 45 דק׳</span></h2>
+  <p>אותן מטרות ואותם מושגים, במבנה חדש: את ההמשגה הכיתה לומדת ומלמדת בעצמה, ובסוף מחליטה יחד מה תעשה כדי שלכולם יהיה מקום.</p>
+
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">איפה הייתם מתיישבים?</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">מה הקשר?</span><span class="beam">עניין ורלוונטיות</span></div>
+        <p>על המסך: חדר אוכל מלא ביום הראשון בבית ספר חדש, וכל השולחנות כבר מתמלאים. ״איפה הייתם מתיישבים — ולמה?״ חושבים לבד, אומרים בזוגות, שומעים שלושה.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">5′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">המעגלים שלי</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">כולם כותבים</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>משרטטים את מעגלי ההשתייכות האישיים — משפחה, חברים, חוג, תנועת נוער, שכונה — ומקיפים את המעגל שבו הכי נוח. לידו כותבים: מה עושה אותו לנוח?</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">11′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">ג׳יגסו: צוותי מומחים</h3><span class="dur">10 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="talk">Jigsaw</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>קבוצות בית של ארבעה מתחלקות בארבעה כרטיסים: אהוב · נחוץ · יכול · ״לכל אחד קצב״ (מתוך ההמשגה של שפ״י). מי שקיבלו אותו כרטיס נפגשים ומכינים הסבר של דקה, עם דוגמה.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">21′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">חוזרים ומלמדים</h3><span class="dur">8 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="talk">Jigsaw</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>חוזרים לקבוצת הבית ומלמדים, דקה לכל כרטיס. בסוף הקבוצה כותבת משפט אחד, ״שייכות היא…״, שמשתמש בכל ארבעת הכרטיסים.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">29′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">אמנת שייכות</h3><span class="dur">11 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">אחריות ובחירה</span></div>
+        <p>כל קבוצה מציעה שתי פעולות ל״מה צריך כדי שכולם ירגישו שייכים?״ ומדביקה על הלוח. מצביעים במדבקות, שלוש לכל אחד ואחת. שלוש הפעולות המובילות הן אמנת השייכות של הכיתה.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">40′</div><span class="step-node" data-k="close"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">כרטיס יציאה</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>״איזו פעולה מהאמנה אקח על עצמי השבוע, ואיך?״ ושורת רשות שנשארת בינינו: ״רציתי לומר לך ש…״.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <h3>מה השתנה לעומת המקור</h3>
+    <div class="row"><b>נשאר</b><p>המטרות והמושגים: מעגלי השתייכות, אהוב · נחוץ · יכול, הקצב האישי, ״מה צריך כדי שכולם ירגישו שייכים?״ ו״בכוונתי״.</p></div>
+    <div class="row"><b>השתנה</b><p>את ההמשגה לא מציגים מהמצגת — הכיתה לומדת ומלמדת אותה. השאלה הפתוחה בסוף הופכת להחלטה של הכיתה.</p></div>
+    <div class="row"><b>יצא</b><p>כדור השלג, שאלות הרפלקציה והדף האישי.</p></div>
+    <div class="row"><b>המחיר</b><p>הכנה: תמונה, ארבעה כרטיסים מודפסים לכל קבוצה, מדבקות וחלוקה מראש לקבוצות. בפעם הראשונה כדאי להסביר את מהלך הג׳יגסו לפני שמתחילים.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ===================================================================== 1.2 -->
+
+<section data-pt="1.2" data-opt="a"
+  data-title="שלד קבוע לאורך השנה?"
+  data-gloss="שגרה עוזרת לכיתה ז׳ להיכנס ללמידה מהר, אבל עלולה להרגיש חזרתית. רואים שלושה שיעורים — מקום בעולם, סיפור במניפה, השפעה חברתית — בכל גישה."
+  data-anchor="מקום בעולם · סיפור במניפה · השפעה חברתית"
+  data-h="660"
+  data-label="שלד קבוע"
+  data-note="הכיתה לומדת את המסלול ופחות זמן הולך על הסברים; הסיכון — שחיקה."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">שלושה שיעורים מהשנה, זה לצד זה</p>
+  <h2>שלושה שיעורים, שלד אחד</h2>
+  <p>בכל שיעור אותם חמישה שלבים, באותו סדר ובאותם שמות. מתחלף רק מה שבתוכם. בצבע מלא — שלב שחוזר בכל שיעור.</p>
+
+  <div class="b-tri">
+    <div class="b-col">
+      <h3>מקום בעולם</h3>
+      <p class="b-sub">אוקטובר · למצוא מקום, שיעור 1</p>
+      <ol class="b-seq">
+        <li class="b-fix" data-k="open"><div class="b-top"><b>קדימה ללמידה</b><span class="dur">4 דק׳</span></div><span class="b-hint">איפה אתם מרגישים בבית?</span><div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span></div></li>
+        <li class="b-fix" data-k="open"><div class="b-top"><b>מה הקשר?</b><span class="dur">6 דק׳</span></div><span class="b-hint">שמש מעגלי השתייכות</span><div class="tags"><span class="pr" data-f="open">מה הקשר?</span></div></li>
+        <li class="b-fix" data-k="body"><div class="b-top"><b>משימה</b><span class="dur">14 דק׳</span></div><span class="b-hint">כדור שלג 2 ← 4 ← 8</span><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li class="b-fix" data-k="talk"><div class="b-top"><b>שיח</b><span class="dur">16 דק׳</span></div><span class="b-hint">אהוב · נחוץ · יכול</span><div class="tags"><span class="pr" data-f="talk">Think–Pair–Share</span></div></li>
+        <li class="b-fix" data-k="close"><div class="b-top"><b>כרטיס יציאה</b><span class="dur">5 דק׳</span></div><span class="b-hint">״בכוונתי…״</span><div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span></div></li>
+      </ol>
+    </div>
+    <div class="b-col">
+      <h3>סיפור במניפה</h3>
+      <p class="b-sub">אוקטובר · למצוא מקום, שיעור 2</p>
+      <ol class="b-seq">
+        <li class="b-fix" data-k="open"><div class="b-top"><b>קדימה ללמידה</b><span class="dur">4 דק׳</span></div><span class="b-hint">מהשיעור הקודם ועד היום</span><div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span></div></li>
+        <li class="b-fix" data-k="open"><div class="b-top"><b>מה הקשר?</b><span class="dur">8 דק׳</span></div><span class="b-hint">כמה אחוזים יש לכם בטלפון?</span><div class="tags"><span class="pr" data-f="open">מה הקשר?</span></div></li>
+        <li class="b-fix" data-k="body"><div class="b-top"><b>משימה</b><span class="dur">13 דק׳</span></div><span class="b-hint">סיפור במניפה</span><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li class="b-fix" data-k="talk"><div class="b-top"><b>שיח</b><span class="dur">15 דק׳</span></div><span class="b-hint">איך הרגשתם? מה נמנף בכיתה?</span><div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span></div></li>
+        <li class="b-fix" data-k="close"><div class="b-top"><b>כרטיס יציאה</b><span class="dur">5 דק׳</span></div><span class="b-hint">משהו שאקח על עצמי</span><div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span></div></li>
+      </ol>
+    </div>
+    <div class="b-col">
+      <h3>השפעה חברתית</h3>
+      <p class="b-sub">דצמבר · מתבגרים בבריאות, שיעור 1</p>
+      <ol class="b-seq">
+        <li class="b-fix" data-k="open"><div class="b-top"><b>קדימה ללמידה</b><span class="dur">4 דק׳</span></div><span class="b-hint">מה זה בשבילכם לחץ חברתי?</span><div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span></div></li>
+        <li class="b-fix" data-k="open"><div class="b-top"><b>מה הקשר?</b><span class="dur">7 דק׳</span></div><span class="b-hint">ניסוי הקווים של אש</span><div class="tags"><span class="pr" data-f="open">מה הקשר?</span></div></li>
+        <li class="b-fix" data-k="body"><div class="b-top"><b>משימה</b><span class="dur">15 דק׳</span></div><span class="b-hint">מקרים: ברק, נועה, טלי</span><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li class="b-fix" data-k="talk"><div class="b-top"><b>שיח</b><span class="dur">14 דק׳</span></div><span class="b-hint">מה מרגישים כש״נכנעים״?</span><div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span></div></li>
+        <li class="b-fix" data-k="close"><div class="b-top"><b>כרטיס יציאה</b><span class="dur">5 דק׳</span></div><span class="b-hint">מה אקח איתי הלאה?</span><div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span></div></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="say"><q>כמו בכל שיעור: משימה על הלוח, ואחריה ׳מה הקשר?׳.</q></div>
+</div>
+</section>
+
+<section data-pt="1.2" data-opt="b"
+  data-label="פתיחה וסגירה קבועות"
+  data-note="שגרה בקצוות, חופש באמצע."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">שלושה שיעורים מהשנה, זה לצד זה</p>
+  <h2>שלושה שיעורים, אותה כניסה ואותה יציאה</h2>
+  <p>כל שיעור נפתח בקדימה ללמידה או בתרגילי שליפה, ונסגר בכרטיס יציאה. האמצע נבנה לפי השיעור. בצבע מלא — שלב שחוזר בכל שיעור.</p>
+
+  <div class="b-tri">
+    <div class="b-col">
+      <h3>מקום בעולם</h3>
+      <p class="b-sub">אוקטובר · למצוא מקום, שיעור 1</p>
+      <ol class="b-seq">
+        <li class="b-fix" data-k="open"><div class="b-top"><b>קדימה ללמידה</b><span class="dur">4 דק׳</span></div><span class="b-hint">איפה אתם מרגישים בבית?</span><div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span></div></li>
+        <li data-k="body"><div class="b-top"><b>כדור שלג מתגלגל</b><span class="dur">12 דק׳</span></div><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li data-k="body"><div class="b-top"><b>שמש מעגלי השתייכות</b><span class="dur">8 דק׳</span></div><div class="tags"><span class="pr" data-f="think">כולם כותבים</span></div></li>
+        <li data-k="talk"><div class="b-top"><b>אהוב · נחוץ · יכול</b><span class="dur">6 דק׳</span></div><div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span></div></li>
+        <li data-k="body"><div class="b-top"><b>פתקים לקיר</b><span class="dur">10 דק׳</span></div><div class="tags"><span class="pr" data-f="talk">Think–Pair–Share</span></div></li>
+        <li class="b-fix" data-k="close"><div class="b-top"><b>כרטיס יציאה</b><span class="dur">5 דק׳</span></div><span class="b-hint">״בכוונתי…״</span><div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span></div></li>
+      </ol>
+    </div>
+    <div class="b-col">
+      <h3>סיפור במניפה</h3>
+      <p class="b-sub">אוקטובר · למצוא מקום, שיעור 2</p>
+      <ol class="b-seq">
+        <li class="b-fix" data-k="open"><div class="b-top"><b>תרגילי שליפה</b><span class="dur">4 דק׳</span></div><span class="b-hint">מה זוכרים מ״מקום בעולם״?</span><div class="tags"><span class="pr" data-f="think">תרגילי שליפה</span></div></li>
+        <li data-k="open"><div class="b-top"><b>כשהיינו ילדים</b><span class="dur">4 דק׳</span></div><div class="tags"><span class="beam">עניין ורלוונטיות</span></div></li>
+        <li data-k="open"><div class="b-top"><b>הסוללה הפנימית</b><span class="dur">8 דק׳</span></div><div class="tags"><span class="pr" data-f="open">מה הקשר?</span></div></li>
+        <li data-k="body"><div class="b-top"><b>סיפור במניפה</b><span class="dur">14 דק׳</span></div><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li data-k="talk"><div class="b-top"><b>מניפת רעיונות</b><span class="dur">10 דק׳</span></div><div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span></div></li>
+        <li class="b-fix" data-k="close"><div class="b-top"><b>כרטיס יציאה</b><span class="dur">5 דק׳</span></div><span class="b-hint">משהו שאקח על עצמי</span><div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span></div></li>
+      </ol>
+    </div>
+    <div class="b-col">
+      <h3>השפעה חברתית</h3>
+      <p class="b-sub">דצמבר · מתבגרים בבריאות, שיעור 1</p>
+      <ol class="b-seq">
+        <li class="b-fix" data-k="open"><div class="b-top"><b>קדימה ללמידה</b><span class="dur">4 דק׳</span></div><span class="b-hint">מה זה בשבילכם לחץ חברתי?</span><div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span></div></li>
+        <li data-k="open"><div class="b-top"><b>ניסוי הקווים של אש</b><span class="dur">8 דק׳</span></div><div class="tags"><span class="pr" data-f="open">מה הקשר?</span></div></li>
+        <li data-k="body"><div class="b-top"><b>מהי השפעה חברתית?</b><span class="dur">7 דק׳</span></div><div class="tags"><span class="pr" data-f="think">זמן חשיבה</span></div></li>
+        <li data-k="body"><div class="b-top"><b>מקרים בקבוצות</b><span class="dur">16 דק׳</span></div><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li data-k="talk"><div class="b-top"><b>דיון ומסרים</b><span class="dur">5 דק׳</span></div><div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span></div></li>
+        <li class="b-fix" data-k="close"><div class="b-top"><b>כרטיס יציאה</b><span class="dur">5 דק׳</span></div><span class="b-hint">מה אקח איתי הלאה?</span><div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span></div></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="say"><q>נכנסים — יש משימה על הלוח. ובסוף, כמו תמיד, כרטיס יציאה.</q></div>
+</div>
+</section>
+
+<section data-pt="1.2" data-opt="c"
+  data-label="כל שיעור לפי התוכן"
+  data-note="הכי נאמן לתוכן; פחות צפוי — לטוב ולרע."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">שלושה שיעורים מהשנה, זה לצד זה</p>
+  <h2>שלושה שיעורים, שלושה מבנים</h2>
+  <p>לכל שיעור המבנה שהתוכן שלו מבקש: אחד נפתח במשחק, אחד בשליפה ואחד בסרטון — וגם הסגירה משתנה. אף שלב לא חוזר בכל שיעור.</p>
+
+  <div class="b-tri">
+    <div class="b-col">
+      <h3>מקום בעולם</h3>
+      <p class="b-sub">אוקטובר · למצוא מקום, שיעור 1</p>
+      <ol class="b-seq">
+        <li data-k="body"><div class="b-top"><b>כדור שלג מתגלגל</b><span class="dur">12 דק׳</span></div><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li data-k="talk"><div class="b-top"><b>מה עזר לכם לשתף פעולה?</b><span class="dur">5 דק׳</span></div><div class="tags"><span class="pr" data-f="talk">Think–Pair–Share</span></div></li>
+        <li data-k="body"><div class="b-top"><b>שמש מעגלי השתייכות</b><span class="dur">8 דק׳</span></div><div class="tags"><span class="pr" data-f="think">כולם כותבים</span></div></li>
+        <li data-k="talk"><div class="b-top"><b>אהוב · נחוץ · יכול</b><span class="dur">6 דק׳</span></div><div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span></div></li>
+        <li data-k="body"><div class="b-top"><b>דף אישי ו״רציתי לומר לך״</b><span class="dur">9 דק׳</span></div><div class="tags"><span class="beam">הערכה ורפלקטיביות</span></div></li>
+        <li data-k="close"><div class="b-top"><b>מסרים ו״בכוונתי״ בעל פה</b><span class="dur">5 דק׳</span></div><div class="tags"><span class="beam">אחריות ובחירה</span></div></li>
+      </ol>
+    </div>
+    <div class="b-col">
+      <h3>סיפור במניפה</h3>
+      <p class="b-sub">אוקטובר · למצוא מקום, שיעור 2</p>
+      <ol class="b-seq">
+        <li data-k="open"><div class="b-top"><b>מהשיעור הקודם — נזכרים</b><span class="dur">5 דק׳</span></div><div class="tags"><span class="pr" data-f="think">תרגילי שליפה</span></div></li>
+        <li data-k="open"><div class="b-top"><b>כשהיינו ילדים</b><span class="dur">5 דק׳</span></div><div class="tags"><span class="beam">עניין ורלוונטיות</span></div></li>
+        <li data-k="talk"><div class="b-top"><b>הסוללה הפנימית בשלשות</b><span class="dur">8 דק׳</span></div><div class="tags"><span class="pr" data-f="open">מה הקשר?</span></div></li>
+        <li data-k="body"><div class="b-top"><b>סיפור במניפה</b><span class="dur">15 דק׳</span></div><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li data-k="talk"><div class="b-top"><b>מסכמים יחידה ואמנה כיתתית</b><span class="dur">12 דק׳</span></div><div class="tags"><span class="beam">אחריות ובחירה</span></div></li>
+      </ol>
+    </div>
+    <div class="b-col">
+      <h3>השפעה חברתית</h3>
+      <p class="b-sub">דצמבר · מתבגרים בבריאות, שיעור 1</p>
+      <ol class="b-seq">
+        <li data-k="open"><div class="b-top"><b>סרטון: ניסוי הקווים של אש</b><span class="dur">8 דק׳</span></div><div class="tags"><span class="pr" data-f="open">מה הקשר?</span></div></li>
+        <li data-k="body"><div class="b-top"><b>השפעה חברתית וקונפורמיות</b><span class="dur">8 דק׳</span></div><div class="tags"><span class="pr" data-f="think">זמן חשיבה</span></div></li>
+        <li data-k="body"><div class="b-top"><b>מקרים בקבוצות ודיאלוג</b><span class="dur">15 דק׳</span></div><div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div></li>
+        <li data-k="talk"><div class="b-top"><b>הצגת הדיאלוגים ודיון</b><span class="dur">9 דק׳</span></div><div class="tags"><span class="pr" data-f="talk">מהלכי שיח</span></div></li>
+        <li data-k="close"><div class="b-top"><b>מה למדנו היום?</b><span class="dur">5 דק׳</span></div><div class="tags"><span class="beam">הערכה ורפלקטיביות</span></div></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="say"><q>היום זה עובד קצת אחרת, אז רגע של הסבר לפני שמתחילים…</q></div>
+</div>
+</section>
+
+<!-- ===================================================================== 1.3 -->
+
+<section data-pt="1.3" data-opt="a"
+  data-title="כמה זמן תופס המערך?"
+  data-gloss="שעת חינוך היא 45 דקות על הנייר. בפועל יש הודעות, איחורים ומבחן שזז. איך המערך מתמודד עם הפער?"
+  data-anchor="מקום בעולם · למצוא מקום, שיעור 1"
+  data-vw="760" data-h="600"
+  data-label="45 דקות מלאות"
+  data-note="מקסימום תוכן, אפס מרווח."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">ציר הזמן של השיעור, ומתחתיו שורות מהמערך</p>
+  <h2>45 דקות, כל דקה מתוכננת</h2>
+
+  <div class="b-time">
+    <div class="b-bar" role="img" aria-label="ציר זמן של 45 דקות: פתיחה 4, כדור שלג 10, רפלקציה 4, שמש מעגלים 6, המשגה 4, דף אישי 7, מה צריך 5, כרטיס יציאה 5">
+      <span class="b-seg" data-k="open" style="--m:4">פתיחה<small>4′</small></span>
+      <span class="b-seg" data-k="body" style="--m:10">כדור שלג<small>10′</small></span>
+      <span class="b-seg" data-k="talk" style="--m:4">רפלקציה<small>4′</small></span>
+      <span class="b-seg" data-k="talk" style="--m:6">שמש מעגלים<small>6′</small></span>
+      <span class="b-seg" data-k="body" style="--m:4">המשגה<small>4′</small></span>
+      <span class="b-seg" data-k="body" style="--m:7">דף אישי<small>7′</small></span>
+      <span class="b-seg" data-k="talk" style="--m:5">מה צריך?<small>5′</small></span>
+      <span class="b-seg" data-k="close" style="--m:5">כרטיס יציאה<small>5′</small></span>
+    </div>
+    <div class="b-ticks" aria-hidden="true"><span style="--t:0">0′</span><span style="--t:5">5′</span><span style="--t:10">10′</span><span style="--t:15">15′</span><span style="--t:20">20′</span><span style="--t:25">25′</span><span style="--t:30">30′</span><span style="--t:35">35′</span><span style="--t:40">40′</span><span style="--t:45">45′</span></div>
+  </div>
+  <p class="b-key">שמונה שלבים צמודים, בלי דקה פנויה. המערך מתכנן גם את הדקות שבתוך כל שלב.</p>
+
+  <h3>כך זה נראה במערך</h3>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">4′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">כדור שלג מתגלגל</h3><span class="dur">10 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>זוגות, 3 דק׳: 10 משפטים ששומעים בבית. רביעיות, 3 דק׳: 10 מאכלים. שמיניות, 4 דק׳: 8 חוויות משותפות. עוברים בין השלבים בלי לעצור.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">14′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">רפלקציה</h3><span class="dur">4 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>שלוש שאלות, דקה לכל אחת, ודקה אחרונה לגשר: ״הקבוצות היום היו זמניות. ובחיים?״</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">18′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">שמש מעגלי השתייכות</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="beam">עניין ורלוונטיות</span></div>
+        <p>2 דק׳: דוגמאות ללוח. 3 דק׳: ״באיזה מעגל נוח לכם?״. דקה אחרונה: ״מהי בכלל שייכות עבורכם?״</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="1.3" data-opt="b"
+  data-label="ליבה של 35 + הרחבות"
+  data-note="המערך מחזיק גם כשהשיעור מתחיל באיחור."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">ציר הזמן של השיעור, ומתחתיו שורות מהמערך</p>
+  <h2>ליבה של 35 דקות, ועשר דקות של ״אם נשאר זמן״</h2>
+
+  <div class="b-time">
+    <div class="b-bar" role="img" aria-label="ציר זמן: ליבה של 35 דקות, ועשר דקות של הרחבות לפני כרטיס היציאה">
+      <span class="b-seg" data-k="open" style="--m:4">פתיחה<small>4′</small></span>
+      <span class="b-seg" data-k="body" style="--m:8">כדור שלג<small>8′</small></span>
+      <span class="b-seg" data-k="talk" style="--m:3">רפלקציה<small>3′</small></span>
+      <span class="b-seg" data-k="talk" style="--m:6">שמש מעגלים<small>6′</small></span>
+      <span class="b-seg" data-k="body" style="--m:5">המשגה<small>5′</small></span>
+      <span class="b-seg" data-k="talk" style="--m:4">מה צריך?<small>4′</small></span>
+      <span class="b-seg" data-k="free" style="--m:10">אם נשאר זמן<small><span dir="ltr">+5</span> או <span dir="ltr">+8</span></small></span>
+      <span class="b-seg" data-k="close" style="--m:5">כרטיס יציאה<small>5′</small></span>
+    </div>
+    <div class="b-ticks" aria-hidden="true"><span style="--t:0">0′</span><span style="--t:5">5′</span><span style="--t:10">10′</span><span style="--t:15">15′</span><span style="--t:20">20′</span><span style="--t:25">25′</span><span style="--t:30">30′</span><span style="--t:35">35′</span><span style="--t:40">40′</span><span style="--t:45">45′</span></div>
+  </div>
+  <p class="b-key">בצבע מלא — הליבה, 35 דקות. במקווקו — עשר דקות של הרחבות מוכנות. התחלתם באיחור? מוותרים עליהן, והשיעור עדיין שלם.</p>
+
+  <h3>כך זה נראה במערך</h3>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">26′<small>ליבה</small></div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מה צריך כדי שכולם ירגישו שייכים?</h3><span class="dur">4 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">אחריות ובחירה</span></div>
+        <p>חצי דקה לחשוב, ושומעים ארבעה רעיונות.</p>
+        <div class="say whisper">כאן מסתכלים בשעון. נשארו עד הצלצול 10 דקות — פתקים לקיר; 13 ומעלה — הדף האישי; פחות — ישר לכרטיס היציאה.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min"><span dir="ltr">+5′</span></div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">אם נשאר זמן: פתקים לקיר</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span></div>
+        <p>כל זוג כותב על פתק פעולה אחת לכיתה, ותולה על הקיר.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min"><span dir="ltr">+8′</span></div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">אם נשאר זמן: הדף האישי</h3><span class="dur">8 דק׳</span></div>
+        <div class="tags"><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>״מה יכול לעזור לי כדי להשתייך לכיתה?״ ו״רציתי לומר לך ש…״. כתיבה אישית, לא לשיתוף.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say whisper">אם חסר זמן גם לליבה — מוותרים על שתיים משאלות הרפלקציה, והשמש נעשית בעל פה. על כרטיס היציאה לא מוותרים.</div>
+</div>
+</section>
+
+<section data-pt="1.3" data-opt="c"
+  data-label="שלושה בלוקים של 15"
+  data-note="גמיש לשעות קצרות; פחות רצף בתוך המפגש."
+  data-body-class="paper">
+<div class="wrap doc b-ch1">
+  <p class="ctx">ציר הזמן של השיעור, ומתחתיו שורות מהמערך</p>
+  <h2>שלושה בלוקים של 15 דקות</h2>
+
+  <div class="b-time">
+    <div class="b-blocks"><span>בלוק 1 · ביחד</span><span>בלוק 2 · המעגלים שלי</span><span>בלוק 3 · מקום לכולם</span></div>
+    <div class="b-bar" role="img" aria-label="ציר זמן: שלושה בלוקים של 15 דקות, שכל אחד מהם עומד בפני עצמו">
+      <span class="b-seg" data-k="open" style="--m:3">פתיחה<small>3′</small></span>
+      <span class="b-seg" data-k="body" style="--m:9">כדור שלג<small>9′</small></span>
+      <span class="b-seg" data-k="talk" style="--m:3">רפלקציה<small>3′</small></span>
+      <span class="b-seg b-cut" data-k="talk" style="--m:6">שמש מעגלים<small>6′</small></span>
+      <span class="b-seg" data-k="body" style="--m:4">המשגה<small>4′</small></span>
+      <span class="b-seg" data-k="body" style="--m:5">דף אישי<small>5′</small></span>
+      <span class="b-seg b-cut" data-k="talk" style="--m:7">מה צריך?<small>7′</small></span>
+      <span class="b-seg" data-k="body" style="--m:3">מסרים<small>3′</small></span>
+      <span class="b-seg" data-k="close" style="--m:5">כרטיס יציאה<small>5′</small></span>
+    </div>
+    <div class="b-ticks" aria-hidden="true"><span style="--t:0">0′</span><span style="--t:5">5′</span><span style="--t:10">10′</span><span style="--t:15">15′</span><span style="--t:20">20′</span><span style="--t:25">25′</span><span style="--t:30">30′</span><span style="--t:35">35′</span><span style="--t:40">40′</span><span style="--t:45">45′</span></div>
+  </div>
+  <p class="b-key">כל בלוק נפתח ונסגר בעצמו. אפשר לעצור אחרי בלוק 1 או אחרי בלוק 2, ולהמשיך במפגש הבא.</p>
+
+  <h3>כך זה נראה במערך</h3>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">0′<small>בלוק 1</small></div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">ביחד</h3><span class="dur">15 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>קדימה ללמידה, כדור שלג 2 ← 4 ← 8 ורפלקציה. נסגר בשאלה ״מה עזר לכם לשתף פעולה?״</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">15′<small>בלוק 2</small></div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">המעגלים שלי</h3><span class="dur">15 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">כולם כותבים</span><span class="beam">עניין ורלוונטיות</span></div>
+        <p>נפתח בלי תלות בבלוק 1: ״לאילו קבוצות אתם שייכים?״ ואז שמש מעגלים, אהוב · נחוץ · יכול, ודף אישי.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">30′<small>בלוק 3</small></div><span class="step-node" data-k="close"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מקום לכולם</h3><span class="dur">15 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span><span class="beam">אחריות ובחירה</span></div>
+        <p>״מה צריך כדי שכולם ירגישו שייכים?״, שלושת המסרים וכרטיס יציאה.</p>
+      </div>
+    </div>
+  </div>
+  <div class="say whisper">מפצלים לשני מפגשים? עוצרים בסוף בלוק, והמפגש הבא נפתח בדקה של שליפה: ״מה נשאר לכם מהפעם הקודמת?״</div>
+</div>
+</section>
+
+</body></html>

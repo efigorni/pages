@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>פרק 6 · העזר החזותי</title>
+<style data-bundle-style>
+  .b-ch6-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow-1); background: var(--ground); margin: 10px 0 14px; }
+  .b-ch6-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .b-ch6-frame .hint { position: absolute; bottom: 8px; left: 10px; font-size: 12px; font-weight: 700; color: var(--ink-3); background: rgba(255,255,255,.85); padding: 2px 9px; border-radius: 99px; }
+  .b-ch6-pc { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 6px 0 0; }
+  .b-ch6-pc > div { border-radius: 12px; padding: 10px 14px 12px; font-size: 14.5px; line-height: 1.5; }
+  .b-ch6-pc > div > b { display: block; font-family: var(--display); font-weight: 400; font-size: 16px; margin-bottom: 2px; }
+  .b-ch6-pc ul { margin: 0; padding-inline-start: 18px; }
+  .b-ch6-pc li { margin: 3px 0; }
+  .b-ch6-pc .pro { background: var(--moss-soft); }
+  .b-ch6-pc .pro b { color: var(--moss-deep); }
+  .b-ch6-pc .con { background: var(--orange-soft); }
+  .b-ch6-pc .con b { color: var(--orange-deep); }
+  /* PowerPoint window mock */
+  .b-ch6-ppt { border-radius: 12px; overflow: hidden; border: 1px solid #cfc8bf; box-shadow: var(--shadow-1); margin: 10px 0 14px; background: #eae6e1; }
+  .b-ch6-ppt .bar { display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; background: #c4462b; color: #fff; font-size: 12.5px; font-weight: 700; direction: ltr; }
+  .b-ch6-ppt .bar i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.65); display: inline-block; }
+  .b-ch6-ppt .bar span { margin-left: 8px; }
+  .b-ch6-ppt .ribbon { height: 22px; background: #f6f3ef; border-bottom: 1px solid #ddd5cb; }
+  .b-ch6-ppt .body { display: grid; grid-template-columns: 1fr 70px; gap: 10px; padding: 10px; }
+  .b-ch6-ppt .thumbs { display: flex; flex-direction: column; gap: 7px; }
+  .b-ch6-ppt .thumbs div { aspect-ratio: 16 / 9; background: #fff; border: 1.5px solid #d9d1c6; border-radius: 3px; }
+  .b-ch6-ppt .thumbs div.on { border-color: #c4462b; }
+  .b-ch6-ppt .slide { aspect-ratio: 16 / 9; background: #fff; border: 1px solid #ddd5cb; padding: 6% 7%; display: flex; flex-direction: column; justify-content: center; }
+  .b-ch6-ppt .slide .k { font-weight: 800; font-size: 13px; color: var(--teal-deep); }
+  .b-ch6-ppt .slide .q { font-family: var(--display); font-size: clamp(17px, 2.6vw, 26px); line-height: 1.25; margin: 4px 0 0; }
+  .b-ch6-ppt .slide .t { margin-top: 12px; font-size: 12px; color: var(--ink-3); font-weight: 700; }
+  .b-ch6-files { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+  .b-ch6-files span { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 99px; background: var(--paper); border: 1.5px solid var(--line-2); font-size: 13.5px; font-weight: 700; color: var(--ink-2); }
+  .b-ch6-files span::before { content: ""; width: 10px; height: 12px; border-radius: 2px; background: var(--teal); }
+  .b-ch6-files span.pdf::before { background: var(--orange-deep); }
+  .b-ch6-files code { direction: ltr; font: 600 12px/1 ui-monospace, Menlo, monospace; color: var(--ink-3); }
+  .b-ch6-stack .b-ch6-frame { margin: 0 0 10px; }
+  .b-ch6-thumbed { display: grid; grid-template-columns: 1fr 190px; gap: 16px; align-items: start; }
+  .b-ch6-thumbed .b-ch6-frame { margin: 4px 0 0; }
+  @media (max-width: 560px) { .b-ch6-pc, .b-ch6-thumbed { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- ===================================================== 6.1 · הכלי -->
+<section data-pt="6.1" data-opt="a" data-title="באיזה כלי בונים את המצגת?"
+  data-gloss="המערך עומד בפני עצמו; המצגת מלווה אותו בכיתה. השאלה היא באיזה כלי לבנות את המצגת — וזה משפיע על איך פותחים אותה, איך עורכים, ומה קורה כשאין אינטרנט."
+  data-anchor="מקום בעולם (ז׳, אוקטובר) — דמו חי" data-h="660"
+  data-label="reveal.js (דף אינטרנט)" data-note="אותה שפה ואותו מקור כמו המערך, נפתח מקישור; תלוי באינטרנט בכיתה." data-body-class="paper">
+  <div class="wrap doc">
+    <p class="ctx">דמו חי — לחצו על השקף והתקדמו בחיצים</p>
+    <div class="b-ch6-frame"><iframe src="demos/reveal-makom.html" title="דמו reveal.js"></iframe></div>
+    <div class="b-ch6-pc">
+      <div class="pro"><b>מה טוב</b><ul>
+        <li>אותם צבעים, גופנים ועיגולים כמו במערך — שינוי עיצוב אחד מתעדכן בכל השנה.</li>
+        <li>נפתח מקישור ב־GitHub Pages, מכל מחשב, בלי התקנה.</li>
+        <li>טיימרים, חשיפה הדרגתית ואיורים חדים בכל גודל.</li>
+        <li>תצוגת מנחה עם הערות (מקש S).</li>
+      </ul></div>
+      <div class="con"><b>על מה לחשוב</b><ul>
+        <li>בלי אינטרנט בכיתה — אין מצגת.</li>
+        <li>תיקון מילה דורש לגעת בקובץ (אפשר להקל: הטקסט יישב בבלוק פשוט בראש הקובץ).</li>
+        <li>הקישור ציבורי, גם אם לא מקשרים אליו מהאתר.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section data-pt="6.1" data-opt="b"
+  data-label="PowerPoint / Google Slides" data-note="מוכר, עובד בלי אינטרנט וקל לעריכה; עיצוב מוגבל, בלי אינטראקטיביות, ושני מקורות שעלולים להתפצל." data-body-class="paper">
+  <div class="wrap doc">
+    <p class="ctx">כך זה ייראה — קובץ מצגת רגיל (הדמיה)</p>
+    <div class="b-ch6-ppt" aria-label="הדמיה של חלון PowerPoint">
+      <div class="bar"><i></i><i></i><i></i><span>מקום-בעולם.pptx</span></div>
+      <div class="ribbon"></div>
+      <div class="body">
+        <div class="slide"><div class="k">קדימה ללמידה</div><p class="q">איפה אתם מרגישים הכי בבית? כתבו מקום אחד — ולמה.</p><div class="t">3 דקות, לבד ובשקט</div></div>
+        <div class="thumbs"><div></div><div class="on"></div><div></div><div></div></div>
+      </div>
+    </div>
+    <div class="b-ch6-pc">
+      <div class="pro"><b>מה טוב</b><ul>
+        <li>עובד בלי אינטרנט, בכל מחשב בבית הספר.</li>
+        <li>כל מורה יודעת לערוך: להחליף מילה, להוסיף תמונה של הכיתה.</li>
+        <li>קל לשלוח בוואטסאפ או בדרייב, ולשלב עם שקפי שפ״י המקוריים.</li>
+        <li>ב־Google Slides הגופנים שלנו זמינים.</li>
+      </ul></div>
+      <div class="con"><b>על מה לחשוב</b><ul>
+        <li>לא נפתח מהאתר — רק בהורדה.</li>
+        <li>בהפקה אוטומטית העיצוב מוגבל, ועברית מימין לשמאל דורשת זהירות.</li>
+        <li>בלי טיימרים ובלי אנימציה של איורים — הכול תמונות סטטיות.</li>
+        <li>המערך והמצגת הם שני קבצים נפרדים שעלולים להתפצל.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section data-pt="6.1" data-opt="c"
+  data-label="reveal.js + גיבוי PDF (מומלץ)" data-note="כל היתרונות של א׳, ועוד קובץ PDF מוכן להורדה ליום שבו האינטרנט נופל." data-body-class="paper">
+  <div class="wrap doc">
+    <p class="ctx">אותו דמו חי, ולצידו קובץ גיבוי</p>
+    <div class="b-ch6-frame"><iframe src="demos/reveal-makom.html" title="דמו reveal.js"></iframe></div>
+    <div class="b-ch6-files"><span>מצגת בקישור <code>…/lessons/makom/</code></span><span class="pdf">גיבוי: makom.pdf</span></div>
+    <div class="b-ch6-pc">
+      <div class="pro"><b>מה טוב</b><ul>
+        <li>כל מה שבגרסה א׳: מקור אחד, עיצוב אחיד, קישור, אינטראקטיביות.</li>
+        <li>PDF שנוצר אוטומטית מאותה מצגת — לדיסק־און־קי או למחשב בכיתה.</li>
+        <li>reveal.js עצמו יישב בתוך האתר, בלי תלות בשרת חיצוני.</li>
+      </ul></div>
+      <div class="con"><b>על מה לחשוב</b><ul>
+        <li>ב־PDF אין טיימרים וחשיפה הדרגתית — הוא רשת ביטחון, לא תחליף.</li>
+        <li>עדיין צריך קובץ לכל שינוי מילה (כמו בא׳).</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== 6.2 · מה על השקפים -->
+<section data-pt="6.2" data-opt="a" data-title="מה על השקפים?"
+  data-gloss="השקף הוא עזר, לא המערך: הוא מה שהכיתה רואה. כמה מילים להשאיר עליו, ואיזה סוג תמונה? אותם שלושה שקפים בשלושה סגנונות."
+  data-anchor="מקום בעולם — פתיחה, כדור שלג, מהי שייכות" data-h="680"
+  data-label="שאלה אחת גדולה" data-note="נקי וברור מכל פינה בכיתה; בלי תמונות, אז פחות זיכרון חזותי." data-body-class="paper">
+  <div class="wrap doc b-ch6-stack">
+    <p class="ctx">שלושה שקפים מאותו שיעור</p>
+    <div class="b-ch6-frame"><iframe src="demos/slides-text.html?thumb=1&amp;slide=0" title="שקף 1"></iframe></div>
+    <div class="b-ch6-frame"><iframe src="demos/slides-text.html?thumb=1&amp;slide=1" title="שקף 2"></iframe></div>
+    <div class="b-ch6-frame"><iframe src="demos/slides-text.html?thumb=1&amp;slide=2" title="שקף 3"></iframe></div>
+  </div>
+</section>
+
+<section data-pt="6.2" data-opt="b"
+  data-label="איור גדול + מעט מילים" data-note="בסגנון eli5: תמונה שנשארת בראש, מעט טקסט; כל שקף דורש איור." data-body-class="paper">
+  <div class="wrap doc b-ch6-stack">
+    <p class="ctx">שלושה שקפים מאותו שיעור</p>
+    <div class="b-ch6-frame"><iframe src="demos/slides-pic.html?thumb=1&amp;slide=0" title="שקף 1"></iframe></div>
+    <div class="b-ch6-frame"><iframe src="demos/slides-pic.html?thumb=1&amp;slide=1" title="שקף 2"></iframe></div>
+    <div class="b-ch6-frame"><iframe src="demos/slides-pic.html?thumb=1&amp;slide=2" title="שקף 3"></iframe></div>
+  </div>
+</section>
+
+<section data-pt="6.2" data-opt="c"
+  data-label="שקפי שפ״י משופצים" data-note="קרוב למקור ומלא מידע — ההוראות על המסך; הרבה טקסט לקרוא מהשורה האחרונה." data-body-class="paper">
+  <div class="wrap doc b-ch6-stack">
+    <p class="ctx">שלושה שקפים מאותו שיעור</p>
+    <div class="b-ch6-frame"><iframe src="demos/slides-shefi.html?thumb=1&amp;slide=0" title="שקף 1"></iframe></div>
+    <div class="b-ch6-frame"><iframe src="demos/slides-shefi.html?thumb=1&amp;slide=1" title="שקף 2"></iframe></div>
+    <div class="b-ch6-frame"><iframe src="demos/slides-shefi.html?thumb=1&amp;slide=2" title="שקף 3"></iframe></div>
+  </div>
+</section>
+
+<!-- ===================================================== 6.3 · הפניות מהמערך -->
+<section data-pt="6.3" data-opt="a" data-title="איך המערך מפנה לשקפים?"
+  data-gloss="כשמעבירים שיעור עם מצגת צריך לדעת מתי להעביר שקף — בלי שהמערך יהפוך למדריך למצגת. אותם שני שלבים, שלוש דרכים לחבר ביניהם."
+  data-anchor="מקום בעולם (ז׳, אוקטובר)" data-h="640"
+  data-label="תגית שקף בכל שלב" data-note="ברור ומדויק בלי לתפוס מקום; צריך לזכור מה יש בכל שקף." data-body-class="paper">
+  <div class="wrap doc">
+    <p class="ctx">קטע מתוך: שלבים 1–2</p>
+    <div class="flow lite">
+      <div class="step"><div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div><div class="step-body">
+        <div class="step-head"><h3 class="step-title">קדימה ללמידה</h3><span class="dur">5 דק׳</span><span class="slide-ref">שקף 1</span></div>
+        <div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span><span class="pr" data-f="think">כולם כותבים</span></div>
+        <p>השאלה כבר על המסך כשהכיתה נכנסת. כולם כותבים לבד; אתם מסתובבים בין השולחנות ומסמנים לעצמכם שתי תשובות שכדאי לשמוע.</p>
+        <div class="say"><q>שלוש דקות, לבד ובשקט. אחר כך נשמע שניים־שלושה.</q></div>
+      </div></div>
+      <div class="step"><div class="step-rail"><div class="step-min">5′</div><span class="step-node" data-k="body"></span></div><div class="step-body">
+        <div class="step-head"><h3 class="step-title">כדור שלג מתגלגל</h3><span class="dur">12 דק׳</span><span class="slide-ref">שקפים 2–3</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>מסבירים את המשימה <b>לפני</b> שזזים לזוגות, עם <span class="slide-ref">שקף 2</span> על המסך. כשהזוגות מוכנים להתאחד — עוברים ל־<span class="slide-ref">שקף 3</span> (רביעיות).</p>
+        <div class="say"><q>בזוגות: עשרה משפטים שכל אחד מכם שומע בבית. ארבע דקות.</q></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section data-pt="6.3" data-opt="b"
+  data-label="תמונה ממוזערת בשוליים" data-note="רואים בדיוק מה הכיתה רואה; המערך ארוך יותר ותלוי בעיצוב המצגת." data-body-class="paper">
+  <div class="wrap doc">
+    <p class="ctx">קטע מתוך: שלבים 1–2</p>
+    <div class="flow lite">
+      <div class="step"><div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div><div class="step-body">
+        <div class="step-head"><h3 class="step-title">קדימה ללמידה</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span><span class="pr" data-f="think">כולם כותבים</span></div>
+        <div class="b-ch6-thumbed">
+          <div><p>השאלה כבר על המסך כשהכיתה נכנסת. כולם כותבים לבד; אתם מסתובבים בין השולחנות ומסמנים לעצמכם שתי תשובות שכדאי לשמוע.</p>
+          <div class="say"><q>שלוש דקות, לבד ובשקט. אחר כך נשמע שניים־שלושה.</q></div></div>
+          <div class="b-ch6-frame"><iframe src="demos/slides-pic.html?thumb=1&amp;slide=0" title="שקף 1"></iframe></div>
+        </div>
+      </div></div>
+      <div class="step"><div class="step-rail"><div class="step-min">5′</div><span class="step-node" data-k="body"></span></div><div class="step-body">
+        <div class="step-head"><h3 class="step-title">כדור שלג מתגלגל</h3><span class="dur">12 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <div class="b-ch6-thumbed">
+          <div><p>מסבירים את המשימה <b>לפני</b> שזזים לזוגות. כשהזוגות מוכנים להתאחד — עוברים לשקף הבא (רביעיות).</p>
+          <div class="say"><q>בזוגות: עשרה משפטים שכל אחד מכם שומע בבית. ארבע דקות.</q></div></div>
+          <div class="b-ch6-frame"><iframe src="demos/slides-pic.html?thumb=1&amp;slide=1" title="שקף 2"></iframe></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section data-pt="6.3" data-opt="c"
+  data-label="בלי הפניות" data-note="המערך נקי לגמרי; מניח שהמצגת הולכת איתו שלב־שלב." data-body-class="paper">
+  <div class="wrap doc">
+    <p class="ctx">קטע מתוך: שלבים 1–2</p>
+    <div class="tip">המצגת עוקבת אחרי סדר השלבים: כל שלב במערך הוא שקף אחד (או שניים, כשכתוב "ממשיכים").</div>
+    <div class="flow lite">
+      <div class="step"><div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div><div class="step-body">
+        <div class="step-head"><h3 class="step-title">קדימה ללמידה</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span><span class="pr" data-f="think">כולם כותבים</span></div>
+        <p>השאלה כבר על המסך כשהכיתה נכנסת. כולם כותבים לבד; אתם מסתובבים בין השולחנות ומסמנים לעצמכם שתי תשובות שכדאי לשמוע.</p>
+        <div class="say"><q>שלוש דקות, לבד ובשקט. אחר כך נשמע שניים־שלושה.</q></div>
+      </div></div>
+      <div class="step"><div class="step-rail"><div class="step-min">5′</div><span class="step-node" data-k="body"></span></div><div class="step-body">
+        <div class="step-head"><h3 class="step-title">כדור שלג מתגלגל</h3><span class="dur">12 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>מסבירים את המשימה <b>לפני</b> שזזים לזוגות. כשהזוגות מוכנים להתאחד — ממשיכים לרביעיות.</p>
+        <div class="say"><q>בזוגות: עשרה משפטים שכל אחד מכם שומע בבית. ארבע דקות.</q></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

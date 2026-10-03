@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תצוגה</title>
+<!--
+  מציג גרסה אחת מתוך קובץ אפשרויות, עם ערכת העיצוב של השיעורים:
+    preview.html?b=<file>&pt=<id>&opt=<a|b|c|d>
+  data-vw על הנקודה = רוחב וירטואלי: אם המסגרת צרה ממנו, הדף מוקטן כולו כמו תמונה ממוזערת.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../theme/lesson.css">
+<style>
+  #pv > .wrap:first-child { padding-top: 22px; }
+  #pv > .wrap:last-child { padding-bottom: 36px; }
+  #pv-error { display: none; padding: 30px; color: #c2473a; font-weight: 700; text-align: center; }
+  #pv-error.show { display: block; }
+</style>
+</head>
+<body>
+<div id="pv"></div>
+<div id="pv-error"></div>
+<script src="../theme/lesson.js"></script>
+<script>
+(async function () {
+  var q = new URLSearchParams(location.search);
+  var bundle = q.get('b'), pt = q.get('pt'), opt = q.get('opt') || 'a';
+  var err = document.getElementById('pv-error');
+  function fail(msg) { err.textContent = msg; err.classList.add('show'); }
+  if (!bundle || !pt) { fail('חסרים פרמטרים: b, pt, opt'); return; }
+  var html;
+  try {
+    var res = await fetch('options/' + bundle, { cache: 'no-store' });
+    if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+    html = await res.text();
+  } catch (e) { fail('לא נטען הקובץ ' + bundle + ': ' + e.message); return; }
+  var doc = new DOMParser().parseFromString(html, 'text/html');
+  var sec = doc.querySelector('section[data-pt="' + pt + '"][data-opt="' + opt + '"]');
+  if (!sec) { fail('לא נמצאה גרסה ' + opt + ' לנקודה ' + pt); return; }
+  doc.querySelectorAll('style[data-bundle-style]').forEach(function (st) { document.head.appendChild(document.importNode(st, true)); });
+  var vw = 0;
+  doc.querySelectorAll('section[data-pt="' + pt + '"]').forEach(function (s) { if (!vw && s.getAttribute('data-vw')) vw = +s.getAttribute('data-vw'); });
+  document.title = (sec.getAttribute('data-label') || 'גרסה') + ' — ' + pt;
+  var pv = document.getElementById('pv');
+  pv.innerHTML = sec.innerHTML;
+  if (sec.getAttribute('data-body-class')) document.body.className = sec.getAttribute('data-body-class');
+  function fit() {
+    if (!vw) return;
+    var z = Math.min(1, window.innerWidth / vw);
+    pv.style.width = (z < 1 ? vw + 'px' : '');
+    pv.style.zoom = z < 1 ? z : '';
+  }
+  fit(); window.addEventListener('resize', fit);
+  window.LessonTheme.decorate(pv);
+})();
+</script>
+</body>
+</html>
