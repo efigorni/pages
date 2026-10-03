@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- "בחרו מספר מן הקוביות שלפניכם" (מקור: שקף 13): חמש קוביות ממוספרות, מימין לשמאל. ציור ייעודי -->
+  <g filter="url(#rough)">
+    <!-- 1 -->
+    <path d="M318 156 L344 130 L474 130 L448 156 Z" fill="#63b1af"/>
+    <path d="M318 156 L344 130 L474 130 L448 156 Z" fill="#ffffff" fill-opacity=".3"/>
+    <path d="M448 156 L474 130 L474 260 L448 286 Z" fill="#63b1af"/>
+    <path d="M448 156 L474 130 L474 260 L448 286 Z" fill="#13100e" fill-opacity=".15"/>
+    <rect x="318" y="156" width="130" height="130" fill="#63b1af"/>
+    <!-- 2 -->
+    <path d="M146 156 L172 130 L302 130 L276 156 Z" fill="#f7ae4d"/>
+    <path d="M146 156 L172 130 L302 130 L276 156 Z" fill="#ffffff" fill-opacity=".3"/>
+    <path d="M276 156 L302 130 L302 260 L276 286 Z" fill="#f7ae4d"/>
+    <path d="M276 156 L302 130 L302 260 L276 286 Z" fill="#13100e" fill-opacity=".15"/>
+    <rect x="146" y="156" width="130" height="130" fill="#f7ae4d"/>
+    <!-- 3 -->
+    <path d="M404 326 L430 300 L560 300 L534 326 Z" fill="#8c82c1"/>
+    <path d="M404 326 L430 300 L560 300 L534 326 Z" fill="#ffffff" fill-opacity=".3"/>
+    <path d="M534 326 L560 300 L560 430 L534 456 Z" fill="#8c82c1"/>
+    <path d="M534 326 L560 300 L560 430 L534 456 Z" fill="#13100e" fill-opacity=".15"/>
+    <rect x="404" y="326" width="130" height="130" fill="#8c82c1"/>
+    <!-- 4 -->
+    <path d="M232 326 L258 300 L388 300 L362 326 Z" fill="#63b1af"/>
+    <path d="M232 326 L258 300 L388 300 L362 326 Z" fill="#ffffff" fill-opacity=".3"/>
+    <path d="M362 326 L388 300 L388 430 L362 456 Z" fill="#63b1af"/>
+    <path d="M362 326 L388 300 L388 430 L362 456 Z" fill="#13100e" fill-opacity=".15"/>
+    <rect x="232" y="326" width="130" height="130" fill="#63b1af"/>
+    <!-- 5 -->
+    <path d="M60 326 L86 300 L216 300 L190 326 Z" fill="#f7ae4d"/>
+    <path d="M60 326 L86 300 L216 300 L190 326 Z" fill="#ffffff" fill-opacity=".3"/>
+    <path d="M190 326 L216 300 L216 430 L190 456 Z" fill="#f7ae4d"/>
+    <path d="M190 326 L216 300 L216 430 L190 456 Z" fill="#13100e" fill-opacity=".15"/>
+    <rect x="60" y="326" width="130" height="130" fill="#f7ae4d"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="78" fill="#13100e" text-anchor="middle" dominant-baseline="middle">
+    <text x="383" y="226">1</text>
+    <text x="211" y="226">2</text>
+    <text x="469" y="396">3</text>
+    <text x="297" y="396">4</text>
+    <text x="125" y="396">5</text>
+  </g>
+</svg>

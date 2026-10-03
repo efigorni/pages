@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- רצף השימוש (מקור: שקף 13): שש מדרגות יורדות, ומעל כל מדרגה הפרצופון של המקור — מצחוק (1) ועד בכי (6) -->
+  <g filter="url(#rough)">
+    <rect x="503.7" y="252" width="89.3" height="272" rx="10" fill="#847c74" fill-opacity=".22"/>
+    <rect x="408.3" y="298" width="89.3" height="226" rx="10" fill="#847c74" fill-opacity=".22"/>
+    <rect x="313" y="344" width="89.3" height="180" rx="10" fill="#847c74" fill-opacity=".22"/>
+    <rect x="217.7" y="390" width="89.3" height="134" rx="10" fill="#847c74" fill-opacity=".22"/>
+    <rect x="122.3" y="436" width="89.3" height="88" rx="10" fill="#847c74" fill-opacity=".22"/>
+    <rect x="27" y="482" width="89.3" height="42" rx="10" fill="#847c74" fill-opacity=".22"/>
+    <circle cx="548.3" cy="206" r="36" fill="#fff" stroke="#13100e" stroke-width="5"/>
+    <circle cx="453" cy="252" r="36" fill="#fff" stroke="#13100e" stroke-width="5"/>
+    <circle cx="357.7" cy="298" r="36" fill="#fff" stroke="#13100e" stroke-width="5"/>
+    <circle cx="262.3" cy="344" r="36" fill="#fff" stroke="#13100e" stroke-width="5"/>
+    <circle cx="167" cy="390" r="36" fill="#fff" stroke="#13100e" stroke-width="5"/>
+    <circle cx="71.7" cy="436" r="36" fill="#fff" stroke="#13100e" stroke-width="5"/>
+    <circle cx="548.3" cy="106" r="38" fill="#f7ae4d"/>
+    <g fill="#13100e"><circle cx="535" cy="99.2" r="4.6"/><circle cx="561.6" cy="99.2" r="4.6"/></g>
+    <path d="M531.6 110.6 C531.6 134.1 565.1 134.1 565.1 110.6 Z" fill="#13100e"/>
+    <circle cx="453" cy="152" r="38" fill="#f7ae4d"/>
+    <g fill="#13100e"><circle cx="439.7" cy="145.2" r="4.6"/><circle cx="466.3" cy="145.2" r="4.6"/></g>
+    <path d="M438.6 158.8 Q453 174.8 467.4 158.8" fill="none" stroke="#13100e" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="357.7" cy="198" r="38" fill="#63b1af"/>
+    <g fill="#13100e"><circle cx="344.4" cy="191.2" r="4.6"/><circle cx="371" cy="191.2" r="4.6"/></g>
+    <path d="M345.5 210.9 H369.8" fill="none" stroke="#13100e" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="262.3" cy="244" r="38" fill="#8c82c1"/>
+    <g fill="#13100e"><circle cx="249" cy="237.2" r="4.6"/><circle cx="275.6" cy="237.2" r="4.6"/></g>
+    <path d="M242.6 228.8 L254.7 224.2 M282.1 228.8 L269.9 224.2" fill="none" stroke="#13100e" stroke-width="4" stroke-linecap="round"/>
+    <path d="M249.4 260 Q262.3 253.9 275.3 260" fill="none" stroke="#13100e" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="167" cy="290" r="38" fill="#8c82c1"/>
+    <g fill="#13100e"><circle cx="153.7" cy="283.2" r="4.6"/><circle cx="180.3" cy="283.2" r="4.6"/></g>
+    <path d="M154.1 308.2 Q167 296.8 179.9 308.2" fill="none" stroke="#13100e" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="71.7" cy="336" r="38" fill="#8c82c1"/>
+    <g fill="#13100e"><circle cx="58.4" cy="329.2" r="4.6"/><circle cx="85" cy="329.2" r="4.6"/></g>
+    <path d="M58.7 354.2 Q71.7 342.8 84.6 354.2" fill="none" stroke="#13100e" stroke-width="4" stroke-linecap="round"/>
+    <path d="M85 336 C87.6 340.6 89.1 343.2 89.1 345.9 A4.2 4.2 0 0 1 80.8 345.9 C80.8 343.2 82.3 340.6 85 336 Z" fill="#fff"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="40" fill="#13100e" text-anchor="middle" dominant-baseline="middle">
+    <text x="548.3" y="208">1</text>
+    <text x="453" y="254">2</text>
+    <text x="357.7" y="300">3</text>
+    <text x="262.3" y="346">4</text>
+    <text x="167" y="392">5</text>
+    <text x="71.7" y="438">6</text>
+  </g>
+</svg>

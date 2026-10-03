@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- תרגיל הטלפונים (מקור: שקף 16): טלפון מונף, ואלומת הפנס שלו עולה למעלה. האלומה — ציור ייעודי -->
+  <g filter="url(#rough)">
+    <path d="M276 262 L344 262 L486 40 L134 40 Z" fill="#f7ae4d" fill-opacity=".45"/>
+    <path d="M292 262 L328 262 L398 70 L222 70 Z" fill="#f7ae4d" fill-opacity=".45"/>
+    <use href="#phone" x="232" y="250" width="156" height="260" color="#13100e"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כל רגע — תמונה: אותה מסגרת, ועכשיו יש בה רגע — שלושה חברים יחד (ציור ייעודי — אין מסגרת בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M150 160 L310 70 L470 160" fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="310" cy="68" r="10" fill="#847c74"/>
+    <rect x="110" y="154" width="400" height="320" rx="10" fill="#f7ae4d"/>
+    <path d="M110 448 H510 V464 Q510 474 500 474 H120 Q110 474 110 464 Z" fill="#13100e" opacity=".12"/>
+    <rect x="140" y="184" width="340" height="260" rx="4" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <use href="#group3" x="180" y="214" width="260" height="195"/>
+  </g>
+</svg>

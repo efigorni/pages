@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- קלף אקראי: מניפה של קלפים הפוכים, וקלף אחד שנהפך — גלוי — לפניה (ציור ייעודי — אין קלפים בערכה) -->
+  <g filter="url(#rough)">
+    <g transform="rotate(-30 310 420)">
+      <rect x="244" y="150" width="132" height="176" rx="12" fill="#8c82c1"/>
+      <rect x="258" y="164" width="104" height="148" rx="7" fill="none" stroke="#ffffff" stroke-width="5"/>
+      <path d="M310 206 L334 238 L310 270 L286 238 Z" fill="#ffffff"/>
+    </g>
+    <g transform="rotate(30 310 420)">
+      <rect x="244" y="150" width="132" height="176" rx="12" fill="#8c82c1"/>
+      <rect x="258" y="164" width="104" height="148" rx="7" fill="none" stroke="#ffffff" stroke-width="5"/>
+      <path d="M310 206 L334 238 L310 270 L286 238 Z" fill="#ffffff"/>
+    </g>
+    <g transform="rotate(-10 310 420)">
+      <rect x="244" y="150" width="132" height="176" rx="12" fill="#8c82c1"/>
+      <rect x="258" y="164" width="104" height="148" rx="7" fill="none" stroke="#ffffff" stroke-width="5"/>
+      <path d="M310 206 L334 238 L310 270 L286 238 Z" fill="#ffffff"/>
+    </g>
+    <g transform="rotate(10 310 420)">
+      <rect x="244" y="150" width="132" height="176" rx="12" fill="#8c82c1"/>
+      <rect x="258" y="164" width="104" height="148" rx="7" fill="none" stroke="#ffffff" stroke-width="5"/>
+      <path d="M310 206 L334 238 L310 270 L286 238 Z" fill="#ffffff"/>
+    </g>
+    <g transform="rotate(6 310 400)">
+      <rect x="226" y="288" width="168" height="224" rx="14" fill="#63b1af"/>
+      <rect x="242" y="304" width="136" height="192" rx="7" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+      <path d="M264 352 H356 M264 384 H356 M264 416 H334" stroke="#847c74" stroke-width="7" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>

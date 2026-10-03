@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מתנה לדרך: קופסת מתנה סגולה עם סרט כתום, וכוכב לידה (ציור ייעודי — אין מתנה בערכה) -->
+  <g filter="url(#rough)">
+    <rect x="132" y="272" width="300" height="236" rx="8" fill="#8c82c1"/>
+    <rect x="132" y="272" width="44" height="236" rx="8" fill="#13100e" opacity=".12"/>
+    <rect x="112" y="214" width="340" height="72" rx="10" fill="#8c82c1"/>
+    <rect x="112" y="262" width="340" height="24" fill="#13100e" opacity=".12"/>
+    <rect x="260" y="214" width="44" height="294" fill="#f7ae4d"/>
+    <path d="M282 212 C230 140 176 168 206 206 C220 224 256 220 282 212 Z" fill="#f7ae4d"/>
+    <path d="M282 212 C334 140 388 168 358 206 C344 224 308 220 282 212 Z" fill="#f7ae4d"/>
+    <path d="M282 212 C262 194 236 186 222 196 M282 212 C302 194 328 186 342 196" fill="none" stroke="#13100e" stroke-width="4" stroke-linecap="round" opacity=".25"/>
+    <circle cx="282" cy="212" r="18" fill="#f7ae4d"/>
+    <circle cx="282" cy="212" r="18" fill="#13100e" opacity=".12"/>
+    <use href="#star" x="458" y="64" width="130" height="130" color="#f7ae4d"/>
+    <circle cx="86" cy="120" r="10" fill="#63b1af"/>
+    <circle cx="140" cy="70" r="8" fill="#619f88"/>
+    <circle cx="520" cy="270" r="9" fill="#63b1af"/>
+  </g>
+</svg>

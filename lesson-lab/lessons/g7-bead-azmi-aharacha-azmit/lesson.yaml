@@ -12,8 +12,13 @@ src_text: sources/text/7/Bead_Azmi_Aharacha_Azmit.md
 src_url: https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Bead_Azmi_Aharacha_Azmit.pptm
 sensitivity: med
 src_fixes:
+  # מופיע פעמיים במקור (כותרת שקף 21 והמצב עצמו), ושני המופעים באותה טעות — האזהרה נשארת בכוונה
   - from: לא צרפו אותי
     to: לא צירפו אותי
+  - from: איזה חוזקות היא רואה בי
+    to: אילו חוזקות היא רואה בי
+  - from: היא היתה אומרת
+    to: היא הייתה אומרת
 
 sub: >-
   מה אנחנו מעריכים באנשים אחרים — ומה אנחנו רואים בעצמנו? בשיעור הזה מגלים חוזקות, מקבלים מתנות
@@ -390,7 +395,7 @@ steps:
           kicker: כשמגיע דיבור מוריד
           title: ועוד שתי דרכים
           points:
-            - להיזכר בדמות אהובה, איזה חוזקות היא רואה בי? מה היא היתה אומרת עכשיו?
+            - להיזכר בדמות אהובה, אילו חוזקות היא רואה בי? מה היא הייתה אומרת עכשיו?
             - לנסח מחדש את המשפט ״המוריד״ ולשנות אותו למחשבה ״מרימה״
           verbatim:
             - points

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- קוביית המעברים: קובייה צבעונית שנזרקה באוויר, ועל כל פאה שורות כתובות (ציור ייעודי — אין קובייה בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M500 118 C540 148 560 190 556 240" fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12"/>
+    <path d="M120 118 C80 148 64 190 68 240" fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12"/>
+    <g stroke="#ffffff" stroke-width="5" stroke-linejoin="round">
+      <path d="M310 110 L466 200 L310 290 L154 200 Z" fill="#f7ae4d"/>
+      <path d="M154 200 L310 290 L310 470 L154 380 Z" fill="#63b1af"/>
+      <path d="M310 290 L466 200 L466 380 L310 470 Z" fill="#8c82c1"/>
+    </g>
+    <g stroke="#ffffff" stroke-width="7" stroke-linecap="round" fill="none">
+      <path d="M302 160 L380 205 M271 178 L349 223 M253 205 L292 228"/>
+      <path d="M185 272 L279 326 M185 308 L279 362 M185 344 L232 371"/>
+      <path d="M341 326 L435 272 M341 362 L435 308 M341 398 L388 371"/>
+    </g>
+  </g>
+</svg>
