@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <g filter="url(#rough)">
+    <path d="M455 52 L570 248 L340 248 Z" fill="#ffffff" stroke="#e57373" stroke-width="16" stroke-linejoin="round"/>
+    <path d="M462 226 L462 172 Q462 140 430 140 L420 140" fill="none" stroke="#13100e" stroke-width="12" stroke-linecap="round"/>
+    <path d="M398 140 L422 122 L422 158 Z" fill="#13100e"/>
+    <path d="M165 52 L280 248 L50 248 Z" fill="#ffffff" stroke="#e57373" stroke-width="16" stroke-linejoin="round"/>
+    <use href="#traffic-light" x="141" y="128" width="48" height="96"/>
+    <circle cx="310" cy="400" r="100" fill="#63b1af"/>
+    <path d="M310 468 L310 352" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round"/>
+    <path d="M310 318 L280 356 L340 356 Z" fill="#ffffff"/>
+  </g>
+</svg>

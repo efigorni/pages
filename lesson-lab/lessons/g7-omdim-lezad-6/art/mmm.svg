@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- חמשת המ"מים: עיגול מחולק לחמישה, ו"מ"ם" במרכז (מקור: שקף 36 — התרשים; שקף 44 — השמות) -->
+  <g filter="url(#rough)">
+    <g stroke="#ffffff" stroke-width="6" stroke-linejoin="round">
+      <path d="M310 270 L310 25 A245 245 0 0 1 543 194.3 Z" fill="#63b1af"/>
+      <path d="M310 270 L543 194.3 A245 245 0 0 1 454 468.2 Z" fill="#f7ae4d"/>
+      <path d="M310 270 L454 468.2 A245 245 0 0 1 166 468.2 Z" fill="#8c82c1"/>
+      <path d="M310 270 L166 468.2 A245 245 0 0 1 77 194.3 Z" fill="#63b1af"/>
+      <path d="M310 270 L77 194.3 A245 245 0 0 1 310 25 Z" fill="#f7ae4d"/>
+    </g>
+    <circle cx="310" cy="270" r="58" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="31">
+    <text x="310" y="274" font-size="40">מ״ם</text>
+    <text x="400" y="134">מדברים</text>
+    <text x="400" y="170">תכל׳ס</text>
+    <text x="455" y="300">מעבירים</text>
+    <text x="455" y="336">נושא</text>
+    <text x="310" y="404">מארגנים</text>
+    <text x="310" y="440">משלחת</text>
+    <text x="165" y="300">משהים</text>
+    <text x="165" y="336">לרגע</text>
+    <text x="220" y="134">מדווחים</text>
+    <text x="220" y="170">ומשתפים</text>
+  </g>
+</svg>

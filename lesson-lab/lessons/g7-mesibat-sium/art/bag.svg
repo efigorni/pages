@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מסיבת סיום: שקית הפתעות ובה שתי כרטיסיות, כוכב ונקודות קונפטי (ציור ייעודי — אין שקית בערכה) -->
+  <g filter="url(#rough)">
+    <g fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="214" y="150" width="96" height="130" rx="10" transform="rotate(-14 262 215)"/>
+      <rect x="306" y="140" width="96" height="130" rx="10" transform="rotate(10 354 205)"/>
+    </g>
+    <g stroke="#847c74" stroke-width="6" stroke-linecap="round" fill="none">
+      <path d="M238 184 H286 M238 206 H276" transform="rotate(-14 262 215)"/>
+      <path d="M330 174 H378 M330 196 H368" transform="rotate(10 354 205)"/>
+    </g>
+    <g fill="none" stroke="#13100e" stroke-width="7" stroke-linecap="round">
+      <path d="M226 236 C226 176 276 176 276 236"/>
+      <path d="M344 236 C344 176 394 176 394 236"/>
+    </g>
+    <rect x="180" y="232" width="260" height="270" rx="10" fill="#8c82c1"/>
+    <rect x="180" y="232" width="260" height="28" rx="10" fill="#13100e" opacity=".12"/>
+    <path d="M180 260 V492 Q180 502 190 502 H214 V260 Z" fill="#13100e" opacity=".12"/>
+    <use href="#star" x="450" y="70" width="140" height="140" color="#f7ae4d"/>
+    <circle cx="96" cy="110" r="11" fill="#63b1af"/>
+    <circle cx="150" cy="62" r="9" fill="#e57373"/>
+    <circle cx="70" cy="200" r="9" fill="#f7ae4d"/>
+    <circle cx="520" cy="262" r="10" fill="#63b1af"/>
+    <circle cx="560" cy="330" r="8" fill="#e57373"/>
+  </g>
+</svg>

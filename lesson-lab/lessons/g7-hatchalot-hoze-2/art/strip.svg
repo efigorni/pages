@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ״שבץ נא״, הכנה: רצועת נייר מחולקת לריבועים, אות בכל ריבוע — השם ירדן מהדוגמה של המקור (שקף 10), ועיפרון -->
+  <g filter="url(#rough)">
+    <g fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="454" y="196" width="112" height="112" rx="6"/>
+      <rect x="342" y="196" width="112" height="112" rx="6"/>
+      <rect x="230" y="196" width="112" height="112" rx="6"/>
+      <rect x="118" y="196" width="112" height="112" rx="6"/>
+    </g>
+    <use href="#pencil" x="40" y="320" width="170" height="170" color="#f7ae4d"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" font-size="72" fill="#13100e">
+    <text x="510" y="256">י</text>
+    <text x="398" y="256">ר</text>
+    <text x="286" y="256">ד</text>
+    <text x="174" y="256">ן</text>
+  </g>
+</svg>

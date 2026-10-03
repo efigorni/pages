@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ״שבץ נא״: לוח שמות — ירדן לרוחב ושי לאורך, מצטלבים באות המשותפת י׳ (הדוגמה של המקור, שקף 10) -->
+  <g filter="url(#rough)">
+    <g fill="#e6f2f1" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="436" y="108" width="112" height="112" rx="6"/>
+    </g>
+    <g fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="324" y="220" width="112" height="112" rx="6"/>
+      <rect x="212" y="220" width="112" height="112" rx="6"/>
+      <rect x="100" y="220" width="112" height="112" rx="6"/>
+    </g>
+    <rect x="436" y="220" width="112" height="112" rx="6" fill="#f7ae4d" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" font-size="72" fill="#13100e">
+    <text x="492" y="168">ש</text>
+    <text x="492" y="280">י</text>
+    <text x="380" y="280">ר</text>
+    <text x="268" y="280">ד</text>
+    <text x="156" y="280">ן</text>
+  </g>
+</svg>

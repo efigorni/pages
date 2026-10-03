@@ -41,7 +41,7 @@
 {% elif t == 'quote' %}
 {% if v.title %}<h4>{{ v.title|md }}</h4>{% endif %}<blockquote>{{ v.text|paras }}</blockquote>
 {% elif t == 'handout' %}
-<div class="handout"><h4>{{ v.title|md }}</h4>{% if v['items'] %}<ol>{% for m in v['items'] %}<li>{{ m|md }}{% if v.lines is not defined or v.lines %}<span class="line"></span>{% endif %}</li>{% endfor %}</ol>{% else %}{{ v.text|paras }}{% endif %}<p class="copies">להדפסה: {{ v.copies|md }}</p></div>
+<div class="handout"><h4>{{ v.title|md }}</h4>{% if v.get('items') %}<ol>{% for m in v.get('items') %}<li>{{ m|md }}{% if v.lines is not defined or v.lines %}<span class="line"></span>{% endif %}</li>{% endfor %}</ol>{% else %}{{ v.text|paras }}{% endif %}<p class="copies">להדפסה: {{ v.copies|md }}</p></div>
 {% elif t == 'tracks' %}
 <div class="tracks">{% for tr in b.tracks %}<div class="{{ tr.cls }}"><h4><a href="#{{ tr.id }}">מסלול {{ tr.letter }} · {{ tr.title|md }}</a></h4><p>{{ tr.text|md }}</p><span class="when">מתאים כש: {{ tr.when|md }}</span>{% if tr.nums %}<p class="refs"><a class="slide-ref" href="{{ tr.href }}">{{ tr.label }}</a></p>{% endif %}</div>{% endfor %}</div>
 {% for tr in b.tracks %}
@@ -55,7 +55,7 @@
 {% endfor %}
 {% elif t == 'messages' %}
 {% if not b.first %}<p class="slide-cue"><a class="slide-ref" href="slides.html#/{{ b.n - 1 }}">{{ b.label }}</a></p>{% endif %}
-<p>הקריני את המסרים בקול, מילה במילה — {% if b['items']|length > 1 %}מסר בכל שקף, אחד אחרי השני{% else %}כמו שהוא על המסך{% endif %}:</p>
+<p>הקריאי את המסרים בקול, מילה במילה — {% if b['items']|length > 1 %}מסר בכל שקף, אחד אחרי השני{% else %}כמו שהוא על המסך{% endif %}:</p>
 <div class="board screen"><span class="k">{{ b.head }}</span><ol>{% for m in b['items'] %}<li>{{ m|md }}</li>{% endfor %}</ol></div>
 <div class="say q"><q>{{ v.ask|md }}</q></div>
 {% if v.tip %}<div class="tip">{{ v.tip|md }}</div>{% endif %}

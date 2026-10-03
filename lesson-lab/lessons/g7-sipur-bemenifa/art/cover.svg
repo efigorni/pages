@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- סיפור במניפה: מניפת נייר פתוחה, ושתי דמויות משני צידיה -->
+  <g filter="url(#rough)">
+    <path d="M310 318 L377.3 298.7 M310 318 L367.7 278.4 M310 318 L352.1 262.1 M310 318 L332.2 251.6 M310 318 L310.0 248.0 M310 318 L287.8 251.6 M310 318 L267.9 262.1 M310 318 L252.3 278.4 M310 318 L242.7 298.7" stroke="#847c74" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <path d="M550.3 249.1 A250 250 0 0 0 69.7 249.1 L248.5 300.4 A64 64 0 0 1 371.5 300.4 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M550.3 249.1 A250 250 0 0 0 516.0 176.4 L362.7 281.8 A64 64 0 0 1 371.5 300.4 Z" fill="#f7ae4d"/>
+    <path d="M460.5 118.3 A250 250 0 0 0 389.3 80.9 L330.3 257.3 A64 64 0 0 1 348.5 266.9 Z" fill="#f7ae4d"/>
+    <path d="M310.0 68.0 A250 250 0 0 0 230.7 80.9 L289.7 257.3 A64 64 0 0 1 310.0 254.0 Z" fill="#f7ae4d"/>
+    <path d="M159.5 118.3 A250 250 0 0 0 104.0 176.4 L257.3 281.8 A64 64 0 0 1 271.5 266.9 Z" fill="#f7ae4d"/>
+    <path d="M362.7 281.8 L516.0 176.4 M348.5 266.9 L460.5 118.3 M330.3 257.3 L389.3 80.9 M310.0 254.0 L310.0 68.0 M289.7 257.3 L230.7 80.9 M271.5 266.9 L159.5 118.3 M257.3 281.8 L104.0 176.4" stroke="#13100e" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M550.3 249.1 A250 250 0 0 0 69.7 249.1 L248.5 300.4 A64 64 0 0 1 371.5 300.4 Z" fill="none" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M472.6 188.3 L446.7 161.2 M447.6 208.3 L425.6 185.3 M361.8 116.6 L324.8 110.5 M353.9 147.6 L322.5 142.4 M230.2 125.9 L196.9 143.4 M242.4 155.5 L214.3 170.3 M130.7 212.7 L114.6 246.6 M158.2 228.9 L144.7 257.6" stroke="#847c74" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <circle cx="310" cy="318" r="13" fill="#13100e"/>
+    <use href="#kid-stand" x="28" y="280" width="118" height="236" color="#63b1af"/>
+    <use href="#kid-hand" x="474" y="280" width="118" height="236" color="#8c82c1"/>
+  </g>
+</svg>

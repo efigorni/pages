@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- ציר הזמן שלנו: הקו יוצא מ־2020 (מימין) קדימה, שמאלה. אותה דמות ב־2020 וב־2026; אחרי 2026 — העתיד, בקו מנוקד -->
+  <g filter="url(#rough)">
+    <path d="M592 430 H236" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <path d="M236 430 H78" stroke="#847c74" stroke-width="10" stroke-linecap="round" stroke-dasharray="2 22" fill="none"/>
+    <path d="M28 430 L66 408 L66 452 Z" fill="#847c74"/>
+    <g stroke="#847c74" stroke-width="5" stroke-linecap="round">
+      <line x1="548" y1="412" x2="548" y2="448"/>
+      <line x1="496" y1="412" x2="496" y2="448"/>
+      <line x1="444" y1="412" x2="444" y2="448"/>
+      <line x1="392" y1="412" x2="392" y2="448"/>
+      <line x1="340" y1="412" x2="340" y2="448"/>
+      <line x1="288" y1="412" x2="288" y2="448"/>
+      <line x1="236" y1="412" x2="236" y2="448"/>
+      <line x1="184" y1="416" x2="184" y2="444"/>
+      <line x1="132" y1="416" x2="132" y2="444"/>
+    </g>
+    <g fill="#f7ae4d">
+      <circle cx="496" cy="430" r="15"/>
+      <circle cx="392" cy="430" r="15"/>
+      <circle cx="340" cy="430" r="15"/>
+      <circle cx="288" cy="430" r="15"/>
+    </g>
+    <use href="#kid-stand" x="498" y="230" width="100" height="200" color="#63b1af"/>
+    <use href="#kid-stand" x="156" y="110" width="160" height="320" color="#63b1af"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="38" fill="#13100e" text-anchor="middle">
+    <text x="548" y="496">2020</text>
+    <text x="236" y="496">2026</text>
+  </g>
+</svg>

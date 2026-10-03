@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- לכל משפחה עץ משלה: שלושה עצים שונים בשלושה צבעים, עם פירות, על קו רצפה אחד -->
+  <g filter="url(#rough)">
+    <g fill="#847c74">
+      <path d="M470 500 C476 460 478 420 476 380 H500 C498 420 500 460 506 500 Z"/>
+      <path d="M296 500 C302 450 304 400 302 350 H330 C328 400 330 450 336 500 Z"/>
+      <path d="M126 500 C132 466 134 432 132 398 H156 C154 432 156 466 162 500 Z"/>
+    </g>
+    <circle cx="488" cy="318" r="92" fill="#63b1af"/>
+    <ellipse cx="316" cy="236" rx="96" ry="140" fill="#f7ae4d"/>
+    <g fill="#8c82c1">
+      <circle cx="112" cy="352" r="58"/>
+      <circle cx="176" cy="352" r="58"/>
+      <circle cx="144" cy="300" r="62"/>
+    </g>
+    <g fill="#ffffff" stroke="#13100e" stroke-width="4">
+      <circle cx="458" cy="290" r="12"/><circle cx="516" cy="330" r="12"/><circle cx="474" cy="360" r="12"/>
+      <circle cx="292" cy="180" r="12"/><circle cx="342" cy="240" r="12"/><circle cx="300" cy="300" r="12"/>
+      <circle cx="118" cy="330" r="12"/><circle cx="170" cy="290" r="12"/><circle cx="160" cy="372" r="12"/>
+    </g>
+    <path d="M36 500 H584" stroke="#847c74" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

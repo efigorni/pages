@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מגדר ופיתוח מודעות מגדרית · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-hand" viewBox="0 0 120 240" data-cat="people" data-he="דמות מצביעה" data-color="#f7ae4d">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+      <path d="M84 140 L103 64" stroke="currentColor" stroke-width="17" stroke-linecap="round" />
+      <circle cx="104" cy="60" r="11" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-desk" viewBox="0 0 180 240" data-cat="people" data-he="דמות כותבת ליד שולחן" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="90" cy="98" r="22" />
+      <path d="M54 200 C54 152 70 126 90 126 C110 126 126 152 126 200 Z" />
+    </g>
+    <path d="M30 170 H150 L170 200 H10 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <rect x="10" y="200" width="160" height="12" fill="#e08f36" />
+    <rect x="20" y="212" width="9" height="20" fill="#13100e" />
+    <rect x="151" y="212" width="9" height="20" fill="#13100e" />
+    <path d="M62 177 H112 L117 195 H57 Z" fill="#fff" stroke="#13100e" stroke-width="3.5" stroke-linejoin="round" />
+    <path d="M100 191 L122 157" stroke="#f7ae4d" stroke-width="7" stroke-linecap="round" />
+    <path d="M100 191 L104 185" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+    <path d="M56 177 L70 187 M126 177 L110 186" stroke="currentColor" stroke-width="13" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="group3" viewBox="0 0 320 240" data-cat="people" data-he="שלישייה">
+    <g fill="#8c82c1" transform="translate(100 -10)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(4 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#63b1af" transform="translate(196 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="speech" viewBox="0 0 200 170" data-cat="talk" data-he="בועת דיבור">
+    <path d="M50 10 H150 A40 40 0 0 1 190 50 V82 A40 40 0 0 1 150 122 H144 L160 160 L116 122 H50 A40 40 0 0 1 10 82 V50 A40 40 0 0 1 50 10 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="speech-l" viewBox="0 0 200 170" data-cat="talk" data-he="בועת דיבור (זנב שמאלה)">
+    <path transform="matrix(-1 0 0 1 200 0)" d="M50 10 H150 A40 40 0 0 1 190 50 V82 A40 40 0 0 1 150 122 H144 L160 160 L116 122 H50 A40 40 0 0 1 10 82 V50 A40 40 0 0 1 50 10 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="thought" viewBox="0 0 200 190" data-cat="talk" data-he="ענן מחשבה">
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M184 80 A25 25 0 0 1 164.3 116 A32 32 0 0 1 114.6 135.1 A34 34 0 0 1 58 128.5 A28 28 0 0 1 21.1 99.2 A23 23 0 0 1 21.1 60.8 A28 28 0 0 1 58 31.5 A34 34 0 0 1 114.6 24.9 A32 32 0 0 1 164.3 44 A25 25 0 0 1 184 80 Z" />
+      <circle cx="148" cy="160" r="10" />
+      <circle cx="170" cy="178" r="6" />
+    </g>
+  </symbol>
+
+  <symbol id="face-sad" viewBox="0 0 200 200" data-cat="feelings" data-he="פנים עצובות" data-color="#8c82c1">
+    <circle cx="100" cy="100" r="86" fill="currentColor" />
+    <g fill="#13100e"><circle cx="70" cy="84" r="10" /><circle cx="130" cy="84" r="10" /></g>
+    <path d="M66 146 Q100 116 134 146" fill="none" stroke="#13100e" stroke-width="9" stroke-linecap="round" />
+    <path d="M136 100 C142 110 146 116 146 122 A10 10 0 0 1 126 122 C126 116 130 110 136 100 Z" fill="#fff" />
+  </symbol>
+
+  <symbol id="phone" viewBox="0 0 120 200" data-cat="screens" data-he="טלפון" data-color="#13100e">
+    <rect x="12" y="6" width="96" height="188" rx="18" fill="currentColor" />
+    <rect x="19" y="14" width="82" height="172" rx="12" fill="#fff" />
+    <rect x="46" y="20" width="28" height="8" rx="4" fill="currentColor" />
+    <rect x="44" y="176" width="32" height="4" rx="2" fill="#d9d1c6" />
+  </symbol>
+
+  <symbol id="laptop" viewBox="0 0 240 160" data-cat="screens" data-he="מחשב נייד" data-color="#13100e">
+    <rect x="40" y="12" width="160" height="110" rx="12" fill="currentColor" />
+    <rect x="50" y="22" width="140" height="90" rx="4" fill="#fff" />
+    <path d="M14 124 H226 Q226 142 208 142 H32 Q14 142 14 124 Z" fill="#847c74" />
+    <rect x="98" y="124" width="44" height="6" rx="3" fill="currentColor" />
+  </symbol>
+
+  <symbol id="camera" viewBox="0 0 220 170" data-cat="screens" data-he="מצלמה" data-color="#13100e">
+    <path d="M72 42 L86 18 H134 L148 42 Z" fill="currentColor" />
+    <rect x="12" y="38" width="196" height="120" rx="18" fill="currentColor" />
+    <rect x="28" y="52" width="26" height="14" rx="4" fill="#f7ae4d" />
+    <circle cx="110" cy="98" r="44" fill="#fff" />
+    <circle cx="110" cy="98" r="32" fill="#63b1af" />
+    <circle cx="98" cy="86" r="9" fill="#fff" opacity=".8" />
+  </symbol>
+
+  
+  <symbol id="pencil" viewBox="0 0 200 200" data-cat="learning" data-he="עיפרון" data-color="#f7ae4d">
+    <g transform="rotate(-45 100 100) translate(100 100) scale(1.12) translate(-100 -100)">
+      <path d="M54 82 L14 100 L54 118 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+      <path d="M28 93.7 L14 100 L28 106.3 Z" fill="#13100e" />
+      <rect x="54" y="82" width="96" height="36" fill="currentColor" />
+      <rect x="54" y="106" width="96" height="12" fill="#13100e" opacity=".12" />
+      <rect x="150" y="80" width="18" height="40" rx="3" fill="#847c74" />
+      <path d="M168 82 H178 A12 12 0 0 1 190 94 V106 A12 12 0 0 1 178 118 H168 Z" fill="#e57373" />
+    </g>
+  </symbol>
+
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="sticky" viewBox="0 0 170 170" data-cat="learning" data-he="פתק דביק" data-color="#f7ae4d">
+    <g transform="rotate(-4 85 85)">
+      <path d="M20 20 H150 V118 L118 150 H20 Z" fill="currentColor" />
+      <rect x="20" y="20" width="130" height="22" fill="#13100e" opacity=".08" />
+      <path d="M150 118 L118 150 L124 124 Z" fill="#13100e" opacity=".2" />
+      <path d="M42 70 H126 M42 94 H118 M42 118 H90" stroke="#13100e" stroke-width="5" stroke-linecap="round" opacity=".55" />
+    </g>
+  </symbol>
+
+  <symbol id="board" viewBox="0 0 260 190" data-cat="learning" data-he="לוח">
+    <rect x="10" y="10" width="240" height="150" rx="8" fill="#e08f36" />
+    <rect x="22" y="22" width="216" height="126" rx="4" fill="#24302d" />
+    <g fill="none" stroke="#f4f1e8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M46 52 H150" />
+      <path d="M46 84 C60 76 72 92 86 84 S112 76 126 84 S152 92 168 84" />
+      <path d="M46 114 C60 106 72 122 86 114 S112 106 126 114" />
+      <circle cx="198" cy="96" r="20" />
+    </g>
+    <rect x="50" y="160" width="160" height="10" rx="3" fill="#847c74" />
+    <rect x="70" y="152" width="22" height="8" rx="2" fill="#f4f1e8" />
+    <rect x="160" y="150" width="30" height="10" rx="2" fill="#8c82c1" />
+  </symbol>
+
+  <symbol id="book" viewBox="0 0 220 170" data-cat="learning" data-he="ספר" data-color="#8c82c1">
+    <path d="M110 50 C86 36 40 32 6 44 V160 C40 150 86 152 110 166 C134 152 180 150 214 160 V44 C180 32 134 36 110 50 Z" fill="currentColor" />
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M110 40 C86 26 46 24 18 34 V146 C46 136 86 138 110 152 Z" />
+      <path d="M110 40 C134 26 174 24 202 34 V146 C174 136 134 138 110 152 Z" />
+    </g>
+    <g fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round">
+      <path d="M36 62 C56 56 76 58 94 64 M36 86 C56 80 76 82 94 88 M36 110 C56 104 70 106 84 110" />
+      <path d="M184 62 C164 56 144 58 126 64 M184 86 C164 80 144 82 126 88 M184 110 C164 104 150 106 136 110" />
+    </g>
+  </symbol>
+
+  <symbol id="thumb-up" viewBox="0 0 180 200" data-cat="choices" data-he="אגודל למעלה" data-color="#619f88">
+    <g>
+      <rect x="26" y="94" width="44" height="84" rx="6" fill="currentColor" />
+      <rect x="26" y="94" width="44" height="84" rx="6" fill="#13100e" opacity=".3" />
+      <path d="M68 174 V102 C68 94 72 90 78 86 L80 38 C80 18 116 18 116 38 L114 88 H142 A13 13 0 0 1 142 114 A12.5 12.5 0 0 1 142 139 A12 12 0 0 1 140 163 A11 11 0 0 1 132 174 Z" fill="currentColor" />
+      <path d="M114 114 H140 M114 139 H140 M114 163 H136" stroke="#fff" stroke-width="4.5" stroke-linecap="round" opacity=".8" />
+    </g>
+  </symbol>
+
+  <symbol id="thumb-down" viewBox="0 0 180 200" data-cat="choices" data-he="אגודל למטה" data-color="#e57373">
+    <g transform="rotate(180 90 100)">
+      <rect x="26" y="94" width="44" height="84" rx="6" fill="currentColor" />
+      <rect x="26" y="94" width="44" height="84" rx="6" fill="#13100e" opacity=".3" />
+      <path d="M68 174 V102 C68 94 72 90 78 86 L80 38 C80 18 116 18 116 38 L114 88 H142 A13 13 0 0 1 142 114 A12.5 12.5 0 0 1 142 139 A12 12 0 0 1 140 163 A11 11 0 0 1 132 174 Z" fill="currentColor" />
+      <path d="M114 114 H140 M114 139 H140 M114 163 H136" stroke="#fff" stroke-width="4.5" stroke-linecap="round" opacity=".8" />
+    </g>
+  </symbol>
+
+  <symbol id="target" viewBox="0 0 200 200" data-cat="growth" data-he="מטרה" data-color="#e57373">
+    <circle cx="96" cy="104" r="84" fill="currentColor" />
+    <circle cx="96" cy="104" r="62" fill="#fff" />
+    <circle cx="96" cy="104" r="42" fill="currentColor" />
+    <circle cx="96" cy="104" r="20" fill="#fff" />
+    <path d="M96 104 L166 34" stroke="#13100e" stroke-width="7" stroke-linecap="round" />
+    <path d="M160 40 L160 16 L176 24 L184 40 Z" fill="#63b1af" />
+  </symbol>
+
+  
+  <symbol id="flag" viewBox="0 0 180 220" data-cat="calendar" data-he="דגל" data-color="#63b1af">
+    <rect x="30" y="16" width="10" height="198" rx="5" fill="#4a443f" />
+    <circle cx="35" cy="14" r="9" fill="#f7ae4d" />
+    <path d="M40 26 C72 16 98 40 130 30 C146 25 158 24 168 28 V106 C158 102 146 103 130 108 C98 118 72 94 40 104 Z" fill="currentColor" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מבט אל עצמי · שיעור 3</div><h1>מגדר ופיתוח מודעות מגדרית</h1>    </div>
+    <div class="pic"><svg role="img" aria-label="שתי דמויות, וגדר ביניהן" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <rect x="212" y="318" width="196" height="20" rx="6" fill="#847c74"/>
+    <rect x="212" y="318" width="196" height="20" rx="6" fill="#13100e" fill-opacity=".15"/>
+    <rect x="212" y="408" width="196" height="20" rx="6" fill="#847c74"/>
+    <rect x="212" y="408" width="196" height="20" rx="6" fill="#13100e" fill-opacity=".15"/>
+    <g fill="#847c74">
+      <path d="M226 270 L242 248 L258 270 V470 H226 Z"/>
+      <path d="M270 270 L286 248 L302 270 V470 H270 Z"/>
+      <path d="M314 270 L330 248 L346 270 V470 H314 Z"/>
+      <path d="M358 270 L374 248 L390 270 V470 H358 Z"/>
+    </g>
+    <use href="#kid-stand" x="440" y="190" width="140" height="280" color="#63b1af"/>
+    <use href="#kid-stand" x="40" y="190" width="140" height="280" color="#8c82c1"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מי אני?! · בקבוצות</div><h2>מי הדמות שקיבלתם?</h2><p class="sub">כתבו עליה הכול — מה היא עושה, מה היא אוהבת, על מה היא חולמת.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="צללית של דמות, ובועת דיבור עם סימן שאלה"><g filter="url(#rough)"><use href="#kid-stand" x="340.0" y="140.0" width="185.0" height="370.0" color="#13100e"/><use href="#speech" x="70.0" y="40.0" width="260.0" height="221.0" color="#13100e"/></g><text x="200.0" y="126.0" font-size="110" text-anchor="middle" dominant-baseline="middle" fill="#13100e">?</text></svg></div>
+<div class="foot"><span>5 דקות</span><span class="timer" data-sec="300"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מסתכלים על הלוח</div><h2>מה השפיע על ההחלטה כיצד לתאר את הדמויות?</h2><p class="sub">מי מחליט מה נחשב גברי ומה נחשב נשי?</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="לוח, ועליו שני פתקים — אחד לכל דמות"><g filter="url(#rough)"><use href="#board" x="110.0" y="110.0" width="400.0" height="292.3" color="#13100e"/><use href="#sticky" x="175.0" y="172.0" width="110.0" height="110.0" color="#f7ae4d"/><use href="#sticky" x="335.0" y="172.0" width="110.0" height="110.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">העמדות שלנו</div><h2>מה מעצב את העמדות שלנו?</h2><p class="sub">ערכים, משפחה, חברים, מדיה ותפקידים חברתיים.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="״עמדות״ במרכז, ומסביב ערכים, משפחה, חברים, מדיה ותפקידים חברתיים" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  
+  <g filter="url(#rough)">
+    <g stroke="#f7ae4d" stroke-width="11" stroke-linecap="round">
+      <line x1="310" y1="285" x2="310" y2="95"/>
+      <line x1="310" y1="285" x2="491" y2="226"/>
+      <line x1="310" y1="285" x2="422" y2="439"/>
+      <line x1="310" y1="285" x2="198" y2="439"/>
+      <line x1="310" y1="285" x2="129" y2="226"/>
+    </g>
+    <circle cx="310" cy="285" r="86" fill="#f7ae4d"/>
+    <g fill="#ffffff" stroke="#63b1af" stroke-width="7">
+      <circle cx="310" cy="95" r="74"/>
+      <circle cx="491" cy="226" r="74"/>
+      <circle cx="422" cy="439" r="74"/>
+      <circle cx="198" cy="439" r="74"/>
+      <circle cx="129" cy="226" r="74"/>
+    </g>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="31">
+    <text x="310" y="289" font-size="44">עמדות</text>
+    <text x="310" y="98">ערכים</text>
+    <text x="491" y="229">משפחה</text>
+    <text x="422" y="442">חברים</text>
+    <text x="198" y="442">מדיה</text>
+    <text x="129" y="212">תפקידים</text>
+    <text x="129" y="246">חברתיים</text>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מסכים או לא מסכים? · על הקו</div><h2>איפה אתם עומדים?</h2><p class="sub">קצה אחד — מסכימים לגמרי. הקצה השני — לא מסכימים בכלל.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="קו על הרצפה, אגודל למעלה בקצה אחד ואגודל למטה בשני, ודמות עומדת עליו" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <path d="M40 452 H580" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <use href="#thumb-up" x="452" y="290" width="135" height="150" color="#619f88"/>
+    <use href="#thumb-down" x="33" y="290" width="135" height="150" color="#e57373"/>
+    <use href="#kid-stand" x="235" y="160" width="150" height="300" color="#8c82c1"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">היגד 1</div><h2>בנים באקס בוקס ובנות בטיק טוק</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מחשב נייד וטלפון"><g filter="url(#rough)"><use href="#laptop" x="250.0" y="170.0" width="320.0" height="213.3" color="#13100e"/><use href="#phone" x="70.0" y="196.0" width="120.0" height="200.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="7">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">היגד 2</div><h2>גברים לא בוכים</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="פנים עצובות עם דמעה"><g filter="url(#rough)"><use href="#face-sad" x="150.0" y="110.0" width="320.0" height="320.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="8">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">היגד 3</div><h2>בנות פחות טובות בספורט</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מטרה עם חץ באמצע, ודמות מרימה יד"><g filter="url(#rough)"><use href="#target" x="50.0" y="140.0" width="270.0" height="270.0" color="#e57373"/><use href="#kid-hand" x="380.0" y="150.0" width="165.0" height="330.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="9">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">היגד 4</div><h2>חשוב לי שבמבחנים ובעבודות, לשון הפנייה תהיה לגברים ולנשים</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דף מבחן ועיפרון"><g filter="url(#rough)"><use href="#note" x="240.0" y="90.0" width="240.0" height="300.0" color="#13100e"/><use href="#pencil" x="60.0" y="262.0" width="180.0" height="180.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="10">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חושבים · בזוגות · משתפים</div><h2>מה זה מגדר?</h2><p class="sub">בתוך המילה מגדר נמצאות המילים ״גדר״ ו״הגדרה״.</p><ol class="pts"><li class="fragment">לבד — 30 שניות</li><li class="fragment">בזוגות — דקה</li><li class="fragment">במליאה</li></ol>    </div>
+    <div class="pic"><svg role="img" aria-label="גדר, וספר פתוח לידה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <rect x="300" y="236" width="286" height="22" rx="7" fill="#847c74"/>
+    <rect x="300" y="236" width="286" height="22" rx="7" fill="#13100e" fill-opacity=".15"/>
+    <rect x="300" y="366" width="286" height="22" rx="7" fill="#847c74"/>
+    <rect x="300" y="366" width="286" height="22" rx="7" fill="#13100e" fill-opacity=".15"/>
+    <g fill="#847c74">
+      <path d="M314 176 L333 152 L352 176 V450 H314 Z"/>
+      <path d="M366 176 L385 152 L404 176 V450 H366 Z"/>
+      <path d="M418 176 L437 152 L456 176 V450 H418 Z"/>
+      <path d="M470 176 L489 152 L508 176 V450 H470 Z"/>
+      <path d="M522 176 L541 152 L560 176 V450 H522 Z"/>
+    </g>
+    <use href="#book" x="36" y="222" width="230" height="178" color="#8c82c1"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="11">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">הבחנה בין מין למגדר</div><h2>מין ומגדר — מה ההבדל?</h2><ol class="pts"><li class="fragment">מין — הבחנה ביולוגית בין זכר לנקבה</li><li class="fragment">מגדר — אמונות וציפיות של החברה, איך נשים וגברים ׳צריכים׳ להיראות ולהתנהג</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות במרכז, ומשני צדיה בועות דיבור עם סימני קריאה"><g filter="url(#rough)"><use href="#kid-stand" x="230.0" y="200.0" width="160.0" height="320.0" color="#63b1af"/><use href="#speech" x="30.0" y="40.0" width="200.0" height="170.0" color="#13100e"/><use href="#speech-l" x="390.0" y="40.0" width="200.0" height="170.0" color="#13100e"/></g><text x="130.0" y="106.0" font-size="90" text-anchor="middle" dominant-baseline="middle" fill="#13100e">!</text><text x="490.0" y="106.0" font-size="90" text-anchor="middle" dominant-baseline="middle" fill="#13100e">!</text></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="12">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">שמים סימני שאלה</div><h2>נשים סימן שאלה…</h2><p class="sub">מדוע זה חשוב?</p><ol class="pts"><li class="fragment">בנים באקס בוקס ובנות בטיק טוק?</li><li class="fragment">בנות פחות טובות בספורט?</li><li class="fragment">בנות יכולות לעשות כל מה שבנים עושים?</li><li class="fragment">בנים ספורטאים הם הכי שווים?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות, ומעליה ענן מחשבה עם סימן שאלה גדול"><g filter="url(#rough)"><use href="#thought" x="50.0" y="40.0" width="300.0" height="285.0" color="#13100e"/><use href="#kid-stand" x="360.0" y="210.0" width="140.0" height="280.0" color="#8c82c1"/></g><text x="203.0" y="160.0" font-size="130" text-anchor="middle" dominant-baseline="middle" fill="#13100e">?</text></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="13">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · לייב</div><h2>לייב עם…</h2><p class="sub">ראיון עם הדמויות שתיארתם — דקה וחצי לכל ראיון.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי דמויות, ובועת דיבור ביניהן ובתוכה מצלמה"><g filter="url(#rough)"><use href="#kid-stand" x="395.0" y="190.0" width="150.0" height="300.0" color="#63b1af"/><use href="#kid-stand" x="75.0" y="190.0" width="150.0" height="300.0" color="#f7ae4d"/><use href="#speech" x="200.0" y="30.0" width="220.0" height="187.0" color="#13100e"/><use href="#camera" x="260.0" y="64.0" width="100.0" height="77.3" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-video" data-n="14">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לפני שצופים</div><h2>שלי רוצה רק לשחק כדורגל. מה יכול לעצור אותה?</h2><a class="go" href="https://www.youtube.com/watch?v=_GWV9sDZuq0" target="_blank" rel="noopener">לסרטון ←</a>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות עומדת, ודגל של קבוצה לידה"><g filter="url(#rough)"><use href="#flag" x="300.0" y="177.0" width="240.0" height="293.3" color="#63b1af"/><use href="#kid-stand" x="110.0" y="190.0" width="140.0" height="280.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="15">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 1 מתוך 4</div><h2>קיימת שונות בחברה וקיימות עמדות שונות כלפי מגדר ותפיסות שונות של המושגים גבריות ונשיות.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש דמויות שונות עומדות יחד"><g filter="url(#rough)"><use href="#group3" x="115.0" y="123.8" width="390.0" height="292.5" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg len-m" data-n="16">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 2 מתוך 4</div><h2>השונות מאפשרת לכולנו להתפתח, ללמוד ולהעשיר את עולמנו, ומאפשרת גם לנו להיות שונים ולהתאמן בקבלת האחר ובפיתוח נקודות מבט רחבות יותר על העולם.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש דמויות שונות עומדות יחד"><g filter="url(#rough)"><use href="#group3" x="115.0" y="123.8" width="390.0" height="292.5" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg len-m" data-n="17">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 3 מתוך 4</div><h2>כיום, מתנהל שיח ציבורי נרחב המערער על התפיסות המסורתיות. מגדר נתפס לפעמים כאמת מוחלטת – חשוב שנפתח מודעות לעמדות שלנו, נשים סימני שאלה ונזכור כי העמדות שלנו יכולות להשתנות.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש דמויות שונות עומדות יחד"><g filter="url(#rough)"><use href="#group3" x="115.0" y="123.8" width="390.0" height="292.5" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="18">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 4 מתוך 4</div><h2>נגלה כבוד וסובלנות כלפי עמדות ותפיסות, גם אם הן שונות מהעמדות שלנו, כדי שכולנו נוכל להרגיש שייכים, מוגנים ובטוחים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש דמויות שונות עומדות יחד"><g filter="url(#rough)"><use href="#group3" x="115.0" y="123.8" width="390.0" height="292.5" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="19">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כרטיס יציאה</div><h2>לפני שיוצאים</h2><ol class="pts"><li class="fragment">במילים שלכם — מה ההבדל בין מין למגדר?</li><li class="fragment">ציפייה אחת מבנים או מבנות שהייתם רוצים לשים עליה סימן שאלה — ולמה?</li><li class="fragment">רשות — שאלה או מחשבה שנשארה איתכם.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות כותבת ליד שולחן, ופתק לידה"><g filter="url(#rough)"><use href="#kid-desk" x="236.0" y="110.0" width="288.0" height="384.0" color="#63b1af"/><use href="#sticky" x="40.0" y="70.0" width="170.0" height="170.0" color="#8c82c1"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

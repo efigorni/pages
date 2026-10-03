@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כותבים את השם: שלושה פתקים חלקים, אות על כל אחד (ד־נ־ה), ועיפרון -->
+  <g filter="url(#rough)">
+    <g stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="430" y="96" width="132" height="132" rx="14" fill="#fdf0dd" transform="rotate(-5 496 162)"/>
+      <rect x="244" y="110" width="132" height="132" rx="14" fill="#e6f2f1" transform="rotate(3 310 176)"/>
+      <rect x="58" y="96" width="132" height="132" rx="14" fill="#eeecf7" transform="rotate(-3 124 162)"/>
+    </g>
+    <use href="#pencil" x="225" y="306" width="180" height="180" color="#f7ae4d"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="88" fill="#13100e" text-anchor="middle" dominant-baseline="central">
+    <text x="496" y="162" transform="rotate(-5 496 162)">ד</text>
+    <text x="310" y="176" transform="rotate(3 310 176)">נ</text>
+    <text x="124" y="162" transform="rotate(-3 124 162)">ה</text>
+  </g>
+</svg>

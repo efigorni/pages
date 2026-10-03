@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שער: גדר באמצע, ודמות מכל צד שלה (גדר והגדרה — מגדר) -->
+  <g filter="url(#rough)">
+    <rect x="212" y="318" width="196" height="20" rx="6" fill="#847c74"/>
+    <rect x="212" y="318" width="196" height="20" rx="6" fill="#13100e" fill-opacity=".15"/>
+    <rect x="212" y="408" width="196" height="20" rx="6" fill="#847c74"/>
+    <rect x="212" y="408" width="196" height="20" rx="6" fill="#13100e" fill-opacity=".15"/>
+    <g fill="#847c74">
+      <path d="M226 270 L242 248 L258 270 V470 H226 Z"/>
+      <path d="M270 270 L286 248 L302 270 V470 H270 Z"/>
+      <path d="M314 270 L330 248 L346 270 V470 H314 Z"/>
+      <path d="M358 270 L374 248 L390 270 V470 H358 Z"/>
+    </g>
+    <use href="#kid-stand" x="440" y="190" width="140" height="280" color="#63b1af"/>
+    <use href="#kid-stand" x="40" y="190" width="140" height="280" color="#8c82c1"/>
+  </g>
+</svg>

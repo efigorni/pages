@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מכנה משותף: שלושה עיגולים חופפים, דמות בכל עיגול, וכוכב במקום שבו שלושתם נפגשים (מקור: שקפים 13–14) -->
+  <g filter="url(#rough)">
+    <circle cx="380" cy="215" r="150" fill="#63b1af" fill-opacity=".5"/>
+    <circle cx="240" cy="215" r="150" fill="#f7ae4d" fill-opacity=".55"/>
+    <circle cx="310" cy="335" r="150" fill="#8c82c1" fill-opacity=".5"/>
+    <g fill="#13100e">
+      <g transform="translate(460 175) scale(1.3)"><use href="#kid"/></g>
+      <g transform="translate(160 175) scale(1.3)"><use href="#kid"/></g>
+      <g transform="translate(310 440) scale(1.3)"><use href="#kid"/></g>
+    </g>
+    <use href="#star" x="246" y="196" width="128" height="128" color="#ffffff"/>
+  </g>
+</svg>

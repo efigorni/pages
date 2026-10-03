@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מתחברים בשמות: כמו התמונה במקור (שקף 9) — שם אחד לרוחב ושם אחד לאורך, שנפגשים באות משותפת (ע) -->
+  <g filter="url(#rough)">
+    <g stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="410" y="87" width="84" height="84" rx="12" fill="#e6f2f1"/>
+      <rect x="316" y="87" width="84" height="84" rx="12" fill="#e6f2f1"/>
+      <rect x="128" y="87" width="84" height="84" rx="12" fill="#e6f2f1"/>
+      <rect x="222" y="181" width="84" height="84" rx="12" fill="#fdf0dd"/>
+      <rect x="222" y="275" width="84" height="84" rx="12" fill="#fdf0dd"/>
+      <rect x="222" y="369" width="84" height="84" rx="12" fill="#fdf0dd"/>
+      <rect x="222" y="87" width="84" height="84" rx="12" fill="#f7ae4d"/>
+    </g>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="56" fill="#13100e" text-anchor="middle" dominant-baseline="central">
+    <text x="452" y="131">נ</text>
+    <text x="358" y="131">ו</text>
+    <text x="264" y="131">ע</text>
+    <text x="170" y="131">ה</text>
+    <text x="264" y="225">ו</text>
+    <text x="264" y="319">מ</text>
+    <text x="264" y="413">ר</text>
+  </g>
+</svg>

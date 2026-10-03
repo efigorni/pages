@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סולם ערכים משפחתי · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-desk" viewBox="0 0 180 240" data-cat="people" data-he="דמות כותבת ליד שולחן" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="90" cy="98" r="22" />
+      <path d="M54 200 C54 152 70 126 90 126 C110 126 126 152 126 200 Z" />
+    </g>
+    <path d="M30 170 H150 L170 200 H10 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <rect x="10" y="200" width="160" height="12" fill="#e08f36" />
+    <rect x="20" y="212" width="9" height="20" fill="#13100e" />
+    <rect x="151" y="212" width="9" height="20" fill="#13100e" />
+    <path d="M62 177 H112 L117 195 H57 Z" fill="#fff" stroke="#13100e" stroke-width="3.5" stroke-linejoin="round" />
+    <path d="M100 191 L122 157" stroke="#f7ae4d" stroke-width="7" stroke-linecap="round" />
+    <path d="M100 191 L104 185" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+    <path d="M56 177 L70 187 M126 177 L110 186" stroke="currentColor" stroke-width="13" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="pair" viewBox="0 0 220 240" data-cat="people" data-he="זוג">
+    <path d="M80 140 L110 186" stroke="#63b1af" stroke-width="15" stroke-linecap="round" />
+    <path d="M140 140 L110 186" stroke="#f7ae4d" stroke-width="15" stroke-linecap="round" />
+    <g fill="#63b1af" transform="translate(-6 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(106 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="group3" viewBox="0 0 320 240" data-cat="people" data-he="שלישייה">
+    <g fill="#8c82c1" transform="translate(100 -10)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(4 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#63b1af" transform="translate(196 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="circle4" viewBox="0 0 220 220" data-cat="people" data-he="ארבעה סביב שולחן (מלמעלה)">
+    <circle cx="110" cy="110" r="42" fill="#fdf0dd" stroke="#13100e" stroke-width="5" />
+    <g fill="#fff" stroke="#13100e" stroke-width="3" stroke-linejoin="round">
+      <path d="M92 96 L112 90 L118 108 L98 114 Z" /><path d="M108 116 L128 112 L131 130 L111 134 Z" />
+    </g>
+    <g fill="#63b1af"><path d="M82 30 L90 60 M138 30 L130 60" stroke="#63b1af" stroke-width="12" stroke-linecap="round" /><rect x="74" y="10" width="72" height="28" rx="14" /><circle cx="110" cy="40" r="15" stroke="#fff" stroke-width="4" paint-order="stroke" /></g>
+    <g fill="#f7ae4d" transform="rotate(90 110 110)"><path d="M82 30 L90 60 M138 30 L130 60" stroke="#f7ae4d" stroke-width="12" stroke-linecap="round" /><rect x="74" y="10" width="72" height="28" rx="14" /><circle cx="110" cy="40" r="15" stroke="#fff" stroke-width="4" paint-order="stroke" /></g>
+    <g fill="#8c82c1" transform="rotate(180 110 110)"><path d="M82 30 L90 60 M138 30 L130 60" stroke="#8c82c1" stroke-width="12" stroke-linecap="round" /><rect x="74" y="10" width="72" height="28" rx="14" /><circle cx="110" cy="40" r="15" stroke="#fff" stroke-width="4" paint-order="stroke" /></g>
+    <g fill="#619f88" transform="rotate(270 110 110)"><path d="M82 30 L90 60 M138 30 L130 60" stroke="#619f88" stroke-width="12" stroke-linecap="round" /><rect x="74" y="10" width="72" height="28" rx="14" /><circle cx="110" cy="40" r="15" stroke="#fff" stroke-width="4" paint-order="stroke" /></g>
+  </symbol>
+
+  <symbol id="thought" viewBox="0 0 200 190" data-cat="talk" data-he="ענן מחשבה">
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M184 80 A25 25 0 0 1 164.3 116 A32 32 0 0 1 114.6 135.1 A34 34 0 0 1 58 128.5 A28 28 0 0 1 21.1 99.2 A23 23 0 0 1 21.1 60.8 A28 28 0 0 1 58 31.5 A34 34 0 0 1 114.6 24.9 A32 32 0 0 1 164.3 44 A25 25 0 0 1 184 80 Z" />
+      <circle cx="148" cy="160" r="10" />
+      <circle cx="170" cy="178" r="6" />
+    </g>
+  </symbol>
+
+  <symbol id="chat" viewBox="0 0 220 190" data-cat="talk" data-he="צ׳אט">
+    <path d="M40 10 H120 A30 30 0 0 1 150 40 V66 A30 30 0 0 1 120 96 H64 L28 122 L34.8 95.5 A30 30 0 0 1 10 66 V40 A30 30 0 0 1 40 10 Z" fill="#63b1af" />
+    <path d="M38 42 H122 M38 64 H98" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+    <path d="M100 76 H180 A30 30 0 0 1 210 106 V130 A30 30 0 0 1 185.2 159.5 L204 182 L156 160 H100 A30 30 0 0 1 70 130 V106 A30 30 0 0 1 100 76 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <g fill="#13100e"><circle cx="112" cy="118" r="7" /><circle cx="140" cy="118" r="7" /><circle cx="168" cy="118" r="7" /></g>
+  </symbol>
+
+  
+  <symbol id="heart" viewBox="0 0 200 180" data-cat="feelings" data-he="לב" data-color="#e57373">
+    <path d="M100 168 C40 124 12 92 12 58 C12 30 34 12 58 12 C76 12 90 22 100 38 C110 22 124 12 142 12 C166 12 188 30 188 58 C188 92 160 124 100 168 Z" fill="currentColor" />
+    <path d="M38 58 C38 46 46 37 58 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55" />
+  </symbol>
+
+  <symbol id="house" viewBox="0 0 220 200" data-cat="places" data-he="בית">
+    <path d="M10 96 L110 14 L210 96 Z" fill="#f7ae4d" />
+    <rect x="34" y="90" width="152" height="100" rx="8" fill="#fff" stroke="#13100e" stroke-width="5" />
+    <rect x="93" y="128" width="34" height="62" rx="6" fill="#63b1af" />
+    <g fill="#eeecf7" stroke="#13100e" stroke-width="4">
+      <rect x="48" y="110" width="32" height="28" rx="4" /><rect x="140" y="110" width="32" height="28" rx="4" />
+    </g>
+  </symbol>
+
+  <symbol id="hands-help" viewBox="0 0 220 220" data-cat="safety" data-he="ידיים עוזרות">
+   <g transform="translate(110 110) scale(.92) translate(-110 -100)">
+    <g transform="translate(64 158) rotate(40)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#3f8f8d" />
+      <path d="M13 -12 L27 -32" stroke="#63b1af" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#63b1af" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+    <g transform="translate(156 42) rotate(220)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#e08f36" />
+      <path d="M13 -12 L27 -32" stroke="#f7ae4d" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#f7ae4d" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+   </g>
+  </symbol>
+
+  <symbol id="magnifier" viewBox="0 0 200 200" data-cat="learning" data-he="זכוכית מגדלת" data-color="#63b1af">
+    <path d="M138 138 L178 178" stroke="currentColor" stroke-width="26" stroke-linecap="round" />
+    <path d="M122 122 L140 140" stroke="#13100e" stroke-width="14" />
+    <circle cx="84" cy="84" r="58" fill="#e6f2f1" stroke="#13100e" stroke-width="12" />
+    <path d="M52 76 C54 62 64 54 78 52" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="signpost" viewBox="0 0 200 240" data-cat="choices" data-he="שלט הכוונה">
+    <ellipse cx="100" cy="228" rx="46" ry="8" fill="#619f88" />
+    <rect x="92" y="24" width="16" height="206" rx="4" fill="#4a443f" />
+    <path d="M20 56 L40 36 H150 V76 H40 Z" fill="#63b1af" />
+    <path d="M180 110 L160 90 H50 V130 H160 Z" fill="#f7ae4d" />
+    <path d="M26 164 L46 144 H144 V184 H46 Z" fill="#8c82c1" />
+  </symbol>
+
+  <symbol id="scale" viewBox="0 0 240 210" data-cat="choices" data-he="מאזניים">
+    <path d="M76 198 H164 L150 180 H90 Z" fill="#13100e" />
+    <rect x="114" y="40" width="12" height="146" fill="#13100e" />
+    <circle cx="120" cy="34" r="10" fill="#13100e" />
+    <rect x="24" y="50" width="192" height="10" rx="5" fill="#13100e" />
+    <path d="M40 60 L18 128 M40 60 L62 128 M200 60 L178 128 M200 60 L222 128" stroke="#13100e" stroke-width="4" />
+    <path d="M12 126 H68 C66 146 52 156 40 156 C28 156 14 146 12 126 Z" fill="#63b1af" />
+    <path d="M172 126 H228 C226 146 212 156 200 156 C188 156 174 146 172 126 Z" fill="#f7ae4d" />
+  </symbol>
+
+  <symbol id="target" viewBox="0 0 200 200" data-cat="growth" data-he="מטרה" data-color="#e57373">
+    <circle cx="96" cy="104" r="84" fill="currentColor" />
+    <circle cx="96" cy="104" r="62" fill="#fff" />
+    <circle cx="96" cy="104" r="42" fill="currentColor" />
+    <circle cx="96" cy="104" r="20" fill="#fff" />
+    <path d="M96 104 L166 34" stroke="#13100e" stroke-width="7" stroke-linecap="round" />
+    <path d="M160 40 L160 16 L176 24 L184 40 Z" fill="#63b1af" />
+  </symbol>
+
+  
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">ערכים במשפחה · שיעור 1</div><h1>סולם ערכים משפחתי</h1>    </div>
+    <div class="pic"><svg role="img" aria-label="סולם שנשען על בית, ודמות עומדת לידו" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <use href="#house" x="270" y="200" width="330" height="300"/>
+    <g transform="translate(181 310) rotate(28 39 190)" fill="#8c82c1">
+      <rect x="0" y="0" width="14" height="190" rx="7"/>
+      <rect x="64" y="0" width="14" height="190" rx="7"/>
+      <rect x="7" y="22" width="64" height="12" rx="6"/>
+      <rect x="7" y="62" width="64" height="12" rx="6"/>
+      <rect x="7" y="102" width="64" height="12" rx="6"/>
+      <rect x="7" y="142" width="64" height="12" rx="6"/>
+    </g>
+    <use href="#kid-stand" x="56" y="240" width="130" height="260" color="#63b1af"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic s-video" data-n="2">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לפני שצופים</div><h2>מה חשוב לכל אחת מהדמויות? ואיך היא מראה את מה שחשוב לה?</h2><a class="go" href="https://www.youtube.com/watch?v=cMfDJVvrW64&amp;t=12s" target="_blank" rel="noopener">לסרטון ←</a>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="משפחה של שלוש דמויות, ומעליה ענן מחשבה ובו לב"><g filter="url(#rough)"><use href="#group3" x="244.0" y="254.0" width="360.0" height="270.0" color="#13100e"/><use href="#thought" x="24.0" y="20.0" width="260.0" height="247.0" color="#13100e"/><use href="#heart" x="104.0" y="72.0" width="100.0" height="90.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חושבים · בזוגות · משתפים</div><h2>מה חשוב לדמות שבחרתם — ואיך היא מראה את זה?</h2><ol class="pts"><li class="fragment">לבד — 30 שניות</li><li class="fragment">בזוגות — דקה</li><li class="fragment">במליאה</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג יד ביד, ולידו שתי בועות צ׳אט"><g filter="url(#rough)"><use href="#pair" x="334.0" y="248.0" width="250.0" height="272.7" color="#13100e"/><use href="#chat" x="36.0" y="40.0" width="280.0" height="241.8" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מהו ערך?</div><h2>ערך — דבר שמאמינים בו ומשתדלים לפעול לפיו</h2><p class="sub">כלל שמנחה אותנו, כמו נדיבות לב, אומץ או יושר.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלט כיוונים, ודמות עומדת לידו"><g filter="url(#rough)"><use href="#signpost" x="110.0" y="180.0" width="270.0" height="324.0" color="#13100e"/><use href="#kid-stand" x="430.0" y="244.0" width="130.0" height="260.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כולם כותבים · לבד, במחברת</div><h2>שלושה ערכים שחשובים במשפחה שלכם</h2><p class="sub">לפי הסדר — הכי חשוב ראשון. אפשר מהעץ, ואפשר ערך משלכם.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="עץ ערכים משפחתי — עץ שעל העלווה שלו 22 ערכים, מאדיבות ועד תעוזה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  
+  <g filter="url(#rough)">
+    <path d="M288 524 C294 494 296 462 294 430 H326 C324 462 326 494 332 524 Z" fill="#847c74"/>
+    <g fill="none" stroke="#619f88" stroke-width="10">
+      <circle cx="150" cy="150" r="120"/><circle cx="310" cy="125" r="100"/><circle cx="470" cy="150" r="120"/>
+      <circle cx="140" cy="300" r="110"/><circle cx="310" cy="280" r="150"/><circle cx="480" cy="300" r="110"/>
+      <circle cx="310" cy="360" r="90"/>
+    </g>
+    <g fill="#e7f1ec">
+      <circle cx="150" cy="150" r="120"/><circle cx="310" cy="125" r="100"/><circle cx="470" cy="150" r="120"/>
+      <circle cx="140" cy="300" r="110"/><circle cx="310" cy="280" r="150"/><circle cx="480" cy="300" r="110"/>
+      <circle cx="310" cy="360" r="90"/>
+    </g>
+  </g>
+  <g text-anchor="middle" dominant-baseline="central" font-family="Secular One, Arial Hebrew, sans-serif" font-size="36" fill="#13100e">
+    <text x="310" y="68">אדיבות · אכפתיות</text>
+    <text x="310" y="112">ביטוי עצמי · חופש בחירה</text>
+    <text x="310" y="156">גמישות · דוגמה אישית · הגינות</text>
+    <text x="310" y="200">הגשמה · הומור · הכרת תודה</text>
+    <text x="310" y="244">הצלחה · התמדה</text>
+    <text x="310" y="288">התנדבות, עזרה לזולת · חריצות</text>
+    <text x="310" y="332">כבוד · מסורת · נאמנות · סלחנות</text>
+    <text x="310" y="376">עצמאות · צניעות · שאפתנות</text>
+    <text x="310" y="420">תעוזה</text>
+  </g>
+</svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">בול פגיעה · ברביעיות, 7 דקות</div><h2>מי כתב כמוני?</h2><ol class="pts"><li class="fragment">כל אחד מקריא את שלושת הערכים שלו</li><li class="fragment">אותו ערך — ״בול״, ושם החבר</li><li class="fragment">ערך דומה או קרוב — ״פגיעה״, ושם החבר</li><li class="fragment">בסוף — מה משותף? ומה ייחודי?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מטרה וחץ במרכזה, וארבעה סביב שולחן"><g filter="url(#rough)"><use href="#target" x="40.0" y="30.0" width="320.0" height="320.0" color="#e57373"/><use href="#circle4" x="370.0" y="290.0" width="220.0" height="220.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>7 דקות</span><span class="timer" data-sec="420"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="7">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">במליאה</div><h2>גיליתם היום ערך חדש — שהייתם רוצים גם במשפחה שלכם?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זכוכית מגדלת, ובעדשה שלה לב"><g filter="url(#rough)"><use href="#magnifier" x="180.0" y="70.0" width="320.0" height="320.0" color="#63b1af"/><use href="#heart" x="254.0" y="156.0" width="120.0" height="108.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="8">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מה למדנו?</div><h2>יש ערכים שחשובים לנו יותר מאחרים</h2><p class="sub">לקביעה הזו קוראים סולם ערכים.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="סולם, ועל שלושה שלבים שלו המספרים 1, 2 ו־3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g fill="#8c82c1">
+      <rect x="124" y="112" width="26" height="390" rx="13"/>
+      <rect x="290" y="112" width="26" height="390" rx="13"/>
+      <rect x="136" y="148" width="168" height="20" rx="10"/>
+      <rect x="136" y="223" width="168" height="20" rx="10"/>
+      <rect x="136" y="298" width="168" height="20" rx="10"/>
+      <rect x="136" y="373" width="168" height="20" rx="10"/>
+      <rect x="136" y="448" width="168" height="20" rx="10"/>
+    </g>
+    <g fill="#ffffff" stroke="#13100e" stroke-width="5">
+      <circle cx="220" cy="158" r="44"/>
+      <circle cx="220" cy="308" r="44"/>
+      <circle cx="220" cy="458" r="44"/>
+    </g>
+    <use href="#kid-stand" x="410" y="222" width="140" height="280" color="#63b1af"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="central" font-family="Secular One, Arial Hebrew, sans-serif" font-size="52" fill="#13100e">
+    <text x="220" y="161">1</text>
+    <text x="220" y="311">2</text>
+    <text x="220" y="461">3</text>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="9">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">ובכל משפחה</div><h2>לכל משפחה יש עץ ערכים משפחתי משלה</h2>    </div>
+    <div class="pic"><svg role="img" aria-label="שלושה עצים שונים, כל אחד בצבע אחר" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g fill="#847c74">
+      <path d="M470 500 C476 460 478 420 476 380 H500 C498 420 500 460 506 500 Z"/>
+      <path d="M296 500 C302 450 304 400 302 350 H330 C328 400 330 450 336 500 Z"/>
+      <path d="M126 500 C132 466 134 432 132 398 H156 C154 432 156 466 162 500 Z"/>
+    </g>
+    <circle cx="488" cy="318" r="92" fill="#63b1af"/>
+    <ellipse cx="316" cy="236" rx="96" ry="140" fill="#f7ae4d"/>
+    <g fill="#8c82c1">
+      <circle cx="112" cy="352" r="58"/>
+      <circle cx="176" cy="352" r="58"/>
+      <circle cx="144" cy="300" r="62"/>
+    </g>
+    <g fill="#ffffff" stroke="#13100e" stroke-width="4">
+      <circle cx="458" cy="290" r="12"/><circle cx="516" cy="330" r="12"/><circle cx="474" cy="360" r="12"/>
+      <circle cx="292" cy="180" r="12"/><circle cx="342" cy="240" r="12"/><circle cx="300" cy="300" r="12"/>
+      <circle cx="118" cy="330" r="12"/><circle cx="170" cy="290" r="12"/><circle cx="160" cy="372" r="12"/>
+    </g>
+    <path d="M36 500 H584" stroke="#847c74" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="10">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · בזוגות</div><h2>איך ערך נראה ביום־יום?</h2><p class="sub">בחרו ערך אחד, ומצאו שלוש פעולות קטנות שמבטאות אותו בבית.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי ידיים מושטות זו לזו, ולב מעליהן"><g filter="url(#rough)"><use href="#hands-help" x="160.0" y="200.0" width="300.0" height="300.0" color="#13100e"/><use href="#heart" x="410.0" y="40.0" width="160.0" height="144.0" color="#e57373"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="11">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · לדיון</div><h2>מה עושים כשערכים מתנגשים?</h2><p class="sub">כמו בסרטון — מה שחשוב לאחד, מול מה שחשוב לאחר.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מאזניים"><g filter="url(#rough)"><use href="#scale" x="118.0" y="102.0" width="384.0" height="336.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="12">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 1 מתוך 4</div><h2>לכל משפחה יש את הערכים החשובים לה.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית, ולב גדול מעליו"><g filter="url(#rough)"><use href="#house" x="160.0" y="220.0" width="300.0" height="272.7" color="#13100e"/><use href="#heart" x="230.0" y="40.0" width="160.0" height="144.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="13">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 2 מתוך 4</div><h2>יש דרכים שונות לבטא את הערכים השונים, דרך פעולות והתנהגויות יומיומיות.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית, ולב גדול מעליו"><g filter="url(#rough)"><use href="#house" x="160.0" y="220.0" width="300.0" height="272.7" color="#13100e"/><use href="#heart" x="230.0" y="40.0" width="160.0" height="144.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="14">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 3 מתוך 4</div><h2>גם ״פעולות קטנות״ עשויות להיות בעלות משמעות גדולה.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית, ולב גדול מעליו"><g filter="url(#rough)"><use href="#house" x="160.0" y="220.0" width="300.0" height="272.7" color="#13100e"/><use href="#heart" x="230.0" y="40.0" width="160.0" height="144.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="15">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 4 מתוך 4</div><h2>כל אחד ואחת מאיתנו יכול לקדם את הערכים החשובים לו/לה. כיצד?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית, ולב גדול מעליו"><g filter="url(#rough)"><use href="#house" x="160.0" y="220.0" width="300.0" height="272.7" color="#13100e"/><use href="#heart" x="230.0" y="40.0" width="160.0" height="144.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="16">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כרטיס יציאה</div><h2>בכוונתי…</h2><ol class="pts"><li class="fragment">ערך אחד שגיליתי היום אצל מישהו אחר.</li><li class="fragment">מה בכוונתי לעשות השבוע כדי לקדם במשפחה שלי את הערך החשוב לי ביותר?</li><li class="fragment">רשות — משהו שלמדתי על עצמי היום.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="תלמיד כותב ליד שולחן, ומעליו ענן מחשבה ובו לב"><g filter="url(#rough)"><use href="#kid-desk" x="290.0" y="164.0" width="270.0" height="360.0" color="#63b1af"/><use href="#thought" x="40.0" y="24.0" width="250.0" height="237.5" color="#13100e"/><use href="#heart" x="103.0" y="64.0" width="110.0" height="99.0" color="#e57373"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- חיבורים בריבוע: שני כרטיסים, לכל אחד שלושה איורים — ועל שניהם אותה שמש, האיור המשותף היחיד, מחוברת בקו מנוקד -->
+  <g filter="url(#rough)">
+    <g transform="rotate(4 461 161)">
+      <rect x="336" y="36" width="250" height="250" rx="30" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+      <use href="#sun" x="358" y="62" width="100" height="100" color="#f7ae4d"/>
+      <use href="#heart" x="476" y="72" width="88" height="79" color="#e57373"/>
+      <use href="#book" x="420" y="178" width="130" height="100" color="#8c82c1"/>
+    </g>
+    <g transform="rotate(-4 159 375)">
+      <rect x="34" y="250" width="250" height="250" rx="30" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+      <use href="#puzzle" x="160" y="270" width="96" height="96" color="#8c82c1"/>
+      <use href="#key" x="52" y="300" width="110" height="60" color="#f7ae4d"/>
+      <use href="#sun" x="120" y="382" width="100" height="100" color="#f7ae4d"/>
+    </g>
+    <path d="M396 168 C360 250 290 330 222 400" stroke="#847c74" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 12"/>
+  </g>
+</svg>
