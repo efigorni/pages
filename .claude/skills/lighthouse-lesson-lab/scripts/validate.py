@@ -3,7 +3,7 @@
 # requires-python = ">=3.10"
 # dependencies = ["pyyaml", "jinja2"]
 # ///
-"""validate.py — the rules of lighthouse-lesson-lab (D8–D59, the picks' Combined rules) for lesson.yaml files.
+"""validate.py — the rules of lighthouse-lesson-lab (D8–D65, the picks' Combined rules) for lesson.yaml files.
 
     uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/validate.py lesson-lab/lessons/<slug> [...]
 
@@ -46,6 +46,19 @@ SRC_IMAGES = 'src_images.md'
 # skill-fixes #22: Hebrew points and cantillation are not letters — a quote with or without niqqud is the same words.
 # Only the combining marks: maqaf (U+05BE), paseq, sof pasuq and nun hafukha stay word separators.
 NIQQUD_RE = re.compile('[֑-ׇֽֿׁׂׅׄ]')
+
+# skill-fixes #35: a verbatim field that is only the beginning of a source sentence — a label cut from a quote.
+# Where the quote ends in the source: these close a sentence, a clause that stands alone or a table cell…
+WORD_CHAR = re.compile(r'[\w/]')  # what norm() keeps
+CLAUSE_END = '.!?;:…|'
+QUOTE_CLOSE = '״"”“„»'
+# …a field that ends in "…" shows the cut itself; the words that go on run to the end of the sentence
+CUT_MARK = re.compile(r'(?:…|\.\.\.)[\s״"”“„»\'׳*)\]]*$')
+TAIL_RE = re.compile(r'[^.!?;:…|״"”“„»(]*')
+# D60, D63 (skill-fixes #37): a helpline next to the counsellor — ער״ן 1201, מוקד 105, 6800*, "קווי הסיוע", 24/7.
+# A box that carries one is allowed at every sensitivity, low too
+HELPLINE_RE = re.compile(r'(?<![א-ת])[ובלמה]?(?:ער["״]ן|נט["״]ל|סה["״]ר|מד["״]א|מוקד|קו(?:ו?י)?\s+ה?(?:עזרה|סיוע|חירום|חם))'
+                         r'(?![א-ת])|(?<![\d*])\d{3,5}\*|\*\d{3,5}(?!\d)|(?<![\d./:-])1\d{2,3}(?!\d|[.,/:]\d|%)|24/7')
 
 
 def _words(words):
@@ -423,6 +436,79 @@ def best_ratio(q: str, src: str) -> float:
     return best
 
 
+def norm_map(t: str) -> tuple[str, list[int]]:
+    """norm(t), and for every character of it the index in t it came from — so a quote found in the normalised
+    source can be looked at in the source as it is written (skill-fixes #35)."""
+    out, at, gap, i = [], [], False, 0
+    while i < len(t):
+        if t.startswith('**', i):
+            i += 2
+            continue
+        c, i = t[i], i + 1
+        if NIQQUD_RE.match(c):
+            continue
+        if WORD_CHAR.match(c):
+            if gap and out:
+                out.append(' ')
+                at.append(i - 1)
+            out.append(c)
+            at.append(i - 1)
+            gap = False
+        else:
+            gap = True
+    return ''.join(out), at
+
+
+def goes_on(src: str, end: int) -> str:
+    """'' when the source sentence ends where a quote ends (src[end:]) — a line end, a full stop, a closing quote
+    mark or bracket, a table cell; else the words of the sentence that come after it. A list item whose line ends
+    in a comma ends there, and one more word ("…, ועוד", "וכו׳") is not a cut."""
+    j = end
+    while j < len(src) and src[j] in ' \t*)]\'׳':
+        j += 1
+    if j >= len(src) or src[j] in '\n(' + CLAUSE_END + QUOTE_CLOSE:
+        return ''
+    eol = src.find('\n', j)
+    if src[j] == ',' and not src[j + 1:eol if eol != -1 else len(src)].strip():
+        return ''
+    tail = TAIL_RE.match(src, j).group(0)
+    tail = re.split(r'\n[ \t]*(?:\n|#|[-•·▪●○■]\s)', tail)[0]  # a paragraph, a heading or the next bullet
+    if len(norm(tail).split()) <= 1:
+        return ''
+    tail = re.sub(r'\s+', ' ', tail).strip()
+    return tail if len(tail) <= 50 else tail[:49] + '…'
+
+
+def partial_quotes(src: str, fields) -> list[tuple[str, str]]:
+    """(where, how the source goes on) for every verbatim field that the source has only as the beginning of a
+    sentence — a label cut from a quote, which the style guide forbids (§16; skill-fixes #35). `src` is the source
+    after src_fixes, `fields` is iter_text(). One quote may span fields: a field that the next verbatim field of the
+    same block continues (a title and its sub, points that split one sentence) is not cut. Only the end is checked —
+    a quote that leaves out "המורה תאמר כי" before it is still the whole sentence."""
+    sn, at = norm_map(src)
+    padded = f' {sn} '
+    quotes = [(w, t, norm(t)) for w, t, role in fields if role == 'verbatim']
+    out = []
+    for i, (where, text, q) in enumerate(quotes):
+        if not q or CUT_MARK.search(text.rstrip()):
+            continue
+        block = where.rsplit('.', 1)[0]
+        nxt = quotes[i + 1][2] if i + 1 < len(quotes) and quotes[i + 1][0].rsplit('.', 1)[0] == block else ''
+        first, pos = '', padded.find(f' {q} ')
+        while pos != -1:
+            if nxt and padded.startswith(f' {nxt} ', pos + 1 + len(q)):
+                break
+            rest = goes_on(src, at[pos + len(q) - 1] + 1)
+            if not rest:
+                break
+            first = first or rest
+            pos = padded.find(f' {q} ', pos + 1)
+        else:
+            if first:
+                out.append((where, first))
+    return out
+
+
 def fixed_source(r: Report, raw: str, fixes) -> str:
     """The source text with the lesson's silent corrections applied (D23): `src_fixes: [{from, to}]`.
     A fix whose `from` is not in the source is an error, so a stale fix can't hide a real change. Every occurrence
@@ -643,16 +729,24 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
                 elif not 15 <= end <= 25:
                     r.warn('brain', f'הפסקת המוח אחרי דקה {end} — הכיוון הוא סביב דקה 20')
 
-    # --- sensitivity (D24, D45): the box at med+ — or whenever a public stance activity is in the lesson
+    # --- sensitivity (D24, D45, D63): the box at med+ — or whenever a public stance activity is in the lesson, or the
+    # lesson needs helplines (skill-fixes #37: then a low lesson has the box too)
     safe = data.get('safe')
     stance_steps = [s.get('id') for s in steps if s.get('stance') is True]
+    safe_items = [x for x in safe if isinstance(x, dict)] if isinstance(safe, list) else []
+    stance_box = [x for x in safe_items if 'עמידה' in str(x.get('head', ''))]
+    helplines = [x for x in safe_items if HELPLINE_RE.search(f'{x.get("head", "")} {x.get("text", "")}')]
     if sens in LL.SAFE_REQUIRED and not safe:
         r.err('safe', f'sensitivity: {sens} — צריך תיבת safe ("לפני השיעור") בראש המערך')
     if stance_steps and not safe:
         r.err('safe', f'עמידה פומבית ({", ".join(stance_steps)}) — צריך תיבת safe גם ברגישות {sens}, '
                       'עם סעיף "עמידה מול הכיתה" (D45)')
-    if sens == 'low' and safe and not stance_steps:
-        r.err('safe', 'sensitivity: low בלי עמידה פומבית — בלי תיבת safe')
+    if sens == 'low' and safe and not (stance_steps or stance_box or helplines):
+        r.err('safe', 'sensitivity: low בלי עמידה פומבית ובלי קווי עזרה — בלי תיבת safe. ב-low התיבה רק לסעיף '
+                      '"עמידה מול הכיתה" (D45, D54) או לסעיף "קווי עזרה" (D60, D63) — מדריך הסגנון §12')
+    if stance_box and not stance_steps:
+        r.warn('stance', 'בתיבת safe יש סעיף "עמידה מול הכיתה", אבל אף שלב אינו stance: true — סמני את שלב '
+                         'העמידה (D54, D62), כדי שגם הבדיקות שלו ירוצו')
     if safe:
         for i, x in enumerate(safe if isinstance(safe, list) else []):
             if not isinstance(x, dict) or not x.get('head') or not x.get('text'):
@@ -735,10 +829,12 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
                 r.err('source', f'{w}.slides: שקף {n} — במצגת המקורית יש {size} שקפים')
 
     # --- text: language, gender forms, voice, verbatim
-    src_norm = norm(fixed_source(r, raw_src, data.get('src_fixes'))) if raw_src else ''
+    src_fixed = fixed_source(r, raw_src, data.get('src_fixes')) if raw_src else ''
+    src_norm = norm(src_fixed) if src_fixed else ''
     has_images = (Path(data['_dir']) / SRC_IMAGES).exists()
     allowed, used = latin_allowed(r, data), set()
-    for where, text, role in iter_text(data):
+    texts = list(iter_text(data))
+    for where, text, role in texts:
         clean = URL_RE.sub(' ', text)
         used.update(name for name, rx in allowed if rx.search(clean))
         if role != 'verbatim':
@@ -773,6 +869,10 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
                     hint = '' if has_images else (f'. טקסט שבמקור יש רק בתוך תמונה — תמללי אותו ל-{SRC_IMAGES} '
                                                   'בתיקיית השיעור (schema.md, "ציטוט מילולי")')
                     r.err('verbatim', f'{where}: לא נמצא במקור ({ratio:.0%}) — ציטוט מהמקור נשאר כמו שהוא' + hint)
+    for where, rest in partial_quotes(src_fixed, texts) if src_norm else []:
+        r.warn('verbatim-part', f'{where}: מסומן כציטוט, אבל במקור המשפט ממשיך — "{rest}". ציטוט מקוצר כבר אינו '
+                                'מילה במילה: העתיקי את כל המשפט, או תווית בניסוח שלך בלי verbatim והנוסח המלא ב-quote '
+                                '(schema.md, "ציטוט ארוך מדי לשקף"). השמטה מכוונת (D58) — ב-src_fixes')
     for name, _ in allowed:
         if name not in used:
             r.warn('hebrew', f'latin_ok: "{name}" לא מופיע בשיעור — מחקי אותו מהרשימה')
