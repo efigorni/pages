@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ההתנהגויות המוגדרות בחוק כהטרדה מינית (מקור: שקף 17) — ״הטרדה מינית״ במרכז, וחמש ההתנהגויות סביבה -->
+  <g filter="url(#rough)">
+    <circle cx="310" cy="300" r="72" fill="#e57373"/>
+    <circle cx="310" cy="300" r="54" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <rect x="196" y="22" width="228" height="104" rx="18" fill="#fdf0dd" stroke="#13100e" stroke-width="4"/>
+    <rect x="376" y="144" width="228" height="104" rx="18" fill="#eeecf7" stroke="#13100e" stroke-width="4"/>
+    <rect x="318" y="388" width="228" height="104" rx="18" fill="#e6f2f1" stroke="#13100e" stroke-width="4"/>
+    <rect x="74" y="388" width="228" height="104" rx="18" fill="#e7f1ec" stroke="#13100e" stroke-width="4"/>
+    <rect x="16" y="144" width="228" height="104" rx="18" fill="#fdf0dd" stroke="#13100e" stroke-width="4"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="32">
+    <text x="310" y="284" font-size="30">הטרדה</text>
+    <text x="310" y="318" font-size="30">מינית</text>
+    <text x="310" y="56">סחיטה מינית</text>
+    <text x="310" y="92">באיומים</text>
+    <text x="490" y="178">מעשה</text>
+    <text x="490" y="214">מגונה</text>
+    <text x="432" y="422">ביזוי</text>
+    <text x="432" y="458">או השפלה</text>
+    <text x="188" y="422">פרסום תצלום,</text>
+    <text x="188" y="458">סרט או הקלטה</text>
+    <text x="130" y="178">הצעות מיניות</text>
+    <text x="130" y="214">חוזרות</text>
+  </g>
+</svg>

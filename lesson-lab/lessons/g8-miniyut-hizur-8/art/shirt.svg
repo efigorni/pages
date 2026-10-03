@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- חולצה לטיול השנתי (ציור ייעודי — אין חולצה בערכה), ובמרכזה מקום ריק לסלוגן עם סימן שאלה -->
+  <g filter="url(#rough)">
+    <path d="M258 92 Q310 142 362 92 L458 122 L528 214 L460 252 L442 230 L442 474 L178 474 L178 230 L160 252 L92 214 L162 122 Z" fill="#63b1af"/>
+    <path d="M258 92 Q310 142 362 92 L346 88 Q310 120 274 88 Z" fill="#13100e" fill-opacity=".15"/>
+    <rect x="236" y="236" width="148" height="148" rx="18" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+  </g>
+  <text x="310" y="314" text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="110">?</text>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- דמות קשורה בשרשרת ליתד קטנה, ומעליה ענן מחשבה עם סימן קריאה — מחשבה שתוקעת -->
+  <g filter="url(#rough)">
+    <path d="M30 470 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="120" y="400" width="24" height="70" rx="5" fill="#f7ae4d"/>
+    <rect x="132" y="400" width="12" height="70" rx="4" fill="#13100e" opacity=".14"/>
+    <circle cx="132" cy="420" r="9" fill="none" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="360.8" cy="460.4" rx="21.2" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-169.6 360.8 460.4)"/>
+    <ellipse cx="327.0" cy="454.2" rx="21.2" ry="3" fill="#13100e" transform="rotate(-169.6 327.0 454.2)"/>
+    <ellipse cx="293.1" cy="448.0" rx="21.2" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-169.6 293.1 448.0)"/>
+    <ellipse cx="259.3" cy="441.8" rx="21.2" ry="3" fill="#13100e" transform="rotate(-169.6 259.3 441.8)"/>
+    <ellipse cx="225.5" cy="435.5" rx="21.2" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-169.6 225.5 435.5)"/>
+    <ellipse cx="191.7" cy="429.3" rx="21.2" ry="3" fill="#13100e" transform="rotate(-169.6 191.7 429.3)"/>
+    <ellipse cx="157.9" cy="423.1" rx="21.2" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-169.6 157.9 423.1)"/>
+    <use href="#kid-stand" x="330" y="218.667" width="130" height="260" color="#63b1af"/>
+    <use href="#thought" x="150" y="24" width="240" height="228" color="#13100e"/>
+  </g>
+  <text x="272.4" y="120" font-family="Secular One, Arial Hebrew, sans-serif" font-size="120" fill="#13100e" text-anchor="middle" dominant-baseline="middle">!</text>
+</svg>

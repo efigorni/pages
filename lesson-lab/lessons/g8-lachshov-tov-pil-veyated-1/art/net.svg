@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- רשת לפרפרים: חישוק, ושק רשת לבן שתלוי ממנו ובתוכו ענן מחשבה עם לב; ענן מחשבה עם ענן גשם עף לידה -->
+  <g filter="url(#rough)">
+    <path d="M346 162 L578 504" stroke="#f7ae4d" stroke-width="16" stroke-linecap="round"/>
+    <path d="M122.5 200.1 C118 290 158 392 214 398 C270 404 330 320 349.5 151.9 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M170 214 C170 290 186 360 206 396" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M232 210 C238 290 242 350 236 398" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M292 196 C298 270 292 330 272 384" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M126 262 C190 282 270 280 342 238" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M140 322 C196 342 262 338 324 302" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M172 372 C210 384 252 382 292 362" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <use href="#thought" x="150" y="250" width="120" height="114" color="#13100e"/>
+    <use href="#heart" x="186" y="276" width="50" height="45" color="#e57373"/>
+    <ellipse cx="236" cy="176" rx="116" ry="46" fill="#fff" stroke="#13100e" stroke-width="8" transform="rotate(-12 236 176)"/>
+    <use href="#thought" x="410" y="40" width="160" height="152" color="#13100e"/>
+    <use href="#rain-cloud" x="452" y="64" width="80" height="80" color="#847c74"/>
+  </g>
+</svg>

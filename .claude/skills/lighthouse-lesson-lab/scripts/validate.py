@@ -3,7 +3,7 @@
 # requires-python = ">=3.10"
 # dependencies = ["pyyaml", "jinja2"]
 # ///
-"""validate.py — the rules of lighthouse-lesson-lab (D8–D45, the picks' Combined rules) for lesson.yaml files.
+"""validate.py — the rules of lighthouse-lesson-lab (D8–D59, the picks' Combined rules) for lesson.yaml files.
 
     uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/validate.py lesson-lab/lessons/<slug> [...]
 
@@ -31,9 +31,19 @@ URL_RE = re.compile(r'https?://\S+')
 QUOTED_RE = re.compile(r'(?:(?<=[\s(—–-])|^)[״"„“][^״"„“”\n]*?[״"”](?=[\s.,;:!?)—–-]|$)')
 ID_RE = re.compile(r'^[a-z0-9][a-z0-9-]*$')
 TIME_RE = re.compile(r'^\d{1,2}:\d{2}$')
-# D45: a public stance activity (D27) — the validator asks for `stance: true` when the text looks like one
-STANCE_HINT = re.compile(r'מסכימומטר|לאורך הקו|נעמדים על|נעמדים ליד|חוצים את הקו|ליד השלט|עמדה בחלל')
+# D45, D54: a public stance activity (D27) — the validator asks for `stance: true` when the text looks like one:
+# a side of a line, a place on an axis, agreement signs, standing up from the chair when a statement fits you
+STANCE_HINT = re.compile(r'מסכימומטר|לאורך הקו|נעמדים על|נעמדים ליד|חוצים את הקו|ליד השלט|עמדה בחלל'
+                         r'|כי?סאות\s+(?:מתחלפים|מסתובבים)|רוח נושבת|מתמקמים על|שלטי הסכמה|נשאר\S*\s+בלי\s+כי?סא'
+                         r'|(?<![א-ת])(?:קם|קמה|קמים)\s+(?:ממקומ\S*\s+|מהכי?סא\s+)?(?:כש|אם\s+)\S*מזדה'
+                         r'|מי\s+שמזדה\S*\s+(?:\S+\s+){0,3}?(?:(?:קם|קמה|קמים)(?![א-ת])|נעמד)')
 SLIDE_VERBATIM_FIELDS = ('title', 'sub', 'points')
+# skill-fixes #17: source text that exists only inside images (cards, posts) — a faithful transcription, per lesson,
+# that the verbatim check reads together with src_text
+SRC_IMAGES = 'src_images.md'
+# skill-fixes #22: Hebrew points and cantillation are not letters — a quote with or without niqqud is the same words.
+# Only the combining marks: maqaf (U+05BE), paseq, sof pasuq and nun hafukha stay word separators.
+NIQQUD_RE = re.compile('[֑-ׇֽֿׁׂׅׄ]')
 
 
 def _words(words):
@@ -54,7 +64,7 @@ TOP = {  # key: (type, required)
     'slug': (str, False), 'title': (str, True), 'sub': (str, True), 'grade': (int, True), 'grades_served': (list, False),
     'month': (str, True), 'section': (str, True), 'unit': (str, True), 'unit_order': (int, False),
     'unit_size': (int, False), 'src_text': (str, True), 'src_url': (str, False), 'sensitivity': (str, True),
-    'src_fixes': (list, False),
+    'src_fixes': (list, False), 'latin_ok': (list, False),
     'format': (str, True), 'question': (str, True), 'takeaways': (list, True), 'prep': (list, True),
     'safe': (list, False), 'time': (dict, True), 'brain_break': (dict, True), 'cover': (dict, True),
     'steps': (list, True),
@@ -85,6 +95,8 @@ BLOCKS = {  # dict blocks: field → (type, required); str/list blocks by name
                  'art': (object, True), 'alt': (str, False)},
     'exit': {'form': (str, True), 'title': (str, True), 'prompts': (list, True), 'look_for': (str, True),
              'art': (object, True), 'alt': (str, False), 'timer': (int, False)},
+    # skill-fixes #24: an image that exists only in the original deck — the teacher shows it from there
+    'source_slide': {'slides': (object, True), 'why': (str, True), 'art': (object, False), 'alt': (str, False)},
 }
 TEXT_BLOCKS = {'p': str, 'say': str, 'ask': str, 'whisper': str, 'tip': str, 'moves': list, 'list': list,
                'board': (str, list), 'tracks': list}
@@ -338,13 +350,19 @@ def block_text(where, typ, v):
         if isinstance(v.get('look_for'), str):
             yield f'{where}.look_for', v['look_for'], 'teacher'
         yield from art_text(f'{where}.art', v.get('art'))
+    elif typ == 'source_slide':
+        if isinstance(v.get('why'), str):
+            yield f'{where}.why', v['why'], 'teacher'
+        yield from art_text(f'{where}.art', v.get('art'))
 
 
 # ----------------------------------------------------------------------------- verbatim
 
 def norm(t: str) -> str:
-    """Words only: punctuation, quote marks and spacing never decide whether a quote is verbatim (D23)."""
-    t = re.sub(r'[^\w/]+', ' ', str(t).replace('**', ''))
+    """Words only: punctuation, quote marks, spacing and niqqud never decide whether a quote is verbatim (D23).
+    Niqqud and cantillation are dropped before anything else — as separators they split "עוֹד" into "עו ד" (#22)."""
+    t = NIQQUD_RE.sub('', str(t).replace('**', ''))
+    t = re.sub(r'[^\w/]+', ' ', t)
     return re.sub(r'\s+', ' ', t).strip()
 
 
@@ -365,7 +383,8 @@ def best_ratio(q: str, src: str) -> float:
 
 def fixed_source(r: Report, raw: str, fixes) -> str:
     """The source text with the lesson's silent corrections applied (D23): `src_fixes: [{from, to}]`.
-    A fix whose `from` is not in the source is an error, so a stale fix can't hide a real change."""
+    A fix whose `from` is not in the source is an error, so a stale fix can't hide a real change. Every occurrence
+    of `from` is replaced — a warning when there is more than one (skill-fixes #10)."""
     for i, fx in enumerate(fixes if isinstance(fixes, list) else []):
         if not isinstance(fx, dict) or not isinstance(fx.get('from'), str) or not isinstance(fx.get('to'), str):
             r.err('src-fix', f'src_fixes[{i}]: צריך {{from, to}} — המילים במקור, והתיקון השקט')
@@ -373,8 +392,64 @@ def fixed_source(r: Report, raw: str, fixes) -> str:
         if fx['from'] not in raw:
             r.err('src-fix', f'src_fixes[{i}]: "{fx["from"]}" לא נמצא במקור (העתיקי את הקטע כמו שהוא, כולל רווחים)')
             continue
+        count = raw.count(fx['from'])
+        if count > 1:
+            r.warn('src-fix', f'src_fixes[{i}]: "{fx["from"]}" מופיע במקור {count} פעמים, והתיקון מחליף את כולם — '
+                              'אם רק אחד מהם שגוי, הרחיבי את from לקטע שמופיע פעם אחת')
         raw = raw.replace(fx['from'], fx['to'])
     return raw
+
+
+def source_corpus(r: Report, data: dict, src_path: Path | None) -> tuple[str, str]:
+    """(the text a verbatim quote is checked against, src_text alone). The corpus is src_text and, when the lesson
+    has one, its src_images.md — text that exists in the source only inside images, transcribed (skill-fixes #17)."""
+    src = src_path.read_text(encoding='utf-8') if src_path and src_path.exists() else ''
+    corpus = src
+    images = Path(data['_dir']) / SRC_IMAGES
+    if images.exists():
+        transcript = images.read_text(encoding='utf-8')
+        if not transcript.strip():
+            r.warn('verbatim', f'{SRC_IMAGES} ריק — תמללי לתוכו את הטקסט שבתמונות המקור, או מחקי אותו')
+        else:
+            check_transcript(r, transcript, src)
+        corpus = f'{src}\n\n{transcript}' if src else transcript
+    return corpus, src
+
+
+SLIDE_HEAD_RE = re.compile(r'^#+[ \t]*שקף[ \t]+(\d+)(.*)$', re.M)
+
+
+def check_transcript(r: Report, transcript: str, src: str) -> None:
+    """src_images.md stays auditable: every section is headed by the source slide whose image it transcribes
+    (`## שקף 19 (תמונה)`), and that slide has images in src_text ("(2 תמונות)" in its heading)."""
+    heads = sorted({int(n) for n, _ in SLIDE_HEAD_RE.findall(transcript)})
+    if not heads:
+        r.warn('verbatim', f'{SRC_IMAGES}: בלי כותרות — לכל תמונה כותרת "## שקף N (תמונה)" לפי המקור, כדי שאפשר '
+                           'יהיה לבדוק את התמלול מול התמונה')
+        return
+    src_heads = {int(n): rest for n, rest in SLIDE_HEAD_RE.findall(src)}
+    for n in heads if src_heads else []:
+        if n not in src_heads:
+            r.warn('verbatim', f'{SRC_IMAGES}: "## שקף {n}" — אין שקף {n} במקור')
+        elif 'תמונ' not in src_heads[n]:
+            r.warn('verbatim', f'{SRC_IMAGES}: "## שקף {n}" — בשקף הזה אין תמונה במקור; מתמללים רק טקסט שבתוך '
+                               'תמונות')
+
+
+def latin_allowed(r: Report, data: dict) -> list[tuple[str, re.Pattern]]:
+    """`latin_ok`: original names in Latin letters that may stay as they are — a film, a song, a site (D57)."""
+    out = []
+    items = data.get('latin_ok')
+    text_items(r, 'latin_ok', items)
+    for x in items if isinstance(items, list) else []:
+        if not isinstance(x, str) or not x.strip():
+            continue
+        if not re.search('[A-Za-z]', x):
+            r.warn('hebrew', f'latin_ok: "{x}" — רק שמות באותיות לטיניות')
+            continue
+        words = map(re.escape, x.split())
+        out.append((x, re.compile(r'(?<![A-Za-z0-9])' + r'\s+'.join(words) + r'(?![A-Za-z0-9])')))
+    return out
 
 
 # ----------------------------------------------------------------------------- the checks
@@ -551,8 +626,9 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
                 r.warn('stance', f'steps[{i}:{s.get("id")}]: עמידה פומבית בלי "חושבים לבד חמש שניות, בלי להסתכל על אף אחד — '
                                  'ורק אז זזים" (מדריך הסגנון §12)')
         elif STANCE_HINT.search(' '.join(t for _, t, _ in body_text('', s))):
-            r.warn('stance', f'steps[{i}:{s.get("id")}]: נראה כמו עמידה פומבית (D27) — אם כן, stance: true בשלב '
-                             'וסעיף "עמידה מול הכיתה" בתיבת safe')
+            r.warn('stance', f'steps[{i}:{s.get("id")}]: נראה כמו עמידה פומבית (D27, D54 — גם קימה מהכיסא כשמזדהים) '
+                             '— אם כן, stance: true בשלב, וסעיף "עמידה מול הכיתה" בתיבת safe עם זכות לעבור '
+                             '(מדריך הסגנון §12)')
 
     # --- cover
     cover = data.get('cover')
@@ -599,15 +675,34 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
                 elif said > 5:
                     r.warn('voice', f'{w}{label}: {said} ניסוחי מפתח — 2–3 לרגעים החשובים, לא תסריט מלא')
 
+    # --- source_slide (skill-fixes #24): the original deck has a link, and the slides are in it
+    raw_src, src_only = source_corpus(r, data, src_path)
+    shown = [(w, v) for i, s in enumerate(steps) for t, v, w in walk_blocks(s, f'steps[{i}:{s.get("id")}]')
+             if t == 'source_slide' and isinstance(v, dict)]
+    if shown and not LL.src_url(data):
+        r.err('source', 'source_slide: אין src_url — לא בשיעור ולא ב-docs/lessons.json, ובלי קישור למצגת המקורית '
+                        'אין מאיפה להציג')
+    size = deck_size(data, src_only) if shown else None
+    for w, v in shown:
+        for n in LL.source_slides(v) or []:
+            if size and n > size:
+                r.err('source', f'{w}.slides: שקף {n} — במצגת המקורית יש {size} שקפים')
+
     # --- text: language, gender forms, voice, verbatim
-    raw_src = src_path.read_text(encoding='utf-8') if src_path and src_path.exists() else ''
     src_norm = norm(fixed_source(r, raw_src, data.get('src_fixes'))) if raw_src else ''
+    has_images = (Path(data['_dir']) / SRC_IMAGES).exists()
+    allowed, used = latin_allowed(r, data), set()
     for where, text, role in iter_text(data):
         clean = URL_RE.sub(' ', text)
+        used.update(name for name, rx in allowed if rx.search(clean))
         if role != 'verbatim':
-            latin = sorted({w for w in re.findall(r'[A-Za-z][A-Za-z0-9]*', clean)} - LATIN_OK)
+            masked = clean
+            for _, rx in allowed:
+                masked = rx.sub(' ', masked)
+            latin = sorted({w for w in re.findall(r'[A-Za-z][A-Za-z0-9]*', masked)} - LATIN_OK)
             if latin:
-                r.err('hebrew', f'{where}: טקסט לטיני {latin[:6]} — עברית בלבד')
+                r.err('hebrew', f'{where}: טקסט לטיני {latin[:6]} — עברית בלבד. שם מקורי באנגלית (סרט, שיר, אתר) '
+                                'נשאר כמו שהוא — הוסיפי אותו ל-latin_ok (D57)')
             g = GENDER_RE.findall(clean)
             if g:
                 r.err('gender', f'{where}: צורות עם נקודה/לוכסן {g[:4]} — רבים רגיל ("תלמידים", "מוכן"); '
@@ -629,11 +724,25 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
                     r.warn('verbatim', f'{where}: כמעט מילה במילה ({ratio:.0%}) — תיקון שקט? רשמי אותו ב-src_fixes; '
                                        'אחרת העתיקי מהמקור')
                 else:
-                    r.err('verbatim', f'{where}: לא נמצא במקור ({ratio:.0%}) — ציטוט מהמקור נשאר כמו שהוא')
+                    hint = '' if has_images else (f'. טקסט שבמקור יש רק בתוך תמונה — תמללי אותו ל-{SRC_IMAGES} '
+                                                  'בתיקיית השיעור (schema.md, "ציטוט מילולי")')
+                    r.err('verbatim', f'{where}: לא נמצא במקור ({ratio:.0%}) — ציטוט מהמקור נשאר כמו שהוא' + hint)
+    for name, _ in allowed:
+        if name not in used:
+            r.warn('hebrew', f'latin_ok: "{name}" לא מופיע בשיעור — מחקי אותו מהרשימה')
     for w in FORBIDDEN:
         if w in data.get('_raw', ''):
             r.err('forbidden', f'המילה "{w}…" אסורה — המסמך נקרא "המערך"')
     return r
+
+
+def deck_size(data: dict, src: str) -> int | None:
+    """How many slides the original deck has: docs/lessons.json, or the last "## שקף N" heading of src_text."""
+    inv = LL.inventory().get(data.get('_slug')) or {}
+    if isinstance(inv.get('slides'), int) and not isinstance(inv.get('slides'), bool):
+        return inv['slides']
+    nums = [int(n) for n in re.findall(r'^#+\s*שקף\s+(\d+)', src, flags=re.M)]
+    return max(nums) if nums else None
 
 
 def walk_blocks(owner: dict, where: str = ''):
@@ -887,10 +996,12 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
         _typecheck(r, w, v, BLOCKS[typ], kind=typ)
         if track and typ in ('messages', 'exit'):
             r.err('tracks', f'{w}: {typ} רק בשלב משלו, לא בתוך מסלול')
-        if typ in ('video', 'exit'):
+        if typ in ('video', 'exit', 'source_slide'):
             n_slides += 1
             if v.get('art'):
                 check_art(r, f'{w}.art', v['art'], kit, lesson_dir)
+        if typ == 'source_slide' and LL.source_slides(v) is None:
+            r.err('source', f'{w}.slides: מספרי השקפים במצגת המקורית — מספר אחד, או רשימת מספרים ([19, 24])')
         if typ == 'messages':
             items = v.get('items') or []
             n_slides += len(items) if isinstance(items, list) else 0
@@ -945,7 +1056,8 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
         if kind != 'exit' and 'exit' in types:
             r.err('exit', f'{where}: בלוק exit רק בשלב עם kind: exit')
         if n_slides == 0:
-            r.err('slides', f'{where}: אין שקף — לכל שלב לפחות שקף אחד (slide, video, messages, exit או tracks)')
+            r.err('slides', f'{where}: אין שקף — לכל שלב לפחות שקף אחד (slide, video, source_slide, messages, exit '
+                            'או tracks)')
     # task/ladder checks run on the owner's own tags: the step's for shared blocks, each track's for its body
     if 'הוצאה למשימה' in (step.get('practices') or []) and 'task' not in types and 'tracks' not in types:
         r.warn('task', f'{where}: מתויג "הוצאה למשימה" בלי בלוק task (מה עושים + זמן · הרכב · כללים · במליאה)')

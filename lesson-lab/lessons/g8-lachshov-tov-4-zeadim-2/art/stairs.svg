@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ארבעת הצעדים (מקור: שקף 11): מדרגות שעולות שמאלה — סימן קריאה, סימן שאלה, לב, מטרה — ודמות זקופה בראש -->
+  <g filter="url(#rough)">
+    <rect x="452" y="440" width="132" height="80" rx="8" fill="#8c82c1"/>
+    <rect x="322" y="364" width="132" height="156" rx="8" fill="#8c82c1"/>
+    <rect x="192" y="288" width="132" height="232" rx="8" fill="#8c82c1"/>
+    <rect x="62" y="212" width="132" height="308" rx="8" fill="#8c82c1"/>
+    <g fill="#fff" stroke="#13100e" stroke-width="4">
+      <circle cx="518" cy="480" r="34"/>
+      <circle cx="388" cy="404" r="34"/>
+      <circle cx="258" cy="328" r="34"/>
+      <circle cx="128" cy="252" r="34"/>
+    </g>
+    <use href="#heart" x="232" y="304.6" width="52" height="46.8" color="#e57373"/>
+    <use href="#target" x="101" y="225" width="54" height="54" color="#e57373"/>
+    <use href="#kid-stand" x="90" y="65.0667" width="76" height="152" color="#63b1af"/>
+  </g>
+  <text x="518" y="483" font-family="Secular One, Arial Hebrew, sans-serif" font-size="56" fill="#13100e" text-anchor="middle" dominant-baseline="middle">!</text>
+  <text x="388" y="407" font-family="Secular One, Arial Hebrew, sans-serif" font-size="56" fill="#13100e" text-anchor="middle" dominant-baseline="middle">?</text>
+</svg>

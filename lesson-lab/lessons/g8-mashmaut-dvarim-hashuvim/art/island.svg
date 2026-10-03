@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- אי המטמון שלי: אי קטן עם עץ דקל באמצע הים, ושמש מעליו (ציור ייעודי — אין אי בערכה) -->
+  <g filter="url(#rough)">
+    <ellipse cx="310" cy="452" rx="292" ry="66" fill="#e6f2f1"/>
+    <path d="M58 470 q18 -12 36 0 t36 0 M478 486 q18 -12 36 0 t36 0 M96 420 q14 -10 28 0 t28 0 M500 424 q14 -10 28 0 t28 0"
+          stroke="#63b1af" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M132 452 C176 366 444 366 488 452 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M336 420 C344 346 324 272 288 210" stroke="#f7ae4d" stroke-width="24" fill="none" stroke-linecap="round"/>
+    <g fill="#619f88">
+      <path d="M286 204 Q206 156 160 240 Q226 206 286 214 Z"/>
+      <path d="M284 202 Q236 112 188 122 Q250 150 280 210 Z"/>
+      <path d="M288 202 Q322 104 368 112 Q322 150 292 210 Z"/>
+      <path d="M288 204 Q372 152 420 232 Q354 204 290 214 Z"/>
+    </g>
+    <use href="#sun" x="456" y="34" width="130" height="130" color="#f7ae4d"/>
+  </g>
+</svg>

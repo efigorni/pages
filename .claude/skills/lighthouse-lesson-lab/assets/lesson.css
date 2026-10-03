@@ -176,6 +176,11 @@ a.slide-ref:hover { border-color: var(--teal-deep); color: var(--ink); }
 .safe b { color: #4a2e08; }
 .safe ul { margin: 4px 0 0; }
 .safe li { margin: 6px 0; }
+/* source_slide: an image shown from the original deck (skill-fixes #24) */
+.src-slide { margin: 10px 0; padding: 11px 15px; border-radius: var(--r-sm); background: var(--teal-soft); color: var(--ink); border-inline-start: 4px solid var(--teal-deep); font-size: 15px; line-height: 1.55; }
+.src-slide::before { content: "מהמצגת המקורית"; display: block; font-size: 12px; font-weight: 700; color: var(--teal-deep); margin-bottom: 3px; }
+.src-slide .h { font-family: var(--display); font-size: 18px; line-height: 1.35; margin: 0 0 4px; }
+.src-slide p { margin: 0 0 4px; }
 
 /* ---------- printed material inside the step ---------- */
 .exit, .handout { margin: 12px 0; padding: 18px 20px; border: 2px dashed var(--moss); border-radius: var(--r); background: var(--paper); }
@@ -239,7 +244,7 @@ a.slide-ref:hover { border-color: var(--teal-deep); color: var(--ink); }
   .doc h2 { font-size: 20px; }
   .st { padding: 16px 0 10px; }
   .tags { break-after: avoid; }
-  .board, .say, .task, .ladder, .tracks, .tip, .safe, .exit, .handout, .plan tr, blockquote { break-inside: avoid; }
+  .board, .say, .task, .ladder, .tracks, .tip, .safe, .src-slide, .exit, .handout, .plan tr, blockquote { break-inside: avoid; }
   .board { background: #fff; color: var(--ink); border: 2px solid var(--ink); box-shadow: none; }
   .board::before, .board .k, .board .small-chalk { color: var(--ink-3); }
   .say, .ladder > div { background: #fff; border: 1px solid var(--line-2); }

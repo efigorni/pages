@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- טעמי החופשה: כוס גלידה עם שלושה כדורים בשלושה צבעים (ציור ייעודי — אין גלידה בערכה) -->
+  <g filter="url(#rough)">
+    <g transform="translate(310 300) scale(1.15)">
+      <path d="M-130 0 L130 0 L108 112 Q104 128 86 128 L-86 128 Q-104 128 -108 112 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+      <g transform="translate(-66 0) scale(.95)">
+        <circle cx="0" cy="-44" r="64" fill="#63b1af"/>
+        <path d="M-70 -2 Q0 -60 70 -2 C70 12 58 14 52 6 C48 18 34 18 28 8 C24 22 8 22 2 8 C-2 20 -16 20 -24 8 C-28 22 -44 22 -50 6 C-56 14 -70 14 -70 -2 Z" fill="#63b1af"/>
+        <path d="M32 -99.4 A64 64 0 0 1 32 11.4 A90 90 0 0 0 32 -99.4 Z" fill="#13100e" opacity=".12"/>
+      </g>
+      <g transform="translate(66 0) scale(.95)">
+        <circle cx="0" cy="-44" r="64" fill="#8c82c1"/>
+        <path d="M-70 -2 Q0 -60 70 -2 C70 12 58 14 52 6 C48 18 34 18 28 8 C24 22 8 22 2 8 C-2 20 -16 20 -24 8 C-28 22 -44 22 -50 6 C-56 14 -70 14 -70 -2 Z" fill="#8c82c1"/>
+        <path d="M32 -99.4 A64 64 0 0 1 32 11.4 A90 90 0 0 0 32 -99.4 Z" fill="#13100e" opacity=".12"/>
+      </g>
+      <g transform="translate(0 -52)">
+        <circle cx="0" cy="-44" r="64" fill="#f7ae4d"/>
+        <path d="M-70 -2 Q0 -60 70 -2 C70 12 58 14 52 6 C48 18 34 18 28 8 C24 22 8 22 2 8 C-2 20 -16 20 -24 8 C-28 22 -44 22 -50 6 C-56 14 -70 14 -70 -2 Z" fill="#f7ae4d"/>
+        <path d="M32 -99.4 A64 64 0 0 1 32 11.4 A90 90 0 0 0 32 -99.4 Z" fill="#13100e" opacity=".12"/>
+      </g>
+    </g>
+  </g>
+</svg>

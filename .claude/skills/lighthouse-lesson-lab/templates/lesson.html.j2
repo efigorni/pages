@@ -42,6 +42,9 @@
 {% else %}
 <p>ממשיכים עד הסוף.</p>
 {% endif %}
+{% elif t == 'source_slide' %}
+{% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}</p>{% endif %}
+<div class="src-slide"><p class="h">מציגים מהמצגת המקורית: {{ b.label }}</p><p>{{ v.why|md }}</p><p>{% if b.url %}<a href="{{ b.url }}" target="_blank" rel="noopener">המצגת המקורית</a> · {% endif %}בשקף {{ b.n }} של המצגת שלנו עוברים אליה, ואחרי {% if ',' in b.label %}השקפים{% else %}השקף{% endif %} חוזרים.</p></div>
 {% elif t == 'quote' %}
 {% if v.title %}<h4>{{ v.title|md }}</h4>{% endif %}<blockquote>{{ v.text|paras }}</blockquote>
 {% elif t == 'handout' %}

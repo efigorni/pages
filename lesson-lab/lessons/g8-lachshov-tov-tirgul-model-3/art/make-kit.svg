@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- הכנת ערכת הצעדים: ארבע עקבות — בשלוש כבר סימן, ובאחרונה עיפרון מצייר -->
+  <g filter="url(#rough)">
+    <g transform="translate(452 312) rotate(14 55 110) scale(1)" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M58 52 C90 52 102 92 98 128 C94 166 82 196 58 196 C34 196 20 168 18 130 C16 92 26 52 58 52 Z"/>
+      <ellipse cx="80" cy="34" rx="13" ry="16.25"/>
+      <ellipse cx="58" cy="24" rx="11" ry="13.75"/>
+      <ellipse cx="38" cy="26" rx="9.5" ry="11.875"/>
+      <ellipse cx="22" cy="36" rx="8" ry="10"/>
+      <ellipse cx="11" cy="51" rx="7" ry="8.75"/>
+    </g>
+    <g transform="translate(342 214) rotate(14 55 110) scale(1) translate(116 0) scale(-1 1)" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M58 52 C90 52 102 92 98 128 C94 166 82 196 58 196 C34 196 20 168 18 130 C16 92 26 52 58 52 Z"/>
+      <ellipse cx="80" cy="34" rx="13" ry="16.25"/>
+      <ellipse cx="58" cy="24" rx="11" ry="13.75"/>
+      <ellipse cx="38" cy="26" rx="9.5" ry="11.875"/>
+      <ellipse cx="22" cy="36" rx="8" ry="10"/>
+      <ellipse cx="11" cy="51" rx="7" ry="8.75"/>
+    </g>
+    <g transform="translate(232 116) rotate(14 55 110) scale(1)" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M58 52 C90 52 102 92 98 128 C94 166 82 196 58 196 C34 196 20 168 18 130 C16 92 26 52 58 52 Z"/>
+      <ellipse cx="80" cy="34" rx="13" ry="16.25"/>
+      <ellipse cx="58" cy="24" rx="11" ry="13.75"/>
+      <ellipse cx="38" cy="26" rx="9.5" ry="11.875"/>
+      <ellipse cx="22" cy="36" rx="8" ry="10"/>
+      <ellipse cx="11" cy="51" rx="7" ry="8.75"/>
+    </g>
+    <g transform="translate(122 18) rotate(14 55 110) scale(1) translate(116 0) scale(-1 1)" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M58 52 C90 52 102 92 98 128 C94 166 82 196 58 196 C34 196 20 168 18 130 C16 92 26 52 58 52 Z"/>
+      <ellipse cx="80" cy="34" rx="13" ry="16.25"/>
+      <ellipse cx="58" cy="24" rx="11" ry="13.75"/>
+      <ellipse cx="38" cy="26" rx="9.5" ry="11.875"/>
+      <ellipse cx="22" cy="36" rx="8" ry="10"/>
+      <ellipse cx="11" cy="51" rx="7" ry="8.75"/>
+    </g>
+    <use href="#heart" x="255.072" y="219.132" width="60" height="54" color="#e57373"/>
+    <use href="#pencil" x="149.072" y="78.1317" width="130" height="130" color="#f7ae4d"/>
+  </g>
+  <text x="505.072" y="442.132" font-family="Secular One, Arial Hebrew, sans-serif" font-size="66" fill="#13100e" text-anchor="middle" dominant-baseline="middle">!</text>
+  <text x="395.072" y="344.132" font-family="Secular One, Arial Hebrew, sans-serif" font-size="66" fill="#13100e" text-anchor="middle" dominant-baseline="middle">?</text>
+</svg>

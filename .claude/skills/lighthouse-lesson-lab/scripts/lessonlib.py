@@ -189,6 +189,25 @@ def clip_text(v: dict, pauses: list[dict]) -> dict | None:
     return {'prep': prep, 'tail': tail, 'span': span}
 
 
+def source_slides(v) -> list[int] | None:
+    """`source_slide.slides` → the slide numbers of the original deck: 19 or [19, 24]; None when malformed."""
+    s = v.get('slides') if isinstance(v, dict) else None
+    nums = [s] if isinstance(s, int) else s if isinstance(s, list) else None
+    if not nums or not all(isinstance(n, int) and not isinstance(n, bool) and n > 0 for n in nums):
+        return None
+    return nums
+
+
+def source_label(nums: list[int]) -> str:
+    """'שקף 19' · 'שקפים 19, 24' — slides of the original deck, as given (not a range)."""
+    return f'שקף {nums[0]}' if len(nums) == 1 else 'שקפים ' + ', '.join(str(n) for n in nums)
+
+
+def src_url(data: dict) -> str:
+    """The original deck: the lesson's src_url, or the one in docs/lessons.json."""
+    return str(data.get('src_url') or (inventory().get(data.get('_slug')) or {}).get('src_url') or '')
+
+
 def minutes_label(sec: int) -> str:
     sec = int(sec)
     if sec < 60:
@@ -455,9 +474,10 @@ def derive(data: dict, kit: Kit) -> dict:
     steps = [s for s in (data.get('steps') or []) if isinstance(s, dict)]
     used: set[str] = set()
     slides: list[dict] = []
+    deck_url = src_url(data)
 
     def add_slide(step_id, *, kicker='', title='', sub='', points=None, art=None, timer=None,
-                  link=None, cls='', h1=False, alt=None, track=None):
+                  link=None, link_label=None, cls='', h1=False, alt=None, track=None):
         n = len(slides) + 1
         slides.append({
             'n': n, 'step': step_id, 'track': track, 'cls': cls, 'h1': h1,
@@ -466,7 +486,7 @@ def derive(data: dict, kit: Kit) -> dict:
             'art': render_art(art, kit, lesson_dir, alt or title, used),
             'timer': int(timer) if timer else 0,
             'timer_label': minutes_label(timer) if timer else '',
-            'link': link,
+            'link': link, 'link_label': link_label,
         })
         return n
 
@@ -556,6 +576,16 @@ def derive(data: dict, kit: Kit) -> dict:
                               art=v.get('art'), timer=v.get('timer'), cls='s-exit', alt=v.get('alt'), track=track)
                 b['n'], b['first'] = n, first is None
                 first = first or n
+            elif typ == 'source_slide' and isinstance(v, dict):
+                # an image that exists only in the original deck (a painting, game cards, a photo): the teacher
+                # switches to that deck; our deck holds a placeholder slide that says where to (skill-fixes #24)
+                b['label'] = source_label(source_slides(v) or [0])
+                b['url'] = deck_url
+                n = add_slide(step_id, kicker='מהמצגת המקורית', title='עוברים למצגת המקורית', sub=b['label'],
+                              art=v.get('art') or 'laptop', link=deck_url or None, link_label='למצגת המקורית ←',
+                              cls='s-source', alt=v.get('alt') or 'מחשב נייד — עוברים למצגת המקורית', track=track)
+                b['n'], b['first'] = n, first is None
+                first = first or n
             elif typ == 'tracks' and isinstance(v, list) and track is None:
                 tracks = []
                 for ti, tr in enumerate(v[:2]):
@@ -638,6 +668,11 @@ def derive(data: dict, kit: Kit) -> dict:
                 prep.append(Markup(f'{escape(prefix)}הסרטון <a href="{escape(b.get("link") or vv.get("url", ""))}" '
                                    f'target="_blank" rel="noopener">״{escape(vv.get("title", ""))}״</a>{escape(length)} '
                                    f'— פתוח במחשב הכיתה, {marks}{span}'))
+            elif b['type'] == 'source_slide' and isinstance(b['v'], dict):
+                deck = (Markup('<a href="{}" target="_blank" rel="noopener">המצגת המקורית</a>').format(b['url'])
+                        if b.get('url') else Markup('המצגת המקורית'))
+                prep.append(Markup('{}{} — פתוחה במחשב הכיתה לצד המצגת שלנו; מציגים ממנה את {} ({})').format(
+                    prefix, deck, b['label'], where))
             elif b['type'] == 'exit' and isinstance(b['v'], dict):
                 prep.append(md({'board': 'פתקים או חצאי דפים לכרטיס היציאה, לכל הכיתה',
                                 'sticky': 'פתקיות דביקות לכרטיס היציאה, לכל הכיתה',
