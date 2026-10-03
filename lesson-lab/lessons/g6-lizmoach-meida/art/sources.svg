@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מקורות המידע (מקור: שקפים 8, 11) — 15 המקורות שהכיתה ממיינת; צבעים ניטרליים בכוונה -->
+  <g filter="url(#rough)">
+    <rect x="20" y="24" width="580" height="492" rx="56" fill="#e6f2f1"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif">
+    <text x="470" y="78" font-size="38" fill="#3f8f8d">ויקיפדיה</text>
+    <text x="300" y="78" font-size="42" fill="#4a8571">חברים</text>
+    <text x="128" y="78" font-size="36" fill="#13100e">Google</text>
+    <text x="448" y="152" font-size="34" fill="#6c60b0">קרובי משפחה</text>
+    <text x="230" y="152" font-size="34" fill="#13100e">אינסטגרם</text>
+    <text x="86" y="152" font-size="32" fill="#3f8f8d">בלוגים</text>
+    <text x="410" y="226" font-size="34" fill="#13100e">מדריכים / מורים</text>
+    <text x="140" y="226" font-size="38" fill="#6c60b0">שמועות</text>
+    <text x="470" y="300" font-size="32" fill="#3f8f8d">כתבות ברשת</text>
+    <text x="290" y="300" font-size="34" fill="#6c60b0">עיתונים</text>
+    <text x="120" y="300" font-size="38" fill="#4a8571">ספרים</text>
+    <text x="450" y="374" font-size="34" fill="#13100e">יועצת ביה״ס</text>
+    <text x="190" y="374" font-size="36" fill="#3f8f8d">פייסבוק</text>
+    <text x="400" y="452" font-size="32" fill="#4a8571">תוכניות טלוויזיה</text>
+    <text x="136" y="452" font-size="38" fill="#13100e">סרטים</text>
+  </g>
+</svg>

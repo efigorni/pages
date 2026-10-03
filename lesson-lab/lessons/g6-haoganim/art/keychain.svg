@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מחזיק המפתחות: חישוק מתכת, ושלושה עוגנים צבעוניים תלויים עליו (ציור ייעודי — אין עוגן ומחזיק מפתחות בערכה) -->
+  <g filter="url(#rough)">
+    <circle cx="310" cy="112" r="74" fill="none" stroke="#847c74" stroke-width="14"/>
+    <g stroke="#847c74" stroke-width="6" stroke-linecap="round">
+      <path d="M258 166 L170 262"/>
+      <path d="M310 190 V262"/>
+      <path d="M362 166 L450 262"/>
+    </g>
+    <g transform="rotate(12 170 274) translate(90 250) scale(.8)" color="#63b1af">
+      <circle cx="100" cy="30" r="19" fill="none" stroke="currentColor" stroke-width="13"/>
+      <rect x="88" y="46" width="24" height="170" rx="12" fill="currentColor"/>
+      <rect x="40" y="62" width="120" height="22" rx="11" fill="currentColor"/>
+      <path d="M28 150 Q34 226 100 226 Q166 226 172 150" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round"/>
+      <path d="M27 104 L54 160 L2 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M173 104 L146 160 L198 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <rect x="100" y="46" width="12" height="170" rx="6" fill="#13100e" opacity=".13"/>
+    </g>
+    <g transform="translate(230 250) scale(.8)" color="#f7ae4d">
+      <circle cx="100" cy="30" r="19" fill="none" stroke="currentColor" stroke-width="13"/>
+      <rect x="88" y="46" width="24" height="170" rx="12" fill="currentColor"/>
+      <rect x="40" y="62" width="120" height="22" rx="11" fill="currentColor"/>
+      <path d="M28 150 Q34 226 100 226 Q166 226 172 150" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round"/>
+      <path d="M27 104 L54 160 L2 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M173 104 L146 160 L198 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <rect x="100" y="46" width="12" height="170" rx="6" fill="#13100e" opacity=".13"/>
+    </g>
+    <g transform="rotate(-12 450 274) translate(370 250) scale(.8)" color="#8c82c1">
+      <circle cx="100" cy="30" r="19" fill="none" stroke="currentColor" stroke-width="13"/>
+      <rect x="88" y="46" width="24" height="170" rx="12" fill="currentColor"/>
+      <rect x="40" y="62" width="120" height="22" rx="11" fill="currentColor"/>
+      <path d="M28 150 Q34 226 100 226 Q166 226 172 150" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round"/>
+      <path d="M27 104 L54 160 L2 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M173 104 L146 160 L198 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <rect x="100" y="46" width="12" height="170" rx="6" fill="#13100e" opacity=".13"/>
+    </g>
+  </g>
+</svg>

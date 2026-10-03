@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- משלוח מנות: קופסת מתנה עם סרט (ציור ייעודי — אין מתנה בערכה), ומסכת פורים לידה -->
+  <g filter="url(#rough)">
+    <rect x="250" y="236" width="300" height="236" rx="14" fill="#8c82c1"/>
+    <rect x="236" y="192" width="328" height="64" rx="12" fill="#8c82c1"/>
+    <rect x="236" y="192" width="328" height="64" rx="12" fill="#13100e" opacity=".15"/>
+    <rect x="378" y="192" width="44" height="280" fill="#f7ae4d"/>
+    <path d="M400 190 C360 120 300 120 304 156 C308 190 370 192 400 190 Z" fill="#f7ae4d"/>
+    <path d="M400 190 C440 120 500 120 496 156 C492 190 430 192 400 190 Z" fill="#f7ae4d"/>
+    <path d="M400 190 C372 150 336 140 326 152" fill="none" stroke="#13100e" stroke-width="4" opacity=".15" stroke-linecap="round"/>
+    <circle cx="400" cy="188" r="16" fill="#f7ae4d"/>
+    <path d="M276 296 C276 340 284 380 300 420" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity=".35"/>
+    <use href="#mask" x="24" y="60" width="250" height="162.5" color="#e57373"/>
+  </g>
+</svg>

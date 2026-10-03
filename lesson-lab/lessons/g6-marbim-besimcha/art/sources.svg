@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מקורות השמחה (שקף 13 במקור): ארבעה תחומים — גוף, חברה, רגש, מחשבה — בכל אחד סמל ומילה -->
+  <g filter="url(#rough)">
+    <rect x="322" y="24" width="270" height="236" rx="22" fill="#e6f2f1"/>
+    <rect x="28" y="24" width="270" height="236" rx="22" fill="#fdf0dd"/>
+    <rect x="322" y="280" width="270" height="236" rx="22" fill="#eeecf7"/>
+    <rect x="28" y="280" width="270" height="236" rx="22" fill="#e7f1ec"/>
+    <use href="#kid-hand" x="400" y="36" width="80" height="160" color="#63b1af"/>
+    <use href="#pair" x="104" y="44" width="120" height="131" />
+    <use href="#heart" x="392" y="300" width="130" height="117" color="#e57373"/>
+    <use href="#bulb" x="117" y="292" width="92" height="114" color="#f7ae4d"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="40" fill="#13100e" text-anchor="middle">
+    <text x="457" y="238">גוף</text>
+    <text x="163" y="238">חברה</text>
+    <text x="457" y="494">רגש</text>
+    <text x="163" y="494">מחשבה</text>
+  </g>
+</svg>

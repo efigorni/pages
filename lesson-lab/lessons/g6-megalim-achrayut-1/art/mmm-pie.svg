@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- חמש המ"מים — התרשים שבשקפים 22–27 של המקור (תמונה), אותם שמות ואותו סדר; התיאורים — שקפים 23–27 -->
+  <g filter="url(#rough)">
+    <path d="M310 270 L310.0 30.0 A240 240 0 0 1 538.3 195.8 Z" fill="#63b1af" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M310 270 L538.3 195.8 A240 240 0 0 1 451.1 464.2 Z" fill="#fdf0dd" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M310 270 L451.1 464.2 A240 240 0 0 1 168.9 464.2 Z" fill="#619f88" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M310 270 L168.9 464.2 A240 240 0 0 1 81.7 195.8 Z" fill="#8c82c1" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M310 270 L81.7 195.8 A240 240 0 0 1 310.0 30.0 Z" fill="#f7ae4d" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="310" cy="270" r="58" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif">
+    <text x="399" y="130" font-size="30">מדברים</text>
+    <text x="399" y="164" font-size="30">תכל׳ס</text>
+    <text x="455" y="283" font-size="30">משהים רגע</text>
+    <text x="455" y="317" font-size="30">ופועלים</text>
+    <text x="455" y="351" font-size="30">מאוחר יותר</text>
+    <text x="310" y="405" font-size="30">מדווחים</text>
+    <text x="310" y="439" font-size="30">ומשתפים</text>
+    <text x="165" y="300" font-size="30">מארגנים</text>
+    <text x="165" y="334" font-size="30">משלחת</text>
+    <text x="221" y="130" font-size="30">משנים נושא</text>
+    <text x="221" y="164" font-size="30">ומצב</text>
+    <text x="310" y="273" font-size="40">מ״ם</text>
+  </g>
+</svg>

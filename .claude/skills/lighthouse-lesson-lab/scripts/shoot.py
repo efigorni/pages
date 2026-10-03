@@ -19,6 +19,10 @@ and checks the layout automatically:
     picture leaves the slide
 The ✗ lines are errors (exit code 1). Then LOOK at every sheet — the checks can't see a bad picture.
 
+Two runs on the same lesson never overlap: the second waits for the first (a lock in .shots/). Overlapping runs
+wrote and deleted each other's files, and the first phone sheet came out repeating the top of the page
+(skill-fixes #20).
+
 Uses the installed Google Chrome through Playwright (channel="chrome"), like export_pdf.py; with no Chrome:
 `uv run --with playwright playwright install chromium` and pass --bundled.
 """
@@ -28,6 +32,11 @@ import math
 import shutil
 import sys
 from pathlib import Path
+
+try:
+    import fcntl
+except ImportError:  # not on macOS/Linux: no lock, runs on the same lesson must not overlap
+    fcntl = None
 
 STRIP = 1500          # px of page per strip/tile
 SLIDE_W, SLIDE_H = 1440, 810
@@ -100,8 +109,44 @@ def wait_ready(target, page_or_frame_is_deck: bool = False):
     target.evaluate('document.fonts.ready.then(() => true)')
 
 
-def sheet(page, out: Path, name: str, items: list[tuple[str, str]], width: int, cols: int, caption_color: str = '#13100e'):
-    """Compose PNGs into one image: items = [(png file name relative to out, caption)]."""
+# Two animation frames: whatever changed before (a scroll, a slide, a resize) has been painted. A fixed pause
+# is too short when several agents shoot at once.
+SETTLE = 'new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => r(true))))'
+
+
+def scroll_to(page, y: int) -> bool:
+    """Scroll the page to y and wait until that position is painted; False if it never got there."""
+    page.evaluate(f'window.scrollTo(0, {y})')
+    try:
+        page.wait_for_function(f'Math.abs(window.scrollY - {y}) < 2', timeout=5000)
+    except Exception:  # playwright's TimeoutError
+        return False
+    page.evaluate(SETTLE)
+    return True
+
+
+def claim(out: Path):
+    """Lock the lesson's .shots/ for this run and empty it (all but the lock). A second shoot.py on the same lesson
+    waits here: overlapping runs deleted and rewrote each other's files (skill-fixes #20)."""
+    out.mkdir(exist_ok=True)
+    lock = open(out / '.lock', 'w')
+    if fcntl:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            print(f'   … shoot.py כבר רץ על {out.parent.name} — מחכה שיסיים', flush=True)
+            fcntl.flock(lock, fcntl.LOCK_EX)
+    for p in out.iterdir():
+        if p.name != '.lock':
+            shutil.rmtree(p) if p.is_dir() else p.unlink()
+    return lock
+
+
+def sheet(browser, out: Path, name: str, items: list[tuple[str, str]], width: int, cols: int,
+          caption_color: str = '#13100e'):
+    """Compose PNGs into one image: items = [(png file name relative to out, caption)]. A fresh page whose viewport is
+    the whole sheet, so the capture is the viewport itself — a full_page capture (Chrome's capture beyond the
+    viewport) could repeat the top band of the sheet down the image (skill-fixes #20)."""
     cells = ''.join(
         f'<figure><img src="{src}" width="{width}"><figcaption style="color:{"#c94f4f" if cap.startswith("✗") else caption_color}">'
         f'{cap}</figcaption></figure>' for src, cap in items)
@@ -112,20 +157,34 @@ def sheet(page, out: Path, name: str, items: list[tuple[str, str]], width: int, 
             f'figcaption{{padding:4px 10px}}</style></head><body><div class="g">{cells}</div></body></html>')
     tmp = out / f'_{name}.html'
     tmp.write_text(html, encoding='utf-8')
-    page.set_viewport_size({'width': cols * width + (cols + 1) * 14, 'height': 600})
-    page.goto(uri(tmp))
-    page.wait_for_load_state('load')
-    page.screenshot(path=str(out / f'{name}.png'), full_page=True)
-    tmp.unlink()
+    w = cols * width + (cols + 1) * 14
+    page = browser.new_page(viewport={'width': w, 'height': 600})
+    try:
+        page.goto(uri(tmp))
+        page.wait_for_load_state('load')
+        page.evaluate('Promise.allSettled([...document.images].map(i => i.decode())).then(() => true)')
+        h = page.evaluate('Math.ceil(document.querySelector(".g").getBoundingClientRect().height)')
+        page.set_viewport_size({'width': w, 'height': max(int(h), 100)})
+        page.evaluate(SETTLE)
+        page.screenshot(path=str(out / f'{name}.png'))
+    finally:
+        page.close()
+        tmp.unlink(missing_ok=True)
 
 
 def shoot_lesson(d: Path, browser) -> tuple[list[str], list[str], list[str]]:
     """Returns (errors, warnings, sheets) for one lesson folder."""
-    errors, warnings, sheets = [], [], []
     out = d / '.shots'
-    if out.exists():
-        shutil.rmtree(out)
-    (out / 'slides').mkdir(parents=True)
+    lock = claim(out)
+    try:
+        return _shoot(d, out, browser)
+    finally:
+        lock.close()
+
+
+def _shoot(d: Path, out: Path, browser) -> tuple[list[str], list[str], list[str]]:
+    errors, warnings, sheets = [], [], []
+    (out / 'slides').mkdir()
     (out / 'strips').mkdir()
 
     # ---- the deck: every slide, all fragments visible, scale 1
@@ -140,6 +199,7 @@ def shoot_lesson(d: Path, browser) -> tuple[list[str], list[str], list[str]]:
     for i in range(total):
         page.evaluate(f'Reveal.slide({i})')
         page.wait_for_timeout(80)
+        page.evaluate(SETTLE)
         problems = page.evaluate(SLIDE_CHECK)
         for p in problems:
             (warnings if p.startswith('האיור קטן') else errors).append(f'שקף {i + 1}: {p}')
@@ -147,11 +207,11 @@ def shoot_lesson(d: Path, browser) -> tuple[list[str], list[str], list[str]]:
         page.screenshot(path=str(out / name))
         bad = any(not p.startswith('האיור קטן') for p in problems)
         captions.append((name, f'{"✗ " if bad else ""}שקף {i + 1}'))
+    page.close()
     for k in range(math.ceil(total / PER_SHEET)):
         name = f'slides-{k + 1}'
-        sheet(page, out, name, captions[k * PER_SHEET:(k + 1) * PER_SHEET], SHEET_SLIDE_W, 2)
+        sheet(browser, out, name, captions[k * PER_SHEET:(k + 1) * PER_SHEET], SHEET_SLIDE_W, 2)
         sheets.append(str(out / f'{name}.png'))
-    page.close()
 
     # ---- המערך at a true 420px: the page inside a 420px-wide iframe, as tall as the page itself (so the page
     # never scrolls and has no scrollbar); the wrapper scrolls instead, one 1500px viewport at a time — a single
@@ -170,6 +230,7 @@ def shoot_lesson(d: Path, browser) -> tuple[list[str], list[str], list[str]]:
     height = frame.evaluate('document.documentElement.scrollHeight')
     page.evaluate(f'document.getElementById("f").style.height = "{height}px"')
     page.wait_for_timeout(150)
+    page.evaluate(SETTLE)
     inner = frame.evaluate('[innerWidth, document.documentElement.clientWidth]')
     if inner != [PHONE, PHONE]:
         warnings.append(f'רוחב הטלפון יצא {inner} ולא {PHONE}px')
@@ -178,17 +239,17 @@ def shoot_lesson(d: Path, browser) -> tuple[list[str], list[str], list[str]]:
     strips = []
     for k in range(math.ceil(height / STRIP)):
         h = min(STRIP, height - k * STRIP)
-        page.evaluate(f'window.scrollTo(0, {k * STRIP})')
-        page.wait_for_timeout(60)
+        if not scroll_to(page, k * STRIP):
+            warnings.append(f'רצועת הטלפון {k + 1}: הגלילה לא הגיעה ל-{k * STRIP} — הצילום שלה לא אמין')
         name = f'strips/phone-{k + 1:02d}.png'
         page.screenshot(path=str(out / name))
         strips.append((name, f'{PHONE}px · {k * STRIP}–{k * STRIP + h}'))
-    wrapper.unlink()
+    page.close()
+    wrapper.unlink(missing_ok=True)
     for k in range(math.ceil(len(strips) / 3)):
         name = f'phone-{k + 1}'
-        sheet(page, out, name, strips[k * 3:(k + 1) * 3], PHONE, 3)
+        sheet(browser, out, name, strips[k * 3:(k + 1) * 3], PHONE, 3)
         sheets.append(str(out / f'{name}.png'))
-    page.close()
 
     # ---- המערך at desktop width: the reading column, one 1500px viewport at a time (same reason as above)
     page = browser.new_page(viewport={'width': DESK, 'height': STRIP})
@@ -202,8 +263,8 @@ def shoot_lesson(d: Path, browser) -> tuple[list[str], list[str], list[str]]:
         h = min(STRIP, height - k * STRIP)
         if h < STRIP:  # the last tile: a shorter viewport, so the scroll lands exactly on k·STRIP
             page.set_viewport_size({'width': DESK, 'height': h})
-        page.evaluate(f'window.scrollTo(0, {k * STRIP})')
-        page.wait_for_timeout(60)
+        if not scroll_to(page, k * STRIP):
+            warnings.append(f'אריח שולחני {k + 1}: הגלילה לא הגיעה ל-{k * STRIP} — הצילום שלו לא אמין')
         name = f'desk-{k + 1}.png'
         page.screenshot(path=str(out / name), clip={'x': x, 'y': 0, 'width': w, 'height': h})
         sheets.append(str(out / name))

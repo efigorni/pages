@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מנקודה לסימן שאלה: נקודה, חץ, סימן שאלה, חץ, סימן קריאה — מלמעלה מימין ועד למטה משמאל (מקור: שקפים 24–27) -->
+  <g filter="url(#rough)">
+    <circle cx="500" cy="120" r="78" fill="#eeecf7"/>
+    <circle cx="310" cy="270" r="78" fill="#fdf0dd"/>
+    <circle cx="120" cy="420" r="78" fill="#e7f1ec"/>
+    <use href="#arrow" x="345" y="162" width="120" height="65" color="#847c74" transform="rotate(-38 405 195)"/>
+    <use href="#arrow" x="155" y="312" width="120" height="65" color="#847c74" transform="rotate(-38 215 345)"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="160" fill="#13100e" text-anchor="middle" dominant-baseline="central">
+    <text x="500" y="98">.</text>
+    <text x="310" y="272">?</text>
+    <text x="120" y="422">!</text>
+  </g>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מיפוי אישי וכיתתי: טבלה של ארבע משבצות — לימודי/חברתי × הזדמנויות/חששות, ופתקים בתוכה (מקור: שקפים 19–20, 22) -->
+  <g filter="url(#rough)">
+    <rect x="258" y="112" width="210" height="190" rx="12" fill="#e7f1ec"/>
+    <rect x="38" y="112" width="210" height="190" rx="12" fill="#eeecf7"/>
+    <rect x="258" y="312" width="210" height="190" rx="12" fill="#e7f1ec"/>
+    <rect x="38" y="312" width="210" height="190" rx="12" fill="#eeecf7"/>
+    <use href="#sticky" x="300" y="146" width="108" height="108" color="#f7ae4d"/>
+    <use href="#sticky" x="86" y="160" width="108" height="108" color="#8c82c1"/>
+    <use href="#sticky" x="318" y="352" width="108" height="108" color="#63b1af"/>
+    <use href="#sticky" x="74" y="344" width="108" height="108" color="#f7ae4d"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="36" fill="#13100e" text-anchor="middle" dominant-baseline="central">
+    <text x="363" y="72">הזדמנויות</text>
+    <text x="143" y="72">חששות</text>
+    <text x="540" y="207">לימודי</text>
+    <text x="540" y="407">חברתי</text>
+  </g>
+</svg>

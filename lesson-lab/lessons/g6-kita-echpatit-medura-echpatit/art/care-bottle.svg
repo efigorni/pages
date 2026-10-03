@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- בקבוק האכפתיות: בקבוק ובו פתקים מגולגלים, ופתק אחד שנשלף (ציור ייעודי — הבקבוק שבערכה הוא לשיעורי אלכוהול) -->
+  <g filter="url(#rough)">
+    <path d="M282 110 H338 V160 C338 180 395 190 395 226 V446 Q395 480 361 480 H259 Q225 480 225 446 V226 C225 190 282 180 282 160 Z" fill="#e6f2f1" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="252" y="418" width="96" height="26" rx="13" fill="#f7ae4d" transform="rotate(-10 300 431)"/>
+    <rect x="270" y="384" width="96" height="26" rx="13" fill="#8c82c1" transform="rotate(14 318 397)"/>
+    <rect x="250" y="350" width="96" height="26" rx="13" fill="#fff" stroke="#13100e" stroke-width="3.5" transform="rotate(-6 298 363)"/>
+    <rect x="268" y="316" width="96" height="26" rx="13" fill="#f7ae4d" transform="rotate(18 316 329)"/>
+    <rect x="254" y="284" width="96" height="26" rx="13" fill="#8c82c1" transform="rotate(-14 302 297)"/>
+    <rect x="270" y="250" width="96" height="26" rx="13" fill="#fff" stroke="#13100e" stroke-width="3.5" transform="rotate(8 318 263)"/>
+    <path d="M246 252 C242 300 242 360 246 412" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".75"/>
+    <rect x="274" y="84" width="72" height="34" rx="8" fill="#63b1af"/>
+    <use href="#sticky" x="64" y="320" width="150" height="150" color="#f7ae4d"/>
+  </g>
+  <text x="139" y="400" font-family="Secular One, Arial Hebrew, sans-serif" font-size="72" fill="#13100e" text-anchor="middle" dominant-baseline="middle">?</text>
+</svg>

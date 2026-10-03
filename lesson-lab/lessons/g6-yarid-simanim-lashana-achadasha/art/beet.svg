@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- דוכן הסלק: סלק עם עלים (ציור ייעודי — אין סלק בערכה), ומנעול — הפתקים נשארים סגורים -->
+  <g filter="url(#rough)">
+    <g transform="translate(220 96) scale(1.25)">
+      <path d="M100 96 C90 70 70 44 74 14 C96 26 108 58 100 96 Z" fill="#619f88"/>
+      <path d="M100 96 C108 64 130 36 162 30 C160 62 134 86 100 96 Z" fill="#619f88"/>
+      <path d="M100 96 C80 76 50 64 24 74 C38 96 70 104 100 96 Z" fill="#619f88"/>
+      <path d="M100 96 C96 72 90 50 80 28 M100 96 C112 72 128 52 150 40 M100 96 C80 84 58 78 36 80" fill="none" stroke="#13100e" stroke-width="3.5" opacity=".15" stroke-linecap="round"/>
+      <path d="M100 92 C148 92 176 128 172 166 C168 202 132 222 108 244 C104 248 96 248 92 244 C68 222 32 202 28 166 C24 128 52 92 100 92 Z" fill="#c94f4f"/>
+      <path d="M100 244 C100 254 98 262 92 270" fill="none" stroke="#c94f4f" stroke-width="6" stroke-linecap="round"/>
+      <path d="M54 150 C56 128 70 114 90 108" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".45"/>
+    </g>
+    <use href="#lock" x="50" y="290" width="136" height="170" color="#8c82c1"/>
+  </g>
+</svg>

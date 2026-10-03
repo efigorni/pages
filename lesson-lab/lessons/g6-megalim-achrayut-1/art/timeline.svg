@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ציר הזמן של האירוע (מקור: שקף 14): לפני — מחשבה, תוך כדי — החבורה, אחרי — מדברים -->
+  <g filter="url(#rough)">
+    <path d="M572 330 H82" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <path d="M46 330 L86 306 L86 354 Z" fill="#847c74" stroke="#847c74" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="490" cy="330" r="26" fill="#63b1af"/>
+    <circle cx="310" cy="330" r="26" fill="#f7ae4d"/>
+    <circle cx="130" cy="330" r="26" fill="#8c82c1"/>
+    <use href="#thought" x="420" y="120" width="140" height="133"/>
+    <use href="#crowd" x="210" y="160" width="200" height="125"/>
+    <use href="#speech" x="60" y="140" width="140" height="119"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif">
+    <text x="490" y="396" font-size="36">לפני</text>
+    <text x="310" y="396" font-size="36">תוך כדי</text>
+    <text x="130" y="396" font-size="36">אחרי</text>
+  </g>
+</svg>

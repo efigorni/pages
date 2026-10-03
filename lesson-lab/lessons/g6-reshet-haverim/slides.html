@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>רשת של חברים · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-hand" viewBox="0 0 120 240" data-cat="people" data-he="דמות מצביעה" data-color="#f7ae4d">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+      <path d="M84 140 L103 64" stroke="currentColor" stroke-width="17" stroke-linecap="round" />
+      <circle cx="104" cy="60" r="11" />
+    </g>
+  </symbol>
+
+  <symbol id="pair" viewBox="0 0 220 240" data-cat="people" data-he="זוג">
+    <path d="M80 140 L110 186" stroke="#63b1af" stroke-width="15" stroke-linecap="round" />
+    <path d="M140 140 L110 186" stroke="#f7ae4d" stroke-width="15" stroke-linecap="round" />
+    <g fill="#63b1af" transform="translate(-6 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(106 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="group3" viewBox="0 0 320 240" data-cat="people" data-he="שלישייה">
+    <g fill="#8c82c1" transform="translate(100 -10)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(4 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#63b1af" transform="translate(196 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="thought" viewBox="0 0 200 190" data-cat="talk" data-he="ענן מחשבה">
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M184 80 A25 25 0 0 1 164.3 116 A32 32 0 0 1 114.6 135.1 A34 34 0 0 1 58 128.5 A28 28 0 0 1 21.1 99.2 A23 23 0 0 1 21.1 60.8 A28 28 0 0 1 58 31.5 A34 34 0 0 1 114.6 24.9 A32 32 0 0 1 164.3 44 A25 25 0 0 1 184 80 Z" />
+      <circle cx="148" cy="160" r="10" />
+      <circle cx="170" cy="178" r="6" />
+    </g>
+  </symbol>
+
+  <symbol id="phone" viewBox="0 0 120 200" data-cat="screens" data-he="טלפון" data-color="#13100e">
+    <rect x="12" y="6" width="96" height="188" rx="18" fill="currentColor" />
+    <rect x="19" y="14" width="82" height="172" rx="12" fill="#fff" />
+    <rect x="46" y="20" width="28" height="8" rx="4" fill="currentColor" />
+    <rect x="44" y="176" width="32" height="4" rx="2" fill="#d9d1c6" />
+  </symbol>
+
+  <symbol id="lock" viewBox="0 0 160 200" data-cat="screens" data-he="מנעול (פרטיות)" data-color="#8c82c1">
+    <path d="M46 96 V64 A34 34 0 0 1 114 64 V96" fill="none" stroke="#13100e" stroke-width="14" />
+    <rect x="20" y="88" width="120" height="100" rx="18" fill="currentColor" />
+    <circle cx="80" cy="128" r="12" fill="#13100e" />
+    <path d="M74 132 L70 160 H90 L86 132 Z" fill="#13100e" />
+  </symbol>
+
+  <symbol id="key" viewBox="0 0 220 120" data-cat="screens" data-he="מפתח" data-color="#f7ae4d">
+    <path fill="currentColor" fill-rule="evenodd" d="M52 22 A38 38 0 1 1 52 98 A38 38 0 1 1 52 22 Z M52 46 A14 14 0 1 0 52 74 A14 14 0 1 0 52 46 Z" />
+    <rect x="84" y="50" width="122" height="20" rx="6" fill="currentColor" />
+    <rect x="160" y="64" width="14" height="28" rx="4" fill="currentColor" />
+    <rect x="184" y="64" width="14" height="20" rx="4" fill="currentColor" />
+  </symbol>
+
+  <symbol id="network" viewBox="0 0 220 200" data-cat="screens" data-he="רשת">
+    <g stroke="#13100e" stroke-width="5" stroke-linecap="round">
+      <path d="M110 100 L40 44 M110 100 L180 36 M110 100 L194 128 M110 100 L128 176 M110 100 L28 140 M40 44 L180 36 M40 44 L28 140 M194 128 L128 176 M180 36 L194 128" />
+    </g>
+    <g stroke="#fff" stroke-width="5" paint-order="stroke">
+      <circle cx="110" cy="100" r="26" fill="#f7ae4d" />
+      <circle cx="40" cy="44" r="18" fill="#63b1af" />
+      <circle cx="180" cy="36" r="16" fill="#8c82c1" />
+      <circle cx="194" cy="128" r="18" fill="#619f88" />
+      <circle cx="128" cy="176" r="16" fill="#63b1af" />
+      <circle cx="28" cy="140" r="16" fill="#8c82c1" />
+    </g>
+  </symbol>
+
+  <symbol id="camera" viewBox="0 0 220 170" data-cat="screens" data-he="מצלמה" data-color="#13100e">
+    <path d="M72 42 L86 18 H134 L148 42 Z" fill="currentColor" />
+    <rect x="12" y="38" width="196" height="120" rx="18" fill="currentColor" />
+    <rect x="28" y="52" width="26" height="14" rx="4" fill="#f7ae4d" />
+    <circle cx="110" cy="98" r="44" fill="#fff" />
+    <circle cx="110" cy="98" r="32" fill="#63b1af" />
+    <circle cx="98" cy="86" r="9" fill="#fff" opacity=".8" />
+  </symbol>
+
+  
+  <symbol id="house" viewBox="0 0 220 200" data-cat="places" data-he="בית">
+    <path d="M10 96 L110 14 L210 96 Z" fill="#f7ae4d" />
+    <rect x="34" y="90" width="152" height="100" rx="8" fill="#fff" stroke="#13100e" stroke-width="5" />
+    <rect x="93" y="128" width="34" height="62" rx="6" fill="#63b1af" />
+    <g fill="#eeecf7" stroke="#13100e" stroke-width="4">
+      <rect x="48" y="110" width="32" height="28" rx="4" /><rect x="140" y="110" width="32" height="28" rx="4" />
+    </g>
+  </symbol>
+
+  <symbol id="school" viewBox="0 0 260 210" data-cat="places" data-he="בית ספר">
+    <path d="M130 52 V14" stroke="#13100e" stroke-width="4" stroke-linecap="round" />
+    <path d="M132 14 L164 23 L132 33 Z" fill="#e57373" />
+    <path d="M84 96 L130 50 L176 96 Z" fill="#8c82c1" />
+    <rect x="22" y="96" width="216" height="104" rx="6" fill="#fff" stroke="#13100e" stroke-width="5" />
+    <rect x="12" y="86" width="236" height="16" rx="5" fill="#8c82c1" />
+    <circle cx="130" cy="74" r="12" fill="#fff" stroke="#13100e" stroke-width="3.5" />
+    <path d="M130 74 V66 M130 74 H136" stroke="#13100e" stroke-width="3" stroke-linecap="round" />
+    <g fill="#e6f2f1" stroke="#13100e" stroke-width="4">
+      <rect x="38" y="118" width="26" height="30" rx="3" /><rect x="74" y="118" width="26" height="30" rx="3" />
+      <rect x="160" y="118" width="26" height="30" rx="3" /><rect x="196" y="118" width="26" height="30" rx="3" />
+    </g>
+    <rect x="110" y="140" width="40" height="60" rx="4" fill="#f7ae4d" />
+    <path d="M130 140 V200" stroke="#13100e" stroke-width="3.5" />
+  </symbol>
+
+  <symbol id="hands-help" viewBox="0 0 220 220" data-cat="safety" data-he="ידיים עוזרות">
+   <g transform="translate(110 110) scale(.92) translate(-110 -100)">
+    <g transform="translate(64 158) rotate(40)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#3f8f8d" />
+      <path d="M13 -12 L27 -32" stroke="#63b1af" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#63b1af" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+    <g transform="translate(156 42) rotate(220)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#e08f36" />
+      <path d="M13 -12 L27 -32" stroke="#f7ae4d" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#f7ae4d" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+   </g>
+  </symbol>
+
+  <symbol id="book" viewBox="0 0 220 170" data-cat="learning" data-he="ספר" data-color="#8c82c1">
+    <path d="M110 50 C86 36 40 32 6 44 V160 C40 150 86 152 110 166 C134 152 180 150 214 160 V44 C180 32 134 36 110 50 Z" fill="currentColor" />
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M110 40 C86 26 46 24 18 34 V146 C46 136 86 138 110 152 Z" />
+      <path d="M110 40 C134 26 174 24 202 34 V146 C174 136 134 138 110 152 Z" />
+    </g>
+    <g fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round">
+      <path d="M36 62 C56 56 76 58 94 64 M36 86 C56 80 76 82 94 88 M36 110 C56 104 70 106 84 110" />
+      <path d="M184 62 C164 56 144 58 126 64 M184 86 C164 80 144 82 126 88 M184 110 C164 104 150 106 136 110" />
+    </g>
+  </symbol>
+
+  <symbol id="bulb" viewBox="0 0 170 210" data-cat="learning" data-he="נורה (רעיון)" data-color="#f7ae4d">
+    <g stroke="#e08f36" stroke-width="7" stroke-linecap="round">
+      <path d="M85 32 V16 M126 47 L136 35 M44 47 L34 35 M146 86 L161 83 M24 86 L9 83" />
+    </g>
+    <path d="M85 42 C55 42 31 66 31 96 C31 118 44 132 56 146 V162 H114 V146 C126 132 139 118 139 96 C139 66 115 42 85 42 Z" fill="currentColor" />
+    <path d="M54 94 C54 76 64 66 80 63" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".6" />
+    <rect x="56" y="158" width="58" height="30" rx="6" fill="#847c74" />
+    <path d="M60 168 H110 M60 178 H110" stroke="#fff" stroke-width="3" opacity=".6" />
+    <path d="M70 188 H100 L92 200 H78 Z" fill="#13100e" />
+  </symbol>
+
+  <symbol id="calendar" viewBox="0 0 200 200" data-cat="learning" data-he="לוח שנה" data-color="#8c82c1">
+    <rect x="18" y="30" width="164" height="154" rx="14" fill="#fff" />
+    <path d="M18 72 V44 A14 14 0 0 1 32 30 H168 A14 14 0 0 1 182 44 V72 Z" fill="currentColor" />
+    <rect x="18" y="30" width="164" height="154" rx="14" fill="none" stroke="#13100e" stroke-width="5" />
+    <g fill="#13100e"><rect x="52" y="14" width="12" height="32" rx="6" /><rect x="136" y="14" width="12" height="32" rx="6" /></g>
+    <g fill="#e8e2da">
+      <rect x="36" y="88" width="24" height="20" rx="4" /><rect x="70" y="88" width="24" height="20" rx="4" /><rect x="106" y="88" width="24" height="20" rx="4" /><rect x="140" y="88" width="24" height="20" rx="4" />
+      <rect x="36" y="118" width="24" height="20" rx="4" /><rect x="70" y="118" width="24" height="20" rx="4" /><rect x="140" y="118" width="24" height="20" rx="4" />
+      <rect x="36" y="148" width="24" height="20" rx="4" /><rect x="70" y="148" width="24" height="20" rx="4" /><rect x="106" y="148" width="24" height="20" rx="4" />
+    </g>
+    <rect x="106" y="118" width="24" height="20" rx="4" fill="#f7ae4d" />
+    <circle cx="118" cy="128" r="18" fill="none" stroke="#e57373" stroke-width="4" />
+  </symbol>
+
+  
+  <symbol id="scale" viewBox="0 0 240 210" data-cat="choices" data-he="מאזניים">
+    <path d="M76 198 H164 L150 180 H90 Z" fill="#13100e" />
+    <rect x="114" y="40" width="12" height="146" fill="#13100e" />
+    <circle cx="120" cy="34" r="10" fill="#13100e" />
+    <rect x="24" y="50" width="192" height="10" rx="5" fill="#13100e" />
+    <path d="M40 60 L18 128 M40 60 L62 128 M200 60 L178 128 M200 60 L222 128" stroke="#13100e" stroke-width="4" />
+    <path d="M12 126 H68 C66 146 52 156 40 156 C28 156 14 146 12 126 Z" fill="#63b1af" />
+    <path d="M172 126 H228 C226 146 212 156 200 156 C188 156 174 146 172 126 Z" fill="#f7ae4d" />
+  </symbol>
+
+  <symbol id="thumb-up" viewBox="0 0 180 200" data-cat="choices" data-he="אגודל למעלה" data-color="#619f88">
+    <g>
+      <rect x="26" y="94" width="44" height="84" rx="6" fill="currentColor" />
+      <rect x="26" y="94" width="44" height="84" rx="6" fill="#13100e" opacity=".3" />
+      <path d="M68 174 V102 C68 94 72 90 78 86 L80 38 C80 18 116 18 116 38 L114 88 H142 A13 13 0 0 1 142 114 A12.5 12.5 0 0 1 142 139 A12 12 0 0 1 140 163 A11 11 0 0 1 132 174 Z" fill="currentColor" />
+      <path d="M114 114 H140 M114 139 H140 M114 163 H136" stroke="#fff" stroke-width="4.5" stroke-linecap="round" opacity=".8" />
+    </g>
+  </symbol>
+
+  <symbol id="thumb-down" viewBox="0 0 180 200" data-cat="choices" data-he="אגודל למטה" data-color="#e57373">
+    <g transform="rotate(180 90 100)">
+      <rect x="26" y="94" width="44" height="84" rx="6" fill="currentColor" />
+      <rect x="26" y="94" width="44" height="84" rx="6" fill="#13100e" opacity=".3" />
+      <path d="M68 174 V102 C68 94 72 90 78 86 L80 38 C80 18 116 18 116 38 L114 88 H142 A13 13 0 0 1 142 114 A12.5 12.5 0 0 1 142 139 A12 12 0 0 1 140 163 A11 11 0 0 1 132 174 Z" fill="currentColor" />
+      <path d="M114 114 H140 M114 139 H140 M114 163 H136" stroke="#fff" stroke-width="4.5" stroke-linecap="round" opacity=".8" />
+    </g>
+  </symbol>
+
+  <symbol id="arrow" viewBox="0 0 220 120" data-cat="choices" data-he="חץ (קדימה)" data-color="#f7ae4d">
+    <path d="M196 92 C150 30 90 30 54 64" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" />
+    <path d="M29 87 L38 35 L82 82 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="sun" viewBox="0 0 200 200" data-cat="growth" data-he="שמש" data-color="#f7ae4d">
+    <circle cx="100" cy="100" r="46" fill="currentColor" />
+    <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
+      <path d="M162 100 H186 M143.8 143.8 L160.8 160.8 M100 162 V186 M56.2 143.8 L39.2 160.8 M38 100 H14 M56.2 56.2 L39.2 39.2 M100 38 V14 M143.8 56.2 L160.8 39.2" />
+    </g>
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">התנהלות מיטבית ברשת ומניעת פגיעה לקראת היציאה לחופשת הקיץ · שיעור 3</div><h1>רשת של חברים</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש דמויות יחד, ורשת של עיגולים מחוברים מעליהן"><g filter="url(#rough)"><use href="#group3" x="120.0" y="268.0" width="330.0" height="247.5" color="#13100e"/><use href="#network" x="360.0" y="40.0" width="220.0" height="200.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מה הקשר? · אגודל למעלה או למטה</div><h2>״הכל אני יכול בחופש הגדול…״</h2><p class="sub">לייק? אגודל למעלה. לא בשבילי? אגודל למטה.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שמש, ומתחתיה אגודל למעלה ואגודל למטה"><g filter="url(#rough)"><use href="#sun" x="180.0" y="40.0" width="260.0" height="260.0" color="#f7ae4d"/><use href="#thumb-up" x="420.0" y="330.0" width="140.0" height="155.6" color="#619f88"/><use href="#thumb-down" x="60.0" y="330.0" width="140.0" height="155.6" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">בחופש הגדול… · 1 מתוך 3</div><h2>לייק, או לא בשבילי?</h2><ol class="pts"><li class="fragment">נשלים שעות שינה בחופשה, נישן לפחות עד הצהריים...</li><li class="fragment">ניפגש עם חברים כל יום בחופשה...</li><li class="fragment">נשחק במשחקי רשת לפחות שלוש שעות ביום...</li><li class="fragment">נהיה במסגרת של קייטנה במהלך חלק מחופשת הקיץ...</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג יד ביד, ושמש מעליו"><g filter="url(#rough)"><use href="#pair" x="280.0" y="220.0" width="270.0" height="294.5" color="#13100e"/><use href="#sun" x="70.0" y="50.0" width="170.0" height="170.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">בחופש הגדול… · 2 מתוך 3</div><h2>לייק, או לא בשבילי?</h2><ol class="pts"><li class="fragment">נבלה הרבה עם קרובים ובני משפחה בחופשה...</li><li class="fragment">ניסע לחופשה משפחתית...</li><li class="fragment">נלמד ונתרגל קצת במהלך החופשה...</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית, וספר פתוח לידו"><g filter="url(#rough)"><use href="#house" x="250.0" y="150.0" width="320.0" height="290.9" color="#13100e"/><use href="#book" x="50.0" y="330.0" width="190.0" height="146.8" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">בחופש הגדול… · 3 מתוך 3</div><h2>לייק, או לא בשבילי?</h2><ol class="pts"><li class="fragment">נקרא לפחות שני ספרים במהלך החופשה...</li><li class="fragment">נשתף ברשתות החברתיות בתמונות וסרטונים שמתעדים את חוויות הקיץ שלנו...</li><li class="fragment">נשתעמם בחופשת הקיץ...</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מצלמה, וספר פתוח לידה"><g filter="url(#rough)"><use href="#camera" x="270.0" y="150.0" width="300.0" height="231.8" color="#13100e"/><use href="#book" x="50.0" y="300.0" width="190.0" height="146.8" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">רגע חושבים…</div><h2>מה למדתם על עצמכם מתוך ההצבעות?</h2><p class="sub">ואיך תשלבו בחופש מגוון של פעילויות?</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות חושבת, ובענן המחשבה נורה דולקת"><g filter="url(#rough)"><use href="#thought" x="50.0" y="30.0" width="300.0" height="285.0" color="#13100e"/><use href="#bulb" x="158.0" y="76.0" width="90.0" height="111.2" color="#f7ae4d"/><use href="#kid-stand" x="400.0" y="228.0" width="140.0" height="280.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="7" data-track="screen-a">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כתב סתרים · בקבוצות</div><h2>פענחו את כתב הסתרים</h2><ol class="pts"><li class="fragment">ג=ה, ב=ר, א=ש, ד=ת, י=נ</li><li class="fragment">ו=ח, ז=ע, ט=ל, מ=ק, פ=כ, ס=צ</li><li class="fragment">פנכ טגנכהא חטאומ זק ורבנק <b>הק</b> כינק שט כינק.</li><li class="fragment">קכהא פנדדנ רמנס? רבחב! פחטיח קהנזנק!</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מפתח גדול, ומנעול לידו"><g filter="url(#rough)"><use href="#key" x="160.0" y="300.0" width="300.0" height="163.6" color="#f7ae4d"/><use href="#lock" x="410.0" y="60.0" width="150.0" height="187.5" color="#8c82c1"/></g></svg></div>
+<div class="foot"><span>5 דקות</span><span class="timer" data-sec="300"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="8" data-track="screen-a">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כתב סתרים · המסר</div><h2>כיף להיפגש ולשחק עם חברים <b>גם</b> פנים אל פנים.</h2><p class="sub">מפגש כיתתי בקיץ? ברור! כולנו מגיעים!</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש דמויות יחד, ושמש מעליהן"><g filter="url(#rough)"><use href="#group3" x="120.0" y="250.0" width="360.0" height="270.0" color="#13100e"/><use href="#sun" x="420.0" y="40.0" width="150.0" height="150.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="9" data-track="screen-b">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">סולמות, משימות וחבלים · בקבוצות</div><h2>כדור ים? מקבלים משימה!</h2><p class="sub">סולם — עולים. חבל — יורדים. משימה שבוצעה — מתקדמים.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="סולם, קובייה וחבל מתפתל" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g transform="rotate(-10 200 290)">
+      <rect x="122" y="80" width="24" height="420" rx="10" fill="#f7ae4d"/>
+      <rect x="254" y="80" width="24" height="420" rx="10" fill="#f7ae4d"/>
+      <g fill="#f7ae4d">
+        <rect x="140" y="118" width="120" height="18" rx="7"/>
+        <rect x="140" y="184" width="120" height="18" rx="7"/>
+        <rect x="140" y="250" width="120" height="18" rx="7"/>
+        <rect x="140" y="316" width="120" height="18" rx="7"/>
+        <rect x="140" y="382" width="120" height="18" rx="7"/>
+        <rect x="140" y="448" width="120" height="18" rx="7"/>
+      </g>
+      <g fill="#13100e" fill-opacity=".14">
+        <rect x="140" y="128" width="120" height="8" rx="4"/>
+        <rect x="140" y="194" width="120" height="8" rx="4"/>
+        <rect x="140" y="260" width="120" height="8" rx="4"/>
+        <rect x="140" y="326" width="120" height="8" rx="4"/>
+        <rect x="140" y="392" width="120" height="8" rx="4"/>
+        <rect x="140" y="458" width="120" height="8" rx="4"/>
+      </g>
+    </g>
+    <path d="M470 60 C560 96 396 134 470 178 C530 214 430 236 452 268" stroke="#8c82c1" stroke-width="13" fill="none" stroke-linecap="round"/>
+    <rect x="384" y="292" width="176" height="176" rx="30" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <g fill="#13100e">
+      <circle cx="428" cy="336" r="15"/>
+      <circle cx="516" cy="336" r="15"/>
+      <circle cx="472" cy="380" r="15"/>
+      <circle cx="428" cy="424" r="15"/>
+      <circle cx="516" cy="424" r="15"/>
+    </g>
+  </g>
+</svg></div>
+<div class="foot"><span>6 דקות</span><span class="timer" data-sec="360"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="10" data-track="face-a">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">1, 2, 3 דג מלוח · על הקו</div><h2>נכון לכם? הרימו יד!</h2><p class="sub">וצעדו קדימה או אחורה — כמה שהמורה אומרת.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="שתי דמויות על קו — אחת מרימה יד וצעדה קדימה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <path d="M40 470 H580" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <use href="#kid-stand" x="404" y="210" width="130" height="260" color="#63b1af"/>
+    <use href="#kid-hand" x="120" y="190" width="140" height="280" color="#f7ae4d"/>
+    <use href="#arrow" x="240" y="60" width="200" height="109" color="#847c74"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="11" data-track="face-b">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חבילה מפרגנת עוברת · במעגל</div><h2>חבילה מפרגנת עוברת… מוכנים?</h2><p class="sub">כשהמוזיקה נעצרת — פותחים פתק, ומעבירים.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="חבילה עטופה ותו מוזיקה, ושתי ידיים מושטות" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <use href="#hands-help" x="160" y="214" width="300" height="300" color="#63b1af"/>
+    <rect x="214" y="70" width="192" height="140" rx="12" fill="#8c82c1"/>
+    <rect x="214" y="70" width="192" height="40" rx="12" fill="#13100e" fill-opacity=".14"/>
+    <rect x="300" y="70" width="20" height="140" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="214" y="130" width="192" height="20" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M310 70 C282 30 248 48 268 70 Z" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M310 70 C338 30 372 48 352 70 Z" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <g fill="#13100e">
+      <ellipse cx="110" cy="190" rx="26" ry="20" transform="rotate(-20 110 190)"/>
+      <rect x="128" y="86" width="9" height="104" rx="4"/>
+      <path d="M134 86 C170 100 176 124 160 146 C164 124 154 112 134 108 Z"/>
+    </g>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="12">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חושבים · בזוגות · משתפים</div><h2>מה ההבדל בין משחק ברשת למשחק פנים אל פנים?</h2><ol class="pts"><li class="fragment">לבד — 30 שניות</li><li class="fragment">בזוגות — דקה וחצי</li><li class="fragment">במליאה</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מאזניים, ומעליהם טלפון מצד אחד וזוג חברים מהצד השני"><g filter="url(#rough)"><use href="#scale" x="170.0" y="230.0" width="290.0" height="253.8" color="#13100e"/><use href="#phone" x="150.0" y="40.0" width="90.0" height="150.0" color="#13100e"/><use href="#pair" x="380.0" y="30.0" width="160.0" height="174.5" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="13">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · בקבוצות</div><h2>משחק היכרות לכיתה החדשה בחטיבה</h2><p class="sub">רעיון אחד לכל קבוצה — על דף, ותולים על הלוח.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית ספר, ושלוש דמויות לפניו"><g filter="url(#rough)"><use href="#school" x="290.0" y="60.0" width="300.0" height="242.3" color="#13100e"/><use href="#group3" x="30.0" y="280.0" width="300.0" height="225.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+<section class="s-pic s-msg" data-n="14">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 1 מתוך 4</div><h2>ישנם מגוון משחקים מהנים, מקרבים ומעניינים — חלקם ברשת וחלקם פנים אל פנים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג יד ביד, ושמש לידו"><g filter="url(#rough)"><use href="#pair" x="300.0" y="220.0" width="260.0" height="283.6" color="#13100e"/><use href="#sun" x="60.0" y="50.0" width="180.0" height="180.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="15">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 2 מתוך 4</div><h2>בחופשת הקיץ חשוב שניזום פעילויות חברתיות מגוונות בשעות הפנאי.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג יד ביד, ושמש לידו"><g filter="url(#rough)"><use href="#pair" x="300.0" y="220.0" width="260.0" height="283.6" color="#13100e"/><use href="#sun" x="60.0" y="50.0" width="180.0" height="180.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="16">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 3 מתוך 4</div><h2>חשוב לשמור על ״זמן מסכים״ מאוזן ולהתנהל ברשת באופן בטוח ומוגן.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג יד ביד, ושמש לידו"><g filter="url(#rough)"><use href="#pair" x="300.0" y="220.0" width="260.0" height="283.6" color="#13100e"/><use href="#sun" x="60.0" y="50.0" width="180.0" height="180.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg len-m" data-n="17">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 4 מתוך 4</div><h2>משחקים פנים אל פנים תורמים למיומנויות החברתיות שלנו: אנחנו מסתכלים זה לזה בעיניים, אנו רואים את שפת הגוף של האחר ומתקיימת תקשורת ישירה. היבטים אלו לא תמיד ניתן להרגיש ולראות מבעד למסך.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג יד ביד, ושמש לידו"><g filter="url(#rough)"><use href="#pair" x="300.0" y="220.0" width="260.0" height="283.6" color="#13100e"/><use href="#sun" x="60.0" y="50.0" width="180.0" height="180.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="18">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כרטיס יציאה</div><h2>תפריט החופש שלי</h2><ol class="pts"><li class="fragment">מפגש פנים אל פנים שאזום בחופש, ועם מי.</li><li class="fragment">משחק ברשת שאשחק בחופש — ואיך הוא לא ייקח את כל היום.</li><li class="fragment">רשות — משהו שהפתיע אותי היום.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="לוח שנה, ושמש לידו"><g filter="url(#rough)"><use href="#calendar" x="270.0" y="100.0" width="320.0" height="320.0" color="#8c82c1"/><use href="#sun" x="50.0" y="60.0" width="180.0" height="180.0" color="#f7ae4d"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>המירוץ ממצרים · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="circle4" viewBox="0 0 220 220" data-cat="people" data-he="ארבעה סביב שולחן (מלמעלה)">
+    <circle cx="110" cy="110" r="42" fill="#fdf0dd" stroke="#13100e" stroke-width="5" />
+    <g fill="#fff" stroke="#13100e" stroke-width="3" stroke-linejoin="round">
+      <path d="M92 96 L112 90 L118 108 L98 114 Z" /><path d="M108 116 L128 112 L131 130 L111 134 Z" />
+    </g>
+    <g fill="#63b1af"><path d="M82 30 L90 60 M138 30 L130 60" stroke="#63b1af" stroke-width="12" stroke-linecap="round" /><rect x="74" y="10" width="72" height="28" rx="14" /><circle cx="110" cy="40" r="15" stroke="#fff" stroke-width="4" paint-order="stroke" /></g>
+    <g fill="#f7ae4d" transform="rotate(90 110 110)"><path d="M82 30 L90 60 M138 30 L130 60" stroke="#f7ae4d" stroke-width="12" stroke-linecap="round" /><rect x="74" y="10" width="72" height="28" rx="14" /><circle cx="110" cy="40" r="15" stroke="#fff" stroke-width="4" paint-order="stroke" /></g>
+    <g fill="#8c82c1" transform="rotate(180 110 110)"><path d="M82 30 L90 60 M138 30 L130 60" stroke="#8c82c1" stroke-width="12" stroke-linecap="round" /><rect x="74" y="10" width="72" height="28" rx="14" /><circle cx="110" cy="40" r="15" stroke="#fff" stroke-width="4" paint-order="stroke" /></g>
+    <g fill="#619f88" transform="rotate(270 110 110)"><path d="M82 30 L90 60 M138 30 L130 60" stroke="#619f88" stroke-width="12" stroke-linecap="round" /><rect x="74" y="10" width="72" height="28" rx="14" /><circle cx="110" cy="40" r="15" stroke="#fff" stroke-width="4" paint-order="stroke" /></g>
+  </symbol>
+
+  <symbol id="road" viewBox="0 0 260 210" data-cat="places" data-he="דרך">
+    <path d="M6 104 Q130 92 254 104 V180 Q254 204 230 204 H30 Q6 204 6 180 Z" fill="#e7f1ec" />
+    <path d="M120 103 C146 60 208 56 244 100 Z" fill="#4a8571" />
+    <path d="M16 101 C40 62 104 52 152 98 Z" fill="#619f88" />
+    <path d="M36 204 C70 172 114 152 112 130 C110 116 117 107 123 100 L137 100 C139 108 134 118 143 132 C158 152 192 172 224 204 Z" fill="#847c74" />
+    <path d="M130 200 C128 172 125 152 127 132 C128 118 129 110 130 104" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="14 11" />
+  </symbol>
+
+  <symbol id="bridge" viewBox="0 0 260 170" data-cat="places" data-he="גשר" data-color="#8c82c1">
+    <path d="M20 44 H240" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+    <path d="M26 44 V58 M66 44 V58 M106 44 V58 M146 44 V58 M186 44 V58 M226 44 V58" stroke="#13100e" stroke-width="4" />
+    <path d="M14 58 H246 V142 H208 A78 60 0 0 0 52 142 H14 Z" fill="currentColor" />
+    <path d="M18 156 q16 -10 32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0" fill="none" stroke="#63b1af" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="mountain" viewBox="0 0 240 180" data-cat="places" data-he="הר">
+    <path d="M70 172 L156 26 L236 172 Z" fill="#63b1af" />
+    <path d="M6 172 L90 50 L176 172 Z" fill="#619f88" />
+    <path d="M156 26 L137.2 58 L147 53 L156 62 L165 53 L173.5 58 Z" fill="#fff" />
+    <path d="M90 50 L66.6 84 L78 78 L88 88 L100 78 L114 84 Z" fill="#fff" />
+  </symbol>
+
+  
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="scale" viewBox="0 0 240 210" data-cat="choices" data-he="מאזניים">
+    <path d="M76 198 H164 L150 180 H90 Z" fill="#13100e" />
+    <rect x="114" y="40" width="12" height="146" fill="#13100e" />
+    <circle cx="120" cy="34" r="10" fill="#13100e" />
+    <rect x="24" y="50" width="192" height="10" rx="5" fill="#13100e" />
+    <path d="M40 60 L18 128 M40 60 L62 128 M200 60 L178 128 M200 60 L222 128" stroke="#13100e" stroke-width="4" />
+    <path d="M12 126 H68 C66 146 52 156 40 156 C28 156 14 146 12 126 Z" fill="#63b1af" />
+    <path d="M172 126 H228 C226 146 212 156 200 156 C188 156 174 146 172 126 Z" fill="#f7ae4d" />
+  </symbol>
+
+  <symbol id="sprout" viewBox="0 0 180 210" data-cat="growth" data-he="נבט">
+    <path d="M90 124 C90 100 92 82 90 62" fill="none" stroke="#4a8571" stroke-width="8" stroke-linecap="round" />
+    <path d="M90 84 C70 84 46 70 40 48 C62 44 84 56 90 84 Z" fill="#619f88" />
+    <path d="M90 68 C100 48 124 34 148 40 C140 62 116 74 90 68 Z" fill="#619f88" />
+    <path d="M42 136 H138 L126 198 H54 Z" fill="#f7ae4d" />
+    <rect x="32" y="118" width="116" height="24" rx="6" fill="#e08f36" />
+  </symbol>
+
+  <symbol id="flag" viewBox="0 0 180 220" data-cat="calendar" data-he="דגל" data-color="#63b1af">
+    <rect x="30" y="16" width="10" height="198" rx="5" fill="#4a443f" />
+    <circle cx="35" cy="14" r="9" fill="#f7ae4d" />
+    <path d="M40 26 C72 16 98 40 130 30 C146 25 158 24 168 28 V106 C158 102 146 103 130 108 C98 118 72 94 40 104 Z" fill="currentColor" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לקראת פסח</div><h1>המירוץ ממצרים</h1>    </div>
+    <div class="pic"><svg role="img" aria-label="שתי פירמידות, שביל מנוקד, ופרח בסוף השביל" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g transform="translate(214 226) scale(0.85)">
+      <path d="M120 6 L234 166 L6 166 Z" fill="#f7ae4d"/>
+      <path d="M120 6 L234 166 L150 166 Z" fill="#13100e" opacity=".15"/>
+      <path d="M72 78 H168 M50 110 H190 M28 140 H212" stroke="#13100e" stroke-width="4" opacity=".12" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(272 196) scale(1.4)">
+      <path d="M120 6 L234 166 L6 166 Z" fill="#f7ae4d"/>
+      <path d="M120 6 L234 166 L150 166 Z" fill="#13100e" opacity=".15"/>
+      <path d="M72 78 H168 M50 110 H190 M28 140 H212" stroke="#13100e" stroke-width="4" opacity=".12" stroke-linecap="round"/>
+    </g>
+    <path d="M262 470 C226 474 206 456 190 436" stroke="#847c74" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 14"/>
+    <g transform="translate(26 96) scale(1.72)">
+      <path d="M65 100 C64 140 66 180 64 214" stroke="#619f88" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M64 172 C40 170 22 154 18 136 C40 134 58 148 64 172 Z" fill="#619f88"/>
+      <path d="M65 150 C88 146 104 128 108 112 C86 112 70 126 65 150 Z" fill="#619f88"/>
+      <g fill="#8c82c1"><circle cx="65" cy="30" r="22"/><circle cx="92" cy="49" r="22"/><circle cx="82" cy="81" r="22"/><circle cx="48" cy="81" r="22"/><circle cx="38" cy="49" r="22"/></g>
+      <circle cx="65" cy="58" r="19" fill="#f7ae4d"/>
+    </g>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לקראת פסח</div><h2>מה עזר לבני ישראל לאורך המסע לארץ ישראל?</h2><p class="sub">בצאת ישראל ממצרים...</p>    </div>
+    <div class="pic"><svg role="img" aria-label="פירמידות, ודרך מתפתלת שיוצאת מהן אל האופק" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g transform="translate(300 290) scale(1.25)">
+      <path d="M120 6 L234 166 L6 166 Z" fill="#f7ae4d"/>
+      <path d="M120 6 L234 166 L150 166 Z" fill="#13100e" opacity=".15"/>
+      <path d="M72 78 H168 M50 110 H190 M28 140 H212" stroke="#13100e" stroke-width="4" opacity=".12" stroke-linecap="round"/>
+    </g>
+    <use href="#road" x="16" y="70" width="350" height="282.7"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כולם כותבים · לעצמכם</div><h2>מה עוזר לי להתקדם בחיים?</h2><ol class="pts"><li class="fragment">אילו אתגרים (״פירמידות״) יש לנו בחיים?</li><li class="fragment">מה עוזר להתמודד עימם?</li></ol>    </div>
+    <div class="pic"><svg role="img" aria-label="פירמידה גדולה, ודמות קטנה עומדת לידה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g transform="translate(170 136) scale(1.75)">
+      <path d="M120 6 L234 166 L6 166 Z" fill="#f7ae4d"/>
+      <path d="M120 6 L234 166 L150 166 Z" fill="#13100e" opacity=".15"/>
+      <path d="M72 78 H168 M50 110 H190 M28 140 H212" stroke="#13100e" stroke-width="4" opacity=".12" stroke-linecap="round"/>
+    </g>
+    <use href="#kid-stand" x="40" y="226" width="100" height="200" color="#63b1af"/>
+  </g>
+</svg></div>
+<div class="foot"><span>2 דקות</span><span class="timer" data-sec="120"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">פעילות קבוצתית לחג הפסח</div><h2>המירוץ ממצרים</h2><ol class="pts"><li class="fragment">בתורכם — מטילים קובייה ומתקדמים על הלוח</li><li class="fragment">פירמידה — שולפים קלף פירמידה ועונים</li><li class="fragment">פרח — שולפים קלף פרח ועונים</li><li class="fragment">נחש — יורדים לזנב · סולם — עולים לקצה</li></ol>    </div>
+    <div class="pic"><svg role="img" aria-label="קטע מלוח משחק — סולם, נחש, משבצת פירמידה ומשבצת פרח — וקובייה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g>
+      <rect x="150" y="40" width="100" height="100" fill="#fdf0dd"/>
+      <rect x="250" y="40" width="100" height="100" fill="#ffffff"/>
+      <rect x="350" y="40" width="100" height="100" fill="#fdf0dd"/>
+      <rect x="450" y="40" width="100" height="100" fill="#ffffff"/>
+      <rect x="150" y="140" width="100" height="100" fill="#ffffff"/>
+      <rect x="250" y="140" width="100" height="100" fill="#fdf0dd"/>
+      <rect x="350" y="140" width="100" height="100" fill="#ffffff"/>
+      <rect x="450" y="140" width="100" height="100" fill="#fdf0dd"/>
+      <rect x="150" y="240" width="100" height="100" fill="#fdf0dd"/>
+      <rect x="250" y="240" width="100" height="100" fill="#ffffff"/>
+      <rect x="350" y="240" width="100" height="100" fill="#fdf0dd"/>
+      <rect x="450" y="240" width="100" height="100" fill="#ffffff"/>
+      <rect x="150" y="340" width="100" height="100" fill="#ffffff"/>
+      <rect x="250" y="340" width="100" height="100" fill="#fdf0dd"/>
+      <rect x="350" y="340" width="100" height="100" fill="#ffffff"/>
+      <rect x="450" y="340" width="100" height="100" fill="#fdf0dd"/>
+    </g>
+    <rect x="150" y="40" width="400" height="400" rx="10" fill="none" stroke="#13100e" stroke-width="5"/>
+    <g transform="translate(362 266) scale(0.32)">
+      <path d="M120 6 L234 166 L6 166 Z" fill="#f7ae4d"/>
+      <path d="M120 6 L234 166 L150 166 Z" fill="#13100e" opacity=".15"/>
+      <path d="M72 78 H168 M50 110 H190 M28 140 H212" stroke="#13100e" stroke-width="4" opacity=".12" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(280 54) scale(0.33)">
+      <path d="M65 100 C64 140 66 180 64 214" stroke="#619f88" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M64 172 C40 170 22 154 18 136 C40 134 58 148 64 172 Z" fill="#619f88"/>
+      <path d="M65 150 C88 146 104 128 108 112 C86 112 70 126 65 150 Z" fill="#619f88"/>
+      <g fill="#8c82c1"><circle cx="65" cy="30" r="22"/><circle cx="92" cy="49" r="22"/><circle cx="82" cy="81" r="22"/><circle cx="48" cy="81" r="22"/><circle cx="38" cy="49" r="22"/></g>
+      <circle cx="65" cy="58" r="19" fill="#f7ae4d"/>
+    </g>
+    <g stroke="#f7ae4d" stroke-linecap="round">
+      <path d="M470 380 L420 160 M512 370 L462 150" stroke-width="10"/>
+      <path d="M480 336 L506 330 M470 292 L496 286 M460 248 L486 242 M450 204 L476 198" stroke-width="8"/>
+    </g>
+    <path d="M222 92 C270 120 180 170 226 214 C270 256 196 300 240 352" stroke="#619f88" stroke-width="18" fill="none" stroke-linecap="round"/>
+    <circle cx="220" cy="90" r="17" fill="#619f88"/>
+    <circle cx="214" cy="86" r="4" fill="#ffffff"/>
+    <g transform="translate(26 380) scale(1.2)">
+      <rect x="5" y="5" width="90" height="90" rx="16" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+      <g fill="#13100e"><circle cx="30" cy="30" r="8"/><circle cx="70" cy="30" r="8"/><circle cx="50" cy="50" r="8"/><circle cx="30" cy="70" r="8"/><circle cx="70" cy="70" r="8"/></g>
+    </g>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">שני סוגי קלפים</div><h2>פירמידות ופרחים בדרך</h2><p class="sub">פירמידה — אתגר שמתגברים עליו. פרח — התקדמות. ובכל קלף מותר לומר ״דלג״.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="שני קלפים — על אחד פירמידה, על השני פרח" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <rect x="336" y="60" width="240" height="340" rx="26" fill="#ffffff" stroke="#13100e" stroke-width="5" transform="rotate(5 456 230)"/>
+    <g transform="translate(360 166) scale(0.82)">
+      <path d="M120 6 L234 166 L6 166 Z" fill="#f7ae4d"/>
+      <path d="M120 6 L234 166 L150 166 Z" fill="#13100e" opacity=".15"/>
+      <path d="M72 78 H168 M50 110 H190 M28 140 H212" stroke="#13100e" stroke-width="4" opacity=".12" stroke-linecap="round"/>
+    </g>
+    <rect x="44" y="90" width="240" height="340" rx="26" fill="#ffffff" stroke="#13100e" stroke-width="5" transform="rotate(-5 164 260)"/>
+    <g transform="translate(110 140) scale(1.05)">
+      <path d="M65 100 C64 140 66 180 64 214" stroke="#619f88" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M64 172 C40 170 22 154 18 136 C40 134 58 148 64 172 Z" fill="#619f88"/>
+      <path d="M65 150 C88 146 104 128 108 112 C86 112 70 126 65 150 Z" fill="#619f88"/>
+      <g fill="#8c82c1"><circle cx="65" cy="30" r="22"/><circle cx="92" cy="49" r="22"/><circle cx="82" cy="81" r="22"/><circle cx="48" cy="81" r="22"/><circle cx="38" cy="49" r="22"/></g>
+      <circle cx="65" cy="58" r="19" fill="#f7ae4d"/>
+    </g>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">המירוץ ממצרים · בקבוצות</div><h2>יוצאים למסע!</h2><p class="sub">כשהזמן נגמר — מי שהגיע הכי רחוק במסלול, מנצח.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="ארבעה סביב שולחן, וקובייה לידם" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <use href="#circle4" x="170" y="96" width="340" height="340"/>
+    <g transform="translate(40 60) scale(1.3)">
+      <rect x="5" y="5" width="90" height="90" rx="16" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+      <g fill="#13100e"><circle cx="30" cy="30" r="8"/><circle cx="70" cy="30" r="8"/><circle cx="50" cy="50" r="8"/><circle cx="30" cy="70" r="8"/><circle cx="70" cy="70" r="8"/></g>
+    </g>
+  </g>
+</svg></div>
+<div class="foot"><span>12 דקות</span><span class="timer" data-sec="720"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="7">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אחרי המירוץ</div><h2>מה עוזר לנו לעבור את הפירמידות?</h2><p class="sub">ואיזה קלף פתח אצלכם שיחה טובה?</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="גשר מעל מים, ודמות עומדת בתחילתו"><g filter="url(#rough)"><use href="#bridge" x="200.0" y="160.0" width="380.0" height="248.5" color="#8c82c1"/><use href="#kid-stand" x="40.0" y="200.0" width="140.0" height="280.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="8">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · חושבים · בזוגות · משתפים</div><h2>אז והיום</h2><p class="sub">הכוחות שבני ישראל היו צריכים במסע — דומים לכוחות שאנחנו צריכים היום?</p><ol class="pts"><li class="fragment">לבד — 20 שניות</li><li class="fragment">בזוגות — דקה</li><li class="fragment">במליאה</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מאזניים, ומעליהם הר בצד אחד ונבט בצד השני"><g filter="url(#rough)"><use href="#scale" x="140.0" y="214.0" width="340.0" height="297.5" color="#13100e"/><use href="#mountain" x="90.0" y="100.0" width="180.0" height="135.0" color="#13100e"/><use href="#sprout" x="380.0" y="64.0" width="136.0" height="158.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="9">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · עוד סבב</div><h2>ממשיכים במסע</h2><p class="sub">מהמקום שבו עצרתם — אותם כללים, ו״דלג״ תמיד מותר.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דגל בסוף דרך מתפתלת"><g filter="url(#rough)"><use href="#road" x="30.0" y="200.0" width="300.0" height="242.3" color="#13100e"/><use href="#flag" x="330.0" y="70.0" width="240.0" height="293.3" color="#63b1af"/></g></svg></div>
+<div class="foot"><span>5 דקות</span><span class="timer" data-sec="300"></span></div>  </div>
+</section>
+<section class="s-pic s-exit" data-n="10">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כרטיס יציאה</div><h2>כוח אחד שעוזר לי</h2><ol class="pts"><li class="fragment">כוח אחד שעוזר לי להתקדם, גם כשקשה.</li><li class="fragment">כשיש לי ׳פירמידה׳ בדרך — מי או מה יכול לעזור לי?</li><li class="fragment">רשות — משהו שגיליתי על עצמי היום במירוץ.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דף עם שורות, ונבט בעציץ לידו"><g filter="url(#rough)"><use href="#note" x="300.0" y="40.0" width="256.0" height="320.0" color="#13100e"/><use href="#sprout" x="30.0" y="200.0" width="270.0" height="315.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

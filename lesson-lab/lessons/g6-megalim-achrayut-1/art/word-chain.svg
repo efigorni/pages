@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- השרשרת שבמילה אחריות (מקור: שקף 9) — בכל שורה נוספת אות, והאות החדשה בכתום -->
+  <g filter="url(#rough)">
+    <rect x="445" y="75" width="60" height="60" rx="10" fill="#f7ae4d" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="445" y="141" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="379" y="141" width="60" height="60" rx="10" fill="#f7ae4d" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="445" y="207" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="379" y="207" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="313" y="207" width="60" height="60" rx="10" fill="#f7ae4d" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="445" y="273" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="379" y="273" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="313" y="273" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="247" y="273" width="60" height="60" rx="10" fill="#f7ae4d" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="445" y="339" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="379" y="339" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="313" y="339" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="247" y="339" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="181" y="339" width="60" height="60" rx="10" fill="#f7ae4d" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="445" y="405" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="379" y="405" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="313" y="405" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="247" y="405" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="181" y="405" width="60" height="60" rx="10" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="115" y="405" width="60" height="60" rx="10" fill="#f7ae4d" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif">
+    <text x="475" y="107" font-size="40">א</text>
+    <text x="475" y="173" font-size="40">א</text>
+    <text x="409" y="173" font-size="40">ח</text>
+    <text x="475" y="239" font-size="40">א</text>
+    <text x="409" y="239" font-size="40">ח</text>
+    <text x="343" y="239" font-size="40">ר</text>
+    <text x="475" y="305" font-size="40">א</text>
+    <text x="409" y="305" font-size="40">ח</text>
+    <text x="343" y="305" font-size="40">ר</text>
+    <text x="277" y="305" font-size="40">י</text>
+    <text x="475" y="371" font-size="40">א</text>
+    <text x="409" y="371" font-size="40">ח</text>
+    <text x="343" y="371" font-size="40">ר</text>
+    <text x="277" y="371" font-size="40">י</text>
+    <text x="211" y="371" font-size="40">ו</text>
+    <text x="475" y="437" font-size="40">א</text>
+    <text x="409" y="437" font-size="40">ח</text>
+    <text x="343" y="437" font-size="40">ר</text>
+    <text x="277" y="437" font-size="40">י</text>
+    <text x="211" y="437" font-size="40">ו</text>
+    <text x="145" y="437" font-size="40">ת</text>
+  </g>
+</svg>

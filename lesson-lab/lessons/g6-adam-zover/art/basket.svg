@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- טנא של זכרונות: סל קלוע, ומתוכו מציצות שתי תמונות ולב (ציור ייעודי — אין סל בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M150 300 C150 120 470 120 470 300" fill="none" stroke="#f7ae4d" stroke-width="18" stroke-linecap="round"/>
+    <path d="M150 300 C150 120 470 120 470 300" fill="none" stroke="#13100e" stroke-width="18" stroke-linecap="round" opacity=".13"/>
+    <g transform="rotate(-12 222 220)">
+      <rect x="152" y="128" width="140" height="164" rx="6" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="165" y="141" width="114" height="108" rx="3" fill="#e6f2f1"/>
+      <use href="#pair" x="174" y="143" width="96" height="105"/>
+    </g>
+    <g transform="rotate(10 398 216)">
+      <rect x="328" y="124" width="140" height="164" rx="6" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="341" y="137" width="114" height="108" rx="3" fill="#fdf0dd"/>
+      <use href="#star" x="353" y="146" width="90" height="90" color="#f7ae4d"/>
+    </g>
+    <use href="#heart" x="246" y="186" width="128" height="115" color="#e57373"/>
+    <path d="M122 298 L498 298 L458 498 L162 498 Z" fill="#f7ae4d"/>
+    <g stroke="#13100e" stroke-width="6" stroke-linecap="round" opacity=".16">
+      <path d="M136 346 H484"/>
+      <path d="M146 396 H474"/>
+      <path d="M156 446 H464"/>
+      <path d="M220 304 L232 494"/>
+      <path d="M310 304 V494"/>
+      <path d="M400 304 L388 494"/>
+    </g>
+    <rect x="104" y="280" width="412" height="36" rx="18" fill="#f7ae4d"/>
+    <rect x="104" y="280" width="412" height="36" rx="18" fill="#13100e" opacity=".13"/>
+  </g>
+</svg>

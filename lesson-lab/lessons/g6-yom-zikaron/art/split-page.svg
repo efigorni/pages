@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שני ימים על דף אחד: דף מחולק בקו מקווקו — נר זיכרון בצד אחד, דגל ישראל בצד השני (מקור: שקף 17) -->
+  <g filter="url(#rough)">
+    <rect x="70" y="50" width="480" height="440" rx="12" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M310 74 V466" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-dasharray="14 12"/>
+    <use href="#candle" x="360" y="210" width="140" height="205" color="#13100e"/>
+    <use href="#flag-il" x="105" y="205" width="170" height="187" color="#3b7ab3"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="40" fill="#13100e" text-anchor="middle" dominant-baseline="middle">
+    <text x="430" y="132">זיכרון</text>
+    <text x="190" y="132">עצמאות</text>
+  </g>
+</svg>

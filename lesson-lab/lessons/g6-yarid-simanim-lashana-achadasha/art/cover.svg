@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שער: רימון, תפוח בדבש ושופר (ציור ייעודי) — שלושת הדוכנים של היריד -->
+  <g filter="url(#rough)">
+    <use href="#pomegranate" x="170" y="16" width="280" height="294"/>
+    <use href="#apple-honey" x="18" y="296" width="264" height="220"/>
+    <g transform="translate(300 330) scale(1.0)">
+      <path d="M292 34 C268 100 186 140 96 112 L58 160 C38 126 32 86 46 36 L84 70 C160 90 236 72 280 26 Z" fill="#f7ae4d"/>
+      <circle cx="287" cy="30" r="8" fill="#f7ae4d"/>
+      <path d="M58 160 C38 126 32 86 46 36 C64 64 70 124 58 160 Z" fill="#13100e" opacity=".22"/>
+      <path d="M213 67 L219 106 M248 51 L254 84" stroke="#13100e" stroke-width="5" opacity=".15" stroke-linecap="round"/>
+      <path d="M104 88 C150 102 206 90 244 62" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".5"/>
+    </g>
+  </g>
+</svg>

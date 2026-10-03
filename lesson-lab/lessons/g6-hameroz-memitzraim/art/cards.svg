@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שני סוגי הקלפים: קלף פירמידה מימין וקלף פרח משמאל (ציורים ייעודיים) -->
+  <g filter="url(#rough)">
+    <rect x="336" y="60" width="240" height="340" rx="26" fill="#ffffff" stroke="#13100e" stroke-width="5" transform="rotate(5 456 230)"/>
+    <g transform="translate(360 166) scale(0.82)">
+      <path d="M120 6 L234 166 L6 166 Z" fill="#f7ae4d"/>
+      <path d="M120 6 L234 166 L150 166 Z" fill="#13100e" opacity=".15"/>
+      <path d="M72 78 H168 M50 110 H190 M28 140 H212" stroke="#13100e" stroke-width="4" opacity=".12" stroke-linecap="round"/>
+    </g>
+    <rect x="44" y="90" width="240" height="340" rx="26" fill="#ffffff" stroke="#13100e" stroke-width="5" transform="rotate(-5 164 260)"/>
+    <g transform="translate(110 140) scale(1.05)">
+      <path d="M65 100 C64 140 66 180 64 214" stroke="#619f88" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M64 172 C40 170 22 154 18 136 C40 134 58 148 64 172 Z" fill="#619f88"/>
+      <path d="M65 150 C88 146 104 128 108 112 C86 112 70 126 65 150 Z" fill="#619f88"/>
+      <g fill="#8c82c1"><circle cx="65" cy="30" r="22"/><circle cx="92" cy="49" r="22"/><circle cx="82" cy="81" r="22"/><circle cx="48" cy="81" r="22"/><circle cx="38" cy="49" r="22"/></g>
+      <circle cx="65" cy="58" r="19" fill="#f7ae4d"/>
+    </g>
+  </g>
+</svg>

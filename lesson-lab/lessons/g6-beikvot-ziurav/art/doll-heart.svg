@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- הציור השני: בובה, ולב לידה — חפץ שנותן נחמה וביטחון (ציור ייעודי — אין בובה בערכה) -->
+  <g filter="url(#rough)">
+    <use href="#heart" x="96" y="196" width="170" height="153" color="#e57373"/>
+    <g transform="translate(330 150) scale(1.35)">
+      <rect x="30" y="128" width="20" height="56" rx="10" fill="#8c82c1" transform="rotate(20 40 156)"/>
+      <rect x="110" y="128" width="20" height="56" rx="10" fill="#8c82c1" transform="rotate(-20 120 156)"/>
+      <rect x="52" y="186" width="24" height="42" rx="12" fill="#8c82c1"/>
+      <rect x="84" y="186" width="24" height="42" rx="12" fill="#8c82c1"/>
+      <ellipse cx="62" cy="230" rx="17" ry="9" fill="#f7ae4d"/>
+      <ellipse cx="98" cy="230" rx="17" ry="9" fill="#f7ae4d"/>
+      <path d="M48 196 C48 150 60 120 80 120 C100 120 112 150 112 196 Q112 202 106 202 H54 Q48 202 48 196 Z" fill="#8c82c1"/>
+      <path d="M80 134 L89 148 L80 162 L71 148 Z M62 164 L69 175 L62 186 L55 175 Z M98 164 L105 175 L98 186 L91 175 Z" fill="#13100e" opacity=".14"/>
+      <circle cx="80" cy="86" r="24" fill="#8c82c1"/>
+      <path d="M50 114 L58 104 L66 114 L74 104 L80 112 L86 104 L94 114 L102 104 L110 114 L104 124 H56 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M56 70 L80 8 L104 70 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+      <circle cx="80" cy="8" r="8" fill="#f7ae4d"/>
+    </g>
+  </g>
+</svg>
