@@ -9,7 +9,7 @@ description: Lesson plans from the Ministry of Education life-skills decks ("ה�
 
 ## כללי ברזל
 
-1. **רק `lesson.yaml`** (ואיורים ייעודיים ב-`art/` של השיעור). את `index.html` ו-`slides.html` כותבת רק הבנייה; תיקון שם יימחק בבנייה הבאה.
+1. **רק `lesson.yaml`** (ואיורים ייעודיים ב-`art/` של השיעור, ותמלול של טקסט מתמונות המקור ב-`src_images.md` כשצריך). את `index.html` ו-`slides.html` כותבת רק הבנייה; תיקון שם יימחק בבנייה הבאה.
 2. **כותבים רק בתיקיות השיעורים שלך** וביומן החבילה (`lesson-lab/docs/runs/<חבילה>.md`). לא נוגעים ב-`_assets/`, בדף המרכז (`lessons/index.html`), בסקיל או בשיעורים של חבילות אחרות (D34). בעיה בסקיל, או סמל שחסר בערכה — מדווחים ביומן.
 3. **אין git** — הרועה עושה commit (D2), גם לא `git status`. **אין דפדפן MCP** (Chrome DevTools, Playwright MCP) — מצב משותף שמשתבש (D36). **הבדיקה החזותית היא חובה, ונעשית רק עם `shoot.py`** (Chrome headless משלו, בלי MCP — D43). PDF ודף המרכז — בגל הבקרה.
 4. עקרונות חותם והמגדלור — **רק** מתוך `references/hotam-al-ze.md` ו-`references/migdalor.md` (תעתיק מילולי), לא מהזיכרון ולא מספרי Teach Like a Champion.
@@ -17,7 +17,7 @@ description: Lesson plans from the Ministry of Education life-skills decks ("ה�
 
 ## המתכון — לכל שיעור בחבילה
 
-1. **קוראים.** פעם אחת לחבילה: `references/style-guide.md` (הנוסח המבצעי של כל ההחלטות — את `picks-summary.md` לא צריך), `references/schema.md`, `assets/art/art-guide.md`, ו-YAML של שלושת הפיילוטים (`lesson-lab/lessons/g7-*/lesson.yaml`). לכל שיעור: הרשומה שלו ב-`lesson-lab/docs/lessons.json` (`src_text`, `digest_ref`, `flags`, `sensitivity`), טקסט המקור וכרטיס התקציר. *גמור כש*אפשר למנות את הפעילויות המרכזיות של המקור, את **כל** המסרים שלו (מילה במילה; מה נחשב מסרים — מדריך הסגנון §10, D50–D51), את רמת הרגישות, ואם יש עמידה פומבית או "לבחירת המורה".
+1. **קוראים.** פעם אחת לחבילה: `references/style-guide.md` (הנוסח המבצעי של כל ההחלטות — את `picks-summary.md` לא צריך), `references/schema.md`, `assets/art/art-guide.md`, ו-YAML של שלושת הפיילוטים (`lesson-lab/lessons/g7-*/lesson.yaml`). לכל שיעור: הרשומה שלו ב-`lesson-lab/docs/lessons.json` (`src_text`, `digest_ref`, `flags`, `sensitivity`), טקסט המקור וכרטיס התקציר. שקף שבכותרת שלו בטקסט המקור כתוב "(N תמונות)" — מסתכלים גם בתמונות עצמן (`schema.md`, "טקסט שיש במקור רק בתמונה"). *גמור כש*אפשר למנות את הפעילויות המרכזיות של המקור, את **כל** המסרים שלו (מילה במילה; מה נחשב מסרים — מדריך הסגנון §10, D50–D51), את רמת הרגישות, ואם יש עמידה פומבית או "לבחירת המורה".
 2. **מתכננים את הקשת** (לפני שכותבים YAML): מה נשאר, מה מתקצר, מה יוצא; סדר השלבים; דקות לכל שלב (ליבה 35′ בדיוק, הרחבות עד 10′); פרקטיקת הפתיחה; טכניקת הדיון לכל דיון; מסלולים; צורת כרטיס היציאה; שקף אחד או יותר לכל שלב והאיור שלו. *גמור כש*סכום הליבה 35 ויש 6–7 שלבי ליבה.
 3. **כותבים** את `lesson.yaml` לפי `schema.md` (מטא־דאטה מועתקת מ-`lessons.json`).
 4. **בונים** — הבנייה מריצה גם את הבדיקה. מתקנים כל ✗ ומריצים שוב. כל ! (אזהרה) — מתקנים, או רושמים ביומן החבילה למה היא נשארת. *גמור כש*השורה האחרונה היא `✓ <slug>: 0 שגיאות`.
@@ -37,7 +37,7 @@ description: Lesson plans from the Ministry of Education life-skills decks ("ה�
 | PDF (גל הבקרה) | `uv run --with playwright python3 .claude/skills/lighthouse-lesson-lab/scripts/export_pdf.py lesson-lab/lessons/<slug>` |
 | כל השיעורים + דף המרכז (גל הבקרה) | `uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/build_all.py --pdf` |
 
-`shoot.py` כותב ל-`lesson-lab/lessons/<slug>/.shots/` (מחוץ לגיט, מתרוקן בכל ריצה) ומדפיס את רשימת התמונות. כמה שיעורים בפקודה אחת — מותר (כמה תיקיות אחרי הסקריפט).
+`shoot.py` כותב ל-`lesson-lab/lessons/<slug>/.shots/` (מחוץ לגיט, מתרוקן בכל ריצה) ומדפיס את רשימת התמונות. כמה שיעורים בפקודה אחת — מותר (כמה תיקיות אחרי הסקריפט). ריצה שנייה על אותו שיעור מחכה שהראשונה תסתיים ("מחכה שיסיים").
 
 ## טעויות נפוצות
 
@@ -53,6 +53,12 @@ description: Lesson plans from the Ministry of Education life-skills decks ("ה�
 | "כל אחד.ת", "מוכן/ה" בטקסט שכתבת | רבים רגיל: "כל אחד", "מוכן". ציטוט מהמקור (גם היגד על שקף) — נשאר, ומסומן `verbatim` |
 | שלושה מתוך שישה מסרים "כי לא נכנסו לשקף" | כל המסרים, מילה במילה (D42); הבנייה שמה מסר בכל שקף |
 | תיקון כתיב בציטוט משאיר אזהרת "כמעט מילה במילה" | רושמים את התיקון ב-`src_fixes` |
+| `src_fixes` עם `from` קצר (`1ף`) שמופיע במקור עוד פעם | `from` שמופיע במקור פעם אחת — התיקון מחליף כל מופע |
+| קלף או פוסט שיש רק בתמונה — הועתק בלי `verbatim`, או נבחרו רק קלפים בלי לוכסן | תמלול נאמן ב-`src_images.md`, ואז `verbatim` כרגיל |
+| "עברי למצגת המקורית, לשקף 19" בתוך `moves` | בלוק `source_slide` — התיבה במערך, הקישור ושקף ממלא המקום נגזרים |
+| "אמבארקד" — שם סרט בתעתיק, כדי לעבור את בדיקת הלטינית | השם המקורי, "Embarked", ורשום ב-`latin_ok` (D57) |
+| סרטון מקור שירד — הוחלף בסרטון אחר | משמיטים אותו, ומלמדים את הרעיון מתוכן המקור (D53) |
+| "כיסאות מתחלפים" בלי `stance` | קימה כשמזדהים היא עמידה פומבית (D54): `stance: true`, סעיף בתיבה, זכות לעבור |
 | `pause`/`predict` בסרטון | `pauses: [{at, moment, ask}]` (D44); זמן לא מאומת — `at: "?"` + `moment` |
 | הוראות המסלול בגוף השלב, תחת "**מסלול א׳**" | `body` בתוך כל מסלול, ו-`practices`/`spotlights` לכל מסלול (D45) |
 | עמידה על קו בשיעור `low` בלי תיבה | `stance: true` בשלב + תיבת `safe` עם "עמידה מול הכיתה" (D45) |
@@ -67,7 +73,7 @@ description: Lesson plans from the Ministry of Education life-skills decks ("ה�
 
 ## הפניות
 
-- `references/style-guide.md` — כל כללי הכתיבה (D8–D45 והכללים המשולבים), עם דוגמאות.
+- `references/style-guide.md` — כל כללי הכתיבה (D8–D59 והכללים המשולבים), עם דוגמאות.
 - `references/schema.md` — שדות `lesson.yaml`, הבלוקים, מה רואה המורה ומה רואה הכיתה, האיורים, ומה נגזר לבד.
 - `references/checklist.md` — בדיקה עצמית לפני סיום.
 - `references/hotam-al-ze.md` · `references/migdalor.md` — הכרטיסיות, מילה במילה.

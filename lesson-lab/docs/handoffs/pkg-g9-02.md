@@ -1,5 +1,9 @@
 # Handoff — pkg-g9-02 (g9-osher-1, g9-osher-2)
 
+**DONE — superseded.**
+- Both lessons are built: 0 errors and 0 warnings. `shoot.py` shows 0 display errors, and every image was reviewed.
+- Report: `lesson-lab/docs/runs/pkg-g9-02.md`. The rest of this file is the paused state, kept for the record.
+
 Paused by the coordinator. Brief: `lesson-lab/docs/lesson-agent-brief.md`. All required reading has been done: the skill, `decisions.md` up to D58, the pilots, sources and digests (`sources/digests/9a.md:52`, `:74`).
 
 ## Status
