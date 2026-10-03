@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- "קבלת החלטות בשבילי היא כמו…" — חמשת הדימויים של המקור (שקף 9), מילה לכל דימוי -->
+  <g filter="url(#rough)">
+    <use href="#bulb" x="450" y="24" width="130" height="160.6" color="#f7ae4d"/>
+    <use href="#mountain" x="220" y="46" width="180" height="135"/>
+    <use href="#target" x="40" y="34" width="150" height="150" color="#e57373"/>
+    <use href="#rain-cloud" x="360" y="268" width="160" height="160"/>
+    <use href="#arrows-fork" x="110" y="268" width="160" height="160"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" text-anchor="middle" fill="#13100e" font-size="34">
+    <text x="515" y="232">רעיון</text>
+    <text x="310" y="232">לחץ</text>
+    <text x="115" y="232">מטרה</text>
+    <text x="440" y="476">דאגות</text>
+    <text x="190" y="476">התלבטות</text>
+  </g>
+</svg>

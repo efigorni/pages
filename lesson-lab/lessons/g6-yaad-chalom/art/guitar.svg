@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- הדוגמה של המקור (שקף 19): ״אני רוצה ללמוד לנגן בגיטרה״ — ״בעוד חצי שנה״. גיטרה מצוירת (אין בערכה) ולוח שנה -->
+  <g filter="url(#rough)">
+    <g transform="translate(360 380) rotate(24)">
+      <rect x="-13" y="-300" width="26" height="214" rx="5" fill="#e08f36"/>
+      <rect x="-24" y="-352" width="48" height="60" rx="10" fill="#13100e"/>
+      <g fill="#847c74">
+        <circle cx="-31" cy="-338" r="7"/><circle cx="-31" cy="-312" r="7"/>
+        <circle cx="31" cy="-338" r="7"/><circle cx="31" cy="-312" r="7"/>
+      </g>
+      <circle cx="0" cy="-94" r="60" fill="#f7ae4d"/>
+      <circle cx="0" cy="0" r="80" fill="#f7ae4d"/>
+      <circle cx="0" cy="-58" r="25" fill="#13100e"/>
+      <rect x="-34" y="24" width="68" height="13" rx="5" fill="#13100e"/>
+      <g stroke="#ffffff" stroke-width="2.5" opacity=".9">
+        <path d="M-9 30 V-294"/><path d="M-3 30 V-294"/><path d="M3 30 V-294"/><path d="M9 30 V-294"/>
+      </g>
+    </g>
+    <use href="#calendar" x="40" y="300" width="190" height="190" color="#8c82c1"/>
+  </g>
+</svg>

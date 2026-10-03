@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- קורקינט חשמלי (ציור ייעודי — אין קורקינט בערכה), ברק קטן, ודמות שעומדת לידו ומתלבטת -->
+  <g filter="url(#rough)">
+    <path d="M190 440 L150 176" stroke="#13100e" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <path d="M100 172 L200 172" stroke="#13100e" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <rect x="160" y="412" width="296" height="34" rx="17" fill="#8c82c1"/>
+    <circle cx="190" cy="466" r="40" fill="#13100e"/>
+    <circle cx="190" cy="466" r="14" fill="#ffffff"/>
+    <circle cx="424" cy="466" r="40" fill="#13100e"/>
+    <circle cx="424" cy="466" r="14" fill="#ffffff"/>
+    <path d="M318 196 L262 300 L306 300 L276 392 L366 266 L320 266 L352 196 Z" fill="#f7ae4d"/>
+    <use href="#kid-stand" x="474" y="250" width="128" height="256" color="#63b1af"/>
+  </g>
+</svg>

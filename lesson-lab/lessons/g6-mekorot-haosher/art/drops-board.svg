@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- הטיפות הכיתתיות על הלוח: לוח, ועליו ארבע טיפות צבעוניות -->
+  <g filter="url(#rough)">
+    <rect x="96" y="80" width="428" height="290" rx="12" fill="#e08f36"/>
+    <rect x="116" y="100" width="388" height="250" rx="6" fill="#24302d"/>
+    <rect x="170" y="370" width="280" height="16" rx="4" fill="#847c74"/>
+    <g stroke="#13100e" stroke-width="4" stroke-linejoin="round">
+      <path d="M190 130 C204 156 232 186 232 208 A42 42 0 0 1 148 208 C148 186 176 156 190 130 Z" fill="#f7ae4d"/>
+      <path d="M290 160 C304 186 332 216 332 238 A42 42 0 0 1 248 238 C248 216 276 186 290 160 Z" fill="#63b1af"/>
+      <path d="M390 124 C404 150 432 180 432 202 A42 42 0 0 1 348 202 C348 180 376 150 390 124 Z" fill="#8c82c1"/>
+      <path d="M450 196 C464 222 492 252 492 274 A42 42 0 0 1 408 274 C408 252 436 222 450 196 Z" fill="#f7ae4d"/>
+    </g>
+    <use href="#kid-hand" x="20" y="250" width="130" height="260" color="#63b1af"/>
+  </g>
+</svg>

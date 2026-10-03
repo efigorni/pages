@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- הרשימה של השבוע, מוקפת בשלושה צבעים (מקור: שקף 18): אדום, צהוב וירוק -->
+  <g filter="url(#rough)">
+    <path d="M230 36 H478 L530 88 V484 H230 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M478 36 V88 H530" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <g stroke="#847c74" stroke-width="8" stroke-linecap="round">
+      <path d="M300 116 H460"/>
+      <path d="M300 168 H430"/>
+      <path d="M300 220 H470"/>
+      <path d="M300 272 H410"/>
+      <path d="M300 324 H460"/>
+      <path d="M300 376 H440"/>
+      <path d="M300 428 H400"/>
+    </g>
+    <g fill="none" stroke-width="7">
+      <ellipse cx="380" cy="116" rx="112" ry="26" stroke="#e57373"/>
+      <ellipse cx="385" cy="220" rx="118" ry="26" stroke="#f7ae4d"/>
+      <ellipse cx="356" cy="272" rx="88" ry="26" stroke="#619f88"/>
+      <ellipse cx="380" cy="324" rx="112" ry="26" stroke="#e57373"/>
+      <ellipse cx="352" cy="428" rx="82" ry="26" stroke="#619f88"/>
+    </g>
+    <use href="#pencil" x="40" y="318" width="180" height="180" color="#f7ae4d"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מה עזר לאפרוח: אפרוח על מדרגה, ומעליו ענן מחשבה ובו הדגל שבפסגה (ציור ייעודי) -->
+  <g filter="url(#rough)">
+    <path d="M590 508 V436 H480 V364 H370 V292 H300 V508 Z" fill="#619f88"/>
+    <g stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity=".55">
+      <path d="M486 440 H584 M376 368 H474 M306 296 H364"/>
+    </g>
+    <use href="#thought" x="24" y="24" width="300" height="285"/>
+    <use href="#flag" x="120" y="66" width="90" height="110" color="#8c82c1"/>
+    <g transform="translate(424 364) scale(1.7)">
+      <path d="M-8 -14 V-1 M8 -14 V-1" stroke="#847c74" stroke-width="5" stroke-linecap="round"/>
+      <path d="M-17 -1 H-3 M3 -1 H17" stroke="#847c74" stroke-width="5" stroke-linecap="round"/>
+      <path d="M30 -46 L50 -62 L44 -36 Z" fill="#f7ae4d"/>
+      <ellipse cx="4" cy="-40" rx="34" ry="28" fill="#f7ae4d"/>
+      <path d="M-30 -40 A34 28 0 0 0 38 -40 Z" fill="#13100e" opacity=".1"/>
+      <ellipse cx="12" cy="-42" rx="16" ry="11" transform="rotate(-18 12 -42)" fill="#13100e" opacity=".14"/>
+      <circle cx="-22" cy="-76" r="19" fill="#f7ae4d"/>
+      <path d="M-24 -95 C-24 -104 -16 -107 -13 -100" stroke="#f7ae4d" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M-39 -81 L-57 -74 L-39 -67 Z" fill="#f7ae4d"/>
+      <path d="M-39 -81 L-57 -74 L-39 -67 Z" fill="#13100e" opacity=".3"/>
+    </g>
+  </g>
+</svg>

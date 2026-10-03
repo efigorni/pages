@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- פאזל כיתתי (שקפים 27–28, 31 במקור): ארבעה חלקים שמתחברים לריבוע אחד -->
+  <g filter="url(#rough)" stroke="#fff" stroke-width="7" stroke-linejoin="round">
+    <path d="M150 110 H310 V164 A26 26 0 0 1 310 216 V270 H256 A26 26 0 0 0 204 270 H150 Z" fill="#f7ae4d"/>
+    <path d="M310 110 H470 V270 H416 A26 26 0 0 1 364 270 H310 V216 A26 26 0 0 0 310 164 Z" fill="#63b1af"/>
+    <path d="M150 270 H204 A26 26 0 0 1 256 270 H310 V324 A26 26 0 0 0 310 376 V430 H150 Z" fill="#8c82c1"/>
+    <path d="M310 270 H364 A26 26 0 0 0 416 270 H470 V430 H310 V376 A26 26 0 0 1 310 324 Z" fill="#f7ae4d" transform="translate(22 26) rotate(5 390 350)"/>
+  </g>
+</svg>

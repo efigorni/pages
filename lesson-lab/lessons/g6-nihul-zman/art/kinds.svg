@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שלושת הסוגים (מקור: שקפים 14–18), מוקפים בצבע שלהם כמו ברשימה: חשוב ודחוף — אדום, שעון · חשוב ולא דחוף — צהוב, נבט · רוצה ואוהב — ירוק, פנים שמחות. סדר הקריאה: מימין למעלה, משמאל למעלה, למטה -->
+  <g filter="url(#rough)">
+    <g fill="none" stroke-width="13">
+      <circle cx="466" cy="140" r="104" stroke="#e57373"/>
+      <circle cx="154" cy="140" r="104" stroke="#f7ae4d"/>
+      <circle cx="310" cy="392" r="104" stroke="#619f88"/>
+    </g>
+    <use href="#clock" x="396" y="70" width="140" height="140" color="#63b1af"/>
+    <use href="#sprout" x="91" y="67" width="126" height="147"/>
+    <use href="#face-happy" x="240" y="322" width="140" height="140" color="#f7ae4d"/>
+  </g>
+</svg>

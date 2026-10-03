@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- "ידע הוא כוח" (מקור: שקף 22): ידע ← ביטחון, ודאות, רוגע ← בחירה; מימין לשמאל -->
+  <g filter="url(#rough)">
+    <circle cx="526" cy="270" r="72" fill="#fdf0dd" stroke="#13100e" stroke-width="5"/>
+    <circle cx="310" cy="270" r="104" fill="#e6f2f1" stroke="#13100e" stroke-width="5"/>
+    <circle cx="94" cy="270" r="72" fill="#eeecf7" stroke="#13100e" stroke-width="5"/>
+    <g stroke="#847c74" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M448 270 H424 M434 258 L422 270 L434 282"/>
+      <path d="M200 270 H176 M186 258 L174 270 L186 282"/>
+    </g>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" fill="#13100e">
+    <text x="526" y="272" font-size="40">ידע</text>
+    <text x="310" y="226" font-size="34">ביטחון</text>
+    <text x="310" y="272" font-size="34">ודאות</text>
+    <text x="310" y="318" font-size="34">רוגע</text>
+    <text x="94" y="272" font-size="36">בחירה</text>
+  </g>
+</svg>

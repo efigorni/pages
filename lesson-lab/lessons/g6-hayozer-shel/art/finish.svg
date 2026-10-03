@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- קו הסיום (שקף 10 במקור): שער סיום עם שלט "סיום", ושתי דמויות מתחתיו מרימות יד -->
+  <g filter="url(#rough)">
+    <path d="M36 472 H584" stroke="#847c74" stroke-width="5" stroke-linecap="round"/>
+    <rect x="74" y="96" width="14" height="376" rx="5" fill="#847c74"/>
+    <rect x="532" y="96" width="14" height="376" rx="5" fill="#847c74"/>
+    <rect x="88" y="104" width="444" height="84" rx="8" fill="#fff" stroke="#13100e" stroke-width="5"/>
+    <use href="#kid-hand" x="170" y="228.4" width="126" height="252" color="#63b1af" transform="matrix(-1 0 0 1 466 0)"/>
+    <use href="#kid-hand" x="324" y="228.4" width="126" height="252" color="#f7ae4d"/>
+  </g>
+  <text x="310" y="148" font-family="Secular One, Arial Hebrew, sans-serif" font-size="56" fill="#13100e" text-anchor="middle" dominant-baseline="middle">סיום</text>
+</svg>

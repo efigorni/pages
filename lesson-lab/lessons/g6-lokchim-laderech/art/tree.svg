@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- העץ שהגיע למקום החדש: עץ (ציור ייעודי — אין עץ בערכה) ליד בית -->
+  <g filter="url(#rough)">
+    <path d="M36 472 H584" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <use href="#house" x="40" y="262" width="230" height="209"/>
+    <rect x="420" y="300" width="44" height="172" rx="10" fill="#847c74"/>
+    <circle cx="374" cy="268" r="66" fill="#619f88"/>
+    <circle cx="510" cy="268" r="66" fill="#619f88"/>
+    <circle cx="442" cy="214" r="104" fill="#619f88"/>
+    <circle cx="474" cy="250" r="56" fill="#13100e" fill-opacity=".12"/>
+  </g>
+</svg>

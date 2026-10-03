@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- המפתח: ארבעת הסגנונות בסדר של השקף — קובייה (הימור), לב (רגש), מאזניים (שיקול דעת), ספר (ניסיון העבר) -->
+  <g filter="url(#rough)">
+    <g transform="rotate(-8 455 135)">
+      <rect x="370" y="50" width="170" height="170" rx="26" fill="#f7ae4d"/>
+      <g fill="#ffffff">
+        <circle cx="413" cy="93" r="15"/>
+        <circle cx="497" cy="93" r="15"/>
+        <circle cx="455" cy="135" r="15"/>
+        <circle cx="413" cy="177" r="15"/>
+        <circle cx="497" cy="177" r="15"/>
+      </g>
+    </g>
+    <use href="#heart" x="80" y="45" width="200" height="180" color="#e57373"/>
+    <use href="#scale" x="345" y="300" width="220" height="192.5"/>
+    <use href="#book" x="70" y="310" width="220" height="170" color="#8c82c1"/>
+  </g>
+</svg>

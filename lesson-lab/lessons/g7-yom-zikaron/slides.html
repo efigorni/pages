@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>זיכרון ועצמאות · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-sit" viewBox="0 0 160 240" data-cat="people" data-he="דמות יושבת" data-color="#8c82c1">
+    <g fill="#847c74">
+      <rect x="24" y="108" width="12" height="80" rx="5" />
+      <rect x="24" y="176" width="88" height="12" rx="5" />
+      <rect x="28" y="184" width="9" height="48" rx="3" />
+      <rect x="98" y="184" width="9" height="48" rx="3" />
+    </g>
+    <g fill="currentColor">
+      <circle cx="76" cy="82" r="22" />
+      <path d="M44 176 L46 134 C47 118 58 110 72 110 C88 110 98 120 98 136 L98 176 Z" />
+      <rect x="52" y="152" width="84" height="24" rx="12" />
+      <rect x="112" y="156" width="24" height="68" rx="12" />
+      <rect x="112" y="212" width="40" height="20" rx="10" />
+    </g>
+    <path d="M82 128 L104 160 L128 160" fill="none" stroke="#fff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M82 128 L104 160 L128 160" fill="none" stroke="currentColor" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="kid-desk" viewBox="0 0 180 240" data-cat="people" data-he="דמות כותבת ליד שולחן" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="90" cy="98" r="22" />
+      <path d="M54 200 C54 152 70 126 90 126 C110 126 126 152 126 200 Z" />
+    </g>
+    <path d="M30 170 H150 L170 200 H10 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <rect x="10" y="200" width="160" height="12" fill="#e08f36" />
+    <rect x="20" y="212" width="9" height="20" fill="#13100e" />
+    <rect x="151" y="212" width="9" height="20" fill="#13100e" />
+    <path d="M62 177 H112 L117 195 H57 Z" fill="#fff" stroke="#13100e" stroke-width="3.5" stroke-linejoin="round" />
+    <path d="M100 191 L122 157" stroke="#f7ae4d" stroke-width="7" stroke-linecap="round" />
+    <path d="M100 191 L104 185" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+    <path d="M56 177 L70 187 M126 177 L110 186" stroke="currentColor" stroke-width="13" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="thought" viewBox="0 0 200 190" data-cat="talk" data-he="ענן מחשבה">
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M184 80 A25 25 0 0 1 164.3 116 A32 32 0 0 1 114.6 135.1 A34 34 0 0 1 58 128.5 A28 28 0 0 1 21.1 99.2 A23 23 0 0 1 21.1 60.8 A28 28 0 0 1 58 31.5 A34 34 0 0 1 114.6 24.9 A32 32 0 0 1 164.3 44 A25 25 0 0 1 184 80 Z" />
+      <circle cx="148" cy="160" r="10" />
+      <circle cx="170" cy="178" r="6" />
+    </g>
+  </symbol>
+
+  <symbol id="hands-help" viewBox="0 0 220 220" data-cat="safety" data-he="ידיים עוזרות">
+   <g transform="translate(110 110) scale(.92) translate(-110 -100)">
+    <g transform="translate(64 158) rotate(40)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#3f8f8d" />
+      <path d="M13 -12 L27 -32" stroke="#63b1af" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#63b1af" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+    <g transform="translate(156 42) rotate(220)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#e08f36" />
+      <path d="M13 -12 L27 -32" stroke="#f7ae4d" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#f7ae4d" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+   </g>
+  </symbol>
+
+  <symbol id="umbrella" viewBox="0 0 200 200" data-cat="safety" data-he="מטרייה" data-color="#8c82c1">
+    <path d="M100 20 V8" stroke="#13100e" stroke-width="6" stroke-linecap="round" />
+    <path d="M100 104 V172 A13 13 0 0 1 74 172" fill="none" stroke="#13100e" stroke-width="7" stroke-linecap="round" />
+    <path d="M16 104 C16 54 54 20 100 20 C146 20 184 54 184 104 Q163 88 142 104 Q121 88 100 104 Q79 88 58 104 Q37 88 16 104 Z" fill="currentColor" />
+    <path d="M100 20 C80 40 64 70 58 104 Q79 88 100 104 Z M100 20 C150 30 180 60 184 104 Q163 88 142 104 C138 70 124 40 100 20 Z" fill="#13100e" opacity=".13" />
+  </symbol>
+
+  
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="arrow" viewBox="0 0 220 120" data-cat="choices" data-he="חץ (קדימה)" data-color="#f7ae4d">
+    <path d="M196 92 C150 30 90 30 54 64" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" />
+    <path d="M29 87 L38 35 L82 82 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="rain-cloud" viewBox="0 0 200 200" data-cat="growth" data-he="ענן גשם">
+    <g fill="#847c74">
+      <circle cx="66" cy="98" r="34" /><circle cx="106" cy="78" r="44" /><circle cx="148" cy="102" r="30" />
+      <rect x="40" y="100" width="126" height="32" rx="16" />
+    </g>
+    <g fill="#63b1af">
+      <path d="M66 146 C72 156 76 162 76 168 A10 10 0 0 1 56 168 C56 162 60 156 66 146 Z" />
+      <path d="M104 160 C110 170 114 176 114 182 A10 10 0 0 1 94 182 C94 176 98 170 104 160 Z" />
+      <path d="M142 144 C148 154 152 160 152 166 A10 10 0 0 1 132 166 C132 160 136 154 142 144 Z" />
+    </g>
+  </symbol>
+
+  <symbol id="candle" viewBox="0 0 150 220" data-cat="calendar" data-he="נר זיכרון">
+    <circle cx="75" cy="66" r="46" fill="#fdf0dd" />
+    <path d="M75 22 C88 40 96 56 96 70 A21 21 0 0 1 54 70 C54 56 62 40 75 22 Z" fill="#f7ae4d" />
+    <path d="M75 52 C81 60 85 68 85 76 A10 10 0 0 1 65 76 C65 68 69 60 75 52 Z" fill="#fff" />
+    <path d="M75 92 V106" stroke="#13100e" stroke-width="4" stroke-linecap="round" />
+    <path d="M36 106 H114 L108 206 H42 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M40 150 H110 L109 172 H41 Z" fill="#eeecf7" />
+  </symbol>
+
+  <symbol id="flag-il" viewBox="0 0 200 220" data-cat="calendar" data-he="דגל ישראל">
+    <rect x="22" y="16" width="10" height="198" rx="5" fill="#4a443f" />
+    <circle cx="27" cy="14" r="9" fill="#f7ae4d" />
+    <path d="M32 26 C70 14 104 40 142 28 C160 23 174 22 186 26 V116 C174 112 160 113 142 118 C104 130 70 104 32 116 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <g fill="none" stroke="#3b7ab3" stroke-width="11">
+      <path d="M32 40 C70 28 104 54 142 42 C160 37 174 36 186 40" />
+      <path d="M32 102 C70 90 104 116 142 104 C160 99 174 98 186 102" />
+    </g>
+    <g fill="none" stroke="#3b7ab3" stroke-width="4.5" stroke-linejoin="round">
+      <path d="M109 54 L127 85 H91 Z" />
+      <path d="M109 96 L91 65 H127 Z" />
+    </g>
+  </symbol>
+
+  
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">שיח רגשי לרגל יום הזיכרון לחללי צה&#34;ל</div><h1>זיכרון ועצמאות</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נר זיכרון, ודגל ישראל לידו"><g filter="url(#rough)"><use href="#candle" x="360.0" y="170.0" width="200.0" height="293.3" color="#13100e"/><use href="#flag-il" x="70.0" y="232.0" width="210.0" height="231.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מה הקשר?</div><h2>יום עצוב… ולמחרת יום שמחה?</h2><p class="sub">יום הזיכרון — ולמחרתו, יום העצמאות.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נר זיכרון, חץ, ודגל ישראל"><g filter="url(#rough)"><use href="#candle" x="410.0" y="140.0" width="180.0" height="264.0" color="#13100e"/><use href="#arrow" x="238.0" y="230.0" width="160.0" height="87.3" color="#847c74"/><use href="#flag-il" x="30.0" y="184.0" width="200.0" height="220.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">יום הזיכרון לחללי מערכות ישראל</div><h2>יום אבל לאומי במדינת ישראל</h2><p class="sub">להנצחת זכרם של חללי מערכות ישראל ופעולות האיבה</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נר זיכרון"><g filter="url(#rough)"><use href="#candle" x="190.0" y="94.0" width="240.0" height="352.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כולם כותבים · בלי שם</div><h2>אילו מחשבות ורגשות עולים בכם?</h2><p class="sub">כשמדברים על יום הזיכרון — מילה או משפט על פתק.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות יושבת, ומעליה ענן מחשבה"><g filter="url(#rough)"><use href="#kid-sit" x="330.0" y="200.0" width="200.0" height="300.0" color="#63b1af"/><use href="#thought" x="60.0" y="30.0" width="260.0" height="247.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>דקה</span><span class="timer" data-sec="60"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אנו לא לבד!</div><h2>את מי תבחרו לשתף?</h2><p class="sub">התכנים, המראות והסיפורים עלולים להציף מחשבות ורגשות.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי דמויות יושבות זו מול זו ומשוחחות"><g filter="url(#rough)"><use href="#kid-sit" x="60.0" y="220.0" width="180.0" height="270.0" color="#63b1af"/><use href="#kid-sit" x="360.0" y="220.0" width="180.0" height="270.0" color="#f7ae4d" transform="translate(900.0 0) scale(-1 1)"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">סיפור אחד אישי של שני חיילים צעירים</div><h2>״יובלים והראלים״</h2><p class="sub">לשניהם קראו יובל הראל, ושניהם גרו בשכונת תלפיות בירושלים.</p><ol class="pts"><li class="fragment">יובל הראל ז״ל — בנם של חיה ויוסף</li><li class="fragment">יובל הראל ז״ל — בנם של מרים ויחזקאל</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שני נרות זיכרון זה לצד זה"><g filter="url(#rough)"><use href="#candle" x="100.0" y="160.0" width="190.0" height="278.7" color="#13100e"/><use href="#candle" x="330.0" y="160.0" width="190.0" height="278.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-video" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לפני שצופים</div><h2>איזו שורה בשיר תיגע בכם?</h2><a class="go" href="https://www.youtube.com/watch?v=TGMY6a_JzCQ" target="_blank" rel="noopener">לסרטון ←</a>    </div>
+    <div class="pic"><svg role="img" aria-label="נר זיכרון, ותווים לידו" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g fill="#8c82c1" transform="translate(40 70) scale(0.8)">
+      <ellipse cx="92" cy="330" rx="30" ry="21" transform="rotate(-20 92 330)"/>
+      <ellipse cx="210" cy="298" rx="30" ry="21" transform="rotate(-20 210 298)"/>
+      <rect x="109" y="188" width="12" height="138" rx="5"/>
+      <rect x="227" y="156" width="12" height="138" rx="5"/>
+      <path d="M109 188 L239 156 L239 184 L109 216 Z"/>
+      <ellipse cx="250" cy="146" rx="26" ry="19" transform="rotate(-20 250 146)"/>
+      <rect x="265" y="30" width="11" height="112" rx="5"/>
+      <path d="M270 30 C292 56 326 66 318 112 C308 86 292 76 276 72 Z"/>
+    </g>
+    <use href="#candle" x="340" y="130" width="230" height="337" color="#13100e"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="8">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אחרי השיר</div><h2>איזו שורה בשיר נגעה בכם?</h2><p class="sub">ואילו מחשבות ורגשות מתעוררים בעקבות הסיפור והשיר?</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות יושבת מול דף עם שורות"><g filter="url(#rough)"><use href="#kid-sit" x="50.0" y="200.0" width="200.0" height="300.0" color="#63b1af"/><use href="#note" x="330.0" y="100.0" width="200.0" height="250.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="9">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חוסן אישי · חושבים · בזוגות · משתפים</div><h2>מה נותן לכם כוח וחוסן?</h2><p class="sub">כשמצבים מורכבים מציפים רגשות שונים.</p><ol class="pts"><li class="fragment">לבד — כותבים לעצמכם</li><li class="fragment">בזוגות — משתפים במה שבוחרים</li><li class="fragment">במליאה — אילו רעיונות קיבלתם?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות עומדת מתחת למטרייה, וענן גשם מעליה"><g filter="url(#rough)"><use href="#rain-cloud" x="360.0" y="20.0" width="190.0" height="190.0" color="#13100e"/><use href="#umbrella" x="200.0" y="170.0" width="230.0" height="230.0" color="#8c82c1"/><use href="#kid-stand" x="250.0" y="240.0" width="140.0" height="280.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="10">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חוסן אישי</div><h2>לכל אחד ואחת מאיתנו דרך התמודדות שונה</h2><p class="sub">אין דפוס התמודדות אחד שהוא טוב לכולם.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="שש דרכים סביב ״חוסן״ — אמונה, שיתוף, ספורט, חיפוש מידע, משפחה וחברים" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  
+  <g filter="url(#rough)">
+    <g stroke="#619f88" stroke-width="11" stroke-linecap="round">
+      <line x1="310" y1="270" x2="310" y2="95"/><line x1="310" y1="270" x2="461.6" y2="182.5"/>
+      <line x1="310" y1="270" x2="461.6" y2="357.5"/><line x1="310" y1="270" x2="310" y2="445"/>
+      <line x1="310" y1="270" x2="158.4" y2="357.5"/><line x1="310" y1="270" x2="158.4" y2="182.5"/>
+    </g>
+    <circle cx="310" cy="270" r="80" fill="#619f88"/>
+    <g fill="#ffffff" stroke="#63b1af" stroke-width="7">
+      <circle cx="310" cy="95" r="66"/><circle cx="461.6" cy="182.5" r="66"/>
+      <circle cx="461.6" cy="357.5" r="66"/><circle cx="310" cy="445" r="66"/>
+      <circle cx="158.4" cy="357.5" r="66"/><circle cx="158.4" cy="182.5" r="66"/>
+    </g>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="30">
+    <text x="310" y="274" font-size="46">חוסן</text>
+    <text x="310" y="98">אמונה</text>
+    <text x="461.6" y="185.5">שיתוף</text>
+    <text x="461.6" y="360.5">ספורט</text>
+    <text x="310" y="431">חיפוש</text><text x="310" y="465">מידע</text>
+    <text x="158.4" y="360.5">משפחה</text>
+    <text x="158.4" y="185.5">חברים</text>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic s-video" data-n="11">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לפני שצופים</div><h2>״אך נזכור את כולם״ — באלו דרכים נזכור את הנופלים?</h2><a class="go" href="https://youtu.be/XSRBg7OUDig" target="_blank" rel="noopener">לסרטון ←</a>    </div>
+    <div class="pic"><svg role="img" aria-label="דגל ישראל, ותווים לידו" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g fill="#8c82c1" transform="translate(30 70) scale(0.8)">
+      <ellipse cx="92" cy="330" rx="30" ry="21" transform="rotate(-20 92 330)"/>
+      <ellipse cx="210" cy="298" rx="30" ry="21" transform="rotate(-20 210 298)"/>
+      <rect x="109" y="188" width="12" height="138" rx="5"/>
+      <rect x="227" y="156" width="12" height="138" rx="5"/>
+      <path d="M109 188 L239 156 L239 184 L109 216 Z"/>
+      <ellipse cx="250" cy="146" rx="26" ry="19" transform="rotate(-20 250 146)"/>
+      <rect x="265" y="30" width="11" height="112" rx="5"/>
+      <path d="M270 30 C292 56 326 66 318 112 C308 86 292 76 276 72 Z"/>
+    </g>
+    <use href="#flag-il" x="310" y="140" width="270" height="297" color="#3b7ab3"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="12">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 1 מתוך 5</div><h2>הדגשנו את חשיבותו של יום הזיכרון בהיותו יום המוקדש לזכירת הנופלים ולהיכרות עם סיפורי החיים שלהם.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי ידיים מושטות זו לזו, ונר זיכרון לידן"><g filter="url(#rough)"><use href="#hands-help" x="240.0" y="150.0" width="300.0" height="300.0" color="#13100e"/><use href="#candle" x="60.0" y="200.0" width="140.0" height="205.3" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="13">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 2 מתוך 5</div><h2>הכרנו את הסיפור על ״יובלים והראלים״ והקשבנו לשיר שנכתב בהשראתו.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי ידיים מושטות זו לזו, ונר זיכרון לידן"><g filter="url(#rough)"><use href="#hands-help" x="240.0" y="150.0" width="300.0" height="300.0" color="#13100e"/><use href="#candle" x="60.0" y="200.0" width="140.0" height="205.3" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="14">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 3 מתוך 5</div><h2>דנו בסמיכות שבין יום הזיכרון ליום העצמאות.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי ידיים מושטות זו לזו, ונר זיכרון לידן"><g filter="url(#rough)"><use href="#hands-help" x="240.0" y="150.0" width="300.0" height="300.0" color="#13100e"/><use href="#candle" x="60.0" y="200.0" width="140.0" height="205.3" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg len-m" data-n="15">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 4 מתוך 5</div><h2>יום הזיכרון ולאחריו יום העצמאות הינם מועדים המציפים אצל כולנו רגשות שונים: כאב, עצב, חמלה ודאגה, לצד גאווה, שמחה, תחושת סולידריות והוקרה על הקיים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי ידיים מושטות זו לזו, ונר זיכרון לידן"><g filter="url(#rough)"><use href="#hands-help" x="240.0" y="150.0" width="300.0" height="300.0" color="#13100e"/><use href="#candle" x="60.0" y="200.0" width="140.0" height="205.3" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="16">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 5 מתוך 5</div><h2>שוחחנו על החשיבות שבשיתוף אחרים בתחושותינו וברגשותינו, ביום זה בפרט ובמצבי קושי ומשבר, בכלל.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי ידיים מושטות זו לזו, ונר זיכרון לידן"><g filter="url(#rough)"><use href="#hands-help" x="240.0" y="150.0" width="300.0" height="300.0" color="#13100e"/><use href="#candle" x="60.0" y="200.0" width="140.0" height="205.3" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="17">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כרטיס יציאה</div><h2>לפני שיוצאים</h2><ol class="pts"><li class="fragment">אדם אחד שאוכל לשתף במחשבות וברגשות שעולים בי.</li><li class="fragment">דרך התמודדות אחת שמחזקת אותי — או שאנסה.</li><li class="fragment">רשות — משהו שריגש אותי היום.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות כותבת ליד שולחן, ושתי ידיים מושטות לידה"><g filter="url(#rough)"><use href="#kid-desk" x="290.0" y="130.0" width="288.0" height="384.0" color="#63b1af"/><use href="#hands-help" x="40.0" y="80.0" width="200.0" height="200.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

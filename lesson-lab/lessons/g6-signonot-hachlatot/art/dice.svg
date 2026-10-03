@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- הימור: שתי קוביות משחק (ציור ייעודי — אין קובייה בערכה), ודמות לידן -->
+  <g filter="url(#rough)">
+    <g transform="rotate(-14 365 161)">
+      <rect x="290" y="86" width="150" height="150" rx="24" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+      <g fill="#13100e">
+        <circle cx="328" cy="124" r="14"/>
+        <circle cx="365" cy="161" r="14"/>
+        <circle cx="402" cy="198" r="14"/>
+      </g>
+    </g>
+    <g transform="rotate(10 450 350)">
+      <rect x="350" y="250" width="200" height="200" rx="30" fill="#f7ae4d"/>
+      <g fill="#ffffff">
+        <circle cx="400" cy="300" r="17"/>
+        <circle cx="500" cy="300" r="17"/>
+        <circle cx="450" cy="350" r="17"/>
+        <circle cx="400" cy="400" r="17"/>
+        <circle cx="500" cy="400" r="17"/>
+      </g>
+    </g>
+    <use href="#kid-stand" x="70" y="230" width="140" height="280" color="#63b1af"/>
+  </g>
+</svg>

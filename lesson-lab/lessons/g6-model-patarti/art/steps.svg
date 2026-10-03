@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ארבעת צעדי מודל פתרת"י (מקור: שקף 12): מדרגות שעולות שמאלה — 1 פנייה, 2 תיאור הקושי, 3 בקשה, 4 תודה; דמות בתחתית ודגל בראש -->
+  <g filter="url(#rough)">
+    <rect x="440" y="404" width="140" height="100" rx="8" fill="#8c82c1"/>
+    <rect x="320" y="324" width="122" height="180" rx="8" fill="#8c82c1"/>
+    <rect x="200" y="244" width="122" height="260" rx="8" fill="#8c82c1"/>
+    <rect x="80" y="164" width="122" height="340" rx="8" fill="#8c82c1"/>
+    <g fill="#ffffff" stroke="#13100e" stroke-width="4">
+      <circle cx="510" cy="454" r="30"/>
+      <circle cx="381" cy="374" r="30"/>
+      <circle cx="261" cy="294" r="30"/>
+      <circle cx="141" cy="214" r="30"/>
+    </g>
+    <use href="#kid-stand" x="462" y="168" width="118" height="236" color="#63b1af"/>
+    <use href="#flag" x="86" y="24" width="112" height="137" color="#f7ae4d"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="38">
+    <text x="510" y="457">1</text>
+    <text x="381" y="377">2</text>
+    <text x="261" y="297">3</text>
+    <text x="141" y="217">4</text>
+  </g>
+</svg>

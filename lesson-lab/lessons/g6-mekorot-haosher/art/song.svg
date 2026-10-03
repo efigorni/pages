@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- השיר "אושר" (שקף 9 במקור): מחשב נייד ועל המסך שמש, ותווי מוזיקה מעליו -->
+  <g filter="url(#rough)">
+    <use href="#laptop" x="130" y="220" width="360" height="240" color="#13100e"/>
+    <use href="#sun" x="255" y="265" width="110" height="110" color="#f7ae4d"/>
+    <g fill="#13100e">
+      <ellipse cx="226" cy="176" rx="22" ry="16" transform="rotate(-20 226 176)"/>
+      <rect x="241" y="74" width="9" height="100" rx="3"/>
+      <path d="M245 74 C266 88 284 98 280 132 C273 112 262 106 245 104 Z"/>
+      <ellipse cx="364" cy="150" rx="22" ry="16" transform="rotate(-20 364 150)"/>
+      <ellipse cx="438" cy="132" rx="22" ry="16" transform="rotate(-20 438 132)"/>
+      <rect x="379" y="54" width="9" height="94" rx="3"/>
+      <rect x="453" y="36" width="9" height="94" rx="3"/>
+      <path d="M379 54 L462 36 L462 56 L379 74 Z"/>
+    </g>
+  </g>
+</svg>

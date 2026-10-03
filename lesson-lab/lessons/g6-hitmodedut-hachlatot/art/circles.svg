@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מעגלי השפעה: אני במרכז, ומסביב משפחה, חברים וסביבה (מקור: שקף 14) -->
+  <g filter="url(#rough)">
+    <circle cx="310" cy="270" r="250" fill="#ffffff" stroke="#847c74" stroke-width="6" stroke-dasharray="2 14" stroke-linecap="round"/>
+    <circle cx="310" cy="270" r="185" fill="#fdf0dd" stroke="#f7ae4d" stroke-width="7"/>
+    <circle cx="310" cy="270" r="122" fill="#eeecf7" stroke="#8c82c1" stroke-width="7"/>
+    <circle cx="310" cy="270" r="62" fill="#63b1af"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-size="38">
+    <text x="310" y="273" font-size="46">אני</text>
+    <text x="310" y="180">משפחה</text>
+    <text x="310" y="118">חברים</text>
+    <text x="310" y="54">סביבה</text>
+  </g>
+</svg>

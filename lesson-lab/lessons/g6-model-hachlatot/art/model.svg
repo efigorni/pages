@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מודל קבלת החלטות (מקור: שקפים 11, 19): שישה שלבים מלמעלה למטה; בשלב השני שתי אפשרויות זו לצד זו -->
+  <g filter="url(#rough)">
+    <g stroke="#13100e" stroke-width="4" stroke-linejoin="round">
+      <rect x="110" y="40" width="360" height="62" rx="16" fill="#e6f2f1"/>
+      <rect x="300" y="120" width="170" height="62" rx="16" fill="#fdf0dd"/>
+      <rect x="110" y="120" width="170" height="62" rx="16" fill="#fdf0dd"/>
+      <rect x="110" y="200" width="360" height="62" rx="16" fill="#eeecf7"/>
+      <rect x="110" y="280" width="360" height="62" rx="16" fill="#e6f2f1"/>
+      <rect x="110" y="360" width="360" height="62" rx="16" fill="#fdf0dd"/>
+      <rect x="110" y="440" width="360" height="62" rx="16" fill="#eeecf7"/>
+    </g>
+    <g fill="none" stroke="#847c74" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M375 105 L385 115 L395 105"/><path d="M185 105 L195 115 L205 105"/>
+      <path d="M375 185 L385 195 L395 185"/><path d="M185 185 L195 195 L205 185"/>
+      <path d="M280 265 L290 275 L300 265"/>
+      <path d="M280 345 L290 355 L300 345"/>
+      <path d="M280 425 L290 435 L300 425"/>
+    </g>
+    <g fill="#ffffff" stroke="#63b1af" stroke-width="5">
+      <circle cx="530" cy="71" r="26"/><circle cx="530" cy="151" r="26"/><circle cx="530" cy="231" r="26"/>
+      <circle cx="530" cy="311" r="26"/><circle cx="530" cy="391" r="26"/><circle cx="530" cy="471" r="26"/>
+    </g>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-size="34">
+    <text x="290" y="73">הגדרת הסוגיה</text>
+    <text x="385" y="153" font-size="31">אפשרות א׳</text>
+    <text x="195" y="153" font-size="31">אפשרות ב׳</text>
+    <text x="290" y="233">איסוף מידע</text>
+    <text x="290" y="313">יתרונות וחסרונות</text>
+    <text x="290" y="393">החלטה וביצוע</text>
+    <text x="290" y="473">משוב ובדיקה</text>
+    <g font-size="30"><text x="530" y="73">1</text><text x="530" y="153">2</text><text x="530" y="233">3</text><text x="530" y="313">4</text><text x="530" y="393">5</text><text x="530" y="473">6</text></g>
+  </g>
+</svg>

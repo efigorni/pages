@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ארבעת התחומים (מקור: שקף 13): אישי · לימודי · חברתי · משפחתי. סדר הקריאה מימין -->
+  <g filter="url(#rough)">
+    <g stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="322" y="22" width="276" height="236" rx="22" fill="#e6f2f1"/>
+      <rect x="22" y="22" width="276" height="236" rx="22" fill="#eeecf7"/>
+      <rect x="322" y="282" width="276" height="236" rx="22" fill="#fdf0dd"/>
+      <rect x="22" y="282" width="276" height="236" rx="22" fill="#e7f1ec"/>
+    </g>
+    <use href="#kid-stand" x="424" y="34" width="72" height="144" color="#63b1af"/>
+    <use href="#book" x="85" y="58" width="150" height="116" color="#8c82c1"/>
+    <use href="#pair" x="394" y="294" width="132" height="144"/>
+    <use href="#house" x="85" y="302" width="150" height="136"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" fill="#13100e" font-size="40">
+    <text x="460" y="214">אישי</text>
+    <text x="160" y="214">לימודי</text>
+    <text x="460" y="476">חברתי</text>
+    <text x="160" y="476">משפחתי</text>
+  </g>
+</svg>
