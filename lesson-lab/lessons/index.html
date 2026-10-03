@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מערכי שיעור · הכ״חות שבדרך</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#63b1af; --teal-deep:#3f8f8d; --teal-soft:#e6f2f1;
+  --orange:#f7ae4d; --orange-deep:#e08f36; --orange-soft:#fdf0dd;
+  --purple:#8c82c1; --purple-deep:#6c60b0; --purple-soft:#eeecf7;
+  --moss:#619f88; --moss-deep:#4a8571; --moss-soft:#e7f1ec;
+  --ink:#13100e; --ink-2:#4a443f; --ink-3:#847c74;
+  --paper:#ffffff; --ground:#f6f3ef; --line:#e8e2da;
+  --shadow-1:0 1px 2px rgba(19,16,14,.04), 0 4px 14px rgba(19,16,14,.05);
+  --shadow-2:0 2px 6px rgba(19,16,14,.06), 0 18px 44px rgba(19,16,14,.13);
+  --r:18px;
+  --display:"Secular One","Arial Hebrew","Noto Sans Hebrew",system-ui,sans-serif;
+  --body:"Assistant","Arial Hebrew","Noto Sans Hebrew",system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--purple-deep);outline-offset:2px;border-radius:6px}
+
+.hero{position:relative;overflow:hidden;background:var(--paper);border-bottom:1px solid var(--line)}
+.hero-in{max-width:1180px;margin:0 auto;padding:44px 22px 30px;position:relative;z-index:2}
+.deck{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.deck-num{font-family:var(--display);font-size:clamp(58px,11vw,104px);line-height:.78;color:var(--teal);letter-spacing:-.03em}
+.deck-txt h1{font-family:var(--display);font-weight:400;margin:0;font-size:clamp(24px,4.4vw,38px);line-height:1.1;letter-spacing:-.01em}
+.deck-txt p{margin:7px 0 0;color:var(--ink-3);font-size:14px;letter-spacing:.06em}
+.hero-art{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero-art svg{position:absolute}
+.art-a{top:-56px;left:-40px;width:230px;height:230px;opacity:.9}
+.art-b{bottom:-74px;left:16%;width:150px;height:150px}
+.art-c{top:14px;left:20%;width:86px;height:86px;opacity:.85}
+
+.bar{position:sticky;top:0;z-index:60;background:rgba(246,243,239,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1180px;margin:0 auto;padding:13px 22px}
+.bar-top{display:flex;gap:11px;align-items:center}
+.search{position:relative;flex:1;min-width:0}
+.search input{width:100%;font:inherit;font-size:15px;padding:12px 44px 12px 40px;background:var(--paper);border:1.5px solid var(--line);border-radius:99px;color:var(--ink);transition:border-color .18s,box-shadow .18s}
+.search input::placeholder{color:var(--ink-3)}
+.search input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-soft)}
+.search svg{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:17px;height:17px;stroke:var(--ink-3);fill:none;stroke-width:2;pointer-events:none}
+.filt-btn{display:none;align-items:center;gap:7px;flex:none;padding:12px 16px;border-radius:99px;background:var(--paper);border:1.5px solid var(--line);font-weight:700;font-size:14px;color:var(--ink-2)}
+.filt-btn[aria-expanded="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.filt-btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2}
+.facets{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.facet{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.facet-name{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.03em;margin-inline-end:3px;flex:none;min-width:38px}
+.chip{--c:var(--ink-3);display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;font-size:13.5px;font-weight:600;background:var(--paper);border:1.5px solid var(--line);color:var(--ink-2);transition:background .16s,border-color .16s,color .16s,transform .12s}
+.chip:hover{border-color:var(--c);transform:translateY(-1px)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.chip .n{font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.chip[aria-pressed="true"] .dot{background:rgba(255,255,255,.85)}
+.chip[aria-pressed="true"] .n{color:rgba(255,255,255,.8)}
+.chip.off{opacity:.36}
+.facet.units .chip.off{display:none}
+.facet.units:not(.on) .chip{display:none}
+.facet-hint{font-size:12.5px;color:var(--ink-3)}
+.facet.units.on .facet-hint{display:none}
+.tally{display:flex;align-items:center;gap:12px;margin-top:11px;font-size:13px;color:var(--ink-3)}
+.tally b{color:var(--ink);font-variant-numeric:tabular-nums}
+.clear{color:var(--purple-deep);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:3px;display:none}
+.clear.on{display:inline}
+
+main{max-width:1180px;margin:0 auto;padding:26px 22px 90px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
+.card{--c:var(--teal);position:relative;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:19px 18px 14px;min-height:190px;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow-1);transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s;animation:rise .44s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(11px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-2);border-color:transparent}
+.card:hover .motif{transform:rotate(-9deg) scale(1.06)}
+.card.hide{display:none}
+.motif{position:absolute;top:-16px;left:-14px;width:82px;height:82px;pointer-events:none;transition:transform .38s var(--ease)}
+.card-cat{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:12px;font-weight:800;color:var(--c);margin-bottom:8px}
+.card-cat .dot{width:7px;height:7px;border-radius:50%;background:var(--c)}
+.card-t{font-family:var(--display);font-weight:400;font-size:20px;line-height:1.25;margin:0 0 4px;padding-inline-end:46px;letter-spacing:-.005em}
+.card-t a{text-decoration:none}
+.card-t a::after{content:"";position:absolute;inset:0;z-index:1}
+.card-sub{font-size:12.5px;color:var(--ink-3);margin:0 0 8px;font-weight:600}
+.card-s{font-size:14px;color:var(--ink-2);line-height:1.45;margin:0 0 auto;padding-bottom:14px}
+.card-f{position:relative;z-index:2;display:flex;align-items:center;gap:6px;border-top:1px solid var(--line);padding-top:11px}
+.card-f a{font-size:12.5px;font-weight:800;text-decoration:none;color:var(--ink-2);padding:4px 10px;border-radius:99px;background:var(--ground)}
+.card-f a:first-child{background:var(--c);color:#fff}
+.card-f a:hover{filter:brightness(.94)}
+.empty{text-align:center;padding:76px 20px;color:var(--ink-3);display:none}
+.empty.on{display:block}
+.empty h3{font-family:var(--display);font-weight:400;font-size:23px;color:var(--ink);margin:0 0 8px}
+footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--ink-3);font-size:13px}
+
+@media (max-width:720px){
+  .hero-in{padding:30px 17px 22px}
+  .art-a{top:-64px;left:-72px;width:170px;height:170px;opacity:.5}
+  .art-b{bottom:-64px;left:6%;width:104px;height:104px;opacity:.55}
+  .art-c{top:6px;left:8%;width:60px;height:60px;opacity:.5}
+  .filt-btn{display:flex}
+  .facets{display:none}
+  .facets.open{display:flex}
+  .bar-in{padding:11px 17px}
+  main{padding:20px 17px 70px}
+  .grid{grid-template-columns:1fr;gap:11px}
+  .card{min-height:0}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-art" aria-hidden="true">
+    <svg class="art-a" viewBox="0 0 100 100"><g fill="none" stroke="#8c82c1" stroke-width="1.7"><circle cx="50" cy="50" r="6"/><circle cx="50" cy="50" r="12"/><circle cx="50" cy="50" r="18"/><circle cx="50" cy="50" r="24"/><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="36"/><circle cx="50" cy="50" r="42"/><circle cx="50" cy="50" r="48"/></g></svg>
+    <svg class="art-b" viewBox="0 0 100 100"><defs><pattern id="hs" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="7" stroke="#f7ae4d" stroke-width="3.4"/></pattern></defs><circle cx="50" cy="50" r="46" fill="url(#hs)"/></svg>
+    <svg class="art-c" viewBox="0 0 100 100"><circle cx="38" cy="42" r="34" fill="#f7ae4d"/><circle cx="66" cy="60" r="30" fill="#63b1af" fill-opacity=".82"/></svg>
+  </div>
+  <div class="hero-in">
+    <div class="deck">
+      <div class="deck-num">3</div>
+      <div class="deck-txt">
+        <h1>מערכי שיעור לכישורי חיים</h1>
+        <p>הכ״חות שבדרך · כיתות ו׳–ט׳ · ברוח חותם והמגדלור</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="bar-top">
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+        <input id="q" type="search" placeholder="חיפוש שיעור, יחידה או שאלה" aria-label="חיפוש שיעור" autocomplete="off">
+      </div>
+      <button class="filt-btn" id="toggleFilters" aria-expanded="false" aria-controls="facets">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span>סינון</span>
+      </button>
+    </div>
+    <div class="facets" id="facets">
+      <div class="facet" data-f="grade"><span class="facet-name">כיתה</span><button class="chip" data-v="7" aria-pressed="false" style="--c:#e08f36"><span class="dot"></span>ז׳<span class="n"></span></button></div>
+      <div class="facet" data-f="month"><span class="facet-name">חודש</span><button class="chip" data-v="אוקטובר" aria-pressed="false">אוקטובר<span class="n"></span></button><button class="chip" data-v="דצמבר" aria-pressed="false">דצמבר<span class="n"></span></button><button class="chip" data-v="פברואר" aria-pressed="false">פברואר<span class="n"></span></button></div>
+      <div class="facet units" data-f="unit"><span class="facet-name">יחידה</span><span class="facet-hint">בוחרים כיתה — ואז אפשר לסנן לפי יחידה</span><button class="chip" data-v="למצוא מקום" aria-pressed="false">למצוא מקום<span class="n"></span></button><button class="chip" data-v="מתבגרים בבריאות" aria-pressed="false">מתבגרים בבריאות<span class="n"></span></button><button class="chip" data-v="נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת" aria-pressed="false">נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת<span class="n"></span></button></div>
+    </div>
+    <div class="tally"><span>מוצגים <b id="shown">3</b> מתוך <b>3</b> שיעורים</span><button class="clear" id="clearAll">נקה הכול</button></div>
+  </div>
+</div>
+
+<main>
+  <div class="grid" id="grid">
+    <article class="card" style="--c:#e08f36;animation-delay:0ms" data-grade="7" data-month="אוקטובר" data-unit="למצוא מקום">
+      <span class="motif" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="60" cy="42" r="30" fill="#e08f36" fill-opacity=".9"/><circle cx="36" cy="60" r="25" fill="#f7ae4d" fill-opacity=".78"/></svg></span>
+      <span class="card-cat"><span class="dot"></span>כיתה ז׳ · אוקטובר</span>
+      <h2 class="card-t"><a href="g7-makom-baolam/index.html">מקום בעולם</a></h2>
+      <p class="card-sub">למצוא מקום · שיעור 1</p>
+      <p class="card-s">מה צריך כדי להרגיש שיש לי מקום — ואיך עושים מקום לכולם?</p>
+      <div class="card-f"><a href="g7-makom-baolam/index.html">המערך</a><a href="g7-makom-baolam/slides.html">מצגת</a><a href="g7-makom-baolam/slides.pdf">PDF</a></div>
+    </article>
+    <article class="card" style="--c:#e08f36;animation-delay:22ms" data-grade="7" data-month="דצמבר" data-unit="מתבגרים בבריאות">
+      <span class="motif" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><pattern id="p1" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><line x1="0" y1="0" x2="0" y2="8" stroke="#f7ae4d" stroke-width="3.6"/></pattern></defs><circle cx="42" cy="55" r="30" fill="url(#p1)"/><circle cx="66" cy="36" r="20" fill="#e08f36" fill-opacity=".88"/></svg></span>
+      <span class="card-cat"><span class="dot"></span>כיתה ז׳ · דצמבר</span>
+      <h2 class="card-t"><a href="g7-hashpaha-hevratit-1/index.html">מתבגרים ומתמודדים עם השפעה חברתית</a></h2>
+      <p class="card-sub">מתבגרים בבריאות · שיעור 1</p>
+      <p class="card-s">למה קשה לעמוד מול הקבוצה — ואיך אומרים ׳לא׳ כשצריך?</p>
+      <div class="card-f"><a href="g7-hashpaha-hevratit-1/index.html">המערך</a><a href="g7-hashpaha-hevratit-1/slides.html">מצגת</a></div>
+    </article>
+    <article class="card" style="--c:#e08f36;animation-delay:44ms" data-grade="7" data-month="פברואר" data-unit="נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת">
+      <span class="motif" aria-hidden="true"><svg viewBox="0 0 100 100"><g fill="none" stroke="#e08f36" stroke-width="2.6"><circle cx="50" cy="50" r="8"/><circle cx="50" cy="50" r="16"/><circle cx="50" cy="50" r="24"/><circle cx="50" cy="50" r="32"/><circle cx="50" cy="50" r="40"/></g></svg></span>
+      <span class="card-cat"><span class="dot"></span>כיתה ז׳ · פברואר</span>
+      <h2 class="card-t"><a href="g7-eifo-ani-vehagvul-sheli-bamasachim/index.html">איפה אני ומה הגבול שלי?</a></h2>
+      <p class="card-sub">נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת · שיעור 2</p>
+      <p class="card-s">מתי המסך עושה לנו טוב, מתי הוא לוקח מאיתנו — ואיזה גבול מתאים לנו?</p>
+      <div class="card-f"><a href="g7-eifo-ani-vehagvul-sheli-bamasachim/index.html">המערך</a><a href="g7-eifo-ani-vehagvul-sheli-bamasachim/slides.html">מצגת</a></div>
+    </article>
+  </div>
+  <div class="empty" id="empty"><h3>אין שיעור שמתאים לסינון</h3><p>נסו להסיר תווית או לנקות את החיפוש.</p></div>
+</main>
+<footer>מבוסס על ״הכ״חות שבדרך״ של שפ״י, בעריכה מחדש לפי פרקטיקות ״חותם על זה״ וזרקורי ״המגדלור״.</footer>
+
+<script>
+(function () {
+  'use strict';
+  var cards = [].slice.call(document.querySelectorAll('.card'));
+  var F = { grade: new Set(), month: new Set(), unit: new Set() };
+  var q = '';
+  function vals(card, k) { var v = card.dataset[k] || ''; return k === 'unit' ? [v] : v.split(k === 'month' ? '|' : ' '); }
+  function passes(card, skip) {
+    for (var k in F) {
+      if (k === skip || !F[k].size) continue;
+      if (!vals(card, k).some(function (v) { return F[k].has(v); })) return false;
+    }
+    return !q || card.textContent.indexOf(q) !== -1;
+  }
+  function render() {
+    var shown = 0;
+    cards.forEach(function (c) { var ok = passes(c, null); c.classList.toggle('hide', !ok); shown += ok; });
+    document.getElementById('shown').textContent = shown;
+    document.getElementById('empty').classList.toggle('on', shown === 0);
+    document.querySelectorAll('.facet').forEach(function (fc) {
+      var k = fc.dataset.f;
+      fc.querySelectorAll('.chip').forEach(function (b) {
+        var v = b.dataset.v, on = F[k].has(v);
+        var n = cards.filter(function (c) { return passes(c, k) && vals(c, k).indexOf(v) !== -1; }).length;
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.querySelector('.n').textContent = n;
+        b.classList.toggle('off', n === 0 && !on);
+      });
+    });
+    document.querySelector('.facet.units').classList.toggle('on', F.grade.size > 0);
+    var active = F.grade.size + F.month.size + F.unit.size;
+    document.getElementById('clearAll').classList.toggle('on', !!(q || active));
+  }
+  document.getElementById('facets').addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    var s = F[b.closest('.facet').dataset.f], v = b.dataset.v;
+    s.has(v) ? s.delete(v) : s.add(v);
+    if (!F.grade.size) F.unit.clear();
+    render();
+  });
+  document.getElementById('q').addEventListener('input', function (e) { q = e.target.value.trim(); render(); });
+  document.getElementById('clearAll').addEventListener('click', function () {
+    F.grade.clear(); F.month.clear(); F.unit.clear(); q = ''; document.getElementById('q').value = ''; render();
+  });
+  document.getElementById('toggleFilters').addEventListener('click', function () {
+    var f = document.getElementById('facets'), open = f.classList.toggle('open');
+    this.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  render();
+})();
+</script>
+</body>
+</html>

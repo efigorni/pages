@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- ניסוי אורך הקווים של אש: קו בודד בכרטיס הימני, ושלושה קווים לבחירה בכרטיס השמאלי; קו 2 תואם (מקור: שקף 11, הערות) -->
+  <g filter="url(#rough)">
+    <rect x="396" y="92" width="192" height="356" rx="18" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="32" y="92" width="336" height="356" rx="18" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <g stroke="#13100e" stroke-width="12" stroke-linecap="round">
+      <line x1="492" y1="150" x2="492" y2="370"/>
+      <line x1="298" y1="240" x2="298" y2="370"/>
+      <line x1="200" y1="150" x2="200" y2="370"/>
+      <line x1="102" y1="120" x2="102" y2="370"/>
+    </g>
+  </g>
+  <g text-anchor="middle" font-family="Secular One, Arial Hebrew, sans-serif" font-size="40" fill="#13100e">
+    <text x="298" y="424">1</text>
+    <text x="200" y="424">2</text>
+    <text x="102" y="424">3</text>
+  </g>
+</svg>

@@ -56,9 +56,16 @@ COLORS = {
     'paper': '#ffffff', 'ground': '#f6f3ef', 'line': '#e8e2da',
 }
 TRACK_LETTERS = ('א׳', 'ב׳')
+TRACK_IDS = ('a', 'b')
 # composition rules of assets/art/art-guide.md (the validator warns outside them)
 FOCUS_MAX, SCALE_MIN, SCALE_MAX, MARGIN, MAX_USES = 390, 0.6, 1.6, 16, 5
+DETAIL_MIN = 0.4  # a small detail drawn inside a container (bubble, board, phone…) may go down to 0.4×
+CONTAINERS = {'speech', 'speech-l', 'thought', 'chat', 'board', 'phone', 'phone-notify', 'laptop', 'note', 'sticky',
+              'signpost', 'calendar'}
 MIN_SIZE = {'circle4': 150, 'crowd': 180, 'hands-help': 160, 'school': 160, 'red-line': 300}  # width; face-*: 100
+# D42: one message per slide. Longer messages get a smaller type size; above MSG_MAX the slide overflows.
+MSG_TIERS = ((120, ''), (200, 'len-m'), (10_000, 'len-l'))
+MSG_MAX = 300
 PALETTE = {'#63b1af', '#f7ae4d', '#8c82c1', '#619f88', '#13100e', '#e57373', '#c94f4f', '#847c74', '#3b7ab3',
            '#e6f2f1', '#fdf0dd', '#eeecf7', '#e7f1ec', '#ffffff'}
 PAUSE_UNKNOWN = '[דקה:שנייה]'
@@ -90,6 +97,19 @@ def paras(text) -> Markup:
 def unquote(text) -> str:
     """`.say q` adds ״…״ itself, so surrounding quote marks in the YAML are dropped."""
     return str(text or '').strip().strip('״"„“”\'׳').strip()
+
+
+def msg_class(text) -> str:
+    n = len(str(text or '').strip())
+    return next(cls for limit, cls in MSG_TIERS if n <= limit)
+
+
+def pause_label(at) -> Markup:
+    """A video pause time: "1:05" (LTR), or the highlighted [דקה:שנייה] for the teacher to fill in."""
+    at = str(at if at is not None else '').strip()
+    if at in ('', '?', PAUSE_UNKNOWN):
+        return Markup(f'<span class="fill">{PAUSE_UNKNOWN}</span>')
+    return Markup(f'<span dir="ltr">{escape(at)}</span>')
 
 
 def minutes_label(sec: int) -> str:
@@ -268,7 +288,7 @@ def art_symbols(spec) -> list[str]:
 
 def render_art(spec, kit: Kit, lesson_dir: Path, label: str, used: set[str]) -> Markup:
     """A slide scene on the 620×540 canvas (the kit's units): one symbol fitted to the canvas,
-    a list of placements ({use, x, y, w?, h?, color?, flip?} with x,y = top-left, natural size by
+    a list of placements ({use, x, y, w?, h?, color?, flip?, rotate?} with x,y = top-left, natural size by
     default; {use: <token>, x, y, color?, scale?} for <g> tokens such as #kid; {text, x, y, size?, color?}
     centred), or {file: art/x.svg} — a lesson-only SVG."""
     label_attr = escape(re.sub(r'\*\*', '', str(label or '')))
@@ -306,9 +326,14 @@ def render_art(spec, kit: Kit, lesson_dir: Path, label: str, used: set[str]) -> 
                 w = float(it.get('w', it['h'] * vw / vh if it.get('h') else vw))
                 h = float(it.get('h', w * vh / vw))
                 x, y = float(it.get('x', (CANVAS_W - w) / 2)), float(it.get('y', (CANVAS_H - h) / 2))
-            flip = f' transform="translate({2 * x + w:.1f} 0) scale(-1 1)"' if it.get('flip') else ''
+            tf = []
+            if it.get('rotate'):  # degrees, around the centre of the symbol's box
+                tf.append(f'rotate({float(it["rotate"]):g} {x + w / 2:.1f} {y + h / 2:.1f})')
+            if it.get('flip'):
+                tf.append(f'translate({2 * x + w:.1f} 0) scale(-1 1)')
+            transform = f' transform="{" ".join(tf)}"' if tf else ''
             shapes.append(f'<use href="#{escape(sid)}" x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h:.1f}" '
-                          f'color="{_color(it.get("color"), kit.default_color(sid))}"{flip}/>')
+                          f'color="{_color(it.get("color"), kit.default_color(sid))}"{transform}/>')
         elif it.get('text') is not None:
             size = float(it.get('size', 34))
             texts.append(f'<text x="{float(it.get("x", CANVAS_W / 2)):.1f}" y="{float(it.get("y", CANVAS_H / 2)):.1f}" '
@@ -327,6 +352,26 @@ def slide_label(nums: list[int]) -> str:
     return f'שקף {nums[0]}' if len(nums) == 1 else f'שקפים {nums[0]}–{nums[-1]}'
 
 
+def tags_union(*lists) -> list:
+    out = []
+    for lst in lists:
+        for x in lst or []:
+            if x not in out:
+                out.append(x)
+    return out
+
+
+def step_tags(step: dict, key: str) -> list:
+    """A step's practices/spotlights: its own, plus those of its tracks (D45: every track has its own tags)."""
+    own = list(step.get(key) or [])
+    for typ, v in blocks_of(step):
+        if typ == 'tracks' and isinstance(v, list):
+            for tr in v:
+                if isinstance(tr, dict):
+                    own = tags_union(own, tr.get(key))
+    return own
+
+
 def derive(data: dict, kit: Kit) -> dict:
     """Everything the templates need, computed from lesson.yaml: times, slides, refs, prep lines."""
     lesson_dir = data['_dir']
@@ -335,10 +380,10 @@ def derive(data: dict, kit: Kit) -> dict:
     slides: list[dict] = []
 
     def add_slide(step_id, *, kicker='', title='', sub='', points=None, art=None, timer=None,
-                  link=None, cls='', h1=False, alt=None):
+                  link=None, cls='', h1=False, alt=None, track=None):
         n = len(slides) + 1
         slides.append({
-            'n': n, 'step': step_id, 'cls': cls, 'h1': h1,
+            'n': n, 'step': step_id, 'track': track, 'cls': cls, 'h1': h1,
             'kicker': md(kicker), 'title': md(title), 'sub': md(sub),
             'points': [md(p) for p in (points or [])],
             'art': render_art(art, kit, lesson_dir, alt or title, used),
@@ -377,66 +422,85 @@ def derive(data: dict, kit: Kit) -> dict:
     if not brain_after and content:
         brain_after = min(content, key=lambda s: (abs(times[id(s)][1] - 20), times[id(s)][1])).get('id')
 
-    views = []
-    for idx, s in enumerate(steps):
-        k = kind_of(s)
-        step_id = s.get('id')
-        first_slide = None
-        blocks = []
+    def tagviews(practices, spotlights):
+        return ([{'name': p, 'f': PRACTICES.get(p, 'think')} for p in practices or []], list(spotlights or []))
 
-        def slide_block(spec, step_id=step_id):
-            nonlocal first_slide
-            n = add_slide(step_id, kicker=spec.get('kicker', ''), title=spec.get('title', ''),
-                          sub=spec.get('sub', ''), points=spec.get('points'), art=spec.get('art'),
-                          timer=spec.get('timer'), alt=spec.get('alt'))
-            is_first = first_slide is None
-            first_slide = first_slide or n
-            return n, is_first
-
-        for typ, v in blocks_of(s):
+    def make_blocks(owner: dict, step_id, track=None) -> list[dict]:
+        """The blocks of a step body or of a track body, in reading order; slides are numbered as they come."""
+        first = None
+        out = []
+        after_tracks = False
+        for typ, v in blocks_of(owner):
             b = {'type': typ, 'v': v}
+            if after_tracks:
+                b['both'] = True  # the first shared block after the two tracks: "בשני המסלולים"
+                after_tracks = False
             if typ == 'slide' and isinstance(v, dict):
-                b['n'], b['first'] = slide_block(v)
-                b['s'] = slides[b['n'] - 1]
+                n = add_slide(step_id, kicker=v.get('kicker', ''), title=v.get('title', ''), sub=v.get('sub', ''),
+                              points=v.get('points'), art=v.get('art'), timer=v.get('timer'), alt=v.get('alt'),
+                              track=track)
+                b['n'], b['first'] = n, first is None
+                first = first or n
+                b['s'] = slides[n - 1]
                 b['echo'] = bool(v.get('echo'))
                 b['cue'] = md(v.get('cue', ''))
             elif typ == 'video' and isinstance(v, dict):
                 n = add_slide(step_id, kicker='לפני שצופים', title=v.get('before', ''), art=v.get('art'),
-                              link=v.get('url'), cls='s-video', alt=v.get('alt'))
-                b['n'], b['first'] = n, first_slide is None
-                first_slide = first_slide or n
+                              link=v.get('url'), cls='s-video', alt=v.get('alt'), track=track)
+                b['n'], b['first'] = n, first is None
+                first = first or n
                 b['s'] = slides[n - 1]
-                pause = str(v.get('pause') or '').strip()
-                b['pause'] = (Markup(f'<span class="fill">{PAUSE_UNKNOWN}</span>') if pause in ('', '?', PAUSE_UNKNOWN)
-                              else Markup(f'<span dir="ltr">{escape(pause)}</span>'))
+                b['pauses'] = [{'at': pause_label(p.get('at')), 'moment': p.get('moment', ''),
+                                'ask': unquote(p.get('ask', ''))}
+                               for p in (v.get('pauses') or []) if isinstance(p, dict)]
+                b['watch'] = unquote(v.get('watch', ''))
             elif typ == 'messages' and isinstance(v, dict):
-                n = add_slide(step_id, title=v.get('title') or 'חשוב לזכור', points=v.get('items'),
-                              art=v.get('art'), cls='s-msgs', alt=v.get('alt'))
-                b['n'], b['first'] = n, first_slide is None
-                first_slide = first_slide or n
-                b['s'] = slides[n - 1]
+                # D42: every message verbatim in המערך; in the deck one message per slide
+                items = [x for x in (v.get('items') or []) if isinstance(x, str)]
+                head = v.get('title') or 'חשוב לזכור'
+                nums = []
+                for i, item in enumerate(items):
+                    kicker = head if len(items) == 1 else f'{head} · {i + 1} מתוך {len(items)}'
+                    nums.append(add_slide(step_id, kicker=kicker, title=item, art=v.get('art'),
+                                          cls=f's-msg {msg_class(item)}'.strip(), alt=v.get('alt'), track=track))
+                b['nums'], b['first'] = nums, first is None
+                b['n'] = nums[0] if nums else None
+                b['label'] = slide_label(nums)
+                first = first or (nums[0] if nums else None)
+                b['items'] = items
+                b['head'] = head
             elif typ == 'exit' and isinstance(v, dict):
                 n = add_slide(step_id, kicker='כרטיס יציאה', title=v.get('title', ''), points=v.get('prompts'),
-                              art=v.get('art'), timer=v.get('timer'), cls='s-exit', alt=v.get('alt'))
-                b['n'], b['first'] = n, first_slide is None
-                first_slide = first_slide or n
-            elif typ == 'tracks' and isinstance(v, list):
+                              art=v.get('art'), timer=v.get('timer'), cls='s-exit', alt=v.get('alt'), track=track)
+                b['n'], b['first'] = n, first is None
+                first = first or n
+            elif typ == 'tracks' and isinstance(v, list) and track is None:
                 tracks = []
                 for ti, tr in enumerate(v[:2]):
                     if not isinstance(tr, dict):
                         continue
-                    nums = []
-                    for spec in tr.get('slides') or []:
-                        if isinstance(spec, dict):
-                            n, _ = slide_block(spec)
-                            nums.append(n)
-                    tracks.append({**tr, 'letter': TRACK_LETTERS[ti], 'nums': nums,
-                                   'label': slide_label(nums), 'href': f'slides.html#/{nums[0] - 1}' if nums else ''})
+                    key = f'{step_id}-{TRACK_IDS[ti]}'
+                    tblocks = make_blocks(tr, step_id, track=key)
+                    nums = [sl['n'] for sl in slides if sl.get('track') == key]
+                    pr, sp = tagviews(tr.get('practices'), tr.get('spotlights'))
+                    tracks.append({**tr, 'letter': TRACK_LETTERS[ti], 'id': key, 'cls': f't{ti + 1}',
+                                   'blocks': tblocks, 'nums': nums, 'label': slide_label(nums),
+                                   'href': f'slides.html#/{nums[0] - 1}' if nums else '',
+                                   'practices': pr, 'spotlights': sp})
                 b['tracks'] = tracks
+                track_first = next((t['nums'][0] for t in tracks if t['nums']), None)
+                first = first or track_first
+                after_tracks = True
             elif typ in ('say', 'ask'):
                 b['v'] = unquote(v)
-            blocks.append(b)
+            out.append(b)
+        return out
 
+    views = []
+    for idx, s in enumerate(steps):
+        k = kind_of(s)
+        step_id = s.get('id')
+        blocks = make_blocks(s, step_id)
         nums = [sl['n'] for sl in slides if sl['step'] == step_id] if step_id else []
         start, end_ = times.get(id(s), (None, None))
         if k == 'extension':
@@ -460,19 +524,17 @@ def derive(data: dict, kit: Kit) -> dict:
             tail.append({'type': 'brain', 'next': (nxt or {}).get('title', ''), 'signs': brain.get('signs', ''),
                          'ideas': brain.get('ideas') or [],
                          'from': (src or {}).get('title', ''), 'from_ext': kind_of(src or {}) == 'extension'})
-        summary = s.get('summary', '')
         track_block = next((b for b in blocks if b['type'] == 'tracks'), None)
-        if track_block:
-            names = ' · '.join(f'מסלול {t["letter"]}: {t.get("title", "")}' for t in track_block['tracks'])
-            summary = f'{summary} — {names}' if summary else names
+        track_names = (' · '.join(f'מסלול {t["letter"]}: {t.get("title", "")}' for t in track_block['tracks'])
+                       if track_block else '')
+        pr, sp = tagviews(step_tags(s, 'practices'), step_tags(s, 'spotlights'))
         views.append({
             'id': step_id, 'kind': k, 'title': s.get('title', ''),
             'display_title': ('אם נשאר זמן: ' + str(s.get('title', ''))) if k == 'extension' else s.get('title', ''),
             'minutes': s.get('minutes'), 'start': start, 'end': end_,
             'time_label': time_label, 'table_time': table_time,
-            'practices': [{'name': p, 'f': PRACTICES.get(p, 'think')} for p in (s.get('practices') or [])],
-            'spotlights': list(s.get('spotlights') or []),
-            'summary': summary, 'blocks': blocks, 'tail': tail,
+            'practices': pr, 'spotlights': sp,
+            'summary': s.get('summary', ''), 'track_names': track_names, 'blocks': blocks, 'tail': tail,
             'slides': nums, 'slide_label': slide_label(nums),
             'slide_href': f'slides.html#/{nums[0] - 1}' if nums else '',
         })
@@ -481,20 +543,31 @@ def derive(data: dict, kit: Kit) -> dict:
     prep = [Markup(f'<a href="slides.html">המצגת</a> ({len(slides)} שקפים), פתוחה במחשב הכיתה לפני השיעור · '
                    f'גיבוי: <a href="slides.pdf">PDF</a>')]
     prep += [md(p) for p in (data.get('prep') or [])]
-    for v_ in views:
-        for b in v_['blocks']:
+
+    def prep_from(blocks, where, prefix=''):
+        for b in blocks:
             if b['type'] == 'handout' and isinstance(b['v'], dict):
-                prep.append(md(f'{b["v"].get("title", "")} — {b["v"].get("copies", "")} (בשלב ״{v_["display_title"]}״)'))
+                prep.append(md(f'{prefix}{b["v"].get("title", "")} — {b["v"].get("copies", "")} ({where})'))
             elif b['type'] == 'video' and isinstance(b['v'], dict):
                 vv = b['v']
                 length = f' ({vv["length"]})' if vv.get('length') else ''
-                prep.append(Markup(f'הסרטון <a href="{escape(vv.get("url", ""))}" target="_blank" rel="noopener">'
-                                   f'״{escape(vv.get("title", ""))}״</a>{escape(length)} — פתוח במחשב הכיתה, '
-                                   f'עם נקודת העצירה מסומנת'))
+                marks = 'עם נקודות העצירה מסומנות' if len(b['pauses']) > 1 else 'עם נקודת העצירה מסומנת'
+                prep.append(Markup(f'{escape(prefix)}הסרטון <a href="{escape(vv.get("url", ""))}" target="_blank" '
+                                   f'rel="noopener">״{escape(vv.get("title", ""))}״</a>{escape(length)} — פתוח במחשב '
+                                   f'הכיתה, {marks}'))
             elif b['type'] == 'exit' and isinstance(b['v'], dict):
                 prep.append(md({'board': 'פתקים או חצאי דפים לכרטיס היציאה, לכל הכיתה',
                                 'sticky': 'פתקיות דביקות לכרטיס היציאה, לכל הכיתה',
                                 'print': 'כרטיס היציאה מודפס — עותק לכל תלמיד'}.get(b['v'].get('form'), '')))
+            elif b['type'] == 'tracks':
+                for t in b['tracks']:
+                    tp = f'במסלול ״{t.get("title", "")}״: '
+                    for line in t.get('prep') or []:
+                        prep.append(md(f'{tp}{line}'))
+                    prep_from(t['blocks'], where, tp)
+
+    for v_ in views:
+        prep_from(v_['blocks'], f'בשלב ״{v_["display_title"]}״')
 
     n_core = sum(1 for v_ in views if v_['kind'] != 'extension')
     n_ext = sum(1 for v_ in views if v_['kind'] == 'extension')

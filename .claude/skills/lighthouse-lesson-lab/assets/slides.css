@@ -45,12 +45,14 @@ html, body, .reveal-viewport { background: var(--ground); }
 .reveal .s-cover h1 { max-width: 9ch; }
 .reveal .s-cover .kicker { font-size: 32px; }
 
-/* messages (R12: the one long-text slide — each message verbatim, one at a time) */
-.reveal .s-msgs .frame { grid-template-columns: minmax(0, 1fr) 400px; gap: 48px; }
-.reveal .s-msgs h2 { font-size: 58px; }
-.reveal .s-msgs .pts li { font-family: var(--display); font-size: 38px; line-height: 1.35; padding-top: 18px; padding-bottom: 18px; }
+/* messages (D42, R12): one source message per slide, verbatim — the only long-text slide.
+   The picture column stays 620 like every other slide; longer messages get a smaller size (lessonlib.MSG_TIERS). */
+.reveal .s-msg h2 { font-size: 50px; line-height: 1.32; text-wrap: pretty; }
+.reveal .s-msg.len-m h2 { font-size: 44px; }
+.reveal .s-msg.len-l h2 { font-size: 38px; line-height: 1.34; }
+.reveal .s-msg .kicker { color: var(--orange-deep); }
 
-/* exit ticket */
+/* exit ticket: 2–3 prompts need the room, so the picture column is 460 (art-guide: a focus at the top of the range) */
 .reveal .s-exit .frame { grid-template-columns: minmax(0, 1fr) 460px; }
 .reveal .s-exit .kicker { color: var(--moss-deep); }
 

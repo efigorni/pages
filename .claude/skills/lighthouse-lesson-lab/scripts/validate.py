@@ -3,7 +3,7 @@
 # requires-python = ">=3.10"
 # dependencies = ["pyyaml", "jinja2"]
 # ///
-"""validate.py — the rules of lighthouse-lesson-lab (D8–D30, the picks' Combined rules) for lesson.yaml files.
+"""validate.py — the rules of lighthouse-lesson-lab (D8–D45, the picks' Combined rules) for lesson.yaml files.
 
     uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/validate.py lesson-lab/lessons/<slug> [...]
 
@@ -21,7 +21,7 @@ sys.dont_write_bytecode = True  # keep the skill folder free of __pycache__
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import lessonlib as LL  # noqa: E402
 
-FORBIDDEN = ('\u05d3\u05d5\u05e1\u05d9', 'dossier')  # the retired name of the document; it is always "המערך"
+FORBIDDEN = ('דוסי', 'dossier')  # the retired name of the document; it is always "המערך"
 LATIN_OK = {'Think', 'Pair', 'Share', 'Jigsaw', 'PDF', 'YouTube', 'TikTok', 'WhatsApp', 'Instagram', 'Facebook',
             'Snapchat', 'Google', 'Zoom', 'Discord', 'Roblox', 'Minecraft', 'Fortnite', 'Netflix', 'Spotify',
             'iPhone', 'Android', 'Wi', 'Fi'}
@@ -30,6 +30,10 @@ EMOJI_RE = re.compile('[\U0001F000-\U0001FAFF☀-➿️]')
 URL_RE = re.compile(r'https?://\S+')
 QUOTED_RE = re.compile(r'(?:(?<=[\s(—–-])|^)[״"„“][^״"„“”\n]*?[״"”](?=[\s.,;:!?)—–-]|$)')
 ID_RE = re.compile(r'^[a-z0-9][a-z0-9-]*$')
+TIME_RE = re.compile(r'^\d{1,2}:\d{2}$')
+# D45: a public stance activity (D27) — the validator asks for `stance: true` when the text looks like one
+STANCE_HINT = re.compile(r'מסכימומטר|לאורך הקו|נעמדים על|נעמדים ליד|חוצים את הקו|ליד השלט|עמדה בחלל')
+SLIDE_VERBATIM_FIELDS = ('title', 'sub', 'points')
 
 
 def _words(words):
@@ -50,14 +54,19 @@ TOP = {  # key: (type, required)
     'slug': (str, False), 'title': (str, True), 'sub': (str, True), 'grade': (int, True), 'grades_served': (list, False),
     'month': (str, True), 'section': (str, True), 'unit': (str, True), 'unit_order': (int, False),
     'unit_size': (int, False), 'src_text': (str, True), 'src_url': (str, False), 'sensitivity': (str, True),
+    'src_fixes': (list, False),
     'format': (str, True), 'question': (str, True), 'takeaways': (list, True), 'prep': (list, True),
     'safe': (list, False), 'time': (dict, True), 'brain_break': (dict, True), 'cover': (dict, True),
     'steps': (list, True),
 }
+# practices/spotlights: required per step, but a step with tracks may leave them to its tracks (D45)
 STEP = {'id': (str, True), 'title': (str, True), 'kind': (str, False), 'minutes': (int, True),
-        'practices': (list, True), 'spotlights': (list, True), 'summary': (str, True), 'body': (list, True)}
+        'practices': (list, False), 'spotlights': (list, False), 'summary': (str, True), 'body': (list, True),
+        'stance': (bool, False)}
 SLIDE = {'kicker': (str, False), 'title': (str, True), 'sub': (str, False), 'points': (list, False),
-         'art': (object, True), 'alt': (str, False), 'timer': (int, False), 'echo': (bool, False), 'cue': (str, False)}
+         'art': (object, True), 'alt': (str, False), 'timer': (int, False), 'echo': (bool, False), 'cue': (str, False),
+         'verbatim': (object, False)}
+PAUSE = {'at': (str, True), 'moment': (str, False), 'ask': (str, True)}
 BLOCKS = {  # dict blocks: field → (type, required); str/list blocks by name
     'task': {'what': (str, True), 'time': (str, True), 'group': (str, True), 'rules': (str, True),
              'plenary': (str, True), 'help': (str, True), 'challenge': (str, True)},
@@ -65,11 +74,10 @@ BLOCKS = {  # dict blocks: field → (type, required); str/list blocks by name
     'slide': SLIDE,
     'timer': {'sec': (int, True), 'label': (str, True)},
     'video': {'title': (str, True), 'url': (str, True), 'length': (str, False), 'before': (str, True),
-              'watch': (str, True), 'pause': (str, True), 'predict': (str, True), 'art': (object, True),
-              'alt': (str, False)},
+              'watch': (str, True), 'pauses': (list, True), 'art': (object, True), 'alt': (str, False)},
     'quote': {'title': (str, False), 'text': (str, True)},
     'handout': {'title': (str, True), 'copies': (str, True), 'items': (list, False), 'text': (str, False),
-                'verbatim': (bool, False)},
+                'verbatim': (bool, False), 'lines': (bool, False)},
     'messages': {'title': (str, False), 'items': (list, True), 'ask': (str, True), 'tip': (str, False),
                  'art': (object, True), 'alt': (str, False)},
     'exit': {'form': (str, True), 'title': (str, True), 'prompts': (list, True), 'look_for': (str, True),
@@ -77,7 +85,13 @@ BLOCKS = {  # dict blocks: field → (type, required); str/list blocks by name
 }
 TEXT_BLOCKS = {'p': str, 'say': str, 'ask': str, 'whisper': str, 'tip': str, 'moves': list, 'list': list,
                'board': (str, list), 'tracks': list}
-TRACK = {'title': (str, True), 'text': (str, True), 'when': (str, True), 'slides': (list, True)}
+TRACK = {'title': (str, True), 'text': (str, True), 'when': (str, True), 'practices': (list, True),
+         'spotlights': (list, True), 'body': (list, True), 'prep': (list, False)}
+HINTS = {  # retired fields → how to write them now
+    ('video', 'pause'): 'השדות pause/predict הוחלפו ב-pauses: רשימה של {at, moment, ask} (D44, schema.md)',
+    ('video', 'predict'): 'השדות pause/predict הוחלפו ב-pauses: רשימה של {at, moment, ask} (D44, schema.md)',
+    ('track', 'slides'): 'מסלול הוא תת־שלב מלא (D45): body עם בלוקים משלו — השקפים הם בלוקי slide בתוך body',
+}
 
 
 class Report:
@@ -100,10 +114,11 @@ class Report:
                 print(f'   ! [{code}] {msg}')
 
 
-def _typecheck(r: Report, where: str, d: dict, schema: dict):
+def _typecheck(r: Report, where: str, d: dict, schema: dict, kind: str = ''):
     for k in d:
         if k not in schema and not k.startswith('_'):
-            r.err('schema', f'{where}: שדה לא מוכר "{k}" (מותר: {", ".join(schema)})')
+            hint = HINTS.get((kind, k))
+            r.err('schema', f'{where}: שדה לא מוכר "{k}"' + (f' — {hint}' if hint else f' (מותר: {", ".join(schema)})'))
     for k, (typ, req) in schema.items():
         if k not in d or d[k] is None:
             if req:
@@ -112,10 +127,23 @@ def _typecheck(r: Report, where: str, d: dict, schema: dict):
         if typ is object:
             continue
         ok = isinstance(d[k], typ) and not (typ is int and isinstance(d[k], bool))
-        if typ is str and isinstance(d[k], (int, float)) and k == 'pause':
-            r.err('schema', f'{where}.pause: YAML קרא את הזמן כמספר ({d[k]}) — כתבי אותו במירכאות, למשל "1:05"')
+        if typ is str and isinstance(d[k], (int, float)) and k == 'at':
+            r.err('schema', f'{where}.at: YAML קרא את הזמן כמספר ({d[k]}) — כתבי אותו במירכאות, למשל "1:05"')
         elif not ok:
             r.err('schema', f'{where}.{k}: צריך להיות {typ.__name__}, יש {type(d[k]).__name__}')
+
+
+def slide_verbatim(v: dict) -> set:
+    """The fields of a slide marked as verbatim source text (D45): `verbatim: true` = title, sub, points;
+    or a list of field names."""
+    mark = v.get('verbatim')
+    if mark is True:
+        return set(SLIDE_VERBATIM_FIELDS)
+    if isinstance(mark, list):
+        return {str(x) for x in mark}
+    if isinstance(mark, str):
+        return {mark}
+    return set()
 
 
 # ----------------------------------------------------------------------------- text roles
@@ -156,8 +184,12 @@ def iter_text(data: dict):
         w = f'steps[{si}:{st.get("id")}]'
         yield from s(f'{w}.title', st.get('title'), 'neutral')
         yield from s(f'{w}.summary', st.get('summary'), 'neutral')
-        for bi, (typ, v) in enumerate(LL.blocks_of(st)):
-            yield from block_text(f'{w}.body[{bi}].{typ}', typ, v)
+        yield from body_text(w, st)
+
+
+def body_text(w, owner):
+    for bi, (typ, v) in enumerate(LL.blocks_of(owner)):
+        yield from block_text(f'{w}.body[{bi}].{typ}', typ, v)
 
 
 def art_text(where, art):
@@ -168,12 +200,13 @@ def art_text(where, art):
 
 
 def slide_text(where, v):
+    vb = slide_verbatim(v)
     for k in ('kicker', 'title', 'sub'):
         if isinstance(v.get(k), str):
-            yield f'{where}.{k}', v[k], 'student'
+            yield f'{where}.{k}', v[k], 'verbatim' if k in vb else 'student'
     for i, p in enumerate(v.get('points') or []):
         if isinstance(p, str):
-            yield f'{where}.points[{i}]', p, 'student'
+            yield f'{where}.points[{i}]', p, 'verbatim' if 'points' in vb else 'student'
     if isinstance(v.get('cue'), str):
         yield f'{where}.cue', v['cue'], 'teacher'
     yield from art_text(f'{where}.art', v.get('art'))
@@ -211,9 +244,15 @@ def block_text(where, typ, v):
     elif typ == 'video':
         if isinstance(v.get('title'), str):
             yield f'{where}.title', v['title'], 'neutral'
-        for k in ('before', 'watch', 'predict'):
+        for k in ('before', 'watch'):
             if isinstance(v.get(k), str):
                 yield f'{where}.{k}', v[k], 'student'
+        for i, p in enumerate(v.get('pauses') or []):
+            if isinstance(p, dict):
+                if isinstance(p.get('moment'), str):
+                    yield f'{where}.pauses[{i}].moment', p['moment'], 'teacher'
+                if isinstance(p.get('ask'), str):
+                    yield f'{where}.pauses[{i}].ask', p['ask'], 'student'
         yield from art_text(f'{where}.art', v.get('art'))
     elif typ == 'quote':
         if isinstance(v.get('title'), str):
@@ -235,14 +274,16 @@ def block_text(where, typ, v):
         for ti, tr in enumerate(v):
             if not isinstance(tr, dict):
                 continue
+            tw = f'{where}[{ti}]'
             if isinstance(tr.get('title'), str):
-                yield f'{where}[{ti}].title', tr['title'], 'neutral'
+                yield f'{tw}.title', tr['title'], 'neutral'
             for k in ('text', 'when'):
                 if isinstance(tr.get(k), str):
-                    yield f'{where}[{ti}].{k}', tr[k], 'teacher'
-            for i, sl in enumerate(tr.get('slides') or []):
-                if isinstance(sl, dict):
-                    yield from slide_text(f'{where}[{ti}].slides[{i}]', sl)
+                    yield f'{tw}.{k}', tr[k], 'teacher'
+            for i, x in enumerate(tr.get('prep') or []):
+                if isinstance(x, str):
+                    yield f'{tw}.prep[{i}]', x, 'teacher'
+            yield from body_text(tw, tr)
     elif typ == 'messages':
         for i, x in enumerate(v.get('items') or []):
             if isinstance(x, str):
@@ -283,6 +324,20 @@ def best_ratio(q: str, src: str) -> float:
             continue
         best = max(best, sm.ratio())
     return best
+
+
+def fixed_source(r: Report, raw: str, fixes) -> str:
+    """The source text with the lesson's silent corrections applied (D23): `src_fixes: [{from, to}]`.
+    A fix whose `from` is not in the source is an error, so a stale fix can't hide a real change."""
+    for i, fx in enumerate(fixes if isinstance(fixes, list) else []):
+        if not isinstance(fx, dict) or not isinstance(fx.get('from'), str) or not isinstance(fx.get('to'), str):
+            r.err('src-fix', f'src_fixes[{i}]: צריך {{from, to}} — המילים במקור, והתיקון השקט')
+            continue
+        if fx['from'] not in raw:
+            r.err('src-fix', f'src_fixes[{i}]: "{fx["from"]}" לא נמצא במקור (העתיקי את הקטע כמו שהוא, כולל רווחים)')
+            continue
+        raw = raw.replace(fx['from'], fx['to'])
+    return raw
 
 
 # ----------------------------------------------------------------------------- the checks
@@ -336,18 +391,11 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
         kinds.append(k)
         if k == 'extension' and str(s.get('title', '')).startswith('אם נשאר זמן'):
             r.err('schema', f'{where}: כותרת הרחבה בלי "אם נשאר זמן:" — הבנייה מוסיפה אותו')
-        for p in s.get('practices') or []:
-            if p not in LL.PRACTICES:
-                guess = difflib.get_close_matches(str(p).replace('-', '–'), list(LL.PRACTICES), n=1, cutoff=.6)
-                r.err('tags', f'{where}: "{p}" אינה אחת מ-11 הפרקטיקות' + (f' (אולי "{guess[0]}"?)' if guess else ''))
-        for b in s.get('spotlights') or []:
-            if b not in LL.SPOTLIGHTS:
-                guess = difflib.get_close_matches(str(b), list(LL.SPOTLIGHTS), n=1, cutoff=.5)
-                r.err('tags', f'{where}: "{b}" אינו אחד מ-5 הזרקורים' + (f' (אולי "{guess[0]}"?)' if guess else ''))
-        if isinstance(s.get('practices'), list) and not s['practices']:
-            r.err('tags', f'{where}: צריך לפחות פרקטיקה אחת')
-        if isinstance(s.get('spotlights'), list) and not s['spotlights']:
-            r.err('tags', f'{where}: צריך לפחות זרקור אחד')
+        check_tags(r, where, s.get('practices'), s.get('spotlights'))
+        if not LL.step_tags(s, 'practices'):
+            r.err('tags', f'{where}: צריך לפחות פרקטיקה אחת (לשלב, או לכל אחד מהמסלולים שלו)')
+        if not LL.step_tags(s, 'spotlights'):
+            r.err('tags', f'{where}: צריך לפחות זרקור אחד (לשלב, או לכל אחד מהמסלולים שלו)')
         check_blocks(r, where, s, kit, data['_dir'])
 
     rank = {'core': 0, 'extension': 1, 'messages': 2, 'exit': 3}
@@ -430,20 +478,37 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
                 elif not 15 <= end <= 25:
                     r.warn('brain', f'הפסקת המוח אחרי דקה {end} — הכיוון הוא סביב דקה 20')
 
-    # --- sensitivity
+    # --- sensitivity (D24, D45): the box at med+ — or whenever a public stance activity is in the lesson
     safe = data.get('safe')
+    stance_steps = [s.get('id') for s in steps if s.get('stance') is True]
     if sens in LL.SAFE_REQUIRED and not safe:
         r.err('safe', f'sensitivity: {sens} — צריך תיבת safe ("לפני השיעור") בראש המערך')
-    if sens == 'low' and safe:
-        r.err('safe', 'sensitivity: low — בלי תיבת safe')
+    if stance_steps and not safe:
+        r.err('safe', f'עמידה פומבית ({", ".join(stance_steps)}) — צריך תיבת safe גם ברגישות {sens}, '
+                      'עם סעיף "עמידה מול הכיתה" (D45)')
+    if sens == 'low' and safe and not stance_steps:
+        r.err('safe', 'sensitivity: low בלי עמידה פומבית — בלי תיבת safe')
     if safe:
         for i, x in enumerate(safe if isinstance(safe, list) else []):
             if not isinstance(x, dict) or not x.get('head') or not x.get('text'):
                 r.err('safe', f'safe[{i}]: צריך {{head, text}}')
-        if isinstance(safe, list) and len(safe) < 4:
-            r.warn('safe', f'safe: {len(safe)} סעיפים — בדרך כלל ארבעה (יועצת · מי עלול להיפגע · לא לוחצים לשתף · אם מישהו משתף פגיעה)')
-        if 'יועצ' not in str(safe):
-            r.warn('safe', 'safe: לא מוזכרת היועצת')
+        heads = ' '.join(str(x.get('head', '')) for x in safe if isinstance(x, dict))
+        if stance_steps and 'עמידה' not in heads:
+            r.err('safe', 'יש עמידה פומבית — סעיף safe שהכותרת שלו "עמידה מול הכיתה" (D45, מדריך הסגנון §12)')
+        if sens in LL.SAFE_REQUIRED:
+            if isinstance(safe, list) and len(safe) < 4:
+                r.warn('safe', f'safe: {len(safe)} סעיפים — בדרך כלל ארבעה (יועצת · מי עלול להיפגע · לא לוחצים לשתף · אם מישהו משתף פגיעה)')
+            if 'יועצ' not in str(safe):
+                r.warn('safe', 'safe: לא מוזכרת היועצת')
+    for i, s in enumerate(steps):
+        if s.get('stance') is True:
+            text = ' '.join(t for _, t, _ in body_text('', s))
+            if 'חמש שניות' not in text:
+                r.warn('stance', f'steps[{i}:{s.get("id")}]: עמידה פומבית בלי "חושבים לבד חמש שניות, בלי להסתכל על אף אחד — '
+                                 'ורק אז זזים" (מדריך הסגנון §12)')
+        elif STANCE_HINT.search(' '.join(t for _, t, _ in body_text('', s))):
+            r.warn('stance', f'steps[{i}:{s.get("id")}]: נראה כמו עמידה פומבית (D27) — אם כן, stance: true בשלב '
+                             'וסעיף "עמידה מול הכיתה" בתיבת safe')
 
     # --- cover
     cover = data.get('cover')
@@ -456,12 +521,43 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
 
     # --- opening by retrieval needs a self-sufficient recap (R3)
     first = next((s for s in steps if LL.kind_of(s) == 'core'), None)
-    if first and 'תרגילי שליפה' in (first.get('practices') or []):
-        if not any(t == 'whisper' for t, _ in LL.blocks_of(first)):
+    if first and 'תרגילי שליפה' in LL.step_tags(first, 'practices'):
+        if 'whisper' not in [t for t, _, _ in walk_blocks(first)]:
             r.err('retrieval', 'פתיחה בתרגילי שליפה: צריך whisper שמסכם מה היה בשיעור הקודם (R3)')
 
+    # --- practices used as their cards define them (references/hotam-al-ze.md)
+    for i, s in enumerate(steps):
+        w, tags, k = f'steps[{i}:{s.get("id")}]', LL.step_tags(s, 'practices'), LL.kind_of(s)
+        if 'קדימה ללמידה' in tags and s is not first:
+            r.warn('practice', f'{w}: קדימה ללמידה היא משימת הפתיחה — בדקות הראשונות של השיעור, לא באמצע')
+        if 'קדימה ללמידה' in tags and s is first and int(s.get('minutes') or 0) > 10:
+            r.warn('practice', f'{w}: קדימה ללמידה — משימה של 3–5 דקות (ועוד אותו זמן לשמוע תשובות); השלב {s.get("minutes")}′')
+        if 'כרטיס יציאה' in tags and k != 'exit':
+            r.warn('practice', f'{w}: "כרטיס יציאה" רק בשלב כרטיס היציאה — המשימה האחרונה בשיעור')
+        if k == 'exit' and 'כרטיס יציאה' not in tags:
+            r.warn('practice', f'{w}: שלב כרטיס היציאה מתויג "כרטיס יציאה"')
+        if 'הפסקת מוח' in tags:
+            r.warn('practice', f'{w}: הפסקת מוח לא מתוזמנת (D19) — היא נכנסת רק כהצעה, דרך brain_break')
+        if k in ('core', 'extension'):
+            owners = [('', s)] + [(f' · מסלול {LL.TRACK_LETTERS[ti]}', tr) for typ, v in LL.blocks_of(s)
+                                  if typ == 'tracks' and isinstance(v, list)
+                                  for ti, tr in enumerate(v[:2]) if isinstance(tr, dict)]
+            for label, owner in owners:
+                if owner is s and any(t == 'tracks' for t, _ in LL.blocks_of(s)):
+                    continue  # a tracks step: counted per track (its shared bridge counts in each)
+                said = sum(1 for t, v in LL.blocks_of(owner) if t in ('say', 'ask'))
+                said += sum(1 + len(v.get('pauses') or []) for t, v in LL.blocks_of(owner)
+                            if t == 'video' and isinstance(v, dict))
+                if owner is not s:
+                    said += sum(1 for t, _ in LL.blocks_of(s) if t in ('say', 'ask'))
+                if said == 0:
+                    r.warn('voice', f'{w}{label}: אין אף ניסוח מפתח (say/ask) — 2–3 לרגעים החשובים')
+                elif said > 5:
+                    r.warn('voice', f'{w}{label}: {said} ניסוחי מפתח — 2–3 לרגעים החשובים, לא תסריט מלא')
+
     # --- text: language, gender forms, voice, verbatim
-    src_norm = norm(src_path.read_text(encoding='utf-8')) if src_path and src_path.exists() else ''
+    raw_src = src_path.read_text(encoding='utf-8') if src_path and src_path.exists() else ''
+    src_norm = norm(fixed_source(r, raw_src, data.get('src_fixes'))) if raw_src else ''
     for where, text, role in iter_text(data):
         clean = URL_RE.sub(' ', text)
         if role != 'verbatim':
@@ -470,7 +566,8 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
                 r.err('hebrew', f'{where}: טקסט לטיני {latin[:6]} — עברית בלבד')
             g = GENDER_RE.findall(clean)
             if g:
-                r.err('gender', f'{where}: צורות עם נקודה/לוכסן {g[:4]} — רבים רגיל ("תלמידים", "מוכן")')
+                r.err('gender', f'{where}: צורות עם נקודה/לוכסן {g[:4]} — רבים רגיל ("תלמידים", "מוכן"); '
+                                'ציטוט מילולי מהמקור — סמני אותו כ-verbatim')
         if EMOJI_RE.search(clean):
             r.err('emoji', f'{where}: בלי אימוג׳י וסמלים')
         if role == 'teacher':
@@ -485,13 +582,36 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
             if q and f' {q} ' not in f' {src_norm} ':
                 ratio = best_ratio(q, src_norm)
                 if ratio >= .9:
-                    r.warn('verbatim', f'{where}: כמעט מילה במילה ({ratio:.0%}) — תיקון שקט (D23)? אחרת העתיקי מהמקור')
+                    r.warn('verbatim', f'{where}: כמעט מילה במילה ({ratio:.0%}) — תיקון שקט? רשמי אותו ב-src_fixes; '
+                                       'אחרת העתיקי מהמקור')
                 else:
                     r.err('verbatim', f'{where}: לא נמצא במקור ({ratio:.0%}) — ציטוט מהמקור נשאר כמו שהוא')
     for w in FORBIDDEN:
         if w in data.get('_raw', ''):
             r.err('forbidden', f'המילה "{w}…" אסורה — המסמך נקרא "המערך"')
     return r
+
+
+def walk_blocks(owner: dict, where: str = ''):
+    """(type, value, where) for every block of a step, including the blocks inside its tracks."""
+    for bi, (typ, v) in enumerate(LL.blocks_of(owner)):
+        w = f'{where}.body[{bi}].{typ}'
+        yield typ, v, w
+        if typ == 'tracks' and isinstance(v, list):
+            for ti, tr in enumerate(v):
+                if isinstance(tr, dict):
+                    yield from walk_blocks(tr, f'{w}[{ti}]')
+
+
+def check_tags(r: Report, where: str, practices, spotlights):
+    for p in practices or []:
+        if p not in LL.PRACTICES:
+            guess = difflib.get_close_matches(str(p).replace('-', '–'), list(LL.PRACTICES), n=1, cutoff=.6)
+            r.err('tags', f'{where}: "{p}" אינה אחת מ-11 הפרקטיקות' + (f' (אולי "{guess[0]}"?)' if guess else ''))
+    for b in spotlights or []:
+        if b not in LL.SPOTLIGHTS:
+            guess = difflib.get_close_matches(str(b), list(LL.SPOTLIGHTS), n=1, cutoff=.5)
+            r.err('tags', f'{where}: "{b}" אינו אחד מ-5 הזרקורים' + (f' (אולי "{guess[0]}"?)' if guess else ''))
 
 
 def check_art(r: Report, where: str, art, kit: LL.Kit, lesson_dir: Path):
@@ -501,6 +621,8 @@ def check_art(r: Report, where: str, art, kit: LL.Kit, lesson_dir: Path):
             r.err('art', f'{where}: צריך {{file: art/…svg}}, מזהה סמל, או רשימת מיקומים')
         elif not (Path(lesson_dir) / str(f)).exists():
             r.err('art', f'{where}: הקובץ {f} לא קיים בתיקיית השיעור')
+        else:
+            check_scene(r, where, art, kit, lesson_dir)
         return
     if isinstance(art, list):
         for i, it in enumerate(art):
@@ -513,6 +635,17 @@ def check_art(r: Report, where: str, art, kit: LL.Kit, lesson_dir: Path):
             guess = difflib.get_close_matches(sid, list(kit.symbols) + sorted(kit.tokens), n=3, cutoff=.4)
             r.err('art', f'{where}: אין סמל "{sid}" בערכה (assets/art/kit.svg)' + (f' — אולי {guess}?' if guess else ''))
     check_scene(r, where, art, kit, lesson_dir)
+
+
+def _box(it: dict, kit: LL.Kit):
+    sid = str(it['use'])
+    vw, vh = kit.symbols[sid][0][2] or 100, kit.symbols[sid][0][3] or 100
+    w, h = it.get('w'), it.get('h')
+    w = float(w or (float(h) * vw / vh if h else vw))
+    h = float(h or w * vh / vw)
+    x = float(it.get('x', (LL.CANVAS_W - w) / 2))
+    y = float(it.get('y', (LL.CANVAS_H - h) / 2))
+    return x, y, w, h
 
 
 def check_scene(r: Report, where: str, art, kit: LL.Kit, lesson_dir: Path):
@@ -528,12 +661,23 @@ def check_scene(r: Report, where: str, art, kit: LL.Kit, lesson_dir: Path):
         for ref in sorted(set(re.findall(r'href="#([^"]+)"', svg)) - own):
             if not kit.has(ref):
                 r.err('art', f'{where}: {art["file"]} מפנה ל-#{ref}, שאין בערכה')
+        for m in re.finditer(r'<use\b[^>]*href="#([^"]+)"[^>]*>', svg):
+            tag, ref = m.group(0), m.group(1)
+            if ref in kit.symbols and not re.search(r'\bwidth=', tag):
+                r.warn('art', f'{where}: {art["file"]} — <use href="#{ref}"> בלי width/height ממלא את כל המסגרת')
+            if ref in kit.symbols and kit.default_color(ref) and 'color=' not in tag:
+                r.warn('art', f'{where}: {art["file"]} — <use href="#{ref}"> בלי color (בקובץ אין צבע ברירת מחדל)')
+        words = sum(len(t.split()) for t in re.findall(r'<text\b[^>]*>([^<]*)</text>', svg))
+        if words > 3 and 'data-diagram' not in svg:
+            r.warn('art', f'{where}: {art["file"]} — {words} מילים בתמונה (עד 3). תרשים שמשחזר תרשים מהמקור '
+                          '(מילה לכל חלק) — data-diagram="true" על ה-<svg>')
         return
     if not isinstance(art, list):
         return
     uses = [it for it in art if isinstance(it, dict) and it.get('use')]
     if len(uses) > LL.MAX_USES:
         r.warn('art', f'{where}: {len(uses)} סמלים — מוקד אחד ועד 3 תומכים, לכל היותר {LL.MAX_USES}')
+    boxes = {i: _box(it, kit) for i, it in enumerate(uses) if str(it['use']) in kit.symbols}
     for i, it in enumerate(uses):
         sid, w_ = str(it['use']), f'{where}[{i}] ({it["use"]})'
         c = it.get('color')
@@ -542,21 +686,23 @@ def check_scene(r: Report, where: str, art, kit: LL.Kit, lesson_dir: Path):
         if sid not in kit.symbols:
             continue
         vw, vh = kit.symbols[sid][0][2] or 100, kit.symbols[sid][0][3] or 100
-        w, h = it.get('w'), it.get('h')
-        if w and h and abs((float(w) / float(h)) / (vw / vh) - 1) > .05:
+        if it.get('w') and it.get('h') and abs((float(it['w']) / float(it['h'])) / (vw / vh) - 1) > .05:
             r.warn('art', f'{w_}: w/h לא ביחס של הסמל ({vw:g}×{vh:g}) — תני רק w')
-        w = float(w or (float(h) * vw / vh if h else vw))
-        h = float(h or w * vh / vw)
-        if not LL.SCALE_MIN - .005 <= w / vw <= LL.SCALE_MAX + .005:
-            r.warn('art', f'{w_}: פי {w / vw:.2f} מהגודל הטבעי — טווח העבודה {LL.SCALE_MIN}–{LL.SCALE_MAX} '
-                          f'(רוחב {vw * LL.SCALE_MIN:.0f}–{vw * LL.SCALE_MAX:.0f})')
+        x, y, w, h = boxes[i]
+        # a detail inside a container (a bulb in a speech bubble, a phone in a thought) may go down to DETAIL_MIN
+        inside = any(j != i and str(uses[j]['use']) in LL.CONTAINERS and
+                     bx - 1 <= x and by - 1 <= y and x + w <= bx + bw + 1 and y + h <= by + bh + 1
+                     for j, (bx, by, bw, bh) in boxes.items())
+        lo = LL.DETAIL_MIN if inside else LL.SCALE_MIN
+        if not lo - .005 <= w / vw <= LL.SCALE_MAX + .005:
+            r.warn('art', f'{w_}: פי {w / vw:.2f} מהגודל הטבעי — טווח העבודה {lo}–{LL.SCALE_MAX} '
+                          f'(רוחב {vw * lo:.0f}–{vw * LL.SCALE_MAX:.0f})')
         least = LL.MIN_SIZE.get(sid, 100 if sid.startswith('face-') else 0)
         if w < least:
             r.warn('art', f'{w_}: רוחב {w:.0f} — הסמל המפורט הזה צריך לפחות {least}')
-        x = float(it.get('x', (LL.CANVAS_W - w) / 2))
-        y = float(it.get('y', (LL.CANVAS_H - h) / 2))
         m = LL.MARGIN
-        if x < m - .5 or y < m - .5 or x + w > LL.CANVAS_W - m + .5 or y + h > LL.CANVAS_H - m + .5:
+        if not it.get('rotate') and (x < m - .5 or y < m - .5 or x + w > LL.CANVAS_W - m + .5
+                                      or y + h > LL.CANVAS_H - m + .5):
             r.warn('art', f'{w_}: יוצא משולי הסצנה (x {x:.0f}…{x + w:.0f}, y {y:.0f}…{y + h:.0f}; '
                           f'המסגרת {m}…{LL.CANVAS_W - m} × {m}…{LL.CANVAS_H - m})')
     texts = [it for it in art if isinstance(it, dict) and it.get('text') is not None]
@@ -570,6 +716,12 @@ def check_scene(r: Report, where: str, art, kit: LL.Kit, lesson_dir: Path):
 
 def check_slide(r: Report, where: str, v: dict, kit: LL.Kit, lesson_dir: Path, budget: bool = True):
     _typecheck(r, where, v, SLIDE)
+    mark = v.get('verbatim')
+    if mark is not None and not isinstance(mark, (bool, list, str)):
+        r.err('schema', f'{where}.verbatim: true, או רשימת שדות מתוך title · sub · points')
+    bad = slide_verbatim(v) - set(SLIDE_VERBATIM_FIELDS)
+    if bad:
+        r.err('schema', f'{where}.verbatim: {sorted(bad)} — רק title · sub · points יכולים להיות ציטוט מהמקור')
     if v.get('art'):
         check_art(r, f'{where}.art', v['art'], kit, lesson_dir)
     if not budget:
@@ -586,8 +738,9 @@ def check_slide(r: Report, where: str, v: dict, kit: LL.Kit, lesson_dir: Path, b
                 r.warn('slide-words', f'{where}.points[{i}]: {len(p)} תווים (עד 80)')
 
 
-def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Path):
-    kind = LL.kind_of(step)
+def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Path, track: bool = False) -> int:
+    """The blocks of a step body — or of a track body (track=True). Returns the number of slides they make."""
+    kind = 'core' if track else LL.kind_of(step)
     blocks = LL.blocks_of(step)
     n_slides = 0
     types = [t for t, _ in blocks]
@@ -599,20 +752,27 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
                 r.err('schema', f'{w}: סוג לא נכון ({type(v).__name__})')
                 continue
             if typ == 'tracks':
+                if track:
+                    r.err('tracks', f'{w}: מסלולים בתוך מסלול — לא; נקודת בחירה נוספת היא שלב נפרד')
+                    continue
                 if len(v) != 2:
                     r.err('tracks', f'{w}: בדיוק שני מסלולים, יש {len(v)}')
                 for ti, tr in enumerate(v):
+                    tw = f'{w}[{ti}]'
                     if not isinstance(tr, dict):
-                        r.err('tracks', f'{w}[{ti}]: מסלול הוא מילון')
+                        r.err('tracks', f'{tw}: מסלול הוא מילון')
                         continue
-                    _typecheck(r, f'{w}[{ti}]', tr, TRACK)
-                    sl = tr.get('slides') or []
-                    if not sl:
-                        r.err('tracks', f'{w}[{ti}]: לכל מסלול שקף משלו')
-                    for i, spec in enumerate(sl):
-                        if isinstance(spec, dict):
-                            check_slide(r, f'{w}[{ti}].slides[{i}]', spec, kit, lesson_dir)
-                            n_slides += 1
+                    _typecheck(r, tw, tr, TRACK, kind='track')
+                    check_tags(r, tw, tr.get('practices'), tr.get('spotlights'))
+                    if isinstance(tr.get('practices'), list) and not tr['practices']:
+                        r.err('tags', f'{tw}: לכל מסלול לפחות פרקטיקה אחת משלו (D45)')
+                    if isinstance(tr.get('spotlights'), list) and not tr['spotlights']:
+                        r.err('tags', f'{tw}: לכל מסלול לפחות זרקור אחד משלו (D45)')
+                    if isinstance(tr.get('body'), list):
+                        n = check_blocks(r, tw, tr, kit, lesson_dir, track=True)
+                        n_slides += n
+                        if not n:
+                            r.err('tracks', f'{tw}: לכל מסלול שקף משלו — בלוק slide בתוך body')
             continue
         if typ not in BLOCKS:
             r.err('schema', f'{w}: סוג בלוק לא מוכר (מותר: {", ".join(list(TEXT_BLOCKS) + list(BLOCKS))})')
@@ -624,11 +784,41 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
             check_slide(r, w, v, kit, lesson_dir)
             n_slides += 1
             continue
-        _typecheck(r, w, v, BLOCKS[typ])
-        if typ in ('video', 'messages', 'exit'):
+        _typecheck(r, w, v, BLOCKS[typ], kind=typ)
+        if track and typ in ('messages', 'exit'):
+            r.err('tracks', f'{w}: {typ} רק בשלב משלו, לא בתוך מסלול')
+        if typ in ('video', 'exit'):
             n_slides += 1
             if v.get('art'):
                 check_art(r, f'{w}.art', v['art'], kit, lesson_dir)
+        if typ == 'messages':
+            items = v.get('items') or []
+            n_slides += len(items) if isinstance(items, list) else 0
+            if v.get('art'):
+                check_art(r, f'{w}.art', v['art'], kit, lesson_dir)
+            if isinstance(items, list) and not items:
+                r.err('messages', f'{w}.items: לפחות מסר אחד')
+            for i, x in enumerate(items if isinstance(items, list) else []):
+                if isinstance(x, str) and len(x.strip()) > LL.MSG_MAX:
+                    r.warn('messages', f'{w}.items[{i}]: {len(x.strip())} תווים — מסר אחד ארוך מכדי להיכנס לשקף '
+                                       f'(עד {LL.MSG_MAX}). בדקי את השקף בצילום (shoot.py)')
+        if typ == 'video':
+            pauses = v.get('pauses') or []
+            if isinstance(pauses, list) and not pauses:
+                r.err('video', f'{w}.pauses: לפחות נקודת עצירה אחת עם שאלה (D25, D44)')
+            for pi, p in enumerate(pauses if isinstance(pauses, list) else []):
+                pw = f'{w}.pauses[{pi}]'
+                if not isinstance(p, dict):
+                    r.err('video', f'{pw}: צריך {{at, moment, ask}}')
+                    continue
+                _typecheck(r, pw, p, PAUSE)
+                at = p.get('at')
+                if isinstance(at, str) and at.strip() != '?' and not TIME_RE.match(at.strip()):
+                    r.err('video', f'{pw}.at: "{at}" — דקה:שנייה במירכאות ("1:05"), או "?" כשאי אפשר לאמת')
+                if isinstance(at, str) and at.strip() == '?' and not p.get('moment'):
+                    r.err('video', f'{pw}: at: "?" — צריך moment: איזה רגע בסרטון, כדי שהמורה תמצא ותסמן אותו')
+            if isinstance(v.get('length'), (int, float)):
+                r.err('schema', f'{w}.length: במירכאות ("2:16") — ורק אם אומת')
         if typ == 'handout' and not (v.get('items') or v.get('text')):
             r.err('schema', f'{w}: צריך items או text')
         if typ == 'exit':
@@ -639,25 +829,24 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
                 r.err('exit', f'{w}.prompts: לפחות שאלה אחת')
             elif isinstance(pr, list) and len(pr) > 3:
                 r.warn('exit', f'{w}.prompts: {len(pr)} שאלות — 2–3 שאלות קצרות')
-        if typ == 'messages':
-            items = v.get('items') or []
-            if isinstance(items, list) and not items:
-                r.err('messages', f'{w}.items: לפחות מסר אחד')
-    if kind == 'messages' and types.count('messages') != 1:
-        r.err('messages', f'{where}: שלב "חשוב לזכור" מכיל בדיוק בלוק messages אחד')
-    if kind != 'messages' and 'messages' in types:
-        r.err('messages', f'{where}: בלוק messages רק בשלב עם kind: messages')
-    if kind == 'exit' and types.count('exit') != 1:
-        r.err('exit', f'{where}: שלב כרטיס היציאה מכיל בדיוק בלוק exit אחד')
-    if kind != 'exit' and 'exit' in types:
-        r.err('exit', f'{where}: בלוק exit רק בשלב עם kind: exit')
-    if n_slides == 0:
-        r.err('slides', f'{where}: אין שקף — לכל שלב לפחות שקף אחד (slide, video, messages, exit או tracks)')
+    if not track:
+        if kind == 'messages' and types.count('messages') != 1:
+            r.err('messages', f'{where}: שלב "חשוב לזכור" מכיל בדיוק בלוק messages אחד')
+        if kind != 'messages' and 'messages' in types:
+            r.err('messages', f'{where}: בלוק messages רק בשלב עם kind: messages')
+        if kind == 'exit' and types.count('exit') != 1:
+            r.err('exit', f'{where}: שלב כרטיס היציאה מכיל בדיוק בלוק exit אחד')
+        if kind != 'exit' and 'exit' in types:
+            r.err('exit', f'{where}: בלוק exit רק בשלב עם kind: exit')
+        if n_slides == 0:
+            r.err('slides', f'{where}: אין שקף — לכל שלב לפחות שקף אחד (slide, video, messages, exit או tracks)')
+    # task/ladder checks run on the owner's own tags: the step's for shared blocks, each track's for its body
     if 'הוצאה למשימה' in (step.get('practices') or []) and 'task' not in types and 'tracks' not in types:
         r.warn('task', f'{where}: מתויג "הוצאה למשימה" בלי בלוק task (מה עושים + זמן · הרכב · כללים · במליאה)')
-    writing = {'קדימה ללמידה', 'כולם כותבים'} & set(step.get('practices') or [])
-    if writing and kind not in ('exit', 'messages') and not {'task', 'ladder'} & set(types):
-        r.warn('ladder', f'{where}: משימת כתיבה ({", ".join(sorted(writing))}) בלי שאלת עזר ושאלת אתגר — בלוק ladder')
+    tasky = {'קדימה ללמידה', 'כולם כותבים', 'Think–Pair–Share', 'Jigsaw'} & set(step.get('practices') or [])
+    if tasky and kind not in ('exit', 'messages') and not {'task', 'ladder'} & set(types):
+        r.warn('ladder', f'{where}: משימה ({", ".join(sorted(tasky))}) בלי שאלת עזר ושאלת אתגר — בלוק ladder (כלל 26)')
+    return n_slides
 
 
 def validate_dir(lesson_dir: Path, kit: LL.Kit | None = None) -> Report:

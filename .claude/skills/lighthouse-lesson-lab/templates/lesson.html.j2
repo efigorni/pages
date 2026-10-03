@@ -1,10 +1,14 @@
 {#- המערך — built from lesson.yaml by scripts/build.py. Order (D14): hero → lesson card → .safe → table.plan → one h2 per step. -#}
 {%- macro ref(n) -%}<a class="slide-ref" href="slides.html#/{{ n - 1 }}">שקף {{ n }}</a>{%- endmacro -%}
+{%- macro tags(practices, spotlights) -%}
+<div class="tags">{% for p in practices %}<span class="pr" data-f="{{ p.f }}">{{ p.name }}</span>{% endfor %}{% for b in spotlights %}<span class="beam">{{ b }}</span>{% endfor %}</div>
+{%- endmacro -%}
 {%- macro screen(s) -%}
 <div class="board screen">{% if s.kicker %}<span class="k">{{ s.kicker }}</span>{% endif %}<p class="h">{{ s.title }}</p>{% if s.sub %}<p>{{ s.sub }}</p>{% endif %}{% if s.points %}<ol>{% for p in s.points %}<li>{{ p }}</li>{% endfor %}</ol>{% endif %}</div>
 {%- endmacro -%}
 {%- macro block(b) -%}
 {% set t = b.type %}{% set v = b.v %}
+{% if b.both %}<p class="both">בשני המסלולים</p>{% endif %}
 {% if t == 'p' %}<p>{{ v|md }}</p>
 {% elif t == 'moves' %}<ol class="moves">{% for m in v %}<li>{{ m|md }}</li>{% endfor %}</ol>
 {% elif t == 'list' %}<ul>{% for m in v %}<li>{{ m|md }}</li>{% endfor %}</ul>
@@ -25,23 +29,34 @@
 {% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}{% if b.cue %} {{ b.cue }}{% endif %}</p>{% endif %}
 {% if b.echo %}{{ screen(b.s) }}{% endif %}
 {% elif t == 'video' %}
-<p><b>לפני השיעור:</b> פתחי את <a href="{{ v.url }}" target="_blank" rel="noopener">״{{ v.title }}״</a>{% if v.length %} ({{ v.length }}){% endif %} במחשב הכיתה, וסמני את נקודת העצירה: {{ b.pause }}.</p>
+<p><b>לפני השיעור:</b> פתחי את <a href="{{ v.url }}" target="_blank" rel="noopener">״{{ v.title }}״</a>{% if v.length %} ({{ v.length }}){% endif %} במחשב הכיתה, וסמני את {% if b.pauses|length > 1 %}נקודות העצירה{% else %}נקודת העצירה{% endif %}: {% for p in b.pauses %}{{ p.at }}{% if not loop.last %} · {% endif %}{% endfor %}.</p>
 {% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}</p>{% endif %}
 {{ screen(b.s) }}
-<div class="say"><q>{{ v.watch|md }}</q></div>
-<p><b>עצירה</b> ב־{{ b.pause }}:</p>
-<div class="say q"><q>{{ v.predict|md }}</q></div>
+{% if b.watch %}<div class="say"><q>{{ b.watch|md }}</q></div>{% endif %}
+{% for p in b.pauses %}
+<p class="pause"><b>עצירה ב־{{ p.at }}</b>{% if p.moment %} — {{ p.moment|md }}{% endif %}</p>
+<div class="say q"><q>{{ p.ask|md }}</q></div>
+{% endfor %}
 <p>ממשיכים עד הסוף.</p>
 {% elif t == 'quote' %}
 {% if v.title %}<h4>{{ v.title|md }}</h4>{% endif %}<blockquote>{{ v.text|paras }}</blockquote>
 {% elif t == 'handout' %}
-<div class="handout"><h4>{{ v.title|md }}</h4>{% if v['items'] %}<ol>{% for m in v['items'] %}<li>{{ m|md }}<span class="line"></span></li>{% endfor %}</ol>{% else %}{{ v.text|paras }}{% endif %}<p class="copies">להדפסה: {{ v.copies|md }}</p></div>
+<div class="handout"><h4>{{ v.title|md }}</h4>{% if v['items'] %}<ol>{% for m in v['items'] %}<li>{{ m|md }}{% if v.lines is not defined or v.lines %}<span class="line"></span>{% endif %}</li>{% endfor %}</ol>{% else %}{{ v.text|paras }}{% endif %}<p class="copies">להדפסה: {{ v.copies|md }}</p></div>
 {% elif t == 'tracks' %}
-<div class="tracks">{% for tr in b.tracks %}<div><h4>מסלול {{ tr.letter }} · {{ tr.title|md }}</h4><p>{{ tr.text|md }}</p><span class="when">מתאים כש: {{ tr.when|md }}</span>{% if tr.nums %}<p class="refs"><a class="slide-ref" href="{{ tr.href }}">{{ tr.label }}</a></p>{% endif %}</div>{% endfor %}</div>
+<div class="tracks">{% for tr in b.tracks %}<div class="{{ tr.cls }}"><h4><a href="#{{ tr.id }}">מסלול {{ tr.letter }} · {{ tr.title|md }}</a></h4><p>{{ tr.text|md }}</p><span class="when">מתאים כש: {{ tr.when|md }}</span>{% if tr.nums %}<p class="refs"><a class="slide-ref" href="{{ tr.href }}">{{ tr.label }}</a></p>{% endif %}</div>{% endfor %}</div>
+{% for tr in b.tracks %}
+<section class="track {{ tr.cls }}" id="{{ tr.id }}">
+<h3>מסלול {{ tr.letter }} · {{ tr.title|md }}{% if tr.nums %} <a class="slide-ref" href="{{ tr.href }}">{{ tr.label }}</a>{% endif %}</h3>
+{{ tags(tr.practices, tr.spotlights) }}
+{% for x in tr.blocks %}
+{{ block(x) }}
+{% endfor %}
+</section>
+{% endfor %}
 {% elif t == 'messages' %}
-{% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}</p>{% endif %}
-<p>הקריני את המסרים בקול, מילה במילה — אחד בכל פעם, כמו שהם נחשפים על המסך:</p>
-{{ screen(b.s) }}
+{% if not b.first %}<p class="slide-cue"><a class="slide-ref" href="slides.html#/{{ b.n - 1 }}">{{ b.label }}</a></p>{% endif %}
+<p>הקריני את המסרים בקול, מילה במילה — {% if b['items']|length > 1 %}מסר בכל שקף, אחד אחרי השני{% else %}כמו שהוא על המסך{% endif %}:</p>
+<div class="board screen"><span class="k">{{ b.head }}</span><ol>{% for m in b['items'] %}<li>{{ m|md }}</li>{% endfor %}</ol></div>
 <div class="say q"><q>{{ v.ask|md }}</q></div>
 {% if v.tip %}<div class="tip">{{ v.tip|md }}</div>{% endif %}
 {% elif t == 'exit' %}
@@ -92,7 +107,7 @@
     <thead><tr><th>זמן</th><th>שלב</th><th>מה עושים</th><th>פרקטיקה</th></tr></thead>
     <tbody>
 {% for s in steps %}
-      <tr class="k-{{ s.kind }}"><td class="t">{% if s.kind == 'extension' %}<span dir="ltr">{{ s.table_time }}</span>{% else %}{{ s.table_time }}{% endif %}</td><td><a href="#{{ s.id }}">{{ s.display_title|md }}</a></td><td>{{ s.summary|md }}</td><td><div class="tags">{% for p in s.practices %}<span class="pr" data-f="{{ p.f }}">{{ p.name }}</span>{% endfor %}</div></td></tr>
+      <tr class="k-{{ s.kind }}"><td class="t">{% if s.kind == 'extension' %}<span dir="ltr">{{ s.table_time }}</span>{% else %}{{ s.table_time }}{% endif %}</td><td><a href="#{{ s.id }}">{{ s.display_title|md }}</a></td><td>{{ s.summary|md }}{% if s.track_names %}<span class="tr-names">{{ s.track_names|md }}</span>{% endif %}</td><td><div class="tags">{% for p in s.practices %}<span class="pr" data-f="{{ p.f }}">{{ p.name }}</span>{% endfor %}</div></td></tr>
 {% endfor %}
     </tbody>
   </table>
@@ -102,7 +117,7 @@
 {% for s in steps %}
   <section class="st k-{{ s.kind }}" id="{{ s.id }}">
     <h2>{{ s.display_title|md }} <span class="t"{% if s.kind == 'extension' %} dir="ltr"{% endif %}>{{ s.time_label }}</span>{% if s.slides %}<a class="slide-ref" href="{{ s.slide_href }}">{{ s.slide_label }}</a>{% endif %}</h2>
-    <div class="tags">{% for p in s.practices %}<span class="pr" data-f="{{ p.f }}">{{ p.name }}</span>{% endfor %}{% for b in s.spotlights %}<span class="beam">{{ b }}</span>{% endfor %}</div>
+    {{ tags(s.practices, s.spotlights) }}
 {% for b in s.blocks %}
     {{ block(b) }}
 {% endfor %}
