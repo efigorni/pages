@@ -2750,10 +2750,10 @@
    "sensitivity": "med",
    "load": "heavy",
    "flags": [
-    "unit-summary-inside",
+    "unit-summary-lesson",
     "unit-incomplete"
    ],
-   "note": "סיכום תוכנית 'בוחרים בחיים' (פרויקט + מכתב להורים).",
+   "note": "סיכום תוכנית 'בוחרים בחיים' (פרויקט + מכתב להורים). כולו סיכום יחידה — D52 (D80).",
    "digest_ref": "sources/digests/9a.md:186",
    "package": "pkg-g9-03"
   },

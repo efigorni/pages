@@ -68,6 +68,7 @@ def main(argv: list[str]) -> int:
             'grade': L.get('grade'), 'grades': grades, 'grade_label': ctx['grade_label'],
             'month': L.get('month', ''), 'months': LL.months_of(L.get('month', '')),
             'unit': L.get('unit', ''), 'unit_order': L.get('unit_order'), 'unit_size': L.get('unit_size'),
+            'lesson_no': LL.lesson_no(L),
             'color': GRADE_COLOR.get(L.get('grade'), '#3f8f8d'), 'has_pdf': (d / 'slides.pdf').exists(),
             'key': (order.get(d.name, 10_000), L.get('grade') or 0, d.name),
         })

@@ -228,6 +228,15 @@ def section_clean(section: str) -> str:
     return re.sub(r'\s*\([^)]*\)\s*$', '', str(section or '')).strip()
 
 
+def lesson_no(data: dict) -> str:
+    """'שיעור N' for a lesson in a unit of several — '' for a one-lesson unit, or when the title already says it
+    ("הפיל והיתד – שיעור 1"), so the cover and the hub never print it twice."""
+    n = data.get('unit_order')
+    if not n or data.get('unit_size') == 1 or f'שיעור {n}' in str(data.get('title') or ''):
+        return ''
+    return f'שיעור {n}'
+
+
 def months_of(month: str) -> list[str]:
     """'ספטמבר–נובמבר' → every month the range spans, in school-year order."""
     parts = [p.strip() for p in re.split(r'[–-]', str(month or '')) if p.strip()]
@@ -621,7 +630,7 @@ def derive(data: dict, kit: Kit) -> dict:
     cover = data.get('cover') or {}
     unit_line = section_clean(data.get('section'))
     unit = data.get('unit') or ''
-    kicker = unit if not data.get('unit_order') or data.get('unit_size') == 1 else f'{unit} · שיעור {data["unit_order"]}'
+    kicker = ' · '.join(x for x in (unit, lesson_no(data)) if x)
     title = data.get('title', '')
     add_slide(None, kicker=kicker, title=cover_title(title), sub=cover.get('sub', ''), art=cover.get('art'),
               cls=f's-cover {cover_class(title)}'.strip(), h1=True, alt=cover.get('alt') or title)
@@ -821,8 +830,7 @@ def derive(data: dict, kit: Kit) -> dict:
         'L': data, 'slug': data['_slug'], 'steps': views, 'slides': slides, 'prep': [p for p in prep if p],
         'kit_defs': kit.subset(used), 'kit_used': used,
         'grade_label': GRADE_LABEL.get(data.get('grade'), str(data.get('grade', ''))),
-        'unit_line': ' · '.join(x for x in [unit_line, unit, (f'שיעור {data["unit_order"]}' if data.get('unit_order')
-                                                          and data.get('unit_size') != 1 else '')] if x),
+        'unit_line': ' · '.join(x for x in [unit_line, unit, lesson_no(data)] if x),
         'core_minutes': sum(int(s.get('minutes') or 0) for s in steps if kind_of(s) != 'extension'),
         'ext_minutes': sum(int(s.get('minutes') or 0) for s in steps if kind_of(s) == 'extension'),
         'n_core': n_core, 'n_ext': n_ext,

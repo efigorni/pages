@@ -158,7 +158,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--ink-3);fon
       <span class="motif" aria-hidden="true">{{ x.motif }}</span>
       <span class="card-cat"><span class="dot"></span>כיתה {{ x.grade_label }} · {{ x.month }}</span>
       <h2 class="card-t"><a href="{{ x.slug }}/index.html">{{ x.title }}</a></h2>
-      <p class="card-sub">{{ x.unit }}{% if x.unit_order and x.unit_size != 1 %} · שיעור {{ x.unit_order }}{% endif %}</p>
+      <p class="card-sub">{{ x.unit }}{% if x.lesson_no %} · {{ x.lesson_no }}{% endif %}</p>
       <p class="card-s">{{ x.question }}</p>
       <div class="card-f"><a href="{{ x.slug }}/index.html">המערך</a><a href="{{ x.slug }}/slides.html">מצגת</a>{% if x.has_pdf %}<a href="{{ x.slug }}/slides.pdf">PDF</a>{% endif %}</div>
     </article>

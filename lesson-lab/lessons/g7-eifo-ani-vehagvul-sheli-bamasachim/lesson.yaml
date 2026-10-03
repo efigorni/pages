@@ -12,6 +12,10 @@ src_text: sources/text/7/Eifo_Ani_Vehagvul_Sheli_Bamasachim.md
 src_url: https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Eifo_Ani_Vehagvul_Sheli_Bamasachim.pptx
 sensitivity: low
 
+# D57: מילים לועזיות בציטוט מילולי מהמקור — נשארות כמו במקור, ורשומות כאן
+latin_ok:
+  - FIFA
+
 sub: >-
   הטלפון איתנו מהבוקר ועד הלילה. בשיעור הזה בודקים איפה כל אחד עומד, מה המסך נותן ומה הוא לוקח —
   ובוחרים גבול אחד שמתאים לנו.

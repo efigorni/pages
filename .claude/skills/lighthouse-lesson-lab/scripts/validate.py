@@ -3,7 +3,7 @@
 # requires-python = ">=3.10"
 # dependencies = ["pyyaml", "jinja2"]
 # ///
-"""validate.py — the rules of lighthouse-lesson-lab (D8–D65, the picks' Combined rules) for lesson.yaml files.
+"""validate.py — the rules of lighthouse-lesson-lab (D8–D80, the picks' Combined rules) for lesson.yaml files.
 
     uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/validate.py lesson-lab/lessons/<slug> [...]
 
@@ -59,6 +59,30 @@ TAIL_RE = re.compile(r'[^.!?;:…|״"”“„»(]*')
 # A box that carries one is allowed at every sensitivity, low too
 HELPLINE_RE = re.compile(r'(?<![א-ת])[ובלמה]?(?:ער["״]ן|נט["״]ל|סה["״]ר|מד["״]א|מוקד|קו(?:ו?י)?\s+ה?(?:עזרה|סיוע|חירום|חם))'
                          r'(?![א-ת])|(?<![\d*])\d{3,5}\*|\*\d{3,5}(?!\d)|(?<![\d./:-])1\d{2,3}(?!\d|[.,/:]\d|%)|24/7')
+
+# D75: the helplines registry (lesson-lab/docs/helplines.md, verified against each service's official site). A line
+# that appears in the safe box is written there in the registry's box wording, word for word — keep the two in step.
+HELPLINES = (  # (name, how the line shows up in a box, the registry's box wording)
+    ('ער״ן', re.compile(r'(?<!\d)1201(?!\d)'), 'ער״ן 1201 — עזרה ראשונה נפשית, 24/7, גם בלי לומר שם'),
+    ('מוקד 105', re.compile(r'(?<![\d-])105(?!\d)'), 'מוקד 105 — המטה הלאומי להגנה על ילדים ונוער ברשת, 24/7'),
+    ('1202 / 1203', re.compile(r'(?<!\d)120[23](?!\d)'),
+     '1202 (עונות נשים) או 1203 (עונים גברים) — מרכזי הסיוע לנפגעות ולנפגעי תקיפה מינית, 24/7 '
+     '(מתחת לגיל 14 — סיוע ראשוני והפניה)'),
+    ('6800*', re.compile(r'(?<!\d)6800\*|\*6800(?!\d)'),
+     '6800* — המוקד הטלפוני הלאומי לגמילה מעישון של משרד הבריאות, א׳–ה׳ 8:00–20:00, ללא עלות, גם לבני נוער'),
+    ('נט״ל', re.compile(r'(?<!\d)3362\*|\*3362(?!\d)|363-363'),
+     'נט״ל 3362* — סיוע נפשי לנפגעי טראומה ממלחמה וטרור ולבני משפחותיהם, 24/7'),
+    ('קול לכולם', re.compile(r'(?<!\d)6312\*|\*6312(?!\d)'),
+     'קול לכולם 6312* — מוקד התמיכה הרגשית והחברתית של משרד החינוך, א׳–ה׳ 8:00–20:00 ובשישי 8:00–14:00'),
+    ('2982*', re.compile(r'(?<!\d)2982\*|\*2982(?!\d)'),
+     '2982* — קו הקשב ״יש עם מי לדבר״ של האגודה למען הלהט״ב, א׳–ה׳ 14:00–17:00 ו־19:30–22:30, ובשבת 19:30–22:30'),
+    ('מד״א', re.compile(r'(?<![\d-])101(?!\d)'), 'במצב חירום רפואי — מד״א 101'),
+    ('המכון למידע בהרעלות', re.compile(r'7771900'), '04-7771900 — המכון הארצי למידע בהרעלות ברמב״ם, 24/7'),
+)
+# a phone number that is not in the registry: a star number, 1-800/1-700, or a landline/mobile number
+PHONE_RE = re.compile(r'(?<![\d*])\*?\d{4}\*(?!\d)|(?<![\d*])\*\d{4}(?![\d*])|(?<![\d-])1-?[5-9]00-?\d{2,3}-?\d{3}(?!\d)'
+                      r'|(?<![\d-])0\d{1,2}-\d{7}(?!\d)')
+REGISTRY_NUMBERS = {'6800*', '3362*', '6312*', '2982*', '04-7771900'}
 
 
 def _words(words):
@@ -876,6 +900,28 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
     for name, _ in allowed:
         if name not in used:
             r.warn('hebrew', f'latin_ok: "{name}" לא מופיע בשיעור — מחקי אותו מהרשימה')
+
+    # --- helplines (D75): each line in the safe box in the registry's wording; a high lesson, and every lesson of
+    # "בוחרים בחיים" (D78), has ER"N next to the counsellor (D60, D63); no number outside the registry
+    box = ' '.join(f'{x.get("head", "")} {x.get("text", "")}' for x in safe_items)
+    for name, rx, wording in HELPLINES:
+        if rx.search(box) and wording not in box:
+            r.warn('helpline', f'safe: {name} — בנוסח של מרשם קווי העזרה, מילה במילה (lesson-lab/docs/helplines.md, '
+                               f'D75): "{wording}"')
+    if (sens == 'high' or data.get('unit') == 'טעם החיים') and HELPLINES[0][2] not in box:
+        r.warn('helpline', f'sensitivity: {sens}{" · בוחרים בחיים" if data.get("unit") == "טעם החיים" else ""} — '
+                           f'בתיבת safe, לצד היועצת: "{HELPLINES[0][2]}" (D60, D63, D78; docs/helplines.md)')
+    for where, text, role in texts:
+        if role == 'verbatim':
+            continue
+        for m in PHONE_RE.finditer(URL_RE.sub(' ', text)):
+            num = m.group(0)
+            if num.startswith('*'):
+                r.warn('helpline', f'{where}: "{num}" — מספר כוכבית נכתב כמו באתר הרשמי, "{num[1:]}*" (בתצוגה '
+                                   'מימין לשמאל הוא נראה ״*…״, וכך מחייגים)')
+            elif num not in REGISTRY_NUMBERS:
+                r.warn('helpline', f'{where}: "{num}" — מספר שאינו במרשם קווי העזרה (docs/helplines.md). מספר חדש — '
+                                   'מאמתים מול האתר הרשמי ומוסיפים למרשם קודם (D60, D75)')
     for w in FORBIDDEN:
         if w in data.get('_raw', ''):
             r.err('forbidden', f'המילה "{w}…" אסורה — המסמך נקרא "המערך"')
