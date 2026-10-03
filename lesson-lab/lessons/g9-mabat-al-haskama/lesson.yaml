@@ -13,6 +13,10 @@ unit_size: 5
 src_text: sources/text/9/Mabat_Al_Haskama.md
 src_url: https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Mabat_Al_Haskama.pptx
 sensitivity: high
+src_fixes:
+  # D58 — ״הגוף לא יכול להתחפש״ לא נכון: מי שלא רוצה יכול גם לקפוא או לשתוק. הבדיקה נשארת, הטענה יורדת
+  - from: בודקים את שפת הגוף – הגוף לא יכול להתחפש.
+    to: בודקים את שפת הגוף.
 
 sub: >-
   ״נכון שהסכמתי, אבל…״ — כולנו מכירים את זה. בשיעור הזה בודקים מתי הסכמה היא אמיתית ומתי היא במסכה,
