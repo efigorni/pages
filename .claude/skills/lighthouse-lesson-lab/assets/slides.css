@@ -41,8 +41,11 @@ html, body, .reveal-viewport { background: var(--ground); }
 .reveal .pts li { counter-increment: pt; position: relative; font-size: 36px; line-height: 1.3; padding: 14px 64px 14px 0; border-top: 2px solid var(--line); }
 .reveal .pts li::before { content: counter(pt); position: absolute; right: 0; top: 12px; width: 46px; height: 46px; border-radius: 50%; background: var(--orange-soft); color: var(--orange-deep); font-family: var(--display); font-size: 28px; line-height: 46px; text-align: center; }
 
-/* cover */
+/* cover: the lesson title as in the inventory, at any length — longer titles step down (lessonlib.COVER_TIERS) */
 .reveal .s-cover h1 { max-width: 9ch; }
+.reveal .s-cover.len-m h1 { font-size: 84px; max-width: 11ch; }
+.reveal .s-cover.len-l h1 { font-size: 70px; max-width: 13ch; }
+.reveal .s-cover.len-xl h1 { font-size: 58px; max-width: 16ch; line-height: 1.18; }
 .reveal .s-cover .kicker { font-size: 32px; }
 
 /* messages (D42, R12): one source message per slide, verbatim — the only long-text slide.

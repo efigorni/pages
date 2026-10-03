@@ -29,7 +29,7 @@
 {% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}{% if b.cue %} {{ b.cue }}{% endif %}</p>{% endif %}
 {% if b.echo %}{{ screen(b.s) }}{% endif %}
 {% elif t == 'video' %}
-<p><b>לפני השיעור:</b> פתחי את <a href="{{ v.url }}" target="_blank" rel="noopener">״{{ v.title }}״</a>{% if v.length %} ({{ v.length }}){% endif %} במחשב הכיתה, וסמני את {% if b.pauses|length > 1 %}נקודות העצירה{% else %}נקודת העצירה{% endif %}: {% for p in b.pauses %}{{ p.at }}{% if not loop.last %} · {% endif %}{% endfor %}.</p>
+<p><b>לפני השיעור:</b> פתחי את <a href="{{ b.link or v.url }}" target="_blank" rel="noopener">״{{ v.title }}״</a>{% if v.length %} ({{ v.length }}){% endif %} במחשב הכיתה, וסמני את {% if b.pauses|length > 1 %}נקודות העצירה{% else %}נקודת העצירה{% endif %}: {% for p in b.pauses %}{{ p.at }}{% if not loop.last %} · {% endif %}{% endfor %}.{% if b.clip %} {{ b.clip.prep }}{% endif %}</p>
 {% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}</p>{% endif %}
 {{ screen(b.s) }}
 {% if b.watch %}<div class="say"><q>{{ b.watch|md }}</q></div>{% endif %}
@@ -37,7 +37,11 @@
 <p class="pause"><b>עצירה ב־{{ p.at }}</b>{% if p.moment %} — {{ p.moment|md }}{% endif %}</p>
 <div class="say q"><q>{{ p.ask|md }}</q></div>
 {% endfor %}
+{% if b.clip %}
+{% if b.clip.tail %}<p>{{ b.clip.tail }}</p>{% endif %}
+{% else %}
 <p>ממשיכים עד הסוף.</p>
+{% endif %}
 {% elif t == 'quote' %}
 {% if v.title %}<h4>{{ v.title|md }}</h4>{% endif %}<blockquote>{{ v.text|paras }}</blockquote>
 {% elif t == 'handout' %}

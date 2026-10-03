@@ -66,9 +66,14 @@ MIN_SIZE = {'circle4': 150, 'crowd': 180, 'hands-help': 160, 'school': 160, 'red
 # D42: one message per slide. Longer messages get a smaller type size; above MSG_MAX the slide overflows.
 MSG_TIERS = ((120, ''), (200, 'len-m'), (10_000, 'len-l'))
 MSG_MAX = 300
+# The cover slide carries the lesson title as it is in the inventory, at any length: longer titles step down in size
+# (slides.css, .s-cover.len-*) instead of running off the slide.
+COVER_TIERS = ((22, ''), (32, 'len-m'), (44, 'len-l'), (10_000, 'len-xl'))
 PALETTE = {'#63b1af', '#f7ae4d', '#8c82c1', '#619f88', '#13100e', '#e57373', '#c94f4f', '#847c74', '#3b7ab3',
            '#e6f2f1', '#fdf0dd', '#eeecf7', '#e7f1ec', '#ffffff'}
 PAUSE_UNKNOWN = '[דקה:שנייה]'
+CLOCK_RE = re.compile(r'(\d{1,2}):([0-5]\d)')
+YOUTUBE_RE = re.compile(r'(?:youtube\.com/(?:watch\?(?:[^#\s]*&)?v=|embed/|shorts/|live/)|youtu\.be/)([\w-]{11})')
 SVG_NS = 'http://www.w3.org/2000/svg'
 XLINK_NS = 'http://www.w3.org/1999/xlink'
 
@@ -104,12 +109,84 @@ def msg_class(text) -> str:
     return next(cls for limit, cls in MSG_TIERS if n <= limit)
 
 
+def cover_class(title) -> str:
+    n = len(str(title or '').replace('**', '').strip())
+    return next(cls for limit, cls in COVER_TIERS if n <= limit)
+
+
+def cover_title(title) -> str:
+    """The cover title, with a no-break space before a spaced dash so no line of it starts with "–"."""
+    return re.sub(r' ([–—-]) ', chr(0xA0) + r'\1 ', str(title or ''))
+
+
 def pause_label(at) -> Markup:
     """A video pause time: "1:05" (LTR), or the highlighted [דקה:שנייה] for the teacher to fill in."""
     at = str(at if at is not None else '').strip()
     if at in ('', '?', PAUSE_UNKNOWN):
         return Markup(f'<span class="fill">{PAUSE_UNKNOWN}</span>')
     return Markup(f'<span dir="ltr">{escape(at)}</span>')
+
+
+def clock_secs(t) -> int | None:
+    """'1:05' → 65 (minutes:seconds, as in the YouTube player); None for anything else."""
+    m = CLOCK_RE.fullmatch(str(t).strip()) if isinstance(t, str) else None
+    return int(m.group(1)) * 60 + int(m.group(2)) if m else None
+
+
+def youtube_id(url) -> str | None:
+    m = YOUTUBE_RE.search(str(url or ''))
+    return m.group(1) if m else None
+
+
+def video_clip(v: dict) -> tuple[int, int | None] | None:
+    """(start, end) in seconds of `video.clip` — the part of the video the class watches; None without a clip."""
+    clip = v.get('clip')
+    if not isinstance(clip, dict):
+        return None
+    start, end = clock_secs(clip.get('start')), clock_secs(clip.get('end'))
+    if not start and end is None:  # nothing, or the whole video
+        return None
+    return start or 0, end
+
+
+def video_link(v: dict) -> str:
+    """The video link in המערך and on the deck. Without a clip — `url` as written. With a clip on YouTube — the watch
+    page, opening at the clip (&t=). Never an embed link with start/end: opened from a link it fails (error 153)."""
+    url = str(v.get('url') or '')
+    clip, vid = video_clip(v), youtube_id(url)
+    if not clip or not vid:
+        return url
+    return f'https://www.youtube.com/watch?v={vid}' + (f'&t={clip[0]}s' if clip[0] else '')
+
+
+def clip_text(v: dict, pauses: list[dict]) -> dict | None:
+    """The wording of a clip in המערך: what to show (after "לפני השיעור") and where to stop (instead of
+    "ממשיכים עד הסוף"). None without a clip."""
+    clip = video_clip(v)
+    if not clip:
+        return None
+    start, end = clip
+    raw = v['clip']
+    s, e = pause_label(raw.get('start')), pause_label(raw.get('end'))
+    linked = bool(youtube_id(v.get('url')))
+    if start and end is not None:
+        prep = Markup(f'מקרינים רק את הקטע מ־{s} עד {e}')
+    elif start:
+        prep = Markup(f'מקרינים מ־{s} עד הסוף')
+    else:
+        prep = Markup(f'מקרינים רק את ההתחלה, עד {e}.')
+    if start:
+        prep += Markup(f' — הקישור כבר מתחיל ב־{s}.' if linked else f' — קדמי את הסרטון ל־{s} לפני השיעור.')
+    stops = [clock_secs(p.get('at')) for p in pauses if isinstance(p, dict)]
+    if end is None:
+        tail = Markup('ממשיכים עד הסוף.')
+    elif any(t is not None and t >= end for t in stops):
+        tail = Markup('')  # the last pause is the end of the clip
+    else:
+        tail = Markup(f'ממשיכים עד {e} ועוצרים — כאן נגמר הקטע.')
+    span = (Markup(f'מ־{s} עד {e}') if start and end is not None else
+            Markup(f'מ־{s} עד הסוף') if start else Markup(f'עד {e}'))
+    return {'prep': prep, 'tail': tail, 'span': span}
 
 
 def minutes_label(sec: int) -> str:
@@ -397,8 +474,9 @@ def derive(data: dict, kit: Kit) -> dict:
     unit_line = section_clean(data.get('section'))
     unit = data.get('unit') or ''
     kicker = unit if not data.get('unit_order') or data.get('unit_size') == 1 else f'{unit} · שיעור {data["unit_order"]}'
-    add_slide(None, kicker=kicker, title=data.get('title', ''), sub=cover.get('sub', ''),
-              art=cover.get('art'), cls='s-cover', h1=True, alt=cover.get('alt'))
+    title = data.get('title', '')
+    add_slide(None, kicker=kicker, title=cover_title(title), sub=cover.get('sub', ''), art=cover.get('art'),
+              cls=f's-cover {cover_class(title)}'.strip(), h1=True, alt=cover.get('alt') or title)
 
     # timeline: content steps from 0′, extensions as +N′, closing steps anchored to the bell
     content = [s for s in steps if kind_of(s) == 'core']
@@ -423,7 +501,8 @@ def derive(data: dict, kit: Kit) -> dict:
         brain_after = min(content, key=lambda s: (abs(times[id(s)][1] - 20), times[id(s)][1])).get('id')
 
     def tagviews(practices, spotlights):
-        return ([{'name': p, 'f': PRACTICES.get(p, 'think')} for p in practices or []], list(spotlights or []))
+        return ([{'name': p, 'f': PRACTICES.get(p, 'think') if isinstance(p, str) else 'think'}
+                 for p in practices or []], list(spotlights or []))
 
     def make_blocks(owner: dict, step_id, track=None) -> list[dict]:
         """The blocks of a step body or of a track body, in reading order; slides are numbered as they come."""
@@ -445,15 +524,18 @@ def derive(data: dict, kit: Kit) -> dict:
                 b['echo'] = bool(v.get('echo'))
                 b['cue'] = md(v.get('cue', ''))
             elif typ == 'video' and isinstance(v, dict):
+                link = video_link(v)
                 n = add_slide(step_id, kicker='לפני שצופים', title=v.get('before', ''), art=v.get('art'),
-                              link=v.get('url'), cls='s-video', alt=v.get('alt'), track=track)
+                              link=link, cls='s-video', alt=v.get('alt'), track=track)
                 b['n'], b['first'] = n, first is None
                 first = first or n
                 b['s'] = slides[n - 1]
+                pauses = [p for p in (v.get('pauses') or []) if isinstance(p, dict)]
                 b['pauses'] = [{'at': pause_label(p.get('at')), 'moment': p.get('moment', ''),
-                                'ask': unquote(p.get('ask', ''))}
-                               for p in (v.get('pauses') or []) if isinstance(p, dict)]
+                                'ask': unquote(p.get('ask', ''))} for p in pauses]
                 b['watch'] = unquote(v.get('watch', ''))
+                b['link'] = link
+                b['clip'] = clip_text(v, pauses)
             elif typ == 'messages' and isinstance(v, dict):
                 # D42: every message verbatim in המערך; in the deck one message per slide
                 items = [x for x in (v.get('items') or []) if isinstance(x, str)]
@@ -552,9 +634,10 @@ def derive(data: dict, kit: Kit) -> dict:
                 vv = b['v']
                 length = f' ({vv["length"]})' if vv.get('length') else ''
                 marks = 'עם נקודות העצירה מסומנות' if len(b['pauses']) > 1 else 'עם נקודת העצירה מסומנת'
-                prep.append(Markup(f'{escape(prefix)}הסרטון <a href="{escape(vv.get("url", ""))}" target="_blank" '
-                                   f'rel="noopener">״{escape(vv.get("title", ""))}״</a>{escape(length)} — פתוח במחשב '
-                                   f'הכיתה, {marks}'))
+                span = Markup(' (מקרינים {})').format(b['clip']['span']) if b.get('clip') else ''
+                prep.append(Markup(f'{escape(prefix)}הסרטון <a href="{escape(b.get("link") or vv.get("url", ""))}" '
+                                   f'target="_blank" rel="noopener">״{escape(vv.get("title", ""))}״</a>{escape(length)} '
+                                   f'— פתוח במחשב הכיתה, {marks}{span}'))
             elif b['type'] == 'exit' and isinstance(b['v'], dict):
                 prep.append(md({'board': 'פתקים או חצאי דפים לכרטיס היציאה, לכל הכיתה',
                                 'sticky': 'פתקיות דביקות לכרטיס היציאה, לכל הכיתה',

@@ -67,6 +67,8 @@ SLIDE = {'kicker': (str, False), 'title': (str, True), 'sub': (str, False), 'poi
          'art': (object, True), 'alt': (str, False), 'timer': (int, False), 'echo': (bool, False), 'cue': (str, False),
          'verbatim': (object, False)}
 PAUSE = {'at': (str, True), 'moment': (str, False), 'ask': (str, True)}
+CLIP = {'start': (str, False), 'end': (str, False)}
+TIME_FIELDS = ('at', 'start', 'end')  # "m:ss" — unquoted, YAML may read 1:05 as the number 65
 BLOCKS = {  # dict blocks: field → (type, required); str/list blocks by name
     'task': {'what': (str, True), 'time': (str, True), 'group': (str, True), 'rules': (str, True),
              'plenary': (str, True), 'help': (str, True), 'challenge': (str, True)},
@@ -74,7 +76,8 @@ BLOCKS = {  # dict blocks: field → (type, required); str/list blocks by name
     'slide': SLIDE,
     'timer': {'sec': (int, True), 'label': (str, True)},
     'video': {'title': (str, True), 'url': (str, True), 'length': (str, False), 'before': (str, True),
-              'watch': (str, True), 'pauses': (list, True), 'art': (object, True), 'alt': (str, False)},
+              'watch': (str, True), 'pauses': (list, True), 'art': (object, True), 'alt': (str, False),
+              'clip': (dict, False)},
     'quote': {'title': (str, False), 'text': (str, True)},
     'handout': {'title': (str, True), 'copies': (str, True), 'items': (list, False), 'text': (str, False),
                 'verbatim': (bool, False), 'lines': (bool, False)},
@@ -91,7 +94,14 @@ HINTS = {  # retired fields → how to write them now
     ('video', 'pause'): 'השדות pause/predict הוחלפו ב-pauses: רשימה של {at, moment, ask} (D44, schema.md)',
     ('video', 'predict'): 'השדות pause/predict הוחלפו ב-pauses: רשימה של {at, moment, ask} (D44, schema.md)',
     ('track', 'slides'): 'מסלול הוא תת־שלב מלא (D45): body עם בלוקים משלו — השקפים הם בלוקי slide בתוך body',
+    ('clip', 'from'): 'הקטע נכתב clip: {start, end} — "דקה:שנייה" במירכאות (schema.md, "סרטון")',
+    ('clip', 'to'): 'הקטע נכתב clip: {start, end} — "דקה:שנייה" במירכאות (schema.md, "סרטון")',
 }
+# A list item that YAML read as a mapping: "- ולחש לכם באוזן:" or "- סבב מהיר: כל אחד אומר…" (skill-fixes #3)
+COLON_HINT = ('YAML קרא את השורה כמילון, בגלל ": " (נקודתיים ורווח) או נקודתיים בסוף השורה — עטפי אותה במירכאות, '
+              'או כתבי אותה כבלוק: "- >-" ובשורה הבאה הטקסט '
+              '(YAML read this line as a key: value mapping — quote it, or write it as a >- block)')
+BLOCK_KEY_RE = re.compile(r'[a-z_]+')
 
 
 class Report:
@@ -127,10 +137,37 @@ def _typecheck(r: Report, where: str, d: dict, schema: dict, kind: str = ''):
         if typ is object:
             continue
         ok = isinstance(d[k], typ) and not (typ is int and isinstance(d[k], bool))
-        if typ is str and isinstance(d[k], (int, float)) and k == 'at':
-            r.err('schema', f'{where}.at: YAML קרא את הזמן כמספר ({d[k]}) — כתבי אותו במירכאות, למשל "1:05"')
+        if typ is str and isinstance(d[k], (int, float)) and k in TIME_FIELDS:
+            r.err('schema', f'{where}.{k}: YAML קרא את הזמן כמספר ({d[k]}) — כתבי אותו במירכאות, למשל "1:05"')
         elif not ok:
             r.err('schema', f'{where}.{k}: צריך להיות {typ.__name__}, יש {type(d[k]).__name__}')
+
+
+def _line(x: dict) -> str:
+    """The line as it was written, from the mapping YAML made of it (for the error message)."""
+    s = '; '.join(f'{k}: {v}' if v is not None else f'{k}:' for k, v in x.items())
+    return s if len(s) <= 60 else s[:59] + '…'
+
+
+def text_items(r: Report, where: str, items) -> None:
+    """Every item of a list that must be text is a string. YAML turns "- ולחש לכם באוזן:" into a mapping, which
+    המערך prints raw ({'…': '…'}) and the deck drops — an error, not a warning (skill-fixes #3)."""
+    if not isinstance(items, list):
+        return
+    for i, x in enumerate(items):
+        if isinstance(x, str):
+            continue
+        w = f'{where}[{i}]'
+        if isinstance(x, dict):
+            r.err('yaml-item', f'{w}: "{_line(x)}" — {COLON_HINT}')
+        elif x is None:
+            r.err('yaml-item', f'{w}: פריט ריק ("-" בלי טקסט) — מחקי את השורה, או כתבי בה טקסט')
+        elif isinstance(x, bool):
+            r.err('yaml-item', f'{w}: YAML קרא את הפריט כ-{x} — עטפי אותו במירכאות')
+        elif isinstance(x, (int, float)):
+            r.err('yaml-item', f'{w}: YAML קרא את הפריט כמספר ({x}) — עטפי אותו במירכאות (למשל "1:05")')
+        else:
+            r.err('yaml-item', f'{w}: רשימה בתוך רשימה — כל פריט הוא שורת טקסט אחת ("- ערך")')
 
 
 def slide_verbatim(v: dict) -> set:
@@ -346,6 +383,8 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
     r = Report(data.get('_slug', '?'))
     kit = kit or LL.Kit()
     _typecheck(r, 'lesson', data, TOP)
+    for k in ('takeaways', 'prep'):
+        text_items(r, k, data.get(k))
     steps = [s for s in (data.get('steps') or []) if isinstance(s, dict)]
 
     # --- metadata
@@ -391,6 +430,8 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
         kinds.append(k)
         if k == 'extension' and str(s.get('title', '')).startswith('אם נשאר זמן'):
             r.err('schema', f'{where}: כותרת הרחבה בלי "אם נשאר זמן:" — הבנייה מוסיפה אותו')
+        for key in ('practices', 'spotlights'):
+            text_items(r, f'{where}.{key}', s.get(key))
         check_tags(r, where, s.get('practices'), s.get('spotlights'))
         if not LL.step_tags(s, 'practices'):
             r.err('tags', f'{where}: צריך לפחות פרקטיקה אחת (לשלב, או לכל אחד מהמסלולים שלו)')
@@ -409,7 +450,9 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
     if kinds.count('messages') > 1:
         r.err('order', 'לכל היותר שלב "חשוב לזכור" אחד')
     if kinds.count('messages') == 0:
-        r.warn('messages', 'אין שלב "חשוב לזכור" (kind: messages) — אם במקור יש מסרים, מקריאים אותם לפני כרטיס היציאה')
+        r.warn('messages', 'אין שלב "חשוב לזכור" (kind: messages). מסרים (D50–D51, מדריך הסגנון §10): שקף מסרים מפורש '
+                           'במקור, ואם אין — שקף הסיכום שסוגר את השיעור, כשהוא מנוסח כמסר לתלמידים. אין גם כזה — '
+                           'האזהרה נשארת, ורושמים ביומן')
     if 'core' not in kinds:
         r.err('order', 'אין שלבי תוכן (kind: core)')
 
@@ -435,7 +478,8 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
             r.err('time', 'time.short: צריך {steps: [ids], text: …} — על מה מוותרים כשחסר זמן גם לליבה')
         else:
             exit_ids = {s.get('id') for s in steps if LL.kind_of(s) == 'exit'}
-            for sid in short['steps']:
+            text_items(r, 'time.short.steps', short['steps'])
+            for sid in [x for x in short['steps'] if isinstance(x, str)]:
                 if sid not in ids:
                     r.err('time', f'time.short.steps: אין שלב "{sid}"')
                 elif sid in exit_ids:
@@ -604,12 +648,13 @@ def walk_blocks(owner: dict, where: str = ''):
 
 
 def check_tags(r: Report, where: str, practices, spotlights):
+    """Tag names; an item that is not text is reported by text_items."""
     for p in practices or []:
-        if p not in LL.PRACTICES:
+        if isinstance(p, str) and p not in LL.PRACTICES:
             guess = difflib.get_close_matches(str(p).replace('-', '–'), list(LL.PRACTICES), n=1, cutoff=.6)
             r.err('tags', f'{where}: "{p}" אינה אחת מ-11 הפרקטיקות' + (f' (אולי "{guess[0]}"?)' if guess else ''))
     for b in spotlights or []:
-        if b not in LL.SPOTLIGHTS:
+        if isinstance(b, str) and b not in LL.SPOTLIGHTS:
             guess = difflib.get_close_matches(str(b), list(LL.SPOTLIGHTS), n=1, cutoff=.5)
             r.err('tags', f'{where}: "{b}" אינו אחד מ-5 הזרקורים' + (f' (אולי "{guess[0]}"?)' if guess else ''))
 
@@ -714,8 +759,45 @@ def check_scene(r: Report, where: str, art, kit: LL.Kit, lesson_dir: Path):
             r.warn('art', f'{where}: תווית "{t["text"]}" בגודל {t.get("size")} — 30 ומעלה')
 
 
+def check_clip(r: Report, where: str, v: dict):
+    """video.clip (skill-fixes #7): the part of the video the class watches — times of the whole video, "m:ss"."""
+    clip = v['clip']
+    _typecheck(r, where, clip, CLIP, kind='clip')
+    t = {}
+    for k in ('start', 'end'):
+        if isinstance(clip.get(k), str):
+            secs = LL.clock_secs(clip[k])
+            if secs is None:
+                r.err('video', f'{where}.{k}: "{clip[k]}" — דקה:שנייה במירכאות, כמו בנגן ("0:12")')
+            else:
+                t[k] = secs
+    if clip.get('start') is None and clip.get('end') is None:
+        r.err('video', f'{where}: צריך start, end או שניהם — "דקה:שנייה" במירכאות; סרטון שלם — בלי clip')
+    elif t.get('start') == 0 and clip.get('end') is None:
+        r.err('video', f'{where}: start "{clip["start"]}" בלי end הוא הסרטון כולו — מחקי את clip')
+    if 'start' in t and 'end' in t and t['start'] >= t['end']:
+        r.err('video', f'{where}: start ({clip["start"]}) צריך להיות לפני end ({clip["end"]})')
+    length = LL.clock_secs(v.get('length'))
+    if length is not None:
+        for k, secs in t.items():
+            if secs > length:
+                r.err('video', f'{where}.{k}: {clip[k]} — אחרי סוף הסרטון ({v["length"]})')
+    lo, hi = t.get('start', 0), t.get('end')
+    for pi, p in enumerate(v.get('pauses') or []):
+        at = LL.clock_secs(p.get('at')) if isinstance(p, dict) else None
+        if at is not None and (at < lo or (hi is not None and at > hi)):
+            r.warn('video', f'{where}: העצירה pauses[{pi}] ב־{p["at"]} מחוץ לקטע — הזמנים הם של הסרטון כולו, '
+                            'כמו בנגן')
+    if t.get('start') and not LL.youtube_id(v.get('url')):
+        r.warn('video', f'{where}: הקישור אינו של יוטיוב, ולכן לא ייפתח בתחילת הקטע — המערך יבקש מהמורה לקדם את '
+                        f'הסרטון ל־{clip["start"]}')
+
+
 def check_slide(r: Report, where: str, v: dict, kit: LL.Kit, lesson_dir: Path, budget: bool = True):
     _typecheck(r, where, v, SLIDE)
+    text_items(r, f'{where}.points', v.get('points'))
+    if isinstance(v.get('verbatim'), list):
+        text_items(r, f'{where}.verbatim', v['verbatim'])
     mark = v.get('verbatim')
     if mark is not None and not isinstance(mark, (bool, list, str)):
         r.err('schema', f'{where}.verbatim: true, או רשימת שדות מתוך title · sub · points')
@@ -738,6 +820,20 @@ def check_slide(r: Report, where: str, v: dict, kit: LL.Kit, lesson_dir: Path, b
                 r.warn('slide-words', f'{where}.points[{i}]: {len(p)} תווים (עד 80)')
 
 
+def unknown_block(w: str, typ, v) -> tuple[str, str]:
+    """(code, message) for a body item that is not a block — often a line of text that YAML read as a mapping."""
+    if typ == '?' and v is None:
+        return 'yaml-item', f'{w}: פריט ריק ("-" בלי טקסט) — מחקי את השורה, או כתבי בה טקסט'
+    if typ == '?' and isinstance(v, dict):
+        msg = f'{w}: כמה מפתחות בפריט אחד ({", ".join(map(str, list(v)[:4]))}) — כל בלוק הוא פריט משלו, בשורת "- " משלו'
+        if any(not BLOCK_KEY_RE.fullmatch(str(k)) for k in v):
+            return 'yaml-item', f'{msg}. ואם זו שורת טקסט — {COLON_HINT}'
+        return 'schema', msg
+    if typ != '?' and not BLOCK_KEY_RE.fullmatch(str(typ)):
+        return 'yaml-item', f'{w}: "{_line({typ: v})}" — {COLON_HINT}'
+    return 'schema', f'{w}.{typ}: סוג בלוק לא מוכר (מותר: {", ".join(list(TEXT_BLOCKS) + list(BLOCKS))})'
+
+
 def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Path, track: bool = False) -> int:
     """The blocks of a step body — or of a track body (track=True). Returns the number of slides they make."""
     kind = 'core' if track else LL.kind_of(step)
@@ -751,6 +847,8 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
             if not isinstance(v, want):
                 r.err('schema', f'{w}: סוג לא נכון ({type(v).__name__})')
                 continue
+            if typ in ('moves', 'list', 'board') and isinstance(v, list):
+                text_items(r, w, v)
             if typ == 'tracks':
                 if track:
                     r.err('tracks', f'{w}: מסלולים בתוך מסלול — לא; נקודת בחירה נוספת היא שלב נפרד')
@@ -763,6 +861,8 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
                         r.err('tracks', f'{tw}: מסלול הוא מילון')
                         continue
                     _typecheck(r, tw, tr, TRACK, kind='track')
+                    for key in ('practices', 'spotlights', 'prep'):
+                        text_items(r, f'{tw}.{key}', tr.get(key))
                     check_tags(r, tw, tr.get('practices'), tr.get('spotlights'))
                     if isinstance(tr.get('practices'), list) and not tr['practices']:
                         r.err('tags', f'{tw}: לכל מסלול לפחות פרקטיקה אחת משלו (D45)')
@@ -775,7 +875,7 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
                             r.err('tracks', f'{tw}: לכל מסלול שקף משלו — בלוק slide בתוך body')
             continue
         if typ not in BLOCKS:
-            r.err('schema', f'{w}: סוג בלוק לא מוכר (מותר: {", ".join(list(TEXT_BLOCKS) + list(BLOCKS))})')
+            r.err(*unknown_block(f'{where}.body[{bi}]', typ, v))
             continue
         if not isinstance(v, dict):
             r.err('schema', f'{w}: צריך מילון של שדות')
@@ -798,6 +898,7 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
                 check_art(r, f'{w}.art', v['art'], kit, lesson_dir)
             if isinstance(items, list) and not items:
                 r.err('messages', f'{w}.items: לפחות מסר אחד')
+            text_items(r, f'{w}.items', items)
             for i, x in enumerate(items if isinstance(items, list) else []):
                 if isinstance(x, str) and len(x.strip()) > LL.MSG_MAX:
                     r.warn('messages', f'{w}.items[{i}]: {len(x.strip())} תווים — מסר אחד ארוך מכדי להיכנס לשקף '
@@ -819,12 +920,17 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
                     r.err('video', f'{pw}: at: "?" — צריך moment: איזה רגע בסרטון, כדי שהמורה תמצא ותסמן אותו')
             if isinstance(v.get('length'), (int, float)):
                 r.err('schema', f'{w}.length: במירכאות ("2:16") — ורק אם אומת')
-        if typ == 'handout' and not (v.get('items') or v.get('text')):
-            r.err('schema', f'{w}: צריך items או text')
+            if isinstance(v.get('clip'), dict):
+                check_clip(r, f'{w}.clip', v)
+        if typ == 'handout':
+            if not (v.get('items') or v.get('text')):
+                r.err('schema', f'{w}: צריך items או text')
+            text_items(r, f'{w}.items', v.get('items'))
         if typ == 'exit':
             if v.get('form') not in ('board', 'sticky', 'print'):
                 r.err('exit', f'{w}.form: board · sticky · print (לא דיגיטלי)')
             pr = v.get('prompts') or []
+            text_items(r, f'{w}.prompts', pr)
             if isinstance(pr, list) and not pr:
                 r.err('exit', f'{w}.prompts: לפחות שאלה אחת')
             elif isinstance(pr, list) and len(pr) > 3:
@@ -843,7 +949,8 @@ def check_blocks(r: Report, where: str, step: dict, kit: LL.Kit, lesson_dir: Pat
     # task/ladder checks run on the owner's own tags: the step's for shared blocks, each track's for its body
     if 'הוצאה למשימה' in (step.get('practices') or []) and 'task' not in types and 'tracks' not in types:
         r.warn('task', f'{where}: מתויג "הוצאה למשימה" בלי בלוק task (מה עושים + זמן · הרכב · כללים · במליאה)')
-    tasky = {'קדימה ללמידה', 'כולם כותבים', 'Think–Pair–Share', 'Jigsaw'} & set(step.get('practices') or [])
+    tasky = {'קדימה ללמידה', 'כולם כותבים', 'Think–Pair–Share', 'Jigsaw'} & {
+        p for p in step.get('practices') or [] if isinstance(p, str)}
     if tasky and kind not in ('exit', 'messages') and not {'task', 'ladder'} & set(types):
         r.warn('ladder', f'{where}: משימה ({", ".join(sorted(tasky))}) בלי שאלת עזר ושאלת אתגר — בלוק ladder (כלל 26)')
     return n_slides
