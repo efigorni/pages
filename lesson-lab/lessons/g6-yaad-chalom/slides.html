@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>כל יעד מתחיל בחלום · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-hand" viewBox="0 0 120 240" data-cat="people" data-he="דמות מצביעה" data-color="#f7ae4d">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+      <path d="M84 140 L103 64" stroke="currentColor" stroke-width="17" stroke-linecap="round" />
+      <circle cx="104" cy="60" r="11" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-sit" viewBox="0 0 160 240" data-cat="people" data-he="דמות יושבת" data-color="#8c82c1">
+    <g fill="#847c74">
+      <rect x="24" y="108" width="12" height="80" rx="5" />
+      <rect x="24" y="176" width="88" height="12" rx="5" />
+      <rect x="28" y="184" width="9" height="48" rx="3" />
+      <rect x="98" y="184" width="9" height="48" rx="3" />
+    </g>
+    <g fill="currentColor">
+      <circle cx="76" cy="82" r="22" />
+      <path d="M44 176 L46 134 C47 118 58 110 72 110 C88 110 98 120 98 136 L98 176 Z" />
+      <rect x="52" y="152" width="84" height="24" rx="12" />
+      <rect x="112" y="156" width="24" height="68" rx="12" />
+      <rect x="112" y="212" width="40" height="20" rx="10" />
+    </g>
+    <path d="M82 128 L104 160 L128 160" fill="none" stroke="#fff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M82 128 L104 160 L128 160" fill="none" stroke="currentColor" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="kid-desk" viewBox="0 0 180 240" data-cat="people" data-he="דמות כותבת ליד שולחן" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="90" cy="98" r="22" />
+      <path d="M54 200 C54 152 70 126 90 126 C110 126 126 152 126 200 Z" />
+    </g>
+    <path d="M30 170 H150 L170 200 H10 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <rect x="10" y="200" width="160" height="12" fill="#e08f36" />
+    <rect x="20" y="212" width="9" height="20" fill="#13100e" />
+    <rect x="151" y="212" width="9" height="20" fill="#13100e" />
+    <path d="M62 177 H112 L117 195 H57 Z" fill="#fff" stroke="#13100e" stroke-width="3.5" stroke-linejoin="round" />
+    <path d="M100 191 L122 157" stroke="#f7ae4d" stroke-width="7" stroke-linecap="round" />
+    <path d="M100 191 L104 185" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+    <path d="M56 177 L70 187 M126 177 L110 186" stroke="currentColor" stroke-width="13" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="pair" viewBox="0 0 220 240" data-cat="people" data-he="זוג">
+    <path d="M80 140 L110 186" stroke="#63b1af" stroke-width="15" stroke-linecap="round" />
+    <path d="M140 140 L110 186" stroke="#f7ae4d" stroke-width="15" stroke-linecap="round" />
+    <g fill="#63b1af" transform="translate(-6 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(106 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="group3" viewBox="0 0 320 240" data-cat="people" data-he="שלישייה">
+    <g fill="#8c82c1" transform="translate(100 -10)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(4 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#63b1af" transform="translate(196 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="crowd" viewBox="0 0 320 200" data-cat="people" data-he="קהל">
+    <g stroke="#fff" stroke-width="5" paint-order="stroke">
+      <path fill="#8c82c1" transform="translate(45 72) scale(.95)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#619f88" transform="translate(91 72) scale(.95)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#63b1af" transform="translate(137 72) scale(.95)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#f7ae4d" transform="translate(183 72) scale(.95)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#8c82c1" transform="translate(229 72) scale(.95)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#619f88" transform="translate(275 72) scale(.95)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#f7ae4d" transform="translate(52 118) scale(1.1)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#63b1af" transform="translate(106 118) scale(1.1)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#8c82c1" transform="translate(160 118) scale(1.1)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#619f88" transform="translate(214 118) scale(1.1)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#f7ae4d" transform="translate(268 118) scale(1.1)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#63b1af" transform="translate(61 164) scale(1.25)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#8c82c1" transform="translate(127 164) scale(1.25)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#f7ae4d" transform="translate(193 164) scale(1.25)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+      <path fill="#619f88" transform="translate(259 164) scale(1.25)" d="M-15 -34a15 15 0 1 0 30 0a15 15 0 1 0-30 0ZM-22 18C-22-8-14-16 0-16C14-16 22-8 22 18Z" />
+    </g>
+  </symbol>
+
+  <symbol id="speech" viewBox="0 0 200 170" data-cat="talk" data-he="בועת דיבור">
+    <path d="M50 10 H150 A40 40 0 0 1 190 50 V82 A40 40 0 0 1 150 122 H144 L160 160 L116 122 H50 A40 40 0 0 1 10 82 V50 A40 40 0 0 1 50 10 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="speech-l" viewBox="0 0 200 170" data-cat="talk" data-he="בועת דיבור (זנב שמאלה)">
+    <path transform="matrix(-1 0 0 1 200 0)" d="M50 10 H150 A40 40 0 0 1 190 50 V82 A40 40 0 0 1 150 122 H144 L160 160 L116 122 H50 A40 40 0 0 1 10 82 V50 A40 40 0 0 1 50 10 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="thought" viewBox="0 0 200 190" data-cat="talk" data-he="ענן מחשבה">
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M184 80 A25 25 0 0 1 164.3 116 A32 32 0 0 1 114.6 135.1 A34 34 0 0 1 58 128.5 A28 28 0 0 1 21.1 99.2 A23 23 0 0 1 21.1 60.8 A28 28 0 0 1 58 31.5 A34 34 0 0 1 114.6 24.9 A32 32 0 0 1 164.3 44 A25 25 0 0 1 184 80 Z" />
+      <circle cx="148" cy="160" r="10" />
+      <circle cx="170" cy="178" r="6" />
+    </g>
+  </symbol>
+
+  <symbol id="heart" viewBox="0 0 200 180" data-cat="feelings" data-he="לב" data-color="#e57373">
+    <path d="M100 168 C40 124 12 92 12 58 C12 30 34 12 58 12 C76 12 90 22 100 38 C110 22 124 12 142 12 C166 12 188 30 188 58 C188 92 160 124 100 168 Z" fill="currentColor" />
+    <path d="M38 58 C38 46 46 37 58 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55" />
+  </symbol>
+
+  <symbol id="road" viewBox="0 0 260 210" data-cat="places" data-he="דרך">
+    <path d="M6 104 Q130 92 254 104 V180 Q254 204 230 204 H30 Q6 204 6 180 Z" fill="#e7f1ec" />
+    <path d="M120 103 C146 60 208 56 244 100 Z" fill="#4a8571" />
+    <path d="M16 101 C40 62 104 52 152 98 Z" fill="#619f88" />
+    <path d="M36 204 C70 172 114 152 112 130 C110 116 117 107 123 100 L137 100 C139 108 134 118 143 132 C158 152 192 172 224 204 Z" fill="#847c74" />
+    <path d="M130 200 C128 172 125 152 127 132 C128 118 129 110 130 104" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="14 11" />
+  </symbol>
+
+  <symbol id="mountain" viewBox="0 0 240 180" data-cat="places" data-he="הר">
+    <path d="M70 172 L156 26 L236 172 Z" fill="#63b1af" />
+    <path d="M6 172 L90 50 L176 172 Z" fill="#619f88" />
+    <path d="M156 26 L137.2 58 L147 53 L156 62 L165 53 L173.5 58 Z" fill="#fff" />
+    <path d="M90 50 L66.6 84 L78 78 L88 88 L100 78 L114 84 Z" fill="#fff" />
+  </symbol>
+
+  
+  <symbol id="umbrella" viewBox="0 0 200 200" data-cat="safety" data-he="מטרייה" data-color="#8c82c1">
+    <path d="M100 20 V8" stroke="#13100e" stroke-width="6" stroke-linecap="round" />
+    <path d="M100 104 V172 A13 13 0 0 1 74 172" fill="none" stroke="#13100e" stroke-width="7" stroke-linecap="round" />
+    <path d="M16 104 C16 54 54 20 100 20 C146 20 184 54 184 104 Q163 88 142 104 Q121 88 100 104 Q79 88 58 104 Q37 88 16 104 Z" fill="currentColor" />
+    <path d="M100 20 C80 40 64 70 58 104 Q79 88 100 104 Z M100 20 C150 30 180 60 184 104 Q163 88 142 104 C138 70 124 40 100 20 Z" fill="#13100e" opacity=".13" />
+  </symbol>
+
+  
+  <symbol id="pencil" viewBox="0 0 200 200" data-cat="learning" data-he="עיפרון" data-color="#f7ae4d">
+    <g transform="rotate(-45 100 100) translate(100 100) scale(1.12) translate(-100 -100)">
+      <path d="M54 82 L14 100 L54 118 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+      <path d="M28 93.7 L14 100 L28 106.3 Z" fill="#13100e" />
+      <rect x="54" y="82" width="96" height="36" fill="currentColor" />
+      <rect x="54" y="106" width="96" height="12" fill="#13100e" opacity=".12" />
+      <rect x="150" y="80" width="18" height="40" rx="3" fill="#847c74" />
+      <path d="M168 82 H178 A12 12 0 0 1 190 94 V106 A12 12 0 0 1 178 118 H168 Z" fill="#e57373" />
+    </g>
+  </symbol>
+
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="sticky" viewBox="0 0 170 170" data-cat="learning" data-he="פתק דביק" data-color="#f7ae4d">
+    <g transform="rotate(-4 85 85)">
+      <path d="M20 20 H150 V118 L118 150 H20 Z" fill="currentColor" />
+      <rect x="20" y="20" width="130" height="22" fill="#13100e" opacity=".08" />
+      <path d="M150 118 L118 150 L124 124 Z" fill="#13100e" opacity=".2" />
+      <path d="M42 70 H126 M42 94 H118 M42 118 H90" stroke="#13100e" stroke-width="5" stroke-linecap="round" opacity=".55" />
+    </g>
+  </symbol>
+
+  <symbol id="bulb" viewBox="0 0 170 210" data-cat="learning" data-he="נורה (רעיון)" data-color="#f7ae4d">
+    <g stroke="#e08f36" stroke-width="7" stroke-linecap="round">
+      <path d="M85 32 V16 M126 47 L136 35 M44 47 L34 35 M146 86 L161 83 M24 86 L9 83" />
+    </g>
+    <path d="M85 42 C55 42 31 66 31 96 C31 118 44 132 56 146 V162 H114 V146 C126 132 139 118 139 96 C139 66 115 42 85 42 Z" fill="currentColor" />
+    <path d="M54 94 C54 76 64 66 80 63" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".6" />
+    <rect x="56" y="158" width="58" height="30" rx="6" fill="#847c74" />
+    <path d="M60 168 H110 M60 178 H110" stroke="#fff" stroke-width="3" opacity=".6" />
+    <path d="M70 188 H100 L92 200 H78 Z" fill="#13100e" />
+  </symbol>
+
+  <symbol id="clock" viewBox="0 0 200 200" data-cat="learning" data-he="שעון" data-color="#63b1af">
+    <circle cx="100" cy="100" r="86" fill="currentColor" />
+    <circle cx="100" cy="100" r="68" fill="#fff" />
+    <g stroke="#13100e" stroke-width="6" stroke-linecap="round">
+      <path d="M100 40 V52 M160 100 H148 M100 160 V148 M40 100 H52" />
+    </g>
+    <path d="M100 100 L76 80" stroke="#13100e" stroke-width="9" stroke-linecap="round" />
+    <path d="M100 100 V50" stroke="#13100e" stroke-width="6" stroke-linecap="round" />
+    <circle cx="100" cy="100" r="8" fill="#13100e" />
+  </symbol>
+
+  <symbol id="calendar" viewBox="0 0 200 200" data-cat="learning" data-he="לוח שנה" data-color="#8c82c1">
+    <rect x="18" y="30" width="164" height="154" rx="14" fill="#fff" />
+    <path d="M18 72 V44 A14 14 0 0 1 32 30 H168 A14 14 0 0 1 182 44 V72 Z" fill="currentColor" />
+    <rect x="18" y="30" width="164" height="154" rx="14" fill="none" stroke="#13100e" stroke-width="5" />
+    <g fill="#13100e"><rect x="52" y="14" width="12" height="32" rx="6" /><rect x="136" y="14" width="12" height="32" rx="6" /></g>
+    <g fill="#e8e2da">
+      <rect x="36" y="88" width="24" height="20" rx="4" /><rect x="70" y="88" width="24" height="20" rx="4" /><rect x="106" y="88" width="24" height="20" rx="4" /><rect x="140" y="88" width="24" height="20" rx="4" />
+      <rect x="36" y="118" width="24" height="20" rx="4" /><rect x="70" y="118" width="24" height="20" rx="4" /><rect x="140" y="118" width="24" height="20" rx="4" />
+      <rect x="36" y="148" width="24" height="20" rx="4" /><rect x="70" y="148" width="24" height="20" rx="4" /><rect x="106" y="148" width="24" height="20" rx="4" />
+    </g>
+    <rect x="106" y="118" width="24" height="20" rx="4" fill="#f7ae4d" />
+    <circle cx="118" cy="128" r="18" fill="none" stroke="#e57373" stroke-width="4" />
+  </symbol>
+
+  
+  <symbol id="arrow" viewBox="0 0 220 120" data-cat="choices" data-he="חץ (קדימה)" data-color="#f7ae4d">
+    <path d="M196 92 C150 30 90 30 54 64" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" />
+    <path d="M29 87 L38 35 L82 82 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="sun" viewBox="0 0 200 200" data-cat="growth" data-he="שמש" data-color="#f7ae4d">
+    <circle cx="100" cy="100" r="46" fill="currentColor" />
+    <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
+      <path d="M162 100 H186 M143.8 143.8 L160.8 160.8 M100 162 V186 M56.2 143.8 L39.2 160.8 M38 100 H14 M56.2 56.2 L39.2 39.2 M100 38 V14 M143.8 56.2 L160.8 39.2" />
+    </g>
+  </symbol>
+
+  <symbol id="rain-cloud" viewBox="0 0 200 200" data-cat="growth" data-he="ענן גשם">
+    <g fill="#847c74">
+      <circle cx="66" cy="98" r="34" /><circle cx="106" cy="78" r="44" /><circle cx="148" cy="102" r="30" />
+      <rect x="40" y="100" width="126" height="32" rx="16" />
+    </g>
+    <g fill="#63b1af">
+      <path d="M66 146 C72 156 76 162 76 168 A10 10 0 0 1 56 168 C56 162 60 156 66 146 Z" />
+      <path d="M104 160 C110 170 114 176 114 182 A10 10 0 0 1 94 182 C94 176 98 170 104 160 Z" />
+      <path d="M142 144 C148 154 152 160 152 166 A10 10 0 0 1 132 166 C132 160 136 154 142 144 Z" />
+    </g>
+  </symbol>
+
+  <symbol id="star" viewBox="0 0 200 200" data-cat="growth" data-he="כוכב" data-color="#f7ae4d">
+    <path d="M100 16 L123.5 71.6 L183.7 76.8 L138 116.4 L151.7 175.2 L100 144 L48.3 175.2 L62 116.4 L16.3 76.8 L76.5 71.6 Z" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="target" viewBox="0 0 200 200" data-cat="growth" data-he="מטרה" data-color="#e57373">
+    <circle cx="96" cy="104" r="84" fill="currentColor" />
+    <circle cx="96" cy="104" r="62" fill="#fff" />
+    <circle cx="96" cy="104" r="42" fill="currentColor" />
+    <circle cx="96" cy="104" r="20" fill="#fff" />
+    <path d="M96 104 L166 34" stroke="#13100e" stroke-width="7" stroke-linecap="round" />
+    <path d="M160 40 L160 16 L176 24 L184 40 Z" fill="#63b1af" />
+  </symbol>
+
+  
+  <symbol id="flag" viewBox="0 0 180 220" data-cat="calendar" data-he="דגל" data-color="#63b1af">
+    <rect x="30" y="16" width="10" height="198" rx="5" fill="#4a443f" />
+    <circle cx="35" cy="14" r="9" fill="#f7ae4d" />
+    <path d="M40 26 C72 16 98 40 130 30 C146 25 158 24 168 28 V106 C158 102 146 103 130 108 C98 118 72 94 40 104 Z" fill="currentColor" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">ניהול עצמי · שיעור 1</div><h1>כל יעד מתחיל בחלום</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות חולמת על כוכב, וחץ מהחלום אל מטרה"><g filter="url(#rough)"><use href="#thought" x="230.0" y="20.0" width="320.0" height="304.0" color="#13100e"/><use href="#star" x="333.0" y="88.0" width="120.0" height="120.0" color="#f7ae4d"/><use href="#kid-stand" x="466.0" y="262.0" width="128.0" height="256.0" color="#63b1af"/><use href="#arrow" x="200.0" y="300.0" width="160.0" height="87.3" color="#847c74"/><use href="#target" x="24.0" y="300.0" width="190.0" height="190.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2" data-track="dream-a">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">יש לי חלום · דמיון מודרך</div><h2>יש לי חלום</h2><p class="sub">שבו בנוח בכיסא, התרווחו ונוחו קצת.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות יושבת בנוח, ומעליה ענן מחשבה ובתוכו כוכב"><g filter="url(#rough)"><use href="#thought" x="40.0" y="30.0" width="320.0" height="304.0" color="#13100e"/><use href="#star" x="148.0" y="103.0" width="110.0" height="110.0" color="#f7ae4d"/><use href="#kid-sit" x="330.0" y="204.0" width="200.0" height="300.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3" data-track="dream-a">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">יש לי חלום · במחברת</div><h2>ציירו את החלום שלכם</h2><p class="sub">ומתחת — משפט אחד על מה שחלמתם.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות מציירת ליד שולחן, ומעליה ענן מחשבה ובתוכו כוכב"><g filter="url(#rough)"><use href="#thought" x="110.0" y="20.0" width="260.0" height="247.0" color="#13100e"/><use href="#star" x="193.0" y="74.0" width="100.0" height="100.0" color="#f7ae4d"/><use href="#kid-desk" x="300.0" y="140.0" width="280.0" height="373.3" color="#63b1af"/></g></svg></div>
+<div class="foot"><span>2 דקות</span><span class="timer" data-sec="120"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="4" data-track="dream-b">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">קדימה ללמידה · במחברת</div><h2>מה אתם רואים כשאתם שומעים ׳חלום׳?</h2><p class="sub">ציירו תמונה, וכתבו מתחת משפט אחד — למה דווקא היא.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דף, ועליו כוכב מצויר, ועיפרון לידו"><g filter="url(#rough)"><use href="#note" x="150.0" y="50.0" width="256.0" height="320.0" color="#13100e"/><use href="#star" x="223.0" y="165.0" width="110.0" height="110.0" color="#f7ae4d"/><use href="#pencil" x="390.0" y="300.0" width="190.0" height="190.0" color="#f7ae4d"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לפני שמשתפים</div><h2>שיח מעודד ומקבל</h2><ol class="pts"><li class="fragment">הקשבה ממקום מתעניין ולא שיפוטי</li><li class="fragment">כבוד לדברי החבר/ה</li><li class="fragment">הנאמר בשיח נשאר בינינו, אפשר לשתף אחרים בנושא, אך לספר רק על עצמי</li><li class="fragment">שיתוף מהלב</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג יד ביד, ומעליו בועת דיבור ובתוכה לב"><g filter="url(#rough)"><use href="#speech" x="40.0" y="30.0" width="300.0" height="255.0" color="#13100e"/><use href="#heart" x="135.0" y="80.0" width="110.0" height="99.0" color="#e57373"/><use href="#pair" x="260.0" y="250.0" width="250.0" height="272.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חושבים · בזוגות · משתפים</div><h2>חלום או משאלה שכבר הגשמתם</h2><p class="sub">כתבו לבד, ספרו בזוגות, ואז במליאה.</p><ol class="pts"><li class="fragment">מה, או מי, עזר לכם להגשים?</li><li class="fragment">מה עיכב או הקשה בדרך?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="הר ודגל על הפסגה, ודמות מרימה יד"><g filter="url(#rough)"><use href="#mountain" x="40.0" y="260.0" width="330.0" height="247.5" color="#13100e"/><use href="#flag" x="233.0" y="165.0" width="110.0" height="134.4" color="#63b1af"/><use href="#kid-hand" x="430.0" y="272.0" width="125.0" height="250.0" color="#63b1af"/></g></svg></div>
+<div class="foot"><span>דקה</span><span class="timer" data-sec="60"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="7">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">רגע לחשוב</div><h2>מה קל לכם יותר לומר?</h2><p class="sub">מה אתם לא רוצים שיקרה — או שלושה דברים ברורים שהייתם רוצים שיקרו לכם השנה?</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="קהל של דמויות, ומעליו ענן מחשבה עם סימן שאלה"><g filter="url(#rough)"><use href="#thought" x="60.0" y="24.0" width="240.0" height="228.0" color="#13100e"/><use href="#crowd" x="130.0" y="280.0" width="380.0" height="237.5" color="#13100e"/></g><text x="182.0" y="118.0" font-size="110" text-anchor="middle" dominant-baseline="middle" fill="#13100e">?</text></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="8">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">הופכים חלום למציאות</div><h2>בענן ׳חלום׳ — כתבו חלום אחד לשנה הזאת</h2><p class="sub">משהו שהייתם רוצים להשיג — בחוג, בלימודים, משהו חדש ללמוד או שינוי בהתנהגות.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ענן ובתוכו המילה ׳חלום׳, ועיפרון לידו"><g filter="url(#rough)"><use href="#thought" x="50.0" y="40.0" width="320.0" height="304.0" color="#13100e"/><use href="#pencil" x="380.0" y="290.0" width="200.0" height="200.0" color="#f7ae4d"/></g><text x="213.0" y="170.0" font-size="72" text-anchor="middle" dominant-baseline="middle" fill="#13100e">חלום</text></svg></div>
+<div class="foot"><span>דקה וחצי</span><span class="timer" data-sec="90"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="9">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מהו יעד?</div><h2>יעד הוא מטרה שאנחנו רוצים להשיג</h2><p class="sub">משהו שאנחנו שואפים אליו, רוצים עבור עצמנו או עבור אחרים.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מטרה עם חץ במרכז"><g filter="url(#rough)"><use href="#target" x="150.0" y="110.0" width="320.0" height="320.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="10">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כל יעד מתחיל ב…</div><h2>חלו״ם</h2><ol class="pts"><li class="fragment"><b>ח</b>שוב — למה חשוב לנו להשיג את היעד?</li><li class="fragment"><b>ל</b>זמן מוגדר — עד מתי נשיג אותו?</li><li class="fragment"><b>ומ</b>ה עושים — אילו פעולות נעשה כדי להשיג אותו?</li></ol>    </div>
+    <div class="pic"><svg role="img" aria-label="שלושה כרטיסים — לב, שעון ועיפרון — עם האותיות ח, ל, ומ" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="420" y="100" width="176" height="320" rx="24" fill="#fdf0dd"/>
+      <rect x="222" y="100" width="176" height="320" rx="24" fill="#e6f2f1"/>
+      <rect x="24" y="100" width="176" height="320" rx="24" fill="#eeecf7"/>
+    </g>
+    <use href="#heart" x="443" y="146" width="130" height="117" color="#e57373"/>
+    <use href="#clock" x="245" y="139" width="130" height="130" color="#63b1af"/>
+    <use href="#pencil" x="47" y="139" width="130" height="130" color="#f7ae4d"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" fill="#13100e" font-size="84">
+    <text x="508" y="350">ח</text>
+    <text x="310" y="350">ל</text>
+    <text x="112" y="350">ומ</text>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="11">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">עבודה אישית · דוגמה</div><h2>אני רוצה ללמוד לנגן בגיטרה</h2><ol class="pts"><li class="fragment"><b>יעד</b> — אדע לנגן בגיטרה, ואבקש להופיע בטקס הקרוב</li><li class="fragment"><b>פעולות</b> — להשיג גיטרה, ללמוד מסרטונים, להתאמן כל יום</li><li class="fragment"><b>מועד</b> — בעוד חצי שנה</li></ol>    </div>
+    <div class="pic"><svg role="img" aria-label="גיטרה, ולוח שנה לידה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <g transform="translate(360 380) rotate(24)">
+      <rect x="-13" y="-300" width="26" height="214" rx="5" fill="#e08f36"/>
+      <rect x="-24" y="-352" width="48" height="60" rx="10" fill="#13100e"/>
+      <g fill="#847c74">
+        <circle cx="-31" cy="-338" r="7"/><circle cx="-31" cy="-312" r="7"/>
+        <circle cx="31" cy="-338" r="7"/><circle cx="31" cy="-312" r="7"/>
+      </g>
+      <circle cx="0" cy="-94" r="60" fill="#f7ae4d"/>
+      <circle cx="0" cy="0" r="80" fill="#f7ae4d"/>
+      <circle cx="0" cy="-58" r="25" fill="#13100e"/>
+      <rect x="-34" y="24" width="68" height="13" rx="5" fill="#13100e"/>
+      <g stroke="#ffffff" stroke-width="2.5" opacity=".9">
+        <path d="M-9 30 V-294"/><path d="M-3 30 V-294"/><path d="M3 30 V-294"/><path d="M9 30 V-294"/>
+      </g>
+    </g>
+    <use href="#calendar" x="40" y="300" width="190" height="190" color="#8c82c1"/>
+  </g>
+</svg></div>
+<div class="foot"><span>4 דקות</span><span class="timer" data-sec="240"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="12">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · משתפים</div><h2>מי רוצה לשתף ביעד ובפעולות שכתב?</h2><p class="sub">והכיתה מוסיפה — עוד פעולה, או מי יכול לעזור.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש דמויות יחד, ומעליהן בועת דיבור ובתוכה נורה"><g filter="url(#rough)"><use href="#group3" x="110.0" y="254.0" width="360.0" height="270.0" color="#13100e"/><use href="#speech-l" x="300.0" y="24.0" width="280.0" height="238.0" color="#13100e"/><use href="#bulb" x="395.0" y="58.0" width="90.0" height="111.2" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="13">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · חושבים · בזוגות · משתפים</div><h2>מה עלול לעכב אתכם בדרך ליעד?</h2><p class="sub">ומה תעשו אז? כתבו בתחתית הדף.</p><ol class="pts"><li class="fragment">לבד — דקה</li><li class="fragment">בזוגות — דקה</li><li class="fragment">במליאה</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ענן גשם, ומטרייה פתוחה לידו"><g filter="url(#rough)"><use href="#rain-cloud" x="50.0" y="40.0" width="200.0" height="200.0" color="#13100e"/><use href="#umbrella" x="300.0" y="190.0" width="270.0" height="270.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg len-m" data-n="14">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור</div><h2>המאמץ המתוכנן שאנחנו משקיעים במימוש חלומות ומשאלות ליבנו, יחזק בנו את התקווה שהדברים יתממשו ויכוון אותנו לעשות פעולות שיקדמו את השגת היעד.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דרך מתפתלת אל דגל באופק, ושמש מעליה"><g filter="url(#rough)"><use href="#road" x="102.0" y="172.0" width="416.0" height="336.0" color="#13100e"/><use href="#flag" x="289.0" y="201.0" width="110.0" height="134.4" color="#63b1af"/><use href="#sun" x="40.0" y="30.0" width="140.0" height="140.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="15">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כרטיס יציאה</div><h2>החלו״ם שלי — צעד ראשון</h2><ol class="pts"><li class="fragment">פעולה אחת מהרשימה שלי שאתחיל בה — ומתי?</li><li class="fragment">מי יכול לסייע לי בהשגת היעד?</li><li class="fragment">משהו שלמדתי על עצמי היום.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות כותבת ליד שולחן, ופתק לידה"><g filter="url(#rough)"><use href="#kid-desk" x="230.0" y="130.0" width="288.0" height="384.0" color="#63b1af"/><use href="#sticky" x="40.0" y="70.0" width="170.0" height="170.0" color="#f7ae4d"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- חבילה מפרגנת עוברת: חבילה עטופה ותו מוזיקה, ושתי ידיים מושטות (ציור ייעודי — אין חבילה ותו בערכה) -->
+  <g filter="url(#rough)">
+    <use href="#hands-help" x="160" y="214" width="300" height="300" color="#63b1af"/>
+    <rect x="214" y="70" width="192" height="140" rx="12" fill="#8c82c1"/>
+    <rect x="214" y="70" width="192" height="40" rx="12" fill="#13100e" fill-opacity=".14"/>
+    <rect x="300" y="70" width="20" height="140" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="214" y="130" width="192" height="20" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M310 70 C282 30 248 48 268 70 Z" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M310 70 C338 30 372 48 352 70 Z" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <g fill="#13100e">
+      <ellipse cx="110" cy="190" rx="26" ry="20" transform="rotate(-20 110 190)"/>
+      <rect x="128" y="86" width="9" height="104" rx="4"/>
+      <path d="M134 86 C170 100 176 124 160 146 C164 124 154 112 134 108 Z"/>
+    </g>
+  </g>
+</svg>

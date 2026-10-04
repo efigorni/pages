@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כיסאות מסתובבים: שתי דמויות יושבות, דמות אחת עומדת ומחפשת כיסא, ותווי מוזיקה מעליה -->
+  <g filter="url(#rough)">
+    <path d="M24 510 H596" stroke="#847c74" stroke-width="5" stroke-linecap="round"/>
+    <use href="#kid-sit" x="30" y="230" width="192" height="288" color="#8c82c1"/>
+    <use href="#kid-sit" x="398" y="230" width="192" height="288" color="#f7ae4d" transform="matrix(-1 0 0 1 988 0)"/>
+    <use href="#kid-stand" x="232" y="206" width="156" height="312" color="#63b1af"/>
+    <g fill="#13100e">
+      <ellipse cx="266" cy="170" rx="19" ry="14" transform="rotate(-20 266 170)"/>
+      <rect x="279" y="84" width="8" height="84" rx="3"/>
+      <path d="M283 84 C300 96 316 104 312 132 C306 116 296 110 283 108 Z"/>
+      <ellipse cx="380" cy="146" rx="19" ry="14" transform="rotate(-20 380 146)"/>
+      <ellipse cx="444" cy="130" rx="19" ry="14" transform="rotate(-20 444 130)"/>
+      <rect x="393" y="62" width="8" height="82" rx="3"/>
+      <rect x="457" y="46" width="8" height="82" rx="3"/>
+      <path d="M393 62 L465 46 L465 64 L393 80 Z"/>
+    </g>
+  </g>
+</svg>

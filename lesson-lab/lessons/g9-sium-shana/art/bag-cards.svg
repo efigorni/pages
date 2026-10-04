@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כרטיסיות: שקית הפתעות ושלוש כרטיסיות בולטות ממנה, ודמות שמרימה יד לידה (ציור ייעודי — אין שקית בערכה) -->
+  <g filter="url(#rough)">
+    <g fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="122" y="136" width="100" height="136" rx="10" transform="rotate(-16 172 204)"/>
+      <rect x="196" y="112" width="100" height="136" rx="10"/>
+      <rect x="268" y="132" width="100" height="136" rx="10" transform="rotate(14 318 200)"/>
+    </g>
+    <g stroke="#847c74" stroke-width="6" stroke-linecap="round" fill="none">
+      <path d="M146 170 H198 M146 194 H186" transform="rotate(-16 172 204)"/>
+      <path d="M220 146 H272 M220 170 H260"/>
+      <path d="M292 166 H344 M292 190 H332" transform="rotate(14 318 200)"/>
+    </g>
+    <g fill="none" stroke="#13100e" stroke-width="7" stroke-linecap="round">
+      <path d="M136 236 C136 176 186 176 186 236"/>
+      <path d="M254 236 C254 176 304 176 304 236"/>
+    </g>
+    <rect x="90" y="232" width="260" height="270" rx="10" fill="#63b1af"/>
+    <rect x="90" y="232" width="260" height="28" rx="10" fill="#13100e" opacity=".12"/>
+    <path d="M90 260 V492 Q90 502 100 502 H124 V260 Z" fill="#13100e" opacity=".12"/>
+    <use href="#kid-hand" x="420" y="222" width="140" height="280" color="#f7ae4d"/>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- דרכי התמודדות: "חוסן" במרכז, ושש הדרכים של המקור מסביב (מקור: שקף 19) -->
+  <g filter="url(#rough)">
+    <g stroke="#619f88" stroke-width="11" stroke-linecap="round">
+      <line x1="310" y1="270" x2="310" y2="95"/><line x1="310" y1="270" x2="461.6" y2="182.5"/>
+      <line x1="310" y1="270" x2="461.6" y2="357.5"/><line x1="310" y1="270" x2="310" y2="445"/>
+      <line x1="310" y1="270" x2="158.4" y2="357.5"/><line x1="310" y1="270" x2="158.4" y2="182.5"/>
+    </g>
+    <circle cx="310" cy="270" r="80" fill="#619f88"/>
+    <g fill="#ffffff" stroke="#63b1af" stroke-width="7">
+      <circle cx="310" cy="95" r="66"/><circle cx="461.6" cy="182.5" r="66"/>
+      <circle cx="461.6" cy="357.5" r="66"/><circle cx="310" cy="445" r="66"/>
+      <circle cx="158.4" cy="357.5" r="66"/><circle cx="158.4" cy="182.5" r="66"/>
+    </g>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="30">
+    <text x="310" y="274" font-size="46">חוסן</text>
+    <text x="310" y="98">אמונה</text>
+    <text x="461.6" y="185.5">שיתוף</text>
+    <text x="461.6" y="360.5">ספורט</text>
+    <text x="310" y="431">חיפוש</text><text x="310" y="465">מידע</text>
+    <text x="158.4" y="360.5">משפחה</text>
+    <text x="158.4" y="185.5">חברים</text>
+  </g>
+</svg>

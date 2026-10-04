@@ -1,0 +1,7 @@
+sources/raw/
+.DS_Store
+lessons/*/.shots/
+# קובצי ה-PDF של המצגות לא נכנסים לגיט (D81) — מייצרים אותם מקומית, ראו README
+lessons/*/slides.pdf
+lessons/*/.slides.pdf.tmp
+__pycache__/

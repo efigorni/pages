@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- המיטה של פרוקרוסטס: מיטת ברזל אחת, וחץ כפול מעליה — מידה אחת לכולם (מקור: שקף 23). ציור ייעודי, אין מיטה בערכה -->
+  <g filter="url(#rough)">
+    <ellipse cx="310" cy="462" rx="236" ry="18" fill="#13100e" fill-opacity=".12"/>
+    <rect x="452" y="214" width="44" height="246" rx="14" fill="#8c82c1"/>
+    <rect x="124" y="286" width="40" height="174" rx="14" fill="#8c82c1"/>
+    <rect x="452" y="214" width="44" height="246" rx="14" fill="#13100e" fill-opacity=".12"/>
+    <rect x="144" y="318" width="330" height="56" rx="18" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M152 374 L466 374 L466 404 L152 404 Z" fill="#13100e"/>
+    <rect x="402" y="296" width="70" height="34" rx="14" fill="#eeecf7" stroke="#13100e" stroke-width="5"/>
+    <path d="M164 346 L400 346" stroke="#8c82c1" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>
+    <path d="M146 158 L474 158" stroke="#847c74" stroke-width="10" stroke-linecap="round"/>
+    <path d="M178 124 L136 158 L178 192" stroke="#847c74" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M442 124 L484 158 L442 192" stroke="#847c74" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

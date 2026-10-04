@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מה מעצב את העמדות שלנו: "עמדות" במרכז, ומסביב חמשת הגורמים (מקור: שקף 14) -->
+  <g filter="url(#rough)">
+    <g stroke="#f7ae4d" stroke-width="11" stroke-linecap="round">
+      <line x1="310" y1="285" x2="310" y2="95"/>
+      <line x1="310" y1="285" x2="491" y2="226"/>
+      <line x1="310" y1="285" x2="422" y2="439"/>
+      <line x1="310" y1="285" x2="198" y2="439"/>
+      <line x1="310" y1="285" x2="129" y2="226"/>
+    </g>
+    <circle cx="310" cy="285" r="86" fill="#f7ae4d"/>
+    <g fill="#ffffff" stroke="#63b1af" stroke-width="7">
+      <circle cx="310" cy="95" r="74"/>
+      <circle cx="491" cy="226" r="74"/>
+      <circle cx="422" cy="439" r="74"/>
+      <circle cx="198" cy="439" r="74"/>
+      <circle cx="129" cy="226" r="74"/>
+    </g>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="31">
+    <text x="310" y="289" font-size="44">עמדות</text>
+    <text x="310" y="98">ערכים</text>
+    <text x="491" y="229">משפחה</text>
+    <text x="422" y="442">חברים</text>
+    <text x="198" y="442">מדיה</text>
+    <text x="129" y="212">תפקידים</text>
+    <text x="129" y="246">חברתיים</text>
+  </g>
+</svg>

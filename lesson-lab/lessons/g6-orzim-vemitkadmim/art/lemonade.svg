@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- להפוך את הלימון ללימונדה: לימון מימין, חץ, וכוס לימונדה משמאל (ציור ייעודי — אין לימון וכוס בערכה) -->
+  <g filter="url(#rough)">
+    <ellipse cx="488" cy="300" rx="84" ry="60" transform="rotate(-18 488 300)" fill="#f7ae4d"/>
+    <ellipse cx="567" cy="274" rx="14" ry="11" transform="rotate(-18 567 274)" fill="#f7ae4d"/>
+    <ellipse cx="409" cy="326" rx="14" ry="11" transform="rotate(-18 409 326)" fill="#f7ae4d"/>
+    <ellipse cx="504" cy="326" rx="60" ry="26" transform="rotate(-18 504 326)" fill="#13100e" fill-opacity=".12"/>
+    <ellipse cx="452" cy="228" rx="34" ry="14" transform="rotate(-28 452 228)" fill="#619f88"/>
+    <use href="#arrow" x="252" y="262" width="140" height="76" color="#847c74"/>
+    <polygon points="62,150 244,150 220,462 86,462" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <line x1="196" y1="72" x2="168" y2="330" stroke="#8c82c1" stroke-width="12" stroke-linecap="round"/>
+    <polygon points="73,214 233,214 216,455 90,455" fill="#f7ae4d" fill-opacity=".55"/>
+    <circle cx="236" cy="158" r="36" fill="#f7ae4d"/>
+    <circle cx="236" cy="158" r="25" fill="#fdf0dd"/>
+    <path d="M236 135 V181 M216 147 L256 169 M216 169 L256 147" stroke="#f7ae4d" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

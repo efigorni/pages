@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>הפיל והיתד – שיעור 1 · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-desk" viewBox="0 0 180 240" data-cat="people" data-he="דמות כותבת ליד שולחן" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="90" cy="98" r="22" />
+      <path d="M54 200 C54 152 70 126 90 126 C110 126 126 152 126 200 Z" />
+    </g>
+    <path d="M30 170 H150 L170 200 H10 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <rect x="10" y="200" width="160" height="12" fill="#e08f36" />
+    <rect x="20" y="212" width="9" height="20" fill="#13100e" />
+    <rect x="151" y="212" width="9" height="20" fill="#13100e" />
+    <path d="M62 177 H112 L117 195 H57 Z" fill="#fff" stroke="#13100e" stroke-width="3.5" stroke-linejoin="round" />
+    <path d="M100 191 L122 157" stroke="#f7ae4d" stroke-width="7" stroke-linecap="round" />
+    <path d="M100 191 L104 185" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+    <path d="M56 177 L70 187 M126 177 L110 186" stroke="currentColor" stroke-width="13" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="group3" viewBox="0 0 320 240" data-cat="people" data-he="שלישייה">
+    <g fill="#8c82c1" transform="translate(100 -10)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(4 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#63b1af" transform="translate(196 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="speech-l" viewBox="0 0 200 170" data-cat="talk" data-he="בועת דיבור (זנב שמאלה)">
+    <path transform="matrix(-1 0 0 1 200 0)" d="M50 10 H150 A40 40 0 0 1 190 50 V82 A40 40 0 0 1 150 122 H144 L160 160 L116 122 H50 A40 40 0 0 1 10 82 V50 A40 40 0 0 1 50 10 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="thought" viewBox="0 0 200 190" data-cat="talk" data-he="ענן מחשבה">
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M184 80 A25 25 0 0 1 164.3 116 A32 32 0 0 1 114.6 135.1 A34 34 0 0 1 58 128.5 A28 28 0 0 1 21.1 99.2 A23 23 0 0 1 21.1 60.8 A28 28 0 0 1 58 31.5 A34 34 0 0 1 114.6 24.9 A32 32 0 0 1 164.3 44 A25 25 0 0 1 184 80 Z" />
+      <circle cx="148" cy="160" r="10" />
+      <circle cx="170" cy="178" r="6" />
+    </g>
+  </symbol>
+
+  <symbol id="chat" viewBox="0 0 220 190" data-cat="talk" data-he="צ׳אט">
+    <path d="M40 10 H120 A30 30 0 0 1 150 40 V66 A30 30 0 0 1 120 96 H64 L28 122 L34.8 95.5 A30 30 0 0 1 10 66 V40 A30 30 0 0 1 40 10 Z" fill="#63b1af" />
+    <path d="M38 42 H122 M38 64 H98" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+    <path d="M100 76 H180 A30 30 0 0 1 210 106 V130 A30 30 0 0 1 185.2 159.5 L204 182 L156 160 H100 A30 30 0 0 1 70 130 V106 A30 30 0 0 1 100 76 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <g fill="#13100e"><circle cx="112" cy="118" r="7" /><circle cx="140" cy="118" r="7" /><circle cx="168" cy="118" r="7" /></g>
+  </symbol>
+
+  
+  <symbol id="heart" viewBox="0 0 200 180" data-cat="feelings" data-he="לב" data-color="#e57373">
+    <path d="M100 168 C40 124 12 92 12 58 C12 30 34 12 58 12 C76 12 90 22 100 38 C110 22 124 12 142 12 C166 12 188 30 188 58 C188 92 160 124 100 168 Z" fill="currentColor" />
+    <path d="M38 58 C38 46 46 37 58 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55" />
+  </symbol>
+
+  <symbol id="laptop" viewBox="0 0 240 160" data-cat="screens" data-he="מחשב נייד" data-color="#13100e">
+    <rect x="40" y="12" width="160" height="110" rx="12" fill="currentColor" />
+    <rect x="50" y="22" width="140" height="90" rx="4" fill="#fff" />
+    <path d="M14 124 H226 Q226 142 208 142 H32 Q14 142 14 124 Z" fill="#847c74" />
+    <rect x="98" y="124" width="44" height="6" rx="3" fill="currentColor" />
+  </symbol>
+
+  <symbol id="envelope" viewBox="0 0 220 160" data-cat="screens" data-he="מעטפה / הודעה">
+    <rect x="14" y="22" width="192" height="122" rx="10" fill="#fff" stroke="#13100e" stroke-width="5" />
+    <path d="M18 30 L110 98 L202 30" fill="none" stroke="#13100e" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" />
+    <path d="M20 138 L82 78 M200 138 L138 78" fill="none" stroke="#13100e" stroke-width="4" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="sticky" viewBox="0 0 170 170" data-cat="learning" data-he="פתק דביק" data-color="#f7ae4d">
+    <g transform="rotate(-4 85 85)">
+      <path d="M20 20 H150 V118 L118 150 H20 Z" fill="currentColor" />
+      <rect x="20" y="20" width="130" height="22" fill="#13100e" opacity=".08" />
+      <path d="M150 118 L118 150 L124 124 Z" fill="#13100e" opacity=".2" />
+      <path d="M42 70 H126 M42 94 H118 M42 118 H90" stroke="#13100e" stroke-width="5" stroke-linecap="round" opacity=".55" />
+    </g>
+  </symbol>
+
+  <symbol id="magnifier" viewBox="0 0 200 200" data-cat="learning" data-he="זכוכית מגדלת" data-color="#63b1af">
+    <path d="M138 138 L178 178" stroke="currentColor" stroke-width="26" stroke-linecap="round" />
+    <path d="M122 122 L140 140" stroke="#13100e" stroke-width="14" />
+    <circle cx="84" cy="84" r="58" fill="#e6f2f1" stroke="#13100e" stroke-width="12" />
+    <path d="M52 76 C54 62 64 54 78 52" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="scale" viewBox="0 0 240 210" data-cat="choices" data-he="מאזניים">
+    <path d="M76 198 H164 L150 180 H90 Z" fill="#13100e" />
+    <rect x="114" y="40" width="12" height="146" fill="#13100e" />
+    <circle cx="120" cy="34" r="10" fill="#13100e" />
+    <rect x="24" y="50" width="192" height="10" rx="5" fill="#13100e" />
+    <path d="M40 60 L18 128 M40 60 L62 128 M200 60 L178 128 M200 60 L222 128" stroke="#13100e" stroke-width="4" />
+    <path d="M12 126 H68 C66 146 52 156 40 156 C28 156 14 146 12 126 Z" fill="#63b1af" />
+    <path d="M172 126 H228 C226 146 212 156 200 156 C188 156 174 146 172 126 Z" fill="#f7ae4d" />
+  </symbol>
+
+  <symbol id="rain-cloud" viewBox="0 0 200 200" data-cat="growth" data-he="ענן גשם">
+    <g fill="#847c74">
+      <circle cx="66" cy="98" r="34" /><circle cx="106" cy="78" r="44" /><circle cx="148" cy="102" r="30" />
+      <rect x="40" y="100" width="126" height="32" rx="16" />
+    </g>
+    <g fill="#63b1af">
+      <path d="M66 146 C72 156 76 162 76 168 A10 10 0 0 1 56 168 C56 162 60 156 66 146 Z" />
+      <path d="M104 160 C110 170 114 176 114 182 A10 10 0 0 1 94 182 C94 176 98 170 104 160 Z" />
+      <path d="M142 144 C148 154 152 160 152 166 A10 10 0 0 1 132 166 C132 160 136 154 142 144 Z" />
+    </g>
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לחשוב טוב</div><h1>הפיל והיתד – שיעור 1</h1>    </div>
+    <div class="pic"><svg role="img" aria-label="פיל גדול ואפור קשור בשרשרת ליתד עץ קטנה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <path d="M30 486 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="56" y="416" width="24" height="70" rx="5" fill="#f7ae4d"/>
+    <rect x="68" y="416" width="12" height="70" rx="4" fill="#13100e" opacity=".14"/>
+    <circle cx="68" cy="436" r="9" fill="none" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="224.3" cy="461.7" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 224.3 461.7)"/>
+    <ellipse cx="207.0" cy="458.7" rx="12.8" ry="3" fill="#13100e" transform="rotate(-170.1 207.0 458.7)"/>
+    <ellipse cx="189.6" cy="455.6" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 189.6 455.6)"/>
+    <ellipse cx="172.3" cy="452.6" rx="12.8" ry="3" fill="#13100e" transform="rotate(-170.1 172.3 452.6)"/>
+    <ellipse cx="155.0" cy="449.6" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 155.0 449.6)"/>
+    <ellipse cx="137.7" cy="446.6" rx="12.8" ry="3" fill="#13100e" transform="rotate(-170.1 137.7 446.6)"/>
+    <ellipse cx="120.3" cy="443.6" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 120.3 443.6)"/>
+    <ellipse cx="103.0" cy="440.5" rx="12.8" ry="3" fill="#13100e" transform="rotate(-170.1 103.0 440.5)"/>
+    <ellipse cx="85.7" cy="437.5" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 85.7 437.5)"/>
+    <g transform="translate(120 150) scale(1.08)">
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <path d="M24 128 C6 150 0 178 4 206" fill="none" stroke="#847c74" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="174" cy="146" rx="156" ry="108" fill="#847c74"/>
+      <rect x="84" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <rect x="268" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <circle cx="334" cy="106" r="76" fill="#847c74"/>
+      <path d="M388 118 C416 158 422 206 412 244 C407 263 390 268 383 255" fill="none" stroke="#847c74" stroke-width="36" stroke-linecap="round"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#847c74"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#13100e" opacity=".16"/>
+      <path d="M370 150 Q378 186 414 190 Q388 176 383 148 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מה הקשר? · רשת ללכידת מחשבות</div><h2>אילו מחשבות לכדתם ברשת?</h2><p class="sub">נעימות, מועילות, מבלבלות — ואיך הן משפיעות על מצב הרוח?</p>    </div>
+    <div class="pic"><svg role="img" aria-label="רשת לפרפרים שלכדה ענן מחשבה עם לב, וענן מחשבה עם ענן גשם עף לידה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <path d="M346 162 L578 504" stroke="#f7ae4d" stroke-width="16" stroke-linecap="round"/>
+    <path d="M122.5 200.1 C118 290 158 392 214 398 C270 404 330 320 349.5 151.9 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M170 214 C170 290 186 360 206 396" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M232 210 C238 290 242 350 236 398" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M292 196 C298 270 292 330 272 384" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M126 262 C190 282 270 280 342 238" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M140 322 C196 342 262 338 324 302" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <path d="M172 372 C210 384 252 382 292 362" fill="none" stroke="#847c74" stroke-width="3.5" opacity=".6"/>
+    <use href="#thought" x="150" y="250" width="120" height="114" color="#13100e"/>
+    <use href="#heart" x="186" y="276" width="50" height="45" color="#e57373"/>
+    <ellipse cx="236" cy="176" rx="116" ry="46" fill="#fff" stroke="#13100e" stroke-width="8" transform="rotate(-12 236 176)"/>
+    <use href="#thought" x="410" y="40" width="160" height="152" color="#13100e"/>
+    <use href="#rain-cloud" x="452" y="64" width="80" height="80" color="#847c74"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מחשבות מכשילות</div><h2>מחשבות מכשילות</h2><p class="sub">מחשבות שמופיעות לנו בראש ומשנות את מצב הרוח שלנו לרעה.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות, ומעליה ענן מחשבה ובתוכו ענן גשם"><g filter="url(#rough)"><use href="#thought" x="150.0" y="24.0" width="300.0" height="285.0" color="#13100e"/><use href="#rain-cloud" x="228.0" y="44.0" width="128.0" height="128.0" color="#13100e"/><use href="#kid-stand" x="420.0" y="250.0" width="130.0" height="260.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חושבים · בזוגות · משתפים</div><h2>מחשבה = עובדה?</h2><ol class="pts"><li class="fragment">אף פעם לא יסמכו עלי פה, לא משנה מה אני אעשה!</li><li class="fragment">אני בטוח אכשל במבחן</li><li class="fragment">אני לא מצליח בכלום ואף פעם גם לא אצליח</li><li class="fragment">ההורים שלי אף פעם לא מבינים אותי</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ענן מחשבה גדול עם סימן קריאה, וזכוכית מגדלת שבודקת אותו"><g filter="url(#rough)"><use href="#thought" x="230.0" y="30.0" width="320.0" height="304.0" color="#13100e"/><use href="#magnifier" x="40.0" y="300.0" width="200.0" height="200.0" color="#63b1af"/></g><text x="393.0" y="156.0" font-size="130" text-anchor="middle" dominant-baseline="middle" fill="#13100e">!</text></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מחשבה = עובדה? · עוד שלוש</div><h2>מחשבה = עובדה?</h2><ol class="pts"><li class="fragment">אין לי אף חבר בכיתה</li><li class="fragment">אין בכלל מקום בטוח בעולם</li><li class="fragment">תמיד מאשימים אותי!</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ענן מחשבה עם סימן קריאה, ודמות עומדת מתחתיו"><g filter="url(#rough)"><use href="#thought" x="70.0" y="30.0" width="320.0" height="304.0" color="#13100e"/><use href="#kid-stand" x="400.0" y="250.0" width="130.0" height="260.0" color="#63b1af"/></g><text x="233.0" y="156.0" font-size="130" text-anchor="middle" dominant-baseline="middle" fill="#13100e">!</text></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">משל · מקשיבים</div><h2>משל הפיל והיתד</h2><p class="sub">הקשיבו — ונסו לפתור את התעלומה.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="פיל גדול ואפור קשור בשרשרת ליתד עץ קטנה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <path d="M30 486 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="56" y="416" width="24" height="70" rx="5" fill="#f7ae4d"/>
+    <rect x="68" y="416" width="12" height="70" rx="4" fill="#13100e" opacity=".14"/>
+    <circle cx="68" cy="436" r="9" fill="none" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="224.3" cy="461.7" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 224.3 461.7)"/>
+    <ellipse cx="207.0" cy="458.7" rx="12.8" ry="3" fill="#13100e" transform="rotate(-170.1 207.0 458.7)"/>
+    <ellipse cx="189.6" cy="455.6" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 189.6 455.6)"/>
+    <ellipse cx="172.3" cy="452.6" rx="12.8" ry="3" fill="#13100e" transform="rotate(-170.1 172.3 452.6)"/>
+    <ellipse cx="155.0" cy="449.6" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 155.0 449.6)"/>
+    <ellipse cx="137.7" cy="446.6" rx="12.8" ry="3" fill="#13100e" transform="rotate(-170.1 137.7 446.6)"/>
+    <ellipse cx="120.3" cy="443.6" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 120.3 443.6)"/>
+    <ellipse cx="103.0" cy="440.5" rx="12.8" ry="3" fill="#13100e" transform="rotate(-170.1 103.0 440.5)"/>
+    <ellipse cx="85.7" cy="437.5" rx="12.8" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-170.1 85.7 437.5)"/>
+    <g transform="translate(120 150) scale(1.08)">
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <path d="M24 128 C6 150 0 178 4 206" fill="none" stroke="#847c74" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="174" cy="146" rx="156" ry="108" fill="#847c74"/>
+      <rect x="84" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <rect x="268" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <circle cx="334" cy="106" r="76" fill="#847c74"/>
+      <path d="M388 118 C416 158 422 206 412 244 C407 263 390 268 383 255" fill="none" stroke="#847c74" stroke-width="36" stroke-linecap="round"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#847c74"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#13100e" opacity=".16"/>
+      <path d="M370 150 Q378 186 414 190 Q388 176 383 148 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic s-source" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מהמצגת המקורית</div><h2>עוברים למצגת המקורית</h2><p class="sub">שקף 15</p><a class="go" href="https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Lachshov_Tov_Pil_Veyated_1.pptx" target="_blank" rel="noopener">למצגת המקורית ←</a>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעבר למצגת המקורית — חלק א׳ של המשל"><g filter="url(#rough)"><use href="#laptop" x="118.0" y="142.0" width="384.0" height="256.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="8">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">עוצרים · ניחוש לשכן</div><h2>למה הפיל לא בורח?</h2><p class="sub">חשבו לבד עשר שניות — ולחשו לשכן ניחוש אחד.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="ילד מסתכל על פיל שקשור ליתד קטנה, ובבועת הדיבור שלו סימן שאלה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <path d="M30 486 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="214" y="416" width="24" height="70" rx="5" fill="#f7ae4d"/>
+    <rect x="226" y="416" width="12" height="70" rx="4" fill="#13100e" opacity=".14"/>
+    <circle cx="226" cy="436" r="9" fill="none" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="344.7" cy="467.1" rx="16.7" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-164.2 344.7 467.1)"/>
+    <ellipse cx="320.3" cy="460.2" rx="16.7" ry="3" fill="#13100e" transform="rotate(-164.2 320.3 460.2)"/>
+    <ellipse cx="295.9" cy="453.3" rx="16.7" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-164.2 295.9 453.3)"/>
+    <ellipse cx="271.6" cy="446.4" rx="16.7" ry="3" fill="#13100e" transform="rotate(-164.2 271.6 446.4)"/>
+    <ellipse cx="247.2" cy="439.5" rx="16.7" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-164.2 247.2 439.5)"/>
+    <g transform="translate(280 256) scale(0.74)">
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <path d="M24 128 C6 150 0 178 4 206" fill="none" stroke="#847c74" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="174" cy="146" rx="156" ry="108" fill="#847c74"/>
+      <rect x="84" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <rect x="268" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <circle cx="334" cy="106" r="76" fill="#847c74"/>
+      <path d="M388 118 C416 158 422 206 412 244 C407 263 390 268 383 255" fill="none" stroke="#847c74" stroke-width="36" stroke-linecap="round"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#847c74"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#13100e" opacity=".16"/>
+      <path d="M370 150 Q378 186 414 190 Q388 176 383 148 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    </g>
+    <use href="#kid-stand" x="40" y="254" width="120" height="240" color="#63b1af"/>
+    <use href="#speech-l" x="70" y="40" width="240" height="204" color="#13100e"/>
+  </g>
+  <text x="190" y="112" font-family="Secular One, Arial Hebrew, sans-serif" font-size="120" fill="#13100e" text-anchor="middle" dominant-baseline="middle">?</text>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic s-source" data-n="9">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מהמצגת המקורית</div><h2>עוברים למצגת המקורית</h2><p class="sub">שקפים 16, 17</p><a class="go" href="https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Lachshov_Tov_Pil_Veyated_1.pptx" target="_blank" rel="noopener">למצגת המקורית ←</a>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעבר למצגת המקורית — ההמשך והתשובה של המשל"><g filter="url(#rough)"><use href="#laptop" x="118.0" y="142.0" width="384.0" height="256.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="10">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">המשל · התשובה</div><h2>הוא מאמין שהוא לא יכול</h2><p class="sub">והוא אף פעם לא ניסה לבחון את כוחו מחדש.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="פיל קטן מושך בכל כוחו את השרשרת, והיתד הקטנה מחזיקה אותו" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <path d="M30 470 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="150" y="400" width="24" height="70" rx="5" fill="#f7ae4d"/>
+    <rect x="162" y="400" width="12" height="70" rx="4" fill="#13100e" opacity=".14"/>
+    <circle cx="162" cy="420" r="9" fill="none" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="342.3" cy="453.1" rx="17.4" ry="6" fill="none" stroke="#13100e" stroke-width="4.5" transform="rotate(-169.1 342.3 453.1)"/>
+    <ellipse cx="315.9" cy="448.0" rx="17.4" ry="2.75" fill="#13100e" transform="rotate(-169.1 315.9 448.0)"/>
+    <ellipse cx="289.6" cy="442.9" rx="17.4" ry="6" fill="none" stroke="#13100e" stroke-width="4.5" transform="rotate(-169.1 289.6 442.9)"/>
+    <ellipse cx="263.2" cy="437.8" rx="17.4" ry="2.75" fill="#13100e" transform="rotate(-169.1 263.2 437.8)"/>
+    <ellipse cx="236.9" cy="432.7" rx="17.4" ry="6" fill="none" stroke="#13100e" stroke-width="4.5" transform="rotate(-169.1 236.9 432.7)"/>
+    <ellipse cx="210.5" cy="427.6" rx="17.4" ry="2.75" fill="#13100e" transform="rotate(-169.1 210.5 427.6)"/>
+    <ellipse cx="184.2" cy="422.5" rx="17.4" ry="6" fill="none" stroke="#13100e" stroke-width="4.5" transform="rotate(-169.1 184.2 422.5)"/>
+    <g transform="translate(290 277.8) scale(0.62) rotate(4 210 310)">
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <path d="M24 128 C6 150 0 178 4 206" fill="none" stroke="#847c74" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="174" cy="146" rx="156" ry="108" fill="#847c74"/>
+      <rect x="84" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <rect x="268" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <circle cx="334" cy="106" r="76" fill="#847c74"/>
+      <path d="M388 118 C416 158 422 206 412 244 C407 263 390 268 383 255" fill="none" stroke="#847c74" stroke-width="36" stroke-linecap="round"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#847c74"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#13100e" opacity=".16"/>
+      <path d="M370 150 Q378 186 414 190 Q388 176 383 148 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="11">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אחרי המשל</div><h2>מה עולה בכם בעקבות המשל?</h2><p class="sub">איך זה קשור לחיים שלכם?</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש דמויות יחד, ומעליהן שתי בועות צ׳אט"><g filter="url(#rough)"><use href="#group3" x="100.0" y="270.0" width="320.0" height="240.0" color="#13100e"/><use href="#chat" x="340.0" y="30.0" width="240.0" height="207.3" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="12">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">היתד שלנו</div><h2>מחשבה מכשילה מונעת פעולה מקדמת</h2><p class="sub">היא כמו יתד ש״תוקעת״ אותנו מלעשות דברים שאנחנו רוצים, מלנסות, מלהתקדם.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="דמות קשורה בשרשרת ליתד קטנה, ומעליה ענן מחשבה עם סימן קריאה" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <path d="M30 470 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="120" y="400" width="24" height="70" rx="5" fill="#f7ae4d"/>
+    <rect x="132" y="400" width="12" height="70" rx="4" fill="#13100e" opacity=".14"/>
+    <circle cx="132" cy="420" r="9" fill="none" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="360.8" cy="460.4" rx="21.2" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-169.6 360.8 460.4)"/>
+    <ellipse cx="327.0" cy="454.2" rx="21.2" ry="3" fill="#13100e" transform="rotate(-169.6 327.0 454.2)"/>
+    <ellipse cx="293.1" cy="448.0" rx="21.2" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-169.6 293.1 448.0)"/>
+    <ellipse cx="259.3" cy="441.8" rx="21.2" ry="3" fill="#13100e" transform="rotate(-169.6 259.3 441.8)"/>
+    <ellipse cx="225.5" cy="435.5" rx="21.2" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-169.6 225.5 435.5)"/>
+    <ellipse cx="191.7" cy="429.3" rx="21.2" ry="3" fill="#13100e" transform="rotate(-169.6 191.7 429.3)"/>
+    <ellipse cx="157.9" cy="423.1" rx="21.2" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-169.6 157.9 423.1)"/>
+    <use href="#kid-stand" x="330" y="218.667" width="130" height="260" color="#63b1af"/>
+    <use href="#thought" x="150" y="24" width="240" height="228" color="#13100e"/>
+  </g>
+  <text x="272.4" y="120" font-family="Secular One, Arial Hebrew, sans-serif" font-size="120" fill="#13100e" text-anchor="middle" dominant-baseline="middle">!</text>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="13">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כולם כותבים · על פתק, בלי שם</div><h2>ה״יתדות״ שלנו</h2><p class="sub">כתבו על הפתק מהי המחשבה וכיצד היא גורמת לכם להרגיש ולהתנהג.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות כותבת ליד שולחן, ופתק כתום לידה"><g filter="url(#rough)"><use href="#kid-desk" x="280.0" y="140.0" width="280.0" height="373.3" color="#63b1af"/><use href="#sticky" x="50.0" y="70.0" width="190.0" height="190.0" color="#f7ae4d"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="14">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · בלי שמות</div><h2>שתפו את הכיתה ביתדות שלכם</h2><p class="sub">רק מי שרוצה — מקפל את הפתק ומכניס לקופסה.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעטפה סגורה, ושני פתקים צבעוניים לידה"><g filter="url(#rough)"><use href="#envelope" x="180.0" y="200.0" width="340.0" height="247.3" color="#13100e"/><use href="#sticky" x="60.0" y="60.0" width="150.0" height="150.0" color="#8c82c1"/><use href="#sticky" x="380.0" y="40.0" width="150.0" height="150.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="15">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · בזוגות</div><h2>מה קרה באמת — ומה אני מרגיש?</h2><ol class="pts"><li class="fragment">אף אחד לא שם עלי!</li><li class="fragment">תמיד מתעלמים ממני!</li><li class="fragment">לעולם לא אבין על מה הם מדברים!</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מאזניים, וענן מחשבה עם סימן קריאה מעליהם"><g filter="url(#rough)"><use href="#scale" x="190.0" y="250.0" width="300.0" height="262.5" color="#13100e"/><use href="#thought" x="60.0" y="24.0" width="230.0" height="218.5" color="#13100e"/></g><text x="177.0" y="116.0" font-size="100" text-anchor="middle" dominant-baseline="middle" fill="#13100e">!</text></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="16">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 1 מתוך 4</div><h2>מחשבה אינה עובדה</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ענן מחשבה עם סימן שאלה, ודמות עומדת מתחתיו"><g filter="url(#rough)"><use href="#thought" x="120.0" y="30.0" width="320.0" height="304.0" color="#13100e"/><use href="#kid-stand" x="420.0" y="250.0" width="130.0" height="260.0" color="#63b1af"/></g><text x="283.0" y="156.0" font-size="130" text-anchor="middle" dominant-baseline="middle" fill="#13100e">?</text></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="17">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 2 מתוך 4</div><h2>מחשבה מכשילה מחזקת רגש לא נעים שמתעורר בעקבות המחשבה</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ענן מחשבה עם סימן שאלה, ודמות עומדת מתחתיו"><g filter="url(#rough)"><use href="#thought" x="120.0" y="30.0" width="320.0" height="304.0" color="#13100e"/><use href="#kid-stand" x="420.0" y="250.0" width="130.0" height="260.0" color="#63b1af"/></g><text x="283.0" y="156.0" font-size="130" text-anchor="middle" dominant-baseline="middle" fill="#13100e">?</text></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="18">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 3 מתוך 4</div><h2>חשוב לתרגל זיהוי מחשבות מכשילות וכיצד הן גורמות לנו להרגיש</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ענן מחשבה עם סימן שאלה, ודמות עומדת מתחתיו"><g filter="url(#rough)"><use href="#thought" x="120.0" y="30.0" width="320.0" height="304.0" color="#13100e"/><use href="#kid-stand" x="420.0" y="250.0" width="130.0" height="260.0" color="#63b1af"/></g><text x="283.0" y="156.0" font-size="130" text-anchor="middle" dominant-baseline="middle" fill="#13100e">?</text></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="19">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 4 מתוך 4</div><h2>חשוב שנשים לב לתגובות שלנו בעקבות מחשבה מכשילה שמתעוררת בנו</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ענן מחשבה עם סימן שאלה, ודמות עומדת מתחתיו"><g filter="url(#rough)"><use href="#thought" x="120.0" y="30.0" width="320.0" height="304.0" color="#13100e"/><use href="#kid-stand" x="420.0" y="250.0" width="130.0" height="260.0" color="#63b1af"/></g><text x="283.0" y="156.0" font-size="130" text-anchor="middle" dominant-baseline="middle" fill="#13100e">?</text></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="20">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כרטיס יציאה</div><h2>לפני שיוצאים</h2><ol class="pts"><li class="fragment">סימן אחד שעוזר לי לזהות שמחשבה היא לא עובדה.</li><li class="fragment">במה מחשבה מכשילה דומה ליתד של הפיל?</li><li class="fragment">רשות — משהו שלמדתי על עצמי היום.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות כותבת ליד שולחן, ופתק כתום לידה"><g filter="url(#rough)"><use href="#kid-desk" x="210.0" y="130.0" width="288.0" height="384.0" color="#63b1af"/><use href="#sticky" x="24.0" y="40.0" width="170.0" height="170.0" color="#f7ae4d"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

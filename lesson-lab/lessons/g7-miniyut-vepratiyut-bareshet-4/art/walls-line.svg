@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- בין שני הקירות: קו על הרצפה, כוכב (חשוב לי מאוד) בקצה אחד ופנים ניטרליות (לא חשוב לי בכלל) בשני, ודמות עומדת עליו -->
+  <g filter="url(#rough)">
+    <rect x="572" y="70" width="20" height="392" rx="5" fill="#847c74"/>
+    <rect x="28" y="70" width="20" height="392" rx="5" fill="#847c74"/>
+    <path d="M64 452 H556" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <use href="#star" x="420" y="296" width="140" height="140" color="#f7ae4d"/>
+    <use href="#face-meh" x="60" y="296" width="140" height="140" color="#63b1af"/>
+    <use href="#kid-stand" x="235" y="160" width="150" height="300" color="#8c82c1"/>
+  </g>
+</svg>

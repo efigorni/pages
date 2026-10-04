@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- חידה 1 (שקף 6 במקור): ילד עם מצנח נוחת על כרית רכה — "נחיתה רכה" -->
+  <defs>
+    <clipPath id="g6-ptichat-shana-tashpaz-canopy">
+      <path d="M150 150 C150 74 222 30 310 30 C398 30 470 74 470 150 Q430 132 390 150 Q350 132 310 150 Q270 132 230 150 Q190 132 150 150 Z"/>
+    </clipPath>
+  </defs>
+  <g filter="url(#rough)">
+    <path d="M150 150 C150 74 222 30 310 30 C398 30 470 74 470 150 Q430 132 390 150 Q350 132 310 150 Q270 132 230 150 Q190 132 150 150 Z" fill="#f7ae4d"/>
+    <g clip-path="url(#g6-ptichat-shana-tashpaz-canopy)" fill="#13100e" opacity=".14">
+      <path d="M230 160 C236 100 266 50 310 26 L310 160 Z"/>
+      <path d="M390 160 C384 100 354 50 310 26 L490 20 L490 160 Z"/>
+    </g>
+    <g stroke="#13100e" stroke-width="3.5" stroke-linecap="round" fill="none">
+      <path d="M152 148 L266 252 M230 150 L266 252 M390 150 L354 252 M468 148 L354 252"/>
+    </g>
+    <path d="M170 446 Q310 422 450 446 Q478 478 450 508 Q310 528 170 508 Q142 478 170 446 Z" fill="#eeecf7" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M214 478 Q310 466 406 478" fill="none" stroke="#8c82c1" stroke-width="4" stroke-linecap="round"/>
+    <g stroke="#63b1af" stroke-width="17" stroke-linecap="round">
+      <path d="M286 330 L267 256 M334 330 L353 256"/>
+    </g>
+    <g fill="#63b1af"><circle cx="266" cy="251" r="11"/><circle cx="354" cy="251" r="11"/></g>
+    <use href="#kid-stand" x="250" y="190" width="120" height="240" color="#63b1af"/>
+    <g fill="#fff" stroke="#13100e" stroke-width="3.5" stroke-linejoin="round">
+      <path d="M96 404 C108 386 136 380 158 388 C138 398 116 406 96 404 Z"/>
+      <path d="M470 372 C488 360 514 362 532 376 C510 382 488 382 470 372 Z"/>
+    </g>
+  </g>
+</svg>

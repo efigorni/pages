@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- בנק הרגשות (מקור: שקפים 12–13 — הבנק של יעל, ו״כעס״ מהבנק של רן), בסדר הקריאה -->
+  <g filter="url(#rough)">
+    <rect x="398" y="49" width="140" height="88" rx="44" fill="#eeecf7" stroke="#13100e" stroke-width="4"/>
+    <rect x="263" y="49" width="117" height="88" rx="44" fill="#e6f2f1" stroke="#13100e" stroke-width="4"/>
+    <rect x="82" y="49" width="163" height="88" rx="44" fill="#eeecf7" stroke="#13100e" stroke-width="4"/>
+    <rect x="410" y="167" width="163" height="88" rx="44" fill="#e6f2f1" stroke="#13100e" stroke-width="4"/>
+    <rect x="228" y="167" width="163" height="88" rx="44" fill="#eeecf7" stroke="#13100e" stroke-width="4"/>
+    <rect x="48" y="167" width="163" height="88" rx="44" fill="#e6f2f1" stroke="#13100e" stroke-width="4"/>
+    <rect x="410" y="285" width="117" height="88" rx="44" fill="#eeecf7" stroke="#13100e" stroke-width="4"/>
+    <rect x="274" y="285" width="117" height="88" rx="44" fill="#e6f2f1" stroke="#13100e" stroke-width="4"/>
+    <rect x="94" y="285" width="163" height="88" rx="44" fill="#eeecf7" stroke="#13100e" stroke-width="4"/>
+    <rect x="365" y="403" width="209" height="88" rx="44" fill="#fdf0dd" stroke="#13100e" stroke-width="4"/>
+    <rect x="46" y="403" width="301" height="88" rx="44" fill="#fdf0dd" stroke="#13100e" stroke-width="4"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="40">
+    <text x="468" y="95">בושה</text>
+    <text x="322" y="95">כעס</text>
+    <text x="164" y="95">מצוקה</text>
+    <text x="491" y="213">מבוכה</text>
+    <text x="310" y="213">תסכול</text>
+    <text x="129" y="213">בלבול</text>
+    <text x="468" y="331">לחץ</text>
+    <text x="333" y="331">מתח</text>
+    <text x="175" y="331">מועקה</text>
+    <text x="470" y="449">התרגשות</text>
+    <text x="196" y="449">פרפרים בבטן</text>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- פיל קטן מושך בכל הכוח את השרשרת, והיתד — באותו גודל — מחזיקה אותו -->
+  <g filter="url(#rough)">
+    <path d="M30 470 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="150" y="400" width="24" height="70" rx="5" fill="#f7ae4d"/>
+    <rect x="162" y="400" width="12" height="70" rx="4" fill="#13100e" opacity=".14"/>
+    <circle cx="162" cy="420" r="9" fill="none" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="342.3" cy="453.1" rx="17.4" ry="6" fill="none" stroke="#13100e" stroke-width="4.5" transform="rotate(-169.1 342.3 453.1)"/>
+    <ellipse cx="315.9" cy="448.0" rx="17.4" ry="2.75" fill="#13100e" transform="rotate(-169.1 315.9 448.0)"/>
+    <ellipse cx="289.6" cy="442.9" rx="17.4" ry="6" fill="none" stroke="#13100e" stroke-width="4.5" transform="rotate(-169.1 289.6 442.9)"/>
+    <ellipse cx="263.2" cy="437.8" rx="17.4" ry="2.75" fill="#13100e" transform="rotate(-169.1 263.2 437.8)"/>
+    <ellipse cx="236.9" cy="432.7" rx="17.4" ry="6" fill="none" stroke="#13100e" stroke-width="4.5" transform="rotate(-169.1 236.9 432.7)"/>
+    <ellipse cx="210.5" cy="427.6" rx="17.4" ry="2.75" fill="#13100e" transform="rotate(-169.1 210.5 427.6)"/>
+    <ellipse cx="184.2" cy="422.5" rx="17.4" ry="6" fill="none" stroke="#13100e" stroke-width="4.5" transform="rotate(-169.1 184.2 422.5)"/>
+    <g transform="translate(290 277.8) scale(0.62) rotate(4 210 310)">
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <path d="M24 128 C6 150 0 178 4 206" fill="none" stroke="#847c74" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="174" cy="146" rx="156" ry="108" fill="#847c74"/>
+      <rect x="84" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <rect x="268" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <circle cx="334" cy="106" r="76" fill="#847c74"/>
+      <path d="M388 118 C416 158 422 206 412 244 C407 263 390 268 383 255" fill="none" stroke="#847c74" stroke-width="36" stroke-linecap="round"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#847c74"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#13100e" opacity=".16"/>
+      <path d="M370 150 Q378 186 414 190 Q388 176 383 148 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    </g>
+  </g>
+</svg>

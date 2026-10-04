@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- העיוורים והפיל: פיל גדול (ציור ייעודי — אין פיל בערכה), ושלוש דמויות שכל אחת נוגעת בחלק אחר שלו — חדק, בטן, זנב -->
+  <g filter="url(#rough)">
+    <path d="M500 232 C522 262 530 292 526 318" fill="none" stroke="#847c74" stroke-width="9" stroke-linecap="round"/>
+    <path d="M518 312 C514 328 530 338 538 326 C542 318 534 310 526 312 Z" fill="#847c74"/>
+    <rect x="286" y="296" width="50" height="174" rx="20" fill="#847c74"/>
+    <rect x="286" y="296" width="50" height="174" rx="20" fill="#13100e" opacity=".14"/>
+    <rect x="448" y="296" width="50" height="174" rx="20" fill="#847c74"/>
+    <rect x="448" y="296" width="50" height="174" rx="20" fill="#13100e" opacity=".14"/>
+    <ellipse cx="362" cy="246" rx="152" ry="110" fill="#847c74"/>
+    <rect x="236" y="300" width="56" height="170" rx="20" fill="#847c74"/>
+    <rect x="404" y="300" width="56" height="170" rx="20" fill="#847c74"/>
+    <circle cx="204" cy="204" r="86" fill="#847c74"/>
+    <path d="M150 240 C116 296 108 362 126 418 C132 436 148 444 160 434" fill="none" stroke="#847c74" stroke-width="42" stroke-linecap="round"/>
+    <path d="M232 146 C302 132 318 250 262 296 C236 290 220 214 232 146 Z" fill="#13100e" opacity=".14"/>
+    <path d="M176 280 C158 300 134 308 112 304 C126 322 160 320 184 298 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="172" cy="190" r="7" fill="#13100e"/>
+    <use href="#kid-hand" x="16" y="290" width="90" height="180" color="#f7ae4d"/>
+    <use href="#kid-hand" x="305" y="290" width="90" height="180" color="#f7ae4d"/>
+    <use href="#kid-hand" x="510" y="290" width="90" height="180" color="#f7ae4d" transform="matrix(-1 0 0 1 1110 0)"/>
+  </g>
+</svg>

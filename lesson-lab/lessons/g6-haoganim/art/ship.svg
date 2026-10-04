@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מהו עוגן: סירה על הגלים, וחבל מנוקד ממנה אל עוגן שמונח במים (ציור ייעודי — אין סירה ועוגן בערכה) -->
+  <g filter="url(#rough)">
+    <rect x="205" y="34" width="11" height="128" rx="5" fill="#847c74"/>
+    <path d="M222 46 L222 146 L316 146 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M199 64 L199 146 L132 146 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M84 156 L340 156 L304 214 L120 214 Z" fill="#f7ae4d" stroke="#f7ae4d" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M84 156 L340 156 L332 170 L92 170 Z" fill="#13100e" opacity=".13"/>
+    <path d="M16 218 q 42 -26 84 0 t 84 0 t 84 0 t 84 0 t 84 0 t 84 0 t 84 0" fill="none" stroke="#63b1af" stroke-width="10" stroke-linecap="round"/>
+    <path d="M58 262 q 42 -24 84 0 t 84 0 t 84 0 t 84 0 t 84 0 t 84 0" fill="none" stroke="#63b1af" stroke-width="8" stroke-linecap="round" opacity=".5"/>
+    <path d="M300 204 C330 248 384 282 420 306" fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12"/>
+    <g transform="translate(336 300) scale(.92)" color="#8c82c1">
+      <circle cx="100" cy="30" r="19" fill="none" stroke="currentColor" stroke-width="13"/>
+      <rect x="88" y="46" width="24" height="170" rx="12" fill="currentColor"/>
+      <rect x="40" y="62" width="120" height="22" rx="11" fill="currentColor"/>
+      <path d="M28 150 Q34 226 100 226 Q166 226 172 150" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round"/>
+      <path d="M27 104 L54 160 L2 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M173 104 L146 160 L198 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <rect x="100" y="46" width="12" height="170" rx="6" fill="#13100e" opacity=".13"/>
+    </g>
+  </g>
+</svg>

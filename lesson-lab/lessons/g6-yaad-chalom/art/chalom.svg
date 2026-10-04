@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- חלו״ם (מקור: שקפים 15–16): ח — חשוב (לב), ל — לזמן מוגדר (שעון), ומ — מה עושים (עיפרון). סדר הקריאה מימין -->
+  <g filter="url(#rough)">
+    <g stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="420" y="100" width="176" height="320" rx="24" fill="#fdf0dd"/>
+      <rect x="222" y="100" width="176" height="320" rx="24" fill="#e6f2f1"/>
+      <rect x="24" y="100" width="176" height="320" rx="24" fill="#eeecf7"/>
+    </g>
+    <use href="#heart" x="443" y="146" width="130" height="117" color="#e57373"/>
+    <use href="#clock" x="245" y="139" width="130" height="130" color="#63b1af"/>
+    <use href="#pencil" x="47" y="139" width="130" height="130" color="#f7ae4d"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" fill="#13100e" font-size="84">
+    <text x="508" y="350">ח</text>
+    <text x="310" y="350">ל</text>
+    <text x="112" y="350">ומ</text>
+  </g>
+</svg>

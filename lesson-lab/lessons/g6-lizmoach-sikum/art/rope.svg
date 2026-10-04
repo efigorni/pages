@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- משאלות לעצמנו (מקור: שקף 63): חבל ועליו שלושה פתקים באטבים, ודמות שתולה עוד אחד -->
+  <g filter="url(#rough)">
+    <path d="M24 104 Q310 196 596 104" stroke="#847c74" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <use href="#sticky" x="96" y="142" width="128" height="128" color="#f7ae4d" transform="rotate(-6 160 206)"/>
+    <use href="#sticky" x="246" y="156" width="128" height="128" color="#63b1af" transform="rotate(3 310 220)"/>
+    <use href="#sticky" x="396" y="142" width="128" height="128" color="#8c82c1" transform="rotate(6 460 206)"/>
+    <rect x="153" y="124" width="14" height="34" rx="4" fill="#13100e"/>
+    <rect x="303" y="138" width="14" height="34" rx="4" fill="#13100e"/>
+    <rect x="453" y="124" width="14" height="34" rx="4" fill="#13100e"/>
+    <use href="#kid-hand" x="250" y="290" width="120" height="240" color="#63b1af"/>
+  </g>
+</svg>

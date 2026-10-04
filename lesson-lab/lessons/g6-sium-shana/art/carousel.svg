@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- קרוסלה: מעגל פנימי ומעגל חיצוני של דמויות, פנים מול פנים; קלפים במרכז, וחץ — המעגל הפנימי זז (ציור ייעודי) -->
+  <g filter="url(#rough)">
+    <g fill="none" stroke="#847c74" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round">
+      <ellipse cx="310" cy="280" rx="245" ry="180"/>
+      <ellipse cx="310" cy="280" rx="135" ry="95"/>
+    </g>
+    <g fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="282" y="250" width="50" height="66" rx="8" transform="rotate(-10 307 283)"/>
+      <rect x="290" y="244" width="50" height="66" rx="8" transform="rotate(8 315 277)"/>
+    </g>
+    <path d="M261 413 A190 138 0 0 0 359 413" fill="none" stroke="#f7ae4d" stroke-width="9" stroke-linecap="round"/>
+    <path d="M384 406 L355 398 L360 428 Z" fill="#f7ae4d"/>
+    <g fill="#f7ae4d">
+      <g transform="translate(445 280) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(377.5 362.3) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(242.5 362.3) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(175 280) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(242.5 197.7) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(377.5 197.7) scale(1.2)"><use href="#kid"/></g>
+    </g>
+    <g fill="#63b1af">
+      <g transform="translate(555 280) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(432.5 435.9) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(187.5 435.9) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(65 280) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(187.5 124.1) scale(1.2)"><use href="#kid"/></g>
+      <g transform="translate(432.5 124.1) scale(1.2)"><use href="#kid"/></g>
+    </g>
+  </g>
+</svg>

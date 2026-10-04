@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><title>פרק 5 · תוכן, רגישות ורצף</title>
+<style data-bundle-style>
+/* 5.4 ג: מפת הכ״חות של הכיתה. כל הסלקטורים תחת .b-ch5 */
+.b-ch5 .wall { margin: 12px 0; padding: 16px 18px 8px; background: var(--ground); border: 1.5px solid var(--line-2); border-radius: var(--r); }
+.b-ch5 .wall-kicker { display: block; font-size: 12px; font-weight: 700; color: var(--ink-3); }
+.b-ch5 .wall-title { display: block; font-family: var(--display); font-weight: 400; font-size: 22px; line-height: 1.25; color: var(--ink); margin: 2px 0 14px; }
+.b-ch5 .road { list-style: none; margin: 0; padding: 0; position: relative; max-width: none; }
+.b-ch5 .road::before { content: ""; position: absolute; top: 12px; bottom: 14px; inset-inline-start: 10px; border-inline-start: 2.5px dashed var(--line-2); }
+.b-ch5 .stop { position: relative; margin: 0 0 14px; padding-inline-start: 36px; }
+.b-ch5 .stop::before { content: ""; position: absolute; top: 3px; inset-inline-start: 1px; width: 21px; height: 21px; border-radius: 50%; background: var(--moss); box-shadow: 0 0 0 4px var(--ground); }
+.b-ch5 .stop.next::before { background: var(--paper); border: 2px dashed var(--ink-3); }
+.b-ch5 .when { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink-3); }
+.b-ch5 .name { display: block; font-family: var(--display); font-weight: 400; font-size: 17px; line-height: 1.3; color: var(--ink); }
+.b-ch5 .stop.next .name { color: var(--ink-3); }
+.b-ch5 .force { display: block; margin-top: 6px; padding: 8px 12px; background: var(--paper); border: 1.5px solid var(--moss); border-radius: var(--r-sm); color: var(--moss-deep); font-weight: 700; font-size: 15.5px; line-height: 1.4; }
+.b-ch5 .notes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.b-ch5 .notes span { padding: 5px 10px; background: var(--orange-soft); border-radius: 3px; box-shadow: var(--shadow-1); font-size: 14px; line-height: 1.35; color: var(--ink-2); transform: rotate(-1.5deg); }
+.b-ch5 .notes span + span { background: var(--teal-soft); transform: rotate(1.2deg); }
+</style></head><body>
+
+<!-- ========================================================= 5.1 -->
+
+<section data-pt="5.1" data-opt="a" data-title="כמה לעדכן את הדוגמאות?" data-gloss="המקרים בשיעורי שפ״י נכתבו לפני כמה שנים. לעדכן אותם לעולם של ז׳ היום?" data-anchor="מתבגרים ומתמודדים עם השפעה חברתית (דצמבר) · המקרה ״חודש לחברות״, שקף 23 במצגת שפ״י" data-h="680" data-label="נאמן למקור" data-note="אפס הכנה ונאמן לשפ״י; חלק מהפרטים עלולים להישמע לכיתה קצת מאתמול." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: מקרים בקבוצות — כרטיס המקרה ״חודש לחברות״</p>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">26′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מקרים בקבוצות</h3><span class="dur">14 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">עניין ורלוונטיות</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>שלושה מקרים, כרטיס אחד לכל קבוצה. מסבירים את המשימה לפני שמחלקים את הכרטיסים, וההנחיות נשארות על המסך עד הסוף.</p>
+        <div class="say"><q>כל קבוצה מקבלת סיפור קצר על רגע של החלטה. אתם לא מחליטים במקום הדמות — אתם בודקים מה עובר עליה, ואז כותבים את השיחה.</q></div>
+        <div class="task">
+          <div class="task-what"><b>מה עושים?</b> קוראים את המקרה, עונים יחד על שלוש השאלות שבתחתית הכרטיס, וכותבים דיאלוג קצר בין הדמויות — עם לפחות שתי אמירות שעומדות מול הלחץ.</div>
+          <div class="task-how">
+            <div><b>זמן</b>10 דקות: 4 לשאלות, 6 לדיאלוג</div>
+            <div><b>הרכב</b>רביעיות, לפי השולחנות</div>
+            <div><b>כללים</b>כל אחד כותב לפחות שורה אחת בדיאלוג; מי שמסיים מוקדם כותב סוף אחר</div>
+            <div><b>במליאה</b>שתי קבוצות מקריאות את הדיאלוג, 2 דקות לכל אחת</div>
+          </div>
+        </div>
+        <h4>כרטיס המקרה</h4>
+        <blockquote>
+          <p><b>חודש לחברות</b></p>
+          <p>טלי לומדת בכיתה ז׳. היא ספורטאית וחשוב לה לשמור על כושר. לפני כמה ימים ראתה באינסטגרם תמונה שהעלתה חברה טובה שלה. בתמונה היא נראית עם חברים ומחזיקה סיגריה אלקטרונית.</p>
+          <p>טלי הוזמנה למסיבה בסוף השבוע. היא יודעת שהחברות מתכוונות לעשן. טלי לא יודעת מה לעשות…</p>
+        </blockquote>
+        <h4>שאלות לקבוצה</h4>
+        <ol>
+          <li>מה מושך את טלי ללכת, ומה עוצר אותה?</li>
+          <li>אילו אפשרויות יש לה? מה המחיר ומה הרווח של כל אחת?</li>
+          <li>מה הייתם עושים במקומה?</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="5.1" data-opt="b" data-label="מעודכן להיום" data-note="הכיתה מזהה את עצמה בסיפור ונכנסת מהר לדיון; אפליקציות וסלנג מתיישנים, וצריך לרענן כל שנה." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: מקרים בקבוצות — כרטיס המקרה ״חודש לחברות״</p>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">26′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מקרים בקבוצות</h3><span class="dur">14 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">עניין ורלוונטיות</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>שלושה מקרים, כרטיס אחד לכל קבוצה. מסבירים את המשימה לפני שמחלקים את הכרטיסים, וההנחיות נשארות על המסך עד הסוף.</p>
+        <div class="say"><q>כל קבוצה מקבלת סיפור קצר על רגע של החלטה. אתם לא מחליטים במקום הדמות — אתם בודקים מה עובר עליה, ואז כותבים את השיחה.</q></div>
+        <div class="task">
+          <div class="task-what"><b>מה עושים?</b> קוראים את המקרה, עונים יחד על שלוש השאלות שבתחתית הכרטיס, וכותבים דיאלוג קצר בין הדמויות — עם לפחות שתי אמירות שעומדות מול הלחץ.</div>
+          <div class="task-how">
+            <div><b>זמן</b>10 דקות: 4 לשאלות, 6 לדיאלוג</div>
+            <div><b>הרכב</b>רביעיות, לפי השולחנות</div>
+            <div><b>כללים</b>כל אחד כותב לפחות שורה אחת בדיאלוג; מי שמסיים מוקדם כותב סוף אחר</div>
+            <div><b>במליאה</b>שתי קבוצות מקריאות את הדיאלוג, 2 דקות לכל אחת</div>
+          </div>
+        </div>
+        <h4>כרטיס המקרה</h4>
+        <div class="tip">שמות, אפליקציות וסלנג מתיישנים מהר. לפני כל שנה בדקו שהסיפור עדיין נשמע כמו הכיתה, ועדכנו את מה שצריך.</div>
+        <blockquote>
+          <p><b>מי באה בשישי?</b></p>
+          <p>רומי בכיתה ז׳. היא משחקת כדורעף בקבוצה של העיר, מתאמנת שלוש פעמים בשבוע, וחשוב לה לשמור על כושר. אתמול בלילה ראתה בטיקטוק סטורי של שירה, חברה טובה שלה: שירה עם עוד כמה חברים, צוחקת, עם וייפ ביד.</p>
+          <p>הבוקר הגיעה הודעה בקבוצת הוואטסאפ של הבנות מהשכבה: ״מסיבה אצל עלמה, שישי בשמונה. מי באה?״ תוך כמה דקות כבר היו 12 תגובות ״אני!״, ומישהי הוסיפה: ״אני מביאה וייפים, יש לכולן.״</p>
+          <p>שני וי כחולים: שירה רואה שרומי קראה. ואז מגיעה הודעה בפרטי: ״את באה, נכון?״ רומי מסתכלת על המסך ולא יודעת מה לענות…</p>
+        </blockquote>
+        <h4>שאלות לקבוצה</h4>
+        <ol>
+          <li>מה מושך את רומי ללכת, ומה עוצר אותה?</li>
+          <li>אילו אפשרויות יש לה? מה המחיר ומה הרווח של כל אחת?</li>
+          <li>מה הייתם עושים במקומה?</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="5.1" data-opt="c" data-label="מקום למילוי" data-note="הסיפור נשמע בדיוק כמו הכיתה שלכם; דורש כמה דקות הכנה והקשבה לפני כל הדפסה." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: מקרים בקבוצות — כרטיס המקרה ״חודש לחברות״</p>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">26′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מקרים בקבוצות</h3><span class="dur">14 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">עניין ורלוונטיות</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>שלושה מקרים, כרטיס אחד לכל קבוצה. מסבירים את המשימה לפני שמחלקים את הכרטיסים, וההנחיות נשארות על המסך עד הסוף.</p>
+        <div class="say"><q>כל קבוצה מקבלת סיפור קצר על רגע של החלטה. אתם לא מחליטים במקום הדמות — אתם בודקים מה עובר עליה, ואז כותבים את השיחה.</q></div>
+        <div class="task">
+          <div class="task-what"><b>מה עושים?</b> קוראים את המקרה, עונים יחד על שלוש השאלות שבתחתית הכרטיס, וכותבים דיאלוג קצר בין הדמויות — עם לפחות שתי אמירות שעומדות מול הלחץ.</div>
+          <div class="task-how">
+            <div><b>זמן</b>10 דקות: 4 לשאלות, 6 לדיאלוג</div>
+            <div><b>הרכב</b>רביעיות, לפי השולחנות</div>
+            <div><b>כללים</b>כל אחד כותב לפחות שורה אחת בדיאלוג; מי שמסיים מוקדם כותב סוף אחר</div>
+            <div><b>במליאה</b>שתי קבוצות מקריאות את הדיאלוג, 2 דקות לכל אחת</div>
+          </div>
+        </div>
+        <h4>כרטיס המקרה</h4>
+        <div class="tip">לפני ההדפסה, מלאו את המקומות המסומנים לפי מה שאתם שומעים מהכיתה: במסדרון, בהפסקות, בשיחות הבוקר. לא בטוחים? שאלו שניים־שלושה תלמידים ״באיזו אפליקציה מעלים היום תמונות?״. ואם יש בכיתה טלי — החליפו שם.</div>
+        <blockquote>
+          <p><b>חודש לחברות</b></p>
+          <p>טלי לומדת בכיתה ז׳. היא מתאמנת ב<span class="fill">[ענף ספורט שמוכר בכיתה]</span> וחשוב לה לשמור על כושר. לפני כמה ימים ראתה ב<span class="fill">[אפליקציה שהכיתה שלכם משתמשת בה]</span> תמונה שהעלתה חברה טובה שלה: היא נראית עם חברים ב<span class="fill">[מקום בילוי מוכר]</span>, ומחזיקה <span class="fill">[המילה שבה הכיתה קוראת לסיגריה אלקטרונית]</span>.</p>
+          <p>טלי הוזמנה למסיבה בסוף השבוע. היא יודעת שהחברות מתכוונות לעשן. טלי לא יודעת מה לעשות…</p>
+        </blockquote>
+        <h4>שאלות לקבוצה</h4>
+        <ol>
+          <li>מה מושך את טלי ללכת, ומה עוצר אותה?</li>
+          <li>אילו אפשרויות יש לה? מה המחיר ומה הרווח של כל אחת?</li>
+          <li>מה הייתם עושים במקומה?</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ========================================================= 5.2 -->
+
+<section data-pt="5.2" data-opt="a" data-title="נושאים רגישים" data-gloss="חלק מהשיעורים נוגעים בעישון, אלכוהול, פגיעה ומיניות. איך המערך מכין אתכם לרגעים הרגישים?" data-anchor="מתבגרים ומתמודדים עם השפעה חברתית (דצמבר) · שאלת ההיזכרות האישית (שקף 12) ומקרי העישון (שקפים 14, 21–23)" data-h="680" data-label="תיבה בראש המערך" data-note="קוראים הכול פעם אחת בערב שלפני ומגיעים מוכנים; באמצע השיעור ההנחיה כבר לא מול העיניים." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: ראש המערך ושני השלבים הרגישים — היזכרות אישית ומקרי העישון</p>
+  <h2>מתבגרים ומתמודדים עם השפעה חברתית</h2>
+  <div class="safe">
+    <p><b>לפני השיעור</b></p>
+    <ul>
+      <li><b>תיאום עם היועצת.</b> ספרו לה מתי השיעור ועל מה, ושאלו אם יש בכיתה מי שהנושא קרוב אליו מדי: הורה שמעשן או חולה, אובדן במשפחה, מי שכבר מעשן. בקשו שתהיה זמינה אחרי השיעור.</li>
+      <li><b>מי עלול להיפגע.</b> לחלק מהכיתה יש בבית מישהו שמעשן. מדברים על עישון כהתמכרות שקשה להפסיק, לא על ״מעשנים״ כאנשים, ולא עושים סקר ״למי יש בבית מעשנים״. על ״אבא שלי מעשן״ מגיבים בלי שיפוט; צחוק על מישהו בכיתה — עוצרים מיד.</li>
+      <li><b>לא לוחצים לשתף.</b> כלל השיח של היום: ״מספרים רק על עצמנו״. אפשר לשתף מה הרגשתם בלי לספר מה קרה, ואפשר לוותר. לא קוראים בשם למי שלא הצביע. ואם מישהו מספר שניסה לעשן: בלי הלם ובלי מוסר מול הכיתה — מודים, וממשיכים אישית אחר כך.</li>
+      <li><b>אם מישהו משתף פגיעה.</b> עוצרים בעדינות, מודים, ממשיכים בשיחה אישית אחרי השיעור, ומעדכנים את היועצת עוד באותו יום. לא מבטיחים לשמור בסוד.</li>
+    </ul>
+  </div>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">14′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">משוחחים על השפעה חברתית</h3><span class="dur">8 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">כולם כותבים</span><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <div class="board screen">היזכרו ברגע שבו הרגשתם שכולם סביבכם מושכים אתכם לעשות משהו. זה יכול להיות משהו קטן: בגדים, משחק, אפליקציה.
+          <ol><li>מה הרגשתם? מה חשבתם?</li><li>הלכתם עם כולם? למה?</li><li>במבט לאחור — זה היה נכון בשבילכם?</li></ol>
+        </div>
+        <p>כותבים לבד, 3 דקות. הדף נשאר אצל מי שכתב: לא אוספים ולא מקריאים. אחר כך שלושה־ארבעה שיתופים, רק ממי שמצביע.</p>
+        <div class="say"><q>כתבו רק לעצמכם. מי שירצה לשתף יבחר מה לשתף — אפשר לספר מה הרגשתם, בלי לספר מה קרה.</q></div>
+        <div class="say q"><q>השפעה חברתית ׳חזקה׳ במיוחד בגיל שלכם — האמנם? למה?</q></div>
+        <p>אחרי השאלה — עשר שניות של שקט לפני שמזמינים תשובות.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">26′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מקרים בקבוצות: עישון ולחץ חברתי</h3><span class="dur">14 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>כל קבוצה מקבלת אחד משלושת המקרים — ״בהפסקה״ (ברק), ״בית ספר חדש״ (נועה) או ״חודש לחברות״ (טלי) — דנה בשאלות שעל הכרטיס וכותבת דיאלוג עם לפחות שתי אמירות שעומדות מול הלחץ. שתי קבוצות מציגות.</p>
+        <div class="say"><q>לא שופטים את הדמות. בודקים מה עובר עליה, ומה עוד אפשר לעשות במצב כזה.</q></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="5.2" data-opt="b" data-label="הערות ברגע עצמו" data-note="ההנחיה מופיעה בדיוק ברגע שצריך אותה; אין מבט מרוכז אחד על מה שצריך להכין מראש." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: ראש המערך ושני השלבים הרגישים — היזכרות אישית ומקרי העישון</p>
+  <h2>מתבגרים ומתמודדים עם השפעה חברתית</h2>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">14′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">משוחחים על השפעה חברתית</h3><span class="dur">8 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">כולם כותבים</span><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <div class="board screen">היזכרו ברגע שבו הרגשתם שכולם סביבכם מושכים אתכם לעשות משהו. זה יכול להיות משהו קטן: בגדים, משחק, אפליקציה.
+          <ol><li>מה הרגשתם? מה חשבתם?</li><li>הלכתם עם כולם? למה?</li><li>במבט לאחור — זה היה נכון בשבילכם?</li></ol>
+        </div>
+        <p>כותבים לבד, 3 דקות. הדף נשאר אצל מי שכתב: לא אוספים ולא מקריאים. אחר כך שלושה־ארבעה שיתופים, רק ממי שמצביע.</p>
+        <div class="say"><q>כתבו רק לעצמכם. מי שירצה לשתף יבחר מה לשתף — אפשר לספר מה הרגשתם, בלי לספר מה קרה.</q></div>
+        <div class="say q"><q>השפעה חברתית ׳חזקה׳ במיוחד בגיל שלכם — האמנם? למה?</q></div>
+        <p>אחרי השאלה — עשר שניות של שקט לפני שמזמינים תשובות.</p>
+        <div class="safe"><b>לפני השיעור:</b> ספרו ליועצת מתי השיעור ועל מה, ושאלו אם יש בכיתה מי שהנושא קרוב אליו מדי (הורה שמעשן או חולה, אובדן במשפחה, מי שכבר מעשן). <b>בזמן השיח:</b> חוזרים על הכלל ״מספרים רק על עצמנו״ ולא קוראים בשם למי שלא הצביע. ואם מישהו מספר שניסה לעשן: בלי הלם ובלי מוסר מול הכיתה — מודים, וממשיכים אישית אחר כך. <b>אם מישהו משתף פגיעה:</b> עוצרים בעדינות, מודים, ממשיכים בשיחה אישית אחרי השיעור ומעדכנים את היועצת באותו יום. לא מבטיחים לשמור בסוד.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">26′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מקרים בקבוצות: עישון ולחץ חברתי</h3><span class="dur">14 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>כל קבוצה מקבלת אחד משלושת המקרים — ״בהפסקה״ (ברק), ״בית ספר חדש״ (נועה) או ״חודש לחברות״ (טלי) — דנה בשאלות שעל הכרטיס וכותבת דיאלוג עם לפחות שתי אמירות שעומדות מול הלחץ. שתי קבוצות מציגות.</p>
+        <div class="say"><q>לא שופטים את הדמות. בודקים מה עובר עליה, ומה עוד אפשר לעשות במצב כזה.</q></div>
+        <div class="safe">לחלק מהכיתה יש בבית מישהו שמעשן. מדברים על עישון כהתמכרות שקשה להפסיק, לא על ״מעשנים״ כאנשים, ולא עושים סקר ״למי יש בבית מעשנים״. אם עולה ״אבא שלי מעשן״, מגיבים בלי שיפוט: ״הרבה מבוגרים התחילו לעשן בגיל ההתבגרות, ומאז קשה להם להפסיק. בדיוק על זה אנחנו מדברים.״ צחוק על מישהו בכיתה — עוצרים מיד.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="5.2" data-opt="c" data-label="תיבה, הערות ופרוטוקול" data-note="הכי מוגן: הכנה, תזכורת ברגע ופרוטוקול מוכן; המערך ארוך יותר, ויש בו קצת חזרות." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: ראש המערך ושני השלבים הרגישים — היזכרות אישית ומקרי העישון</p>
+  <h2>מתבגרים ומתמודדים עם השפעה חברתית</h2>
+  <div class="safe">
+    <p><b>לפני השיעור</b></p>
+    <ul>
+      <li><b>תיאום עם היועצת:</b> מתי השיעור ועל מה; האם יש בכיתה מי שהנושא קרוב אליו מדי (הורה שמעשן או חולה, אובדן במשפחה, מי שכבר מעשן); ושתהיה זמינה אחרי השיעור.</li>
+      <li><b>כלל השיח:</b> ״מספרים רק על עצמנו״. כתבו אותו על הלוח לפני שהכיתה נכנסת.</li>
+      <li><b>אם מישהו משתף פגיעה:</b> קראו עכשיו את ״מה עושים אם…״ בסוף המערך — לא ברגע עצמו.</li>
+    </ul>
+  </div>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">14′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">משוחחים על השפעה חברתית</h3><span class="dur">8 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">כולם כותבים</span><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <div class="board screen">היזכרו ברגע שבו הרגשתם שכולם סביבכם מושכים אתכם לעשות משהו. זה יכול להיות משהו קטן: בגדים, משחק, אפליקציה.
+          <ol><li>מה הרגשתם? מה חשבתם?</li><li>הלכתם עם כולם? למה?</li><li>במבט לאחור — זה היה נכון בשבילכם?</li></ol>
+        </div>
+        <p>כותבים לבד, 3 דקות. הדף נשאר אצל מי שכתב: לא אוספים ולא מקריאים. אחר כך שלושה־ארבעה שיתופים, רק ממי שמצביע.</p>
+        <div class="say"><q>כתבו רק לעצמכם. מי שירצה לשתף יבחר מה לשתף — אפשר לספר מה הרגשתם, בלי לספר מה קרה.</q></div>
+        <div class="say q"><q>השפעה חברתית ׳חזקה׳ במיוחד בגיל שלכם — האמנם? למה?</q></div>
+        <p>אחרי השאלה — עשר שניות של שקט לפני שמזמינים תשובות.</p>
+        <div class="safe">לא קוראים בשם למי שלא הצביע. ואם מישהו מספר שניסה לעשן: בלי הלם ובלי מוסר מול הכיתה; ממשיכים אישית אחר כך. אם מישהו מתחיל לספר על פגיעה — עוצרים בעדינות ועוברים ל״מה עושים אם…״.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">26′</div><span class="step-node" data-k="body"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מקרים בקבוצות: עישון ולחץ חברתי</h3><span class="dur">14 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">הוצאה למשימה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>כל קבוצה מקבלת אחד משלושת המקרים — ״בהפסקה״ (ברק), ״בית ספר חדש״ (נועה) או ״חודש לחברות״ (טלי) — דנה בשאלות שעל הכרטיס וכותבת דיאלוג עם לפחות שתי אמירות שעומדות מול הלחץ. שתי קבוצות מציגות.</p>
+        <div class="say"><q>לא שופטים את הדמות. בודקים מה עובר עליה, ומה עוד אפשר לעשות במצב כזה.</q></div>
+        <div class="safe">לחלק מהכיתה יש בבית מישהו שמעשן. מדברים על עישון כהתמכרות שקשה להפסיק, לא על ״מעשנים״ כאנשים, ולא עושים סקר ״למי יש בבית מעשנים״. אם עולה ״אבא שלי מעשן״, מגיבים בלי שיפוט: ״הרבה מבוגרים התחילו לעשן בגיל ההתבגרות, ומאז קשה להם להפסיק. בדיוק על זה אנחנו מדברים.״ צחוק על מישהו בכיתה — עוצרים מיד.</div>
+      </div>
+    </div>
+  </div>
+  <h3>מה עושים אם מישהו משתף פגיעה</h3>
+  <table>
+    <thead><tr><th>מה עושים</th><th>מה אפשר לומר</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. עוצרים בעדינות.</b> לא שואלים פרטים מול הכיתה.</td><td>״זה חשוב, ומגיע לזה יותר זמן ממה שיש לנו כרגע.״</td></tr>
+      <tr><td><b>2. מודים.</b></td><td>״תודה שסיפרת.״</td></tr>
+      <tr><td><b>3. ממשיכים בשיחה אישית</b> אחרי השיעור; בינתיים חוזרים לשיעור במשפט מעבר רגיל.</td><td>״נדבר על זה אחרי השיעור, בשיחה אישית.״</td></tr>
+      <tr><td><b>4. מעדכנים את היועצת</b> עוד באותו יום, ורושמים לעצמכם מה נאמר, במילים שנאמרו.</td><td>בשיחה האישית: ״את זה לא אשמור רק אצלי. אשתף את היועצת, ונחשוב יחד מה עושים.״</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<!-- ========================================================= 5.3 -->
+
+<section data-pt="5.3" data-opt="a" data-title="סרטונים ומדיה" data-gloss="הרבה שיעורים בנויים סביב סרטון. סרטון טוב מעורר — אבל צפייה פסיבית, קישור שבור וסינון רשת הם סיכון." data-anchor="מתבגרים ומתמודדים עם השפעה חברתית (דצמבר) · ״צופים בניסוי חברתי״ — ניסוי הקונפורמיות של אש, שקף 11" data-h="680" data-label="סרטון עם משימת צפייה" data-note="צפייה פעילה שכל הכיתה עובדת בה; אין גיבוי אם הקישור שבור או חסום." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: פתיחת השיעור — ניסוי הקונפורמיות של אש</p>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">3′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">צופים בניסוי, עם משימה</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">מה הקשר?</span><span class="pr" data-f="think">כולם כותבים</span><span class="beam">עניין ורלוונטיות</span></div>
+        <p><b>לפני השיעור:</b> פתחו את <a href="https://www.youtube.com/watch?v=l_YMx1cZX0A" target="_blank" rel="noopener">״ניסוי הקונפורמיות של אש״ ביוטיוב</a> (שתי דקות ורבע) מהמחשב שבכיתה, וסמנו את נקודת העצירה: <span class="fill">[דקה:שנייה]</span> — אחרי שכל השאר ענו תשובה שגויה, רגע לפני שהנבדק עונה.</p>
+        <div class="board screen">לפני שצופים: כולם סביבכם עונים תשובה שאתם בטוחים שהיא לא נכונה. מה תעשו? כתבו ״אענה מה שאני רואה״ או ״אלך עם כולם״, ומשפט אחד למה.</div>
+        <div class="say"><q>בזמן הצפייה עקבו רק אחרי הנבדק. מתי הוא מתחיל להתלבט? מה רואים עליו?</q></div>
+        <p><b>עצירה</b> בנקודה שסימנתם:</p>
+        <div class="say q"><q>מה הוא יענה? כתבו מילה אחת.</q></div>
+        <p>ממשיכים עד הסוף.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">9′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">חושבים, בזוגות, משתפים</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="talk">Think–Pair–Share</span><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <div class="board screen">למה לדעתכם הנבדק ענה תשובה שגויה?</div>
+        <p><span class="timer" data-sec="30"></span> חושבים וכותבים לבד.</p>
+        <p><b>בזוגות, 2 דקות:</b> משווים למה שכתבתם לפני הצפייה. הייתם עונים כמוהו?</p>
+        <p><b>במליאה:</b> שלושה זוגות משתפים, ואז ״מה אפשר ללמוד מהניסוי?״. סוגרים בנתונים מהמחקר:</p>
+        <div class="say"><q>כשאנשים ענו על אותה שאלה לבד, כמעט כולם צדקו. בקבוצה, כשלושה מכל ארבעה הלכו עם הקבוצה לפחות פעם אחת — גם כשראו בעיניים שהתשובה לא נכונה.</q></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="5.3" data-opt="b" data-label="הדגמה חיה בכיתה" data-note="חוויה שהכיתה לא שוכחת, בלי מסך בכלל; דורשת הכנה מראש ותחקיר זהיר, ויש בה סיכון רגשי למשתתף." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: פתיחת השיעור — ניסוי הקונפורמיות של אש</p>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">3′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">ניסוי חי: אורך הקווים</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">מה הקשר?</span><span class="beam">עניין ורלוונטיות</span></div>
+        <p><b>יום לפני:</b> בקשו מארבעה מתנדבים להיות ״שותפים״ ותדרכו אותם בנפרד. בסבבים 1–2 הם עונים נכון; בסבבים 3–4 כל הארבעה עונים את אותה תשובה שגויה שסיכמתם, בביטחון, בלי לחייך ובלי להחליף מבטים. את הנבדק מזמינים רק ל״ניסוי קצר בראייה״, בלי לספר מה יקרה.</p>
+        <p><b>על הלוח:</b> ארבע שורות, אחת לכל סבב: קו בודד, ולידו שלושה קווים ממוספרים 1, 2, 3. ההבדלים ברורים לעין. כל שורה מכוסה בדף עד שמגיע תורה.</p>
+        <div class="say"><q>חמישה משתתפים, ארבעה סבבים. בכל סבב: איזה מהקווים 1, 2, 3 באורך של הקו הבודד? עונים בקול, לפי הסדר. כל השאר צופים בשקט, בלי תגובות.</q></div>
+        <p>הנבדק עונה אחרון. על כל תשובה אומרים רק ״תודה״.</p>
+        <div class="safe">בחרו נבדק שמעמדו בכיתה בטוח, לא מי שכבר בשוליים. בלי טלפונים ובלי צילום. אם רואים מבוכה — עוצרים וחושפים מיד.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">8′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">תחקיר: מה קרה כאן?</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>מיד אחרי הסבב הרביעי חושפים, ומודים קודם כול לנבדק.</p>
+        <div class="say"><q>ארבעת השותפים ידעו מראש — אני ביקשתי מהם לטעות. תודה להם, ותודה גדולה למי שישב בכיסא האחרון.</q></div>
+        <div class="say"><q>במחקר המקורי, כשלושה מכל ארבעה נבדקים הלכו עם הקבוצה לפחות פעם אחת. מה שהרגשתם כאן, בכיסא או בקהל, אומר משהו על כולנו — לא על מי שישב כאן.</q></div>
+        <p>מציעים לנבדק לספר איך היה, ומקבלים גם ״לא, תודה״. גם אם ענה נכון בכל הסבבים — אותו תחקיר, בלי להפוך אותו לגיבור. אחר כך 30 שניות חשיבה, ושיחה:</p>
+        <div class="say q"><q>מה ראיתם? למה אנשים עונים תשובה שגויה כשכולם סביבם טועים? מה אפשר ללמוד מזה?</q></div>
+        <p>השאלות מדברות על ״אנשים״, לא על מי שישב מול הכיתה. אחרי השיעור — מילה אישית לנבדק ולשותפים.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="5.3" data-opt="c" data-label="סרטון וחלופה בלי מסך" data-note="השיעור קורה גם בלי אינטרנט; עוד הדפסה בתיק, והצפייה עצמה פחות פעילה." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: פתיחת השיעור — ניסוי הקונפורמיות של אש</p>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">3′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">צופים בניסוי חברתי</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">מה הקשר?</span><span class="beam">עניין ורלוונטיות</span></div>
+        <p><b>יום לפני:</b> פתחו את <a href="https://www.youtube.com/watch?v=l_YMx1cZX0A" target="_blank" rel="noopener">״ניסוי הקונפורמיות של אש״ ביוטיוב</a> (שתי דקות ורבע) מהמחשב שבכיתה, לא מהבית: סינון הרשת של בית הספר עלול לחסום אותו. ובכל מקרה, שני הדפים של החלופה נכנסים לתיק.</p>
+        <div class="say"><q>אתם עומדים לראות ניסוי מפורסם. צפו, ושימו לב מה עובר עליכם.</q></div>
+        <p>צופים עד הסוף. אחר כך ״מה הרגשתם? מה חשבתם?״ — כמה תגובות חופשיות.</p>
+        <h4>אין אינטרנט? החלופה המוכנה</h4>
+        <ul>
+          <li><b>דף 1:</b> כרטיסי הקווים — קו בודד מול שלושה קווים ממוספרים. אפשר גם לשרטט על הלוח.</li>
+          <li><b>דף 2:</b> צילום מסך מהסרטון: הנבדק בין שאר המשתתפים.</li>
+        </ul>
+        <p>מראים את הדפים ומקריאים:</p>
+        <div class="say"><q>בשנות החמישים הראה החוקר סולומון אש לקבוצת אנשים שני כרטיסים: באחד קו אחד, ובשני שלושה קווים. השאלה פשוטה — איזה מהשלושה באורך של הקו? כל אחד עונה בקול, לפי הסדר. מה שרק אחד מהם לא ידע: כל השאר עבדו עם החוקר, ובחלק מהסבבים ענו בכוונה את אותה תשובה שגויה. מה הייתם עונים במקומו?</q></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-rail"><div class="step-min">9′</div><span class="step-node" data-k="talk"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">שיחה אחרי הניסוי</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">זמן חשיבה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <p>אותה שיחה בשני המסלולים. <span class="timer" data-sec="30"></span> זמן חשיבה לפני כל שאלה.</p>
+        <div class="say q"><q>מה קרה בניסוי? למה אנשים עונים תשובה שגויה כשכולם סביבם טועים? מה אפשר ללמוד מזה?</q></div>
+        <p>סוגרים בנתונים מהמחקר:</p>
+        <div class="say"><q>כשאנשים ענו על אותה שאלה לבד, כמעט כולם צדקו. בקבוצה, כשלושה מכל ארבעה הלכו עם הקבוצה לפחות פעם אחת — גם כשראו בעיניים שהתשובה לא נכונה.</q></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ========================================================= 5.4 -->
+
+<section data-pt="5.4" data-opt="a" data-title="רצף לאורך השנה" data-gloss="האם כל שיעור עומד בפני עצמו, או שהשנה בונה משהו?" data-anchor="מקום בעולם ← סיפור במניפה (אוקטובר, היחידה ״למצוא מקום״)" data-h="680" data-label="כל שיעור עצמאי" data-note="כל שיעור עומד לבד, נוח למחליפה ולמי שהחסיר; אבל השנה לא מצטברת לשום דבר." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: סוף ״מקום בעולם״ ופתיחת ״סיפור במניפה״ — שני שיעורי אוקטובר ברצף</p>
+  <h2>שיעור 1 · מקום בעולם — הסיום</h2>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">40′</div><span class="step-node" data-k="close"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">כרטיס יציאה: בכוונתי</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <div class="exit"><h4>בכוונתי…</h4><ol>
+          <li>דבר אחד שבכוונתי לעשות השבוע כדי שיהיה לי יותר מקום בכיתה:<span class="line"></span></li>
+          <li>דבר אחד שבכוונתי לעשות כדי שנכיר ונתגבש ככיתה:<span class="line"></span></li>
+        </ol></div>
+        <p>כותבים לבד, 3 דקות, ומוסרים בדלת. השיעור נסגר כאן.</p>
+      </div>
+    </div>
+  </div>
+  <h2>שיעור 2 · סיפור במניפה — הפתיחה</h2>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">קדימה ללמידה: הסוללה שלי</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">קדימה ללמידה</span><span class="pr" data-f="think">כולם כותבים</span><span class="beam">עניין ורלוונטיות</span></div>
+        <div class="board">הסוללה שלי עכשיו: ___%. מה מילא אותה השבוע? מה רוקן אותה?</div>
+        <p>השאלה על הלוח כשנכנסים. כותבים לבד, 3 דקות; בינתיים מסתובבים בין השולחנות ומסמנים לעצמכם שתי תשובות לשמוע. משם ממשיכים ל״כשהיינו ילדים״.</p>
+        <div class="say"><q>שלוש דקות, לבד ובשקט. אחר כך נשמע שניים.</q></div>
+        <div class="tip">הפתיחה לא נשענת על השיעור הקודם: מי שהחסיר אותו, או מחליפה שלא הייתה בו, נכנסים בלי פער.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="5.4" data-opt="b" data-label="שליפה וטיזר" data-note="כמה דקות בכל שיעור מחברות אותו לקודם ולבא; צריך להתמיד בשגרה גם כשהזמן קצר." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: סוף ״מקום בעולם״ ופתיחת ״סיפור במניפה״ — שני שיעורי אוקטובר ברצף</p>
+  <h2>שיעור 1 · מקום בעולם — הסיום</h2>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">40′</div><span class="step-node" data-k="close"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">כרטיס יציאה וטיזר</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <div class="exit"><h4>בכוונתי…</h4><ol>
+          <li>דבר אחד שבכוונתי לעשות השבוע כדי שיהיה לי יותר מקום בכיתה:<span class="line"></span></li>
+          <li>דבר אחד שבכוונתי לעשות כדי שנכיר ונתגבש ככיתה:<span class="line"></span></li>
+        </ol></div>
+        <p>כותבים לבד, 3 דקות, ומוסרים בדלת. רגע לפני היציאה, הטיזר לשיעור הבא:</p>
+        <div class="board">שאלה לשבוע: מה ממלא לכם את הסוללה? לא של הטלפון — שלכם. שימו לב, ונדבר על זה בשיעור הבא.</div>
+      </div>
+    </div>
+  </div>
+  <h2>שיעור 2 · סיפור במניפה — הפתיחה</h2>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">תרגילי שליפה: מה נשאר מ״מקום בעולם״?</h3><span class="dur">6 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="think">תרגילי שליפה</span><span class="pr" data-f="open">מה הקשר?</span><span class="beam">הערכה ורפלקטיביות</span></div>
+        <div class="board">בלי מחברת ובלי להציץ: כתבו כל מה שאתם זוכרים מ״מקום בעולם״. נתקעתם?
+          <ul><li>מעגל השתייכות אחד שלכם</li><li>שלוש המילים שמסבירות מה זו שייכות</li><li>משהו מהשבוע שהזכיר לכם את השיעור</li></ul>
+        </div>
+        <p>3 דקות לבד, ואז 2 דקות בזוגות: משווים ומשלימים ממה שהשני זכר.</p>
+        <div class="say"><q>לא זוכרים הכול? זה בסדר. המאמץ להיזכר הוא מה שמחזק את הזיכרון.</q></div>
+        <div class="say q"><q>מה כתבתם על שלוש המילים? ומה עם השאלה מהשבוע שעבר — מה מילא לכם את הסוללה?</q></div>
+        <p>מוודאים ששלוש המילים — אהוב, נחוץ, יכול — עלו, ומשם לסוללה הפנימית של היום.</p>
+        <div class="tip">מי שהחסיר את השיעור הקודם מצטרף לזוג ושומע ממנו מה היה — וזו עוד שליפה, בשביל מי שמסביר.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section data-pt="5.4" data-opt="c" data-label="חוט שנתי על הקיר" data-note="הכיתה רואה את השנה שלה גדלה על הקיר; דורש קיר, תורנות ועקביות לאורך כל השנה." data-body-class="paper">
+<div class="wrap doc">
+  <p class="ctx">קטע מתוך: סוף ״מקום בעולם״ ופתיחת ״סיפור במניפה״ — שני שיעורי אוקטובר ברצף</p>
+  <h2>שיעור 1 · מקום בעולם — הסיום</h2>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">40′</div><span class="step-node" data-k="close"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">כרטיס יציאה ופתק למפה</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="run">כרטיס יציאה</span><span class="beam">שיתופיות בלמידה</span><span class="beam">אחריות ובחירה</span></div>
+        <div class="exit"><h4>בכוונתי…</h4><ol>
+          <li>דבר אחד שבכוונתי לעשות השבוע כדי שיהיה לי יותר מקום בכיתה:<span class="line"></span></li>
+          <li>דבר אחד שבכוונתי לעשות כדי שנכיר ונתגבש ככיתה:<span class="line"></span></li>
+        </ol></div>
+        <p>כותבים לבד, 3 דקות, ומוסרים בדלת. על הקיר כבר תלוי בריסטול ריק — מפת הכ״חות של הכיתה, שתתמלא לאורך השנה — וכל אחד מקבל פתק דביק:</p>
+        <div class="board">על הפתק, בלי שם: כוח אחד מהשיעור שכדאי לתלות על המפה שלנו. מדביקים ליד הדלת ביציאה.</div>
+        <p><b>אחרי השיעור:</b> ״ועדת המפה״ — שני תלמידים בתורנות — בוחרת מהפתקים משפט אחד לתחנה ושני פתקים שמייצגים אותו, ומראה לכם לפני שתולים. שאר הפתקים נשמרים במעטפה ליד המפה.</p>
+      </div>
+    </div>
+  </div>
+  <h2>שיעור 2 · סיפור במניפה — הפתיחה</h2>
+  <div class="flow lite">
+    <div class="step">
+      <div class="step-rail"><div class="step-min">0′</div><span class="step-node" data-k="open"></span></div>
+      <div class="step-body">
+        <div class="step-head"><h3 class="step-title">מה הקשר? פותחים מול המפה</h3><span class="dur">5 דק׳</span></div>
+        <div class="tags"><span class="pr" data-f="open">מה הקשר?</span><span class="pr" data-f="think">תרגילי שליפה</span><span class="beam">שיתופיות בלמידה</span></div>
+        <p>המפה תלויה מאז השיעור הקודם, עם תחנה אחת. מתחילים מולה.</p>
+        <div class="say q"><q>מה כתוב בתחנה הראשונה? מה עשינו בשיעור שהוביל אליה?</q></div>
+        <div class="say q"><q>היום נדבר על סוללה פנימית. מה הקשר בין ׳לעשות מקום׳ לבין סוללה?</q></div>
+        <p>30 שניות לחשוב לבד, שתיים־שלוש השערות — ולא סוגרים את התשובה. בסוף השיעור הכוח של היום ייכנס לתחנה השנייה.</p>
+      </div>
+    </div>
+  </div>
+  <h2>המפה על הקיר, בסוף אוקטובר</h2>
+  <p>בריסטול על קיר אחד, טושים ופתקים דביקים. בכל תחנה: שם השיעור, משפט הכוח ושני פתקים מהכיתה.</p>
+  <div class="b-ch5">
+    <div class="wall">
+      <span class="wall-kicker">על הקיר בכיתה · תחנה חדשה אחרי כל שיעור</span>
+      <b class="wall-title">מפת הכ״חות של הכיתה</b>
+      <ol class="road">
+        <li class="stop">
+          <span class="when">אוקטובר · שיעור 1</span>
+          <b class="name">מקום בעולם</b>
+          <span class="force">כוח: לעשות מקום — לעצמנו ולאחרים</span>
+          <span class="notes"><span>״לכל אחד יש קצב משלו״</span><span>״הכול מתחיל מ׳היי׳ אחד״</span></span>
+        </li>
+        <li class="stop">
+          <span class="when">אוקטובר · שיעור 2</span>
+          <b class="name">סיפור במניפה</b>
+          <span class="force">כוח: למלא אחד לשני את הסוללה</span>
+          <span class="notes"><span>״במניפה קיבלתי רעיון שלא חשבתי עליו״</span><span>״לשאול מה נשמע — זה כבר ממלא״</span></span>
+        </li>
+        <li class="stop next">
+          <span class="when">נובמבר</span>
+          <b class="name">הלמידה שלי</b>
+        </li>
+        <li class="stop next">
+          <span class="when">דצמבר</span>
+          <b class="name">מתבגרים ומתמודדים עם השפעה חברתית</b>
+        </li>
+        <li class="stop next">
+          <span class="when">יוני</span>
+          <b class="name">מסיבת סיום: מסתכלים על כל המפה</b>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="tip">ביוני, בשיעור הסיום ״התבוננות רפלקטיבית על השנה שהייתה״, המפה היא חומר הגלם: כל הכוחות של השנה על קיר אחד.</div>
+</div>
+</section>
+
+</body></html>

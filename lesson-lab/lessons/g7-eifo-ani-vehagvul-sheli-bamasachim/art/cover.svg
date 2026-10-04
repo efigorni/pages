@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שער: טלפון עם התראות, דמות, וקו אדום (גבול) ביניהם -->
+  <g filter="url(#rough)">
+    <use href="#phone-notify" x="40" y="120" width="238" height="280" color="#13100e"/>
+    <use href="#red-line" x="205" y="244" width="320" height="92" color="#e57373" transform="rotate(90 365 290)"/>
+    <use href="#kid-stand" x="440" y="130" width="140" height="280" color="#63b1af"/>
+  </g>
+</svg>

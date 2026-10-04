@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מה נשאר מאחור: עץ (ציור ייעודי — אין עץ בערכה) מימין, ודמות שהולכת ממנו שמאלה בשביל מנוקד -->
+  <g filter="url(#rough)">
+    <path d="M30 490 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="436" y="300" width="48" height="190" rx="10" fill="#847c74"/>
+    <circle cx="390" cy="282" r="66" fill="#619f88"/>
+    <circle cx="528" cy="282" r="66" fill="#619f88"/>
+    <circle cx="460" cy="222" r="112" fill="#619f88"/>
+    <circle cx="496" cy="262" r="58" fill="#13100e" fill-opacity=".12"/>
+    <path d="M410 474 C360 446 300 488 250 462 C222 448 208 462 196 468" stroke="#847c74" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 12"/>
+    <use href="#kid-stand" x="40" y="190" width="150" height="300" color="#63b1af"/>
+  </g>
+</svg>

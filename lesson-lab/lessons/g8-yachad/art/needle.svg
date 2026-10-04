@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כיצד השונות בינינו קשורה לתמונה? חוטים בשלושה צבעים עוברים יחד בחור של מחט אחת (ציור ייעודי לפי התמונה במקור — אין מחט בערכה) -->
+  <g filter="url(#rough)">
+    <g stroke-width="10" stroke-linecap="round" fill="none">
+      <path d="M24 60 L596 240" stroke="#63b1af"/>
+      <path d="M24 96 L596 204" stroke="#f7ae4d"/>
+      <path d="M24 132 L596 168" stroke="#8c82c1"/>
+      <path d="M24 168 L596 132" stroke="#63b1af"/>
+      <path d="M24 204 L596 96" stroke="#f7ae4d"/>
+      <path d="M24 240 L596 60" stroke="#8c82c1"/>
+    </g>
+    <path fill-rule="evenodd" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"
+          d="M288 98 C288 66 332 66 332 98 L326 404 L310 506 L294 404 Z
+             M302 116 C302 104 318 104 318 116 L318 184 C318 196 302 196 302 184 Z"/>
+  </g>
+</svg>

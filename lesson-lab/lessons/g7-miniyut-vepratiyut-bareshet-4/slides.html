@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מיניות ופרטיות ברשת · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="kid-desk" viewBox="0 0 180 240" data-cat="people" data-he="דמות כותבת ליד שולחן" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="90" cy="98" r="22" />
+      <path d="M54 200 C54 152 70 126 90 126 C110 126 126 152 126 200 Z" />
+    </g>
+    <path d="M30 170 H150 L170 200 H10 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <rect x="10" y="200" width="160" height="12" fill="#e08f36" />
+    <rect x="20" y="212" width="9" height="20" fill="#13100e" />
+    <rect x="151" y="212" width="9" height="20" fill="#13100e" />
+    <path d="M62 177 H112 L117 195 H57 Z" fill="#fff" stroke="#13100e" stroke-width="3.5" stroke-linejoin="round" />
+    <path d="M100 191 L122 157" stroke="#f7ae4d" stroke-width="7" stroke-linecap="round" />
+    <path d="M100 191 L104 185" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+    <path d="M56 177 L70 187 M126 177 L110 186" stroke="currentColor" stroke-width="13" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="speech" viewBox="0 0 200 170" data-cat="talk" data-he="בועת דיבור">
+    <path d="M50 10 H150 A40 40 0 0 1 190 50 V82 A40 40 0 0 1 150 122 H144 L160 160 L116 122 H50 A40 40 0 0 1 10 82 V50 A40 40 0 0 1 50 10 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="thought" viewBox="0 0 200 190" data-cat="talk" data-he="ענן מחשבה">
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M184 80 A25 25 0 0 1 164.3 116 A32 32 0 0 1 114.6 135.1 A34 34 0 0 1 58 128.5 A28 28 0 0 1 21.1 99.2 A23 23 0 0 1 21.1 60.8 A28 28 0 0 1 58 31.5 A34 34 0 0 1 114.6 24.9 A32 32 0 0 1 164.3 44 A25 25 0 0 1 184 80 Z" />
+      <circle cx="148" cy="160" r="10" />
+      <circle cx="170" cy="178" r="6" />
+    </g>
+  </symbol>
+
+  <symbol id="chat" viewBox="0 0 220 190" data-cat="talk" data-he="צ׳אט">
+    <path d="M40 10 H120 A30 30 0 0 1 150 40 V66 A30 30 0 0 1 120 96 H64 L28 122 L34.8 95.5 A30 30 0 0 1 10 66 V40 A30 30 0 0 1 40 10 Z" fill="#63b1af" />
+    <path d="M38 42 H122 M38 64 H98" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+    <path d="M100 76 H180 A30 30 0 0 1 210 106 V130 A30 30 0 0 1 185.2 159.5 L204 182 L156 160 H100 A30 30 0 0 1 70 130 V106 A30 30 0 0 1 100 76 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <g fill="#13100e"><circle cx="112" cy="118" r="7" /><circle cx="140" cy="118" r="7" /><circle cx="168" cy="118" r="7" /></g>
+  </symbol>
+
+  
+  <symbol id="heart" viewBox="0 0 200 180" data-cat="feelings" data-he="לב" data-color="#e57373">
+    <path d="M100 168 C40 124 12 92 12 58 C12 30 34 12 58 12 C76 12 90 22 100 38 C110 22 124 12 142 12 C166 12 188 30 188 58 C188 92 160 124 100 168 Z" fill="currentColor" />
+    <path d="M38 58 C38 46 46 37 58 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55" />
+  </symbol>
+
+  <symbol id="face-meh" viewBox="0 0 200 200" data-cat="feelings" data-he="פנים ניטרליות" data-color="#63b1af">
+    <circle cx="100" cy="100" r="86" fill="currentColor" />
+    <g fill="#13100e"><circle cx="70" cy="84" r="10" /><circle cx="130" cy="84" r="10" /></g>
+    <path d="M68 134 H132" fill="none" stroke="#13100e" stroke-width="9" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="phone" viewBox="0 0 120 200" data-cat="screens" data-he="טלפון" data-color="#13100e">
+    <rect x="12" y="6" width="96" height="188" rx="18" fill="currentColor" />
+    <rect x="19" y="14" width="82" height="172" rx="12" fill="#fff" />
+    <rect x="46" y="20" width="28" height="8" rx="4" fill="currentColor" />
+    <rect x="44" y="176" width="32" height="4" rx="2" fill="#d9d1c6" />
+  </symbol>
+
+  <symbol id="phone-notify" viewBox="0 0 170 200" data-cat="screens" data-he="טלפון עם התראה" data-color="#13100e">
+    <rect x="37" y="6" width="96" height="188" rx="18" fill="currentColor" />
+    <rect x="44" y="14" width="82" height="172" rx="12" fill="#fff" />
+    <rect x="71" y="20" width="28" height="8" rx="4" fill="currentColor" />
+    <rect x="50" y="38" width="70" height="34" rx="9" fill="#e6f2f1" />
+    <circle cx="64" cy="55" r="7" fill="#e57373" />
+    <path d="M78 50 H110 M78 61 H100" stroke="#847c74" stroke-width="4.5" stroke-linecap="round" />
+    <circle cx="128" cy="14" r="15" fill="#e57373" stroke="#fff" stroke-width="4" paint-order="stroke" />
+    <g fill="none" stroke="#13100e" stroke-width="5" stroke-linecap="round">
+      <path d="M26 82 Q18 100 26 118" /><path d="M13 72 Q2 100 13 128" />
+      <path d="M144 82 Q152 100 144 118" /><path d="M157 72 Q168 100 157 128" />
+    </g>
+  </symbol>
+
+  <symbol id="laptop" viewBox="0 0 240 160" data-cat="screens" data-he="מחשב נייד" data-color="#13100e">
+    <rect x="40" y="12" width="160" height="110" rx="12" fill="currentColor" />
+    <rect x="50" y="22" width="140" height="90" rx="4" fill="#fff" />
+    <path d="M14 124 H226 Q226 142 208 142 H32 Q14 142 14 124 Z" fill="#847c74" />
+    <rect x="98" y="124" width="44" height="6" rx="3" fill="currentColor" />
+  </symbol>
+
+  <symbol id="lock" viewBox="0 0 160 200" data-cat="screens" data-he="מנעול (פרטיות)" data-color="#8c82c1">
+    <path d="M46 96 V64 A34 34 0 0 1 114 64 V96" fill="none" stroke="#13100e" stroke-width="14" />
+    <rect x="20" y="88" width="120" height="100" rx="18" fill="currentColor" />
+    <circle cx="80" cy="128" r="12" fill="#13100e" />
+    <path d="M74 132 L70 160 H90 L86 132 Z" fill="#13100e" />
+  </symbol>
+
+  <symbol id="key" viewBox="0 0 220 120" data-cat="screens" data-he="מפתח" data-color="#f7ae4d">
+    <path fill="currentColor" fill-rule="evenodd" d="M52 22 A38 38 0 1 1 52 98 A38 38 0 1 1 52 22 Z M52 46 A14 14 0 1 0 52 74 A14 14 0 1 0 52 46 Z" />
+    <rect x="84" y="50" width="122" height="20" rx="6" fill="currentColor" />
+    <rect x="160" y="64" width="14" height="28" rx="4" fill="currentColor" />
+    <rect x="184" y="64" width="14" height="20" rx="4" fill="currentColor" />
+  </symbol>
+
+  <symbol id="network" viewBox="0 0 220 200" data-cat="screens" data-he="רשת">
+    <g stroke="#13100e" stroke-width="5" stroke-linecap="round">
+      <path d="M110 100 L40 44 M110 100 L180 36 M110 100 L194 128 M110 100 L128 176 M110 100 L28 140 M40 44 L180 36 M40 44 L28 140 M194 128 L128 176 M180 36 L194 128" />
+    </g>
+    <g stroke="#fff" stroke-width="5" paint-order="stroke">
+      <circle cx="110" cy="100" r="26" fill="#f7ae4d" />
+      <circle cx="40" cy="44" r="18" fill="#63b1af" />
+      <circle cx="180" cy="36" r="16" fill="#8c82c1" />
+      <circle cx="194" cy="128" r="18" fill="#619f88" />
+      <circle cx="128" cy="176" r="16" fill="#63b1af" />
+      <circle cx="28" cy="140" r="16" fill="#8c82c1" />
+    </g>
+  </symbol>
+
+  <symbol id="camera" viewBox="0 0 220 170" data-cat="screens" data-he="מצלמה" data-color="#13100e">
+    <path d="M72 42 L86 18 H134 L148 42 Z" fill="currentColor" />
+    <rect x="12" y="38" width="196" height="120" rx="18" fill="currentColor" />
+    <rect x="28" y="52" width="26" height="14" rx="4" fill="#f7ae4d" />
+    <circle cx="110" cy="98" r="44" fill="#fff" />
+    <circle cx="110" cy="98" r="32" fill="#63b1af" />
+    <circle cx="98" cy="86" r="9" fill="#fff" opacity=".8" />
+  </symbol>
+
+  
+  <symbol id="house" viewBox="0 0 220 200" data-cat="places" data-he="בית">
+    <path d="M10 96 L110 14 L210 96 Z" fill="#f7ae4d" />
+    <rect x="34" y="90" width="152" height="100" rx="8" fill="#fff" stroke="#13100e" stroke-width="5" />
+    <rect x="93" y="128" width="34" height="62" rx="6" fill="#63b1af" />
+    <g fill="#eeecf7" stroke="#13100e" stroke-width="4">
+      <rect x="48" y="110" width="32" height="28" rx="4" /><rect x="140" y="110" width="32" height="28" rx="4" />
+    </g>
+  </symbol>
+
+  <symbol id="door" viewBox="0 0 150 220" data-cat="places" data-he="דלת פתוחה" data-color="#63b1af">
+    <rect x="26" y="14" width="100" height="194" rx="4" fill="#fbd6a6" stroke="#13100e" stroke-width="5" />
+    <path d="M26 14 L66 30 V194 L26 208 Z" fill="currentColor" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <circle cx="57" cy="118" r="5" fill="#13100e" />
+    <path d="M10 210 H140" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="shield" viewBox="0 0 180 200" data-cat="safety" data-he="מגן" data-color="#63b1af">
+    <path d="M90 10 L164 36 V96 C164 146 132 178 90 192 C48 178 16 146 16 96 V36 Z" fill="currentColor" />
+    <path d="M90 10 L164 36 V96 C164 146 132 178 90 192 Z" fill="#13100e" opacity=".14" />
+    <path d="M90 30 L146 50 V96 C146 134 122 160 90 172 C58 160 34 134 34 96 V50 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round" opacity=".7" />
+  </symbol>
+
+  <symbol id="umbrella" viewBox="0 0 200 200" data-cat="safety" data-he="מטרייה" data-color="#8c82c1">
+    <path d="M100 20 V8" stroke="#13100e" stroke-width="6" stroke-linecap="round" />
+    <path d="M100 104 V172 A13 13 0 0 1 74 172" fill="none" stroke="#13100e" stroke-width="7" stroke-linecap="round" />
+    <path d="M16 104 C16 54 54 20 100 20 C146 20 184 54 184 104 Q163 88 142 104 Q121 88 100 104 Q79 88 58 104 Q37 88 16 104 Z" fill="currentColor" />
+    <path d="M100 20 C80 40 64 70 58 104 Q79 88 100 104 Z M100 20 C150 30 180 60 184 104 Q163 88 142 104 C138 70 124 40 100 20 Z" fill="#13100e" opacity=".13" />
+  </symbol>
+
+  
+  <symbol id="sticky" viewBox="0 0 170 170" data-cat="learning" data-he="פתק דביק" data-color="#f7ae4d">
+    <g transform="rotate(-4 85 85)">
+      <path d="M20 20 H150 V118 L118 150 H20 Z" fill="currentColor" />
+      <rect x="20" y="20" width="130" height="22" fill="#13100e" opacity=".08" />
+      <path d="M150 118 L118 150 L124 124 Z" fill="#13100e" opacity=".2" />
+      <path d="M42 70 H126 M42 94 H118 M42 118 H90" stroke="#13100e" stroke-width="5" stroke-linecap="round" opacity=".55" />
+    </g>
+  </symbol>
+
+  <symbol id="book" viewBox="0 0 220 170" data-cat="learning" data-he="ספר" data-color="#8c82c1">
+    <path d="M110 50 C86 36 40 32 6 44 V160 C40 150 86 152 110 166 C134 152 180 150 214 160 V44 C180 32 134 36 110 50 Z" fill="currentColor" />
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M110 40 C86 26 46 24 18 34 V146 C46 136 86 138 110 152 Z" />
+      <path d="M110 40 C134 26 174 24 202 34 V146 C174 136 134 138 110 152 Z" />
+    </g>
+    <g fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round">
+      <path d="M36 62 C56 56 76 58 94 64 M36 86 C56 80 76 82 94 88 M36 110 C56 104 70 106 84 110" />
+      <path d="M184 62 C164 56 144 58 126 64 M184 86 C164 80 144 82 126 88 M184 110 C164 104 150 106 136 110" />
+    </g>
+  </symbol>
+
+  <symbol id="arrow" viewBox="0 0 220 120" data-cat="choices" data-he="חץ (קדימה)" data-color="#f7ae4d">
+    <path d="M196 92 C150 30 90 30 54 64" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" />
+    <path d="M29 87 L38 35 L82 82 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="cross" viewBox="0 0 200 200" data-cat="choices" data-he="איקס" data-color="#e57373">
+    <circle cx="100" cy="100" r="84" fill="currentColor" />
+    <path d="M68 68 L132 132 M132 68 L68 132" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" />
+  </symbol>
+
+  
+  <symbol id="sprout" viewBox="0 0 180 210" data-cat="growth" data-he="נבט">
+    <path d="M90 124 C90 100 92 82 90 62" fill="none" stroke="#4a8571" stroke-width="8" stroke-linecap="round" />
+    <path d="M90 84 C70 84 46 70 40 48 C62 44 84 56 90 84 Z" fill="#619f88" />
+    <path d="M90 68 C100 48 124 34 148 40 C140 62 116 74 90 68 Z" fill="#619f88" />
+    <path d="M42 136 H138 L126 198 H54 Z" fill="#f7ae4d" />
+    <rect x="32" y="118" width="116" height="24" rx="6" fill="#e08f36" />
+  </symbol>
+
+  <symbol id="star" viewBox="0 0 200 200" data-cat="growth" data-he="כוכב" data-color="#f7ae4d">
+    <path d="M100 16 L123.5 71.6 L183.7 76.8 L138 116.4 L151.7 175.2 L100 144 L48.3 175.2 L62 116.4 L16.3 76.8 L76.5 71.6 Z" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linejoin="round" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מבט אל עצמי · שיעור 4</div><h1>מיניות ופרטיות ברשת</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="טלפון, ומנעול על המסך שלו"><g filter="url(#rough)"><use href="#phone" x="215.0" y="112.0" width="190.0" height="316.7" color="#13100e"/><use href="#lock" x="260.0" y="205.0" width="100.0" height="125.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">זה רק אני והמרחב הפרטי שלי · בין הקירות</div><h2>כמה זה חשוב לכם?</h2><p class="sub">קיר אחד — חשוב לי מאוד. הקיר השני — לא חשוב לי בכלל.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="קו בין שני קירות, כוכב בקצה אחד ופנים ניטרליות בשני, ודמות עומדת באמצע" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <rect x="572" y="70" width="20" height="392" rx="5" fill="#847c74"/>
+    <rect x="28" y="70" width="20" height="392" rx="5" fill="#847c74"/>
+    <path d="M64 452 H556" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <use href="#star" x="420" y="296" width="140" height="140" color="#f7ae4d"/>
+    <use href="#face-meh" x="60" y="296" width="140" height="140" color="#63b1af"/>
+    <use href="#kid-stand" x="235" y="160" width="150" height="300" color="#8c82c1"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">משפט 1</div><h2>כל אחד צריך פרטיות, גם בבית שלו.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית"><g filter="url(#rough)"><use href="#house" x="134.0" y="110.0" width="352.0" height="320.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">משפט 2</div><h2>כשאני באמבטיה צריך לדפוק על הדלת ולא לפתוח אותה.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דלת, ובועת דיבור עם ״טוק טוק״"><g filter="url(#rough)"><use href="#door" x="330.0" y="150.0" width="200.0" height="293.3" color="#63b1af"/><use href="#speech" x="60.0" y="80.0" width="230.0" height="195.5" color="#13100e"/></g><text x="175.0" y="156.0" font-size="44" text-anchor="middle" dominant-baseline="middle" fill="#13100e">טוק טוק</text></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">משפט 3</div><h2>אף אחד לא יכול לגעת בתיק שלי או בטלפון שלי בלי רשותי</h2><p class="sub">אפילו חברים טובים.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="טלפון, ועיגול עם איקס לידו"><g filter="url(#rough)"><use href="#phone" x="300.0" y="120.0" width="170.0" height="283.3" color="#13100e"/><use href="#cross" x="90.0" y="230.0" width="150.0" height="150.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">משפט 4</div><h2>בגיל ההתבגרות במיוחד חשוב שיכבדו את הפרטיות שלי בבית.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נבט בעציץ, ובית לידו"><g filter="url(#rough)"><use href="#sprout" x="290.0" y="150.0" width="230.0" height="268.3" color="#13100e"/><use href="#house" x="70.0" y="260.0" width="180.0" height="163.6" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="7">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מסרים מסכמים · 1 מתוך 3</div><h2>לכולנו הזכות לפרטיות.</h2><p class="sub">פרטיות מאפשרת לנו לשמור על עצמנו ועל מי שאנחנו.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מטרייה פתוחה, ודמות עומדת לידה"><g filter="url(#rough)"><use href="#umbrella" x="270.0" y="110.0" width="270.0" height="270.0" color="#8c82c1"/><use href="#kid-stand" x="90.0" y="230.0" width="120.0" height="240.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="8">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מסרים מסכמים · 2 מתוך 3</div><h2>בגיל ההתבגרות במיוחד חשובה לנו השמירה על פרטיות</h2><ol class="pts"><li class="fragment">נרצה שידפקו על הדלת</li><li class="fragment">שלא ייכנסו כשאנחנו מתלבשים</li><li class="fragment">שלא יגידו לנו איך לעצב ולסדר את החדר</li><li class="fragment">שייתנו לנו עצמאות ושליטה</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דלת סגורה, ונבט בעציץ לידה"><g filter="url(#rough)"><use href="#door" x="340.0" y="110.0" width="190.0" height="278.7" color="#63b1af"/><use href="#sprout" x="90.0" y="230.0" width="170.0" height="198.3" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="9">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">מסרים מסכמים · 3 מתוך 3</div><h2>הצורך בפרטיות מאד ברור ומוחשי כשאנחנו מתנהלים במרחב הפיזי.</h2><p class="sub">חדירה לפרטיות שלנו במרחב הפיזי היא מאד מוחשית וברורה לנו.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית, ומפתח לידו"><g filter="url(#rough)"><use href="#house" x="250.0" y="130.0" width="300.0" height="272.7" color="#13100e"/><use href="#key" x="50.0" y="310.0" width="190.0" height="103.6" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="10">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">הזכות לפרטיות</div><h2>לכל אדם יש זכות לפרטיות</h2><p class="sub">חוק יסוד — כבוד האדם וחירותו (1992)</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מנעול, וספר פתוח לידו"><g filter="url(#rough)"><use href="#lock" x="340.0" y="130.0" width="190.0" height="237.5" color="#8c82c1"/><use href="#book" x="70.0" y="230.0" width="230.0" height="177.7" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="11">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חושבים · בזוגות · משתפים</div><h2>מה הקשר בין התפתחות מינית ושמירה על פרטיות בגיל ההתבגרות?</h2><ol class="pts"><li class="fragment">לבד — 30 שניות</li><li class="fragment">בזוגות — דקה</li><li class="fragment">במליאה</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות, ומעליה ענן מחשבה ובתוכו לב"><g filter="url(#rough)"><use href="#thought" x="60.0" y="40.0" width="300.0" height="285.0" color="#13100e"/><use href="#heart" x="158.0" y="110.0" width="110.0" height="99.0" color="#e57373"/><use href="#kid-stand" x="380.0" y="210.0" width="140.0" height="280.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="12">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">שמירה על פרטיות במרחב המקוון</div><h2>איפה קל יותר לשמור על פרטיות</h2><p class="sub">במרחב הפיזי או במרחב המקוון?</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בית, ולידו טלפון עם התראה"><g filter="url(#rough)"><use href="#house" x="330.0" y="170.0" width="250.0" height="227.3" color="#13100e"/><use href="#phone-notify" x="60.0" y="170.0" width="190.0" height="223.5" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="13">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">פיזי או מקוון</div><h2>מי שולט בפרטיות שלי?</h2><ol class="pts"><li class="fragment">במרחב הפיזי — בוחרים מי נכנס</li><li class="fragment">ברשת — תמונות עוברות הלאה</li><li class="fragment">מידע אינטימי ברשת — סיכון לפגיעה</li><li class="fragment">פרטיות אמיתית מול פרטיות מדומה</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="טלפון, וחץ ממנו אל רשת של עיגולים מחוברים"><g filter="url(#rough)"><use href="#phone" x="400.0" y="150.0" width="140.0" height="233.3" color="#13100e"/><use href="#arrow" x="250.0" y="220.0" width="140.0" height="76.4" color="#847c74"/><use href="#network" x="40.0" y="170.0" width="210.0" height="190.9" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-video" data-n="14">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">לפני שצופים</div><h2>בינה מלאכותית יודעת לערוך תמונות. מה זה יכול לעשות לפרטיות שלנו?</h2><a class="go" href="https://www.youtube.com/watch?v=DJziuYIXGL4" target="_blank" rel="noopener">לסרטון ←</a>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מחשב נייד, ומצלמה לידו"><g filter="url(#rough)"><use href="#laptop" x="280.0" y="170.0" width="300.0" height="200.0" color="#13100e"/><use href="#camera" x="60.0" y="220.0" width="190.0" height="146.8" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="15">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כולם כותבים · משפט אחד</div><h2>מה הסרטון מוסיף?</h2><p class="sub">למה שדיברנו עליו — על פרטיות, שלנו ושל אחרים.</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות כותבת ליד שולחן"><g filter="url(#rough)"><use href="#kid-desk" x="166.0" y="78.0" width="288.0" height="384.0" color="#63b1af"/></g></svg></div>
+<div class="foot"><span>דקה</span><span class="timer" data-sec="60"></span></div>  </div>
+</section>
+<section class="s-pic " data-n="16">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · שוב בין הקירות</div><h2>ועכשיו — ברשת</h2><p class="sub">כל משפט פעמיים — על החפצים שלכם, ואז על התמונות וההודעות שלכם.</p>    </div>
+    <div class="pic"><svg role="img" aria-label="קו בין שני קירות, כוכב בקצה אחד ופנים ניטרליות בשני, ודמות עומדת באמצע" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  
+  <g filter="url(#rough)">
+    <rect x="572" y="70" width="20" height="392" rx="5" fill="#847c74"/>
+    <rect x="28" y="70" width="20" height="392" rx="5" fill="#847c74"/>
+    <path d="M64 452 H556" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <use href="#star" x="420" y="296" width="140" height="140" color="#f7ae4d"/>
+    <use href="#face-meh" x="60" y="296" width="140" height="140" color="#63b1af"/>
+    <use href="#kid-stand" x="235" y="160" width="150" height="300" color="#8c82c1"/>
+  </g>
+</svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="17">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">שוב בין הקירות</div><h2>יש חפצים שלי שאני מוכן לחלוק בהם ואחרים שלא.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ספר פתוח וטלפון"><g filter="url(#rough)"><use href="#book" x="300.0" y="210.0" width="250.0" height="193.2" color="#8c82c1"/><use href="#phone" x="90.0" y="180.0" width="130.0" height="216.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="18">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">שוב בין הקירות</div><h2>אף אחד לא יכול לגעת בחפצים שלי בלי רשותי.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מנעול, ומפתח לידו"><g filter="url(#rough)"><use href="#lock" x="340.0" y="140.0" width="180.0" height="225.0" color="#8c82c1"/><use href="#key" x="70.0" y="250.0" width="220.0" height="120.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="19">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">אם נשאר זמן · מסכמים שיעור</div><h2>בחרו משפט אחד והשלימו אותו</h2><ol class="pts"><li class="fragment">משהו שהפתיע אותי</li><li class="fragment">משהו חדש שלמדתי היום</li><li class="fragment">משהו שלמדתי על עצמי היום</li><li class="fragment">מתוך מה שלמדתי בשיעור, מה אני רוצה לקחת איתי הלאה?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי בועות צ׳אט"><g filter="url(#rough)"><use href="#chat" x="134.0" y="118.0" width="352.0" height="304.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>דקה</span><span class="timer" data-sec="60"></span></div>  </div>
+</section>
+<section class="s-pic s-msg" data-n="20">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 1 מתוך 4</div><h2>שמירה על הפרטיות זה חלק חשוב מלהתבגר בצורה בריאה ובטוחה.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מגן גדול"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="21">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 2 מתוך 4</div><h2>האיזון בין שיתוף לפרטיות הוא חשוב כדי שתרגישו שאתם שולטים בסיפור שלכם.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מגן גדול"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="22">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 3 מתוך 4</div><h2>לכל אחד יש זכות לפרטיות, גם לך, גם לחברים שלך.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מגן גדול"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="23">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">חשוב לזכור · 4 מתוך 4</div><h2>קל לזרום עם כולם, אבל חכם ואמיץ זה להיות מי ששומר על כבודם של אחרים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מגן גדול"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="24">
+  <div class="frame">
+    <div class="txt">
+<div class="kicker">כרטיס יציאה</div><h2>לפני שיוצאים</h2><ol class="pts"><li class="fragment">השלימו — ברשת קשה יותר לשמור על פרטיות, כי…</li><li class="fragment">לפני שאני משתף תמונה של מישהו אחר, אשאל את עצמי…</li><li class="fragment">רשות — מבוגר שאוכל לפנות אליו אם תמונה שלי תופץ בלי רשותי.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דלת פתוחה, ופתק לידה"><g filter="url(#rough)"><use href="#door" x="330.0" y="90.0" width="200.0" height="293.3" color="#63b1af"/><use href="#sticky" x="70.0" y="250.0" width="170.0" height="170.0" color="#8c82c1"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

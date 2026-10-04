@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- בינגו "כישורים וקשיים": כרטיס של 3 על 3 — כוכבים (כישורים) וענני גשם (קשיים) — ועיפרון -->
+  <g filter="url(#rough)">
+    <rect x="150" y="60" width="380" height="380" rx="18" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <g stroke="#13100e" stroke-width="4" stroke-linecap="round">
+      <line x1="277" y1="74" x2="277" y2="426"/>
+      <line x1="403" y1="74" x2="403" y2="426"/>
+      <line x1="164" y1="187" x2="516" y2="187"/>
+      <line x1="164" y1="313" x2="516" y2="313"/>
+    </g>
+    <use href="#star" x="425" y="81" width="84" height="84" color="#f7ae4d"/>
+    <use href="#star" x="298" y="81" width="84" height="84" color="#f7ae4d"/>
+    <use href="#rain-cloud" x="298" y="208" width="84" height="84"/>
+    <use href="#rain-cloud" x="425" y="335" width="84" height="84"/>
+    <use href="#star" x="171" y="335" width="84" height="84" color="#f7ae4d"/>
+    <use href="#pencil" x="36" y="330" width="160" height="160" color="#f7ae4d"/>
+  </g>
+</svg>

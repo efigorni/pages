@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- דברים שנעדיף להשאיר מאחור: ארגז סגור (ציור ייעודי — אין ארגז בערכה), וענן גשם מעליו -->
+  <g filter="url(#rough)">
+    <polygon points="140,286 450,286 412,240 178,240" fill="#f7ae4d"/>
+    <polygon points="140,286 450,286 412,240 178,240" fill="#13100e" fill-opacity=".16"/>
+    <rect x="140" y="284" width="310" height="196" rx="6" fill="#f7ae4d"/>
+    <polygon points="276,286 314,286 306,240 284,240" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="276" y="284" width="38" height="64" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="200" y="376" width="104" height="64" rx="6" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <use href="#rain-cloud" x="408" y="32" width="176" height="176"/>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מעגלי השיתוף (מקור: שקף 9): מ"ביני לבין עצמי" במרכז ועד "מכרים ברשתות חברתיות" בחוץ -->
+  <g filter="url(#rough)">
+    <circle cx="310" cy="270" r="250" fill="#eeecf7" stroke="#ffffff" stroke-width="4"/>
+    <circle cx="310" cy="315" r="205" fill="#e6f2f1" stroke="#ffffff" stroke-width="4"/>
+    <circle cx="310" cy="355" r="165" fill="#619f88" stroke="#ffffff" stroke-width="4"/>
+    <circle cx="310" cy="395" r="125" fill="#8c82c1" stroke="#ffffff" stroke-width="4"/>
+    <circle cx="310" cy="435" r="85" fill="#f7ae4d" stroke="#ffffff" stroke-width="4"/>
+    <circle cx="310" cy="475" r="45" fill="#63b1af" stroke="#ffffff" stroke-width="4"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif">
+    <text x="310" y="67" font-size="30">מכרים ברשת</text>
+    <text x="310" y="152" font-size="30">חברים ברשת</text>
+    <text x="310" y="216" font-size="30">מבוגר</text>
+    <text x="310" y="248" font-size="30">שסומכים עליו</text>
+    <text x="310" y="296" font-size="30">חברים</text>
+    <text x="310" y="328" font-size="30">קרובים</text>
+    <text x="310" y="392" font-size="30">משפחה</text>
+    <text x="310" y="477" font-size="30">אני</text>
+  </g>
+</svg>

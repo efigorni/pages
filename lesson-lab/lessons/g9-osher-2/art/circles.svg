@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- עיגולי השמחה: לב, ובתוכו עיגול שמחה כתום ששולח עיגולים קטנים החוצה (מקור: שקף 9) -->
+  <g filter="url(#rough)">
+    <g stroke="#847c74" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 12">
+      <path d="M420 205 C450 185 470 170 494 158"/>
+      <path d="M432 318 C460 335 480 345 502 352"/>
+      <path d="M198 205 C170 190 150 178 124 170"/>
+      <path d="M200 322 C175 345 150 365 126 380"/>
+    </g>
+    <use href="#heart" x="150" y="130" width="320" height="288" color="#e57373"/>
+    <circle cx="310" cy="258" r="62" fill="#f7ae4d"/>
+    <g fill="#f7ae4d">
+      <circle cx="515" cy="150" r="20"/>
+      <circle cx="562" cy="255" r="15"/>
+      <circle cx="525" cy="360" r="22"/>
+      <circle cx="105" cy="162" r="17"/>
+      <circle cx="62" cy="272" r="21"/>
+      <circle cx="108" cy="388" r="14"/>
+      <circle cx="262" cy="472" r="16"/>
+      <circle cx="372" cy="482" r="19"/>
+    </g>
+  </g>
+</svg>

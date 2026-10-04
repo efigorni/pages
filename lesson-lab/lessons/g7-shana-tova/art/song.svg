@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מקשיבים לשיר: דמות יושבת, ותווים מרחפים (ציור ייעודי — אין תו מוזיקלי בערכה) -->
+  <g filter="url(#rough)">
+    <g fill="#8c82c1">
+      <ellipse cx="96" cy="318" rx="30" ry="21" transform="rotate(-20 96 318)"/>
+      <ellipse cx="214" cy="286" rx="30" ry="21" transform="rotate(-20 214 286)"/>
+      <rect x="113" y="176" width="12" height="138" rx="5"/>
+      <rect x="231" y="144" width="12" height="138" rx="5"/>
+      <path d="M113 176 L243 144 L243 172 L113 204 Z"/>
+    </g>
+    <g fill="#f7ae4d">
+      <ellipse cx="420" cy="176" rx="27" ry="19" transform="rotate(-20 420 176)"/>
+      <rect x="435" y="48" width="11" height="124" rx="5"/>
+      <path d="M440 48 C462 76 500 86 492 136 C482 108 464 98 446 94 Z"/>
+    </g>
+    <use href="#kid-sit" x="296" y="200" width="210" height="315" color="#63b1af"/>
+  </g>
+</svg>

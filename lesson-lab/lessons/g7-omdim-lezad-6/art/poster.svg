@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- הכרזה (מקור: שקף 25): רקע שחור, הרבה "עומדים מהצד" באדום ומעט "עומדים לצד" בירוק -->
+  <g filter="url(#rough)">
+    <rect x="16" y="16" width="588" height="508" rx="10" fill="#13100e"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" font-size="30" fill="#e57373">
+    <text x="508" y="58">עומדים מהצד</text>
+    <text x="310" y="58">עומדים מהצד</text>
+    <text x="112" y="58">עומדים מהצד</text>
+    <text x="508" y="100">עומדים מהצד</text>
+    <text x="310" y="100" fill="#619f88">עומדים לצד</text>
+    <text x="112" y="100">עומדים מהצד</text>
+    <text x="508" y="143" fill="#619f88">עומדים לצד</text>
+    <text x="310" y="143">עומדים מהצד</text>
+    <text x="112" y="143">עומדים מהצד</text>
+    <text x="508" y="185">עומדים מהצד</text>
+    <text x="310" y="185">עומדים מהצד</text>
+    <text x="112" y="185">עומדים מהצד</text>
+    <text x="508" y="228">עומדים מהצד</text>
+    <text x="310" y="228">עומדים מהצד</text>
+    <text x="112" y="228">עומדים מהצד</text>
+    <text x="508" y="270">עומדים מהצד</text>
+    <text x="310" y="270">עומדים מהצד</text>
+    <text x="112" y="270">עומדים מהצד</text>
+    <text x="508" y="312">עומדים מהצד</text>
+    <text x="310" y="312" fill="#619f88">עומדים לצד</text>
+    <text x="112" y="312">עומדים מהצד</text>
+    <text x="508" y="355">עומדים מהצד</text>
+    <text x="310" y="355">עומדים מהצד</text>
+    <text x="112" y="355">עומדים מהצד</text>
+    <text x="508" y="397">עומדים מהצד</text>
+    <text x="310" y="397">עומדים מהצד</text>
+    <text x="112" y="397">עומדים מהצד</text>
+    <text x="508" y="440">עומדים מהצד</text>
+    <text x="310" y="440">עומדים מהצד</text>
+    <text x="112" y="440" fill="#619f88">עומדים לצד</text>
+    <text x="508" y="482">עומדים מהצד</text>
+    <text x="310" y="482">עומדים מהצד</text>
+    <text x="112" y="482" fill="#619f88">עומדים לצד</text>
+  </g>
+</svg>

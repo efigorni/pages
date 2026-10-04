@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שני עיגולים כמו בדף של המקור: בימני כוכב (על מה אני גאה?), בשמאלי גבעול שמתפצל לשלושה חיצים (מה הייתי עושה אחרת?) -->
+  <g filter="url(#rough)">
+    <circle cx="452" cy="270" r="132" fill="none" stroke="#f7ae4d" stroke-width="22"/>
+    <circle cx="168" cy="270" r="132" fill="none" stroke="#8c82c1" stroke-width="22"/>
+    <use href="#star" x="367" y="185" width="170" height="170" color="#f7ae4d"/>
+    <use href="#arrows-fork" x="88" y="190" width="160" height="160"/>
+  </g>
+</svg>

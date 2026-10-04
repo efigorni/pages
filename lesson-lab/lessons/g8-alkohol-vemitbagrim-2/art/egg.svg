@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- הניסוי: ביצה בכלי שקוף, ומימין בקבוק אלכוהול 90% וחץ ממנו אל הביצה (אין ביצה בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M36 318 Q44 476 186 480 Q328 476 336 318 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <ellipse cx="186" cy="318" rx="150" ry="42" fill="#e6f2f1" stroke="#13100e" stroke-width="5"/>
+    <path d="M92 320 C94 294 146 286 190 288 C238 290 282 300 278 322 C274 344 226 352 184 350 C136 348 90 342 92 320 Z" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <ellipse cx="180" cy="314" rx="36" ry="19" fill="#f7ae4d"/>
+    <use href="#arrow" x="340" y="236" width="140" height="76" color="#847c74"/>
+    <rect x="497" y="108" width="46" height="26" rx="6" fill="#8c82c1"/>
+    <rect x="503" y="132" width="34" height="46" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M503 178 L478 212 L478 392 Q478 406 492 406 L548 406 Q562 406 562 392 L562 212 L537 178 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="486" y="262" width="68" height="64" rx="8" fill="#fdf0dd" stroke="#13100e" stroke-width="3.5"/>
+  </g>
+  <text x="520" y="306" font-family="Secular One, Arial Hebrew, sans-serif" font-size="30" fill="#13100e" text-anchor="middle">90%</text>
+</svg>

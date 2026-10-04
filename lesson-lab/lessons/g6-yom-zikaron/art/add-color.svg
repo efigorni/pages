@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- להוסיף צבע: קופסת צבעים ובה שני עפרונות, ועיפרון סגול חדש שנכנס אליה (ציור ייעודי) -->
+  <g filter="url(#rough)">
+    <path d="M140 300 L158 266 H362 L380 300" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <use href="#pencil" x="110" y="130" width="230" height="230" color="#f7ae4d" transform="rotate(135 225 245)"/>
+    <use href="#pencil" x="190" y="112" width="230" height="230" color="#63b1af" transform="rotate(135 305 227)"/>
+    <rect x="122" y="300" width="276" height="180" rx="16" fill="#fff"/>
+    <rect x="125" y="352" width="270" height="46" fill="#eeecf7"/>
+    <rect x="122" y="300" width="276" height="180" rx="16" fill="none" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <use href="#pencil" x="380" y="96" width="230" height="230" color="#8c82c1" transform="rotate(112 495 211)"/>
+  </g>
+</svg>

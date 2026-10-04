@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- חידה 3 (שקף 10 במקור): ילד מקלף שלט "סוף", ומתחתיו מתגלה שלט "התחלה" — "סוף הוא תמיד התחלה" -->
+  <g filter="url(#rough)">
+    <path d="M40 446 H580" stroke="#847c74" stroke-width="5" stroke-linecap="round"/>
+    <rect x="60" y="194" width="320" height="140" rx="8" fill="#fff" stroke="#13100e" stroke-width="5"/>
+    <path d="M258 94 H552 Q560 94 560 102 V226 Q560 234 552 234 H304 L250 190 V102 Q250 94 258 94 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M250 190 L304 234 L293 181 Z" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <g fill="#847c74">
+      <circle cx="78" cy="212" r="5"/><circle cx="78" cy="316" r="5"/>
+      <circle cx="542" cy="112" r="5"/><circle cx="542" cy="216" r="5"/>
+    </g>
+    <use href="#kid-hand" x="280.8" y="166" width="144" height="288" color="#63b1af" transform="matrix(-1 0 0 1 705.6 0)"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" fill="#13100e" text-anchor="middle" dominant-baseline="middle">
+    <text x="420" y="166" font-size="66">סוף</text>
+    <text x="200" y="268" font-size="54">התחלה</text>
+  </g>
+</svg>

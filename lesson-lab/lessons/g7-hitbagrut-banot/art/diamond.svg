@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- מודל היהלום: ארבע נקודות מבט על ההתבגרות — גוף, רגש, חברה, ערכים (מקור: שקפים 10 ו־15). פאות בשני צבעים, כמו יהלום -->
+  <g filter="url(#rough)">
+    <path d="M310 40 L580 270 L310 270 Z" fill="#63b1af" fill-opacity=".55"/>
+    <path d="M310 40 L40 270 L310 270 Z" fill="#f7ae4d" fill-opacity=".6"/>
+    <path d="M580 270 L310 500 L310 270 Z" fill="#f7ae4d" fill-opacity=".6"/>
+    <path d="M40 270 L310 500 L310 270 Z" fill="#63b1af" fill-opacity=".55"/>
+    <path d="M310 40 L580 270 L310 500 L40 270 Z M310 40 V500 M40 270 H580" fill="none" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="40">
+    <text x="402" y="200">גוף</text>
+    <text x="218" y="200">רגש</text>
+    <text x="402" y="345">חברה</text>
+    <text x="218" y="345">ערכים</text>
+  </g>
+</svg>

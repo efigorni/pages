@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- זום אין וזום אאוט: זכוכית מגדלת עם פלוס (מימין) וזכוכית מגדלת עם מינוס (משמאל), כמו הסמלים בשקף 13 של המקור -->
+  <g filter="url(#rough)">
+    <use href="#magnifier" x="330" y="70" width="260" height="260" color="#63b1af"/>
+    <path d="M405.2 179.2 H473.2 M439.2 145.2 V213.2" stroke="#13100e" stroke-width="15" stroke-linecap="round"/>
+    <use href="#magnifier" x="40" y="220" width="230" height="230" color="#8c82c1"/>
+    <path d="M106.6 316.6 H166.6" stroke="#13100e" stroke-width="14" stroke-linecap="round"/>
+  </g>
+</svg>

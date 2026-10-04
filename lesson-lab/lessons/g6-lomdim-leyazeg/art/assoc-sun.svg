@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שמש אסוציאציות (מקור: שקף 17): "ייצוג עצמי" במרכז, וקרניים עם עיגולים ריקים שהכיתה ממלאת -->
+  <g filter="url(#rough)">
+    <g stroke="#f7ae4d" stroke-width="11" stroke-linecap="round">
+      <line x1="413" y1="313" x2="474" y2="338"/>
+      <line x1="353" y1="373" x2="378" y2="434"/>
+      <line x1="267" y1="373" x2="242" y2="434"/>
+      <line x1="207" y1="313" x2="146" y2="338"/>
+      <line x1="207" y1="227" x2="146" y2="202"/>
+      <line x1="267" y1="167" x2="242" y2="106"/>
+      <line x1="353" y1="167" x2="378" y2="106"/>
+      <line x1="413" y1="227" x2="474" y2="202"/>
+    </g>
+    <circle cx="310" cy="270" r="104" fill="#f7ae4d"/>
+    <g fill="#ffffff" stroke="#63b1af" stroke-width="6">
+      <circle cx="506" cy="351" r="32"/>
+      <circle cx="391" cy="466" r="32"/>
+      <circle cx="229" cy="466" r="32"/>
+      <circle cx="114" cy="351" r="32"/>
+      <circle cx="114" cy="189" r="32"/>
+      <circle cx="229" cy="74" r="32"/>
+      <circle cx="391" cy="74" r="32"/>
+      <circle cx="506" cy="189" r="32"/>
+    </g>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="44">
+    <text x="310" y="246">ייצוג</text>
+    <text x="310" y="298">עצמי</text>
+  </g>
+</svg>

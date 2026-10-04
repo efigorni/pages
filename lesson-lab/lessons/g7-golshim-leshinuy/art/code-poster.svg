@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- הקוד הכיתתי: בריסטול עם כללים ממוספרים וחתימות בתחתית, וטוש לידו (מקור: שקף 29) -->
+  <g filter="url(#rough)">
+    <rect x="130" y="34" width="330" height="460" rx="16" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M150 128 H440" stroke="#13100e" stroke-width="4" stroke-linecap="round"/>
+    <g stroke-width="9" stroke-linecap="round">
+      <circle cx="418" cy="174" r="12" fill="#f7ae4d"/><path d="M392 174 H180" stroke="#847c74"/>
+      <circle cx="418" cy="226" r="12" fill="#63b1af"/><path d="M392 226 H206" stroke="#847c74"/>
+      <circle cx="418" cy="278" r="12" fill="#8c82c1"/><path d="M392 278 H190" stroke="#847c74"/>
+      <circle cx="418" cy="330" r="12" fill="#619f88"/><path d="M392 330 H230" stroke="#847c74"/>
+    </g>
+    <g fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M380 440 C388 418 398 450 408 428 S420 446 430 432" stroke="#13100e"/>
+      <path d="M300 444 C306 420 318 452 326 430 S338 448 352 434" stroke="#63b1af"/>
+      <path d="M220 440 C228 422 236 450 246 428 S258 446 270 430" stroke="#8c82c1"/>
+      <path d="M158 446 C166 426 172 452 182 432" stroke="#f7ae4d"/>
+    </g>
+    <use href="#pencil" x="436" y="318" width="160" height="160" color="#f7ae4d"/>
+  </g>
+  <text x="295" y="84" font-family="Secular One, Arial Hebrew, sans-serif" font-size="44" fill="#13100e" text-anchor="middle" dominant-baseline="middle">הקוד שלנו</text>
+</svg>

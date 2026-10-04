@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- ציר השייכות: קו על הרצפה, 10 בצד ימין (שייכות רבה) ו-1 בצד שמאל, ושתי דמויות במקומות שונים עליו (מקור: שקף 9) -->
+  <g filter="url(#rough)">
+    <path d="M50 440 H570" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <g stroke="#847c74" stroke-width="6" stroke-linecap="round">
+      <path d="M50 418 V462"/>
+      <path d="M310 426 V454"/>
+      <path d="M570 418 V462"/>
+    </g>
+    <use href="#kid-stand" x="400" y="140" width="150" height="300" color="#63b1af"/>
+    <use href="#kid-stand" x="170" y="200" width="120" height="240" color="#8c82c1"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="44" fill="#13100e" text-anchor="middle">
+    <text x="50" y="508">1</text>
+    <text x="570" y="508">10</text>
+  </g>
+</svg>

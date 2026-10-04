@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מדורה אכפתית: מדורה, וסביבה ילדים (ציור ייעודי — אין מדורה בערכה) -->
+  <g filter="url(#rough)">
+    <circle cx="310" cy="300" r="128" fill="#fdf0dd"/>
+    <rect x="200" y="414" width="220" height="34" rx="17" fill="#13100e" transform="rotate(-12 310 431)"/>
+    <rect x="200" y="414" width="220" height="34" rx="17" fill="#13100e" transform="rotate(12 310 431)"/>
+    <path d="M310 140 C344 186 372 222 380 262 C386 296 380 330 360 356 C344 378 326 388 310 388 C294 388 276 378 260 356 C240 330 234 296 240 262 C246 236 260 214 276 196 C280 222 290 238 302 246 C298 210 300 176 310 140 Z" fill="#f7ae4d"/>
+    <path d="M310 262 C328 286 340 306 340 330 A30 30 0 0 1 280 330 C280 306 292 286 310 262 Z" fill="#fff"/>
+    <circle cx="266" cy="150" r="7" fill="#f7ae4d"/>
+    <circle cx="352" cy="118" r="6" fill="#f7ae4d"/>
+    <circle cx="326" cy="84" r="5" fill="#f7ae4d"/>
+    <g fill="#63b1af">
+      <use href="#kid" transform="translate(150 432) scale(1.6)"/>
+      <use href="#kid" transform="translate(88 482) scale(1.8)"/>
+    </g>
+    <g fill="#8c82c1">
+      <use href="#kid" transform="translate(470 432) scale(1.6)"/>
+      <use href="#kid" transform="translate(532 482) scale(1.8)"/>
+    </g>
+  </g>
+</svg>

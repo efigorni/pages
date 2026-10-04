@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- המניפה (מקור: הערות שקף 11): דף שמקפלים פעם החוצה ופעם פנימה, ועיפרון לידו. הדף המקופל — ציור ייעודי -->
+  <g filter="url(#rough)">
+    <path d="M150 90 L380 90 L400 150 L170 150 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M170 150 L400 150 L380 210 L150 210 Z" fill="#eeecf7" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M150 210 L380 210 L400 270 L170 270 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M170 270 L400 270 L380 330 L150 330 Z" fill="#eeecf7" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M150 330 L380 330 L380 450 L150 450 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M178 366 L352 366 M178 396 L352 396 M178 426 L300 426" stroke="#847c74" stroke-width="5" stroke-linecap="round"/>
+    <use href="#pencil" x="400" y="300" width="180" height="180" color="#f7ae4d"/>
+  </g>
+</svg>

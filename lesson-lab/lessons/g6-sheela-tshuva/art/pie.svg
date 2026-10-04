@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- עוגת הביטחון (מקור: שקפים 19–20): 80% ביטחון, ופרוסה של 20% חששות שבולטת החוצה -->
+  <g filter="url(#rough)">
+    <path d="M296 284 L462.4 229.9 A175 175 0 1 1 296 109 Z" fill="#e7f1ec" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M307 269 L307 94 A175 175 0 0 1 473.4 214.9 Z" fill="#8c82c1"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" fill="#13100e">
+    <text x="262" y="330" font-size="44">ביטחון</text>
+    <text x="530" y="96" font-size="36">חששות</text>
+  </g>
+</svg>

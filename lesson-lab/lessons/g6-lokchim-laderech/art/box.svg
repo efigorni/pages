@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- ארגז פתוח (ציור ייעודי — אין ארגז בערכה): לב וספר מציצים מתוכו — מה שאורזים לדרך -->
+  <g filter="url(#rough)">
+    <polygon points="186,252 434,252 416,204 204,204" fill="#f7ae4d"/>
+    <polygon points="186,252 434,252 416,204 204,204" fill="#13100e" fill-opacity=".14"/>
+    <polygon points="150,284 470,284 434,252 186,252" fill="#f7ae4d"/>
+    <polygon points="150,284 470,284 434,252 186,252" fill="#13100e" fill-opacity=".42"/>
+    <use href="#heart" x="192" y="160" width="140" height="126" color="#e57373"/>
+    <use href="#book" x="306" y="176" width="146" height="113" color="#8c82c1"/>
+    <rect x="150" y="282" width="320" height="196" rx="6" fill="#f7ae4d"/>
+    <polygon points="150,284 186,252 134,192 92,232" fill="#f7ae4d"/>
+    <polygon points="150,284 186,252 134,192 92,232" fill="#13100e" fill-opacity=".12"/>
+    <polygon points="470,284 434,252 486,192 528,232" fill="#f7ae4d"/>
+    <polygon points="470,284 434,252 486,192 528,232" fill="#13100e" fill-opacity=".12"/>
+    <rect x="254" y="340" width="112" height="70" rx="6" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+  </g>
+</svg>

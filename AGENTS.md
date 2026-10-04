@@ -41,4 +41,5 @@ Each card in `index.html` must follow the aesthetic established by `gibush.html`
 | `waze.html` | `/pages/waze.html` | Class Waze - ניווט וניהול חכם בכיתה | חינוך והוראה |
 | `schedule.html` | `/pages/schedule.html` | מחולל לו״ז יומי מעוצב | חינוך והוראה |
 | `massa_z.html` | `/pages/massa_z.html` | הכ״חות שבדרך - רולטת מסע כיתה ז׳ | פעילויות וגיבוש |
+| `lesson-lab/lessons/index.html` | `/pages/lesson-lab/lessons/index.html` | הכ״חות שבדרך - 116 מערכי שיעור לכישורי חיים, כיתות ו׳–ט׳ (המערך + מצגת לכל שיעור) | חינוך והוראה |
 

@@ -1,0 +1,4418 @@
+{
+ "lessons": [
+  {
+   "slug": "g6-ptichat-shana-tashpaz",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 1,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "פתיחת שנה",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "רגע לפני שמתחילים ומסיימים",
+   "src_text": "sources/text/6/Ptichat_Shana_Tashpaz.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Ptichat_Shana_Tashpaz.pptx",
+   "slides": 31,
+   "words_slides": 533,
+   "words_notes": 440,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [],
+   "note": "שיעור פתיחה לשנה האחרונה ביסודי; מקבילה ל'נחיתה רכה' של ז'.",
+   "digest_ref": "sources/digests/6a.md:7",
+   "package": "pkg-g6-01"
+  },
+  {
+   "slug": "g6-mahu-osher",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 2,
+   "month": "ספטמבר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–נובמבר)",
+   "unit": "מקורות האושר",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "מהו אושר?",
+   "src_text": "sources/text/6/Mahu_Osher.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Mahu_Osher.pptx",
+   "slides": 25,
+   "words_slides": 1394,
+   "words_notes": 161,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:30",
+   "package": "pkg-g6-01"
+  },
+  {
+   "slug": "g6-mekorot-haosher",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 3,
+   "month": "ספטמבר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–נובמבר)",
+   "unit": "מקורות האושר",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "מוסיפים אושר לחיים",
+   "src_text": "sources/text/6/Mekorot_Haosher.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Mekorot_Haosher.pptx",
+   "slides": 19,
+   "words_slides": 705,
+   "words_notes": 154,
+   "sensitivity": "low",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:53",
+   "package": "pkg-g6-01"
+  },
+  {
+   "slug": "g6-hayozer-shel",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 4,
+   "month": "ספטמבר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–נובמבר)",
+   "unit": "מקורות האושר",
+   "unit_order": 3,
+   "unit_size": 3,
+   "title": "אני היוצר של חיי",
+   "src_text": "sources/text/6/Hayozer_Shel.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Hayozer_Shel.pptx",
+   "slides": 26,
+   "words_slides": 1204,
+   "words_notes": 363,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "שיעור 3/3 וכולל סיכום יחידה (ש' 22–24) — לשקול הפרדה.",
+   "digest_ref": "sources/digests/6a.md:76",
+   "package": "pkg-g6-01"
+  },
+  {
+   "slug": "g6-yaad-chalom",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 5,
+   "month": "ספטמבר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–נובמבר)",
+   "unit": "ניהול עצמי",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "כל יעד מתחיל בחלום",
+   "src_text": "sources/text/6/Yaad_Chalom.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Yaad_Chalom.pptx",
+   "slides": 26,
+   "words_slides": 979,
+   "words_notes": 243,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:99",
+   "package": "pkg-g6-02"
+  },
+  {
+   "slug": "g6-nihul-zman",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 6,
+   "month": "ספטמבר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–נובמבר)",
+   "unit": "ניהול עצמי",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "ניהול וארגון זמן למידה ופנאי בדרך להשגת יעדים",
+   "src_text": "sources/text/6/Nihul_Zman.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Nihul_Zman.pptx",
+   "slides": 28,
+   "words_slides": 1094,
+   "words_notes": 177,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside",
+    "title-fixed"
+   ],
+   "note": "תוקנה שגיאת הקלדה בכותרת האתר ('יהול').",
+   "digest_ref": "sources/digests/6a.md:123",
+   "package": "pkg-g6-02"
+  },
+  {
+   "slug": "g6-mezahim-kishurim",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 7,
+   "month": "ספטמבר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–נובמבר)",
+   "unit": "ייצוג עצמי",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "מזהים כישורים וקשיים ומשתפים",
+   "src_text": "sources/text/6/Mezahim_Kishurim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Mezahim_Kishurim.pptx",
+   "slides": 24,
+   "words_slides": 1240,
+   "words_notes": 264,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:147",
+   "package": "pkg-g6-03"
+  },
+  {
+   "slug": "g6-lomdim-leyazeg",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 8,
+   "month": "ספטמבר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–נובמבר)",
+   "unit": "ייצוג עצמי",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "לומדים לייצג את עצמנו",
+   "src_text": "sources/text/6/Lomdim_Leyazeg.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lomdim_Leyazeg.pptx",
+   "slides": 22,
+   "words_slides": 657,
+   "words_notes": 399,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:170",
+   "package": "pkg-g6-03"
+  },
+  {
+   "slug": "g6-model-patarti",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 9,
+   "month": "ספטמבר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–נובמבר)",
+   "unit": "ייצוג עצמי",
+   "unit_order": 3,
+   "unit_size": 3,
+   "title": "מודל פתרת\"י",
+   "src_text": "sources/text/6/ModelPatarti.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/ModelPatarti.pptx",
+   "slides": 26,
+   "words_slides": 1082,
+   "words_notes": 510,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:193",
+   "package": "pkg-g6-03"
+  },
+  {
+   "slug": "g6-megalim-achrayut-1",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 10,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "מגלים אחריות",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "לוקחים אחריות – עומדים לצד ולא מהצד",
+   "src_text": "sources/text/6/Megalim_Achrayut_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Megalim_Achrayut_1.pptx",
+   "slides": 29,
+   "words_slides": 1196,
+   "words_notes": 335,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [
+    "unit-derived"
+   ],
+   "note": "באתר בלי יחידה; במצגת 'מגלים אחריות – שיעור ראשון'. שאר שיעורי היחידה אינם באתר.",
+   "digest_ref": "sources/digests/6a.md:217",
+   "package": "pkg-g6-04"
+  },
+  {
+   "slug": "g6-lizmoach-pticha",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 11,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 1,
+   "unit_size": 9,
+   "title": "פתיחה ותיאום ציפיות",
+   "src_text": "sources/text/6/Lizmoach_Pticha.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_Pticha.pptx",
+   "slides": 21,
+   "words_slides": 2051,
+   "words_notes": 449,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:240",
+   "package": "pkg-g6-04"
+  },
+  {
+   "slug": "g6-lizmoach-hoze",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 12,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 2,
+   "unit_size": 9,
+   "title": "ניסוח חוזה כיתתי",
+   "src_text": "sources/text/6/Lizmoach_Hoze.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_Hoze.pptx",
+   "slides": 18,
+   "words_slides": 1064,
+   "words_notes": 358,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:262",
+   "package": "pkg-g6-04"
+  },
+  {
+   "slug": "g6-lizmoach-meida",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 13,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 3,
+   "unit_size": 9,
+   "title": "מקורות מידע מהימנים ולא מהימנים",
+   "src_text": "sources/text/6/Lizmoach_Meida.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_Meida.pptx",
+   "slides": 16,
+   "words_slides": 1500,
+   "words_notes": 0,
+   "sensitivity": "high",
+   "load": "balanced-heavy",
+   "flags": [
+    "numbering-inconsistent"
+   ],
+   "note": "שני תרשימי יחידה סותרים (9 מול 12 שיעורים); המטרות בש' 2 הועתקו משיעור 1.",
+   "digest_ref": "sources/digests/6a.md:284",
+   "package": "pkg-g6-04"
+  },
+  {
+   "slug": "g6-lizmoach-ani",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 14,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 4,
+   "unit_size": 9,
+   "title": "נעים להכיר, אני!",
+   "src_text": "sources/text/6/Lizmoach_Ani.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_Ani.pptx",
+   "slides": 12,
+   "words_slides": 940,
+   "words_notes": 0,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "double-period"
+   ],
+   "note": "המקור: בכיתות גדולות ייתכן שיעור כפול.",
+   "digest_ref": "sources/digests/6a.md:306",
+   "package": "pkg-g6-04"
+  },
+  {
+   "slug": "g6-lizmoach-banim-banot",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 15,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 5,
+   "unit_size": 9,
+   "title": "הבנים והבנות – אילו שינויים מביא עימו גיל ההתבגרות?",
+   "src_text": "sources/text/6/Lizmoach_BanimBanot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_BanimBanot.pptx",
+   "slides": 11,
+   "words_slides": 1072,
+   "words_notes": 0,
+   "sensitivity": "high",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:329",
+   "package": "pkg-g6-05"
+  },
+  {
+   "slug": "g6-lizmoach-kolhalev",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 16,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 6,
+   "unit_size": 9,
+   "title": "לגדול עם כל הלב – על שינויים רגשיים וחברתיים",
+   "src_text": "sources/text/6/Lizmoach_Kolhalev.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_Kolhalev.pptx",
+   "slides": 14,
+   "words_slides": 1174,
+   "words_notes": 8,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:351",
+   "package": "pkg-g6-05"
+  },
+  {
+   "slug": "g6-lizmoach-streotypim",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 17,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 7,
+   "unit_size": 9,
+   "title": "סטריאוטיפים מיניים",
+   "src_text": "sources/text/6/Lizmoach_Streotypim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_Streotypim.pptx",
+   "slides": 11,
+   "words_slides": 831,
+   "words_notes": 6,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:373",
+   "package": "pkg-g6-05"
+  },
+  {
+   "slug": "g6-lizmoach-lachaz-hevrati",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 18,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 8,
+   "unit_size": 9,
+   "title": "לחץ חברתי",
+   "src_text": "sources/text/6/Lizmoach_LachazHevrati.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_LachazHevrati.pptx",
+   "slides": 26,
+   "words_slides": 1262,
+   "words_notes": 44,
+   "sensitivity": "med",
+   "load": "very-heavy",
+   "flags": [
+    "assets-missing"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/6a.md:395",
+   "package": "pkg-g6-05"
+  },
+  {
+   "slug": "g6-lizmoach-sikum",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 19,
+   "month": "ינואר–פברואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר–פברואר)",
+   "unit": "התוכנית \"לצמוח ולגדול\"",
+   "unit_order": 9,
+   "unit_size": 9,
+   "title": "שיעור סיכום",
+   "src_text": "sources/text/6/Lizmoach_Sikum.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lizmoach_Sikum.pptx",
+   "slides": 64,
+   "words_slides": 1716,
+   "words_notes": 0,
+   "sensitivity": "low",
+   "load": "very-heavy",
+   "flags": [
+    "unit-summary-lesson",
+    "double-period",
+    "assets-missing"
+   ],
+   "note": "לפי התקציר כ־90 דק' (שני שיעורים); 64 שקפים, חידון בתמונות בלבד.",
+   "digest_ref": "sources/digests/6a.md:417",
+   "package": "pkg-g6-05"
+  },
+  {
+   "slug": "g6-hitmodedut-hachlatot",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 20,
+   "month": "מרץ",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (מרץ)",
+   "unit": "קבלת החלטות",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "התמודדות עם קבלת החלטה",
+   "src_text": "sources/text/6/Hitmodedut_Hachlatot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Hitmodedut_Hachlatot.pptx",
+   "slides": 19,
+   "words_slides": 819,
+   "words_notes": 245,
+   "sensitivity": "low",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6b.md:7",
+   "package": "pkg-g6-06"
+  },
+  {
+   "slug": "g6-signonot-hachlatot",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 21,
+   "month": "מרץ",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (מרץ)",
+   "unit": "קבלת החלטות",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "סגנונות בקבלת החלטות",
+   "src_text": "sources/text/6/Signonot_Hachlatot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Signonot_Hachlatot.pptx",
+   "slides": 23,
+   "words_slides": 1342,
+   "words_notes": 336,
+   "sensitivity": "low",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6b.md:27",
+   "package": "pkg-g6-06"
+  },
+  {
+   "slug": "g6-model-hachlatot",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 22,
+   "month": "מרץ",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (מרץ)",
+   "unit": "קבלת החלטות",
+   "unit_order": 3,
+   "unit_size": 3,
+   "title": "מודל קבלת החלטות",
+   "src_text": "sources/text/6/Model_Hachlatot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Model_Hachlatot.pptx",
+   "slides": 21,
+   "words_slides": 818,
+   "words_notes": 427,
+   "sensitivity": "low-med",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/6b.md:48",
+   "package": "pkg-g6-06"
+  },
+  {
+   "slug": "g6-hakoach-laavor",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 23,
+   "month": "אפריל",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (אפריל)",
+   "unit": "המעבר לחטיבת הביניים",
+   "unit_order": 1,
+   "unit_size": 6,
+   "title": "הכוח לעבור",
+   "src_text": "sources/text/6/Hakoach_Laavor.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Hakoach_Laavor.pptx",
+   "slides": 33,
+   "words_slides": 982,
+   "words_notes": 423,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "double-period"
+   ],
+   "note": "המקור מתיר לפצל לשני שיעורים (60–90 דק').",
+   "digest_ref": "sources/digests/6b.md:68",
+   "package": "pkg-g6-07"
+  },
+  {
+   "slug": "g6-haoganim",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 24,
+   "month": "אפריל",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (אפריל)",
+   "unit": "המעבר לחטיבת הביניים",
+   "unit_order": 2,
+   "unit_size": 6,
+   "title": "העוגנים שלי במעבר",
+   "src_text": "sources/text/6/Haoganim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Haoganim.pptx",
+   "slides": 23,
+   "words_slides": 754,
+   "words_notes": 330,
+   "sensitivity": "low-med",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6b.md:88",
+   "package": "pkg-g6-07"
+  },
+  {
+   "slug": "g6-adam-zover",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 25,
+   "month": "אפריל",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (אפריל)",
+   "unit": "המעבר לחטיבת הביניים",
+   "unit_order": 3,
+   "unit_size": 6,
+   "title": "אדם צובר זיכרונות",
+   "src_text": "sources/text/6/Adam_Zover.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Adam_Zover.pptx",
+   "slides": 21,
+   "words_slides": 721,
+   "words_notes": 392,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/6b.md:108",
+   "package": "pkg-g6-07"
+  },
+  {
+   "slug": "g6-lokchim-laderech",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 26,
+   "month": "אפריל",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (אפריל)",
+   "unit": "המעבר לחטיבת הביניים",
+   "unit_order": 4,
+   "unit_size": 6,
+   "title": "לוקחים לדרך ומטביעים חותם",
+   "src_text": "sources/text/6/Lokchim_Laderech.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Lokchim_Laderech.pptx",
+   "slides": 27,
+   "words_slides": 1039,
+   "words_notes": 377,
+   "sensitivity": "low-med",
+   "load": "heavy",
+   "flags": [
+    "double-period"
+   ],
+   "note": "המקור ממליץ לפצל לשניים (עד ש' 19 / הטבעת חותם).",
+   "digest_ref": "sources/digests/6b.md:128",
+   "package": "pkg-g6-08"
+  },
+  {
+   "slug": "g6-orzim-vemitkadmim",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 27,
+   "month": "אפריל",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (אפריל)",
+   "unit": "המעבר לחטיבת הביניים",
+   "unit_order": 5,
+   "unit_size": 6,
+   "title": "אורזים ומתקדמים",
+   "src_text": "sources/text/6/Orzim_Vemitkadmim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Orzim_Vemitkadmim.pptx",
+   "slides": 18,
+   "words_slides": 670,
+   "words_notes": 338,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "שיעור 5 מתוך 6 אבל כולל שש שאלות סיכום יחידה (זהות ל־Model_Hachlatot).",
+   "digest_ref": "sources/digests/6b.md:148",
+   "package": "pkg-g6-08"
+  },
+  {
+   "slug": "g6-sheela-tshuva",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 28,
+   "month": "אפריל",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (אפריל)",
+   "unit": "המעבר לחטיבת הביניים",
+   "unit_order": 6,
+   "unit_size": 6,
+   "title": "לכל שאלה תשובה – ידע הוא כוח",
+   "src_text": "sources/text/6/Sheela_Tshuva.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Sheela_Tshuva.pptx",
+   "slides": 36,
+   "words_slides": 1420,
+   "words_notes": 436,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "double-period"
+   ],
+   "note": "המקור: 'רצוי להקצות שיעור כפול'; תלוי ביועצת החטיבה כאורחת.",
+   "digest_ref": "sources/digests/6b.md:168",
+   "package": "pkg-g6-08"
+  },
+  {
+   "slug": "g6-hitbagrut-vani",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 29,
+   "month": "מאי",
+   "section": "קידום בריאות ומניעת שימוש בחומרים (מאי)",
+   "unit": "שואפים לבחור נכון",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "התבגרות ואני",
+   "src_text": "sources/text/6/Hitbagrut_Vani.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/samim/Yom_Lelo_Ishun_2024/Hitbagrut_Vani.pptx",
+   "slides": 18,
+   "words_slides": 1047,
+   "words_notes": 508,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [
+    "unit-derived",
+    "title-fixed",
+    "unit-incomplete"
+   ],
+   "note": "כותרת האתר: 'עברית'; השם מהמצגת ('שואפים לבחור נכון 1'). יתר היחידה הם חדרי לומדה ברכזת (ראו gaps).",
+   "digest_ref": "sources/digests/6b.md:208",
+   "package": "pkg-g6-06"
+  },
+  {
+   "slug": "g6-empathy-bamasachim",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 30,
+   "month": "יוני",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (יוני)",
+   "unit": "התנהלות מיטבית ברשת ומניעת פגיעה לקראת היציאה לחופשת הקיץ",
+   "unit_order": 1,
+   "unit_size": 4,
+   "title": "אמפתיה במסכים",
+   "src_text": "sources/text/6/Empathy_Bamasachim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Empathy_Bamasachim.pptx",
+   "slides": 26,
+   "words_slides": 1375,
+   "words_notes": 677,
+   "sensitivity": "low-med",
+   "load": "very-heavy",
+   "flags": [
+    "numbering-inconsistent"
+   ],
+   "note": "מסומן 'שיעור ראשון' כמו 'תראו אותי!'; מפת היחידה עם placeholders.",
+   "digest_ref": "sources/digests/6b.md:228",
+   "package": "pkg-g6-09"
+  },
+  {
+   "slug": "g6-tiru-oty",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 31,
+   "month": "יוני",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (יוני)",
+   "unit": "התנהלות מיטבית ברשת ומניעת פגיעה לקראת היציאה לחופשת הקיץ",
+   "unit_order": 2,
+   "unit_size": 4,
+   "title": "תראו אותי!",
+   "src_text": "sources/text/6/Tiru_Oty.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Tiru_Oty.pptx",
+   "slides": 26,
+   "words_slides": 1249,
+   "words_notes": 818,
+   "sensitivity": "med",
+   "load": "balanced-heavy",
+   "flags": [
+    "numbering-inconsistent"
+   ],
+   "note": "מסומן 'שיעור ראשון' כמו 'אמפתיה במסכים'.",
+   "digest_ref": "sources/digests/6b.md:248",
+   "package": "pkg-g6-09"
+  },
+  {
+   "slug": "g6-reshet-haverim",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 32,
+   "month": "יוני",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (יוני)",
+   "unit": "התנהלות מיטבית ברשת ומניעת פגיעה לקראת היציאה לחופשת הקיץ",
+   "unit_order": 3,
+   "unit_size": 4,
+   "title": "רשת של חברים",
+   "src_text": "sources/text/6/Reshet_Haverim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Reshet_Haverim.pptx",
+   "slides": 35,
+   "words_slides": 886,
+   "words_notes": 1292,
+   "sensitivity": "low-med",
+   "load": "heavy",
+   "flags": [
+    "assets-missing"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/6b.md:268",
+   "package": "pkg-g6-09"
+  },
+  {
+   "slug": "g6-maavarim-bareshet",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 33,
+   "month": "יוני",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (יוני)",
+   "unit": "התנהלות מיטבית ברשת ומניעת פגיעה לקראת היציאה לחופשת הקיץ",
+   "unit_order": 4,
+   "unit_size": 4,
+   "title": "מצטרפים לקבוצה?",
+   "src_text": "sources/text/6/Maavarim_Bareshet.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Maavarim_Bareshet.pptx",
+   "slides": 36,
+   "words_slides": 1135,
+   "words_notes": 1424,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [
+    "assets-missing"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/6b.md:287",
+   "package": "pkg-g6-09"
+  },
+  {
+   "slug": "g6-sium-shana",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 34,
+   "month": "יוני",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (יוני)",
+   "unit": "סיום וסיכום שנה",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "המסע שלי השנה",
+   "src_text": "sources/text/6/Sium_Shana.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Sium_Shana.pptx",
+   "slides": 24,
+   "words_slides": 753,
+   "words_notes": 317,
+   "sensitivity": "low",
+   "load": "balanced",
+   "flags": [
+    "alt-track",
+    "unit-derived",
+    "assets-missing"
+   ],
+   "note": "באתר בלי יחידה; חלופה ל'מתבוננים אחורה וקדימה' (אותו תפקיד, תוכן שונה).",
+   "digest_ref": "sources/digests/6b.md:307",
+   "package": "pkg-g6-10"
+  },
+  {
+   "slug": "g6-siyum-shana",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 35,
+   "month": "יוני",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (יוני)",
+   "unit": "סיום וסיכום שנה",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "מתבוננים אחורה וקדימה",
+   "src_text": "sources/text/6/Siyum_Shana.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Siyum_Shana.pptx",
+   "slides": 15,
+   "words_slides": 690,
+   "words_notes": 128,
+   "sensitivity": "low",
+   "load": "light",
+   "flags": [
+    "alt-track"
+   ],
+   "note": "חלופה ל'המסע שלי השנה' (אותו תפקיד, תוכן שונה).",
+   "digest_ref": "sources/digests/6b.md:327",
+   "package": "pkg-g6-10"
+  },
+  {
+   "slug": "g6-yarid-simanim-lashana-achadasha",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 36,
+   "month": "ספטמבר",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "ראש השנה",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "\"יריד סימנים לשנה החדשה\"",
+   "src_text": "sources/text/6/Yarid_Simanim_Lashana_Achadasha.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Yarid_Simanim_Lashana_Achadasha.pptx",
+   "slides": 25,
+   "words_slides": 1026,
+   "words_notes": 609,
+   "sensitivity": "low-med",
+   "load": "heavy",
+   "flags": [
+    "lower-grade-source"
+   ],
+   "note": "נכתב לשכבות ה'–ו' (תיקיית 5Grade).",
+   "digest_ref": "sources/digests/6b.md:346",
+   "package": "pkg-g6-11"
+  },
+  {
+   "slug": "g6-marbim-besimcha",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 37,
+   "month": "פברואר–מרץ",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פורים",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "מרבים בשמחה",
+   "src_text": "sources/text/6/Marbim_Besimcha.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Marbim_Besimcha.pptx",
+   "slides": 29,
+   "words_slides": 1173,
+   "words_notes": 586,
+   "sensitivity": "low",
+   "load": "balanced-heavy",
+   "flags": [
+    "lower-grade-source",
+    "assets-missing"
+   ],
+   "note": "נכתב לכיתות ד'–ו'.",
+   "digest_ref": "sources/digests/6b.md:364",
+   "package": "pkg-g6-11"
+  },
+  {
+   "slug": "g6-hameroz-memitzraim",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 38,
+   "month": "מרץ–אפריל",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פסח",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "המירוץ ממצרים",
+   "src_text": "sources/text/6/Mamlachti_Hameroz_Memitzraim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/cherum/Haravot_Barzel/Talmidim/Maagarei_Koach/Mamlachti_Hameroz_Memitzraim.pptx",
+   "slides": 9,
+   "words_slides": 315,
+   "words_notes": 110,
+   "sensitivity": "med",
+   "load": "light",
+   "flags": [
+    "lower-grade-source"
+   ],
+   "note": "מסדרת החירום 'מאגרי כוח' (חרבות ברזל), שכבות ה'–ו'; 9 שקפים, בלי סגירה.",
+   "digest_ref": "sources/digests/6b.md:384",
+   "package": "pkg-g6-11"
+  },
+  {
+   "slug": "g6-beikvot-ziurav",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 39,
+   "month": "אפריל–מאי",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "יום הזיכרון לשואה ולגבורה",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "ציורים ליום השואה – בעקבות ציוריו של פאול קור",
+   "src_text": "sources/text/6/Beikvot_Ziurav.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Beikvot_Ziurav.pptx",
+   "slides": 32,
+   "words_slides": 1386,
+   "words_notes": 644,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [
+    "lower-grade-source"
+   ],
+   "note": "נכתב לשכבות ד'–ו' (תיקיית 5Grade).",
+   "digest_ref": "sources/digests/6b.md:403",
+   "package": "pkg-g6-12"
+  },
+  {
+   "slug": "g6-yom-zikaron",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 40,
+   "month": "אפריל–מאי",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "\"קופסת צבעים\"",
+   "src_text": "sources/text/6/Yom_Zikaron.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Yom_Zikaron.pptx",
+   "slides": 19,
+   "words_slides": 831,
+   "words_notes": 440,
+   "sensitivity": "high",
+   "load": "balanced",
+   "flags": [
+    "lower-grade-source"
+   ],
+   "note": "נכתב לשכבות ד'–ו' (תיקיית 4Grade); אינו זהה ל'זיכרון ועצמאות' של ז'–ט'.",
+   "digest_ref": "sources/digests/6b.md:423",
+   "package": "pkg-g6-12"
+  },
+  {
+   "slug": "g6-kita-echpatit-medura-echpatit",
+   "grade": 6,
+   "grades_served": [
+    6
+   ],
+   "seq": 41,
+   "month": "מאי",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת ל\"ג בעומר",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "כיתה אכפתית מדורה אכפתית",
+   "src_text": "sources/text/6/Kita_Echpatit_Medura_Echpatit.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Kita_Echpatit_Medura_Echpatit.pptx",
+   "slides": 32,
+   "words_slides": 1213,
+   "words_notes": 543,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "lower-grade-source"
+   ],
+   "note": "נכתב לכיתה ד' (ש' 1, תיקיית 4Grade).",
+   "digest_ref": "sources/digests/6b.md:443",
+   "package": "pkg-g6-12"
+  },
+  {
+   "slug": "g7-hatchalot-1",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 1,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "פתיחת שנה – ספטמבר",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "כל ההתחלות",
+   "src_text": "sources/text/7/Hatchalot_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Hatchalot_1.pptx",
+   "slides": 17,
+   "words_slides": 727,
+   "words_notes": 194,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "alt-track"
+   ],
+   "note": "'פתיחת שנה – ספטמבר' ו'חיבורים' חולקות טקסט רקע זהה — כנראה מסלולים חלופיים לספטמבר.",
+   "digest_ref": "sources/digests/7a.md:8",
+   "package": "pkg-g7-01"
+  },
+  {
+   "slug": "g7-hatchalot-hoze-2",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 2,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "פתיחת שנה – ספטמבר",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "חוזה כיתתי",
+   "src_text": "sources/text/7/Hatchalot_Hoze2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Hatchalot_Hoze2.pptx",
+   "slides": 20,
+   "words_slides": 670,
+   "words_notes": 355,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "alt-track"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/7a.md:31",
+   "package": "pkg-g7-01"
+  },
+  {
+   "slug": "g7-hatchalot-3",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 3,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "פתיחת שנה – ספטמבר",
+   "unit_order": 3,
+   "unit_size": 3,
+   "title": "לומדים מהעבר ומתבוננים קדימה",
+   "src_text": "sources/text/7/Hatchalot_3.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Hatchalot_3.pptx",
+   "slides": 23,
+   "words_slides": 725,
+   "words_notes": 546,
+   "sensitivity": "med",
+   "load": "very-heavy",
+   "flags": [
+    "alt-track",
+    "numbering-inconsistent"
+   ],
+   "note": "ש' 1 מציין בטעות 'שיעור שני'.",
+   "digest_ref": "sources/digests/7a.md:55",
+   "package": "pkg-g7-01"
+  },
+  {
+   "slug": "g7-ptichat-shana-1",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 4,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "חיבורים",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "אני על ציר הזמן",
+   "src_text": "sources/text/7/Ptichat_Shana_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Ptichat_Shana_1.pptx",
+   "slides": 25,
+   "words_slides": 1041,
+   "words_notes": 542,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [
+    "alt-track"
+   ],
+   "note": "מסלול 'חיבורים' (חלופה ל'פתיחת שנה – ספטמבר'); ציר זמן עם מלחמה וחטופים — רגיש ותלוי זמן.",
+   "digest_ref": "sources/digests/7a.md:78",
+   "package": "pkg-g7-02"
+  },
+  {
+   "slug": "g7-ptichat-shana-2",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 5,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "חיבורים",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "מחוברים כאן ועכשיו",
+   "src_text": "sources/text/7/Ptichat_Shana_2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Ptichat_Shana_2.pptx",
+   "slides": 25,
+   "words_slides": 569,
+   "words_notes": 167,
+   "sensitivity": "low",
+   "load": "balanced-heavy",
+   "flags": [
+    "alt-track",
+    "assets-missing"
+   ],
+   "note": "כרטיסי המשחק (ש' 16–25) בתמונות בלבד.",
+   "digest_ref": "sources/digests/7a.md:100",
+   "package": "pkg-g7-02"
+  },
+  {
+   "slug": "g7-makom-baolam",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 6,
+   "month": "אוקטובר",
+   "section": "חברות, סובלנות ומניעת אלימות (אוקטובר)",
+   "unit": "למצוא מקום",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "מקום בעולם",
+   "src_text": "sources/text/7/Makom_Baolam.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Makom_Baolam.pptx",
+   "slides": 21,
+   "words_slides": 796,
+   "words_notes": 253,
+   "sensitivity": "med-high",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7a.md:122",
+   "package": "pkg-g7-03"
+  },
+  {
+   "slug": "g7-sipur-bemenifa",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 7,
+   "month": "אוקטובר",
+   "section": "חברות, סובלנות ומניעת אלימות (אוקטובר)",
+   "unit": "למצוא מקום",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "סיפור במניפה",
+   "src_text": "sources/text/7/Sipur_Bemenifa.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Sipur_Bemenifa.pptx",
+   "slides": 22,
+   "words_slides": 761,
+   "words_notes": 304,
+   "sensitivity": "med-high",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/7a.md:144",
+   "package": "pkg-g7-03"
+  },
+  {
+   "slug": "g7-lemida-sheli-1",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 8,
+   "month": "נובמבר",
+   "section": "תהליכי למידה (נובמבר)",
+   "unit": "מסע הלמידה שלי",
+   "unit_order": 1,
+   "unit_size": 4,
+   "title": "הלמידה שלי",
+   "src_text": "sources/text/7/Lemida_Sheli1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Lemida_Sheli1.pptx",
+   "slides": 16,
+   "words_slides": 669,
+   "words_notes": 208,
+   "sensitivity": "low-med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7a.md:167",
+   "package": "pkg-g7-04"
+  },
+  {
+   "slug": "g7-tamrurim-lemida-2",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 9,
+   "month": "נובמבר",
+   "section": "תהליכי למידה (נובמבר)",
+   "unit": "מסע הלמידה שלי",
+   "unit_order": 2,
+   "unit_size": 4,
+   "title": "תמרורים בדרך ללמידה",
+   "src_text": "sources/text/7/Tamrurim_Lemida2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Tamrurim_Lemida2.pptx",
+   "slides": 17,
+   "words_slides": 808,
+   "words_notes": 191,
+   "sensitivity": "low-med",
+   "load": "balanced",
+   "flags": [
+    "assets-missing"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/7a.md:190",
+   "package": "pkg-g7-04"
+  },
+  {
+   "slug": "g7-etgarim-balemida-3",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 10,
+   "month": "נובמבר",
+   "section": "תהליכי למידה (נובמבר)",
+   "unit": "מסע הלמידה שלי",
+   "unit_order": 3,
+   "unit_size": 4,
+   "title": "מתמודדים עם אתגרים בלמידה",
+   "src_text": "sources/text/7/Etgarim_Balemida3.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Etgarim_Balemida3.pptx",
+   "slides": 15,
+   "words_slides": 575,
+   "words_notes": 346,
+   "sensitivity": "low-med",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7a.md:213",
+   "package": "pkg-g7-04"
+  },
+  {
+   "slug": "g7-ktav-hida-4",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 11,
+   "month": "נובמבר",
+   "section": "תהליכי למידה (נובמבר)",
+   "unit": "מסע הלמידה שלי",
+   "unit_order": 4,
+   "unit_size": 4,
+   "title": "כתב חידה",
+   "src_text": "sources/text/7/Ktav_Hida4.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Ktav_Hida4.pptx",
+   "slides": 17,
+   "words_slides": 477,
+   "words_notes": 468,
+   "sensitivity": "low",
+   "load": "light",
+   "flags": [
+    "assets-missing"
+   ],
+   "note": "טקסט החידה פגום בחילוץ — ליצור מחדש.",
+   "digest_ref": "sources/digests/7a.md:236",
+   "package": "pkg-g7-04"
+  },
+  {
+   "slug": "g7-hashpaha-hevratit-1",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 12,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים בבריאות",
+   "unit_order": 1,
+   "unit_size": 4,
+   "title": "מתבגרים ומתמודדים עם השפעה חברתית",
+   "src_text": "sources/text/7/HashpahaHevratit1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/HashpahaHevratit1.pptx",
+   "slides": 23,
+   "words_slides": 1184,
+   "words_notes": 1095,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7b.md:9",
+   "package": "pkg-g7-05"
+  },
+  {
+   "slug": "g7-matchilim-leashen-2",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 13,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים בבריאות",
+   "unit_order": 2,
+   "unit_size": 4,
+   "title": "מתחילים לעשן?",
+   "src_text": "sources/text/7/MatchilimLeashen2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/MatchilimLeashen2.pptx",
+   "slides": 29,
+   "words_slides": 738,
+   "words_notes": 449,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7b.md:35",
+   "package": "pkg-g7-05"
+  },
+  {
+   "slug": "g7-tabak-vemuzarav-3",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 14,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים בבריאות",
+   "unit_order": 3,
+   "unit_size": 4,
+   "title": "טבק ומוצריו",
+   "src_text": "sources/text/7/TabakVemuzarav3.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/TabakVemuzarav3.pptx",
+   "slides": 37,
+   "words_slides": 1670,
+   "words_notes": 1304,
+   "sensitivity": "low",
+   "load": "very-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7b.md:61",
+   "package": "pkg-g7-05"
+  },
+  {
+   "slug": "g7-alkohol-4",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 15,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים בבריאות",
+   "unit_order": 4,
+   "unit_size": 4,
+   "title": "אלכוהול לא מדבר אליי",
+   "src_text": "sources/text/7/Alkohol4.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Alkohol4.pptx",
+   "slides": 28,
+   "words_slides": 792,
+   "words_notes": 701,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside",
+    "double-period"
+   ],
+   "note": "כולל סיכום יחידה; לפי התקציר בפועל שני שיעורים.",
+   "digest_ref": "sources/digests/7b.md:87",
+   "package": "pkg-g7-05"
+  },
+  {
+   "slug": "g7-gizanut-1",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 16,
+   "month": "ינואר",
+   "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+   "unit": "סובלנות ומניעת גזענות",
+   "unit_order": 1,
+   "unit_size": 5,
+   "title": "מה הסיפור שלי?",
+   "src_text": "sources/text/7/Gizanut1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Gizanut1.pptx",
+   "slides": 18,
+   "words_slides": 660,
+   "words_notes": 479,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7b.md:112",
+   "package": "pkg-g7-06"
+  },
+  {
+   "slug": "g7-gizanut-streotipim-2",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 17,
+   "month": "ינואר",
+   "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+   "unit": "סובלנות ומניעת גזענות",
+   "unit_order": 2,
+   "unit_size": 5,
+   "title": "סטריאוטיפים ודעות קדומות",
+   "src_text": "sources/text/7/Gizanut_Streotipim2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Gizanut_Streotipim2.pptx",
+   "slides": 27,
+   "words_slides": 789,
+   "words_notes": 572,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7b.md:138",
+   "package": "pkg-g7-06"
+  },
+  {
+   "slug": "g7-gizanut-rov-vemiut-3",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 18,
+   "month": "ינואר",
+   "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+   "unit": "סובלנות ומניעת גזענות",
+   "unit_order": 3,
+   "unit_size": 5,
+   "title": "יחסי רוב ומיעוט",
+   "src_text": "sources/text/7/Gizanut_RovVemiut3.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Gizanut_RovVemiut3.pptx",
+   "slides": 20,
+   "words_slides": 838,
+   "words_notes": 495,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7b.md:164",
+   "package": "pkg-g7-06"
+  },
+  {
+   "slug": "g7-gizanut-ani-veacher-4",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 19,
+   "month": "ינואר",
+   "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+   "unit": "סובלנות ומניעת גזענות",
+   "unit_order": 4,
+   "unit_size": 5,
+   "title": "האחר ואני",
+   "src_text": "sources/text/7/Gizanut_AniVeacher4.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Gizanut_AniVeacher4.pptx",
+   "slides": 23,
+   "words_slides": 908,
+   "words_notes": 193,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7b.md:190",
+   "package": "pkg-g7-06"
+  },
+  {
+   "slug": "g7-gizanut-siyum-5",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 20,
+   "month": "ינואר",
+   "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+   "unit": "סובלנות ומניעת גזענות",
+   "unit_order": 5,
+   "unit_size": 5,
+   "title": "סיום יחידה",
+   "src_text": "sources/text/7/Gizanut_Siyum5.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Gizanut_Siyum5.pptx",
+   "slides": 6,
+   "words_slides": 275,
+   "words_notes": 116,
+   "sensitivity": "low",
+   "load": "balanced",
+   "flags": [
+    "unit-summary-lesson"
+   ],
+   "note": "שיעור סיכום ויישום של היחידה (6 שקפים).",
+   "digest_ref": "sources/digests/7b.md:216",
+   "package": "pkg-g7-06"
+  },
+  {
+   "slug": "g7-golshim-leshinuy",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 21,
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+   "unit": "נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "גולשים לשינוי",
+   "src_text": "sources/text/7/Golshim_Leshinuy.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Golshim_Leshinuy.pptx",
+   "slides": 39,
+   "words_slides": 3043,
+   "words_notes": 997,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-incomplete",
+    "assets-missing"
+   ],
+   "note": "מוצג גם כפתיחת מחצית; 3,043 מילים בשקפים. שיעור 4 ביחידה ('יפים על אמת ברשת') אינו באתר.",
+   "digest_ref": "sources/digests/7c.md:11",
+   "package": "pkg-g7-07"
+  },
+  {
+   "slug": "g7-eifo-ani-vehagvul-sheli-bamasachim",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 22,
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+   "unit": "נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "איפה אני ומה הגבול שלי?",
+   "src_text": "sources/text/7/Eifo_Ani_Vehagvul_Sheli_Bamasachim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Eifo_Ani_Vehagvul_Sheli_Bamasachim.pptx",
+   "slides": 23,
+   "words_slides": 1179,
+   "words_notes": 719,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "unit-incomplete"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/7c.md:38",
+   "package": "pkg-g7-07"
+  },
+  {
+   "slug": "g7-tofsim-kivun-bareshet",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 23,
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+   "unit": "נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת",
+   "unit_order": 3,
+   "unit_size": 3,
+   "title": "תופסים כיוון ברשת",
+   "src_text": "sources/text/7/Tofsim_Kivun_Bareshet.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Tofsim_Kivun_Bareshet.pptx",
+   "slides": 20,
+   "words_slides": 649,
+   "words_notes": 1066,
+   "sensitivity": "med",
+   "load": "balanced-heavy",
+   "flags": [
+    "unit-incomplete",
+    "assets-missing"
+   ],
+   "note": "הגירוי המרכזי (פוסט ותגובות) בתמונה בלבד.",
+   "digest_ref": "sources/digests/7c.md:65",
+   "package": "pkg-g7-07"
+  },
+  {
+   "slug": "g7-bead-azmi-aharacha-azmit",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 24,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מבט אל עצמי",
+   "unit_order": 1,
+   "unit_size": 5,
+   "title": "בעד עצמי - הערכה עצמית חיובית",
+   "src_text": "sources/text/7/Bead_Azmi_Aharacha_Azmit.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Bead_Azmi_Aharacha_Azmit.pptm",
+   "slides": 26,
+   "words_slides": 859,
+   "words_notes": 1315,
+   "sensitivity": "med",
+   "load": "very-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7c.md:91",
+   "package": "pkg-g7-08"
+  },
+  {
+   "slug": "g7-hitbagrut-banot",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 25,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מבט אל עצמי",
+   "unit_order": 2,
+   "unit_size": 5,
+   "title": "בנות",
+   "src_text": "sources/text/7/Hitbagrut_Banot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Hitbagrut_Banot.pptx",
+   "slides": 24,
+   "words_slides": 878,
+   "words_notes": 975,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [
+    "gender-split-pair"
+   ],
+   "note": "שיעור מופרד לפי מין; גרסת מראה של 'בנים' באותה משבצת (שיעור 2).",
+   "digest_ref": "sources/digests/7c.md:119",
+   "package": "pkg-g7-08"
+  },
+  {
+   "slug": "g7-hitbagrut-banim",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 26,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מבט אל עצמי",
+   "unit_order": 2,
+   "unit_size": 5,
+   "title": "בנים",
+   "src_text": "sources/text/7/Hitbagrut_Banim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Hitbagrut_Banim.pptx",
+   "slides": 22,
+   "words_slides": 870,
+   "words_notes": 978,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [
+    "gender-split-pair"
+   ],
+   "note": "שיעור מופרד לפי מין; גרסת מראה של 'בנות' באותה משבצת (שיעור 2).",
+   "digest_ref": "sources/digests/7c.md:145",
+   "package": "pkg-g7-08"
+  },
+  {
+   "slug": "g7-mudaut-migdarit",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 27,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מבט אל עצמי",
+   "unit_order": 3,
+   "unit_size": 5,
+   "title": "מגדר ופיתוח מודעות מגדרית",
+   "src_text": "sources/text/7/Mudaut_Migdarit.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Mudaut_Migdarit.pptx",
+   "slides": 23,
+   "words_slides": 888,
+   "words_notes": 968,
+   "sensitivity": "med-high",
+   "load": "heavy",
+   "flags": [
+    "assets-missing"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/7c.md:170",
+   "package": "pkg-g7-09"
+  },
+  {
+   "slug": "g7-miniyut-vepratiyut-bareshet-4",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 28,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מבט אל עצמי",
+   "unit_order": 4,
+   "unit_size": 5,
+   "title": "מיניות ופרטיות ברשת",
+   "src_text": "sources/text/7/Miniyut_Vepratiyut_Bareshet_4.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Miniyut_Vepratiyut_Bareshet_4.pptx",
+   "slides": 17,
+   "words_slides": 631,
+   "words_notes": 966,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7c.md:197",
+   "package": "pkg-g7-09"
+  },
+  {
+   "slug": "g7-omdim-lezad-6",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 29,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מבט אל עצמי",
+   "unit_order": 5,
+   "unit_size": 5,
+   "title": "עומדים לצד ולא מהצד – חברים כשומרי סף באירועי פגיעה מינית",
+   "src_text": "sources/text/7/Omdim_Lezad_6.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Omdim_Lezad_6.pptx",
+   "slides": 50,
+   "words_slides": 2308,
+   "words_notes": 158,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [
+    "unit-summary-inside",
+    "double-period",
+    "assets-missing"
+   ],
+   "note": "שני מפגשים (חלק א' + חלק ב') וסיכום יחידה; 50 שקפים; קישורי וידאו חסרים.",
+   "digest_ref": "sources/digests/7c.md:223",
+   "package": "pkg-g7-09"
+  },
+  {
+   "slug": "g7-sulam-mishpachti",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 30,
+   "month": "מרץ",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית (מרץ)",
+   "unit": "ערכים במשפחה",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "סולם ערכים משפחתי",
+   "src_text": "sources/text/7/Sulam_Mishpachti.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Sulam_Mishpachti.pptx",
+   "slides": 25,
+   "words_slides": 877,
+   "words_notes": 454,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/7c.md:251",
+   "package": "pkg-g7-10"
+  },
+  {
+   "slug": "g7-mishpacha-hefez-lev",
+   "grade": 7,
+   "grades_served": [
+    7
+   ],
+   "seq": 31,
+   "month": "מרץ",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית (מרץ)",
+   "unit": "ערכים במשפחה",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "חפץ, לב",
+   "src_text": "sources/text/7/Mishpacha_HefezLev.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Mishpacha_HefezLev.pptx",
+   "slides": 21,
+   "words_slides": 683,
+   "words_notes": 425,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/7c.md:278",
+   "package": "pkg-g7-10"
+  },
+  {
+   "slug": "g7-mesibat-sium",
+   "grade": 7,
+   "grades_served": [
+    7,
+    8
+   ],
+   "seq": 32,
+   "month": "יוני",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (יוני)",
+   "unit": "סיום וסיכום שנה",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "מסיבת סיום: התבוננות רפלקטיבית על השנה שהייתה",
+   "src_text": "sources/text/7/Mesibat_Sium.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Mesibat_Sium.pptx",
+   "slides": 24,
+   "words_slides": 738,
+   "words_notes": 161,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "near-dup-merged"
+   ],
+   "note": "כמעט זהה לגרסת ח' (MesibatSiyum, חפיפה 0.90): נבנה פעם אחת לז'–ח'. בגרסת ח' יש בנוסף כרטיסיות להדפסה לשקיות והערת 'מסכמים שיעור'.",
+   "digest_ref": "sources/digests/7c.md:304",
+   "digest_ref_more": [
+    "sources/digests/8.md:273"
+   ],
+   "listings": [
+    {
+     "grade": 7,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (יוני)",
+     "unit": "סיום וסיכום שנה",
+     "title": "מסיבת סיום: התבוננות רפלקטיבית על השנה שהייתה",
+     "src_text": "sources/text/7/Mesibat_Sium.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Mesibat_Sium.pptx"
+    },
+    {
+     "grade": 8,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (יוני)",
+     "unit": "סיכום שנה",
+     "title": "מסיבת סיום - התבוננות פנימית על השנה שהיתה",
+     "src_text": "sources/text/8/MesibatSiyum.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/MesibatSiyum.pptx"
+    }
+   ],
+   "package": "pkg-g7-10"
+  },
+  {
+   "slug": "g7-shana-tova",
+   "grade": 7,
+   "grades_served": [
+    7,
+    8,
+    9
+   ],
+   "seq": 33,
+   "month": "ספטמבר",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת ראש השנה",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "סימנים לראש השנה",
+   "src_text": "sources/text/7/Shana_Tova.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Shana_Tova.pptx",
+   "slides": 42,
+   "words_slides": 1070,
+   "words_notes": 695,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "shared-deck"
+   ],
+   "note": "אותו קובץ (תיקיית 7Grade, 'שכבות ז–ט') ברשימות ז', ח' וט'.",
+   "digest_ref": "sources/digests/7c.md:332",
+   "digest_ref_more": [
+    "sources/digests/8.md:293",
+    "sources/digests/9b.md:269"
+   ],
+   "listings": [
+    {
+     "grade": 7,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת ראש השנה",
+     "title": "סימנים לראש השנה",
+     "src_text": "sources/text/7/Shana_Tova.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Shana_Tova.pptx"
+    },
+    {
+     "grade": 8,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת ראש השנה",
+     "title": "סימנים לראש השנה",
+     "src_text": "sources/text/8/Shana_Tova.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Shana_Tova.pptx"
+    },
+    {
+     "grade": 9,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת ראש השנה",
+     "title": "סימנים לראש השנה",
+     "src_text": "sources/text/9/Shana_Tova.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Shana_Tova.pptx"
+    }
+   ],
+   "package": "pkg-g7-11"
+  },
+  {
+   "slug": "g7-mitchapsim-veshomrim-al-azmenu",
+   "grade": 7,
+   "grades_served": [
+    7,
+    8
+   ],
+   "seq": 34,
+   "month": "פברואר–מרץ",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פורים",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "מתחפשים, מבלים ושומרים על עצמנו בפורים",
+   "src_text": "sources/text/7/Mitchapsim_Veshomrim_Al_Azmenu.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Mitchapsim_Veshomrim_Al_Azmenu.pptx",
+   "slides": 16,
+   "words_slides": 819,
+   "words_notes": 490,
+   "sensitivity": "med",
+   "load": "balanced-heavy",
+   "flags": [
+    "shared-deck"
+   ],
+   "note": "אותו קובץ ברשימות ז' וח' (מסומן 'לכיתות חט\"ב'); בט' הפורים מפנה לשיעורי האושר.",
+   "digest_ref": "sources/digests/7c.md:360",
+   "digest_ref_more": [
+    "sources/digests/8.md:314"
+   ],
+   "listings": [
+    {
+     "grade": 7,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת פורים",
+     "title": "מתחפשים, מבלים ושומרים על עצמנו בפורים",
+     "src_text": "sources/text/7/Mitchapsim_Veshomrim_Al_Azmenu.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Mitchapsim_Veshomrim_Al_Azmenu.pptx"
+    },
+    {
+     "grade": 8,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת פורים",
+     "title": "מתחפשים, מבלים ושומרים על עצמנו בפורים",
+     "src_text": "sources/text/8/Mitchapsim_Veshomrim_Al_Azmenu.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Mitchapsim_Veshomrim_Al_Azmenu.pptx"
+    }
+   ],
+   "package": "pkg-g7-11"
+  },
+  {
+   "slug": "g7-yom-zikaron",
+   "grade": 7,
+   "grades_served": [
+    7,
+    8,
+    9
+   ],
+   "seq": 35,
+   "month": "אפריל–מאי",
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "זיכרון ועצמאות",
+   "src_text": "sources/text/7/Yom_Zikaron.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Yom_Zikaron.pptx",
+   "slides": 22,
+   "words_slides": 1181,
+   "words_notes": 475,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [
+    "shared-deck"
+   ],
+   "note": "אותו קובץ (תיקיית 7Grade, 'שכבות ז–ט') ברשימות ז', ח' וט'.",
+   "digest_ref": "sources/digests/7c.md:387",
+   "digest_ref_more": [
+    "sources/digests/8.md:334",
+    "sources/digests/9b.md:292"
+   ],
+   "listings": [
+    {
+     "grade": 7,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+     "title": "זיכרון ועצמאות",
+     "src_text": "sources/text/7/Yom_Zikaron.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Yom_Zikaron.pptx"
+    },
+    {
+     "grade": 8,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+     "title": "זיכרון ועצמאות",
+     "src_text": "sources/text/8/Yom_Zikaron.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Yom_Zikaron.pptx"
+    },
+    {
+     "grade": 9,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+     "title": "זיכרון ועצמאות",
+     "src_text": "sources/text/9/Yom_Zikaron.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/7Grade/Mamlachti/Yom_Zikaron.pptx"
+    }
+   ],
+   "package": "pkg-g7-11"
+  },
+  {
+   "slug": "g8-yachad",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 1,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "פתיחת שנה",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "להמשיך יחד",
+   "src_text": "sources/text/8/Yachad.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Yachad.pptx",
+   "slides": 24,
+   "words_slides": 932,
+   "words_notes": 336,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/8.md:7",
+   "package": "pkg-g8-01"
+  },
+  {
+   "slug": "g8-mashmaut-dvarim-hashuvim",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 2,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "משמעות – מייצרים ערך ומשמעות",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "משמעות – הדברים החשובים באמת",
+   "src_text": "sources/text/8/Mashmaut_DvarimHashuvim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Mashmaut_DvarimHashuvim.pptx",
+   "slides": 26,
+   "words_slides": 1274,
+   "words_notes": 252,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/8.md:27",
+   "package": "pkg-g8-01"
+  },
+  {
+   "slug": "g8-mashmaut-erech",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 3,
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "משמעות – מייצרים ערך ומשמעות",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "משמעות – מייצרים ערך ומשמעות",
+   "src_text": "sources/text/8/Mashmaut_Erech.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Mashmaut_Erech.pptx",
+   "slides": 21,
+   "words_slides": 688,
+   "words_notes": 207,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/8.md:47",
+   "package": "pkg-g8-01"
+  },
+  {
+   "slug": "g8-lachshov-tov-pil-veyated-1",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 4,
+   "month": "נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום – התמודדות ממוקדת חשיבה (נובמבר)",
+   "unit": "לחשוב טוב",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "הפיל והיתד – שיעור 1",
+   "src_text": "sources/text/8/Lachshov_Tov_Pil_Veyated_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Lachshov_Tov_Pil_Veyated_1.pptx",
+   "slides": 25,
+   "words_slides": 1125,
+   "words_notes": 113,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/8.md:68",
+   "package": "pkg-g8-02"
+  },
+  {
+   "slug": "g8-lachshov-tov-4-zeadim-2",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 5,
+   "month": "נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום – התמודדות ממוקדת חשיבה (נובמבר)",
+   "unit": "לחשוב טוב",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "1, 2, 3, 4 – צעדים להתמודדות יעילה – שיעור 2",
+   "src_text": "sources/text/8/Lachshov_Tov_4_Zeadim_2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Lachshov_Tov_4_Zeadim_2.pptx",
+   "slides": 19,
+   "words_slides": 657,
+   "words_notes": 624,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/8.md:88",
+   "package": "pkg-g8-02"
+  },
+  {
+   "slug": "g8-lachshov-tov-tirgul-model-3",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 6,
+   "month": "נובמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום – התמודדות ממוקדת חשיבה (נובמבר)",
+   "unit": "לחשוב טוב",
+   "unit_order": 3,
+   "unit_size": 3,
+   "title": "מודל ארבעת הצעדים – שיעור 3",
+   "src_text": "sources/text/8/Lachshov_Tov_Tirgul_Model_3.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Lachshov_Tov_Tirgul_Model_3.pptx",
+   "slides": 26,
+   "words_slides": 896,
+   "words_notes": 508,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/8.md:108",
+   "package": "pkg-g8-02"
+  },
+  {
+   "slug": "g8-ani-vealkohol-1",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 7,
+   "month": "נובמבר–דצמבר",
+   "section": "מניעת שימוש בחומרים פסיכואקטיביים (נובמבר–דצמבר)",
+   "unit": "מתבגרים ומשקאות משכ/קרים",
+   "unit_order": 1,
+   "unit_size": 5,
+   "title": "אני, החברים והאלכוהול",
+   "src_text": "sources/text/8/Ani_Vealkohol1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Ani_Vealkohol1.pptx",
+   "slides": 26,
+   "words_slides": 1410,
+   "words_notes": 255,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/8.md:129",
+   "package": "pkg-g8-03"
+  },
+  {
+   "slug": "g8-alkohol-vemitbagrim-2",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 8,
+   "month": "נובמבר–דצמבר",
+   "section": "מניעת שימוש בחומרים פסיכואקטיביים (נובמבר–דצמבר)",
+   "unit": "מתבגרים ומשקאות משכ/קרים",
+   "unit_order": 2,
+   "unit_size": 5,
+   "title": "אלכוהול, מתבגרים ומה שביניהם",
+   "src_text": "sources/text/8/AlkoholVemitbagrim2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/AlkoholVemitbagrim2.pptx",
+   "slides": 40,
+   "words_slides": 1756,
+   "words_notes": 886,
+   "sensitivity": "med",
+   "load": "very-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/8.md:149",
+   "package": "pkg-g8-03"
+  },
+  {
+   "slug": "g8-pituy-pogesh-gvul",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 9,
+   "month": "נובמבר–דצמבר",
+   "section": "מניעת שימוש בחומרים פסיכואקטיביים (נובמבר–דצמבר)",
+   "unit": "מתבגרים ומשקאות משכ/קרים",
+   "unit_order": 3,
+   "unit_size": 5,
+   "title": "כשפיתוי פוגש גבול",
+   "src_text": "sources/text/8/Pituy_Pogesh_Gvul.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Pituy_Pogesh_Gvul.pptx",
+   "slides": 21,
+   "words_slides": 701,
+   "words_notes": 889,
+   "sensitivity": "med",
+   "load": "very-heavy",
+   "flags": [
+    "also-listed-calendar",
+    "double-period"
+   ],
+   "note": "שיעור 3 ביחידת האלכוהול ומופיע שוב תחת 'לקראת פורים'; נראה כשיעור כפול ודורש הכנה יום־יומיים מראש.",
+   "digest_ref": "sources/digests/8.md:169",
+   "listings": [
+    {
+     "grade": 8,
+     "section": "מניעת שימוש בחומרים פסיכואקטיביים (נובמבר–דצמבר)",
+     "unit": "מתבגרים ומשקאות משכ/קרים",
+     "title": "כשפיתוי פוגש גבול (מומלץ להעביר לקראת פורים)",
+     "src_text": "sources/text/8/Pituy_Pogesh_Gvul.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Pituy_Pogesh_Gvul.pptx"
+    },
+    {
+     "grade": 8,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת פורים",
+     "title": "כשהפיתוי פוגש גבול",
+     "src_text": "sources/text/8/Pituy_Pogesh_Gvul.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Pituy_Pogesh_Gvul.pptx"
+    }
+   ],
+   "package": "pkg-g8-03"
+  },
+  {
+   "slug": "g8-haverut-veachrayut",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 10,
+   "month": "נובמבר–דצמבר",
+   "section": "מניעת שימוש בחומרים פסיכואקטיביים (נובמבר–דצמבר)",
+   "unit": "מתבגרים ומשקאות משכ/קרים",
+   "unit_order": 4,
+   "unit_size": 5,
+   "title": "חברות ואחריות חברתית",
+   "src_text": "sources/text/8/Haverut_Veachrayut.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Haverut_Veachrayut.pptx",
+   "slides": 19,
+   "words_slides": 769,
+   "words_notes": 535,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "שיעור 4 מתוך 5 אבל כולל 'מסכמים יחידה'.",
+   "digest_ref": "sources/digests/8.md:190",
+   "package": "pkg-g8-03"
+  },
+  {
+   "slug": "g8-sigaria-he-sigaria",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 11,
+   "month": "נובמבר–דצמבר",
+   "section": "מניעת שימוש בחומרים פסיכואקטיביים (נובמבר–דצמבר)",
+   "unit": "מתבגרים ומשקאות משכ/קרים",
+   "unit_order": 5,
+   "unit_size": 5,
+   "title": "סיגריה היא סיגריה",
+   "src_text": "sources/text/8/Sigaria_He_Sigaria.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Sigaria_He_Sigaria.pptx",
+   "slides": 21,
+   "words_slides": 988,
+   "words_notes": 116,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "assets-missing"
+   ],
+   "note": "שני סרטונים מוטמעים בלי קישור; הקהוט לא מצורף.",
+   "digest_ref": "sources/digests/8.md:211",
+   "package": "pkg-g8-03"
+  },
+  {
+   "slug": "g8-karov-rachok-reshet",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 12,
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת (פברואר)",
+   "unit": "אחריות אישית וחברתית בעת שיתוף תכנים ברשת",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "קרוב, רחוק ומה שביניהם",
+   "src_text": "sources/text/8/Karov_Rachok_Reshet.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Karov_Rachok_Reshet.pptx",
+   "slides": 41,
+   "words_slides": 957,
+   "words_notes": 762,
+   "sensitivity": "high",
+   "load": "balanced",
+   "flags": [
+    "unit-incomplete"
+   ],
+   "note": "שיעור 1 מתוך 6 ביחידת 'חושבים לפני שמפיצים'; שיעורים 2–6 אינם באתר.",
+   "digest_ref": "sources/digests/8.md:232",
+   "package": "pkg-g8-04"
+  },
+  {
+   "slug": "g8-miniyut-hizur-8",
+   "grade": 8,
+   "grades_served": [
+    8
+   ],
+   "seq": 13,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "מה בין חיזור להטרדה?",
+   "src_text": "sources/text/8/Miniyut_Hizur_8.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/8Grade/Mamlachti/Miniyut_Hizur_8.pptx",
+   "slides": 33,
+   "words_slides": 1561,
+   "words_notes": 695,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [
+    "unit-summary-inside",
+    "unit-incomplete",
+    "assets-missing"
+   ],
+   "note": "שיעור 8; שיעורים 1–7 של היחידה הם מודולי story.html שלא הורדו (ראו gaps).",
+   "digest_ref": "sources/digests/8.md:252",
+   "package": "pkg-g8-04"
+  },
+  {
+   "slug": "g9-rega-lifney-shematchilim",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 1,
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (ספטמבר–אוקטובר)",
+   "unit": "פתיחת שנה",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "רגע לפני שמתחילים",
+   "src_text": "sources/text/9/Rega_Lifney_Shematchilim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Rega_Lifney_Shematchilim.pptx",
+   "slides": 25,
+   "words_slides": 436,
+   "words_notes": 182,
+   "sensitivity": "low",
+   "load": "balanced",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/9a.md:8",
+   "package": "pkg-g9-01"
+  },
+  {
+   "slug": "g9-glida",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 2,
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (ספטמבר–אוקטובר)",
+   "unit": "פתיחת שנה",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "פעם שלישית גלידה",
+   "src_text": "sources/text/9/Glida.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Glida.pptx",
+   "slides": 21,
+   "words_slides": 665,
+   "words_notes": 388,
+   "sensitivity": "low",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "'פעם שלישית' — ייחודי לשנה השלישית בחטיבה.",
+   "digest_ref": "sources/digests/9a.md:29",
+   "package": "pkg-g9-01"
+  },
+  {
+   "slug": "g9-osher-1",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 3,
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (ספטמבר–אוקטובר)",
+   "unit": "מקורות האושר שלי",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "מהו אושר?",
+   "src_text": "sources/text/9/Osher_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Osher_1.pptx",
+   "slides": 27,
+   "words_slides": 1188,
+   "words_notes": 102,
+   "sensitivity": "low",
+   "load": "heavy",
+   "flags": [
+    "also-listed-calendar"
+   ],
+   "note": "מופיע שוב בט' תחת 'לקראת פורים'.",
+   "digest_ref": "sources/digests/9a.md:52",
+   "listings": [
+    {
+     "grade": 9,
+     "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (ספטמבר–אוקטובר)",
+     "unit": "מקורות האושר שלי",
+     "title": "מהו אושר?",
+     "src_text": "sources/text/9/Osher_1.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Osher_1.pptx"
+    },
+    {
+     "grade": 9,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת פורים",
+     "title": "מהו אושר",
+     "src_text": "sources/text/9/Osher_1.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Osher_1.pptx"
+    }
+   ],
+   "package": "pkg-g9-02"
+  },
+  {
+   "slug": "g9-osher-2",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 4,
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (ספטמבר–אוקטובר)",
+   "unit": "מקורות האושר שלי",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "להוסיף אושר לחיים",
+   "src_text": "sources/text/9/Osher_2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Osher_2.pptx",
+   "slides": 26,
+   "words_slides": 946,
+   "words_notes": 216,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "also-listed-calendar",
+    "unit-summary-inside"
+   ],
+   "note": "סיום יחידה; מופיע שוב בט' תחת 'לקראת פורים'.",
+   "digest_ref": "sources/digests/9a.md:74",
+   "listings": [
+    {
+     "grade": 9,
+     "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (ספטמבר–אוקטובר)",
+     "unit": "מקורות האושר שלי",
+     "title": "להוסיף אושר לחיים",
+     "src_text": "sources/text/9/Osher_2.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Osher_2.pptx"
+    },
+    {
+     "grade": 9,
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת פורים",
+     "title": "להוסיף אושר לחיים",
+     "src_text": "sources/text/9/Osher_2.md",
+     "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Osher_2.pptx"
+    }
+   ],
+   "package": "pkg-g9-02"
+  },
+  {
+   "slug": "g9-leachnis-et-atov-1",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 5,
+   "month": "אוקטובר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (בוחרים בחיים) (אוקטובר-נובמבר)",
+   "unit": "טעם החיים",
+   "unit_order": 1,
+   "unit_size": 5,
+   "title": "אלה דברים שאותי משמחים",
+   "src_text": "sources/text/9/Leachnis_Et_Atov_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Leachnis_Et_Atov_1.pptx",
+   "slides": 24,
+   "words_slides": 1405,
+   "words_notes": 380,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-incomplete"
+   ],
+   "note": "תוכנית 'בוחרים בחיים' (מניעת אובדנות), שיעור 1 מתוך 7; שיעורים 3–4 ('ידע מציל חיים') אינם באתר.",
+   "digest_ref": "sources/digests/9a.md:96",
+   "package": "pkg-g9-03"
+  },
+  {
+   "slug": "g9-mashabey-hitmodedut-sheli-2",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 6,
+   "month": "אוקטובר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (בוחרים בחיים) (אוקטובר-נובמבר)",
+   "unit": "טעם החיים",
+   "unit_order": 2,
+   "unit_size": 5,
+   "title": "משאבי ההתמודדות שלי",
+   "src_text": "sources/text/9/Mashabey_Hitmodedut_Sheli_2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Mashabey_Hitmodedut_Sheli_2.pptx",
+   "slides": 20,
+   "words_slides": 1092,
+   "words_notes": 195,
+   "sensitivity": "med",
+   "load": "balanced-heavy",
+   "flags": [
+    "unit-incomplete"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/9a.md:118",
+   "package": "pkg-g9-03"
+  },
+  {
+   "slug": "g9-eich-lesaper-5",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 7,
+   "month": "אוקטובר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (בוחרים בחיים) (אוקטובר-נובמבר)",
+   "unit": "טעם החיים",
+   "unit_order": 3,
+   "unit_size": 5,
+   "title": "איך לספר?",
+   "src_text": "sources/text/9/Eich_Lesaper_5.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Eich_Lesaper_5.pptx",
+   "slides": 32,
+   "words_slides": 2649,
+   "words_notes": 657,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [
+    "double-period",
+    "unit-incomplete"
+   ],
+   "note": "כ־90 דק'; מניעת אובדנות — מחייב תיאום עם היועצת. בשקפים יחידה 'עזרה עצמית וערבות הדדית'.",
+   "digest_ref": "sources/digests/9a.md:141",
+   "package": "pkg-g9-03"
+  },
+  {
+   "slug": "g9-akartis-amatin-sheli-6",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 8,
+   "month": "אוקטובר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (בוחרים בחיים) (אוקטובר-נובמבר)",
+   "unit": "טעם החיים",
+   "unit_order": 4,
+   "unit_size": 5,
+   "title": "כרטיס הביטחון שלי",
+   "src_text": "sources/text/9/Akartis_Amatin_Sheli_6.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Akartis_Amatin_Sheli_6.pptx",
+   "slides": 31,
+   "words_slides": 1131,
+   "words_notes": 490,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-incomplete"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/9a.md:163",
+   "package": "pkg-g9-03"
+  },
+  {
+   "slug": "g9-hide-park-shel-tovanot-7",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 9,
+   "month": "אוקטובר–נובמבר",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (בוחרים בחיים) (אוקטובר-נובמבר)",
+   "unit": "טעם החיים",
+   "unit_order": 5,
+   "unit_size": 5,
+   "title": "להעביר את זה הלאה",
+   "src_text": "sources/text/9/Hide_Park_Shel_Tovanot_7.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Hide_Park_Shel_Tovanot_7.pptx",
+   "slides": 19,
+   "words_slides": 897,
+   "words_notes": 273,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-summary-lesson",
+    "unit-incomplete"
+   ],
+   "note": "סיכום תוכנית 'בוחרים בחיים' (פרויקט + מכתב להורים). כולו סיכום יחידה — D52 (D80).",
+   "digest_ref": "sources/digests/9a.md:186",
+   "package": "pkg-g9-03"
+  },
+  {
+   "slug": "g9-samim-lama-ken-lama-lo",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 10,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים – למוח אין חלקי חילוף",
+   "unit_order": 1,
+   "unit_size": 6,
+   "title": "סמים? – למה כן? למה לא?",
+   "src_text": "sources/text/9/Samim_Lama_Ken_Lama_Lo.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Samim_Lama_Ken_Lama_Lo.pptx",
+   "slides": 19,
+   "words_slides": 1012,
+   "words_notes": 411,
+   "sensitivity": "med",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/9a.md:207",
+   "package": "pkg-g9-04"
+  },
+  {
+   "slug": "g9-samim-lishmor",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 11,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים – למוח אין חלקי חילוף",
+   "unit_order": 2,
+   "unit_size": 6,
+   "title": "לשמור על החברות או לשמור על החבר? – פנייה לעזרה",
+   "src_text": "sources/text/9/Samim_Lishmor.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Samim_Lishmor.pptx",
+   "slides": 27,
+   "words_slides": 1150,
+   "words_notes": 2424,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [
+    "order-differs-from-site"
+   ],
+   "note": "במצגת 'שיעור שני'; באתר מופיע שלישי.",
+   "digest_ref": "sources/digests/9a.md:251",
+   "package": "pkg-g9-04"
+  },
+  {
+   "slug": "g9-samim-ksamim",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 12,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים – למוח אין חלקי חילוף",
+   "unit_order": 3,
+   "unit_size": 6,
+   "title": "סמים עושים קסמים?",
+   "src_text": "sources/text/9/Samim_Ksamim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Samim_Ksamim.pptx",
+   "slides": 27,
+   "words_slides": 1012,
+   "words_notes": 1202,
+   "sensitivity": "med",
+   "load": "very-heavy",
+   "flags": [
+    "order-differs-from-site"
+   ],
+   "note": "במצגת 'שיעור שלישי'; באתר מופיע שני.",
+   "digest_ref": "sources/digests/9a.md:229",
+   "package": "pkg-g9-04"
+  },
+  {
+   "slug": "g9-samim-kabalat-hachlatot",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 13,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים – למוח אין חלקי חילוף",
+   "unit_order": 4,
+   "unit_size": 6,
+   "title": "קבלת החלטות – איך ולמה אני מחליט כפי שאני מחליט?",
+   "src_text": "sources/text/9/Samim_Kabalat_Hachlatot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Samim_Kabalat_Hachlatot.pptx",
+   "slides": 28,
+   "words_slides": 1039,
+   "words_notes": 3184,
+   "sensitivity": "low-med",
+   "load": "very-heavy",
+   "flags": [
+    "order-differs-from-site"
+   ],
+   "note": "במצגת 'שיעור רביעי'; באתר מופיע חמישי.",
+   "digest_ref": "sources/digests/9a.md:296",
+   "package": "pkg-g9-05"
+  },
+  {
+   "slug": "g9-samim-sipur-derech",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 14,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים – למוח אין חלקי חילוף",
+   "unit_order": 5,
+   "unit_size": 6,
+   "title": "\"סיפור דרך\" – רצף השימוש בסמים",
+   "src_text": "sources/text/9/Samim_SipurDerech.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Samim_SipurDerech.pptx",
+   "slides": 36,
+   "words_slides": 2558,
+   "words_notes": 992,
+   "sensitivity": "med-high",
+   "load": "very-heavy",
+   "flags": [
+    "order-differs-from-site"
+   ],
+   "note": "במצגת 'שיעור חמישי'; באתר מופיע רביעי. 'מכוונה למעשה' מפנה לכוונה שנכתבה רק ב'לשמור על החברות'.",
+   "digest_ref": "sources/digests/9a.md:274",
+   "package": "pkg-g9-05"
+  },
+  {
+   "slug": "g9-trufot-mirsham",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 15,
+   "month": "דצמבר",
+   "section": "קידום בריאות ומניעת שימוש בחומרים פסיכואקטיביים והתנהגויות ממכרות (דצמבר)",
+   "unit": "מתבגרים – למוח אין חלקי חילוף",
+   "unit_order": 6,
+   "unit_size": 6,
+   "title": "בריאות זה בידיים שלנו - להבין את האחריות בשימוש בתרופות מרשם",
+   "src_text": "sources/text/9/Trufot_Mirsham.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Trufot_Mirsham.pptx",
+   "slides": 30,
+   "words_slides": 1729,
+   "words_notes": 1430,
+   "sensitivity": "low-med",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "בלי מספר שיעור; נראה משלים ליחידה.",
+   "digest_ref": "sources/digests/9a.md:319",
+   "package": "pkg-g9-05"
+  },
+  {
+   "slug": "g9-ani-meshatef-ani-kayam",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 16,
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת (פברואר)",
+   "unit": "השוואה חברתית באמצעות הרשת",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "אני משתף משמע אני קיים – האומנם?",
+   "src_text": "sources/text/9/Ani_Meshatef_Ani_Kayam.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Ani_Meshatef_Ani_Kayam.pptx",
+   "slides": 26,
+   "words_slides": 1240,
+   "words_notes": 556,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "unit-incomplete"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/9b.md:12",
+   "package": "pkg-g9-06"
+  },
+  {
+   "slug": "g9-empathy-masachim-1",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 17,
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת (פברואר)",
+   "unit": "השוואה חברתית באמצעות הרשת",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "אמפתיה במסכים",
+   "src_text": "sources/text/9/Empathy_Masachim_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Empathy_Masachim_1.pptx",
+   "slides": 33,
+   "words_slides": 1363,
+   "words_notes": 574,
+   "sensitivity": "low",
+   "load": "very-heavy",
+   "flags": [
+    "unit-incomplete",
+    "assets-missing"
+   ],
+   "note": "",
+   "digest_ref": "sources/digests/9b.md:33",
+   "package": "pkg-g9-06"
+  },
+  {
+   "slug": "g9-delet-makom-batuach",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 18,
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת (פברואר)",
+   "unit": "השוואה חברתית באמצעות הרשת",
+   "unit_order": 3,
+   "unit_size": 3,
+   "title": "דלת למקום בטוח ברשת",
+   "src_text": "sources/text/9/Delet_Makom_Batuach.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Delet_Makom_Batuach.pptx",
+   "slides": 27,
+   "words_slides": 1202,
+   "words_notes": 905,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [
+    "unit-incomplete",
+    "assets-missing"
+   ],
+   "note": "שיעור 3 מתוך 5 במפת היחידה; כשיעור וחצי. סיפור עלמה וקטע שמע לא נראים.",
+   "digest_ref": "sources/digests/9b.md:54",
+   "package": "pkg-g9-06"
+  },
+  {
+   "slug": "g9-bead-azmi-masa-ishi-yofi",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 19,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "נקודת מבט: פיתוח ראייה ביקורתית במציאות פוסט מודרנית",
+   "unit_order": 1,
+   "unit_size": 5,
+   "title": "בעד עצמי: מסע אישי בעקבות מושג היופי",
+   "src_text": "sources/text/9/Bead_Azmi_Masa_Ishi_Yofi.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Bead_Azmi_Masa_Ishi_Yofi.pptm",
+   "slides": 27,
+   "words_slides": 1497,
+   "words_notes": 1164,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/9b.md:76",
+   "package": "pkg-g9-07"
+  },
+  {
+   "slug": "g9-tfisa-migdarit-bemeziut-mekuvenet",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 20,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "נקודת מבט: פיתוח ראייה ביקורתית במציאות פוסט מודרנית",
+   "unit_order": 2,
+   "unit_size": 5,
+   "title": "תפיסה מגדרית במציאות מקוונת",
+   "src_text": "sources/text/9/Tfisa_Migdarit_Bemeziut_Mekuvenet.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Tfisa_Migdarit_Bemeziut_Mekuvenet.pptx",
+   "slides": 16,
+   "words_slides": 637,
+   "words_notes": 498,
+   "sensitivity": "med",
+   "load": "balanced",
+   "flags": [
+    "numbering-inconsistent"
+   ],
+   "note": "מסומן 'שיעור שני' כמו 'נטייה מינית'.",
+   "digest_ref": "sources/digests/9b.md:97",
+   "package": "pkg-g9-07"
+  },
+  {
+   "slug": "g9-miniyut-7",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 21,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "נקודת מבט: פיתוח ראייה ביקורתית במציאות פוסט מודרנית",
+   "unit_order": 3,
+   "unit_size": 5,
+   "title": "שומרים על קשר בטוח ברשת",
+   "src_text": "sources/text/9/Miniyut_7.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/10Grade/Mamlachti/Miniyut_7.pptx",
+   "slides": 39,
+   "words_slides": 1290,
+   "words_notes": 420,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [
+    "wrong-grade",
+    "unit-summary-inside",
+    "double-period"
+   ],
+   "note": "קובץ כיתה י' (10Grade, ש' 1 'שכבת י''), שיעור 7 וסיכום יחידה 'מיניות במרחב בטוח'. במפת יחידת ט' המשבצת 'שומרים על קשר בטוח ברשת' היא שיעור 3 — להתאים לט'.",
+   "digest_ref": "sources/digests/9b.md:119",
+   "package": "pkg-g9-07"
+  },
+  {
+   "slug": "g9-mabat-al-haskama",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 22,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "נקודת מבט: פיתוח ראייה ביקורתית במציאות פוסט מודרנית",
+   "unit_order": 4,
+   "unit_size": 5,
+   "title": "מבט על הסכמה והדדיות בקשר",
+   "src_text": "sources/text/9/Mabat_Al_Haskama.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Mabat_Al_Haskama.pptx",
+   "slides": 27,
+   "words_slides": 950,
+   "words_notes": 653,
+   "sensitivity": "high",
+   "load": "heavy",
+   "flags": [
+    "order-differs-from-site",
+    "numbering-inconsistent"
+   ],
+   "note": "במצגת 'שיעור רביעי' ובמפת היחידה רביעי; באתר מופיע אחרון.",
+   "digest_ref": "sources/digests/9b.md:162",
+   "package": "pkg-g9-07"
+  },
+  {
+   "slug": "g9-netya-minit",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 23,
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "נקודת מבט: פיתוח ראייה ביקורתית במציאות פוסט מודרנית",
+   "unit_order": 5,
+   "unit_size": 5,
+   "title": "נטייה מינית וזהות מגדרית",
+   "src_text": "sources/text/9/Netya_Minit.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Netya_Minit.pptx",
+   "slides": 34,
+   "words_slides": 1238,
+   "words_notes": 1349,
+   "sensitivity": "high",
+   "load": "very-heavy",
+   "flags": [
+    "double-period",
+    "order-differs-from-site",
+    "numbering-inconsistent"
+   ],
+   "note": "במצגת 'שיעור שני' (שגוי); במפת היחידה אחרון. המקור: 'רצוי לקיים שיעור כפול'.",
+   "digest_ref": "sources/digests/9b.md:140",
+   "package": "pkg-g9-07"
+  },
+  {
+   "slug": "g9-shaar-laavar",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 24,
+   "month": "מאי–יוני",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (מאי–יוני)",
+   "unit": "מעברים",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "שער לעבר",
+   "src_text": "sources/text/9/Shaar_Laavar.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Shaar_Laavar.pptx",
+   "slides": 22,
+   "words_slides": 900,
+   "words_notes": 727,
+   "sensitivity": "med",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/9b.md:184",
+   "package": "pkg-g9-08"
+  },
+  {
+   "slug": "g9-shaar-lahove",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 25,
+   "month": "מאי–יוני",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (מאי–יוני)",
+   "unit": "מעברים",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "שער להווה",
+   "src_text": "sources/text/9/Shaar_Lahove.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Shaar_Lahove.pptx",
+   "slides": 24,
+   "words_slides": 676,
+   "words_notes": 503,
+   "sensitivity": "med",
+   "load": "heavy",
+   "flags": [
+    "assets-missing"
+   ],
+   "note": "קלפי המסרים ודף 'מתנה' בתמונות בלבד.",
+   "digest_ref": "sources/digests/9b.md:205",
+   "package": "pkg-g9-08"
+  },
+  {
+   "slug": "g9-shaar-laatid",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 26,
+   "month": "מאי–יוני",
+   "section": "מיומנויות לחיזוק כוחות, חוסן והתנהלות מיטבית (מאי–יוני)",
+   "unit": "מעברים",
+   "unit_order": 3,
+   "unit_size": 3,
+   "title": "שער לעתיד",
+   "src_text": "sources/text/9/Shaar_Laatid.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Shaar_Laatid.pptx",
+   "slides": 27,
+   "words_slides": 1049,
+   "words_notes": 846,
+   "sensitivity": "med",
+   "load": "very-heavy",
+   "flags": [
+    "unit-summary-inside"
+   ],
+   "note": "כולל סיכום יחידה.",
+   "digest_ref": "sources/digests/9b.md:227",
+   "package": "pkg-g9-08"
+  },
+  {
+   "slug": "g9-sium-shana",
+   "grade": 9,
+   "grades_served": [
+    9
+   ],
+   "seq": 27,
+   "month": "יוני",
+   "section": "סיום וסיכום שנה (יוני)",
+   "unit": "סיכום שנה",
+   "unit_order": 1,
+   "unit_size": 1,
+   "title": "מסיבת סיום: התבוננות פנימית על השנה שהייתה",
+   "src_text": "sources/text/9/Sium_Shana.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/9Grade/Mamlachti/Sium_Shana.pptx",
+   "slides": 23,
+   "words_slides": 726,
+   "words_notes": 487,
+   "sensitivity": "med",
+   "load": "balanced-heavy",
+   "flags": [],
+   "note": "",
+   "digest_ref": "sources/digests/9b.md:248",
+   "package": "pkg-g9-08"
+  }
+ ],
+ "packages": [
+  {
+   "id": "pkg-g6-01",
+   "grade": 6,
+   "unit": "פתיחת שנה + מקורות האושר",
+   "units": [
+    "פתיחת שנה",
+    "מקורות האושר"
+   ],
+   "lessons": [
+    "g6-ptichat-shana-tashpaz",
+    "g6-mahu-osher",
+    "g6-mekorot-haosher",
+    "g6-hayozer-shel"
+   ],
+   "effort": "M",
+   "effort_score": 5.0,
+   "slides": 101,
+   "words": 4954
+  },
+  {
+   "id": "pkg-g6-02",
+   "grade": 6,
+   "unit": "ניהול עצמי",
+   "units": [
+    "ניהול עצמי"
+   ],
+   "lessons": [
+    "g6-yaad-chalom",
+    "g6-nihul-zman"
+   ],
+   "effort": "S",
+   "effort_score": 2.8,
+   "slides": 54,
+   "words": 2493
+  },
+  {
+   "id": "pkg-g6-03",
+   "grade": 6,
+   "unit": "ייצוג עצמי",
+   "units": [
+    "ייצוג עצמי"
+   ],
+   "lessons": [
+    "g6-mezahim-kishurim",
+    "g6-lomdim-leyazeg",
+    "g6-model-patarti"
+   ],
+   "effort": "M",
+   "effort_score": 4.35,
+   "slides": 72,
+   "words": 4152
+  },
+  {
+   "id": "pkg-g6-04",
+   "grade": 6,
+   "unit": "מגלים אחריות + לצמוח ולגדול 1–4",
+   "units": [
+    "מגלים אחריות",
+    "התוכנית \"לצמוח ולגדול\""
+   ],
+   "lessons": [
+    "g6-megalim-achrayut-1",
+    "g6-lizmoach-pticha",
+    "g6-lizmoach-hoze",
+    "g6-lizmoach-meida",
+    "g6-lizmoach-ani"
+   ],
+   "effort": "L",
+   "effort_score": 8.35,
+   "slides": 96,
+   "words": 7893
+  },
+  {
+   "id": "pkg-g6-05",
+   "grade": 6,
+   "unit": "לצמוח ולגדול 5–9",
+   "units": [
+    "התוכנית \"לצמוח ולגדול\""
+   ],
+   "lessons": [
+    "g6-lizmoach-banim-banot",
+    "g6-lizmoach-kolhalev",
+    "g6-lizmoach-streotypim",
+    "g6-lizmoach-lachaz-hevrati",
+    "g6-lizmoach-sikum"
+   ],
+   "effort": "L",
+   "effort_score": 8.15,
+   "slides": 126,
+   "words": 6113
+  },
+  {
+   "id": "pkg-g6-06",
+   "grade": 6,
+   "unit": "קבלת החלטות + שואפים לבחור נכון",
+   "units": [
+    "קבלת החלטות",
+    "שואפים לבחור נכון"
+   ],
+   "lessons": [
+    "g6-hitmodedut-hachlatot",
+    "g6-signonot-hachlatot",
+    "g6-model-hachlatot",
+    "g6-hitbagrut-vani"
+   ],
+   "effort": "M",
+   "effort_score": 5.35,
+   "slides": 81,
+   "words": 5542
+  },
+  {
+   "id": "pkg-g6-07",
+   "grade": 6,
+   "unit": "המעבר לחטיבת הביניים 1–3",
+   "units": [
+    "המעבר לחטיבת הביניים"
+   ],
+   "lessons": [
+    "g6-hakoach-laavor",
+    "g6-haoganim",
+    "g6-adam-zover"
+   ],
+   "effort": "M",
+   "effort_score": 4.3,
+   "slides": 77,
+   "words": 3602
+  },
+  {
+   "id": "pkg-g6-08",
+   "grade": 6,
+   "unit": "המעבר לחטיבת הביניים 4–6",
+   "units": [
+    "המעבר לחטיבת הביניים"
+   ],
+   "lessons": [
+    "g6-lokchim-laderech",
+    "g6-orzim-vemitkadmim",
+    "g6-sheela-tshuva"
+   ],
+   "effort": "M",
+   "effort_score": 5.1,
+   "slides": 81,
+   "words": 4280
+  },
+  {
+   "id": "pkg-g6-09",
+   "grade": 6,
+   "unit": "רשת לקראת הקיץ",
+   "units": [
+    "התנהלות מיטבית ברשת ומניעת פגיעה לקראת היציאה לחופשת הקיץ"
+   ],
+   "lessons": [
+    "g6-empathy-bamasachim",
+    "g6-tiru-oty",
+    "g6-reshet-haverim",
+    "g6-maavarim-bareshet"
+   ],
+   "effort": "L",
+   "effort_score": 8.05,
+   "slides": 123,
+   "words": 8856
+  },
+  {
+   "id": "pkg-g6-10",
+   "grade": 6,
+   "unit": "סיום וסיכום שנה",
+   "units": [
+    "סיום וסיכום שנה"
+   ],
+   "lessons": [
+    "g6-sium-shana",
+    "g6-siyum-shana"
+   ],
+   "effort": "S",
+   "effort_score": 2.2,
+   "slides": 39,
+   "words": 1888
+  },
+  {
+   "id": "pkg-g6-11",
+   "grade": 6,
+   "unit": "לוח שנה א' (ראש השנה, פורים, פסח)",
+   "units": [
+    "ראש השנה",
+    "לקראת פורים",
+    "לקראת פסח"
+   ],
+   "lessons": [
+    "g6-yarid-simanim-lashana-achadasha",
+    "g6-marbim-besimcha",
+    "g6-hameroz-memitzraim"
+   ],
+   "effort": "M",
+   "effort_score": 4.75,
+   "slides": 63,
+   "words": 3819
+  },
+  {
+   "id": "pkg-g6-12",
+   "grade": 6,
+   "unit": "לוח שנה ב' (שואה, זיכרון, ל\"ג בעומר)",
+   "units": [
+    "יום הזיכרון לשואה ולגבורה",
+    "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+    "לקראת ל\"ג בעומר"
+   ],
+   "lessons": [
+    "g6-beikvot-ziurav",
+    "g6-yom-zikaron",
+    "g6-kita-echpatit-medura-echpatit"
+   ],
+   "effort": "M",
+   "effort_score": 5.65,
+   "slides": 83,
+   "words": 5057
+  },
+  {
+   "id": "pkg-g7-01",
+   "grade": 7,
+   "unit": "פתיחת שנה – ספטמבר",
+   "units": [
+    "פתיחת שנה – ספטמבר"
+   ],
+   "lessons": [
+    "g7-hatchalot-1",
+    "g7-hatchalot-hoze-2",
+    "g7-hatchalot-3"
+   ],
+   "effort": "M",
+   "effort_score": 4.3,
+   "slides": 60,
+   "words": 3217
+  },
+  {
+   "id": "pkg-g7-02",
+   "grade": 7,
+   "unit": "חיבורים",
+   "units": [
+    "חיבורים"
+   ],
+   "lessons": [
+    "g7-ptichat-shana-1",
+    "g7-ptichat-shana-2"
+   ],
+   "effort": "S",
+   "effort_score": 3.0,
+   "slides": 50,
+   "words": 2319
+  },
+  {
+   "id": "pkg-g7-03",
+   "grade": 7,
+   "unit": "למצוא מקום",
+   "units": [
+    "למצוא מקום"
+   ],
+   "lessons": [
+    "g7-makom-baolam",
+    "g7-sipur-bemenifa"
+   ],
+   "effort": "S",
+   "effort_score": 3.0,
+   "slides": 43,
+   "words": 2114
+  },
+  {
+   "id": "pkg-g7-04",
+   "grade": 7,
+   "unit": "מסע הלמידה שלי",
+   "units": [
+    "מסע הלמידה שלי"
+   ],
+   "lessons": [
+    "g7-lemida-sheli-1",
+    "g7-tamrurim-lemida-2",
+    "g7-etgarim-balemida-3",
+    "g7-ktav-hida-4"
+   ],
+   "effort": "M",
+   "effort_score": 4.3,
+   "slides": 65,
+   "words": 3742
+  },
+  {
+   "id": "pkg-g7-05",
+   "grade": 7,
+   "unit": "מתבגרים בבריאות",
+   "units": [
+    "מתבגרים בבריאות"
+   ],
+   "lessons": [
+    "g7-hashpaha-hevratit-1",
+    "g7-matchilim-leashen-2",
+    "g7-tabak-vemuzarav-3",
+    "g7-alkohol-4"
+   ],
+   "effort": "M",
+   "effort_score": 6.85,
+   "slides": 117,
+   "words": 7933
+  },
+  {
+   "id": "pkg-g7-06",
+   "grade": 7,
+   "unit": "סובלנות ומניעת גזענות",
+   "units": [
+    "סובלנות ומניעת גזענות"
+   ],
+   "lessons": [
+    "g7-gizanut-1",
+    "g7-gizanut-streotipim-2",
+    "g7-gizanut-rov-vemiut-3",
+    "g7-gizanut-ani-veacher-4",
+    "g7-gizanut-siyum-5"
+   ],
+   "effort": "L",
+   "effort_score": 7.05,
+   "slides": 94,
+   "words": 5325
+  },
+  {
+   "id": "pkg-g7-07",
+   "grade": 7,
+   "unit": "נורמות התנהגות וגבולות ברשת",
+   "units": [
+    "נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת"
+   ],
+   "lessons": [
+    "g7-golshim-leshinuy",
+    "g7-eifo-ani-vehagvul-sheli-bamasachim",
+    "g7-tofsim-kivun-bareshet"
+   ],
+   "effort": "M",
+   "effort_score": 5.6,
+   "slides": 82,
+   "words": 7653
+  },
+  {
+   "id": "pkg-g7-08",
+   "grade": 7,
+   "unit": "מבט אל עצמי 1–2",
+   "units": [
+    "מבט אל עצמי"
+   ],
+   "lessons": [
+    "g7-bead-azmi-aharacha-azmit",
+    "g7-hitbagrut-banot",
+    "g7-hitbagrut-banim"
+   ],
+   "effort": "M",
+   "effort_score": 5.65,
+   "slides": 72,
+   "words": 5875
+  },
+  {
+   "id": "pkg-g7-09",
+   "grade": 7,
+   "unit": "מבט אל עצמי 3–5",
+   "units": [
+    "מבט אל עצמי"
+   ],
+   "lessons": [
+    "g7-mudaut-migdarit",
+    "g7-miniyut-vepratiyut-bareshet-4",
+    "g7-omdim-lezad-6"
+   ],
+   "effort": "M",
+   "effort_score": 6.2,
+   "slides": 90,
+   "words": 5919
+  },
+  {
+   "id": "pkg-g7-10",
+   "grade": 7,
+   "unit": "ערכים במשפחה + סיום וסיכום שנה",
+   "units": [
+    "ערכים במשפחה",
+    "סיום וסיכום שנה"
+   ],
+   "lessons": [
+    "g7-sulam-mishpachti",
+    "g7-mishpacha-hefez-lev",
+    "g7-mesibat-sium"
+   ],
+   "effort": "M",
+   "effort_score": 4.0,
+   "slides": 70,
+   "words": 3338
+  },
+  {
+   "id": "pkg-g7-11",
+   "grade": 7,
+   "unit": "לוח שנה ז'–ט' (ראש השנה, פורים, יום הזיכרון)",
+   "units": [
+    "לקראת ראש השנה",
+    "לקראת פורים",
+    "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל"
+   ],
+   "lessons": [
+    "g7-shana-tova",
+    "g7-mitchapsim-veshomrim-al-azmenu",
+    "g7-yom-zikaron"
+   ],
+   "effort": "M",
+   "effort_score": 5.05,
+   "slides": 80,
+   "words": 4730
+  },
+  {
+   "id": "pkg-g8-01",
+   "grade": 8,
+   "unit": "פתיחת שנה + משמעות",
+   "units": [
+    "פתיחת שנה",
+    "משמעות – מייצרים ערך ומשמעות"
+   ],
+   "lessons": [
+    "g8-yachad",
+    "g8-mashmaut-dvarim-hashuvim",
+    "g8-mashmaut-erech"
+   ],
+   "effort": "M",
+   "effort_score": 4.05,
+   "slides": 71,
+   "words": 3689
+  },
+  {
+   "id": "pkg-g8-02",
+   "grade": 8,
+   "unit": "לחשוב טוב",
+   "units": [
+    "לחשוב טוב"
+   ],
+   "lessons": [
+    "g8-lachshov-tov-pil-veyated-1",
+    "g8-lachshov-tov-4-zeadim-2",
+    "g8-lachshov-tov-tirgul-model-3"
+   ],
+   "effort": "M",
+   "effort_score": 4.15,
+   "slides": 70,
+   "words": 3923
+  },
+  {
+   "id": "pkg-g8-03",
+   "grade": 8,
+   "unit": "מתבגרים ומשקאות משכ/קרים",
+   "units": [
+    "מתבגרים ומשקאות משכ/קרים"
+   ],
+   "lessons": [
+    "g8-ani-vealkohol-1",
+    "g8-alkohol-vemitbagrim-2",
+    "g8-pituy-pogesh-gvul",
+    "g8-haverut-veachrayut",
+    "g8-sigaria-he-sigaria"
+   ],
+   "effort": "L",
+   "effort_score": 9.45,
+   "slides": 127,
+   "words": 8305
+  },
+  {
+   "id": "pkg-g8-04",
+   "grade": 8,
+   "unit": "שיתוף ברשת + מערכות יחסים",
+   "units": [
+    "אחריות אישית וחברתית בעת שיתוף תכנים ברשת",
+    "מערכות יחסים – מבטים נפגשים"
+   ],
+   "lessons": [
+    "g8-karov-rachok-reshet",
+    "g8-miniyut-hizur-8"
+   ],
+   "effort": "M",
+   "effort_score": 4.2,
+   "slides": 74,
+   "words": 3975
+  },
+  {
+   "id": "pkg-g9-01",
+   "grade": 9,
+   "unit": "פתיחת שנה",
+   "units": [
+    "פתיחת שנה"
+   ],
+   "lessons": [
+    "g9-rega-lifney-shematchilim",
+    "g9-glida"
+   ],
+   "effort": "S",
+   "effort_score": 2.3,
+   "slides": 46,
+   "words": 1671
+  },
+  {
+   "id": "pkg-g9-02",
+   "grade": 9,
+   "unit": "מקורות האושר שלי",
+   "units": [
+    "מקורות האושר שלי"
+   ],
+   "lessons": [
+    "g9-osher-1",
+    "g9-osher-2"
+   ],
+   "effort": "S",
+   "effort_score": 2.85,
+   "slides": 53,
+   "words": 2452
+  },
+  {
+   "id": "pkg-g9-03",
+   "grade": 9,
+   "unit": "טעם החיים (בוחרים בחיים)",
+   "units": [
+    "טעם החיים"
+   ],
+   "lessons": [
+    "g9-leachnis-et-atov-1",
+    "g9-mashabey-hitmodedut-sheli-2",
+    "g9-eich-lesaper-5",
+    "g9-akartis-amatin-sheli-6",
+    "g9-hide-park-shel-tovanot-7"
+   ],
+   "effort": "L",
+   "effort_score": 8.7,
+   "slides": 126,
+   "words": 9169
+  },
+  {
+   "id": "pkg-g9-04",
+   "grade": 9,
+   "unit": "למוח אין חלקי חילוף 1–3",
+   "units": [
+    "מתבגרים – למוח אין חלקי חילוף"
+   ],
+   "lessons": [
+    "g9-samim-lama-ken-lama-lo",
+    "g9-samim-lishmor",
+    "g9-samim-ksamim"
+   ],
+   "effort": "M",
+   "effort_score": 5.5,
+   "slides": 73,
+   "words": 7211
+  },
+  {
+   "id": "pkg-g9-05",
+   "grade": 9,
+   "unit": "למוח אין חלקי חילוף 4–6",
+   "units": [
+    "מתבגרים – למוח אין חלקי חילוף"
+   ],
+   "lessons": [
+    "g9-samim-kabalat-hachlatot",
+    "g9-samim-sipur-derech",
+    "g9-trufot-mirsham"
+   ],
+   "effort": "M",
+   "effort_score": 6.05,
+   "slides": 94,
+   "words": 10932
+  },
+  {
+   "id": "pkg-g9-06",
+   "grade": 9,
+   "unit": "השוואה חברתית באמצעות הרשת",
+   "units": [
+    "השוואה חברתית באמצעות הרשת"
+   ],
+   "lessons": [
+    "g9-ani-meshatef-ani-kayam",
+    "g9-empathy-masachim-1",
+    "g9-delet-makom-batuach"
+   ],
+   "effort": "M",
+   "effort_score": 5.95,
+   "slides": 86,
+   "words": 5840
+  },
+  {
+   "id": "pkg-g9-07",
+   "grade": 9,
+   "unit": "נקודת מבט",
+   "units": [
+    "נקודת מבט: פיתוח ראייה ביקורתית במציאות פוסט מודרנית"
+   ],
+   "lessons": [
+    "g9-bead-azmi-masa-ishi-yofi",
+    "g9-tfisa-migdarit-bemeziut-mekuvenet",
+    "g9-miniyut-7",
+    "g9-mabat-al-haskama",
+    "g9-netya-minit"
+   ],
+   "effort": "L",
+   "effort_score": 10.4,
+   "slides": 143,
+   "words": 9696
+  },
+  {
+   "id": "pkg-g9-08",
+   "grade": 9,
+   "unit": "מעברים + סיכום שנה",
+   "units": [
+    "מעברים",
+    "סיכום שנה"
+   ],
+   "lessons": [
+    "g9-shaar-laavar",
+    "g9-shaar-lahove",
+    "g9-shaar-laatid",
+    "g9-sium-shana"
+   ],
+   "effort": "M",
+   "effort_score": 6.4,
+   "slides": 96,
+   "words": 5914
+  }
+ ],
+ "gaps": [
+  {
+   "id": "gap-01",
+   "type": "missing-source",
+   "grade": 8,
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "unit_order": 1,
+   "title": "לפני שמתחילים",
+   "urls": [
+    "https://contentstorage.cet.ac.il/starting/story.html"
+   ],
+   "site_row": 48,
+   "note": "מודול Storyline אינטראקטיבי (story.html); אין מצגת להורדה."
+  },
+  {
+   "id": "gap-02",
+   "type": "missing-source",
+   "grade": 8,
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "unit_order": 2,
+   "title": "התאהבות",
+   "urls": [
+    "https://storage.cet.ac.il/PresentationBaRibua/couple_1/story_html5.html"
+   ],
+   "site_row": 49,
+   "note": "מודול Storyline אינטראקטיבי (story.html); אין מצגת להורדה."
+  },
+  {
+   "id": "gap-03",
+   "type": "missing-source",
+   "grade": 8,
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "unit_order": 3,
+   "title": "חיזור",
+   "urls": [
+    "https://contentstorage.cet.ac.il/3courtship/story.html"
+   ],
+   "site_row": 50,
+   "note": "מודול Storyline אינטראקטיבי (story.html); אין מצגת להורדה."
+  },
+  {
+   "id": "gap-04",
+   "type": "missing-source",
+   "grade": 8,
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "unit_order": 4,
+   "title": "להיות זוג",
+   "urls": [
+    "https://contentstorage.cet.ac.il/4being_a_couple/story.html"
+   ],
+   "site_row": 51,
+   "note": "מודול Storyline אינטראקטיבי (story.html); אין מצגת להורדה."
+  },
+  {
+   "id": "gap-05",
+   "type": "missing-source",
+   "grade": 8,
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "unit_order": 5,
+   "title": "מדברים בשניים",
+   "urls": [
+    "https://contentstorage.cet.ac.il/5MedabrimBe2/story.html"
+   ],
+   "site_row": 52,
+   "note": "מודול Storyline אינטראקטיבי (story.html); אין מצגת להורדה."
+  },
+  {
+   "id": "gap-06",
+   "type": "missing-source",
+   "grade": 8,
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "unit_order": 6,
+   "title": "נפרדנו",
+   "urls": [
+    "https://contentstorage.cet.ac.il/6BreakUp/story.html"
+   ],
+   "site_row": 53,
+   "note": "מודול Storyline אינטראקטיבי (story.html); אין מצגת להורדה."
+  },
+  {
+   "id": "gap-07",
+   "type": "missing-source",
+   "grade": 8,
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "unit_order": 7,
+   "title": "איך מתגברים על פרידה?",
+   "urls": [
+    "https://contentstorage.cet.ac.il/7breakup1/story.html"
+   ],
+   "site_row": 54,
+   "note": "מודול Storyline אינטראקטיבי (story.html); אין מצגת להורדה."
+  },
+  {
+   "id": "gap-08",
+   "type": "hub-linked-module",
+   "grade": 6,
+   "unit": "שואפים לבחור נכון",
+   "title": "חדר מבוא",
+   "urls": [
+    "https://lomdot.education.gov.il/cet/shefi/smoking/lomdot/openinglesson/story.html",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/teacherguide/teacherintro.docx",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/teacherguide/teacheropening.docx"
+   ],
+   "note": "חדר לומדה מרכזת 'שואפים לבחור נכון' (מאי). מדריכי המורה הם קבצי docx שאפשר להוריד ולחלץ."
+  },
+  {
+   "id": "gap-09",
+   "type": "hub-linked-module",
+   "grade": 6,
+   "unit": "שואפים לבחור נכון",
+   "title": "חדר המעבדה",
+   "urls": [
+    "https://lomdot.education.gov.il/cet/shefi/smoking/lomdot/labroom/story.html",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/teacherguide/teacherguidelab.docx"
+   ],
+   "note": "חדר לומדה מרכזת 'שואפים לבחור נכון' (מאי). מדריכי המורה הם קבצי docx שאפשר להוריד ולחלץ."
+  },
+  {
+   "id": "gap-10",
+   "type": "hub-linked-module",
+   "grade": 6,
+   "unit": "שואפים לבחור נכון",
+   "title": "חדר הכוחות",
+   "urls": [
+    "https://lomdot.education.gov.il/cet/shefi/smoking/lomdot/powerroomsudents/story.html",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/lomdot/powerteachersroom/story.html",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/teacherguide/teacherguidepowerroom.docx"
+   ],
+   "note": "חדר לומדה מרכזת 'שואפים לבחור נכון' (מאי). מדריכי המורה הם קבצי docx שאפשר להוריד ולחלץ."
+  },
+  {
+   "id": "gap-11",
+   "type": "hub-linked-module",
+   "grade": 6,
+   "unit": "שואפים לבחור נכון",
+   "title": "חדר הבחירה",
+   "urls": [
+    "https://lomdot.education.gov.il/cet/shefi/smoking/lomdot/choiceroomstudentsroom/story.html",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/lomdot/choiceroomteachersroom/story.html",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/teacherguide/teacherguidechoiceroom.docx"
+   ],
+   "note": "חדר לומדה מרכזת 'שואפים לבחור נכון' (מאי). מדריכי המורה הם קבצי docx שאפשר להוריד ולחלץ."
+  },
+  {
+   "id": "gap-12",
+   "type": "hub-linked-module",
+   "grade": 6,
+   "unit": "שואפים לבחור נכון",
+   "title": "חדר הפופים (פרסום)",
+   "urls": [
+    "https://lomdot.education.gov.il/cet/shefi/smoking/lomdot/pufimroom/story.html",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/teacherguide/teacherguidepirsum.docx"
+   ],
+   "note": "חדר לומדה מרכזת 'שואפים לבחור נכון' (מאי). מדריכי המורה הם קבצי docx שאפשר להוריד ולחלץ."
+  },
+  {
+   "id": "gap-13",
+   "type": "hub-linked-module",
+   "grade": 6,
+   "unit": "שואפים לבחור נכון",
+   "title": "שיעור סיכום",
+   "urls": [
+    "https://lomdot.education.gov.il/cet/shefi/smoking/lomdot/finallesson/story.html",
+    "https://lomdot.education.gov.il/cet/shefi/smoking/teacherguide/teachersummary.docx"
+   ],
+   "note": "חדר לומדה מרכזת 'שואפים לבחור נכון' (מאי). מדריכי המורה הם קבצי docx שאפשר להוריד ולחלץ."
+  },
+  {
+   "id": "gap-14",
+   "type": "not-on-site",
+   "grade": 7,
+   "unit": "נורמות התנהגות וגבולות לקידום מרחב בטוח וחיובי ברשת",
+   "title": "יפים על אמת ברשת (שיעור 4)",
+   "urls": [],
+   "note": "מופיע במפת היחידה בשקף 4 של 'גולשים לשינוי'; אין שורה באתר."
+  },
+  {
+   "id": "gap-15",
+   "type": "not-on-site",
+   "grade": 8,
+   "unit": "אחריות אישית וחברתית בעת שיתוף תכנים ברשת",
+   "title": "'חושבים לפני שמפיצים' — שיעורים 2–6 (שמות לא בטקסט)",
+   "urls": [],
+   "note": "מפת היחידה ב'קרוב, רחוק ומה שביניהם' מונה 6 שיעורים; באתר רק שיעור 1."
+  },
+  {
+   "id": "gap-16",
+   "type": "not-on-site",
+   "grade": 9,
+   "unit": "טעם החיים",
+   "title": "בוחרים בחיים 3: לימוד והיכרות עם תופעת האובדנות",
+   "urls": [],
+   "note": "יחידת המשנה 'ידע מציל חיים' (שיעורים 3–4) מופיעה במבנה התוכנית ב'משאבי ההתמודדות שלי' ש' 2; אין שורה באתר."
+  },
+  {
+   "id": "gap-17",
+   "type": "not-on-site",
+   "grade": 9,
+   "unit": "טעם החיים",
+   "title": "בוחרים בחיים 4: דיכאון – מהו? ומה כדאי לדעת?",
+   "urls": [],
+   "note": "כנ\"ל."
+  },
+  {
+   "id": "gap-18",
+   "type": "not-on-site",
+   "grade": 9,
+   "unit": "השוואה חברתית באמצעות הרשת",
+   "title": "למצוא את הדרך שלי (שיעור 4) ושיעור 5 (שם לא בטקסט)",
+   "urls": [],
+   "note": "מפת היחידה ב'דלת למקום בטוח ברשת' ש' 2 מונה 5 שיעורים; באתר 1–3."
+  }
+ ],
+ "excluded": [
+  {
+   "site_row": 47,
+   "grade": 8,
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מערכות יחסים – מבטים נפגשים",
+   "title": "דף מרכז עם כל השיעורים",
+   "url": "https://contentstorage.cet.ac.il/love_menu/story.html",
+   "reason": "link-hub",
+   "note": "דף מרכז של יחידת 'מערכות יחסים – מבטים נפגשים'; story.html, אין קובץ מקומי."
+  },
+  {
+   "site_row": 120,
+   "grade": 6,
+   "section": "קידום בריאות ומניעת שימוש בחומרים (מאי)",
+   "unit": null,
+   "title": "עברית",
+   "url": "https://meyda.education.gov.il/files/shefi/samim/Yom_Lelo_Ishun_2024/Shoafim_Livchor_Nachon.pptx",
+   "reason": "link-hub",
+   "text": "sources/text/6/Shoafim_Livchor_Nachon.md",
+   "note": "רכזת קישורים ללומדות ומדריכי docx; לא שיעור (ראו gaps)."
+  },
+  {
+   "site_row": 121,
+   "grade": 6,
+   "section": "קידום בריאות ומניעת שימוש בחומרים (מאי)",
+   "unit": null,
+   "title": "ערבית",
+   "url": "https://meyda.education.gov.il/files/shefi/samim/Yom_Lelo_Ishun_2024/Aravit_Shoafim_Livchor_Nachon.pptx",
+   "reason": "arabic-duplicate",
+   "text": "sources/text/6/Aravit_Shoafim_Livchor_Nachon.md",
+   "note": "הגרסה הערבית של רכזת 'שואפים לבחור נכון'."
+  },
+  {
+   "site_row": 123,
+   "grade": 6,
+   "section": "קידום בריאות ומניעת שימוש בחומרים (מאי)",
+   "unit": null,
+   "title": "ערבית",
+   "url": "https://meyda.education.gov.il/files/shefi/samim/Yom_Lelo_Ishun_2024/Aravit_Hitbagrut_Vani.pptx",
+   "reason": "arabic-duplicate",
+   "text": "sources/text/6/Aravit_Hitbagrut_Vani.md",
+   "note": "הגרסה הערבית של g6-hitbagrut-vani."
+  }
+ ],
+ "merged": [
+  {
+   "site_row": 56,
+   "grade": 8,
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (יוני)",
+   "unit": "סיכום שנה",
+   "title": "מסיבת סיום - התבוננות פנימית על השנה שהיתה",
+   "text": "sources/text/8/MesibatSiyum.md",
+   "into": "g7-mesibat-sium",
+   "why": "near-duplicate"
+  },
+  {
+   "site_row": 57,
+   "grade": 8,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת ראש השנה",
+   "title": "סימנים לראש השנה",
+   "text": "sources/text/8/Shana_Tova.md",
+   "into": "g7-shana-tova",
+   "why": "same-deck-other-grade"
+  },
+  {
+   "site_row": 88,
+   "grade": 9,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת ראש השנה",
+   "title": "סימנים לראש השנה",
+   "text": "sources/text/9/Shana_Tova.md",
+   "into": "g7-shana-tova",
+   "why": "same-deck-other-grade"
+  },
+  {
+   "site_row": 58,
+   "grade": 8,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פורים",
+   "title": "מתחפשים, מבלים ושומרים על עצמנו בפורים",
+   "text": "sources/text/8/Mitchapsim_Veshomrim_Al_Azmenu.md",
+   "into": "g7-mitchapsim-veshomrim-al-azmenu",
+   "why": "same-deck-other-grade"
+  },
+  {
+   "site_row": 60,
+   "grade": 8,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+   "title": "זיכרון ועצמאות",
+   "text": "sources/text/8/Yom_Zikaron.md",
+   "into": "g7-yom-zikaron",
+   "why": "same-deck-other-grade"
+  },
+  {
+   "site_row": 91,
+   "grade": 9,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+   "title": "זיכרון ועצמאות",
+   "text": "sources/text/9/Yom_Zikaron.md",
+   "into": "g7-yom-zikaron",
+   "why": "same-deck-other-grade"
+  },
+  {
+   "site_row": 59,
+   "grade": 8,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פורים",
+   "title": "כשהפיתוי פוגש גבול",
+   "text": "sources/text/8/Pituy_Pogesh_Gvul.md",
+   "into": "g8-pituy-pogesh-gvul",
+   "why": "same-deck-relisted"
+  },
+  {
+   "site_row": 89,
+   "grade": 9,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פורים",
+   "title": "מהו אושר",
+   "text": "sources/text/9/Osher_1.md",
+   "into": "g9-osher-1",
+   "why": "same-deck-relisted"
+  },
+  {
+   "site_row": 90,
+   "grade": 9,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פורים",
+   "title": "להוסיף אושר לחיים",
+   "text": "sources/text/9/Osher_2.md",
+   "into": "g9-osher-2",
+   "why": "same-deck-relisted"
+  }
+ ],
+ "sequence": {
+  "6": [
+   "g6-ptichat-shana-tashpaz",
+   "g6-mahu-osher",
+   "g6-mekorot-haosher",
+   "g6-hayozer-shel",
+   "g6-yaad-chalom",
+   "g6-nihul-zman",
+   "g6-mezahim-kishurim",
+   "g6-lomdim-leyazeg",
+   "g6-model-patarti",
+   "g6-megalim-achrayut-1",
+   "g6-lizmoach-pticha",
+   "g6-lizmoach-hoze",
+   "g6-lizmoach-meida",
+   "g6-lizmoach-ani",
+   "g6-lizmoach-banim-banot",
+   "g6-lizmoach-kolhalev",
+   "g6-lizmoach-streotypim",
+   "g6-lizmoach-lachaz-hevrati",
+   "g6-lizmoach-sikum",
+   "g6-hitmodedut-hachlatot",
+   "g6-signonot-hachlatot",
+   "g6-model-hachlatot",
+   "g6-hakoach-laavor",
+   "g6-haoganim",
+   "g6-adam-zover",
+   "g6-lokchim-laderech",
+   "g6-orzim-vemitkadmim",
+   "g6-sheela-tshuva",
+   "g6-hitbagrut-vani",
+   "g6-empathy-bamasachim",
+   "g6-tiru-oty",
+   "g6-reshet-haverim",
+   "g6-maavarim-bareshet",
+   "g6-sium-shana",
+   "g6-siyum-shana",
+   "g6-yarid-simanim-lashana-achadasha",
+   "g6-marbim-besimcha",
+   "g6-hameroz-memitzraim",
+   "g6-beikvot-ziurav",
+   "g6-yom-zikaron",
+   "g6-kita-echpatit-medura-echpatit"
+  ],
+  "7": [
+   "g7-hatchalot-1",
+   "g7-hatchalot-hoze-2",
+   "g7-hatchalot-3",
+   "g7-ptichat-shana-1",
+   "g7-ptichat-shana-2",
+   "g7-makom-baolam",
+   "g7-sipur-bemenifa",
+   "g7-lemida-sheli-1",
+   "g7-tamrurim-lemida-2",
+   "g7-etgarim-balemida-3",
+   "g7-ktav-hida-4",
+   "g7-hashpaha-hevratit-1",
+   "g7-matchilim-leashen-2",
+   "g7-tabak-vemuzarav-3",
+   "g7-alkohol-4",
+   "g7-gizanut-1",
+   "g7-gizanut-streotipim-2",
+   "g7-gizanut-rov-vemiut-3",
+   "g7-gizanut-ani-veacher-4",
+   "g7-gizanut-siyum-5",
+   "g7-golshim-leshinuy",
+   "g7-eifo-ani-vehagvul-sheli-bamasachim",
+   "g7-tofsim-kivun-bareshet",
+   "g7-bead-azmi-aharacha-azmit",
+   "g7-hitbagrut-banot",
+   "g7-hitbagrut-banim",
+   "g7-mudaut-migdarit",
+   "g7-miniyut-vepratiyut-bareshet-4",
+   "g7-omdim-lezad-6",
+   "g7-sulam-mishpachti",
+   "g7-mishpacha-hefez-lev",
+   "g7-mesibat-sium",
+   "g7-shana-tova",
+   "g7-mitchapsim-veshomrim-al-azmenu",
+   "g7-yom-zikaron"
+  ],
+  "8": [
+   "g8-yachad",
+   "g8-mashmaut-dvarim-hashuvim",
+   "g8-mashmaut-erech",
+   "g8-lachshov-tov-pil-veyated-1",
+   "g8-lachshov-tov-4-zeadim-2",
+   "g8-lachshov-tov-tirgul-model-3",
+   "g8-ani-vealkohol-1",
+   "g8-alkohol-vemitbagrim-2",
+   "g8-pituy-pogesh-gvul",
+   "g8-haverut-veachrayut",
+   "g8-sigaria-he-sigaria",
+   "g8-karov-rachok-reshet",
+   "g8-miniyut-hizur-8",
+   "g7-mesibat-sium",
+   "g7-shana-tova",
+   "g7-mitchapsim-veshomrim-al-azmenu",
+   "g7-yom-zikaron"
+  ],
+  "9": [
+   "g9-rega-lifney-shematchilim",
+   "g9-glida",
+   "g9-osher-1",
+   "g9-osher-2",
+   "g9-leachnis-et-atov-1",
+   "g9-mashabey-hitmodedut-sheli-2",
+   "g9-eich-lesaper-5",
+   "g9-akartis-amatin-sheli-6",
+   "g9-hide-park-shel-tovanot-7",
+   "g9-samim-lama-ken-lama-lo",
+   "g9-samim-lishmor",
+   "g9-samim-ksamim",
+   "g9-samim-kabalat-hachlatot",
+   "g9-samim-sipur-derech",
+   "g9-trufot-mirsham",
+   "g9-ani-meshatef-ani-kayam",
+   "g9-empathy-masachim-1",
+   "g9-delet-makom-batuach",
+   "g9-bead-azmi-masa-ishi-yofi",
+   "g9-tfisa-migdarit-bemeziut-mekuvenet",
+   "g9-miniyut-7",
+   "g9-mabat-al-haskama",
+   "g9-netya-minit",
+   "g9-shaar-laavar",
+   "g9-shaar-lahove",
+   "g9-shaar-laatid",
+   "g9-sium-shana",
+   "g7-shana-tova",
+   "g7-yom-zikaron"
+  ]
+ },
+ "meta": {
+  "paths": "src_text and digest_ref are relative to lesson-lab/; digest_ref is file:line of the digest card",
+  "order": "lessons are listed per grade in teaching order: site section (month) order, units by lesson number, calendar lessons last as on the site; sequence[grade] includes lessons shared from other grades",
+  "unit_order": "lesson slot within its unit (1-based); gender-split pair shares a slot; unit_size = number of slots",
+  "sensitivity": [
+   "low",
+   "low-med",
+   "med",
+   "med-high",
+   "high"
+  ],
+  "load": [
+   "light",
+   "balanced",
+   "balanced-heavy",
+   "heavy",
+   "very-heavy"
+  ],
+  "effort": "per-lesson weight from words (1.0/1.2/1.4/1.6 at <1000/<1600/<2400/2400+), +0.2 if 35+ slides, load (-0.2..+0.4), sensitivity (high +0.3), double-period +0.3, assets-missing +0.2, grade adaptation +0.2; package S < 4.0 <= M <= 7.0 < L",
+  "source_rows": {
+   "manifest": 136,
+   "index": 128
+  },
+  "counts": {
+   "6": {
+    "site_rows": 44,
+    "built": 41,
+    "taught": 41,
+    "merged": 0,
+    "excluded": 3,
+    "gaps": 6,
+    "packages": 12
+   },
+   "7": {
+    "site_rows": 35,
+    "built": 35,
+    "taught": 35,
+    "merged": 0,
+    "excluded": 0,
+    "gaps": 1,
+    "packages": 11
+   },
+   "8": {
+    "site_rows": 26,
+    "built": 13,
+    "taught": 17,
+    "merged": 5,
+    "excluded": 1,
+    "gaps": 8,
+    "packages": 4
+   },
+   "9": {
+    "site_rows": 31,
+    "built": 27,
+    "taught": 29,
+    "merged": 4,
+    "excluded": 0,
+    "gaps": 3,
+    "packages": 8
+   },
+   "total": {
+    "site_rows": 136,
+    "built": 116,
+    "taught": 122,
+    "merged": 9,
+    "excluded": 4,
+    "gaps": 18,
+    "packages": 35
+   }
+  }
+ }
+}

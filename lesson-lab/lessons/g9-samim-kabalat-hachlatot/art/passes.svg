@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- סופרים מסירות: שתי דמויות מאותה קבוצה מוסרות כדור זו לזו (כדור — ציור ייעודי, אין כדור בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M226 258 Q310 92 394 258" fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12"/>
+    <use href="#kid-hand" x="90" y="196" width="150" height="300" color="#8c82c1"/>
+    <use href="#kid-hand" x="380" y="196" width="150" height="300" color="#8c82c1" transform="matrix(-1 0 0 1 910 0)"/>
+    <g transform="translate(310 150)">
+      <circle r="46" fill="#f7ae4d"/>
+      <path d="M-46 0 H46 M0 -46 V46 M-32 -33 C-14 -14 -14 14 -32 33 M32 -33 C14 -14 14 14 32 33" fill="none" stroke="#13100e" stroke-width="4" stroke-opacity=".5" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>

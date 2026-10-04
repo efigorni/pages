@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שער לעבר: דלת פתוחה, ולידה על הקיר מסגרת תמונה ובה בית הספר (ציור ייעודי — אין מסגרת בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M74 112 L184 56 L294 112" fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="184" cy="54" r="8" fill="#847c74"/>
+    <rect x="36" y="108" width="296" height="244" rx="8" fill="#f7ae4d"/>
+    <path d="M36 328 H332 V344 Q332 352 324 352 H44 Q36 352 36 344 Z" fill="#13100e" opacity=".12"/>
+    <rect x="58" y="130" width="252" height="198" rx="3" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <use href="#school" x="80" y="145" width="208" height="168"/>
+    <use href="#door" x="362" y="150" width="240" height="352" color="#63b1af"/>
+  </g>
+</svg>

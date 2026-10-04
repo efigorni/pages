@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- דמות, ומעליה ענן מחשבה ובתוכו תווי נגינה (ציור ייעודי — אין תווים בערכה) -->
+  <g filter="url(#rough)">
+    <use href="#thought" x="56" y="30" width="320" height="304"/>
+    <g transform="translate(150 92) scale(1.15)" fill="#8c82c1"><ellipse cx="22" cy="106" rx="22" ry="16" transform="rotate(-20 22 106)"/><ellipse cx="100" cy="92" rx="22" ry="16" transform="rotate(-20 100 92)"/><rect x="36" y="16" width="9" height="88" rx="4"/><rect x="114" y="2" width="9" height="88" rx="4"/><path d="M36 14 L123 0 L123 22 L36 36 Z"/></g>
+    <use href="#kid-stand" x="350" y="264" width="130" height="260" color="#63b1af"/>
+  </g>
+</svg>

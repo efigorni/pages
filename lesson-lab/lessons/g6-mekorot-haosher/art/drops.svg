@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- טיפות אושר (שקפים 15, 19 במקור): טיפה אישית ליד דמות אחת, וטיפה כיתתית ליד קבוצה -->
+  <g filter="url(#rough)">
+    <path d="M450 40 C480 95 545 160 545 205 A95 95 0 0 1 355 205 C355 160 420 95 450 40 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M180 40 C210 95 275 160 275 205 A95 95 0 0 1 85 205 C85 160 150 95 180 40 Z" fill="#e6f2f1" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M392 178 C396 152 410 130 424 112" fill="none" stroke="#f7ae4d" stroke-width="9" stroke-linecap="round"/>
+    <path d="M122 178 C126 152 140 130 154 112" fill="none" stroke="#63b1af" stroke-width="9" stroke-linecap="round"/>
+    <use href="#kid-stand" x="405" y="318" width="90" height="180" color="#f7ae4d"/>
+    <use href="#group3" x="70" y="330" width="220" height="165"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" fill="#13100e" text-anchor="middle" dominant-baseline="middle" font-size="44">
+    <text x="450" y="222">אושר</text>
+    <text x="180" y="222">אושר</text>
+  </g>
+</svg>

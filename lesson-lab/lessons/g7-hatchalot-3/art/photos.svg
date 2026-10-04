@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- תמונות מבית הספר היסודי: שלוש תמונות פרושות — בית ספר, שני חברים ושמש (מקור: שקפים 9–10, 20–21) -->
+  <g filter="url(#rough)">
+    <g transform="rotate(-8 150 210)">
+      <rect x="40" y="90" width="220" height="240" rx="8" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="58" y="108" width="184" height="168" rx="4" fill="#e6f2f1"/>
+      <use href="#school" x="70" y="128" width="160" height="129" color="#63b1af"/>
+    </g>
+    <g transform="rotate(5 470 200)">
+      <rect x="360" y="80" width="220" height="240" rx="8" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="378" y="98" width="184" height="168" rx="4" fill="#fdf0dd"/>
+      <use href="#pair" x="410" y="104" width="132" height="144" color="#63b1af"/>
+    </g>
+    <g transform="rotate(-3 310 380)">
+      <rect x="200" y="260" width="220" height="240" rx="8" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="218" y="278" width="184" height="168" rx="4" fill="#eeecf7"/>
+      <use href="#sun" x="250" y="302" width="120" height="120" color="#f7ae4d"/>
+    </g>
+  </g>
+</svg>

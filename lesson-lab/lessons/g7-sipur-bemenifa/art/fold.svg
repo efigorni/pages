@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- דף מניפה: השאלה למעלה, קיפולים, שורה שנכתבת עכשיו, עיפרון, וחץ — מעבירים לבא בתור -->
+  <g filter="url(#rough)">
+    <rect x="268" y="36" width="208" height="118" rx="8" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <path d="M298 78 H446" stroke="#13100e" stroke-width="12" stroke-linecap="round"/>
+    <path d="M298 114 H402" stroke="#13100e" stroke-width="12" stroke-linecap="round"/>
+    <path d="M268 154 L476 154 L458 198 L250 198 Z" fill="#f7ae4d" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M250 198 L458 198 L476 242 L268 242 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M268 242 L476 242 L458 286 L250 286 Z" fill="#f7ae4d" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M250 286 L458 286 L476 330 L268 330 Z" fill="#fdf0dd" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="268" y="330" width="208" height="104" rx="8" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <path d="M298 386 H386" stroke="#847c74" stroke-width="7" stroke-linecap="round"/>
+    <use href="#pencil" x="366" y="262" width="150" height="150" color="#63b1af"/>
+    <use href="#arrow" x="40" y="236" width="196" height="107" color="#847c74"/>
+  </g>
+</svg>

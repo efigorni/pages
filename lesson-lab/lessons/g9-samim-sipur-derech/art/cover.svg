@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- סיפור דרך: שש מדרגות שיורדות מימין לשמאל, ודמות עומדת על המדרגה הראשונה, העליונה -->
+  <g filter="url(#rough)">
+    <rect x="503.7" y="230" width="89.3" height="294" rx="10" fill="#847c74" fill-opacity=".3"/>
+    <rect x="408.3" y="280" width="89.3" height="244" rx="10" fill="#847c74" fill-opacity=".3"/>
+    <rect x="313" y="330" width="89.3" height="194" rx="10" fill="#847c74" fill-opacity=".3"/>
+    <rect x="217.7" y="380" width="89.3" height="144" rx="10" fill="#847c74" fill-opacity=".3"/>
+    <rect x="122.3" y="430" width="89.3" height="94" rx="10" fill="#847c74" fill-opacity=".3"/>
+    <rect x="27" y="480" width="89.3" height="44" rx="10" fill="#847c74" fill-opacity=".3"/>
+    <use href="#kid-stand" x="493.3" y="17.3" width="110" height="220" color="#63b1af"/>
+  </g>
+</svg>

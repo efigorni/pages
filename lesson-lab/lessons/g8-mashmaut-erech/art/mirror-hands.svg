@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- המילה ׳נתן׳: יד נותנת ויד מקבלת, ולצידן תמונת המראה שלהן (כמו במקור — אותה תמונה פעמיים, אחת הפוכה) -->
+  <g filter="url(#rough)">
+    <use href="#hands-help" x="36" y="144" width="252" height="252"/>
+    <path d="M310 104 V436" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14" fill="none"/>
+    <use href="#hands-help" x="332" y="144" width="252" height="252" transform="matrix(-1 0 0 1 916 0)"/>
+  </g>
+</svg>

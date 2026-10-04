@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- טבלת השינויים (מקור: שקף 9) כשני עיגולים חופפים: בנות · שניהם · בנים -->
+  <g filter="url(#rough)">
+    <circle cx="390" cy="270" r="190" fill="#f7ae4d" fill-opacity=".55"/>
+    <circle cx="230" cy="270" r="190" fill="#63b1af" fill-opacity=".55"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif" font-size="44">
+    <text x="497" y="270">בנות</text>
+    <text x="123" y="270">בנים</text>
+    <text x="310" y="270">שניהם</text>
+  </g>
+</svg>

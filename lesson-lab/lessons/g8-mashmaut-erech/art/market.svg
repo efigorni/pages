@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- גברת עם סלים: נער סוחב שני סלי קניות מהשוק (ציור ייעודי — אין סל קניות בערכה) -->
+  <g filter="url(#rough)">
+    <path d="M60 492 H560" stroke="#847c74" stroke-width="5" stroke-linecap="round"/>
+    <use href="#kid-stand" x="215" y="110" width="190" height="380" color="#63b1af"/>
+    <path d="M208 404 C208 352 262 352 262 404" stroke="#13100e" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M178 404 H292 L281 480 Q279 491 268 491 H202 Q191 491 189 480 Z" fill="#f7ae4d"/>
+    <circle cx="366" cy="396" r="17" fill="#f7ae4d"/>
+    <circle cx="398" cy="390" r="17" fill="#f7ae4d"/>
+    <path d="M358 404 C358 352 412 352 412 404" stroke="#13100e" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M328 404 H442 L431 480 Q429 491 418 491 H352 Q341 491 339 480 Z" fill="#8c82c1"/>
+  </g>
+</svg>

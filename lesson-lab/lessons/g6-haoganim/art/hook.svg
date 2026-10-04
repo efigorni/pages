@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מה הקשר? עוגן מימין, בית ספר משמאל, וסימן שאלה גדול ביניהם (ציור ייעודי — אין עוגן בערכה) -->
+  <g filter="url(#rough)">
+    <g transform="translate(370 140) scale(1.08)" color="#8c82c1">
+      <circle cx="100" cy="30" r="19" fill="none" stroke="currentColor" stroke-width="13"/>
+      <rect x="88" y="46" width="24" height="170" rx="12" fill="currentColor"/>
+      <rect x="40" y="62" width="120" height="22" rx="11" fill="currentColor"/>
+      <path d="M28 150 Q34 226 100 226 Q166 226 172 150" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round"/>
+      <path d="M27 104 L54 160 L2 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M173 104 L146 160 L198 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <rect x="100" y="46" width="12" height="170" rx="6" fill="#13100e" opacity=".13"/>
+    </g>
+    <use href="#school" x="20" y="226" width="220" height="178"/>
+  </g>
+  <text x="314" y="300" font-family="Secular One, Arial Hebrew, sans-serif" font-size="150" fill="#13100e" text-anchor="middle" dominant-baseline="central">?</text>
+</svg>

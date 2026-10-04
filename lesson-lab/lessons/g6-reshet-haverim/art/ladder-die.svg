@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- סולמות, משימות וחבלים: סולם, קובייה וחבל מתפתל (ציור ייעודי — אין סולם וקובייה בערכה) -->
+  <g filter="url(#rough)">
+    <g transform="rotate(-10 200 290)">
+      <rect x="122" y="80" width="24" height="420" rx="10" fill="#f7ae4d"/>
+      <rect x="254" y="80" width="24" height="420" rx="10" fill="#f7ae4d"/>
+      <g fill="#f7ae4d">
+        <rect x="140" y="118" width="120" height="18" rx="7"/>
+        <rect x="140" y="184" width="120" height="18" rx="7"/>
+        <rect x="140" y="250" width="120" height="18" rx="7"/>
+        <rect x="140" y="316" width="120" height="18" rx="7"/>
+        <rect x="140" y="382" width="120" height="18" rx="7"/>
+        <rect x="140" y="448" width="120" height="18" rx="7"/>
+      </g>
+      <g fill="#13100e" fill-opacity=".14">
+        <rect x="140" y="128" width="120" height="8" rx="4"/>
+        <rect x="140" y="194" width="120" height="8" rx="4"/>
+        <rect x="140" y="260" width="120" height="8" rx="4"/>
+        <rect x="140" y="326" width="120" height="8" rx="4"/>
+        <rect x="140" y="392" width="120" height="8" rx="4"/>
+        <rect x="140" y="458" width="120" height="8" rx="4"/>
+      </g>
+    </g>
+    <path d="M470 60 C560 96 396 134 470 178 C530 214 430 236 452 268" stroke="#8c82c1" stroke-width="13" fill="none" stroke-linecap="round"/>
+    <rect x="384" y="292" width="176" height="176" rx="30" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <g fill="#13100e">
+      <circle cx="428" cy="336" r="15"/>
+      <circle cx="516" cy="336" r="15"/>
+      <circle cx="472" cy="380" r="15"/>
+      <circle cx="428" cy="424" r="15"/>
+      <circle cx="516" cy="424" r="15"/>
+    </g>
+  </g>
+</svg>

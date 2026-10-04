@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מה זה מגדר? גדר מימין, וספר פתוח (הגדרה) משמאל (מקור: שקף 18) -->
+  <g filter="url(#rough)">
+    <rect x="300" y="236" width="286" height="22" rx="7" fill="#847c74"/>
+    <rect x="300" y="236" width="286" height="22" rx="7" fill="#13100e" fill-opacity=".15"/>
+    <rect x="300" y="366" width="286" height="22" rx="7" fill="#847c74"/>
+    <rect x="300" y="366" width="286" height="22" rx="7" fill="#13100e" fill-opacity=".15"/>
+    <g fill="#847c74">
+      <path d="M314 176 L333 152 L352 176 V450 H314 Z"/>
+      <path d="M366 176 L385 152 L404 176 V450 H366 Z"/>
+      <path d="M418 176 L437 152 L456 176 V450 H418 Z"/>
+      <path d="M470 176 L489 152 L508 176 V450 H470 Z"/>
+      <path d="M522 176 L541 152 L560 176 V450 H522 Z"/>
+    </g>
+    <use href="#book" x="36" y="222" width="230" height="178" color="#8c82c1"/>
+  </g>
+</svg>

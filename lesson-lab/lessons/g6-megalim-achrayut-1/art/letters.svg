@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- אחריות: שש האותיות על אריחים — א ו-ת מודגשות, כמו "מאל״ף עד תי״ו" במקור (שקפים 6, 9) — ועיפרון -->
+  <g filter="url(#rough)">
+    <rect x="500" y="150" width="80" height="80" rx="12" fill="#f7ae4d" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="408" y="150" width="80" height="80" rx="12" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="316" y="150" width="80" height="80" rx="12" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="224" y="150" width="80" height="80" rx="12" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="132" y="150" width="80" height="80" rx="12" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <rect x="40" y="150" width="80" height="80" rx="12" fill="#f7ae4d" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <use href="#pencil" x="220" y="290" width="180" height="180" color="#f7ae4d"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" fill="#13100e" font-family="Secular One, Arial Hebrew, sans-serif">
+    <text x="540" y="193" font-size="54">א</text>
+    <text x="448" y="193" font-size="54">ח</text>
+    <text x="356" y="193" font-size="54">ר</text>
+    <text x="264" y="193" font-size="54">י</text>
+    <text x="172" y="193" font-size="54">ו</text>
+    <text x="80" y="193" font-size="54">ת</text>
+  </g>
+</svg>

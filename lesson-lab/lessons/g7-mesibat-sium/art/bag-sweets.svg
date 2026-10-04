@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- ממתקים ופירות: שקית הפתעות, ובולטים ממנה סוכרייה על מקל, ממתק עטוף ותפוח; דמות שמרימה יד לידה -->
+  <g filter="url(#rough)">
+    <path d="M232 250 V124" stroke="#847c74" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="232" cy="104" r="42" fill="#f7ae4d"/>
+    <path d="M232 104 m-20 0 a20 20 0 1 1 20 20 a12 12 0 1 1 -12 -12" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+    <g transform="rotate(-14 150 214)">
+      <path d="M96 196 L120 214 L96 232 Z" fill="#63b1af"/>
+      <path d="M204 196 L180 214 L204 232 Z" fill="#63b1af"/>
+      <ellipse cx="150" cy="214" rx="34" ry="24" fill="#63b1af"/>
+      <ellipse cx="150" cy="214" rx="34" ry="24" fill="#13100e" opacity=".12"/>
+    </g>
+    <path d="M316 172 C300 150 266 162 268 196 C270 228 296 246 316 236 C336 246 362 228 364 196 C366 162 332 150 316 172 Z" fill="#e57373"/>
+    <path d="M316 172 C316 160 318 150 322 142" fill="none" stroke="#847c74" stroke-width="6" stroke-linecap="round"/>
+    <path d="M322 152 C334 138 352 138 360 146 C350 158 334 160 322 152 Z" fill="#619f88"/>
+    <g fill="none" stroke="#13100e" stroke-width="7" stroke-linecap="round">
+      <path d="M136 236 C136 176 186 176 186 236"/>
+      <path d="M254 236 C254 176 304 176 304 236"/>
+    </g>
+    <rect x="90" y="232" width="260" height="270" rx="10" fill="#8c82c1"/>
+    <rect x="90" y="232" width="260" height="28" rx="10" fill="#13100e" opacity=".12"/>
+    <path d="M90 260 V492 Q90 502 100 502 H124 V260 Z" fill="#13100e" opacity=".12"/>
+    <use href="#kid-hand" x="420" y="222" width="140" height="280" color="#f7ae4d"/>
+  </g>
+</svg>

@@ -1,0 +1,144 @@
+{#- המערך — built from lesson.yaml by scripts/build.py. Order (D14): hero → lesson card → .safe → table.plan → one h2 per step. -#}
+{%- macro ref(n) -%}<a class="slide-ref" href="slides.html#/{{ n - 1 }}">שקף {{ n }}</a>{%- endmacro -%}
+{%- macro tags(practices, spotlights) -%}
+<div class="tags">{% for p in practices %}<span class="pr" data-f="{{ p.f }}">{{ p.name }}</span>{% endfor %}{% for b in spotlights %}<span class="beam">{{ b }}</span>{% endfor %}</div>
+{%- endmacro -%}
+{%- macro screen(s) -%}
+<div class="board screen">{% if s.kicker %}<span class="k">{{ s.kicker }}</span>{% endif %}<p class="h">{{ s.title }}</p>{% if s.sub %}<p>{{ s.sub }}</p>{% endif %}{% if s.points %}<ol>{% for p in s.points %}<li>{{ p }}</li>{% endfor %}</ol>{% endif %}</div>
+{%- endmacro -%}
+{%- macro block(b) -%}
+{% set t = b.type %}{% set v = b.v %}
+{% if b.both %}<p class="both">בשני המסלולים</p>{% endif %}
+{% if t == 'p' %}<p>{{ v|md }}</p>
+{% elif t == 'moves' %}<ol class="moves">{% for m in v %}<li>{{ m|md }}</li>{% endfor %}</ol>
+{% elif t == 'list' %}<ul>{% for m in v %}<li>{{ m|md }}</li>{% endfor %}</ul>
+{% elif t == 'say' %}<div class="say"><q>{{ v|md }}</q></div>
+{% elif t == 'ask' %}<div class="say q"><q>{{ v|md }}</q></div>
+{% elif t == 'whisper' %}<div class="say whisper">{{ v|md }}</div>
+{% elif t == 'tip' %}<div class="tip">{{ v|md }}</div>
+{% elif t == 'board' %}<div class="board">{% if v is string %}{{ v|md }}{% else %}<ol>{% for m in v %}<li>{{ m|md }}</li>{% endfor %}</ol>{% endif %}</div>
+{% elif t == 'timer' %}<p class="timer-line"><span class="timer" data-sec="{{ v.sec }}"></span> {{ v.label|md }}</p>
+{% elif t == 'task' %}
+<div class="task"><div class="task-what"><b>מה עושים?</b> {{ v.what|md }}</div><div class="task-how"><div><b>זמן</b>{{ v.time|md }}</div><div><b>הרכב</b>{{ v.group|md }}</div><div><b>כללים</b>{{ v.rules|md }}</div><div><b>במליאה</b>{{ v.plenary|md }}</div></div></div>
+<div class="ladder"><div><b>שאלת עזר</b>{{ v.help|md }}</div><div><b>שאלת אתגר</b>{{ v.challenge|md }}</div></div>
+<p class="ladder-note">כתבי את שתי השאלות בפינת הלוח והשאירי אותן שם לכל אורך המשימה — מי שצריך נעזר בהן.</p>
+{% elif t == 'ladder' %}
+<div class="ladder"><div><b>שאלת עזר</b>{{ v.help|md }}</div><div><b>שאלת אתגר</b>{{ v.challenge|md }}</div></div>
+<p class="ladder-note">כתבי את שתי השאלות בפינת הלוח והשאירי אותן שם לכל אורך המשימה — מי שצריך נעזר בהן.</p>
+{% elif t == 'slide' %}
+{% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}{% if b.cue %} {{ b.cue }}{% endif %}</p>{% endif %}
+{% if b.echo %}{{ screen(b.s) }}{% endif %}
+{% elif t == 'video' %}
+<p><b>לפני השיעור:</b> פתחי את <a href="{{ b.link or v.url }}" target="_blank" rel="noopener">״{{ v.title }}״</a>{% if v.length %} ({{ v.length }}){% endif %} במחשב הכיתה, וסמני את {% if b.pauses|length > 1 %}נקודות העצירה{% else %}נקודת העצירה{% endif %}: {% for p in b.pauses %}{{ p.at }}{% if not loop.last %} · {% endif %}{% endfor %}.{% if b.clip %} {{ b.clip.prep }}{% endif %}</p>
+{% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}</p>{% endif %}
+{{ screen(b.s) }}
+{% if b.watch %}<div class="say"><q>{{ b.watch|md }}</q></div>{% endif %}
+{% for p in b.pauses %}
+<p class="pause"><b>עצירה ב־{{ p.at }}</b>{% if p.moment %} — {{ p.moment|md }}{% endif %}</p>
+<div class="say q"><q>{{ p.ask|md }}</q></div>
+{% endfor %}
+{% if b.clip %}
+{% if b.clip.tail %}<p>{{ b.clip.tail }}</p>{% endif %}
+{% else %}
+<p>ממשיכים עד הסוף.</p>
+{% endif %}
+{% elif t == 'source_slide' %}
+{% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}</p>{% endif %}
+<div class="src-slide"><p class="h">מציגים מהמצגת המקורית: {{ b.label }}</p><p>{{ v.why|md }}</p><p>{% if b.url %}<a href="{{ b.url }}" target="_blank" rel="noopener">המצגת המקורית</a> · {% endif %}בשקף {{ b.n }} של המצגת שלנו עוברים אליה, ואחרי {% if ',' in b.label %}השקפים{% else %}השקף{% endif %} חוזרים.</p></div>
+{% elif t == 'quote' %}
+{% if v.title %}<h4>{{ v.title|md }}</h4>{% endif %}<blockquote>{{ v.text|paras }}</blockquote>
+{% elif t == 'handout' %}
+<div class="handout"><h4>{{ v.title|md }}</h4>{% if v.get('items') %}<ol>{% for m in v.get('items') %}<li>{{ m|md }}{% if v.lines is not defined or v.lines %}<span class="line"></span>{% endif %}</li>{% endfor %}</ol>{% else %}{{ v.text|paras }}{% endif %}<p class="copies">להדפסה: {{ v.copies|md }}</p></div>
+{% elif t == 'tracks' %}
+<div class="tracks">{% for tr in b.tracks %}<div class="{{ tr.cls }}"><h4><a href="#{{ tr.id }}">מסלול {{ tr.letter }} · {{ tr.title|md }}</a></h4><p>{{ tr.text|md }}</p><span class="when">מתאים כש: {{ tr.when|md }}</span>{% if tr.nums %}<p class="refs"><a class="slide-ref" href="{{ tr.href }}">{{ tr.label }}</a></p>{% endif %}</div>{% endfor %}</div>
+{% for tr in b.tracks %}
+<section class="track {{ tr.cls }}" id="{{ tr.id }}">
+<h3>מסלול {{ tr.letter }} · {{ tr.title|md }}{% if tr.nums %} <a class="slide-ref" href="{{ tr.href }}">{{ tr.label }}</a>{% endif %}</h3>
+{{ tags(tr.practices, tr.spotlights) }}
+{% for x in tr.blocks %}
+{{ block(x) }}
+{% endfor %}
+</section>
+{% endfor %}
+{% elif t == 'messages' %}
+{% if not b.first %}<p class="slide-cue"><a class="slide-ref" href="slides.html#/{{ b.n - 1 }}">{{ b.label }}</a></p>{% endif %}
+<p>הקריאי את המסרים בקול, מילה במילה — {% if b['items']|length > 1 %}מסר בכל שקף, אחד אחרי השני{% else %}כמו שהוא על המסך{% endif %}:</p>
+<div class="board screen"><span class="k">{{ b.head }}</span><ol>{% for m in b['items'] %}<li>{{ m|md }}</li>{% endfor %}</ol></div>
+<div class="say q"><q>{{ v.ask|md }}</q></div>
+{% if v.tip %}<div class="tip">{{ v.tip|md }}</div>{% endif %}
+{% elif t == 'exit' %}
+{% if not b.first %}<p class="slide-cue">{{ ref(b.n) }}</p>{% endif %}
+{% if v.form == 'print' %}<div class="exit"><h4>{{ v.title|md }}</h4><ol>{% for q in v.prompts %}<li>{{ q|md }}<span class="line"></span></li>{% endfor %}</ol></div>
+{% else %}<div class="board"><p class="h">{{ v.title|md }}</p><ol>{% for q in v.prompts %}<li>{{ q|md }}</li>{% endfor %}</ol>{% if v.form == 'sticky' %}<p class="small-chalk">משפט אחד על פתקית, ומדביקים על הלוח.</p>{% endif %}</div>{% endif %}
+{% if v.look_for %}<div class="say whisper">{{ v.look_for|md }}</div>{% endif %}
+{% endif %}
+{%- endmacro -%}
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ L.title }} · המערך</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/lesson.css">
+</head>
+<body class="paper">
+<header class="hero">
+  <div class="hero-art"></div>
+  <div class="wrap">
+    <p class="lesson-unit">{{ unit_line }}</p>
+    <h1 class="lesson-title">{{ L.title }}</h1>
+    <p class="lesson-sub">{{ L.sub|md }}</p>
+    <div class="meta"><span>כיתה {{ grade_label }}</span><span>{{ L.month }}</span><span>45 דקות</span>{% if L.format %}<span>{{ L.format }}</span>{% endif %}</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="lesson-card">
+    <div class="row"><b>שאלת השיעור</b><p class="question-big">{{ L.question|md }}</p></div>
+    <div class="row"><b>ייקחו איתם</b><ul>{% for x in L.takeaways %}<li>{{ x|md }}</li>{% endfor %}</ul></div>
+    <div class="row"><b>צריך להכין</b><ul class="prep">{% for x in prep %}<li>{{ x }}</li>{% endfor %}</ul></div>
+  </section>
+{% if L.safe %}
+
+  <div class="safe">
+    <p><b>לפני השיעור</b></p>
+    <ul>{% for x in L.safe %}<li><b>{{ x.head|md }}.</b> {{ x.text|md }}</li>{% endfor %}</ul>
+  </div>
+{% endif %}
+
+  <h2 class="sec">השיעור במבט אחד<small>45 דקות · ליבה של {{ core_minutes }}′ · {{ n_core }} שלבים{% if n_ext %} ו־{{ n_ext }} הרחבות{% endif %}</small></h2>
+  <table class="plan">
+    <thead><tr><th>זמן</th><th>שלב</th><th>מה עושים</th><th>פרקטיקה</th></tr></thead>
+    <tbody>
+{% for s in steps %}
+      <tr class="k-{{ s.kind }}"><td class="t">{% if s.kind == 'extension' %}<span dir="ltr">{{ s.table_time }}</span>{% else %}{{ s.table_time }}{% endif %}</td><td><a href="#{{ s.id }}">{{ s.display_title|md }}</a></td><td>{{ s.summary|md }}{% if s.track_names %}<span class="tr-names">{{ s.track_names|md }}</span>{% endif %}</td><td><div class="tags">{% for p in s.practices %}<span class="pr" data-f="{{ p.f }}">{{ p.name }}</span>{% endfor %}</div></td></tr>
+{% endfor %}
+    </tbody>
+  </table>
+</main>
+
+<div class="wrap doc">
+{% for s in steps %}
+  <section class="st k-{{ s.kind }}" id="{{ s.id }}">
+    <h2>{{ s.display_title|md }} <span class="t"{% if s.kind == 'extension' %} dir="ltr"{% endif %}>{{ s.time_label }}</span>{% if s.slides %}<a class="slide-ref" href="{{ s.slide_href }}">{{ s.slide_label }}</a>{% endif %}</h2>
+    {{ tags(s.practices, s.spotlights) }}
+{% for b in s.blocks %}
+    {{ block(b) }}
+{% endfor %}
+{% for x in s.tail %}
+{% if x.type == 'whisper' %}
+    <div class="say whisper">{{ x.v|md }}</div>
+{% elif x.type == 'brain' %}
+    <div class="tip brain"><b>הפסקת מוח, אם הכיתה עייפה — 3 דקות לפני ״{{ x.next }}״.</b> {{ x.signs|md }} בחרי רעיון אחד:<ol>{% for i in x.ideas %}<li><b>{{ i.name|md }}:</b> {{ i.text|md }}</li>{% endfor %}</ol>את שלוש הדקות לוקחים מ{% if x.from_ext %}ההרחבה {% endif %}״{{ x.from }}״.</div>
+{% endif %}
+{% endfor %}
+  </section>
+{% endfor %}
+  <footer class="foot">מבוסס על ״{{ L.title }}״ מתוך ״הכ״חות שבדרך״ של שפ״י{% if L.src_url %} · <a href="{{ L.src_url }}">המצגת המקורית</a>{% endif %}</footer>
+</div>
+<script src="../_assets/lesson.js"></script>
+</body>
+</html>

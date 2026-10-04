@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- 1, 2, 3 דג מלוח: שתי דמויות על קו — אחת מרימה יד וצעדה קדימה (שמאלה), והשנייה נשארה במקום -->
+  <g filter="url(#rough)">
+    <path d="M40 470 H580" stroke="#847c74" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <use href="#kid-stand" x="404" y="210" width="130" height="260" color="#63b1af"/>
+    <use href="#kid-hand" x="120" y="190" width="140" height="280" color="#f7ae4d"/>
+    <use href="#arrow" x="240" y="60" width="200" height="109" color="#847c74"/>
+  </g>
+</svg>

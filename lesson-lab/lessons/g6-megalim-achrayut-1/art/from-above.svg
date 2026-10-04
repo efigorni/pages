@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- "לרחף למעלה" (מקור: שקף 19): רחפן מסתכל מלמעלה על ההמון -->
+  <g filter="url(#rough)">
+    <path d="M382 126 L150 286 M418 126 L470 286" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12" fill="none"/>
+    <use href="#crowd" x="110" y="272" width="400" height="250"/>
+    <path d="M316 66 L484 118 M316 118 L484 66" stroke="#13100e" stroke-width="9" stroke-linecap="round"/>
+    <ellipse cx="316" cy="52" rx="44" ry="11" fill="#847c74"/>
+    <rect x="311" y="52" width="10" height="16" fill="#13100e"/>
+    <ellipse cx="484" cy="104" rx="44" ry="11" fill="#847c74"/>
+    <rect x="479" y="104" width="10" height="16" fill="#13100e"/>
+    <ellipse cx="316" cy="104" rx="44" ry="11" fill="#847c74"/>
+    <rect x="311" y="104" width="10" height="16" fill="#13100e"/>
+    <ellipse cx="484" cy="52" rx="44" ry="11" fill="#847c74"/>
+    <rect x="479" y="52" width="10" height="16" fill="#13100e"/>
+    <rect x="356" y="70" width="88" height="50" rx="16" fill="#13100e"/>
+    <circle cx="400" cy="102" r="12" fill="#ffffff"/>
+    <circle cx="400" cy="102" r="6" fill="#63b1af"/>
+  </g>
+</svg>

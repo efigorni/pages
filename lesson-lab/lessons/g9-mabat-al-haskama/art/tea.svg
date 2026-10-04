@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כוס תה (לסרטון ״מה הקשר בין סקס לכוס תה?״, שקף 23): כוס, תחתית ואדים. ציור ייעודי — אין כוס בערכה -->
+  <g filter="url(#rough)">
+    <ellipse cx="300" cy="452" rx="196" ry="34" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="300" cy="446" rx="120" ry="16" fill="#13100e" fill-opacity=".12"/>
+    <path d="M432 268 C512 262 520 372 420 380" stroke="#13100e" stroke-width="18" fill="none" stroke-linecap="round"/>
+    <path d="M432 268 C512 262 520 372 420 380" stroke="#ffffff" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M150 230 L450 230 C446 340 404 440 300 440 C196 440 154 340 150 230 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M168 300 C214 316 386 316 432 300 L424 336 C380 352 220 352 176 336 Z" fill="#63b1af"/>
+    <ellipse cx="300" cy="230" rx="150" ry="28" fill="#fdf0dd" stroke="#13100e" stroke-width="5"/>
+    <path d="M244 176 C224 146 264 126 244 92" stroke="#847c74" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="2 14"/>
+    <path d="M300 182 C280 148 322 126 300 72" stroke="#847c74" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="2 14"/>
+    <path d="M356 176 C336 146 376 126 356 92" stroke="#847c74" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="2 14"/>
+  </g>
+</svg>

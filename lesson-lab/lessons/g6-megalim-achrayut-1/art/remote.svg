@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- השלט המשוכלל (מקור: שקף 15): עצירה, אחורה וקדימה, נכנסים למחשבות, מרחפים למעלה, מוחקים -->
+  <g filter="url(#rough)">
+    <path d="M295.6 67.2 A18 18 0 0 1 324.4 67.2" stroke="#847c74" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <path d="M282.8 57.6 A34 34 0 0 1 337.2 57.6" stroke="#847c74" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <path d="M270.0 48.0 A50 50 0 0 1 350.0 48.0" stroke="#847c74" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <rect x="225" y="90" width="170" height="420" rx="48" fill="#13100e"/>
+    <circle cx="310" cy="172" r="44" fill="#e57373"/>
+    <rect x="294" y="156" width="32" height="32" rx="4" fill="#ffffff"/>
+    <circle cx="266" cy="270" r="34" fill="#f7ae4d"/>
+    <circle cx="354" cy="270" r="34" fill="#f7ae4d"/>
+    <path d="M266 256 L248 270 L266 284 Z M284 256 L266 270 L284 284 Z" fill="#ffffff"/>
+    <path d="M336 256 L354 270 L336 284 Z M354 256 L372 270 L354 284 Z" fill="#ffffff"/>
+    <circle cx="266" cy="360" r="34" fill="#8c82c1"/>
+    <g fill="#ffffff"><circle cx="256" cy="362" r="11"/><circle cx="270" cy="354" r="13"/><circle cx="281" cy="364" r="9"/><rect x="250" y="362" width="34" height="11" rx="5"/></g>
+    <circle cx="354" cy="360" r="34" fill="#63b1af"/>
+    <path d="M354 340 L370 360 H360 V378 H348 V360 H338 Z" fill="#ffffff"/>
+    <circle cx="310" cy="448" r="30" fill="#847c74"/>
+    <path d="M298 436 L322 460 M322 436 L298 460" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+  </g>
+</svg>

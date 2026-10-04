@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- שני סוגי הסכמה (מקור: שקף 13): הסכמה חופשית (וי) מול הסכמה במסכה (מסכה), וקו מנוקד ביניהן -->
+  <g filter="url(#rough)">
+    <path d="M310 70 L310 470" stroke="#847c74" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 14"/>
+    <use href="#check" x="372" y="120" width="180" height="180" color="#619f88"/>
+    <use href="#mask" x="42" y="132" width="236" height="153" color="#8c82c1"/>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="46" fill="#13100e" text-anchor="middle">
+    <text x="462" y="378">חופשית</text>
+    <text x="160" y="378">במסכה</text>
+  </g>
+</svg>

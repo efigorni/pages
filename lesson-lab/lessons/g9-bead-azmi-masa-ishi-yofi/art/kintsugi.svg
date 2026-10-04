@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- קינצוגי: קערה לבנה שנסדקה, והסדקים מודבקים בזהב (מקור: שקף 10) — ציור ייעודי, אין קערה בערכה -->
+  <g filter="url(#rough)">
+    <ellipse cx="310" cy="468" rx="200" ry="22" fill="#13100e" fill-opacity=".12"/>
+    <path d="M250 430 L262 462 L358 462 L370 430 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M96 200 C104 352 196 436 310 436 C424 436 516 352 524 200 Z" fill="#ffffff" stroke="#13100e" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M110 262 C150 300 470 300 510 262 L506 286 C460 326 160 326 114 286 Z" fill="#8c82c1"/>
+    <ellipse cx="310" cy="200" rx="214" ry="50" fill="#eeecf7" stroke="#13100e" stroke-width="5"/>
+    <path d="M190 172 L214 214 L196 262 L232 312 L214 364 L250 418" stroke="#f7ae4d" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M232 312 L300 330 L332 296" stroke="#f7ae4d" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M428 168 L404 222 L446 270 L416 330 L440 390" stroke="#f7ae4d" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M446 270 L496 252" stroke="#f7ae4d" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M150 116 L156 96 L162 116 L182 122 L162 128 L156 148 L150 128 L130 122 Z" fill="#f7ae4d"/>
+    <path d="M478 86 L483 70 L488 86 L504 91 L488 96 L483 112 L478 96 L462 91 Z" fill="#f7ae4d"/>
+  </g>
+</svg>

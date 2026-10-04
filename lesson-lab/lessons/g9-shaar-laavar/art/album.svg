@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- חשוב לזכור: תמונה באלבום של החיים — מסגרת ובה זוג חברים, ולב לידה (ציור ייעודי — אין מסגרת בערכה) -->
+  <g filter="url(#rough)">
+    <rect x="186" y="96" width="300" height="340" rx="10" fill="#8c82c1"/>
+    <path d="M186 410 H486 V426 Q486 436 476 436 H196 Q186 436 186 426 Z" fill="#13100e" opacity=".12"/>
+    <rect x="210" y="120" width="252" height="290" rx="4" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <use href="#pair" x="226" y="148" width="220" height="240"/>
+    <use href="#heart" x="40" y="300" width="140" height="126" color="#e57373"/>
+  </g>
+</svg>

@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- תפזורת "מלקטים מילים" — 9 על 9, כמו בשקף 7 של המקור; כל שורה נקראת מימין לשמאל -->
+  <g filter="url(#rough)">
+    <rect x="58" y="18" width="504" height="504" rx="14" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <g stroke="#847c74" stroke-width="2.5" opacity=".45" stroke-linecap="round">
+      <line x1="114" y1="26" x2="114" y2="514"/>
+      <line x1="66" y1="74" x2="554" y2="74"/>
+      <line x1="170" y1="26" x2="170" y2="514"/>
+      <line x1="66" y1="130" x2="554" y2="130"/>
+      <line x1="226" y1="26" x2="226" y2="514"/>
+      <line x1="66" y1="186" x2="554" y2="186"/>
+      <line x1="282" y1="26" x2="282" y2="514"/>
+      <line x1="66" y1="242" x2="554" y2="242"/>
+      <line x1="338" y1="26" x2="338" y2="514"/>
+      <line x1="66" y1="298" x2="554" y2="298"/>
+      <line x1="394" y1="26" x2="394" y2="514"/>
+      <line x1="66" y1="354" x2="554" y2="354"/>
+      <line x1="450" y1="26" x2="450" y2="514"/>
+      <line x1="66" y1="410" x2="554" y2="410"/>
+      <line x1="506" y1="26" x2="506" y2="514"/>
+      <line x1="66" y1="466" x2="554" y2="466"/>
+    </g>
+  </g>
+  <g font-family="Secular One, Arial Hebrew, sans-serif" font-size="38" fill="#13100e" text-anchor="middle" dominant-baseline="central">
+    <text x="534" y="46">ג</text>
+    <text x="478" y="46">ר</text>
+    <text x="422" y="46">י</text>
+    <text x="366" y="46">ו</text>
+    <text x="310" y="46">ז</text>
+    <text x="254" y="46">מ</text>
+    <text x="198" y="46">ה</text>
+    <text x="142" y="46">כ</text>
+    <text x="86" y="46">א</text>
+    <text x="534" y="102">מ</text>
+    <text x="478" y="102">א</text>
+    <text x="422" y="102">ש</text>
+    <text x="366" y="102">א</text>
+    <text x="310" y="102">ל</text>
+    <text x="254" y="102">ס</text>
+    <text x="198" y="102">מ</text>
+    <text x="142" y="102">ח</text>
+    <text x="86" y="102">ו</text>
+    <text x="534" y="158">י</text>
+    <text x="478" y="158">ט</text>
+    <text x="422" y="158">א</text>
+    <text x="366" y="158">ד</text>
+    <text x="310" y="158">י</text>
+    <text x="254" y="158">ב</text>
+    <text x="198" y="158">ו</text>
+    <text x="142" y="158">ת</text>
+    <text x="86" y="158">ח</text>
+    <text x="534" y="214">ש</text>
+    <text x="478" y="214">ן</text>
+    <text x="422" y="214">פ</text>
+    <text x="366" y="214">ב</text>
+    <text x="310" y="214">ש</text>
+    <text x="254" y="214">ל</text>
+    <text x="198" y="214">ה</text>
+    <text x="142" y="214">ג</text>
+    <text x="86" y="214">ר</text>
+    <text x="534" y="270">ו</text>
+    <text x="478" y="270">ו</text>
+    <text x="422" y="270">ת</text>
+    <text x="366" y="270">ח</text>
+    <text x="310" y="270">ג</text>
+    <text x="254" y="270">נ</text>
+    <text x="198" y="270">א</text>
+    <text x="142" y="270">ע</text>
+    <text x="86" y="270">י</text>
+    <text x="534" y="326">ת</text>
+    <text x="478" y="326">ג</text>
+    <text x="422" y="326">נ</text>
+    <text x="366" y="326">ש</text>
+    <text x="310" y="326">ל</text>
+    <text x="254" y="326">ו</text>
+    <text x="198" y="326">ה</text>
+    <text x="142" y="326">ל</text>
+    <text x="86" y="326">צ</text>
+    <text x="534" y="382">ב</text>
+    <text x="478" y="382">ר</text>
+    <text x="422" y="382">ו</text>
+    <text x="366" y="382">נ</text>
+    <text x="310" y="382">צ</text>
+    <text x="254" y="382">ת</text>
+    <text x="198" y="382">נ</text>
+    <text x="142" y="382">ה</text>
+    <text x="86" y="382">ו</text>
+    <text x="534" y="438">צ</text>
+    <text x="478" y="438">פ</text>
+    <text x="422" y="438">ת</text>
+    <text x="366" y="438">י</text>
+    <text x="310" y="438">ח</text>
+    <text x="254" y="438">ו</text>
+    <text x="198" y="438">ת</text>
+    <text x="142" y="438">ז</text>
+    <text x="86" y="438">ת</text>
+    <text x="534" y="494">ק</text>
+    <text x="478" y="494">כ</text>
+    <text x="422" y="494">ל</text>
+    <text x="366" y="494">א</text>
+    <text x="310" y="494">י</text>
+    <text x="254" y="494">פ</text>
+    <text x="198" y="494">ו</text>
+    <text x="142" y="494">ק</text>
+    <text x="86" y="494">א</text>
+  </g>
+</svg>

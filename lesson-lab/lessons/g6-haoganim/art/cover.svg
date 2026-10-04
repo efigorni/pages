@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- העוגנים שלי: עוגן גדול, ודמות עומדת לידו (ציור ייעודי — אין עוגן בערכה) -->
+  <g filter="url(#rough)">
+    <g transform="translate(70 100) scale(1.5)" color="#8c82c1">
+      <circle cx="100" cy="30" r="19" fill="none" stroke="currentColor" stroke-width="13"/>
+      <rect x="88" y="46" width="24" height="170" rx="12" fill="currentColor"/>
+      <rect x="40" y="62" width="120" height="22" rx="11" fill="currentColor"/>
+      <path d="M28 150 Q34 226 100 226 Q166 226 172 150" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round"/>
+      <path d="M27 104 L54 160 L2 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M173 104 L146 160 L198 164 Z" fill="currentColor" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/>
+      <rect x="100" y="46" width="12" height="170" rx="6" fill="#13100e" opacity=".13"/>
+    </g>
+    <use href="#kid-stand" x="432" y="206" width="125" height="250" color="#63b1af"/>
+  </g>
+</svg>

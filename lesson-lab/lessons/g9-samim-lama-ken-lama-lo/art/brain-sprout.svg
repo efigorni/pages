@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- מוח (ציור ייעודי — אין מוח בערכה) ונבט: המוח של המתבגר עוד מתפתח -->
+  <g filter="url(#rough)">
+    <g transform="translate(200 96) scale(1.28)">
+      <path d="M168 170 C176 192 178 212 172 234 L202 234 C198 212 200 194 208 176 Z" fill="#8c82c1"/>
+      <path d="M168 170 C176 192 178 212 172 234 L202 234 C198 212 200 194 208 176 Z" fill="#13100e" fill-opacity=".18"/>
+      <ellipse cx="240" cy="176" rx="46" ry="30" fill="#8c82c1"/>
+      <ellipse cx="240" cy="176" rx="46" ry="30" fill="#13100e" fill-opacity=".14"/>
+      <path d="M46 156 C14 140 10 92 40 70 C44 36 84 14 122 22 C146 4 196 4 214 24 C250 18 286 46 284 86 C302 112 292 152 262 160 C248 178 214 182 194 172 C172 190 128 194 108 180 C84 190 52 182 46 156 Z" fill="#8c82c1"/>
+      <g fill="none" stroke="#13100e" stroke-opacity=".28" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M104 146 C134 128 168 134 204 116"/>
+        <path d="M166 24 C156 52 180 72 166 102"/>
+        <path d="M58 106 C76 96 70 78 92 66"/>
+        <path d="M74 136 C92 124 104 132 118 112"/>
+        <path d="M112 50 C124 66 140 58 144 82"/>
+        <path d="M202 44 C216 62 238 54 248 76"/>
+        <path d="M212 98 C230 90 250 104 268 92"/>
+        <path d="M128 168 C148 158 166 170 186 160"/>
+        <path d="M244 128 C258 120 270 130 278 118"/>
+      </g>
+      <g fill="none" stroke="#13100e" stroke-opacity=".22" stroke-width="5" stroke-linecap="round">
+        <path d="M208 190 C228 186 256 186 278 192"/>
+        <path d="M216 200 C234 198 254 198 270 202"/>
+      </g>
+    </g>
+    <use href="#sprout" x="40" y="330" width="140" height="163.3"/>
+  </g>
+</svg>

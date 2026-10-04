@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <g filter="url(#rough)">
+    <g stroke="#847c74" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 12">
+      <path d="M310 190 L310 150"/>
+      <path d="M345 225 L415 190"/>
+      <path d="M345 320 L415 350"/>
+      <path d="M310 365 L310 392"/>
+      <path d="M275 320 L205 350"/>
+      <path d="M275 225 L205 190"/>
+    </g>
+    <g stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <circle cx="310" cy="82" r="66" fill="#e6f2f1"/>
+      <circle cx="476" cy="176" r="66" fill="#fdf0dd"/>
+      <circle cx="476" cy="364" r="66" fill="#eeecf7"/>
+      <circle cx="310" cy="458" r="66" fill="#e7f1ec"/>
+      <circle cx="144" cy="364" r="66" fill="#fdf0dd"/>
+      <circle cx="144" cy="176" r="66" fill="#eeecf7"/>
+    </g>
+    <use href="#kid-stand" x="268" y="186" width="84" height="168" color="#63b1af"/>
+  </g>
+  <g text-anchor="middle" font-family="Secular One, Arial Hebrew, sans-serif" font-size="32" fill="#13100e">
+    <text x="310" y="94">ידע</text>
+    <text x="476" y="188">מחשבות</text>
+    <text x="476" y="376">רגשות</text>
+    <text x="310" y="470">ערכים</text>
+    <text x="144" y="356">נורמות</text>
+    <text x="144" y="392">וחוקים</text>
+    <text x="144" y="188">מצפון</text>
+  </g>
+</svg>

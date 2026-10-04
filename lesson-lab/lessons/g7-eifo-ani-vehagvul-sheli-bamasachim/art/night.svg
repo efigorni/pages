@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- בלילה: טלפון, ירח (ציור ייעודי — אין ירח בערכה) ושעון -->
+  <g filter="url(#rough)">
+    <path d="M441.6 60.4 A90 90 0 1 0 529.5 192.2 A80 80 0 0 1 441.6 60.4 Z" fill="#8c82c1"/>
+    <use href="#phone" x="130" y="150" width="180" height="300" color="#13100e"/>
+    <use href="#clock" x="400" y="300" width="140" height="140" color="#63b1af"/>
+  </g>
+</svg>

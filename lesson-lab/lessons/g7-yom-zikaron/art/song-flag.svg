@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- שיר הרעות: דגל ישראל, ותווים קטנים לידו (ציור ייעודי — אין תו מוזיקלי בערכה) -->
+  <g filter="url(#rough)">
+    <g fill="#8c82c1" transform="translate(30 70) scale(0.8)">
+      <ellipse cx="92" cy="330" rx="30" ry="21" transform="rotate(-20 92 330)"/>
+      <ellipse cx="210" cy="298" rx="30" ry="21" transform="rotate(-20 210 298)"/>
+      <rect x="109" y="188" width="12" height="138" rx="5"/>
+      <rect x="227" y="156" width="12" height="138" rx="5"/>
+      <path d="M109 188 L239 156 L239 184 L109 216 Z"/>
+      <ellipse cx="250" cy="146" rx="26" ry="19" transform="rotate(-20 250 146)"/>
+      <rect x="265" y="30" width="11" height="112" rx="5"/>
+      <path d="M270 30 C292 56 326 66 318 112 C308 86 292 76 276 72 Z"/>
+    </g>
+    <use href="#flag-il" x="310" y="140" width="270" height="297" color="#3b7ab3"/>
+  </g>
+</svg>

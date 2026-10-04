@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- משאבים פנימיים וחיצוניים: דמות בתוך עיגול, ומסביבה בית, זוג חברים ומבוגר (תרשים ייעודי) -->
+  <g filter="url(#rough)">
+    <circle cx="310" cy="272" r="244" fill="none" stroke="#847c74" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>
+    <circle cx="310" cy="272" r="102" fill="#e6f2f1" stroke="#13100e" stroke-width="5"/>
+    <use href="#kid-stand" x="262" y="176" width="96" height="192" color="#63b1af"/>
+    <use href="#house" x="244" y="40" width="132" height="120"/>
+    <use href="#pair" x="78" y="200" width="132" height="144"/>
+    <use href="#teacher" x="446" y="198" width="74" height="148" color="#619f88"/>
+  </g>
+</svg>

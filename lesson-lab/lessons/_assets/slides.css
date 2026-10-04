@@ -1,0 +1,80 @@
+/* =============================================================================
+   slides.css — העזר החזותי (reveal.js 5) באותה שפה של המערך.
+   eli5 (D29): איור גדול + מעט מילים; רעיון אחד לכל שקף.
+   reveal: width 1440 × height 810, rtl, center: false. כל הפריסה בתוך .frame,
+   כי במצב הדפסה reveal מאפס ל-section את ה-padding וה-display.
+   ============================================================================= */
+:root {
+  --teal: #63b1af; --teal-deep: #3f8f8d; --teal-soft: #e6f2f1;
+  --orange: #f7ae4d; --orange-deep: #e08f36; --orange-soft: #fdf0dd;
+  --purple: #8c82c1; --purple-deep: #6c60b0; --purple-soft: #eeecf7;
+  --moss: #619f88; --moss-deep: #4a8571; --moss-soft: #e7f1ec;
+  --ink: #13100e; --ink-2: #4a443f; --ink-3: #847c74;
+  --paper: #ffffff; --ground: #f6f3ef; --line: #e8e2da;
+  --display: "Secular One", "Arial Hebrew", system-ui, sans-serif;
+  --body: "Assistant", "Arial Hebrew", system-ui, sans-serif;
+}
+html, body, .reveal-viewport { background: var(--ground); }
+.reveal { font-family: var(--body); color: var(--ink); font-size: 34px; direction: rtl; }
+.reveal .slides { text-align: right; }
+/* descendant, not child: in print view reveal wraps every section in a .pdf-page */
+.reveal .slides section.s-pic { width: 1440px; height: 810px; padding: 0; box-sizing: border-box; background: var(--ground); }
+.reveal h1, .reveal h2 { font-family: var(--display); font-weight: 400; color: var(--ink); letter-spacing: -.01em; text-transform: none; margin: 0 0 18px; line-height: 1.15; text-wrap: balance; }
+.reveal h1 { font-size: 100px; }
+.reveal h2 { font-size: 66px; }
+.reveal p { margin: 0 0 14px; line-height: 1.4; }
+.reveal b { font-weight: 800; }
+/* reveal's rtl mode forces font-family: sans-serif on .slides and headings */
+.reveal.rtl .slides { font-family: var(--body); }
+.reveal.rtl .slides h1, .reveal.rtl .slides h2 { font-family: var(--display); }
+
+/* ---------- the frame: words on the right, the picture on the left ---------- */
+.reveal .frame { position: absolute; inset: 0; box-sizing: border-box; padding: 64px 96px 96px; display: grid; grid-template-columns: minmax(0, 1fr) 620px; gap: 56px; align-items: center; }
+.reveal .txt { min-width: 0; }
+.reveal .kicker { font-weight: 800; font-size: 30px; color: var(--teal-deep); margin-bottom: 14px; }
+.reveal .sub { font-size: 36px; color: var(--ink-2); max-width: 26ch; }
+.reveal .pic svg { width: 100%; height: auto; max-height: 620px; display: block; overflow: visible; }
+.reveal .pic text { font-family: var(--display); }
+
+/* points: revealed one at a time (fragments) */
+.reveal .pts { list-style: none; margin: 22px 0 0; padding: 0; counter-reset: pt; }
+.reveal .pts li { counter-increment: pt; position: relative; font-size: 36px; line-height: 1.3; padding: 14px 64px 14px 0; border-top: 2px solid var(--line); }
+.reveal .pts li::before { content: counter(pt); position: absolute; right: 0; top: 12px; width: 46px; height: 46px; border-radius: 50%; background: var(--orange-soft); color: var(--orange-deep); font-family: var(--display); font-size: 28px; line-height: 46px; text-align: center; }
+
+/* cover: the lesson title as in the inventory, at any length — longer titles step down (lessonlib.COVER_TIERS) */
+.reveal .s-cover h1 { max-width: 9ch; }
+.reveal .s-cover.len-m h1 { font-size: 84px; max-width: 11ch; }
+.reveal .s-cover.len-l h1 { font-size: 70px; max-width: 13ch; }
+.reveal .s-cover.len-xl h1 { font-size: 58px; max-width: 16ch; line-height: 1.18; }
+.reveal .s-cover .kicker { font-size: 32px; }
+
+/* messages (D42, R12): one source message per slide, verbatim — the only long-text slide.
+   The picture column stays 620 like every other slide; longer messages get a smaller size (lessonlib.MSG_TIERS). */
+.reveal .s-msg h2 { font-size: 50px; line-height: 1.32; text-wrap: pretty; }
+.reveal .s-msg.len-m h2 { font-size: 44px; }
+.reveal .s-msg.len-l h2 { font-size: 38px; line-height: 1.34; }
+.reveal .s-msg .kicker { color: var(--orange-deep); }
+
+/* exit ticket: 2–3 prompts need the room, so the picture column is 460 (art-guide: a focus at the top of the range) */
+.reveal .s-exit .frame { grid-template-columns: minmax(0, 1fr) 460px; }
+.reveal .s-exit .kicker { color: var(--moss-deep); }
+
+/* video: the viewing question first, then the link */
+.reveal .go { display: inline-flex; align-items: center; gap: 10px; margin-top: 26px; padding: 14px 30px; border-radius: 99px; background: var(--ink); color: #fff; font-weight: 800; font-size: 30px; text-decoration: none; }
+.reveal .go:hover { background: var(--purple-deep); }
+
+/* timer pill (T toggles the one on the current slide) */
+.reveal .foot { position: absolute; bottom: 30px; right: 96px; left: 96px; display: flex; justify-content: flex-start; align-items: center; gap: 18px; font-size: 26px; color: var(--ink-3); font-weight: 700; }
+.reveal .timer { display: inline-flex; align-items: center; gap: 16px; padding: 10px 14px 10px 26px; border-radius: 99px; background: var(--ink); color: #fff; font-weight: 800; font-size: 28px; }
+.reveal .timer .tm { font-family: var(--display); font-weight: 400; font-size: 44px; font-variant-numeric: tabular-nums; direction: ltr; }
+.reveal .timer button { font: inherit; font-size: 24px; background: var(--orange); color: var(--ink); border: 0; border-radius: 99px; padding: 8px 20px; cursor: pointer; }
+
+/* chrome */
+.reveal .slide-number { font-family: var(--body); background: transparent; color: var(--ink-3); font-size: 20px; direction: ltr; }
+.reveal .controls { color: var(--teal-deep); }
+.reveal .progress { color: var(--orange); height: 5px; }
+
+/* PDF (print-pdf): one page = one slide, fragments all visible, the timer without its button */
+html.reveal-print .reveal .slides .pdf-page { background: transparent !important; }
+html.reveal-print .reveal .timer button { display: none; }
+html.reveal-print .reveal .slides section .fragment { opacity: 1 !important; visibility: inherit !important; }

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- אורזים ומתקדמים: ארגז סגור מימין (ציור ייעודי), חץ קדימה, ודמות שממשיכה בדרך -->
+  <g filter="url(#rough)">
+    <path d="M30 460 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <polygon points="372,306 586,306 560,272 398,272" fill="#f7ae4d"/>
+    <polygon points="372,306 586,306 560,272 398,272" fill="#13100e" fill-opacity=".16"/>
+    <rect x="372" y="304" width="214" height="156" rx="6" fill="#f7ae4d"/>
+    <polygon points="466,306 492,306 487,272 471,272" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <rect x="466" y="304" width="26" height="46" fill="#ffffff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    <use href="#arrow" x="214" y="330" width="140" height="76" color="#f7ae4d"/>
+    <use href="#kid-stand" x="50" y="160" width="150" height="300" color="#63b1af"/>
+  </g>
+</svg>

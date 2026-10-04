@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- דרך מתפתלת לאופק, רמזור מימין ותמרור "אין כניסה" משמאל (אין תמרורים בערכה; התמרור מצויר כאן) -->
+  <g filter="url(#rough)">
+    <use href="#road" x="120" y="196" width="380" height="306.9" color="#13100e"/>
+    <ellipse cx="534" cy="420" rx="32" ry="7" fill="#619f88"/>
+    <use href="#traffic-light" x="486" y="228" width="96" height="192" color="#13100e"/>
+    <ellipse cx="110" cy="452" rx="34" ry="7" fill="#619f88"/>
+    <rect x="104" y="296" width="12" height="156" rx="4" fill="#847c74"/>
+    <circle cx="110" cy="250" r="58" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <circle cx="110" cy="250" r="47" fill="#e57373"/>
+    <rect x="76" y="240" width="68" height="20" rx="3" fill="#ffffff" stroke="#13100e" stroke-width="3.5"/>
+  </g>
+</svg>

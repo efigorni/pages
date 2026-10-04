@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כשסינדרלה והנסיך הגיעו לטיקטוק: טלפון, ולידו זוג דמויות עם כתר מעליהן. הכתר — ציור ייעודי, אין כתר בערכה -->
+  <g filter="url(#rough)">
+    <use href="#phone-notify" x="56" y="150" width="204" height="240" color="#13100e"/>
+    <use href="#pair" x="320" y="232" width="250" height="273" color="#63b1af"/>
+    <path d="M378 196 L370 112 L414 150 L446 92 L478 150 L522 112 L514 196 Z" fill="#f7ae4d"/>
+    <path d="M378 196 L514 196 L514 178 L378 178 Z" fill="#13100e" fill-opacity=".14"/>
+    <circle cx="446" cy="92" r="11" fill="#f7ae4d"/>
+    <circle cx="370" cy="112" r="10" fill="#f7ae4d"/>
+    <circle cx="522" cy="112" r="10" fill="#f7ae4d"/>
+  </g>
+</svg>

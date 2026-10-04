@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- כשהייתם קטנים: דמות יושבת, ומעליה ענן מחשבה ובו דובי (ציור ייעודי — אין דובי בערכה) -->
+  <g filter="url(#rough)">
+    <use href="#thought" x="80" y="24" width="330" height="313.5"/>
+    <g fill="#f7ae4d">
+      <circle cx="212" cy="96" r="20"/>
+      <circle cx="278" cy="96" r="20"/>
+      <ellipse cx="245" cy="200" rx="40" ry="36"/>
+      <ellipse cx="204" cy="196" rx="13" ry="22" transform="rotate(25 204 196)"/>
+      <ellipse cx="286" cy="196" rx="13" ry="22" transform="rotate(-25 286 196)"/>
+      <circle cx="245" cy="132" r="42"/>
+    </g>
+    <g fill="#fdf0dd">
+      <circle cx="212" cy="96" r="9"/>
+      <circle cx="278" cy="96" r="9"/>
+      <ellipse cx="245" cy="146" rx="20" ry="15"/>
+      <ellipse cx="245" cy="206" rx="20" ry="17"/>
+    </g>
+    <ellipse cx="245" cy="140" rx="7" ry="5" fill="#13100e"/>
+    <use href="#kid-sit" x="410" y="250" width="170" height="255" color="#8c82c1"/>
+  </g>
+</svg>

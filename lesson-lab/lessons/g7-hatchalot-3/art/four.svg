@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540" data-diagram="true">
+  <!-- ארבעת המופלאים (מקור: שקפים 12, 23): השומר — שימור, השיפוצניק — שיפור, הקוסם — שינוי, היזם — חידוש. סדר הקריאה מימין -->
+  <g filter="url(#rough)">
+    <g stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <rect x="322" y="22" width="276" height="236" rx="22" fill="#e6f2f1"/>
+      <rect x="22" y="22" width="276" height="236" rx="22" fill="#fdf0dd"/>
+      <rect x="322" y="282" width="276" height="236" rx="22" fill="#eeecf7"/>
+      <rect x="22" y="282" width="276" height="236" rx="22" fill="#e7f1ec"/>
+    </g>
+    <use href="#heart" x="400" y="52" width="120" height="108" color="#e57373"/>
+    <use href="#sprout" x="106" y="40" width="108" height="126" color="#619f88"/>
+    <use href="#cross" x="400" y="306" width="120" height="120" color="#8c82c1"/>
+    <use href="#bulb" x="109" y="298" width="102" height="126" color="#f7ae4d"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="middle" font-family="Secular One, Arial Hebrew, sans-serif" fill="#13100e">
+    <text x="460" y="212" font-size="40">השומר</text>
+    <text x="160" y="212" font-size="36">השיפוצניק</text>
+    <text x="460" y="472" font-size="40">הקוסם</text>
+    <text x="160" y="472" font-size="40">היזם</text>
+  </g>
+</svg>

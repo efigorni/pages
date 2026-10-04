@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- בוחרים קלף: מניפה של קלפים גלויים, והקלף האמצעי מורם — נבחר (ציור ייעודי — אין קלפים בערכה) -->
+  <g filter="url(#rough)">
+    <g transform="rotate(-34 310 500)">
+      <rect x="244" y="250" width="132" height="176" rx="12" fill="#63b1af"/>
+      <rect x="257" y="263" width="106" height="150" rx="6" fill="#ffffff" stroke="#13100e" stroke-width="4"/>
+      <path d="M276 302 H344 M276 328 H344 M276 354 H326" stroke="#847c74" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <g transform="rotate(34 310 500)">
+      <rect x="244" y="250" width="132" height="176" rx="12" fill="#63b1af"/>
+      <rect x="257" y="263" width="106" height="150" rx="6" fill="#ffffff" stroke="#13100e" stroke-width="4"/>
+      <path d="M276 302 H344 M276 328 H344 M276 354 H326" stroke="#847c74" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <g transform="rotate(-17 310 500)">
+      <rect x="244" y="250" width="132" height="176" rx="12" fill="#63b1af"/>
+      <rect x="257" y="263" width="106" height="150" rx="6" fill="#ffffff" stroke="#13100e" stroke-width="4"/>
+      <path d="M276 302 H344 M276 328 H344 M276 354 H326" stroke="#847c74" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <g transform="rotate(17 310 500)">
+      <rect x="244" y="250" width="132" height="176" rx="12" fill="#63b1af"/>
+      <rect x="257" y="263" width="106" height="150" rx="6" fill="#ffffff" stroke="#13100e" stroke-width="4"/>
+      <path d="M276 302 H344 M276 328 H344 M276 354 H326" stroke="#847c74" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <rect x="234" y="120" width="152" height="202" rx="14" fill="#f7ae4d"/>
+    <rect x="249" y="135" width="122" height="172" rx="7" fill="#ffffff" stroke="#13100e" stroke-width="5"/>
+    <path d="M270 180 H350 M270 210 H350 M270 240 H330" stroke="#847c74" stroke-width="7" stroke-linecap="round"/>
+    <path d="M310 96 V60 M268 104 L246 76 M352 104 L374 76" stroke="#f7ae4d" stroke-width="8" stroke-linecap="round"/>
+  </g>
+</svg>

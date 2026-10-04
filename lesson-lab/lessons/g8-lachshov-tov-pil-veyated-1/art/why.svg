@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 540">
+  <!-- למה הפיל לא בורח? ילד מסתכל על פיל קשור ליתד קטנה, ובבועת הדיבור שלו סימן שאלה -->
+  <g filter="url(#rough)">
+    <path d="M30 486 H590" stroke="#847c74" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <rect x="214" y="416" width="24" height="70" rx="5" fill="#f7ae4d"/>
+    <rect x="226" y="416" width="12" height="70" rx="4" fill="#13100e" opacity=".14"/>
+    <circle cx="226" cy="436" r="9" fill="none" stroke="#13100e" stroke-width="5"/>
+    <ellipse cx="344.7" cy="467.1" rx="16.7" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-164.2 344.7 467.1)"/>
+    <ellipse cx="320.3" cy="460.2" rx="16.7" ry="3" fill="#13100e" transform="rotate(-164.2 320.3 460.2)"/>
+    <ellipse cx="295.9" cy="453.3" rx="16.7" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-164.2 295.9 453.3)"/>
+    <ellipse cx="271.6" cy="446.4" rx="16.7" ry="3" fill="#13100e" transform="rotate(-164.2 271.6 446.4)"/>
+    <ellipse cx="247.2" cy="439.5" rx="16.7" ry="7" fill="none" stroke="#13100e" stroke-width="5" transform="rotate(-164.2 247.2 439.5)"/>
+    <g transform="translate(280 256) scale(0.74)">
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="50" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#847c74"/>
+      <rect x="238" y="176" width="46" height="134" rx="20" fill="#13100e" opacity=".16"/>
+      <path d="M24 128 C6 150 0 178 4 206" fill="none" stroke="#847c74" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="174" cy="146" rx="156" ry="108" fill="#847c74"/>
+      <rect x="84" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <rect x="268" y="186" width="56" height="124" rx="22" fill="#847c74"/>
+      <circle cx="334" cy="106" r="76" fill="#847c74"/>
+      <path d="M388 118 C416 158 422 206 412 244 C407 263 390 268 383 255" fill="none" stroke="#847c74" stroke-width="36" stroke-linecap="round"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#847c74"/>
+      <path d="M300 52 C258 56 244 122 262 170 C276 204 322 204 338 176 C354 146 346 68 300 52 Z" fill="#13100e" opacity=".16"/>
+      <path d="M370 150 Q378 186 414 190 Q388 176 383 148 Z" fill="#fff" stroke="#13100e" stroke-width="4" stroke-linejoin="round"/>
+    </g>
+    <use href="#kid-stand" x="40" y="254" width="120" height="240" color="#63b1af"/>
+    <use href="#speech-l" x="70" y="40" width="240" height="204" color="#13100e"/>
+  </g>
+  <text x="190" y="112" font-family="Secular One, Arial Hebrew, sans-serif" font-size="120" fill="#13100e" text-anchor="middle" dominant-baseline="middle">?</text>
+</svg>
