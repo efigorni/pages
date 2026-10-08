@@ -16,8 +16,9 @@ nothing else in the repo is read or written. In each game:
 
 `data` writes club/roster.json from players.json (one player per line), then assembles that game;
 --prune deletes photos and clips of players who are no longer in it. The club's name model comes from
-<game>/club/club.json: {"names": "full"} keeps name_he only; {"names": "first-last"} adds the
-card's two tiers (first_he / last_he) and speak_he, the text the voice reads.
+<game>/club/club.json: {"names": "full"} shows name_he on one card line; {"names": "first-last"} adds the
+card's two tiers (first_he / last_he). speak_he, the text the voice reads, ships whenever it differs from
+name_he (and always with "first-last").
 `assemble` stamps the shared code and the roster into the pages and writes each sw.js; with no games it
 does every game. `--check` writes nothing and fails if a page or sw.js is not what assemble would write,
 or if img/ or audio/ holds a player the roster doesn't (every file there is precached). Run it before
@@ -100,10 +101,13 @@ def entry(p, page, model):
     img = f"img/{pid}.webp"
     if not (page / img).is_file():
         fail(f"{pid}: missing {img} (run the image tool first)")
-    if model == "full":
-        return {"id": pid, "name_he": name, "number": number, "role": p["role"], "img": img}
-    return {"id": pid, "name_he": name, "first_he": first, "last_he": last, "speak_he": speak,
-            "number": number, "role": p["role"], "img": img}
+    out = {"id": pid, "name_he": name}
+    if model == "first-last":
+        out.update(first_he=first, last_he=last, speak_he=speak)
+    elif speak != name:  # the voice's text ships whenever it isn't the card's, whatever the card shows
+        out["speak_he"] = speak
+    out.update(number=number, role=p["role"], img=img)
+    return out
 
 
 def roster_text(roster):
