@@ -1,6 +1,6 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
 // VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
-const VERSION = 'maccabi-haifa-memory-17f860e23ed6';
+const VERSION = 'maccabi-haifa-memory-673d98cc4f60';
 const ASSETS = [
   './',
   'index.html',
@@ -125,6 +125,29 @@ function cachedPage(request) {
   return cached(request).then((hit) => hit || caches.match('./'));
 }
 
+// <audio> asks for byte ranges, and some players (iOS Safari) refuse a whole 200 in reply. A cached
+// file answers a single range itself; any other request gets the whole file.
+function ranged(request, response) {
+  const m = /^bytes=(\d*)-(\d*)$/.exec(request.headers.get('range') || '');
+  if (!m || (m[1] === '' && m[2] === '')) return Promise.resolve(response);
+  return response.arrayBuffer().then((body) => {
+    const size = body.byteLength;
+    const start = m[1] === '' ? Math.max(0, size - Number(m[2])) : Number(m[1]);
+    const end = m[1] === '' || m[2] === '' ? size - 1 : Math.min(Number(m[2]), size - 1);
+    if (start > end) return new Response(null, { status: 416, headers: { 'Content-Range': `bytes */${size}` } });
+    return new Response(body.slice(start, end + 1), {
+      status: 206,
+      statusText: 'Partial Content',
+      headers: {
+        'Content-Type': response.headers.get('Content-Type') || 'application/octet-stream',
+        'Content-Range': `bytes ${start}-${end}/${size}`,
+        'Content-Length': String(end - start + 1),
+        'Accept-Ranges': 'bytes',
+      },
+    });
+  });
+}
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
@@ -137,7 +160,7 @@ self.addEventListener('fetch', (event) => {
   event.waitUntil(network.then(() => saved, () => {}));
 
   if (request.mode !== 'navigate') {
-    event.respondWith(caches.match(request).then((hit) => hit || network));
+    event.respondWith(caches.match(request).then((hit) => (hit ? ranged(request, hit) : network)));
     return;
   }
 
