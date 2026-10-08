@@ -1,15 +1,17 @@
 # maccabi-memory tools
 
-Scripts that build the game's data, photos, voice clips and offline cache. The game
-itself (`../index.html`) needs none of them at runtime; they're here so the roster can be
-refreshed when the squad changes (a new season, transfers).
+What this game needs to refresh its roster when the squad changes (a new season,
+transfers). The game itself (`../index.html`) needs none of it at runtime. The engine,
+the shared styles, the service worker and the generic tools live in
+[`_memory-game/`](../../_memory-game/README.md), which also explains which parts of
+`../index.html` are generated.
 
-| Folder | What it does |
+| Here | What it is |
 |---|---|
 | `scrape/` | Reads the club site (stats list, roster, line-ups, player pages) into a data directory: `players.json`, raw photos, contact sheets |
-| `images/` | Crops each player's cutout photo to a consistent head-and-shoulders WebP in `../img/` |
-| `tts/` | Generates the Hebrew voice clips in `../audio/` |
-| `page/` | Embeds the roster into `../index.html`, lists which clips exist, and refreshes the service worker's precache list; `page/icons/` renders the PWA icons |
+| `tts/` | `pronunciations.json` (each name's pinned IPA), plus the bake-off that chose the engine |
+| `page/icons/` | The two icon SVGs |
+| `game.json` | The name model `build_page.py data` writes into DATA: `"full"`, `name_he` only |
 
 Downloads are untrusted data: keep them in a work directory **outside the repo**, run
 Python with `-I`, and pass paths as arguments. Commands below run from the repo root;
@@ -67,7 +69,9 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
    landscape. Every card should show a face, number and name, the console should be
    clean, and the voice should read the right name.
 
-6. **Commit** with explicit paths (`git add maccabi-memory/...`).
+6. **Commit** with explicit paths (`git add maccabi-memory/...`). A roster refresh touches
+   only this game. A change in `_memory-game/` changes both games: assemble, commit and
+   verify both (see [`_memory-game/README.md`](../../_memory-game/README.md)).
 
 ## Voice clips
 
