@@ -25,13 +25,10 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
-import hashlib
 import io
 import json
-import os
 import re
 import sys
-import tempfile
 import unicodedata
 from pathlib import Path
 from urllib.parse import quote, unquote
@@ -40,13 +37,15 @@ sys.dont_write_bytecode = True  # no __pycache__ in the repo
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # -I drops the script dir; these helpers are ours
 sys.path.insert(1, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/tts"))  # hebrew.py
 sys.path.insert(2, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/images"))  # framing.py
+sys.path.insert(3, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/scrape"))  # the shared kit
 
 from bs4 import BeautifulSoup  # noqa: E402
 from PIL import Image  # noqa: E402
 
-from fetch import Fetcher, log_line  # noqa: E402
+from common import Fetcher, ascii_slug, log_line, photo_facts, write_json_atomic  # noqa: E402
 from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
 from hebrew import nickname  # noqa: E402
+from roster import check, output_key, rank_key, select  # noqa: E402
 from rsc import page_objects  # noqa: E402
 
 BASE = "https://www.mhaifafc.com"
@@ -66,7 +65,6 @@ FULL_MATCH = 90
 # inside the hair, and a shoulder rule if the default one ever stops fitting.
 IMAGES = json.loads((Path(__file__).resolve().parents[2] / "club/club.json").read_text(encoding="utf-8"))["images"]
 SHOULDER_RULE = {k: IMAGES[k] for k in ("shoulder_share", "shoulder_from") if k in IMAGES}
-TRANSLIT_EXTRA = {"ł": "l", "Ł": "l", "đ": "d", "Đ": "d", "ø": "o", "Ø": "o", "æ": "ae", "ß": "ss", "ı": "i"}
 
 
 def log(msg: str) -> None:
@@ -78,14 +76,6 @@ def clean(text: str | None) -> str:
     for ch in ("‏", "‎", "‪", "‫", "‬", "\xa0"):
         text = text.replace(ch, " " if ch == "\xa0" else "")
     return re.sub(r"\s+", " ", text).strip()
-
-
-def ascii_slug(text: str) -> str:
-    text = "".join(TRANSLIT_EXTRA.get(c, c) for c in text)
-    text = unicodedata.normalize("NFKD", text)
-    text = "".join(c for c in text if not unicodedata.combining(c))
-    text = re.sub(r"['’`]", "", text.lower())
-    return re.sub(r"[^a-z0-9]+", "-", text).strip("-")
 
 
 def speak_he(name: str) -> tuple[str, str | None]:
@@ -104,16 +94,6 @@ def minute(text) -> int | None:
 def int_or_none(text) -> int | None:
     m = re.search(r"-?\d+", str(text or ""))
     return int(m.group(0)) if m else None
-
-
-def write_json_atomic(path: Path, payload) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=path.parent)
-    with os.fdopen(fd, "w", encoding="utf-8") as fh:
-        json.dump(payload, fh, ensure_ascii=False, indent=2)
-        fh.write("\n")
-    os.chmod(tmp, 0o644)
-    os.replace(tmp, path)
 
 
 # ---------------------------------------------------------------- /players
@@ -349,25 +329,6 @@ def game_anomalies(game: dict) -> list[str]:
 
 
 # ---------------------------------------------------------------- photos
-
-def inspect_image(data: bytes) -> dict:
-    img = Image.open(io.BytesIO(data))
-    img.load()
-    rgba = img.convert("RGBA")
-    alpha = rgba.getchannel("A")
-    hist = alpha.histogram()
-    total = img.width * img.height
-    return {
-        "format": img.format,
-        "mode": img.mode,
-        "px": [img.width, img.height],
-        "has_alpha": alpha.getextrema()[0] < 255,
-        "transparent_share": round(hist[0] / total, 3),
-        "alpha_levels": sum(1 for v in hist if v),
-        "bytes": len(data),
-        "sha1": hashlib.sha1(data).hexdigest(),
-    }
-
 
 # ---------------------------------------------------------------- design tokens
 
@@ -636,38 +597,25 @@ def main() -> int:
             "framing": None,
         })
 
-    # ---- H3: pool of the top N by appearances, main 11 = top GK + 10 outfield
-    def rank_key(pl):
-        s = pl["stats"]
-        return (-s["appearances"], -s["starts"], -s["minutes"], pl["number"] if pl["number"] is not None else 999)
-
+    # ---- H3: pool of the top N by appearances, main 11 = top GK + 10 outfield (roster.select)
     eligible = [pl for pl in players if pl["photo_url"] and pl["profile_url"]]
     for pl in players:
         if not pl["photo_url"]:
             pl["role"], pl["excluded_reason"] = "excluded", "no photo on the site"
-    ranked = sorted((pl for pl in eligible if pl["stats"]["appearances"] >= 1), key=rank_key)
-    for i, pl in enumerate(ranked, 1):
-        pl["pool_rank"] = i
-    pool = ranked[: args.pool_size]
+    sel = select(eligible, args.pool_size)
+    ranked, pool, gks, top_gk, outfield_pool = sel.ranked, sel.pool, sel.gks, sel.top_gk, sel.outfield
     tie_notes = []
     if len(ranked) > args.pool_size and rank_key(ranked[args.pool_size - 1])[:3] == rank_key(ranked[args.pool_size])[:3]:
         tie_notes.append(f"pool cut decided by jersey number: {ranked[args.pool_size - 1]['id']} vs {ranked[args.pool_size]['id']}")
-    gks = sorted((pl for pl in eligible if pl["is_gk"]), key=rank_key)
-    top_gk = gks[0] if gks and gks[0]["stats"]["appearances"] >= 1 else None
-    outfield_pool = [pl for pl in pool if not pl["is_gk"]]
     for pl in eligible:
         if pl["role"]:
             continue
         if pl["stats"]["appearances"] == 0:
             pl["role"], pl["excluded_reason"] = "excluded", f"0 appearances in {season_label}"
-        elif pl["is_gk"] and pl is not top_gk:
+        elif pl["is_gk"]:
             pl["role"], pl["excluded_reason"] = "excluded", f"backup goalkeeper (the main 11 uses {top_gk['id']})"
-        elif pl is top_gk:
-            pl["role"] = "starter"
-        elif pl not in pool:
+        else:
             pl["role"], pl["excluded_reason"] = "excluded", f"outside the top {args.pool_size} by appearances (pool_rank {pl['pool_rank']})"
-    for i, pl in enumerate(outfield_pool):
-        pl["role"] = "starter" if i < 10 else "bench"
     if len(outfield_pool) > 10 and rank_key(outfield_pool[9])[:3] == rank_key(outfield_pool[10])[:3]:
         tie_notes.append(f"10th outfield slot decided by jersey number: {outfield_pool[9]['id']} vs {outfield_pool[10]['id']}")
     for a_, b_ in zip(outfield_pool[9:10], outfield_pool[10:11]):
@@ -701,7 +649,7 @@ def main() -> int:
         ext = Path(url).suffix.lower() or ".png"
         rel = f"img/{Path(url).name}"
         data = f.cached(url, rel)
-        meta_img = inspect_image(data)
+        meta_img = photo_facts(data)
         dest = out / "raw" / f"{pl['id']}{ext}"
         dest.write_bytes(data)
         pl.update({"photo_file": f"raw/{pl['id']}{ext}", "photo_px": meta_img["px"], "photo_has_alpha": meta_img["has_alpha"],
@@ -731,8 +679,7 @@ def main() -> int:
         css_text += f.cached(BASE + link, "css/" + Path(link).name).decode("utf-8", "replace")
     design = design_tokens(out, design_dir, css_text, meta.get("card_cover_url"))
 
-    role_order = {"starter": 0, "bench": 1, "excluded": 2}
-    players.sort(key=lambda pl: (role_order[pl["role"]], not pl["is_gk"], pl["pool_rank"] or 999, rank_key(pl)))
+    players.sort(key=output_key)
     now = dt.datetime.now(dt.timezone.utc).astimezone()
     fetched = dt.datetime.fromtimestamp(f.newest_fetch, dt.timezone.utc).astimezone() if f.newest_fetch else now
     comps = sorted({g["stage"] for g in games})
@@ -793,6 +740,12 @@ def main() -> int:
     log(f"wrote {out / 'players.json'} ({counts}); {f.requests} network requests")
     for note in tie_notes:
         log("TIE: " + note)
+    problems = check(payload)
+    for msg in problems:
+        log(f"PROBLEM: {msg}")
+    if problems:
+        log("players.json is written but not usable by the game tools; fix the problems above (no PLAYERS_READY)")
+        return 1
     if args.mark_ready:
         (out / "PLAYERS_READY").write_text(payload["built_at"] + "\n", encoding="utf-8")
         log("created PLAYERS_READY")

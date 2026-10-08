@@ -34,7 +34,7 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
        hapoel-tlv-memory/tools/scrape/fetch_popups.py --html <work>/data/html
    uv run --with requests --with beautifulsoup4 --with pillow --with numpy --with scipy python -I -u \
        hapoel-tlv-memory/tools/scrape/scrape_hapoel.py --data <work>/data
-   uv run --with pillow python -I -u hapoel-tlv-memory/tools/scrape/contact_sheet.py --data <work>/data
+   uv run --with pillow python -I -u _memory-game/tools/scrape/contact_sheet.py --game hapoel-tlv-memory --data <work>/data
    ```
 
    - **Selection** happens here. The metric is this season's appearances in all

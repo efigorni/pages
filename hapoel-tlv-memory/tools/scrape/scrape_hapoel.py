@@ -17,26 +17,24 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
-import hashlib
 import json
-import os
 import re
 import sys
-import tempfile
-import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(1, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/images"))  # framing.py
+sys.path.insert(1, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/scrape"))  # the shared kit
+sys.path.insert(2, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/images"))  # framing.py
 
 from PIL import Image  # noqa: E402
 
-from fetch import Fetcher, log_line  # noqa: E402
+from common import Fetcher, ascii_slug, log_line, norm_name, photo_facts, write_json_atomic  # noqa: E402
 from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
 from htafc import LISTING_EN, LISTING_HE, SECTION_EN, parse_lineup_block, parse_listing, parse_popup, report_text  # noqa: E402
-from tm_parse import parse_squadstats  # noqa: E402
+from roster import check, output_key, select  # noqa: E402
+from transfermarkt import parse_squadstats  # noqa: E402
 
 SEASON = "2026/27"
 TZ = dt.timezone(dt.timedelta(hours=3))
@@ -89,16 +87,6 @@ POOL_RULE = (
     "appearances + the 10 outfield players with the most; bench = the other outfield players in the pool; backup "
     "goalkeepers excluded."
 )
-
-
-def norm_name(s: str) -> str:
-    s = s.replace("׳", "'").replace("״", '"').replace("’", "'").replace("`", "'")
-    return " ".join(s.split())
-
-
-def slug(en: str) -> str:
-    s = unicodedata.normalize("NFKD", en).encode("ascii", "ignore").decode().lower()
-    return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
 
 
 def season_date(ddmm: str) -> str:
@@ -257,19 +245,6 @@ def tm_crosscheck(html_dir: Path, players: list[dict], logs: dict) -> dict:
     return result
 
 
-def photo_facts(path: Path) -> dict:
-    raw = path.read_bytes()
-    im = Image.open(path)
-    fmt, mode, size = im.format, im.mode, im.size
-    rgba = im.convert("RGBA")
-    hist = rgba.getchannel("A").histogram()
-    n = size[0] * size[1]
-    return {"photo_px": list(size), "photo_format": fmt, "photo_mode": mode,
-            "photo_has_alpha": hist[255] != n, "photo_transparent_share": round(hist[0] / n, 3),
-            "photo_alpha_levels": sum(1 for v in hist if v), "photo_bytes": len(raw),
-            "photo_sha1": hashlib.sha1(raw).hexdigest()}
-
-
 def clean_photo(raw_path: Path, clean_path: Path) -> dict:
     """The club photo minus its baked-in shirt number (clean_number.py); cached by mtime."""
     from clean_number import clean
@@ -282,14 +257,6 @@ def clean_photo(raw_path: Path, clean_path: Path) -> dict:
     stats["bbox_number"] = [float(v) for v in stats["bbox_number"]] if stats["bbox_number"] else None
     clean_path.with_suffix(".json").write_text(json.dumps(stats), encoding="utf-8")
     return stats
-
-
-def atomic_write(path: Path, data: str) -> None:
-    fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=path.name + ".", suffix=".tmp")
-    with os.fdopen(fd, "w", encoding="utf-8") as fh:
-        fh.write(data)
-    os.chmod(tmp, 0o644)  # mkstemp creates 0600
-    os.replace(tmp, path)
 
 
 def main() -> int:
@@ -316,7 +283,7 @@ def main() -> int:
         pop = parse_popup(load_json(html_dir / f"members/{x['member_id']}.json")["data"])
         if norm_name(pop["name"]) != norm_name(x["name"]):
             raise SystemExit(f"popup name differs: {pop['name']} vs {x['name']}")
-        pid = slug(y["name"])
+        pid = ascii_slug(y["name"])
         players.append({
             "id": pid, "id_from": "english_name",
             "name_he": x["name"], "speak_he": x["name"], "name_parenthetical": None,
@@ -362,22 +329,13 @@ def main() -> int:
         log_line(f"  TM only: {s}")
 
     # selection (P3)
-    ranked = sorted([p for p in players if p["stats"]["appearances"] >= 1],
-                    key=lambda p: (-p["stats"]["appearances"], -p["stats"]["starts"], -p["stats"]["minutes"], p["number"]))
-    for i, p in enumerate(ranked, 1):
-        p["pool_rank"] = i
+    sel = select(players)
     for p in players:
         p.setdefault("pool_rank", None)
-    pool = [p for p in ranked if p["pool_rank"] <= 23]
-    gks = [p for p in pool if p["is_gk"]]
-    outfield = [p for p in pool if not p["is_gk"]]
-    starters = set([gks[0]["id"]] + [p["id"] for p in outfield[:10]])
-    bench = set(p["id"] for p in outfield[10:])
+    outfield = sel.outfield
     for p in players:
-        if p["id"] in starters:
-            p["role"], p["excluded_reason"] = "starter", None
-        elif p["id"] in bench:
-            p["role"], p["excluded_reason"] = "bench", None
+        if p.get("role") in ("starter", "bench"):
+            p["excluded_reason"] = None
         else:
             p["role"] = "excluded"
             if p["stats"]["appearances"] == 0:
@@ -416,7 +374,7 @@ def main() -> int:
         if not dest.exists() or a.refresh:
             photos.cached(p["photo_url"], rel, force=True)
         p["photo_file_original"] = rel
-        p.update(photo_facts(dest))
+        p.update({f"photo_{k}": v for k, v in photo_facts(dest.read_bytes()).items()})
         crel = f"clean/{p['id']}.png"
         p["number_removal"] = clean_photo(dest, data / crel)
         nb = p["number_removal"]["bbox_number"]
@@ -438,8 +396,7 @@ def main() -> int:
         log_line(f"photo {p['id']}: {p['photo_px']} {p['photo_mode']} alpha {p['photo_transparent_share']} | number {p['number_removal']['bbox_number']} "
                  f"| {lm} | crop {crop} {p['framing']['crop_px']}px")
 
-    order = {"starter": 0, "bench": 1, "excluded": 2}
-    players.sort(key=lambda p: (order[p["role"]], not p["is_gk"], p["pool_rank"] or 99, p["number"]))
+    players.sort(key=output_key)
     pooled = [p for p in players if p.get("crop")]
     shared = {"x0": round(min(p["crop"]["x0"] for p in pooled), 4), "y0": round(min(p["crop"]["y0"] for p in pooled), 4),
               "x1": round(max(p["crop"]["x1"] for p in pooled), 4), "y1": round(max(p["crop"]["y1"] for p in pooled), 4)}
@@ -477,7 +434,7 @@ def main() -> int:
                       "photos --mode auto frames on the numeral."),
         "players": players,
     }
-    atomic_write(data / "players.json", json.dumps(doc, ensure_ascii=False, indent=2) + "\n")
+    write_json_atomic(data / "players.json", doc)
     log_line(f"wrote players.json: {sum(p['role']=='starter' for p in players)} starters, {sum(p['role']=='bench' for p in players)} bench, "
              f"{sum(p['role']=='excluded' for p in players)} excluded; requests this run: {f.requests}")
     for p in players:
@@ -485,6 +442,12 @@ def main() -> int:
         print(f"{p['role']:8} {str(p['pool_rank'] or '-'):>3} #{p['number']:<3} {p['id']:22} {p['name_he']:18} apps {s['appearances']:2} st {s['starts']:2} "
               f"min {s['minutes']:4} | TM {'ok' if (p['crosscheck'].get('transfermarkt') or {}).get('match') else (p['crosscheck'].get('transfermarkt') or {}).get('tm')} "
               f"| {p['excluded_reason'] or ''}", flush=True)
+    problems = check(doc)
+    for msg in problems:
+        log_line(f"PROBLEM: {msg}")
+    if problems:
+        log_line("players.json is written but not usable by the game tools; fix the problems above (no PLAYERS_READY)")
+        return 1
     if a.mark_ready:
         (data / "PLAYERS_READY").write_text(dt.datetime.now(TZ).isoformat(timespec="seconds") + "\n", encoding="utf-8")
         log_line("PLAYERS_READY written")

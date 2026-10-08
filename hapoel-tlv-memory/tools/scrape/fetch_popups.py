@@ -13,8 +13,9 @@ from pathlib import Path
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(1, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/scrape"))  # the shared kit
 
-from fetch import Fetcher, log_line  # noqa: E402
+from common import Fetcher, log_line  # noqa: E402
 from htafc import AJAX, LISTING_HE, nonce_of, parse_listing, parse_popup  # noqa: E402
 
 

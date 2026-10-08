@@ -25,7 +25,7 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
    uv run --with requests --with beautifulsoup4 --with pillow python -I -u \
        maccabi-haifa-memory/tools/scrape/scrape_haifa.py --out <work>/data \
        --shoulder-override pedro-barzao=0.415 --shoulder-override adam-grimberg=0.39 --refresh
-   uv run --with pillow python -I -u maccabi-haifa-memory/tools/scrape/contact_sheet.py --data <work>/data
+   uv run --with pillow python -I -u _memory-game/tools/scrape/contact_sheet.py --game maccabi-haifa-memory --data <work>/data
    ```
 
    - **Selection** happens here. The metric is this season's appearances in all
