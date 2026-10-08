@@ -1,6 +1,9 @@
 /* _memory-game/base.css, shared by the memory games: build_page.py assemble stamps it into the
    base style block of each game's page. Edit it there, not in a page. Colours and fonts come from
-   the club's tokens in the page's own style block, which comes first. */
+   the club's tokens in the page's own style block, which comes first. Optional tokens are read as
+   var(--token, the dark board's value), never declared here: a default on this :root would beat the
+   club's own. A light board sets --scheme, --hud-btn-bg, --hud-btn-muted, --pip-bg, --install-line
+   and --install-fg. */
 
 :root {
   --pad: clamp(6px, 1.4vmin, 14px);
@@ -11,7 +14,7 @@
   --ch: 130px;
   --short: min(var(--cw), var(--ch));
   --r: calc(var(--short) * .09);
-  color-scheme: dark;
+  color-scheme: var(--scheme, dark);
 }
 
 * { box-sizing: border-box; }
@@ -102,7 +105,7 @@ img {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, .09);
+  background: var(--hud-btn-bg, rgba(255, 255, 255, .09));
   color: var(--white);
   transition: transform .12s ease;
 }
@@ -113,7 +116,7 @@ img {
 #mute .i-off { display: none; }
 #mute[aria-pressed="true"] .i-on { display: none; }
 #mute[aria-pressed="true"] .i-off { display: block; }
-#mute[aria-pressed="true"] { color: rgba(255, 255, 255, .55); }
+#mute[aria-pressed="true"] { color: var(--hud-btn-muted, rgba(255, 255, 255, .55)); }
 
 .pips {
   flex: 1 1 auto;
@@ -140,7 +143,7 @@ img {
   max-height: calc(var(--hud) * .6);
   border-radius: 50%;
   overflow: hidden;
-  background: rgba(255, 255, 255, .05);
+  background: var(--pip-bg, rgba(255, 255, 255, .05));
 }
 
 .pip::after {
@@ -392,9 +395,9 @@ img {
   min-height: 40px;
   padding: 6px 14px 6px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, .22);
+  border: 1px solid var(--install-line, rgba(255, 255, 255, .22));
   background: var(--scrim-install);
-  color: rgba(255, 255, 255, .78);
+  color: var(--install-fg, rgba(255, 255, 255, .78));
   font: 600 14px/1.1 system-ui, "Arial Hebrew", sans-serif;
 }
 

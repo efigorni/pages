@@ -34,7 +34,8 @@ text the voice reads, ships whenever it differs from name_he (and always with "f
 if a page or sw.js is not what assemble would write, or if img/ or audio/ holds a player the roster
 doesn't (every file there is precached), or if the fonts and CREDITS.md disagree: every shipped .woff2 has
 an @font-face, the declared families are the ones credited under Fonts, every OFL link resolves and every
-OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left; or if a game's
+OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left; or if the
+club sets a CSS variable nothing reads, or reads one (without a fallback) nothing defines; or if a game's
 start/win clip isn't the master in _memory-game/audio/ui/ (the engine's lines, which tools/tts/hebrew.py
 renders). Run it before committing: the repo has no CI. `--watch`
 assembles the named games again whenever one of their sources or a shared file changes.
@@ -291,10 +292,25 @@ def render(game):
     if missing:
         fail(f"_memory-game/page.template.html lacks the elements the engine needs: {', '.join(missing)}")
     defined = set(re.findall(r"(--[\w-]+)\s*:", style + base))
-    undefined = sorted(set(re.findall(r"var\((--[\w-]+)", base)) - defined - RUNTIME_VARS)
+    undefined = sorted(set(re.findall(r"var\(\s*(--[\w-]+)\s*\)", base)) - defined - RUNTIME_VARS)
     if undefined:
         fail(f"{game}: base.css reads tokens its club style never defines: {', '.join(undefined)}")
     return page
+
+
+def lint_variables(game):
+    """A club variable nobody reads (dead weight, or a typo in an optional token, which falls back silently),
+    and a club read without a fallback that nothing defines."""
+    style, club = read(REPO / game / "club/style.css"), read(REPO / game / "club/club.js")
+    base, engine = read(SHARED / "base.css"), read(SHARED / "engine.js")
+    js_set = set(re.findall(r"setProperty\(\s*['`](--[\w-]+)['`]", club))
+    engine_set = set(re.findall(r"setProperty\(\s*['`](--[\w-]+)['`]", engine))
+    defined = set(re.findall(r"(--[\w-]+)\s*:", style))
+    reads = set(re.findall(r"var\(\s*(--[\w-]+)", style + base + club + engine))
+    nothing = (set(re.findall(r"var\(\s*(--[\w-]+)\s*\)", style + club)) - defined - js_set - engine_set
+               - set(re.findall(r"(--[\w-]+)\s*:", base)))
+    return ([f"{v} is set by the club but nothing reads it" for v in sorted((defined | js_set) - reads)]
+            + [f"{v} is read by the club but nothing defines it" for v in sorted(nothing)])
 
 
 def app_id(game):
@@ -366,7 +382,7 @@ def assemble(game, check):
     strays = orphans(game, read_roster(game))
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
-    lint = lint_credits(game) + check_ui_clips(game)
+    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game)
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:

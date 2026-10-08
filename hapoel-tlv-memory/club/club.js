@@ -44,7 +44,6 @@ const CLUB = {
     function apply(st, cw, ch, mode) {
       const v = faceVars(cw, ch, mode);
       st.setProperty('--frame', `${v.frame}px`);
-      st.setProperty('--ipad', `${v.pad}px`);
       st.setProperty('--band-h', `${v.band}px`);
       st.setProperty('--photo-s', `${v.s}px`);
       st.setProperty('--photo-x', `${v.x}px`);

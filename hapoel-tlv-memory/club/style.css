@@ -34,7 +34,6 @@
   --red: #ff1521;
   --wine: #6d052a;
   --claret: #800029;
-  --magenta: #ff009d;
   --salmon: #ff9495;
   --rose: #ffb5ba;
   --blush: #ffe6e6;
@@ -62,11 +61,10 @@
   --scrim-install: rgba(109, 5, 42, .6);
   --scrim-confirm: rgba(109, 5, 42, .8);
   --scrim-win: rgba(109, 5, 42, .66);
+  /* the shared HUD is drawn for a dark board; this board is the site's pale pink */
+  --hud-btn-bg: var(--wine);
+  --pip-bg: rgba(109, 5, 42, .07);
 }
-
-/* the shared HUD is drawn for a dark board; this board is the site's pale pink */
-.hud .icon-btn { background: var(--wine); }
-.hud .pip { background: rgba(109, 5, 42, .07); }
 
 /* card back: our honeycomb on club red, inside a white frame */
 .back {
