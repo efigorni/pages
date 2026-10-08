@@ -1,6 +1,6 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
 // VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
-const VERSION = 'maccabi-haifa-memory-673d98cc4f60';
+const VERSION = 'maccabi-haifa-memory-ab432b600f95';
 const ASSETS = [
   './',
   'index.html',
@@ -148,21 +148,29 @@ function ranged(request, response) {
   });
 }
 
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
-
+function fetchAndStore(event, request) {
   let saved = Promise.resolve();
   const network = fetch(request).then((response) => {
     saved = store(request, response);
     return response;
   });
   event.waitUntil(network.then(() => saved, () => {}));
+  return network;
+}
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
 
   if (request.mode !== 'navigate') {
-    event.respondWith(caches.match(request).then((hit) => (hit ? ranged(request, hit) : network)));
+    // VERSION hashes every precached file and a new version downloads them all again, so a hit in
+    // this version's cache is current and needs no trip to the network.
+    event.respondWith(caches.open(VERSION).then((cache) => cache.match(request))
+      .then((hit) => (hit ? ranged(request, hit) : fetchAndStore(event, request))));
     return;
   }
+
+  const network = fetchAndStore(event, request);
 
   // Network-first. An error page falls back to the cached copy, and a connection that is up but
   // barely working gets the cached game after NAV_TIMEOUT_MS while the fetch refreshes the cache.
