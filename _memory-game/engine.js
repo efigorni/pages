@@ -856,8 +856,17 @@
     if (card) tap(card);
   });
 
+  // A newer service worker took over this open page, and its cache only holds the files of its own
+  // roster, so a new game starts from a reloaded page rather than from this page's DATA.
+  let stale = false;
+
+  function reloadIfStale() {
+    if (stale) location.reload();
+    return stale;
+  }
+
   $('play').addEventListener('click', () => {
-    if (game.phase !== 'start') return;
+    if (game.phase !== 'start' || reloadIfStale()) return;
     sound.unlock();
     goFullscreen();
     hide('start');
@@ -866,7 +875,7 @@
   });
 
   $('replay').addEventListener('click', () => {
-    if (game.phase !== 'won') return;
+    if (game.phase !== 'won' || reloadIfStale()) return;
     sound.unlock();
     newGame();
     sound.say([clip.ui('start', START_LINE)]);
@@ -877,6 +886,7 @@
   });
 
   $('yes').addEventListener('click', () => {
+    if (reloadIfStale()) return;
     sound.unlock();
     hide('confirm');
     newGame();
@@ -957,6 +967,10 @@
 
   const secure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   if ('serviceWorker' in navigator && secure) {
+    // A first install also takes over the page, but that page came from the network and is current.
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.addEventListener('controllerchange', () => { stale = true; });
+    }
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     });
