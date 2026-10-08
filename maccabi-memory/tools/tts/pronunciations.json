@@ -1,0 +1,31 @@
+{
+  "_doc": [
+    "Engine input per player, keyed by players.json id. `ipa` is fed to BlueTTS verbatim (RenikudPlus IPA: ˈ before the stressed vowel, ʁ χ ʔ ts dʒ tʃ). The same IPA is used in the name clip and inside the match clip, so the two always sound alike.",
+    "`g2p` is what RenikudPlus produced on its own for the bare name (kept to show what was changed). `why` explains each change. `stt_variants` are spellings the STT check accepts as the same pronunciation; never add a spelling that implies a different sound. Optional `speed` overrides the global pace for that player (BlueTTS divides duration by it).",
+    "A player missing from this file falls back to RenikudPlus G2P of name_he and is flagged in the QA report."
+  ],
+  "players": {
+    "ofek-melika": {"ipa": "ʔˈofek melˈika", "g2p": "ʔˈofek milˈika", "why": "G2P said mi-LI-ka for the bare name but me-LI-ka inside the match phrase; me-LI-ka is the reading of מליקה."},
+    "raz-shlomo": {"ipa": "ʁˈaz ʃlˈomo", "g2p": "ʁˈaz ʃlomˈo", "why": "Colloquial Israeli stress SHLO-mo (G2P gave the formal shlo-MO)."},
+    "dor-peretz": {"ipa": "dˈoʁ pˈeʁets", "g2p": "dˈoʁ pˈeʁets", "why": "G2P correct."},
+    "issouf-sissokho": {"ipa": "ʔisˈuf sisˈoko", "g2p": "ʔisˈuf sisokˈo", "why": "G2P was inconsistent (si-so-KO / si-su-KO); pinned to i-SUF si-SO-ko, the natural Hebrew reading of the French name."},
+    "helio-varela": {"ipa": "hˈeljo, vaʁˈela", "g2p": "hˈaljo veʔˈaʁla", "why": "G2P read וארלה as ve-AR-la and הליו as HAL-yo; the player is Hélio Varela: HEL-yo va-RE-la. Without a break the v slid onto the first name (STT: הליוב ארלה); the comma adds a short beat between the names (name 5/6 vs 1/6).", "stt_variants": ["הליו ורלה", "הליו ווארלה", "הליו וורלה"]},
+    "mohamed-ali-camara": {"ipa": "muχˈamad ʔalˈi kamˈaʁa", "g2p": "muχˈamad ʔalˈi kamˈaʁa", "why": "G2P correct (mu-KHA-mad a-LI ka-MA-ra). Three words, so paced a little faster to stay near 1.5 s.", "speed": 0.96},
+    "osher-davida": {"ipa": "ʔˈoʃeʁ davˈida", "g2p": "ʔˈoʃeʁ davˈida", "why": "Bare-name G2P correct; pinned because the match-phrase G2P drifted to o-SHER."},
+    "ido-shahar": {"ipa": "ʔˈido ʃˈaχaʁ", "g2p": "ʔidˈo ʃˈaχaʁ", "why": "Colloquial Israeli stress I-do (G2P gave the formal i-DO)."},
+    "ester-sokler": {"ipa": "ʔˈesteʁ sˈokleʁ", "g2p": "ʔˈasteʁ sˈokleʁ", "why": "G2P said AS-ter; the Slovenian name is ES-ter SOK-ler."},
+    "noam-ben-harush": {"ipa": "nˈoʔam bˈen hhaʁˈuʃ", "g2p": "nˈoʔam bˈen haʁˈoʃ", "why": "G2P said ha-ROSH; the surname is ha-RUSH. With a single h the voice dropped it after 'ben' in 12/12 takes (STT: בן ארוש); the doubled hh keeps it audible (12/12)."},
+    "tyrese-asante": {"ipa": "tajʁˈis ʔasˈante", "g2p": "tˈajʁis ʔasˈanta", "why": "G2P ended Asante with -ta; tai-RIS a-SAN-te follows the Hebrew spelling טייריס אסנטה."},
+    "itay-ben-hemo": {"ipa": "ʔitˈaj bˈen χemˈo", "g2p": "ʔitˈaj bˈen χemˈo", "why": "G2P kept (i-TAI ben khe-MO); stress of חמו is not certain, flagged for a listen."},
+    "itamar-noy": {"ipa": "ʔitamˈaʁ nˈoj", "g2p": "ʔitamˈaʁ nˈoj", "why": "G2P correct."},
+    "gabi-kanichowsky": {"ipa": "ɡˈabi kanikˈovski", "g2p": "ɡˈabi kanikˈovski", "why": "G2P correct (GA-bi ka-ni-KOV-ski)."},
+    "james-tavernier": {"ipa": "dʒˈejms tavˈeʁnjeʁ", "g2p": "dʒˈejms tavˈeʁnjeʁ", "why": "Bare-name G2P kept (JEIMS ta-VER-nyer). Israeli media spell him טברנייר / טאברנייר, so the final r stays (not the English TAV-er-nee-ay). Pinned because the match phrase drifted to te-VER-nyer. STT has no fixed spelling for this new name: ניאר spells the same -nier ending as דניאל (Da-ni-EL), and ו/ב are both v.", "stt_variants": ["ג'יימס טוורנייר", "ג'יימס טאברנייר", "ג'יימס טוורניאר", "ג'יימס טברניאר", "ג'יימס טאברניאר"]},
+    "sagiv-jehezkel": {"ipa": "saɡˈiv jeχezkˈel", "g2p": "saɡˈiv jeχezkˈel", "why": "G2P correct."},
+    "shachar-rosen": {"ipa": "ʃˈaχaʁ ʁˈozen", "g2p": "ʃˈaχaʁ ʁozˈen", "why": "Surname is RO-zen, not ro-ZEN."},
+    "elad-madmon": {"ipa": "ʔelˈad madmˈon", "g2p": "ʔelʔˈad madmˈon", "why": "Dropped the formal glottal stop of ע (e-LAD, as Israelis say it)."},
+    "dan-glazer": {"ipa": "dˈan ɡlˈazeʁ", "g2p": "dˈan ɡlˈazeʁ", "why": "G2P correct.", "stt_variants": ["דן גלאזר"]},
+    "hisham-layous": {"ipa": "hhiʃˈam lajˈus", "g2p": "hiʃˈaʔm lˈeʔijus", "why": "G2P garbled both words; the name is hi-SHAM la-YUS. The opening h was lost in most name takes (STT: אישם); the doubled hh fixed it (12/12).", "stt_variants": ["הישאם ליוס", "היא שם ליוס", "היא שם לאיוס", "הישם ליוס", "הישם לאיוס"]},
+    "ilay-ben-simon": {"ipa": "ʔilaʔˈi bˈen simˈon", "g2p": "ʔilˈaj bˈen simˈon", "why": "G2P's i-LAI is right, but the voice collapsed the -ai diphthong into 'Ili' (STT: אילי, 0/6 match takes). Splitting it as i-la-'I brings back עילאי (10/12)."},
+    "kristijan-belic": {"ipa": "kʁistjˈan bˈelitʃ", "g2p": "kʁˈistjan blˈitʃ", "why": "G2P dropped the e of Belić (BLICH); kris-TYAN BE-lich.", "stt_variants": ["קריסטיאן בליץ'"]}
+  }
+}

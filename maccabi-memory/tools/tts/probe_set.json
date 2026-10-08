@@ -1,0 +1,10 @@
+[
+  {"key": "p1_dor", "text": "דור פרץ", "variants": []},
+  {"key": "p2_roi", "text": "רועי משפתי", "variants": ["רועי משפטי"]},
+  {"key": "p3_sagiv", "text": "סגיב יחזקאל", "variants": []},
+  {"key": "p4_kervin", "text": "קרווין אנדרדה", "variants": ["קרווין אנדראדה", "קרוין אנדרדה", "קרוין אנדראדה"]},
+  {"key": "p5_weslley", "text": "ווסלי פטאטי", "variants": ["וסלי פטאטי", "ווסלי פאטאטי", "וסלי פאטאטי", "ווסלי פטטי"]},
+  {"key": "p6_match", "text": "מספר ארבעים ושתיים, דור פרץ!", "variants": []},
+  {"key": "p7_win", "text": "כל הכבוד! מצאת את כל השחקנים!", "variants": [], "target_speaker": 2},
+  {"key": "p8_start", "text": "יאללה, בואי נשחק!", "variants": ["יאלה, בואי נשחק!"], "target_speaker": 2}
+]
