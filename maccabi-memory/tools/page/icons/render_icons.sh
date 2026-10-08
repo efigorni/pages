@@ -24,5 +24,6 @@ shot() {
 shot icon-any.svg "$out/icon-512.png"
 shot icon-maskable.svg "$out/icon-maskable-512.png"
 uv run --with pillow python -I "$here/resize_icon.py" "$out/icon-512.png" 192 "$out/icon-192.png"
+uv run --with pillow python -I "$here/resize_icon.py" "$out/icon-maskable-512.png" 192 "$out/icon-maskable-192.png"
 uv run --with pillow python -I "$here/resize_icon.py" "$out/icon-maskable-512.png" 180 "$out/apple-touch-icon.png"
 echo "icons written to $out"
