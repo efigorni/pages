@@ -439,7 +439,7 @@ def main() -> int:
              f"{sum(p['role']=='excluded' for p in players)} excluded; requests this run: {f.requests}")
     for p in players:
         s = p["stats"]
-        print(f"{p['role']:8} {str(p['pool_rank'] or '-'):>3} #{p['number']:<3} {p['id']:22} {p['name_he']:18} apps {s['appearances']:2} st {s['starts']:2} "
+        print(f"{p['role']:8} {str(p['pool_rank'] or '-'):>3} #{'-' if p['number'] is None else p['number']:<3} {p['id']:22} {p['name_he']:18} apps {s['appearances']:2} st {s['starts']:2} "
               f"min {s['minutes']:4} | TM {'ok' if (p['crosscheck'].get('transfermarkt') or {}).get('match') else (p['crosscheck'].get('transfermarkt') or {}).get('tm')} "
               f"| {p['excluded_reason'] or ''}", flush=True)
     problems = check(doc)
