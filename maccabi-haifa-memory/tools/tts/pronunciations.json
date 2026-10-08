@@ -1,9 +1,4 @@
 {
-  "_doc": [
-    "Engine input per player, keyed by players.json id. `ipa` is fed to BlueTTS verbatim (RenikudPlus IPA: ˈ before the stressed vowel, ʁ χ ʔ ts dʒ tʃ). It spells speak_he (the text inside a trailing parenthetical, else the full name). The same IPA is used in the name clip and inside the match clip, so the two always sound alike.",
-    "`g2p` is what RenikudPlus produced on its own for the bare speak_he (kept to show what was changed). `why` explains each change. `stt_variants` are spellings the STT check accepts as the same pronunciation; never add a spelling that implies a different sound. `stt_text` replaces speak_he as the STT target when the intended pronunciation is deliberately spelled differently from the card. Optional `ipa_match` is the same pronunciation nudged for the match clip only (e.g. a vowel length). Optional `speed` overrides the global pace for that player (BlueTTS divides duration by it). Optional `listen` is a judgement call worth checking by ear; tts/listen.html highlights it.",
-    "A player missing from this file falls back to RenikudPlus G2P of speak_he and is flagged in the QA report."
-  ],
   "players": {
     "omri-glazer": {"ipa": "ʔˈomʁi ɡlˈazeʁ", "g2p": "ʔamʁˈi ɡlˈazeʁ", "why": "G2P read עמרי as am-RI (om-RI in the match phrase); the name is OM-ri, with the colloquial first-syllable stress.", "stt_variants": ["עומרי גלאזר", "עמרי גלאזר", "עומרי גלזר"]},
     "ethan-azoulay": {"ipa": "ʔejtˈan ʔazulˈaj", "g2p": "ʔejtˈan ʔazulˈaj", "why": "G2P correct (ei-TAN a-zu-LAI)."},

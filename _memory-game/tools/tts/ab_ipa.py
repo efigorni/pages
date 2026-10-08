@@ -1,7 +1,10 @@
 """A/B pronunciation candidates: render each one in both contexts, round-trip through STT.
 
-    <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/ab_ipa.py SPEC.json [--seeds 6] [--run NAME] [--fw]
+    _memory-game/tools/tts/tts.sh <game> <work> ab --ids ID,ID [--cand ID:LABEL=IPA ...] [--seeds 6] [--fw]
+    <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/ab_ipa.py --work <work> SPEC.json [--seeds 6] [--run NAME] [--fw]
 
+With --ids the cases come from players.json and the club's pronunciations.json: each id's current pin
+(or "he:<speak_he>" when it has none) as candidate "pin", plus every --cand for it.
 SPEC.json:
     {"cases": [{"id": "player-id", "speak": "טקסט", "number": 7,
                 "stt_text": "טקסט",                  # optional: intended sound's spelling
@@ -31,15 +34,52 @@ def cand_part(c: str, end: str) -> dict:
     return {"text": c[3:] + end} if c.startswith("he:") else {"ipa": c + end}
 
 
+def spec_from_pins(players_path: str, pron_path: str, ids: list[str], cands: list[str]) -> dict:
+    roster = {p["id"]: p for p in json.load(open(players_path, encoding="utf-8"))["players"]}
+    pins = json.load(open(pron_path, encoding="utf-8"))["players"]
+    cases = []
+    for pid in ids:
+        if pid not in roster:
+            raise SystemExit(f"{pid} is not in {players_path}")
+        p, e = roster[pid], pins.get(pid, {})
+        say = g.speak_he(p)
+        case = {"id": pid, "speak": say, "number": p.get("number"), "variants": e.get("stt_variants", []),
+                "cands": {"pin": e.get("ipa") or f"he:{say}"}}
+        case.update({k: e[k] for k in ("stt_text", "speed") if k in e})
+        for c in cands:
+            cid, _, rest = c.partition(":")
+            label, _, ipa = rest.partition("=")
+            if cid == pid:
+                case["cands"][label] = ipa
+        cases.append(case)
+    return {"cases": cases}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("spec")
+    ap.add_argument("spec", nargs="?")
+    ap.add_argument("--game")
+    ap.add_argument("--work")
+    ap.add_argument("--tts-home")
+    ap.add_argument("--engines")
+    ap.add_argument("--ids", help="ID,ID: cases from the roster and the club's pins")
+    ap.add_argument("--cand", action="append", default=[], help="ID:LABEL=IPA (or he:<text>), with --ids")
     ap.add_argument("--seeds", type=int, default=6)
     ap.add_argument("--run")
     ap.add_argument("--fw", action="store_true")
     ap.add_argument("--voice", default="noa")
     args = ap.parse_args()
-    spec = json.load(open(args.spec, encoding="utf-8"))
+    g.configure(args.work, args.tts_home, args.engines)
+    if args.ids:
+        if not args.game:
+            ap.error("--ids needs --game")
+        spec = spec_from_pins(str(g.ROOT / "data/players.json"),
+                              str(g.config.game_dir(args.game) / "tools/tts/pronunciations.json"),
+                              args.ids.split(","), args.cand)
+    elif args.spec:
+        spec = json.load(open(args.spec, encoding="utf-8"))
+    else:
+        ap.error("pass SPEC.json or --ids")
     run = args.run or time.strftime("ab-%Y%m%d-%H%M%S")
     work = g.TTS / "probe/ab" / run
     (work / "raw").mkdir(parents=True, exist_ok=True)

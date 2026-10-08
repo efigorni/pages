@@ -1,9 +1,9 @@
 """Generate a memory game's voice clips (D6 audio contract, H4/H7).
 
-    <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py \\
-        --pron <game>/tools/tts/pronunciations.json [options]
+    _memory-game/tools/tts/tts.sh <game> <work> generate [options]     # the usual way
+    <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py --game <game> --work <work> [options]
 
-Reads data/players.json (role starter|bench) and the club's pronunciations.json.
+Reads <work>/data/players.json (role starter|bench) and the club's pronunciations.json.
 The voice reads each player's `speak_he`: the text inside a trailing "(...)"
 of the displayed name when there is one, else the full name (HR3/H4). Every
 clip is rendered with several seeds; the take whose ivrit.ai STT round-trip
@@ -21,26 +21,44 @@ final MP3 is checked again. Writes:
     tts/listen.html               one row per player, for listening by ear
 
 Options:
-    --pron FILE           the club's pronunciations.json (required)
+    --game DIR            the game folder; implies --pron DIR/tools/tts/pronunciations.json
+    --work DIR            the work directory (data/, tts/); see config.py for the environment variables
+    --tts-home DIR        work/, qa/ and out/ (default <work>/tts)
+    --engines DIR         the engine install (default: config.py's lookup)
+    --pron FILE           the club's pronunciations.json (when there is no --game)
     --engine blue|piper|say  acoustic model (default blue = BlueTTS 2.5; piper = Phonikud +
                           Piper, needs --phonemes-from; say = macOS Carmit, no pronunciation control)
     --voice NAME          default noa / shaul / Carmit per engine (`female` is refused, see tts.md)
     --takes N             seeds per clip (default 8)
     --speed X             pace; BlueTTS speed, Piper length_scale = 1/X (default 0.88)
     --only ID,ID          only these ids (merged into an existing manifest; ui clips: start,win)
+    --stale               only the ids whose clips are missing or no longer match the roster and the
+                          pronunciations (each manifest row records what it was rendered from)
     --ui                  also the start and win clips
     --phonemes-from FILE  reuse engine_input IPA from another manifest (identical pronunciation
                           across engines, for comparison samples)
     --out DIR             default tts/out
     --second-opinion      also transcribe final clips with ivrit large-v3 on faster-whisper
     --ready               write TTS_READY when every expected clip exists
-    --players FILE        default <root>/data/players.json
+    --players FILE        default <work>/data/players.json
     --run-name NAME       work/qa folder name (default <engine>-<voice>-<timestamp>)
 
-Env: MACCABI_ROOT (required: the work directory outside the repo that holds
-data/ and tts/), MACCABI_TTS_HOME (default $MACCABI_ROOT/tts: work/, qa/, out/),
-MACCABI_TTS_ENGINES (folder with .venv-blue, .venv-stt and _engines/BlueTTS;
-default $MACCABI_TTS_HOME; see setup.sh).
+pronunciations.json, one per club (<game>/tools/tts/), the only schema:
+    {"players": {"<players.json id>": {
+        "ipa": "...",           fed to BlueTTS verbatim (RenikudPlus IPA: ˈ before the stressed vowel,
+                                ʁ χ ʔ ts dʒ tʃ). It spells speak_he (the text inside a trailing
+                                parenthetical, else the full name), in the name clip and inside the match
+                                clip, so the two always sound alike.
+        "g2p": "...",           what RenikudPlus made of the bare speak_he, kept to show what changed
+        "why": "...",           why the pin differs from g2p
+        "stt_variants": [...],  spellings the STT check accepts as the same pronunciation; never one
+                                that implies a different sound
+        "stt_text": "...",      optional: the STT target when the intended pronunciation is spelled
+                                differently from the card (the clip's text stays speak_he)
+        "ipa_match": "...",     optional: the same pronunciation nudged for the match clip only
+        "speed": 0.95,          optional: this player's pace (BlueTTS divides the duration by it)
+        "listen": "..."}}}      optional: a judgement call worth a listen; listen.html highlights it
+A player missing from the file is read by RenikudPlus G2P from speak_he and flagged in the QA report.
 """
 from __future__ import annotations
 
@@ -65,30 +83,26 @@ import numpy as np  # noqa: E402
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import audio_metrics  # noqa: E402
+import config  # noqa: E402
 import hebrew  # noqa: E402
 import stt  # noqa: E402
 
-if not os.environ.get("MACCABI_ROOT"):
-    raise SystemExit("set MACCABI_ROOT to the work directory (outside the repo) that holds data/ and tts/")
-ROOT = Path(os.environ["MACCABI_ROOT"])
-TTS = Path(os.environ.get("MACCABI_TTS_HOME", ROOT / "tts"))  # work/, qa/, out/
-
-
-def engines_home() -> Path:
-    """Where the venvs and the BlueTTS clone live (same order as setup.sh)."""
-    if os.environ.get("MACCABI_TTS_ENGINES"):
-        return Path(os.environ["MACCABI_TTS_ENGINES"])
-    if (TTS / ".venv-blue/bin/python").exists():
-        return TTS
-    raise SystemExit("no BlueTTS install found: run _memory-game/tools/tts/setup.sh (or set MACCABI_TTS_ENGINES)")
-
-
-ENGINES = engines_home()
-VENV = {"blue": ENGINES / ".venv-blue/bin/python", "piper": ENGINES / ".venv-phonikud/bin/python",
-        "say": Path(sys.executable)}
 RENDER = {"blue": HERE / "render_blue.py", "piper": HERE / "render_piper.py", "say": HERE / "render_say.py"}
 DEFAULT_VOICE = {"blue": "noa", "piper": "shaul", "say": "Carmit"}
-CHILD_ENV = {**os.environ, "MACCABI_TTS_ENGINES": str(ENGINES)}
+# Set by configure(): the work directory, the tts home (work/, qa/, out/) and the engine install.
+ROOT = TTS = ENGINES = None
+VENV: dict = {}
+CHILD_ENV: dict = {}
+
+
+def configure(work: str | None = None, tts_home: str | None = None, engines: str | None = None) -> None:
+    global ROOT, TTS, ENGINES, VENV, CHILD_ENV
+    ROOT = config.work_dir(work)
+    TTS = config.tts_home(ROOT, tts_home)
+    ENGINES = config.engines_home(engines, TTS)
+    VENV = {"blue": ENGINES / ".venv-blue/bin/python", "piper": ENGINES / ".venv-phonikud/bin/python",
+            "say": Path(sys.executable)}
+    CHILD_ENV = {**os.environ, "MEMORY_GAME_TTS_ENGINES": str(ENGINES)}
 
 # BlueTTS starts at sample 0 and squeezes the first phoneme ("סגיב" came back
 # "תגיב" on every voice). A leading comma gives it a beat to start on; the
@@ -333,33 +347,77 @@ def finalize(src: str, dst: Path) -> dict:
     return audio_metrics.measure(str(dst))
 
 
+def source(it: dict, engine: str, voice: str, speed: float) -> dict:
+    """What a clip is rendered from; a manifest row whose source differs is stale."""
+    return {"job": it["job"], "engine": engine, "voice": voice, "speed": it.get("speed") or speed}
+
+
+def stale_ids(items: list[dict], manifest: list[dict], out: Path, engine: str, voice: str, speed: float) -> list[str]:
+    """Ids with a clip that is missing, or whose manifest row was made from other text or input. A row
+    from before rows recorded their source is judged by its text and, for a pinned name, its IPA."""
+    rows = {(m["id"], m["kind"]): m for m in manifest}
+    stale = []
+    for it in items:
+        m = rows.get((it["id"], it["kind"]))
+        if m is None or not (out / m["file"]).exists() or m["text"] != it["text"]:
+            fresh = False
+        elif "source" in m:
+            fresh = m["source"] == source(it, engine, voice, speed)
+        else:
+            pin = it["job"]["parts"][-1].get("ipa")
+            fresh = pin is None or m["engine_input"].endswith(pin)
+        if not fresh and it["id"] not in stale:
+            stale.append(it["id"])
+    return stale
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pron", required=True)
+    ap.add_argument("--game")
+    ap.add_argument("--work")
+    ap.add_argument("--tts-home")
+    ap.add_argument("--engines")
+    ap.add_argument("--pron")
     ap.add_argument("--engine", default="blue", choices=["blue", "piper", "say"])
     ap.add_argument("--voice")
     ap.add_argument("--takes", type=int, default=8)
     ap.add_argument("--speed", type=float, default=0.88)
     ap.add_argument("--only")
+    ap.add_argument("--stale", action="store_true")
     ap.add_argument("--ui", action="store_true")
     ap.add_argument("--phonemes-from")
-    ap.add_argument("--out", default=str(TTS / "out"))
+    ap.add_argument("--out")
     ap.add_argument("--second-opinion", action="store_true")
     ap.add_argument("--ready", action="store_true")
     ap.add_argument("--run-name")
-    ap.add_argument("--players", default=str(ROOT / "data/players.json"))
+    ap.add_argument("--players")
     args = ap.parse_args()
+    configure(args.work, args.tts_home, args.engines)
+    if args.game:
+        args.pron = args.pron or str(config.game_dir(args.game) / "tools/tts/pronunciations.json")
+    if not args.pron:
+        ap.error("pass --game <folder> (or --pron <pronunciations.json>)")
+    args.players = args.players or str(ROOT / "data/players.json")
     voice = args.voice or DEFAULT_VOICE[args.engine]
     if args.engine == "blue" and voice == "female":
         raise SystemExit("BlueTTS's `female` voice is not to be shipped (its model card: check rights first)")
     only = set(args.only.split(",")) if args.only else None
-    out = Path(args.out)
-    run = args.run_name or f"{args.engine}-{voice}-{time.strftime('%Y%m%d-%H%M%S')}"
-    work = TTS / "work" / run
-    (work / "raw").mkdir(parents=True, exist_ok=True)
+    out = Path(args.out) if args.out else TTS / "out"
 
     roster = json.load(open(args.players, encoding="utf-8"))["players"]
     pron = json.load(open(args.pron, encoding="utf-8"))
+    if args.stale:
+        man_path = out / "manifest.json"
+        current = json.load(open(man_path, encoding="utf-8")) if man_path.exists() else []
+        ids = stale_ids(build_items(roster, pron, only, args.ui), current, out, args.engine, voice, args.speed)
+        if not ids:
+            log(f"[gen] nothing stale in {out}")
+            return
+        log(f"[gen] stale: {', '.join(ids)}")
+        only = set(ids)
+    run = args.run_name or f"{args.engine}-{voice}-{time.strftime('%Y%m%d-%H%M%S')}"
+    work = TTS / "work" / run
+    (work / "raw").mkdir(parents=True, exist_ok=True)
     check_speak(roster)
     items = build_items(roster, pron, only, args.ui)
     if not items:
@@ -411,7 +469,8 @@ def main() -> None:
         ok, how = hebrew.compare(it["expect"], r["text"], it["variants"])
         row = {"id": it["id"], "kind": it["kind"], "text": it["text"],
                "engine_input": it["best"]["engine_input"], "file": rel_file(it),
-               "duration_ms": it["final"]["duration_ms"], "stt_transcript": r["text"], "stt_ok": ok}
+               "duration_ms": it["final"]["duration_ms"], "stt_transcript": r["text"], "stt_ok": ok,
+               "source": source(it, args.engine, voice, args.speed)}
         index[(it["id"], it["kind"])] = row
         q = {**row, "display_name": it["display"], "speak_he": it["speak"], "number": it["number"],
              "stt_expected": it["expect"], "match_how": how, "mean_p": r["mean_p"], "min_p": r["min_p"],
@@ -450,7 +509,7 @@ def main() -> None:
             f"«{q['stt_transcript']}»{extra}")
     if out.resolve() == (TTS / "out").resolve():
         import make_listen
-        make_listen.main(players_path=args.players, pron_path=args.pron)
+        make_listen.main(players_path=args.players, pron_path=args.pron, tts=TTS)
     have = {(m["id"], m["kind"]) for m in manifest if (out / m["file"]).exists()}
     if args.ready:
         if expected <= have:

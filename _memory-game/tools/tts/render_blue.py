@@ -1,7 +1,7 @@
 """BlueTTS 2.5 (ONNX) renderer — run with <engines>/.venv-blue/bin/python.
 
-<engines> is $MACCABI_TTS_ENGINES (generate.py sets it; see setup.sh). The
-engine install is only read, never written.
+<engines> is $MEMORY_GAME_TTS_ENGINES (generate.py sets it), else config.py's
+default; see setup.sh. The engine install is only read, never written.
 
     render_blue.py jobs.json
 
@@ -13,6 +13,8 @@ verbatim), joined with spaces — so a match clip can say the G2P'd number words
 and then the exact hand-fixed IPA of the name.
 
     render_blue.py --g2p "טקסט" [target_speaker]   # print RenikudPlus IPA only
+    render_blue.py --g2p-roster players.json [pronunciations.json]
+                                                   # every starter/bench name: G2P next to its pin
 
 Hebrew G2P is RenikudPlus. Each job writes <key>.wav (44.1 kHz float→PCM16) and
 <key>.json with the exact IPA spoken, so a mispronounced name can be fixed by
@@ -36,9 +38,10 @@ from pathlib import Path  # noqa: E402
 import numpy as np
 import soundfile as sf
 
-if not os.environ.get("MACCABI_TTS_ENGINES"):
-    raise SystemExit("set MACCABI_TTS_ENGINES to the folder holding _engines/BlueTTS (see setup.sh)")
-ROOT = Path(os.environ["MACCABI_TTS_ENGINES"]) / "_engines/BlueTTS"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import config  # noqa: E402
+
+ROOT = config.engines_home() / "_engines/BlueTTS"
 sys.path.insert(0, str(ROOT / "src"))
 from blue_onnx import limit_peak, load_text_to_speech, load_voice_style  # noqa: E402
 
@@ -101,10 +104,29 @@ def main(spec_path: str) -> None:
               f"({time.time() - t1:.1f}s) {ph}", flush=True)
 
 
+def g2p_roster(players_path: str, pron_path: str | None) -> None:
+    """One process for a whole roster (a new club's first look): id, the spoken text, G2P, and the pin."""
+    import hebrew
+    from blue_onnx import TextProcessor
+
+    tp = TextProcessor(target_speaker=0)
+    pins = json.load(open(pron_path, encoding="utf-8"))["players"] if pron_path else {}
+    for p in json.load(open(players_path, encoding="utf-8"))["players"]:
+        if p.get("role") not in ("starter", "bench"):
+            continue
+        say = (p.get("speak_he") or hebrew.speak_text(p.get("name_he") or p["name"])).strip()
+        ipa = TAG.sub("", tp.phonemize(say, lang="he")).strip()
+        pin = pins.get(p["id"], {}).get("ipa")
+        mark = "no pin" if pin is None else ("pin = g2p" if pin == ipa else f"pin {pin}")
+        print(f"{p['id']:26s} {say:22s} {ipa:32s} {mark}", flush=True)
+
+
 if __name__ == "__main__":
     if sys.argv[1] == "--g2p":
         from blue_onnx import TextProcessor
         tp = TextProcessor(target_speaker=int(sys.argv[3]) if len(sys.argv) > 3 else 0)
         print(TAG.sub("", tp.phonemize(sys.argv[2], lang="he")).strip())
+    elif sys.argv[1] == "--g2p-roster":
+        g2p_roster(sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)
     else:
         main(sys.argv[1])
