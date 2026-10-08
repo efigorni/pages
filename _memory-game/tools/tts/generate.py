@@ -16,7 +16,7 @@ final MP3 is checked again. Writes:
     <out>/audio/ui/win.mp3        "כל הכבוד! מצאת את כל השחקנים!"  (only with --ui)
     <out>/manifest.json           [{id, kind, text, engine_input, file, duration_ms,
                                     stt_transcript, stt_ok}]
-    <out>/TTS_READY               only with --ready, and only when every clip exists
+    <out>/TTS_READY               only with --ready, and only when every clip exists and passed STT
     tts/qa/<run>.json             per-clip details: takes, scores, loudness, onset
     tts/listen.html               one row per player, for listening by ear
 
@@ -39,7 +39,7 @@ Options:
                           across engines, for comparison samples)
     --out DIR             default tts/out
     --second-opinion      also transcribe final clips with ivrit large-v3 on faster-whisper
-    --ready               write TTS_READY when every expected clip exists
+    --ready               write TTS_READY when every expected clip exists and passed the STT round-trip
     --players FILE        default <work>/data/players.json
     --run-name NAME       work/qa folder name (default <engine>-<voice>-<timestamp>)
 
@@ -511,12 +511,13 @@ def main() -> None:
         import make_listen
         make_listen.main(players_path=args.players, pron_path=args.pron, tts=TTS)
     have = {(m["id"], m["kind"]) for m in manifest if (out / m["file"]).exists()}
+    failing = sorted((m["id"], m["kind"]) for m in manifest if (m["id"], m["kind"]) in expected and not m["stt_ok"])
     if args.ready:
-        if expected <= have:
+        if expected <= have and not failing:
             (out / "TTS_READY").write_text(time.strftime("%Y-%m-%d %H:%M:%S\n"))
             log(f"[gen] wrote {out / 'TTS_READY'}")
         else:
-            log(f"[gen] NOT writing TTS_READY: missing {sorted(expected - have)}")
+            log(f"[gen] NOT writing TTS_READY: missing {sorted(expected - have)}, failing STT {failing}")
 
 
 if __name__ == "__main__":
