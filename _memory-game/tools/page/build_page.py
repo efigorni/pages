@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the memory games from _memory-game/ and each game's roster.
 
-    python3 -I _memory-game/tools/page/build_page.py data <players.json> <game>
+    python3 -I _memory-game/tools/page/build_page.py data <players.json> <game> [--prune]
     python3 -I _memory-game/tools/page/build_page.py assemble [--check] [<game> ...]
     python3 -I _memory-game/tools/page/build_page.py list [--json]
 
@@ -9,18 +9,19 @@ A game is a folder at the repo root whose index.html has an engine script (<scri
 nothing else in the repo is read or written. In each game:
 
   index.html  <style id="base">     _memory-game/base.css, stamped in
-              <script id="data">    the roster (`data` only): starters and bench from players.json
-                                    plus the clips that exist under audio/
+              <script id="data">    club/roster.json plus the clips that exist under audio/, stamped in
               <script id="engine">  _memory-game/engine.js, stamped in
   sw.js       _memory-game/sw.template.js with VERSION, ASSETS and PREFIX filled in. VERSION hashes
               every precached file and the template, so any change installs a fresh cache.
 
-`data` writes the DATA line, then assembles that game. The club's name model comes from
+`data` writes club/roster.json from players.json (one player per line), then assembles that game;
+--prune deletes photos and clips of players who are no longer in it. The club's name model comes from
 <game>/club/club.json: {"names": "full"} keeps name_he only; {"names": "first-last"} adds the
 card's two tiers (first_he / last_he) and speak_he, the text the voice reads.
-`assemble` stamps the shared code into the pages and writes each sw.js; with no games it does every
-game. `--check` writes nothing and fails if a page or sw.js is not what assemble would write. Run it
-before committing: the repo has no CI. Manifests are only read, never written.
+`assemble` stamps the shared code and the roster into the pages and writes each sw.js; with no games it
+does every game. `--check` writes nothing and fails if a page or sw.js is not what assemble would write,
+or if img/ or audio/ holds a player the roster doesn't (every file there is precached). Run it before
+committing: the repo has no CI. Manifests are only read, never written.
 """
 import argparse
 import hashlib
@@ -105,7 +106,44 @@ def entry(p, page, model):
             "number": number, "role": p["role"], "img": img}
 
 
-def write_data(players_json, game):
+def roster_text(roster):
+    """club/roster.json: one player per line, so a roster refresh diffs per player."""
+    def rows(players):
+        return ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in players)
+    return (f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n'
+            f'  "starters": [\n{rows(roster["starters"])}\n  ],\n  "bench": [\n{rows(roster["bench"])}\n  ]\n}}\n')
+
+
+def read_roster(game):
+    path = REPO / game / "club/roster.json"
+    if not path.is_file():
+        fail(f"{game}: no club/roster.json (run `build_page.py data <players.json> {game}`)")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def orphans(game, roster):
+    """Photos and clips of players the roster doesn't have: precached, never shown or played."""
+    page = REPO / game
+    ids = {p["id"] for p in roster["starters"] + roster["bench"]}
+    return sorted(f.relative_to(page).as_posix() for d, suffix in (("img", ".webp"), ("audio/name", ".mp3"),
+                                                                    ("audio/match", ".mp3"))
+                  for f in (page / d).glob(f"*{suffix}") if f.stem not in ids)
+
+
+def data_line(game, roster):
+    """The DATA script: the roster plus the clips that exist, in roster order."""
+    page = REPO / game
+    ids = [p["id"] for p in roster["starters"] + roster["bench"]]
+    audio = {
+        "ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()],
+        "name": [i for i in ids if (page / "audio" / "name" / f"{i}.mp3").is_file()],
+        "match": [i for i in ids if (page / "audio" / "match" / f"{i}.mp3").is_file()],
+    }
+    payload = {**roster, "audio": audio}
+    return "const DATA = " + json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";"
+
+
+def write_data(players_json, game, prune):
     page = REPO / game
     config = json.loads((page / "club/club.json").read_text(encoding="utf-8"))
     model = config.get("names")
@@ -118,22 +156,14 @@ def write_data(players_json, game):
         fail(f"expected 11 starters, found {len(starters)}")
     if len(bench) < 4:
         fail(f"need at least 4 bench players, found {len(bench)}")
-    ids = [p["id"] for p in starters + bench]
-    audio = {
-        "ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()],
-        "name": [i for i in ids if (page / "audio" / "name" / f"{i}.mp3").is_file()],
-        "match": [i for i in ids if (page / "audio" / "match" / f"{i}.mp3").is_file()],
-    }
-    payload = {"season": data.get("season"), "starters": starters, "bench": bench, "audio": audio}
-    js = "const DATA = " + json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";"
-    index = page / "index.html"
-    html, n = re.subn(r'(<script id="data">\n).*?(\n</script>)', lambda m: m.group(1) + js + m.group(2),
-                      index.read_text(encoding="utf-8"), count=1, flags=re.S)
-    if n != 1:
-        fail(f'{game}/index.html has no <script id="data"> block')
-    index.write_text(html, encoding="utf-8")
-    print(f"{game}: starters={len(starters)} bench={len(bench)} audio ui={len(audio['ui'])} "
-          f"name={len(audio['name'])} match={len(audio['match'])}", flush=True)
+    roster = {"season": data.get("season"), "starters": starters, "bench": bench}
+    (page / "club").mkdir(exist_ok=True)
+    (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
+    print(f"{game}: club/roster.json: starters={len(starters)} bench={len(bench)}", flush=True)
+    for rel in orphans(game, roster):
+        if prune:
+            (page / rel).unlink()
+        print(f"{game}: {'removed' if prune else 'not in the roster (data --prune removes it)'}: {rel}", flush=True)
 
 
 def shared(name, closer):
@@ -202,9 +232,12 @@ def assemble(game, check):
     template = (SHARED / "sw.template.js").read_text(encoding="utf-8")
     index, sw = page / "index.html", page / "sw.js"
     old_html = index.read_text(encoding="utf-8")
-    html = stamp(stamp(old_html, '<style id="base">', "</style>", base, game),
+    roster = read_roster(game)
+    html = stamp(stamp(stamp(old_html, '<style id="base">', "</style>", base, game),
+                       '<script id="data">', "</script>", data_line(game, roster) + "\n", game),
                  '<script id="engine">', "</script>", engine, game)
     check_page(html, base, game)
+    strays = orphans(game, roster)
 
     prefix = f"{game}-"
     old_sw = sw.read_text(encoding="utf-8") if sw.exists() else ""
@@ -236,9 +269,11 @@ def assemble(game, check):
             fail(f"_memory-game/sw.template.js is missing its {pattern.split()[1]} line")
 
     stale = [p.name for p, old, new in ((index, old_html, html), (sw, old_sw, new_sw)) if old != new]
+    for rel in strays:
+        print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
     if check:
         print(f"{game}: {'out of date: ' + ', '.join(stale) if stale else 'up to date'} ({version})", flush=True)
-        return not stale
+        return not stale and not strays
     index.write_text(html, encoding="utf-8")
     sw.write_text(new_sw, encoding="utf-8")
     total = sum(f.stat().st_size for f in files) + len(html.encode())
@@ -263,9 +298,10 @@ def listing(all_games):
 def main():
     ap = argparse.ArgumentParser(description="Build the memory games (see the module docstring).")
     sub = ap.add_subparsers(dest="cmd", required=True)
-    d = sub.add_parser("data", help="write a game's roster into its page, then assemble it")
+    d = sub.add_parser("data", help="write a game's club/roster.json from players.json, then assemble it")
     d.add_argument("players_json")
     d.add_argument("game")
+    d.add_argument("--prune", action="store_true", help="delete photos and clips of players not in the roster")
     a = sub.add_parser("assemble", help="stamp the shared code into the pages and write each sw.js")
     a.add_argument("--check", action="store_true", help="write nothing; fail if anything is out of date")
     a.add_argument("games", nargs="*")
@@ -282,7 +318,7 @@ def main():
         return
     if args.cmd == "data":
         game = games([args.game])[0]
-        write_data(args.players_json, game)
+        write_data(args.players_json, game, args.prune)
         assemble(game, check=False)
         return
     ok = [assemble(g, args.check) for g in games(args.games)]

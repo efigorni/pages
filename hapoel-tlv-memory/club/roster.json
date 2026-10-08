@@ -1,0 +1,29 @@
+{
+  "season": "2026/27",
+  "starters": [
+    {"id": "assaf-tzur", "name_he": "אסף צור", "number": 22, "role": "starter", "img": "img/assaf-tzur.webp"},
+    {"id": "fernand-mayembo", "name_he": "פרנאן מאיימבו", "number": 5, "role": "starter", "img": "img/fernand-mayembo.webp"},
+    {"id": "chico-alves", "name_he": "צ׳יקו אלבס", "number": 4, "role": "starter", "img": "img/chico-alves.webp"},
+    {"id": "lucas-falcao", "name_he": "לוקאס פלקאו", "number": 98, "role": "starter", "img": "img/lucas-falcao.webp"},
+    {"id": "marcus-coco", "name_he": "מרקוס קוקו", "number": 97, "role": "starter", "img": "img/marcus-coco.webp"},
+    {"id": "emmanuel-boateng", "name_he": "עמנואל בואטנג", "number": 9, "role": "starter", "img": "img/emmanuel-boateng.webp"},
+    {"id": "roei-alkukin", "name_he": "רועי אלקוקין", "number": 15, "role": "starter", "img": "img/roei-alkukin.webp"},
+    {"id": "daniel-dappa", "name_he": "דניאל דאפה", "number": 44, "role": "starter", "img": "img/daniel-dappa.webp"},
+    {"id": "mor-buskila", "name_he": "מור בוסקילה", "number": 27, "role": "starter", "img": "img/mor-buskila.webp"},
+    {"id": "andrian-kraev", "name_he": "אנדריאן קרייב", "number": 6, "role": "starter", "img": "img/andrian-kraev.webp"},
+    {"id": "doron-leidner", "name_he": "דורון ליידנר", "number": 16, "role": "starter", "img": "img/doron-leidner.webp"}
+  ],
+  "bench": [
+    {"id": "stav-toriel", "name_he": "סתיו טוריאל", "number": 11, "role": "bench", "img": "img/stav-toriel.webp"},
+    {"id": "omri-altman", "name_he": "עמרי אלטמן", "number": 51, "role": "bench", "img": "img/omri-altman.webp"},
+    {"id": "shahar-piven", "name_he": "שחר פיבן", "number": 21, "role": "bench", "img": "img/shahar-piven.webp"},
+    {"id": "douglas-owusu", "name_he": "דגלאס אווסו", "number": 35, "role": "bench", "img": "img/douglas-owusu.webp"},
+    {"id": "yonatan-ferber", "name_he": "יונתן פרבר", "number": 8, "role": "bench", "img": "img/yonatan-ferber.webp"},
+    {"id": "amit-lemkin", "name_he": "עמית למקין", "number": 23, "role": "bench", "img": "img/amit-lemkin.webp"},
+    {"id": "el-yam-kancepolsky", "name_he": "אל ים קנצפולסקי", "number": 14, "role": "bench", "img": "img/el-yam-kancepolsky.webp"},
+    {"id": "roy-korine", "name_he": "רוי קורין", "number": 7, "role": "bench", "img": "img/roy-korine.webp"},
+    {"id": "tal-archel", "name_he": "טל ארצ׳ל", "number": 18, "role": "bench", "img": "img/tal-archel.webp"},
+    {"id": "yannick-leliendal", "name_he": "יאניק ללינדאל", "number": 32, "role": "bench", "img": "img/yannick-leliendal.webp"},
+    {"id": "itay-shavit", "name_he": "איתי שביט", "number": 17, "role": "bench", "img": "img/itay-shavit.webp"}
+  ]
+}
