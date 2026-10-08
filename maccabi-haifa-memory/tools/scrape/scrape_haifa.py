@@ -45,7 +45,7 @@ from bs4 import BeautifulSoup  # noqa: E402
 from PIL import Image  # noqa: E402
 
 from fetch import Fetcher, log_line  # noqa: E402
-from framing import landmarks, square_crop  # noqa: E402
+from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
 from hebrew import nickname  # noqa: E402
 from rsc import page_objects  # noqa: E402
 
@@ -62,6 +62,10 @@ POSITION_EN = {  # translation of the site's Hebrew position labels (the site sh
     "כנף": "Winger", "חלוץ": "Striker",
 }
 FULL_MATCH = 90
+# The club's photo rules (club/club.json `images`): hand-read shoulder lines where the alpha detector fires
+# inside the hair, and a shoulder rule if the default one ever stops fitting.
+IMAGES = json.loads((Path(__file__).resolve().parents[2] / "club/club.json").read_text(encoding="utf-8"))["images"]
+SHOULDER_RULE = {k: IMAGES[k] for k in ("shoulder_share", "shoulder_from") if k in IMAGES}
 TRANSLIT_EXTRA = {"ł": "l", "Ł": "l", "đ": "d", "Đ": "d", "ø": "o", "Ø": "o", "æ": "ae", "ß": "ss", "ı": "i"}
 
 
@@ -478,7 +482,7 @@ def main() -> int:
     ap.add_argument("--crop-override", action="append", default=[], metavar="ID=x0,y0,x1,y1",
                     help="replace a player's computed crop box (repeatable)")
     ap.add_argument("--shoulder-override", action="append", default=[], metavar="ID=y",
-                    help="hand-read shoulder line (fraction of the image height) where the alpha detector fails")
+                    help="hand-read shoulder line (fraction of the image height); adds to club.json's shoulder_overrides")
     ap.add_argument("--design-dir", type=Path, default=None, help="default <out>/design")
     ap.add_argument("--mark-ready", action="store_true", help="create PLAYERS_READY after players.json")
     args = ap.parse_args()
@@ -500,7 +504,7 @@ def main() -> int:
     for item in args.crop_override:
         pid, _, box = item.partition("=")
         crop_overrides[pid.strip()] = parse_box(box)
-    shoulder_overrides = {}
+    shoulder_overrides = dict(IMAGES.get("shoulder_overrides", {}))
     for item in args.shoulder_override:
         pid, _, val = item.partition("=")
         shoulder_overrides[pid.strip()] = float(val)
@@ -705,15 +709,10 @@ def main() -> int:
                    "photo_mode": meta_img["mode"], "photo_alpha_levels": meta_img["alpha_levels"],
                    "photo_bytes": meta_img["bytes"], "photo_sha1": meta_img["sha1"]})
         img = Image.open(io.BytesIO(data)).convert("RGBA")
-        lm = landmarks(img)
-        hand = shoulder_overrides.pop(pl["id"], None)
-        if lm["shoulder_detector_failed"] and hand is None:
-            hand_src, used = "neck + 0.07 (alpha detector failed; pass --shoulder-override)", round(lm["neck_y"] + 0.07, 3)
+        lm = landmarks(img, **SHOULDER_RULE)
+        used, hand_src = pick_shoulder(lm, shoulder_overrides.pop(pl["id"], None))
+        if hand_src.startswith("neck"):
             log(f"  WARNING {pl['id']}: shoulder detector failed, using {used}")
-        elif hand is not None:
-            hand_src, used = "hand-read", hand
-        else:
-            hand_src, used = "alpha outline", lm["shoulder_y"]
         box = square_crop(img, lm, used)
         pl["crop"] = box
         pl["framing"] = {**lm, "shoulder_y_used": used, "shoulder_source": hand_src,

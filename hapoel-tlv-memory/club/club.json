@@ -3,6 +3,8 @@
   "images": {
     "mode": "box",
     "fade": 0,
-    "sheet_colors": "6d052a,ffffff,ff009d"
+    "sheet_colors": "6d052a,ffffff,ff009d",
+    "shoulder_share": 0.75,
+    "shoulder_from": 0.3
   }
 }

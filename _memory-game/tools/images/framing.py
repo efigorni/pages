@@ -1,9 +1,11 @@
 """Head-and-shoulders framing from a cutout photo's alpha outline (build_images.py's auto mode and the scrapers).
 
 The square crop puts the hair top TOP_MARGIN below its top edge and the shoulder line at SHOULDER_AT of its
-height, centred on the head, so faces come out the same size on every card. The shoulder line is the first
-row at least half as wide as the widest row; that test fails for 3/4-turned poses with big hair (it fires
-inside the hair), so a hand-read shoulder line can be passed per player.
+height, centred on the head, so faces come out the same size on every card. By default the shoulder line is
+the first row at least half as wide as the widest row. A club whose photos need another rule sets it in its
+club/club.json `images` (shoulder_share, shoulder_from), and a hand-read line per player
+(shoulder_overrides) where no rule works, e.g. 3/4-turned poses with big hair, where the test fires inside
+the hair.
 """
 
 from __future__ import annotations
@@ -32,18 +34,29 @@ def outline(img: Image.Image) -> tuple[list[int], float, int, int]:
     rows = row_widths(img)
     widths = [(r[1] - r[0]) if r else 0 for r in rows]
     top = next(y for y, wd in enumerate(widths) if wd >= max(3, 0.02 * w))
-    body_max = max(widths)
-    shoulder = next(y for y in range(top, h) if widths[y] >= 0.5 * body_max)
+    shoulder = shoulder_row(widths, top)
     head_rows = [rows[y] for y in range(top, top + max(1, int(0.6 * (shoulder - top)))) if rows[y]]
     centres = sorted((r[0] + r[1]) / 2 for r in head_rows)
     return widths, centres[len(centres) // 2], top, shoulder
 
 
-def landmarks(img: Image.Image) -> dict:
-    """Fractions of the image: hair top, head centre x, shoulder line, neck (narrowest row)."""
+def shoulder_row(widths: list[int], start: int, share: float = 0.5) -> int:
+    """The first row from `start` whose solid alpha is at least `share` of the widest row."""
+    widest = max(widths)
+    return next(y for y in range(start, len(widths)) if widths[y] >= share * widest)
+
+
+def landmarks(img: Image.Image, shoulder_share: float = 0.5, shoulder_from: float | None = None) -> dict:
+    """Fractions of the image: hair top, head centre x, shoulder line, neck (narrowest row).
+
+    The shoulder line follows the club's rule: the first row at least `shoulder_share` of the widest,
+    searched from `shoulder_from` (a fraction of the height) or else from the hair top. The head centre
+    and the neck always come from the default rule."""
     img = img.convert("RGBA")
     w, h = img.size
     widths, cx, top, shoulder = outline(img)
+    if shoulder_share != 0.5 or shoulder_from is not None:
+        shoulder = shoulder_row(widths, top if shoulder_from is None else int(shoulder_from * h), shoulder_share)
     lo, hi = top + int(0.12 * h), min(h - 1, top + int(0.42 * h))
     neck = min(range(lo, hi), key=lambda y: widths[y] or w)
     return {
@@ -53,6 +66,16 @@ def landmarks(img: Image.Image) -> dict:
         "neck_y": round(neck / h, 3),
         "shoulder_detector_failed": (shoulder - top) < 0.2 * h,
     }
+
+
+def pick_shoulder(lm: dict, hand: float | None = None) -> tuple[float, str]:
+    """The shoulder line a crop uses and where it came from: a hand-read line, else the outline's, else
+    (the detector fired too close to the hair) the neck plus 7% of the height."""
+    if hand is not None:
+        return hand, "hand-read"
+    if lm["shoulder_detector_failed"]:
+        return round(lm["neck_y"] + 0.07, 3), "neck + 0.07 (alpha detector failed; add a club.json shoulder_overrides line)"
+    return lm["shoulder_y"], "alpha outline"
 
 
 def square_crop(img: Image.Image, lm: dict, shoulder_y: float | None = None) -> dict:

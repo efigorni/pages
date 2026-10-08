@@ -34,7 +34,7 @@ sys.path.insert(1, str(Path(__file__).resolve().parents[3] / "_memory-game/tools
 from PIL import Image  # noqa: E402
 
 from fetch import Fetcher, log_line  # noqa: E402
-from framing import landmarks, square_crop  # noqa: E402
+from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
 from htafc import LISTING_EN, LISTING_HE, SECTION_EN, parse_lineup_block, parse_listing, parse_popup, report_text  # noqa: E402
 from tm_parse import parse_squadstats  # noqa: E402
 
@@ -66,6 +66,11 @@ TM_REPORT_BY_DATE = {
     "2026-08-20": 5013818, "2026-08-27": 5013842, "2026-08-30": 4912901, "2026-09-03": 4912932,
     "2026-09-07": 4912945, "2026-09-14": 4912916, "2026-09-18": 4912958,
 }
+# The club's photo rules (club/club.json `images`). The shared shoulder rule (50%) fires inside the head on
+# these chest-up photos, whose white sticker outline makes the head about half as wide as the chest: the
+# first row >= 75% of the widest, from 30% of the height down, lands on the shoulder slope instead.
+IMAGES = json.loads((Path(__file__).resolve().parents[2] / "club/club.json").read_text(encoding="utf-8"))["images"]
+SHOULDER_RULE = {k: IMAGES[k] for k in ("shoulder_share", "shoulder_from") if k in IMAGES}
 POSITION_EN = {"שוער": "Goalkeeper", "הגנה": "Defender", "קישור": "Midfielder", "קשר": "Midfielder", "התקפה": "Forward"}
 SENT_OFF = "הורחק"
 HOME_NAMES = ("הפועל תל-אביב", "הפועל תל אביב")
@@ -265,19 +270,6 @@ def photo_facts(path: Path) -> dict:
             "photo_sha1": hashlib.sha1(raw).hexdigest()}
 
 
-def shoulder_line(img: Image.Image, share: float = 0.75) -> float:
-    """First row below 30% of the height whose solid alpha is >= `share` of the widest row (fraction of the height).
-
-    The shared rule (50%) fires inside the head on these chest-up photos: the white sticker outline makes the head
-    about half as wide as the chest. 75% lands on the shoulder slope for every photo of the 2026/27 set."""
-    from framing import row_widths
-
-    rows = row_widths(img.convert("RGBA"))
-    widths = [(r[1] - r[0]) if r else 0 for r in rows]
-    h, mx = len(widths), max(widths)
-    return round(next(y for y in range(int(0.3 * h), h) if widths[y] >= share * mx) / h, 3)
-
-
 def clean_photo(raw_path: Path, clean_path: Path) -> dict:
     """The club photo minus its baked-in shirt number (clean_number.py); cached by mtime."""
     from clean_number import clean
@@ -305,7 +297,8 @@ def main() -> int:
     ap.add_argument("--data", required=True, type=Path)
     ap.add_argument("--refresh", action="store_true")
     ap.add_argument("--crop-override", action="append", default=[], help="id=x0,y0,x1,y1 (fractions)")
-    ap.add_argument("--shoulder-override", action="append", default=[], help="id=y (hand-read shoulder line, fraction)")
+    ap.add_argument("--shoulder-override", action="append", default=[],
+                    help="id=y (hand-read shoulder line, fraction); adds to club.json's shoulder_overrides")
     ap.add_argument("--mark-ready", action="store_true")
     a = ap.parse_args()
     data = a.data.expanduser().resolve()
@@ -411,7 +404,8 @@ def main() -> int:
         pid, _, vals = o.partition("=")
         x0, y0, x1, y1 = (float(v) for v in vals.split(","))
         overrides[pid] = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
-    shoulder_overrides = {o.partition("=")[0]: float(o.partition("=")[2]) for o in a.shoulder_override}
+    shoulder_overrides = {**IMAGES.get("shoulder_overrides", {}),
+                          **{o.partition("=")[0]: float(o.partition("=")[2]) for o in a.shoulder_override}}
     for p in players:
         if p["role"] not in ("starter", "bench"):
             p["photo_file"] = None
@@ -432,12 +426,13 @@ def main() -> int:
         img = Image.open(data / crel)
         lm = landmarks(img)
         sh = shoulder_overrides.get(p["id"])
-        sh_used = sh if sh is not None else shoulder_line(img)
+        sh_used, sh_source = pick_shoulder(landmarks(img, **SHOULDER_RULE), sh)
         crop = overrides.get(p["id"]) or square_crop(img, lm, sh_used)
         p["crop"] = crop
         p["framing"] = {"hair_top": lm["hair_top"], "head_cx": lm["head_cx"], "neck_y": lm["neck_y"],
                         "shoulder_y_shared_rule": lm["shoulder_y"], "shoulder_y_used": sh_used,
-                        "shoulder_source": "hand-read" if sh is not None else "alpha outline, first row >= 75% of the widest",
+                        "shoulder_source": sh_source if sh_source != "alpha outline" else
+                        f"alpha outline, first row >= {SHOULDER_RULE.get('shoulder_share', 0.5):.0%} of the widest",
                         "crop_source": "override" if p["id"] in overrides else "auto rule on the number-free photo",
                         "crop_px": round((crop["x1"] - crop["x0"]) * img.size[0])}
         log_line(f"photo {p['id']}: {p['photo_px']} {p['photo_mode']} alpha {p['photo_transparent_share']} | number {p['number_removal']['bbox_number']} "
