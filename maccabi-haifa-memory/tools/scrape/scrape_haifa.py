@@ -517,6 +517,10 @@ def main() -> int:
     games_list = season_games(f.cached(HISTORY_URL, "history.html").decode("utf-8", "replace"), season)
     played = [g for g in games_list if g["finished"]]
     log(f"  {len(games_list)} games in {season_label}, {len(played)} finished")
+    if not played:
+        log(f"no official game of {season_label} has been played yet, so there are no appearances to pick "
+            "the squad by: run this again after the first game. Nothing was written.")
+        return 1
     games = []
     for g in played:
         html = f.cached(f"{BASE}/matches/{g['id']}", f"games/{g['id']}.html").decode("utf-8", "replace")
