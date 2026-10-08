@@ -1,0 +1,8 @@
+{
+  "names": "first-last",
+  "images": {
+    "mode": "box",
+    "fade": 0.14,
+    "sheet_colors": "001d05,204126,86d094"
+  }
+}

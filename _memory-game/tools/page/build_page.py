@@ -16,7 +16,7 @@ nothing else in the repo is read or written. In each game:
               every precached file and the template, so any change installs a fresh cache.
 
 `data` writes the DATA line, then assembles that game. The club's name model comes from
-<game>/tools/game.json: {"names": "full"} keeps name_he only; {"names": "first-last"} adds the
+<game>/club/club.json: {"names": "full"} keeps name_he only; {"names": "first-last"} adds the
 card's two tiers (first_he / last_he) and speak_he, the text the voice reads.
 `assemble` stamps the shared code into the pages and writes each sw.js; with no games it does every
 game. `--check` writes nothing and fails if a page or sw.js is not what assemble would write. Run it
@@ -71,6 +71,8 @@ def entry(p, page, model):
     pid = p["id"]
     if not ID_RE.match(pid):
         fail(f"unsafe player id: {pid!r}")
+    if p.get("number") is None:
+        fail(f"{pid}: no shirt number (the card shows one)")
     number = int(p["number"])
     if not 0 <= number <= 99:
         fail(f"{pid}: shirt number out of range: {number}")
@@ -105,10 +107,10 @@ def entry(p, page, model):
 
 def write_data(players_json, game):
     page = REPO / game
-    config = json.loads((page / "tools/game.json").read_text(encoding="utf-8"))
+    config = json.loads((page / "club/club.json").read_text(encoding="utf-8"))
     model = config.get("names")
     if model not in ("full", "first-last"):
-        fail(f"{game}/tools/game.json: names must be \"full\" or \"first-last\", not {model!r}")
+        fail(f"{game}/club/club.json: names must be \"full\" or \"first-last\", not {model!r}")
     data = json.loads(Path(players_json).read_text(encoding="utf-8"))
     starters = [entry(p, page, model) for p in data["players"] if p.get("role") == "starter"]
     bench = [entry(p, page, model) for p in data["players"] if p.get("role") == "bench"]
@@ -248,7 +250,7 @@ def listing(all_games):
     for game in all_games:
         sw = REPO / game / "sw.js"
         version = re.search(r"^const VERSION = '([^']*)';$", sw.read_text(encoding="utf-8"), flags=re.M) if sw.is_file() else None
-        names = json.loads((REPO / game / "tools/game.json").read_text(encoding="utf-8")).get("names")
+        names = json.loads((REPO / game / "club/club.json").read_text(encoding="utf-8")).get("names")
         out.append({"id": game, "prefix": f"{game}-", "version": version and version.group(1),
                     "app_id": app_id(game).removeprefix("https://origin.invalid"), "names": names})
     return out
