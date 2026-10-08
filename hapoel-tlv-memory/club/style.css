@@ -62,6 +62,7 @@
   --scrim-confirm: rgba(109, 5, 42, .8);
   --scrim-win: rgba(109, 5, 42, .66);
   /* the shared HUD is drawn for a dark board; this board is the site's pale pink */
+  --scheme: light;
   --hud-btn-bg: var(--wine);
   --pip-bg: rgba(109, 5, 42, .07);
 }

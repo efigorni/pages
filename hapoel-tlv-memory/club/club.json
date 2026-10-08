@@ -1,6 +1,7 @@
 {
   "names": "full",
   "title": "tiers",
+  "scheme": "light",
   "trophy": {
     "cup": "#ffffff",
     "stem": "#ffb5ba",

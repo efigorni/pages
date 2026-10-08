@@ -12,8 +12,10 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
 
   manifest.webmanifest  the club's identity; its name, short_name and theme_color fill the page's head and
                         title. Read, never written.
-  club/club.json        {"names": "full"|"first-last", "title": "plain"|"tiers",
+  club/club.json        {"names": "full"|"first-last", "title": "plain"|"tiers", "scheme": "dark"|"light",
                          "trophy": {"cup", "stem", "star", "shine", "shine_opacity"?, "shade"?}, "images": {...}}
+                        `scheme` (default dark) is the board's: the head's color-scheme and iOS status bar
+                        follow it, and a light club's style sets --scheme: light for base.css.
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
   club/roster.json      season, starters and bench; written by `data`
@@ -280,7 +282,14 @@ def render(game):
     man, config = manifest(game), json.loads(read(REPO / game / CONFIG))
     base = source(SHARED / "base.css", "</style")
     style = source(REPO / game / "club/style.css", "</style")
+    scheme = config.get("scheme", "dark")
+    if scheme not in ("dark", "light"):
+        fail(f"{game}/{CONFIG}: scheme must be \"dark\" or \"light\", not {scheme!r}")
+    said = re.search(r"--scheme:\s*([\w-]+)", style)
+    if (said.group(1) if said else "dark") != scheme:
+        fail(f"{game}: club.json's scheme is {scheme} but club/style.css sets --scheme: {said.group(1) if said else '(nothing)'}")
     slots = {
+        "scheme": scheme, "status_bar": "black-translucent" if scheme == "dark" else "default",
         "theme_color": html.escape(man["theme_color"]), "short_name": html.escape(man["short_name"]),
         "name": html.escape(man["name"]), "style": style, "base": base,
         "title": title_html(man["name"], config.get("title", "plain")), "trophy": trophy_svg(config["trophy"]),
