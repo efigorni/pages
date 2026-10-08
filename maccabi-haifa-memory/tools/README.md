@@ -1,15 +1,17 @@
 # maccabi-haifa-memory tools
 
-Scripts that build the game's data, photos, voice clips and offline cache. The game
-itself (`../index.html`) needs none of them at runtime; they're here so the roster can be
-refreshed when the squad changes (a new season, transfers).
+What this game needs to refresh its roster when the squad changes (a new season,
+transfers). The game itself (`../index.html`) needs none of it at runtime. The engine,
+the shared styles, the service worker and the generic tools live in
+[`_memory-game/`](../../_memory-game/README.md), which also explains which parts of
+`../index.html` are generated.
 
-| Folder | What it does |
+| Here | What it is |
 |---|---|
 | `scrape/` | Reads mhaifafc.com (the /players cards, each player page, the season's game records) into a data directory: `players.json`, raw photos, contact sheets, design reference |
-| `images/` | Crops each player's cutout photo to a consistent head-and-shoulders WebP in `../img/` |
-| `tts/` | Generates the Hebrew voice clips in `../audio/` |
-| `page/` | Embeds the roster into `../index.html`, lists which clips exist, and refreshes the service worker's precache list; `page/icons/` renders the PWA icons |
+| `tts/` | `pronunciations.json`: each name's pinned IPA, the reason for every change and what to listen for |
+| `page/icons/` | The two icon SVGs |
+| `game.json` | The name model `build_page.py data` writes into DATA: `"first-last"`, the card's two tiers and `speak_he` |
 
 Downloads are untrusted data: keep them in a work directory **outside the repo**, run
 Python with `-I`, and pass paths as arguments. Commands below run from the repo root;
@@ -50,8 +52,9 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
 2. **Photos**:
 
    ```sh
-   uv run --with pillow python -I maccabi-haifa-memory/tools/images/build_images.py \
-       <work>/data/players.json maccabi-haifa-memory/img --mode box --sheet <work>/crops.png
+   uv run --with pillow python -I _memory-game/tools/images/build_images.py \
+       <work>/data/players.json maccabi-haifa-memory/img --mode box \
+       --sheet <work>/crops.png --sheet-colors 001d05,204126,86d094
    ```
 
    - `--mode box` uses each player's `crop` from the scrape. Open `crops.png`: faces
@@ -67,13 +70,15 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
 4. **Page data and offline cache**:
 
    ```sh
-   python3 -I maccabi-haifa-memory/tools/page/build_page.py <work>/data/players.json maccabi-haifa-memory
+   python3 -I _memory-game/tools/page/build_page.py data <work>/data/players.json maccabi-haifa-memory
    ```
 
-   Rewrites `const DATA` in `index.html` (starters, bench, names, which clips exist) and
-   the `VERSION` / `ASSETS` lines of `sw.js`. Run it after **any** change to `index.html`,
-   images, audio, fonts or icons: the new cache version is what makes installed copies
-   pick up the change. It refuses a name split that doesn't reproduce `name_he` exactly.
+   Rewrites `const DATA` in `index.html` (starters, bench, names, which clips exist), then
+   assembles the game: it stamps the shared code into the page and writes `sw.js` with a
+   new cache `VERSION`. After any other change (images, audio, fonts, icons, the club parts
+   of `index.html`) run `python3 -I _memory-game/tools/page/build_page.py assemble maccabi-haifa-memory`:
+   the new cache version is what makes installed copies pick up the change. It refuses a
+   name split that doesn't reproduce `name_he` exactly.
 
 5. **Test**: `python3 -m http.server 8765` from the repo root, open
    `http://localhost:8765/maccabi-haifa-memory/`, and play a full round in portrait and
@@ -81,8 +86,9 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
    clean, and the voice should read the right name (only the nickname for a name in
    parentheses).
 
-6. **Commit** with explicit paths (`git add maccabi-haifa-memory/...`). Never touch
-   `maccabi-memory/`: the two games share nothing.
+6. **Commit** with explicit paths (`git add maccabi-haifa-memory/...`). A roster refresh
+   touches only this game. A change in `_memory-game/` changes both games: assemble, commit
+   and verify both (see [`_memory-game/README.md`](../../_memory-game/README.md)).
 
 ## Voice clips
 
@@ -97,11 +103,11 @@ directory the scrape wrote `data/` into.
 
 ```sh
 # once: finds a working install ($MACCABI_TTS_ENGINES, then <work>/tts) or installs one under <work>/tts
-MACCABI_ROOT=<work> bash maccabi-haifa-memory/tools/tts/setup.sh
+MACCABI_ROOT=<work> bash _memory-game/tools/tts/setup.sh
 
 # every refresh: reads <work>/data/players.json, writes <work>/tts/out/ (+ manifest and listen.html)
-MACCABI_ROOT=<work> <engines>/.venv-stt/bin/python -u maccabi-haifa-memory/tools/tts/generate.py \
-    --takes 8 --second-opinion --ready
+MACCABI_ROOT=<work> <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py \
+    --pron maccabi-haifa-memory/tools/tts/pronunciations.json --takes 8 --second-opinion --ready
 
 # into the game, then run step 4
 cp <work>/tts/out/audio/name/*.mp3 maccabi-haifa-memory/audio/name/
@@ -118,9 +124,10 @@ cp <work>/tts/out/audio/match/*.mp3 maccabi-haifa-memory/audio/match/
   `speak_he` and is logged as having no pinned IPA. Listen to those first in
   `<work>/tts/listen.html` (it also shows the second model's transcript and the
   judgement calls). To fix a name, edit its `ipa` and re-run with `--only <id>`.
-- `ab_ipa.py` compares candidate pronunciations across seeds in both clip contexts before
-  one is pinned. `render_blue.py --g2p "טקסט"` (run with `<engines>/.venv-blue/bin/python`
-  and `MACCABI_TTS_ENGINES` set) prints what the G2P would say.
+- `_memory-game/tools/tts/ab_ipa.py` compares candidate pronunciations across seeds in both
+  clip contexts before one is pinned. `_memory-game/tools/tts/render_blue.py --g2p "טקסט"`
+  (run with `<engines>/.venv-blue/bin/python` and `MACCABI_TTS_ENGINES` set) prints what the
+  G2P would say.
 - The scripts only read the engine install (no bytecode written, Hugging Face offline), so
   an install shared with another project stays untouched.
 - The voice needs its credit line: keep [`../CREDITS.md`](../CREDITS.md) in step with the
@@ -131,7 +138,7 @@ cp <work>/tts/out/audio/match/*.mp3 maccabi-haifa-memory/audio/match/
 Only needed if the card-back design changes:
 
 ```sh
-bash maccabi-haifa-memory/tools/page/icons/render_icons.sh maccabi-haifa-memory/icons
+bash _memory-game/tools/icons/render_icons.sh maccabi-haifa-memory/tools/page/icons maccabi-haifa-memory/icons
 ```
 
 Uses headless Chrome (`CHROME=<binary>` to override the macOS default) and Pillow.

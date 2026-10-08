@@ -1,8 +1,9 @@
-"""Generate the Maccabi Haifa memory-game voice clips (D6 audio contract, H4/H7).
+"""Generate a memory game's voice clips (D6 audio contract, H4/H7).
 
-    <engines>/.venv-stt/bin/python -u tools/tts/generate.py [options]
+    <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py \\
+        --pron <game>/tools/tts/pronunciations.json [options]
 
-Reads data/players.json (role starter|bench) and tools/tts/pronunciations.json.
+Reads data/players.json (role starter|bench) and the club's pronunciations.json.
 The voice reads each player's `speak_he`: the text inside a trailing "(...)"
 of the displayed name when there is one, else the full name (HR3/H4). Every
 clip is rendered with several seeds; the take whose ivrit.ai STT round-trip
@@ -11,26 +12,30 @@ final MP3 is checked again. Writes:
 
     <out>/audio/name/<id>.mp3     speak_he
     <out>/audio/match/<id>.mp3    "מספר <N in words>, <speak_he>!"
+    <out>/audio/ui/start.mp3      "יאללה, בואי נשחק!"  (only with --ui)
+    <out>/audio/ui/win.mp3        "כל הכבוד! מצאת את כל השחקנים!"  (only with --ui)
     <out>/manifest.json           [{id, kind, text, engine_input, file, duration_ms,
                                     stt_transcript, stt_ok}]
     <out>/TTS_READY               only with --ready, and only when every clip exists
     tts/qa/<run>.json             per-clip details: takes, scores, loudness, onset
     tts/listen.html               one row per player, for listening by ear
 
-The UI clips (start / win) are not made here: the game copies them from the Tel
-Aviv page (H7).
-
 Options:
-    --voice NAME          BlueTTS voice (default noa; `female` is refused, see tts.md)
+    --pron FILE           the club's pronunciations.json (required)
+    --engine blue|piper|say  acoustic model (default blue = BlueTTS 2.5; piper = Phonikud +
+                          Piper, needs --phonemes-from; say = macOS Carmit, no pronunciation control)
+    --voice NAME          default noa / shaul / Carmit per engine (`female` is refused, see tts.md)
     --takes N             seeds per clip (default 8)
-    --speed X             BlueTTS pace (default 0.88)
-    --only ID,ID          only these player ids (merged into an existing manifest)
+    --speed X             pace; BlueTTS speed, Piper length_scale = 1/X (default 0.88)
+    --only ID,ID          only these ids (merged into an existing manifest; ui clips: start,win)
+    --ui                  also the start and win clips
+    --phonemes-from FILE  reuse engine_input IPA from another manifest (identical pronunciation
+                          across engines, for comparison samples)
     --out DIR             default tts/out
     --second-opinion      also transcribe final clips with ivrit large-v3 on faster-whisper
     --ready               write TTS_READY when every expected clip exists
     --players FILE        default <root>/data/players.json
-    --pron FILE           default tools/tts/pronunciations.json
-    --run-name NAME       work/qa folder name (default blue-<voice>-<timestamp>)
+    --run-name NAME       work/qa folder name (default <engine>-<voice>-<timestamp>)
 
 Env: MACCABI_ROOT (required: the work directory outside the repo that holds
 data/ and tts/), MACCABI_TTS_HOME (default $MACCABI_ROOT/tts: work/, qa/, out/),
@@ -75,11 +80,14 @@ def engines_home() -> Path:
         return Path(os.environ["MACCABI_TTS_ENGINES"])
     if (TTS / ".venv-blue/bin/python").exists():
         return TTS
-    raise SystemExit("no BlueTTS install found: run tools/tts/setup.sh (or set MACCABI_TTS_ENGINES)")
+    raise SystemExit("no BlueTTS install found: run _memory-game/tools/tts/setup.sh (or set MACCABI_TTS_ENGINES)")
 
 
 ENGINES = engines_home()
-BLUE_PY = ENGINES / ".venv-blue/bin/python"
+VENV = {"blue": ENGINES / ".venv-blue/bin/python", "piper": ENGINES / ".venv-phonikud/bin/python",
+        "say": Path(sys.executable)}
+RENDER = {"blue": HERE / "render_blue.py", "piper": HERE / "render_piper.py", "say": HERE / "render_say.py"}
+DEFAULT_VOICE = {"blue": "noa", "piper": "shaul", "say": "Carmit"}
 CHILD_ENV = {**os.environ, "MACCABI_TTS_ENGINES": str(ENGINES)}
 
 # BlueTTS starts at sample 0 and squeezes the first phoneme ("סגיב" came back
@@ -119,7 +127,7 @@ def check_speak(players: list[dict]) -> None:
             log(f"[gen] WARNING {p['id']}: no shirt number, the match clip will say the name only")
 
 
-def build_items(players: list[dict], pron: dict, only: set[str] | None) -> list[dict]:
+def build_items(players: list[dict], pron: dict, only: set[str] | None, ui: bool = False) -> list[dict]:
     items = []
     for p in players:
         if p.get("role") not in ("starter", "bench"):
@@ -151,6 +159,13 @@ def build_items(players: list[dict], pron: dict, only: set[str] | None) -> list[
         items.append({**common, "kind": "match", "text": hebrew.match_text(num, say),
                       "expect": hebrew.match_text(num, expect),
                       "variants": [hebrew.match_text(num, v) for v in var], "job": match_job})
+    for uid, text in (("start", hebrew.START_TEXT), ("win", hebrew.WIN_TEXT)) if ui else ():
+        if only and uid not in only:
+            continue
+        # target_speaker 2: the G2P's female-listener forms (בואי, מָצָאת).
+        items.append({"id": uid, "kind": "ui", "display": text, "speak": text, "number": None, "pinned": True,
+                      "speed": None, "text": text, "expect": text, "variants": [],
+                      "job": {"parts": [{"ipa": LEAD_IN}, {"text": text}], "target_speaker": 2}})
     return items
 
 
@@ -158,25 +173,37 @@ def rel_file(it: dict) -> str:
     return f"audio/{it['kind']}/{it['id']}.mp3"
 
 
-def render(voice: str, items: list[dict], takes: int, speed: float, work: Path) -> None:
+def render(engine: str, voice: str, items: list[dict], takes: int, speed: float, work: Path,
+           phonemes_from: dict | None = None) -> None:
     jobs = []
     for it in items:
         for s in range(1, takes + 1):
             sp = it.get("speed") or speed  # pronunciations.json may pace a long name faster
-            jobs.append({"key": f"{it['kind']}__{it['id']}__s{s}", "seed": s, "voice": voice,
-                         **it["job"], "speed": sp, "steps": 24, "cfg": 4.0})
+            j = {"key": f"{it['kind']}__{it['id']}__s{s}", "seed": s, "voice": voice}
+            src = dict(it["job"])
+            if phonemes_from and (it["id"], it["kind"]) in phonemes_from:
+                src = {"phonemes": phonemes_from[(it["id"], it["kind"])]}
+            if engine == "blue":
+                j.update(src, speed=sp, steps=24, cfg=4.0)
+            elif engine == "say":
+                j.update(text=it["text"], rate=round(175 * sp))
+            else:
+                if "phonemes" not in src:
+                    raise SystemExit("piper runs need --phonemes-from (shared IPA) in this pipeline")
+                j.update(src, length_scale=round(1.0 / sp, 3), noise_scale=0.6, noise_w=0.7)
+            jobs.append(j)
     spec = work / "jobs.json"
     json.dump({"out_dir": str(work / "raw"), "jobs": jobs}, open(spec, "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
-    log(f"[gen] rendering {len(jobs)} takes with blue/{voice} ({ENGINES})...")
-    p = subprocess.Popen([str(BLUE_PY), "-u", str(HERE / "render_blue.py"), str(spec)],
+    log(f"[gen] rendering {len(jobs)} takes with {engine}/{voice} ({ENGINES})...")
+    p = subprocess.Popen([str(VENV[engine]), "-u", str(RENDER[engine]), str(spec)],
                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, env=CHILD_ENV)
     tail, done = [], 0
     for ln in p.stdout:
         tail = (tail + [ln.rstrip()])[-40:]
-        if ln.startswith("[blue] loaded"):
+        if ln.startswith(f"[{engine}] loaded"):
             log("   ", ln.rstrip())
-        elif ln.startswith("[blue] "):
+        elif ln.startswith(f"[{engine}] "):
             done += 1
             if done % 25 == 0 or done == len(jobs):
                 log(f"    rendered {done}/{len(jobs)}")
@@ -308,38 +335,46 @@ def finalize(src: str, dst: Path) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--voice", default="noa")
+    ap.add_argument("--pron", required=True)
+    ap.add_argument("--engine", default="blue", choices=["blue", "piper", "say"])
+    ap.add_argument("--voice")
     ap.add_argument("--takes", type=int, default=8)
     ap.add_argument("--speed", type=float, default=0.88)
     ap.add_argument("--only")
+    ap.add_argument("--ui", action="store_true")
+    ap.add_argument("--phonemes-from")
     ap.add_argument("--out", default=str(TTS / "out"))
     ap.add_argument("--second-opinion", action="store_true")
     ap.add_argument("--ready", action="store_true")
     ap.add_argument("--run-name")
     ap.add_argument("--players", default=str(ROOT / "data/players.json"))
-    ap.add_argument("--pron", default=str(HERE / "pronunciations.json"))
     args = ap.parse_args()
-    if args.voice == "female":
+    voice = args.voice or DEFAULT_VOICE[args.engine]
+    if args.engine == "blue" and voice == "female":
         raise SystemExit("BlueTTS's `female` voice is not to be shipped (its model card: check rights first)")
     only = set(args.only.split(",")) if args.only else None
     out = Path(args.out)
-    run = args.run_name or f"blue-{args.voice}-{time.strftime('%Y%m%d-%H%M%S')}"
+    run = args.run_name or f"{args.engine}-{voice}-{time.strftime('%Y%m%d-%H%M%S')}"
     work = TTS / "work" / run
     (work / "raw").mkdir(parents=True, exist_ok=True)
 
     roster = json.load(open(args.players, encoding="utf-8"))["players"]
     pron = json.load(open(args.pron, encoding="utf-8"))
     check_speak(roster)
-    items = build_items(roster, pron, only)
+    items = build_items(roster, pron, only, args.ui)
     if not items:
         raise SystemExit("nothing to render (no starter/bench players matched)")
     log(f"[gen] {len(items)} clips -> {out} (run {run})")
     for it in items:
         if it["kind"] == "name" and not it["pinned"]:
             log(f"[gen] note: {it['id']} has no pinned IPA; RenikudPlus G2P reads «{it['speak']}»")
+    phon = None
+    if args.phonemes_from:
+        phon = {(m["id"], m["kind"]): m["engine_input"]
+                for m in json.load(open(args.phonemes_from, encoding="utf-8"))}
 
     t0 = time.time()
-    render(args.voice, items, args.takes, args.speed, work)
+    render(args.engine, voice, items, args.takes, args.speed, work, phon)
     pick_takes(items, args.takes, work)
 
     log("[gen] finalizing MP3s...")
@@ -380,7 +415,7 @@ def main() -> None:
         index[(it["id"], it["kind"])] = row
         q = {**row, "display_name": it["display"], "speak_he": it["speak"], "number": it["number"],
              "stt_expected": it["expect"], "match_how": how, "mean_p": r["mean_p"], "min_p": r["min_p"],
-             "engine": "blue", "voice": args.voice, "seed": it["best"]["seed"],
+             "engine": args.engine, "voice": voice, "seed": it["best"]["seed"],
              "speed": it.get("speed") or args.speed,
              "pinned_ipa": it["pinned"], "lead_ms": it["final"]["lead_ms"],
              "trail_ms": it["final"]["trail_ms"], "lufs": it["final"]["lufs"],
@@ -393,12 +428,13 @@ def main() -> None:
             q.update(stt2_transcript=fw[f]["text"], stt2_ok=ok2, stt2_mean_p=fw[f]["mean_p"])
         qa.append(q)
 
-    # Keep only rows for the current roster (a re-scrape can drop players).
-    expected = {(it["id"], it["kind"]) for it in build_items(roster, pron, None)}
-    order = {"name": 0, "match": 1}
+    # Keep only rows for the current roster (a re-scrape can drop players); ui rows aren't tied to it.
+    expected = {(it["id"], it["kind"]) for it in build_items(roster, pron, None, args.ui)}
+    keep = expected | {k for k in index if k[1] == "ui"}
+    order = {"name": 0, "match": 1, "ui": 2}
     roster_ids = [p["id"] for p in roster]
-    manifest = sorted((m for k, m in index.items() if k in expected), key=lambda m: (
-        order[m["kind"]], roster_ids.index(m["id"])))
+    manifest = sorted((m for k, m in index.items() if k in keep), key=lambda m: (
+        order[m["kind"]], roster_ids.index(m["id"]) if m["id"] in roster_ids else 99))
     out.mkdir(parents=True, exist_ok=True)
     json.dump(manifest, open(man_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     (TTS / "qa").mkdir(exist_ok=True)
@@ -414,7 +450,7 @@ def main() -> None:
             f"«{q['stt_transcript']}»{extra}")
     if out.resolve() == (TTS / "out").resolve():
         import make_listen
-        make_listen.main(players_path=args.players)
+        make_listen.main(players_path=args.players, pron_path=args.pron)
     have = {(m["id"], m["kind"]) for m in manifest if (out / m["file"]).exists()}
     if args.ready:
         if expected <= have:

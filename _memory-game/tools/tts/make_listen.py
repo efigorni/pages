@@ -1,8 +1,8 @@
 """Build tts/listen.html: one row per player, the name clip and the match clip.
 
-    MACCABI_ROOT=<work> python3 maccabi-haifa-memory/tools/tts/make_listen.py
+    MACCABI_ROOT=<work> python3 _memory-game/tools/tts/make_listen.py --pron <game>/tools/tts/pronunciations.json
 
-Reads tts/out/manifest.json, data/players.json, tools/tts/pronunciations.json and
+Reads tts/out/manifest.json, data/players.json, the club's pronunciations.json and
 the QA files in tts/qa/ (for the second-opinion transcript). Paths in the page are
 relative, so it opens straight from file://. generate.py runs this after every
 run that writes tts/out.
@@ -13,12 +13,12 @@ Alternative pronunciations for a judgement call go in tts/alternatives/<id>--<la
 """
 from __future__ import annotations
 
+import argparse
 import html
 import json
 import os
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
 if not os.environ.get("MACCABI_ROOT"):
     raise SystemExit("set MACCABI_ROOT to the work directory (outside the repo) that holds data/ and tts/")
 ROOT = Path(os.environ["MACCABI_ROOT"])
@@ -39,10 +39,10 @@ def _second_opinions(manifest: list[dict]) -> dict:
     return got
 
 
-def main(players_path: str | None = None) -> None:
+def main(players_path: str | None = None, pron_path: str | None = None) -> None:
     man = json.load(open(TTS / "out/manifest.json", encoding="utf-8"))
     roster = json.load(open(players_path or ROOT / "data/players.json", encoding="utf-8"))["players"]
-    pron = json.load(open(HERE / "pronunciations.json", encoding="utf-8"))["players"]
+    pron = json.load(open(pron_path, encoding="utf-8"))["players"]
     rows_by = {(m["id"], m["kind"]): m for m in man}
     fw = _second_opinions(man)
     alts: dict[str, list[tuple[str, str, dict]]] = {}
@@ -102,7 +102,7 @@ def main(players_path: str | None = None) -> None:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Haifa Voice Check</title>
+<title>Voice Check</title>
 <style>
 :root {{ --bg:#f6f7f5; --fg:#16201b; --muted:#5b6660; --line:#d9ddd8; --card:#fff;
         --ok:#1d7a42; --bad:#b3261e; --accent:#0b6b3a; --flag:#fff6d6; }}
@@ -134,7 +134,7 @@ code {{ font-size:12px; }}
 </style>
 </head>
 <body>
-<h1>Maccabi Haifa — voice check</h1>
+<h1>Voice check</h1>
 <p>{n} players, {n_ok}/{len(man)} clips understood by the local ivrit.ai Whisper (green = heard exactly
 the intended words; the lighter second line is a second model). Yellow rows are judgement calls worth
 a listen. A name in parentheses on the card is read alone.</p>
@@ -156,4 +156,8 @@ document.addEventListener('play', e => {{
 
 
 if __name__ == "__main__":
-    main()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--pron", required=True, help="the club's pronunciations.json")
+    ap.add_argument("--players", help="default <root>/data/players.json")
+    a = ap.parse_args()
+    main(players_path=a.players, pron_path=a.pron)

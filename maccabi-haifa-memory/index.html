@@ -47,6 +47,179 @@
   --mint: #86d094;
   --white: #ffffff;
   --stripes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 292 356'%3E%3Cdefs%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='1' x2='273'%3E%3Cstop offset='.04' stop-color='%23fff' stop-opacity='.44'/%3E%3Cstop offset='.74' stop-color='%23fff' stop-opacity='.22'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' stroke='url(%23g)' d='M-158.0-78.8l-2.3 2.3L186.2 267.4zM-148.3-78.8l-2.3 2.3L195.9 267.4zM-138.7-78.8l-2.3 2.3L205.5 267.4zM-129.0-78.8l-2.3 2.3L215.2 267.4zM-119.3-78.8l-2.3 2.3L224.9 267.4zM-109.6-78.8l-2.3 2.3L234.6 267.4zM-100.0-78.8l-2.3 2.3L244.2 267.4zM-90.3-78.8l-2.3 2.3L253.9 267.4zM-80.6-78.8l-2.3 2.3L263.6 267.4zM-70.9-78.8l-2.3 2.3L273.3 267.4zM-61.2-78.8l-2.3 2.3L283.0 267.4zM-51.6-78.8l-2.3 2.3L292.6 267.4zM-41.9-78.8l-2.3 2.3L302.3 267.4zM-32.2-78.8l-2.3 2.3L312.0 267.4zM-22.5-78.8l-2.3 2.3L321.7 267.4zM-12.9-78.8l-2.3 2.3L331.3 267.4zM-3.2-78.8l-2.3 2.3L341.0 267.4zM6.5-78.8l-2.3 2.3L350.7 267.4z'/%3E%3C/svg%3E");
+  /* read by the shared base styles */
+  --font: Heebo, "Arial Hebrew", system-ui, sans-serif;
+  --accent: var(--mint);
+  --surface: var(--pitch);
+  --pip-ring: rgba(134, 208, 148, .3);
+  --app-bg: radial-gradient(130% 95% at 50% 45%, #0e3a18 0%, #052a0e 45%, var(--ink) 100%);
+  --burst: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%2386d094'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E");
+  --big-bg: var(--white);
+  --big-fg: var(--club);
+  --big-drop: #9cc4a5;
+  --no-bg: var(--forest);
+  --no-drop: #10291a;
+  --start-bg: radial-gradient(90% 70% at 50% 42%, rgba(52, 110, 62, .55) 0%, rgba(52, 110, 62, 0) 70%), var(--pitch);
+  --halo: var(--white);
+  --scrim-install: rgba(0, 29, 5, .35);
+  --scrim-confirm: rgba(0, 29, 5, .76);
+  --scrim-win: rgba(0, 29, 5, .6);
+}
+
+/* card back: club green, the /players pinstripe band, and our own ball (not the crest) */
+.back {
+  background-color: var(--club);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -60 120 120'%3E%3Cdefs%3E%3CclipPath id='b'%3E%3Ccircle r='42'/%3E%3C/clipPath%3E%3Cg id='s'%3E%3Cpath d='M0-17V-29' stroke='%23204126' stroke-width='3.4'/%3E%3Cpath d='M0-28L-12.4-37-7.6-51.5H7.6L12.4-37Z' fill='%23204126'/%3E%3C/g%3E%3C/defs%3E%3Cellipse cy='49' rx='40' ry='8' fill='%23001d05' fill-opacity='.35'/%3E%3Cg transform='scale(1.1)'%3E%3Ccircle r='42' fill='%23fff'/%3E%3Cg clip-path='url(%23b)'%3E%3Cpath d='M0-17 16.2-5.3 10 13.8H-10L-16.2-5.3Z' fill='%23204126'/%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' transform='rotate(72)'/%3E%3Cuse href='%23s' transform='rotate(144)'/%3E%3Cuse href='%23s' transform='rotate(216)'/%3E%3Cuse href='%23s' transform='rotate(288)'/%3E%3C/g%3E%3Ccircle r='42' fill='none' stroke='%23204126' stroke-width='2.2'/%3E%3C/g%3E%3C/svg%3E"),
+    var(--stripes);
+  background-repeat: no-repeat;
+  background-position: center, left top;
+  background-size: min(calc(var(--short) * .64), calc(var(--cw) * .58)) auto, cover;
+}
+
+.back::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--short) * .055);
+  border: max(1.5px, calc(var(--short) * .016)) solid rgba(255, 255, 255, .72);
+  border-radius: calc(var(--r) * .6);
+}
+
+/* card face: a pocket version of the club's /players card */
+.front {
+  background: var(--stripes) left top / cover no-repeat, var(--pitch);
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.photo img {
+  position: absolute;
+  left: var(--photo-x);
+  top: 0;
+  width: var(--photo-s);
+  height: var(--photo-s);
+}
+
+/* the site's bottom shadow: over the photo, under the type */
+.front::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--fade-h);
+  background: linear-gradient(to top, rgba(0, 0, 0, .9) 0%, rgba(0, 0, 0, .62) 42%, rgba(0, 0, 0, 0) 100%);
+}
+
+[data-face="side"] .front::before {
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, .88) 0%, rgba(0, 0, 0, .5) 45%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(to left, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 55%);
+}
+
+.front::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14);
+  transition: box-shadow .2s ease;
+}
+
+.card.found .front::after {
+  box-shadow: inset 0 0 0 var(--frame, 4px) var(--mint);
+}
+
+/* the club's white-to-transparent shirt number, stopped at 30% so a child can still read the digits */
+.num {
+  position: absolute;
+  z-index: 2;
+  top: var(--num-top);
+  right: var(--ipad);
+  direction: ltr;
+  font-weight: 700;
+  font-size: var(--num-fs);
+  line-height: .86;
+  letter-spacing: -.02em;
+  color: var(--white);
+  background: linear-gradient(#fff 33%, rgba(255, 255, 255, .3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.name {
+  position: absolute;
+  z-index: 2;
+  right: var(--ipad);
+  bottom: var(--name-b);
+  width: var(--name-w);
+  text-align: right;
+  white-space: nowrap;
+  color: var(--white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+.name span { display: block; }
+
+.first {
+  font-weight: 400;
+  font-size: var(--first-px, 12px);
+  line-height: 1.04;
+}
+
+.last {
+  font-weight: 800;
+  font-size: var(--last-px, 22px);
+  line-height: .94;
+  letter-spacing: -.04em;
+}
+
+/* the cards' pinstripe band at screen scale, softened so the type and the fan lead */
+.start::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--stripes) left top / cover no-repeat;
+  opacity: .45;
+  pointer-events: none;
+}
+
+/* the cards' two-tier name, at title size */
+.title {
+  margin: 0;
+  display: grid;
+  justify-items: start;
+  color: var(--white);
+}
+
+.title > span { display: block; }
+
+.title-small {
+  font-weight: 400;
+  font-size: clamp(22px, 5.6vmin, 56px);
+  line-height: 1;
+}
+
+.title-big {
+  font-weight: 800;
+  font-size: clamp(48px, 12.5vmin, 128px);
+  line-height: .92;
+  letter-spacing: -.045em;
+}
+</style>
+<style id="base">
+/* _memory-game/base.css, shared by the memory games: build_page.py assemble stamps it into the
+   base style block of each game's page. Edit it there, not in a page. Colours and fonts come from
+   the club's tokens in the page's own style block, which comes first. */
+
+:root {
   --pad: clamp(6px, 1.4vmin, 14px);
   --gap: clamp(4px, 1.1vmin, 10px);
   --hud: clamp(46px, 8vmin, 68px);
@@ -70,7 +243,7 @@ html, body {
 body {
   overflow: hidden;
   color: var(--white);
-  font-family: Heebo, "Arial Hebrew", system-ui, sans-serif;
+  font-family: var(--font);
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
@@ -97,7 +270,7 @@ img {
 }
 
 :focus { outline: none; }
-:focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
 /* ---------- frame ---------- */
 
@@ -115,7 +288,7 @@ img {
     max(var(--pad), env(safe-area-inset-right))
     max(var(--pad), env(safe-area-inset-bottom))
     max(var(--pad), env(safe-area-inset-left));
-  background: radial-gradient(130% 95% at 50% 45%, #0e3a18 0%, #052a0e 45%, var(--ink) 100%);
+  background: var(--app-bg);
   grid-template: "hud" var(--hud) "board" minmax(0, 1fr) / minmax(0, 1fr);
 }
 
@@ -192,7 +365,7 @@ img {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid rgba(134, 208, 148, .3);
+  border: 2px solid var(--pip-ring);
 }
 
 .pip img,
@@ -206,8 +379,8 @@ img {
   transform-origin: 50% 30%;
 }
 
-.pip.full { background: var(--pitch); }
-.pip.full::after { border-color: var(--mint); }
+.pip.full { background: var(--surface); }
+.pip.full::after { border-color: var(--accent); }
 .pip.full { animation: pip-pop .5s cubic-bezier(.3, 1.7, .5, 1); }
 
 @keyframes pip-pop {
@@ -220,8 +393,8 @@ img {
   z-index: 15;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--pitch);
-  box-shadow: 0 0 0 3px var(--mint);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent);
   pointer-events: none;
   will-change: transform;
 }
@@ -273,121 +446,7 @@ img {
   backface-visibility: hidden;
 }
 
-/* card back: club green, the /players pinstripe band, and our own ball (not the crest) */
-.back {
-  background-color: var(--club);
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -60 120 120'%3E%3Cdefs%3E%3CclipPath id='b'%3E%3Ccircle r='42'/%3E%3C/clipPath%3E%3Cg id='s'%3E%3Cpath d='M0-17V-29' stroke='%23204126' stroke-width='3.4'/%3E%3Cpath d='M0-28L-12.4-37-7.6-51.5H7.6L12.4-37Z' fill='%23204126'/%3E%3C/g%3E%3C/defs%3E%3Cellipse cy='49' rx='40' ry='8' fill='%23001d05' fill-opacity='.35'/%3E%3Cg transform='scale(1.1)'%3E%3Ccircle r='42' fill='%23fff'/%3E%3Cg clip-path='url(%23b)'%3E%3Cpath d='M0-17 16.2-5.3 10 13.8H-10L-16.2-5.3Z' fill='%23204126'/%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' transform='rotate(72)'/%3E%3Cuse href='%23s' transform='rotate(144)'/%3E%3Cuse href='%23s' transform='rotate(216)'/%3E%3Cuse href='%23s' transform='rotate(288)'/%3E%3C/g%3E%3Ccircle r='42' fill='none' stroke='%23204126' stroke-width='2.2'/%3E%3C/g%3E%3C/svg%3E"),
-    var(--stripes);
-  background-repeat: no-repeat;
-  background-position: center, left top;
-  background-size: min(calc(var(--short) * .64), calc(var(--cw) * .58)) auto, cover;
-}
-
-.back::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--short) * .055);
-  border: max(1.5px, calc(var(--short) * .016)) solid rgba(255, 255, 255, .72);
-  border-radius: calc(var(--r) * .6);
-}
-
-/* card face: a pocket version of the club's /players card */
-.front {
-  transform: rotateY(180deg);
-  background: var(--stripes) left top / cover no-repeat, var(--pitch);
-}
-
-.photo {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-.photo img {
-  position: absolute;
-  left: var(--photo-x);
-  top: var(--photo-y);
-  width: var(--photo-s);
-  height: var(--photo-s);
-}
-
-/* the site's bottom shadow: over the photo, under the type */
-.front::before {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: var(--fade-h);
-  background: linear-gradient(to top, rgba(0, 0, 0, .9) 0%, rgba(0, 0, 0, .62) 42%, rgba(0, 0, 0, 0) 100%);
-}
-
-[data-face="side"] .front::before {
-  background:
-    linear-gradient(to top, rgba(0, 0, 0, .88) 0%, rgba(0, 0, 0, .5) 45%, rgba(0, 0, 0, 0) 100%),
-    linear-gradient(to left, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 55%);
-}
-
-.front::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14);
-  transition: box-shadow .2s ease;
-}
-
-.card.found .front::after {
-  box-shadow: inset 0 0 0 var(--frame, 4px) var(--mint);
-}
-
-/* the club's white-to-transparent shirt number, stopped at 30% so a child can still read the digits */
-.num {
-  position: absolute;
-  z-index: 2;
-  top: var(--num-top);
-  right: var(--num-x);
-  direction: ltr;
-  font-weight: 700;
-  font-size: var(--num-fs);
-  line-height: .86;
-  letter-spacing: -.02em;
-  color: var(--white);
-  background: linear-gradient(#fff 33%, rgba(255, 255, 255, .3) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.name {
-  position: absolute;
-  z-index: 2;
-  right: var(--ipad);
-  bottom: var(--name-b);
-  width: var(--name-w);
-  text-align: right;
-  white-space: nowrap;
-  color: var(--white);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
-}
-
-.name span { display: block; }
-
-.first {
-  font-weight: 400;
-  font-size: var(--first-px, 12px);
-  line-height: 1.04;
-}
-
-.last {
-  font-weight: 800;
-  font-size: var(--last-px, 22px);
-  line-height: .94;
-  letter-spacing: -.04em;
-}
+.front { transform: rotateY(180deg); }
 
 /* motion */
 .board.dealing .card {
@@ -422,7 +481,7 @@ img {
   margin: calc(max(var(--cw), var(--ch)) * -.725) 0 0 calc(max(var(--cw), var(--ch)) * -.725);
   pointer-events: none;
   opacity: 0;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%2386d094'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  background: var(--burst) center / contain no-repeat;
   animation: burst 720ms cubic-bezier(.2, .7, .3, 1) forwards;
 }
 
@@ -460,9 +519,9 @@ img {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--white);
-  color: var(--club);
-  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 #9cc4a5;
+  background: var(--big-bg);
+  color: var(--big-fg);
+  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 var(--big-drop);
   transition: transform .12s ease;
 }
 
@@ -470,30 +529,15 @@ img {
 .big svg { width: 48%; height: 48%; }
 
 .big.no {
-  background: var(--forest);
+  background: var(--no-bg);
   color: var(--white);
-  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 #10291a;
+  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 var(--no-drop);
 }
 
-.start {
-  background:
-    radial-gradient(90% 70% at 50% 42%, rgba(52, 110, 62, .55) 0%, rgba(52, 110, 62, 0) 70%),
-    var(--pitch);
-}
-
-/* the cards' pinstripe band at screen scale, softened so the type and the fan lead */
-.start::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--stripes) left top / cover no-repeat;
-  opacity: .45;
-  pointer-events: none;
-}
-
-.start-stage { position: relative; }
+.start { background: var(--start-bg); }
 
 .start-stage {
+  position: relative;
   display: grid;
   justify-items: center;
   align-items: center;
@@ -510,29 +554,6 @@ img {
     grid-template-areas: "title fan" "play fan";
     column-gap: clamp(32px, 9vmin, 120px);
   }
-}
-
-/* the cards' two-tier name, at title size */
-.title {
-  margin: 0;
-  display: grid;
-  justify-items: start;
-  color: var(--white);
-}
-
-.title > span { display: block; }
-
-.title-small {
-  font-weight: 400;
-  font-size: clamp(22px, 5.6vmin, 56px);
-  line-height: 1;
-}
-
-.title-big {
-  font-weight: 800;
-  font-size: clamp(48px, 12.5vmin, 128px);
-  line-height: .92;
-  letter-spacing: -.045em;
 }
 
 .fan {
@@ -563,7 +584,7 @@ img {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: clamp(3px, .8vmin, 6px) solid var(--white);
+  border: clamp(3px, .8vmin, 6px) solid var(--halo);
   opacity: 0;
   pointer-events: none;
 }
@@ -589,7 +610,7 @@ img {
   padding: 6px 14px 6px 12px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, .22);
-  background: rgba(0, 29, 5, .35);
+  background: var(--scrim-install);
   color: rgba(255, 255, 255, .78);
   font: 600 14px/1.1 system-ui, "Arial Hebrew", sans-serif;
 }
@@ -601,8 +622,8 @@ img {
   .install { display: none; }
 }
 
-.confirm { background: rgba(0, 29, 5, .76); }
-.win { background: rgba(0, 29, 5, .6); }
+.confirm { background: var(--scrim-confirm); }
+.win { background: var(--scrim-win); }
 
 .confirm-box {
   display: flex;
@@ -721,7 +742,153 @@ img {
 <script id="data">
 const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמרי גלזר","first_he":"עמרי","last_he":"גלזר","speak_he":"עמרי גלזר","number":55,"role":"starter","img":"img/omri-glazer.webp"},{"id":"ethan-azoulay","name_he":"איתן אזולאי","first_he":"איתן","last_he":"אזולאי","speak_he":"איתן אזולאי","number":19,"role":"starter","img":"img/ethan-azoulay.webp"},{"id":"bruninho","name_he":"ברונו רוברטו פריירה דה סילבה (ברוניניו)","first_he":"ברונו רוברטו פריירה דה סילבה","last_he":"(ברוניניו)","speak_he":"ברוניניו","number":10,"role":"starter","img":"img/bruninho.webp"},{"id":"nigel-lonwijk","name_he":"נייג'ל לונווייק","first_he":"נייג'ל","last_he":"לונווייק","speak_he":"נייג'ל לונווייק","number":21,"role":"starter","img":"img/nigel-lonwijk.webp"},{"id":"jelle-bataille","name_he":"יילה בטאיי","first_he":"יילה","last_he":"בטאיי","speak_he":"יילה בטאיי","number":25,"role":"starter","img":"img/jelle-bataille.webp"},{"id":"kenji-gorre","name_he":"קנג'י חורה","first_he":"קנג'י","last_he":"חורה","speak_he":"קנג'י חורה","number":11,"role":"starter","img":"img/kenji-gorre.webp"},{"id":"iyad-khalaili","name_he":"איאד חלאיילי","first_he":"איאד","last_he":"חלאיילי","speak_he":"איאד חלאיילי","number":29,"role":"starter","img":"img/iyad-khalaili.webp"},{"id":"tzunami","name_he":"וונדרסון דה פריאטס סוארס (צונאמי)","first_he":"וונדרסון דה פריאטס סוארס","last_he":"(צונאמי)","speak_he":"צונאמי","number":66,"role":"starter","img":"img/tzunami.webp"},{"id":"kenny-saief","name_he":"קני סייף","first_he":"קני","last_he":"סייף","speak_he":"קני סייף","number":16,"role":"starter","img":"img/kenny-saief.webp"},{"id":"cedric-don","name_he":"סדריק דון","first_he":"סדריק","last_he":"דון","speak_he":"סדריק דון","number":45,"role":"starter","img":"img/cedric-don.webp"},{"id":"noam-shtaifman","name_he":"נועם שטייפמן","first_he":"נועם","last_he":"שטייפמן","speak_he":"נועם שטייפמן","number":35,"role":"starter","img":"img/noam-shtaifman.webp"}],"bench":[{"id":"yarin-levi","name_he":"ירין לוי","first_he":"ירין","last_he":"לוי","speak_he":"ירין לוי","number":8,"role":"bench","img":"img/yarin-levi.webp"},{"id":"ali-mohamed","name_he":"עלי מוחמד","first_he":"עלי","last_he":"מוחמד","speak_he":"עלי מוחמד","number":4,"role":"bench","img":"img/ali-mohamed.webp"},{"id":"pedrao","name_he":"פדרו אוליביירה","first_he":"פדרו","last_he":"אוליביירה","speak_he":"פדרו אוליביירה","number":44,"role":"bench","img":"img/pedrao.webp"},{"id":"silva-kani","name_he":"סילבה קאני","first_he":"סילבה","last_he":"קאני","speak_he":"סילבה קאני","number":26,"role":"bench","img":"img/silva-kani.webp"},{"id":"andrija-novakovich","name_he":"אנדריאה נובאקוביץ'","first_he":"אנדריאה","last_he":"נובאקוביץ'","speak_he":"אנדריאה נובאקוביץ'","number":9,"role":"bench","img":"img/andrija-novakovich.webp"},{"id":"yair-mordechai","name_he":"יאיר מרדכי","first_he":"יאיר","last_he":"מרדכי","speak_he":"יאיר מרדכי","number":7,"role":"bench","img":"img/yair-mordechai.webp"},{"id":"guy-melamed","name_he":"גיא מלמד","first_he":"גיא","last_he":"מלמד","speak_he":"גיא מלמד","number":18,"role":"bench","img":"img/guy-melamed.webp"},{"id":"sean-goldberg","name_he":"שון גולדברג","first_he":"שון","last_he":"גולדברג","speak_he":"שון גולדברג","number":3,"role":"bench","img":"img/sean-goldberg.webp"},{"id":"navot-ratner","name_he":"נבות רטנר","first_he":"נבות","last_he":"רטנר","speak_he":"נבות רטנר","number":36,"role":"bench","img":"img/navot-ratner.webp"},{"id":"pedro-barzao","name_he":"פדרו ברזאו","first_he":"פדרו","last_he":"ברזאו","speak_he":"פדרו ברזאו","number":30,"role":"bench","img":"img/pedro-barzao.webp"},{"id":"adam-grimberg","name_he":"אדם גרימברג","first_he":"אדם","last_he":"גרימברג","speak_he":"אדם גרימברג","number":38,"role":"bench","img":"img/adam-grimberg.webp"}],"audio":{"ui":["start","win"],"name":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg"],"match":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg"]}};
 </script>
-<script>
+<script id="club">
+const CLUB = {
+  confetti: ['#ffffff', '#86d094', '#007638', '#4aa45b', '#ffffff'],
+  fonts: [['800 40px Heebo', 'אבג'], ['700 40px Heebo', '0123456789()']],
+
+  // The card face, a pocket version of the club's /players card: the photo, the faded number and the
+  // two-tier name (a small first name over a big surname). The engine calls prepare(players) once
+  // fonts are in, apply(style, cw, ch, mode) per board size, build(p) per card and fit(cardEl, p, geo)
+  // per card and size.
+  face(kit) {
+    'use strict';
+
+    const { el, textEm, words, bestSplit, photoFront } = kit;
+    const FIRST_FONT = '400 100px Heebo';
+    const LAST_FONT = '800 100px Heebo';
+    const LAST_TRACK = -0.04;
+    const FIRST_LH = 1.04;
+    const LAST_LH = 0.94;
+    const FIRST_RATIO = 0.62;
+    const digitEm = { value: 0.57 };
+
+    // One line, plus the most balanced two-line split when there are several words.
+    function splits(text, font, track) {
+      const list = words(text);
+      if (!list.length) return [];
+      const one = bestSplit(list, 1, font, track);
+      const two = list.length > 1 && bestSplit(list, 2, font, track);
+      return two ? [one, two] : [one];
+    }
+
+    function prepare(players) {
+      digitEm.value = textEm('0123456789', '700 100px Heebo') / 10 || 0.57;
+      players.forEach((p) => {
+        p.firstSplits = splits(p.first_he, FIRST_FONT, 0);
+        p.lastSplits = splits(p.last_he || p.name_he, LAST_FONT, LAST_TRACK);
+      });
+    }
+
+    // The photo is a square head-and-shoulders cutout, nudged toward the end side (left in RTL)
+    // so the number gets the top start corner, as on the club's cards. Type always clears the
+    // found frame, whose glyph ink would otherwise overhang under it.
+    function faceVars(cw, ch, mode) {
+      const twoDigits = digitEm.value * 2.04;
+      const frame = Math.max(3, Math.min(cw, ch) * 0.045);
+      const edge = frame + 3;
+      if (mode === 'side') {
+        const pad = Math.max(edge, ch * 0.065);
+        const s = ch * 0.94;
+        const x = -s * 0.1;
+        const col = cw - (x + s * 0.74) - pad;
+        const num = Math.min(ch * 0.42, col / twoDigits);
+        return {
+          s, x, pad, frame, num, numTop: pad * 0.55,
+          last: Math.min(ch * 0.21, num * 0.62), nameW: Math.max(col, cw * 0.4), nameH: ch * 0.44, nameB: pad * 0.8, fade: 0.6,
+        };
+      }
+      if (mode === 'band') {
+        const pad = Math.max(edge, cw * 0.065);
+        const s = cw * 1.02;
+        const x = -cw * 0.16;
+        const num = Math.min(cw * 0.35, ch * 0.28);
+        return {
+          s, x, pad, frame, num, numTop: pad * 0.55,
+          last: Math.min(cw * 0.2, ch * 0.16), nameW: cw - pad * 2, nameH: ch * 0.36, nameB: pad * 0.8, fade: 0.56,
+        };
+      }
+      const pad = Math.max(edge, cw * 0.06);
+      const s = cw * 1.1;
+      const x = -cw * 0.12;
+      const num = Math.min(cw * 0.36, ((cw - pad * 2) / twoDigits) * 0.8);
+      return {
+        s, x, pad, frame, num, numTop: pad * 0.5,
+        last: cw * 0.22, nameW: cw - pad * 2, nameH: ch * 0.36, nameB: pad, fade: 0.5,
+      };
+    }
+
+    function apply(s, cw, ch, mode) {
+      const v = faceVars(cw, ch, mode);
+      s.setProperty('--frame', `${v.frame}px`);
+      s.setProperty('--photo-s', `${v.s}px`);
+      s.setProperty('--photo-x', `${v.x}px`);
+      s.setProperty('--ipad', `${v.pad}px`);
+      s.setProperty('--num-fs', `${v.num}px`);
+      s.setProperty('--num-top', `${v.numTop}px`);
+      s.setProperty('--name-w', `${v.nameW}px`);
+      s.setProperty('--name-b', `${v.nameB}px`);
+      s.setProperty('--fade-h', `${v.fade * 100}%`);
+      return v;
+    }
+
+    function renderName(scope, first, last) {
+      const name = scope.querySelector('.name');
+      const key = `${first.join('|')}/${last.join('|')}`;
+      if (name.dataset.lines === key) return;
+      name.dataset.lines = key;
+      name.textContent = '';
+      if (first.length) {
+        const top = el('span', 'first');
+        first.forEach((line) => top.appendChild(el('span', null, line)));
+        name.appendChild(top);
+      }
+      const big = el('span', 'last');
+      last.forEach((line) => big.appendChild(el('span', null, line)));
+      name.appendChild(big);
+    }
+
+    // Tries one or two lines per tier and keeps the biggest surname; an extra line has to buy
+    // more than 4% of size.
+    function fit(cardEl, p, geo) {
+      if (!p.lastSplits || !p.lastSplits.length) return;
+      const v = geo.v;
+      const firsts = p.firstSplits.length ? p.firstSplits : [null];
+      let best = null;
+      firsts.forEach((f) => p.lastSplits.forEach((l) => {
+        let last = Math.min(v.last, v.nameW / l.em);
+        let first = f ? Math.min(v.last * FIRST_RATIO, last * 0.8, v.nameW / f.em) : 0;
+        const height = (f ? f.lines.length * first * FIRST_LH : 0) + l.lines.length * last * LAST_LH;
+        const k = Math.min(1, v.nameH / height);
+        last *= k;
+        first *= k;
+        const lines = (f ? f.lines.length : 0) + l.lines.length;
+        const score = last + first * 0.4;
+        if (!best || score > best.score * 1.04 || (score >= best.score && lines <= best.lines)) {
+          best = { f, l, first, last, lines, score };
+        }
+      }));
+      renderName(cardEl, best.f ? best.f.lines : [], best.l.lines);
+      cardEl.style.setProperty('--first-px', `${best.first.toFixed(2)}px`);
+      cardEl.style.setProperty('--last-px', `${best.last.toFixed(2)}px`);
+    }
+
+    function build(p) {
+      const front = photoFront(p);
+      front.append(el('span', 'num', String(p.number)), el('span', 'name'));
+      const first = p.firstSplits && p.firstSplits[0];
+      const last = p.lastSplits && p.lastSplits[0];
+      renderName(front, first ? first.lines : [], last ? last.lines : [p.name_he]);
+      return front;
+    }
+
+    return { prepare, apply, build, fit };
+  },
+};
+</script>
+<script id="engine">
+// _memory-game/engine.js, shared by the memory games: build_page.py assemble stamps it into the
+// engine script of each game's page. Edit it there, not in a page. The page's DATA and CLUB come first.
 (() => {
   'use strict';
 
@@ -784,12 +951,14 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
     match: new Set(AUDIO.match || []),
   };
 
-  // The card shows name_he; the voice says speak_he (a trailing nickname in parentheses, else the name).
+  // The card shows name_he; the voice says speak_he when the roster has one (a trailing nickname in
+  // parentheses), else name_he.
+  const spoken = (p) => p.speak_he || p.name_he;
   const clip = {
-    name: (p) => ({ url: recorded.name.has(p.id) ? `audio/name/${p.id}.mp3` : null, text: p.speak_he }),
+    name: (p) => ({ url: recorded.name.has(p.id) ? `audio/name/${p.id}.mp3` : null, text: spoken(p) }),
     match: (p) => ({
       url: recorded.match.has(p.id) ? `audio/match/${p.id}.mp3` : null,
-      text: `מספר ${hebrewNumber(p.number)}, ${p.speak_he}!`,
+      text: `מספר ${hebrewNumber(p.number)}, ${spoken(p)}!`,
     }),
     ui: (key, text) => ({ url: recorded.ui.has(key) ? `audio/ui/${key}.mp3` : null, text }),
   };
@@ -1050,16 +1219,9 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
     return { unlock, wake, prefetch, say, halt, sfx, setMuted, get muted() { return muted; } };
   })();
 
-  /* ---------- names: the club's two tiers (small first name over a big surname), breaks and fit ---------- */
+  /* ---------- names: the kit a club's card face measures and splits them with ---------- */
 
   const KEEP_WITH_NEXT = new Set(['בן', 'בר', 'אבו', 'אל', 'דה', 'די', 'דוס', 'ואן', 'פון']);
-  const FIRST_FONT = '400 100px Heebo';
-  const LAST_FONT = '800 100px Heebo';
-  const LAST_TRACK = -0.04;
-  const FIRST_LH = 1.04;
-  const LAST_LH = 0.94;
-  const FIRST_RATIO = 0.62;
-  const digitEm = { value: 0.57 };
   let measurer = null;
 
   // `track` is CSS letter-spacing in em, which canvas measurement leaves out.
@@ -1085,141 +1247,20 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
     return out;
   }
 
-  // One line, plus the most balanced two-line split when there are several words.
-  function splits(text, font, track) {
-    const list = words(text);
-    if (!list.length) return [];
-    const measure = (lines) => ({ lines, em: Math.max(...lines.map((line) => textEm(line, font, track))) });
-    const out = [measure([list.join(' ')])];
-    let two = null;
-    if (list.length > 1) {
-      partitions(list, 2).forEach((lines) => {
-        const m = measure(lines);
-        if (!two || m.em < two.em) two = m;
-      });
-    }
-    if (two) out.push(two);
-    return out;
-  }
-
-  function prepareNames() {
-    digitEm.value = textEm('0123456789', '700 100px Heebo') / 10 || 0.57;
-    ALL.forEach((p) => {
-      p.firstSplits = splits(p.first_he, FIRST_FONT, 0);
-      p.lastSplits = splits(p.last_he || p.name_he, LAST_FONT, LAST_TRACK);
-    });
-  }
-
-  /* ---------- card face geometry ---------- */
-
-  function faceMode(cw, ch) {
-    const ratio = cw / ch;
-    if (ratio >= 1.1) return 'side';
-    return ratio < 0.7 ? 'stack' : 'band';
-  }
-
-  // The photo is a square head-and-shoulders cutout, nudged toward the end side (left in RTL)
-  // so the number gets the top start corner, as on the club's cards. Type always clears the
-  // found frame, whose glyph ink would otherwise overhang under it.
-  function faceVars(cw, ch, mode) {
-    const twoDigits = digitEm.value * 2.04;
-    const frame = Math.max(3, Math.min(cw, ch) * 0.045);
-    const edge = frame + 3;
-    if (mode === 'side') {
-      const pad = Math.max(edge, ch * 0.065);
-      const s = ch * 0.94;
-      const x = -s * 0.1;
-      const col = cw - (x + s * 0.74) - pad;
-      const num = Math.min(ch * 0.42, col / twoDigits);
-      return {
-        s, x, y: 0, pad, frame, num, numTop: pad * 0.55, numX: pad,
-        last: Math.min(ch * 0.21, num * 0.62), nameW: Math.max(col, cw * 0.4), nameH: ch * 0.44, nameB: pad * 0.8, fade: 0.6,
-      };
-    }
-    if (mode === 'band') {
-      const pad = Math.max(edge, cw * 0.065);
-      const s = cw * 1.02;
-      const x = -cw * 0.16;
-      const num = Math.min(cw * 0.35, ch * 0.28);
-      return {
-        s, x, y: 0, pad, frame, num, numTop: pad * 0.55, numX: pad,
-        last: Math.min(cw * 0.2, ch * 0.16), nameW: cw - pad * 2, nameH: ch * 0.36, nameB: pad * 0.8, fade: 0.56,
-      };
-    }
-    const pad = Math.max(edge, cw * 0.06);
-    const s = cw * 1.1;
-    const x = -cw * 0.12;
-    const num = Math.min(cw * 0.36, ((cw - pad * 2) / twoDigits) * 0.8);
-    return {
-      s, x, y: 0, pad, frame, num, numTop: pad * 0.5, numX: pad,
-      last: cw * 0.22, nameW: cw - pad * 2, nameH: ch * 0.36, nameB: pad, fade: 0.5,
-    };
-  }
-
-  function applyFace(target, cw, ch, mode) {
-    const v = faceVars(cw, ch, mode);
-    const s = target.style;
-    target.dataset.face = mode;
-    s.setProperty('--cw', `${cw}px`);
-    s.setProperty('--ch', `${ch}px`);
-    s.setProperty('--frame', `${v.frame}px`);
-    s.setProperty('--photo-s', `${v.s}px`);
-    s.setProperty('--photo-x', `${v.x}px`);
-    s.setProperty('--photo-y', `${v.y}px`);
-    s.setProperty('--ipad', `${v.pad}px`);
-    s.setProperty('--num-fs', `${v.num}px`);
-    s.setProperty('--num-top', `${v.numTop}px`);
-    s.setProperty('--num-x', `${v.numX}px`);
-    s.setProperty('--name-w', `${v.nameW}px`);
-    s.setProperty('--name-b', `${v.nameB}px`);
-    s.setProperty('--fade-h', `${v.fade * 100}%`);
-    return { cw, ch, mode, v };
-  }
-
-  function renderName(scope, first, last) {
-    const name = scope.querySelector('.name');
-    const key = `${first.join('|')}/${last.join('|')}`;
-    if (name.dataset.lines === key) return;
-    name.dataset.lines = key;
-    name.textContent = '';
-    if (first.length) {
-      const top = el('span', 'first');
-      first.forEach((line) => top.appendChild(el('span', null, line)));
-      name.appendChild(top);
-    }
-    const big = el('span', 'last');
-    last.forEach((line) => big.appendChild(el('span', null, line)));
-    name.appendChild(big);
-  }
-
-  // Tries one or two lines per tier and keeps the biggest surname; an extra line has to buy
-  // more than 4% of size.
-  function fitName(cardEl, p, geo) {
-    if (!p.lastSplits || !p.lastSplits.length) return;
-    const v = geo.v;
-    const firsts = p.firstSplits.length ? p.firstSplits : [null];
+  // The split into `count` lines whose widest line is the narrowest; null when no split is allowed.
+  function bestSplit(list, count, font, track) {
     let best = null;
-    firsts.forEach((f) => p.lastSplits.forEach((l) => {
-      let last = Math.min(v.last, v.nameW / l.em);
-      let first = f ? Math.min(v.last * FIRST_RATIO, last * 0.8, v.nameW / f.em) : 0;
-      const height = (f ? f.lines.length * first * FIRST_LH : 0) + l.lines.length * last * LAST_LH;
-      const k = Math.min(1, v.nameH / height);
-      last *= k;
-      first *= k;
-      const lines = (f ? f.lines.length : 0) + l.lines.length;
-      const score = last + first * 0.4;
-      if (!best || score > best.score * 1.04 || (score >= best.score && lines <= best.lines)) {
-        best = { f, l, first, last, lines, score };
-      }
-    }));
-    renderName(cardEl, best.f ? best.f.lines : [], best.l.lines);
-    cardEl.style.setProperty('--first-px', `${best.first.toFixed(2)}px`);
-    cardEl.style.setProperty('--last-px', `${best.last.toFixed(2)}px`);
+    partitions(list, count).forEach((lines) => {
+      const em = Math.max(...lines.map((line) => textEm(line, font, track)));
+      if (!best || em < best.em) best = { lines, em };
+    });
+    return best;
   }
 
-  /* ---------- DOM ---------- */
+  /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
-  function buildFront(p) {
+  // Every face starts with the photo; a match flight starts from its `.photo img`.
+  function photoFront(p) {
     const front = el('span', 'face front');
     const photo = el('span', 'photo');
     const img = el('img');
@@ -1228,12 +1269,27 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
     img.decoding = 'async';
     img.draggable = false;
     photo.appendChild(img);
-    front.append(photo, el('span', 'num', String(p.number)), el('span', 'name'));
-    const first = p.firstSplits && p.firstSplits[0];
-    const last = p.lastSplits && p.lastSplits[0];
-    renderName(front, first ? first.lines : [], last ? last.lines : [p.name_he]);
+    front.appendChild(photo);
     return front;
   }
+
+  const face = CLUB.face({ el, textEm, words, bestSplit, photoFront });
+
+  function faceMode(cw, ch) {
+    const ratio = cw / ch;
+    if (ratio >= 1.1) return 'side';
+    return ratio < 0.7 ? 'stack' : 'band';
+  }
+
+  function applyFace(target, cw, ch, mode) {
+    const s = target.style;
+    target.dataset.face = mode;
+    s.setProperty('--cw', `${cw}px`);
+    s.setProperty('--ch', `${ch}px`);
+    return { cw, ch, mode, v: face.apply(s, cw, ch, mode) };
+  }
+
+  /* ---------- DOM ---------- */
 
   function buildCard(p, index, tag) {
     const card = el(tag || 'button', 'card');
@@ -1246,7 +1302,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
     card.dataset.state = 'down';
     card.style.setProperty('--i', String(index));
     const inner = el('span', 'card-inner');
-    inner.append(el('span', 'face back'), buildFront(p));
+    inner.append(el('span', 'face back'), face.build(p));
     card.appendChild(inner);
     return card;
   }
@@ -1291,7 +1347,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
     const cw = (rect.width - gx * (cols - 1)) / cols;
     const ch = (rect.height - gy * (rows - 1)) / rows;
     game.geo = applyFace(board, cw, ch, faceMode(cw, ch));
-    game.cards.forEach((card) => fitName(card.el, card.p, game.geo));
+    game.cards.forEach((card) => face.fit(card.el, card.p, game.geo));
   }
 
   function renderPips() {
@@ -1451,11 +1507,12 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
       pip.classList.add('full');
     };
     const photo = card.el.querySelector('.photo');
-    const face = photo && photo.querySelector('img');
-    if (reducedMotion.matches || !face || !document.body.animate) return fill();
+    const pic = photo && photo.querySelector('img');
+    if (reducedMotion.matches || !pic || !document.body.animate) return fill();
 
+    // Centred on the photo itself, which a face may place off the middle of its .photo box.
     const from = photo.getBoundingClientRect();
-    const shot = face.getBoundingClientRect();
+    const shot = pic.getBoundingClientRect();
     const to = pip.getBoundingClientRect();
     const size = Math.min(from.width, from.height);
     const x0 = shot.left + (shot.width - size) / 2;
@@ -1535,7 +1592,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
   const confetti = (() => {
     const canvas = $('confetti');
     const g = canvas.getContext('2d');
-    const colors = ['#ffffff', '#86d094', '#007638', '#4aa45b', '#ffffff'];
+    const colors = CLUB.confetti;
     let parts = [];
     let frame = 0;
     let last = 0;
@@ -1623,7 +1680,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
     [star, star, star].forEach((p, i) => {
       const card = buildCard(p, i, 'span');
       if (i === 1) card.dataset.state = 'up';
-      fitName(card, p, geo);
+      face.fit(card, p, geo);
       fan.appendChild(card);
     });
   }
@@ -1688,8 +1745,17 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
     if (card) tap(card);
   });
 
+  // A newer service worker took over this open page, and its cache only holds the files of its own
+  // roster, so a new game starts from a reloaded page rather than from this page's DATA.
+  let stale = false;
+
+  function reloadIfStale() {
+    if (stale) location.reload();
+    return stale;
+  }
+
   $('play').addEventListener('click', () => {
-    if (game.phase !== 'start') return;
+    if (game.phase !== 'start' || reloadIfStale()) return;
     sound.unlock();
     goFullscreen();
     hide('start');
@@ -1698,7 +1764,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
   });
 
   $('replay').addEventListener('click', () => {
-    if (game.phase !== 'won') return;
+    if (game.phase !== 'won' || reloadIfStale()) return;
     sound.unlock();
     newGame();
     sound.say([clip.ui('start', START_LINE)]);
@@ -1709,6 +1775,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
   });
 
   $('yes').addEventListener('click', () => {
+    if (reloadIfStale()) return;
     sound.unlock();
     hide('confirm');
     newGame();
@@ -1751,16 +1818,13 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
   window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
 
   sound.prefetch([clip.ui('start').url]);
-  prepareNames();
+  face.prepare(ALL);
   buildFan();
   const fontsReady = document.fonts && document.fonts.load
-    ? Promise.all([
-      document.fonts.load('800 40px Heebo', 'אבג'),
-      document.fonts.load('700 40px Heebo', '0123456789()'),
-    ])
+    ? Promise.all(CLUB.fonts.map(([spec, sample]) => document.fonts.load(spec, sample)))
     : Promise.resolve();
   fontsReady.catch(() => {}).then(() => {
-    prepareNames();
+    face.prepare(ALL);
     buildFan();
     layout();
   });
@@ -1792,6 +1856,10 @@ const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמ
 
   const secure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   if ('serviceWorker' in navigator && secure) {
+    // A first install also takes over the page, but that page came from the network and is current.
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.addEventListener('controllerchange', () => { stale = true; });
+    }
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     });

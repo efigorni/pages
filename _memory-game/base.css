@@ -1,0 +1,463 @@
+/* _memory-game/base.css, shared by the memory games: build_page.py assemble stamps it into the
+   base style block of each game's page. Edit it there, not in a page. Colours and fonts come from
+   the club's tokens in the page's own style block, which comes first. */
+
+:root {
+  --pad: clamp(6px, 1.4vmin, 14px);
+  --gap: clamp(4px, 1.1vmin, 10px);
+  --hud: clamp(46px, 8vmin, 68px);
+  --flip: 460ms;
+  --cw: 110px;
+  --ch: 130px;
+  --short: min(var(--cw), var(--ch));
+  --r: calc(var(--short) * .09);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--ink);
+  overscroll-behavior: none;
+}
+
+body {
+  overflow: hidden;
+  color: var(--white);
+  font-family: var(--font);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+:focus { outline: none; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- frame ---------- */
+
+.app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  gap: var(--gap);
+  padding:
+    max(var(--pad), env(safe-area-inset-top))
+    max(var(--pad), env(safe-area-inset-right))
+    max(var(--pad), env(safe-area-inset-bottom))
+    max(var(--pad), env(safe-area-inset-left));
+  background: var(--app-bg);
+  grid-template: "hud" var(--hud) "board" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+@media (orientation: landscape) {
+  .app { grid-template: "hud board" minmax(0, 1fr) / var(--hud) minmax(0, 1fr); }
+}
+
+/* ---------- HUD ---------- */
+
+.hud {
+  grid-area: hud;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (orientation: landscape) {
+  .hud { flex-direction: column; }
+}
+
+.icon-btn {
+  flex: none;
+  width: var(--hud);
+  height: var(--hud);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, .09);
+  color: var(--white);
+  transition: transform .12s ease;
+}
+
+.icon-btn:active { transform: scale(.88); }
+.icon-btn svg { width: 52%; height: 52%; }
+
+#mute .i-off { display: none; }
+#mute[aria-pressed="true"] .i-on { display: none; }
+#mute[aria-pressed="true"] .i-off { display: block; }
+#mute[aria-pressed="true"] { color: rgba(255, 255, 255, .55); }
+
+.pips {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2px, .6vmin, 6px);
+}
+
+@media (orientation: landscape) {
+  .pips { flex-direction: column; }
+}
+
+.pip {
+  position: relative;
+  flex: 0 1 calc(var(--hud) * .6);
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  max-width: calc(var(--hud) * .6);
+  max-height: calc(var(--hud) * .6);
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .05);
+}
+
+.pip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--pip-ring);
+}
+
+.pip img,
+.flyer img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.5);
+  transform-origin: 50% 30%;
+}
+
+.pip.full { background: var(--surface); }
+.pip.full::after { border-color: var(--accent); }
+.pip.full { animation: pip-pop .5s cubic-bezier(.3, 1.7, .5, 1); }
+
+@keyframes pip-pop {
+  0% { transform: scale(.4); }
+  100% { transform: scale(1); }
+}
+
+.flyer {
+  position: fixed;
+  z-index: 15;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ---------- board ---------- */
+
+.board {
+  grid-area: board;
+  display: grid;
+  gap: var(--gap);
+  min-width: 0;
+  min-height: 0;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+}
+
+@media (orientation: landscape) {
+  .board {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.card {
+  position: relative;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  border-radius: var(--r);
+  perspective: calc(var(--cw) * 4);
+}
+
+.card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform var(--flip) cubic-bezier(.3, 1.3, .5, 1);
+}
+
+.card[data-state="up"] .card-inner,
+.card[data-state="matched"] .card-inner { transform: rotateY(180deg); }
+
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.front { transform: rotateY(180deg); }
+
+/* motion */
+.board.dealing .card {
+  animation: deal 520ms cubic-bezier(.25, 1.35, .5, 1) both;
+  animation-delay: calc(var(--i) * 16ms);
+}
+
+@keyframes deal {
+  from { opacity: 0; transform: translateY(-24%) scale(.55); }
+  to { opacity: 1; transform: none; }
+}
+
+.card.found {
+  z-index: 2;
+  animation: found 640ms cubic-bezier(.3, 1.5, .5, 1);
+}
+
+@keyframes found {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.16) rotate(-3deg); }
+  70% { transform: scale(.97) rotate(1.5deg); }
+  100% { transform: scale(1); }
+}
+
+.burst {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 50%;
+  width: calc(max(var(--cw), var(--ch)) * 1.45);
+  height: calc(max(var(--cw), var(--ch)) * 1.45);
+  margin: calc(max(var(--cw), var(--ch)) * -.725) 0 0 calc(max(var(--cw), var(--ch)) * -.725);
+  pointer-events: none;
+  opacity: 0;
+  background: var(--burst) center / contain no-repeat;
+  animation: burst 720ms cubic-bezier(.2, .7, .3, 1) forwards;
+}
+
+@keyframes burst {
+  0% { opacity: 1; transform: scale(.35) rotate(0deg); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.1) rotate(30deg); }
+}
+
+/* ---------- overlays ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: var(--pad);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s ease, visibility 0s linear .35s;
+}
+
+.overlay.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .35s ease;
+}
+
+.overlay:not(.show) { pointer-events: none; }
+
+.big {
+  width: clamp(104px, 24vmin, 200px);
+  height: clamp(104px, 24vmin, 200px);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--big-bg);
+  color: var(--big-fg);
+  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 var(--big-drop);
+  transition: transform .12s ease;
+}
+
+.big:active { transform: translateY(clamp(3px, .7vmin, 6px)); }
+.big svg { width: 48%; height: 48%; }
+
+.big.no {
+  background: var(--no-bg);
+  color: var(--white);
+  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 var(--no-drop);
+}
+
+.start { background: var(--start-bg); }
+
+.start-stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  gap: clamp(14px, 4.5vmin, 44px);
+  grid-template-areas: "title" "fan" "play";
+}
+
+.start-stage .title { grid-area: title; }
+.start-stage .fan { grid-area: fan; }
+.start-stage .play { grid-area: play; }
+
+@media (orientation: landscape) {
+  .start-stage {
+    grid-template-areas: "title fan" "play fan";
+    column-gap: clamp(32px, 9vmin, 120px);
+  }
+}
+
+.fan {
+  position: relative;
+  width: calc(var(--cw) * 2.1);
+  height: calc(var(--ch) * 1.1);
+}
+
+.fan .card {
+  position: absolute;
+  top: calc(var(--ch) * .05);
+  left: 50%;
+  width: var(--cw);
+  height: var(--ch);
+  margin-left: calc(var(--cw) * -.5);
+  transform-origin: 50% 135%;
+  pointer-events: none;
+}
+
+.fan .card:nth-child(1) { transform: rotate(-15deg); }
+.fan .card:nth-child(3) { transform: rotate(15deg); }
+.fan .card:nth-child(2) { z-index: 1; }
+
+.play { position: relative; }
+
+.play::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: clamp(3px, .8vmin, 6px) solid var(--halo);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.start.show .play::before { animation: halo 1.9s ease-out infinite; }
+
+@keyframes halo {
+  0% { opacity: .85; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.45); }
+}
+
+.play svg { margin-left: 8%; }
+
+/* parent-facing: small, quiet, in a corner of the start screen, never on the board */
+.install {
+  position: absolute;
+  bottom: max(var(--pad), env(safe-area-inset-bottom));
+  left: max(var(--pad), env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  background: var(--scrim-install);
+  color: rgba(255, 255, 255, .78);
+  font: 600 14px/1.1 system-ui, "Arial Hebrew", sans-serif;
+}
+
+.install[hidden] { display: none; }
+.install svg { width: 18px; height: 18px; flex: none; }
+
+@media (display-mode: fullscreen), (display-mode: standalone) {
+  .install { display: none; }
+}
+
+.confirm { background: var(--scrim-confirm); }
+.win { background: var(--scrim-win); }
+
+.confirm-box {
+  display: flex;
+  gap: clamp(28px, 9vmin, 96px);
+}
+
+.confirm.show .big { animation: pop-in .38s cubic-bezier(.3, 1.6, .5, 1) both; }
+.confirm.show .big.no { animation-delay: .06s; }
+
+@keyframes pop-in {
+  from { transform: scale(.3); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.win-stage {
+  display: grid;
+  justify-items: center;
+  gap: clamp(16px, 5vmin, 48px);
+}
+
+.trophy {
+  width: clamp(130px, 36vmin, 320px);
+  height: clamp(130px, 36vmin, 320px);
+}
+
+.win.show .trophy { animation: trophy-in .9s cubic-bezier(.3, 1.45, .5, 1) both; }
+.win.show .big { animation: pop-in .45s .55s cubic-bezier(.3, 1.6, .5, 1) both; }
+
+@keyframes trophy-in {
+  0% { opacity: 0; transform: scale(.2) rotate(-24deg); }
+  60% { opacity: 1; transform: scale(1.08) rotate(5deg); }
+  100% { opacity: 1; transform: none; }
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-inner { transition-duration: 1ms; }
+  .board.dealing .card,
+  .card.found,
+  .burst,
+  .pip.full,
+  .start.show .play::before,
+  .confirm.show .big,
+  .win.show .trophy,
+  .win.show .big { animation: none; }
+}

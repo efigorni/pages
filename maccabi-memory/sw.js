@@ -1,4 +1,6 @@
-const VERSION = 'maccabi-memory-d17e2839a810';
+// build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
+// VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
+const VERSION = 'maccabi-memory-225f49194891';
 const ASSETS = [
   './',
   'index.html',
@@ -81,19 +83,18 @@ const ASSETS = [
   'img/tyrese-asante.webp'
 ];
 
-// Without these the game can't start offline, so failing either one fails the install and the
-// previous version stays in charge.
-const CORE = ['./', 'index.html'];
+// The origin's Cache Storage is shared with the other games on efigorni.github.io, so this worker
+// only ever deletes caches carrying its own prefix.
+const PREFIX = 'maccabi-memory-';
+
 const NAV_TIMEOUT_MS = 3000;
 
+// Offline play needs every file, so one failed download fails the whole install (addAll stores
+// nothing then): the previous version stays in charge and the browser tries again on a later visit.
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(VERSION)
-      .then((cache) => Promise.all(ASSETS.map((url) => cache.add(new Request(url, { cache: 'reload' })).catch((err) => {
-        if (CORE.includes(url)) throw err;
-        // Keep offline play whole: reuse the previous version's copy of a file that failed to download.
-        return caches.match(url).then((old) => (old ? cache.put(url, old) : undefined)).catch(() => {});
-      }))))
+      .then((cache) => cache.addAll(ASSETS.map((url) => new Request(url, { cache: 'reload' }))))
       .then(() => self.skipWaiting()),
   );
 });
@@ -101,7 +102,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((key) => key.startsWith('maccabi-memory-') && key !== VERSION).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(keys.filter((key) => key.startsWith(PREFIX) && key !== VERSION).map((key) => caches.delete(key))))
       .then(() => self.clients.claim()),
   );
 });
@@ -120,21 +121,52 @@ function cachedPage(request) {
   return cached(request).then((hit) => hit || caches.match('./'));
 }
 
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
+// <audio> asks for byte ranges, and some players (iOS Safari) refuse a whole 200 in reply. A cached
+// file answers a single range itself; any other request gets the whole file.
+function ranged(request, response) {
+  const m = /^bytes=(\d*)-(\d*)$/.exec(request.headers.get('range') || '');
+  if (!m || (m[1] === '' && m[2] === '')) return Promise.resolve(response);
+  return response.arrayBuffer().then((body) => {
+    const size = body.byteLength;
+    const start = m[1] === '' ? Math.max(0, size - Number(m[2])) : Number(m[1]);
+    const end = m[1] === '' || m[2] === '' ? size - 1 : Math.min(Number(m[2]), size - 1);
+    if (start > end) return new Response(null, { status: 416, headers: { 'Content-Range': `bytes */${size}` } });
+    return new Response(body.slice(start, end + 1), {
+      status: 206,
+      statusText: 'Partial Content',
+      headers: {
+        'Content-Type': response.headers.get('Content-Type') || 'application/octet-stream',
+        'Content-Range': `bytes ${start}-${end}/${size}`,
+        'Content-Length': String(end - start + 1),
+        'Accept-Ranges': 'bytes',
+      },
+    });
+  });
+}
 
+function fetchAndStore(event, request) {
   let saved = Promise.resolve();
   const network = fetch(request).then((response) => {
     saved = store(request, response);
     return response;
   });
   event.waitUntil(network.then(() => saved, () => {}));
+  return network;
+}
+
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
 
   if (request.mode !== 'navigate') {
-    event.respondWith(caches.match(request).then((hit) => hit || network));
+    // VERSION hashes every precached file and a new version downloads them all again, so a hit in
+    // this version's cache is current and needs no trip to the network.
+    event.respondWith(caches.open(VERSION).then((cache) => cache.match(request))
+      .then((hit) => (hit ? ranged(request, hit) : fetchAndStore(event, request))));
     return;
   }
+
+  const network = fetchAndStore(event, request);
 
   // Network-first. An error page falls back to the cached copy, and a connection that is up but
   // barely working gets the cached game after NAV_TIMEOUT_MS while the fetch refreshes the cache.

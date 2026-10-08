@@ -19,7 +19,8 @@ import json
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))  # -I drops the script dir; framing.py is ours
+sys.dont_write_bytecode = True  # no __pycache__ in the repo
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/images"))  # framing.py
 
 from PIL import Image, ImageDraw, ImageFont  # noqa: E402
 

@@ -1,7 +1,10 @@
-"""Hebrew text helpers for the Maccabi memory-game voice clips.
+"""Hebrew text helpers for the memory games' voice clips.
 
 Pure stdlib, importable from any of the engine venvs.
 
+- `speak_text` applies the parentheses rule: a name that ends in "(...)" is read
+  as the text inside the parentheses only; any other name is read in full.
+  `split_display_name` is the card's two-tier split of the same name.
 - Number words use the feminine counting form that follows "מספר"
   ("מספר שבע", "מספר ארבעים ושתיים").
 - `normalize_for_compare` folds both the expected text and an STT transcript to
@@ -49,6 +52,47 @@ def match_text(number: int | None, name: str) -> str:
 START_TEXT = "יאללה, בואי נשחק!"
 WIN_TEXT = "כל הכבוד! מצאת את כל השחקנים!"
 
+
+_TRAILING_PARENS = re.compile(r"\(([^()]*)\)\s*$")
+
+
+def _squash(text: str) -> str:
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def nickname(display_name: str) -> str | None:
+    """The text inside a trailing "(...)" of a name as the site displays it, else None.
+
+    Only a parenthetical at the very end counts, and an empty one is ignored. This is
+    the one definition of the parentheses rule: the scraper, the page builder and the
+    voice tools all go through it.
+    """
+    m = _TRAILING_PARENS.search(_squash(display_name))
+    if m and m.group(1).strip():
+        return m.group(1).strip()
+    return None
+
+
+def speak_text(display_name: str) -> str:
+    """The words the voice reads for a name as the site displays it.
+
+    "ז'וזה דה סילבה (ז'וזינייו)" -> "ז'וזינייו"; "דור פרץ" -> "דור פרץ".
+    """
+    return nickname(display_name) or _squash(display_name)
+
+
+def split_display_name(display_name: str) -> tuple[str, str]:
+    """The club card's two tiers: a trailing "(...)", else the last word, is the big line.
+
+    "ברונו רוברטו פריירה דה סילבה (ברוניניו)" -> ("ברונו רוברטו פריירה דה סילבה", "(ברוניניו)").
+    """
+    name = _squash(display_name)
+    m = _TRAILING_PARENS.search(name)
+    if m:
+        return name[:m.start()].rstrip(), name[m.start():]
+    head, _, tail = name.rpartition(" ")
+    return head, tail
+
 _NIKUD = re.compile(r"[֑-ׇ]")
 _FINALS = str.maketrans("ךםןףץ", "כמנפצ")
 _PUNCT = re.compile(r"[^\w\s]", re.UNICODE)
@@ -82,10 +126,14 @@ def normalize_for_compare(text: str) -> str:
     t = t.replace("_", " ")
     t = re.sub(r"\s+", " ", t).strip()
     t = t.translate(_FINALS)
-    # "ושתיים" vs "ושתים": both spellings are standard.
-    t = re.sub(r"שתים\b", "שתיימ", t)
-    t = re.sub(r"שתיימ\b", "שתיימ", t)
+    # "ושתיים" vs "ושתים": both spellings are standard. Final letters are folded by now (ם→מ).
+    t = re.sub(r"שתימ\b", "שתיימ", t)
     return t
+
+
+# The fold above once ran with an unfolded final letter and silently never matched.
+assert normalize_for_compare("מספר ארבעים ושתים") == normalize_for_compare("מספר ארבעים ושתיים")
+assert normalize_for_compare("שתים עשרה") == normalize_for_compare("שתיים עשרה")
 
 
 # Letters that spell the same sound in Israeli Hebrew whatever the context:
@@ -116,6 +164,8 @@ def similarity(a: str, b: str) -> float:
 if __name__ == "__main__":
     for n in (1, 2, 7, 10, 11, 12, 19, 20, 21, 42, 70, 99):
         print(n, number_words_fem(n))
+    for s in ("דור פרץ", "ז'וזה דה סילבה (ז'וזינייו)", "שם ( כינוי ) ", "שם ()", "שם (א) ב"):
+        print(repr(s), "->", repr(speak_text(s)), split_display_name(s))
     print(match_text(42, "דור פרץ"))
     print(normalize_for_compare("מס' 42, דור פרץ!"), "|", normalize_for_compare(match_text(42, "דור פרץ")))
     print(compare("מספר ארבעים ושתיים, דור פרץ!", "מספר 42 דור פרץ"))

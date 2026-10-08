@@ -16,7 +16,9 @@ Whenever you create, import, rename, or delete an HTML page:
 #### Unlisted pages
 Kept private on purpose, at the owner's request: each stays out of `index.html` and the catalog below, and carries `<meta name="robots" content="noindex, nofollow">`.
 - `maccabi-memory/` (`/pages/maccabi-memory/`): Maccabi Tel Aviv memory game for a young child. Refresh its roster, photos and voice clips with `maccabi-memory/tools/README.md`.
-- `maccabi-haifa-memory/` (`/pages/maccabi-haifa-memory/`): Maccabi Haifa memory game, a standalone copy of the Tel Aviv one with its own roster, look and voice clips; changes to one game never touch the other. Refresh its roster, photos and voice clips with `maccabi-haifa-memory/tools/README.md`.
+- `maccabi-haifa-memory/` (`/pages/maccabi-haifa-memory/`): Maccabi Haifa memory game, the same game with its own roster, look and voice clips. Refresh its roster, photos and voice clips with `maccabi-haifa-memory/tools/README.md`.
+
+Both memory games are built from `_memory-game/`, which is not a page: it gets no card in `index.html` and must not be deleted as an orphan. Each game's `index.html` keeps its club parts by hand, but its `<style id="base">`, `<script id="data">` and `<script id="engine">` and its whole `sw.js` are generated: edit `_memory-game/` (or the roster) and run `python3 -I _memory-game/tools/page/build_page.py assemble`, never the generated parts. A shared change changes both games, so commit both and verify both; run `assemble --check` before committing. See `_memory-game/README.md`.
 
 ### 2. Card Design Standard in `index.html`
 Each card in `index.html` must follow the aesthetic established by `gibush.html`:

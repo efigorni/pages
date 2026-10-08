@@ -36,13 +36,17 @@ import unicodedata
 from pathlib import Path
 from urllib.parse import quote, unquote
 
+sys.dont_write_bytecode = True  # no __pycache__ in the repo
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # -I drops the script dir; these helpers are ours
+sys.path.insert(1, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/tts"))  # hebrew.py
+sys.path.insert(2, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/images"))  # framing.py
 
 from bs4 import BeautifulSoup  # noqa: E402
 from PIL import Image  # noqa: E402
 
 from fetch import Fetcher, log_line  # noqa: E402
 from framing import landmarks, square_crop  # noqa: E402
+from hebrew import nickname  # noqa: E402
 from rsc import page_objects  # noqa: E402
 
 BASE = "https://www.mhaifafc.com"
@@ -58,7 +62,6 @@ POSITION_EN = {  # translation of the site's Hebrew position labels (the site sh
     "כנף": "Winger", "חלוץ": "Striker",
 }
 FULL_MATCH = 90
-TRAILING_PARENS = re.compile(r"\(([^()]*)\)\s*$")
 TRANSLIT_EXTRA = {"ł": "l", "Ł": "l", "đ": "d", "Đ": "d", "ø": "o", "Ø": "o", "æ": "ae", "ß": "ss", "ı": "i"}
 
 
@@ -83,10 +86,8 @@ def ascii_slug(text: str) -> str:
 
 def speak_he(name: str) -> tuple[str, str | None]:
     """H4: the text inside a trailing (...) when there is one, else the full name."""
-    m = TRAILING_PARENS.search(name)
-    if m and clean(m.group(1)):
-        return clean(m.group(1)), clean(m.group(1))
-    return name, None
+    nick = nickname(name)
+    return (nick, nick) if nick else (name, None)
 
 
 def minute(text) -> int | None:
@@ -128,15 +129,22 @@ def parse_cards(html: str) -> list[dict]:
         if not re.fullmatch(r"/players/\d+", href):
             continue
         num = el.select_one("span.text-gradient-shirt-number")
-        lines = [clean(sp.get_text()) for sp in el.select("div.absolute.bottom-0 span")]
+        spans = el.select("div.absolute.bottom-0 span")
+        # The position is the small `text-lg` line under the name. Telling it apart by class, not by
+        # count, keeps a one-line name (a bare nickname) from swallowing the position.
+        is_pos = ["text-lg" in (sp.get("class") or []) for sp in spans]
+        names = [clean(sp.get_text()) for sp, p in zip(spans, is_pos) if not p]
+        positions = [clean(sp.get_text()) for sp, p in zip(spans, is_pos) if p]
+        if not positions:  # markup without the class: two name lines, then the position
+            names, positions = names[:2], names[2:3]
         imgs = el.find_all("img")
         cards.append({
             "site_id": int(href.rsplit("/", 1)[1]),
             "href": href,
             "section_he": section,
             "number_text": clean(num.get_text()) if num else None,
-            "name_lines": lines[:2],
-            "position_he": lines[2] if len(lines) > 2 else None,
+            "name_lines": [line for line in names if line],
+            "position_he": positions[0] if positions else None,
             "cover_src": imgs[0].get("src") if imgs else None,
             "photo_src": imgs[1].get("src") if len(imgs) > 1 else None,
         })
@@ -516,6 +524,10 @@ def main() -> int:
     games_list = season_games(f.cached(HISTORY_URL, "history.html").decode("utf-8", "replace"), season)
     played = [g for g in games_list if g["finished"]]
     log(f"  {len(games_list)} games in {season_label}, {len(played)} finished")
+    if not played:
+        log(f"no official game of {season_label} has been played yet, so there are no appearances to pick "
+            "the squad by: run this again after the first game. Nothing was written.")
+        return 1
     games = []
     for g in played:
         html = f.cached(f"{BASE}/matches/{g['id']}", f"games/{g['id']}.html").decode("utf-8", "replace")
