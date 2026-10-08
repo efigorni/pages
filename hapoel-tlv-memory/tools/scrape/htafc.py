@@ -104,7 +104,8 @@ def report_text(content_html: str) -> str:
     return H.unescape(t)
 
 
-LINEUP_RE = re.compile(r"שיחקו בהפועל\s*:?\s*\n+\s*(.+?)\n", re.S)
+# The line-up follows "שיחקו בהפועל:" on the next line, or on the same one.
+LINEUP_RE = re.compile(r"שיחקו בהפועל\s*:?\s*([^\s:].*?)(?:\n|$)", re.S)
 
 
 def parse_lineup_block(text: str) -> list[dict]:

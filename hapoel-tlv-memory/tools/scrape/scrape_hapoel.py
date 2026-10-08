@@ -32,7 +32,8 @@ from PIL import Image  # noqa: E402
 
 from common import Fetcher, ascii_slug, log_line, norm_name, photo_facts, write_json_atomic  # noqa: E402
 from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
-from htafc import LISTING_EN, LISTING_HE, SECTION_EN, parse_lineup_block, parse_listing, parse_popup, report_text  # noqa: E402
+from htafc import (LINEUP_RE, LISTING_EN, LISTING_HE, SECTION_EN, parse_lineup_block, parse_listing,  # noqa: E402
+                   parse_popup, report_text)
 from roster import check, output_key, select  # noqa: E402
 from transfermarkt import parse_squadstats  # noqa: E402
 
@@ -147,6 +148,10 @@ def build_lineups(games: list[dict], roster_by_name: dict) -> tuple[dict, list[d
             raise SystemExit(f"no club report for {g['date']} {g['opponent']}")
         text = report_text(r["content"]["rendered"])
         block = parse_lineup_block(text)
+        if not block:
+            raise SystemExit(f"{g['date']} {g['opponent']}: the club's report ({r['link']}) has no line-up after "
+                             "'שיחקו בהפועל:', so every player would lose this appearance; fix the report text in "
+                             "<data>/html/rest/reports-cat30.json and run again")
         notes, unknown = [], []
         if len(block) != 11:
             notes.append(f"line-up block has {len(block)} starters")
@@ -199,7 +204,7 @@ def build_lineups(games: list[dict], roster_by_name: dict) -> tuple[dict, list[d
 
 
 def LINEUP_LINE(text: str) -> str:
-    m = re.search(r"שיחקו בהפועל\s*:?\s*\n+\s*(.+?)\n", text, re.S)
+    m = LINEUP_RE.search(text)
     return " ".join(m.group(1).split()) if m else ""
 
 
