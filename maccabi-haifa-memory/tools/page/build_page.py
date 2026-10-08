@@ -47,6 +47,8 @@ def entry(p, page):
     lines = p.get("card_name_lines")
     if isinstance(lines, list) and len(lines) == 2:
         first, last = clean(lines[0]), clean(lines[1])
+    elif isinstance(lines, list) and len(lines) == 1:
+        first, last = "", clean(lines[0])
     elif p.get("last_he"):
         first, last = clean(p.get("first_he")), clean(p["last_he"])
     else:

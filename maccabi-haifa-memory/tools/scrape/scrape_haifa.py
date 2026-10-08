@@ -129,15 +129,22 @@ def parse_cards(html: str) -> list[dict]:
         if not re.fullmatch(r"/players/\d+", href):
             continue
         num = el.select_one("span.text-gradient-shirt-number")
-        lines = [clean(sp.get_text()) for sp in el.select("div.absolute.bottom-0 span")]
+        spans = el.select("div.absolute.bottom-0 span")
+        # The position is the small `text-lg` line under the name. Telling it apart by class, not by
+        # count, keeps a one-line name (a bare nickname) from swallowing the position.
+        is_pos = ["text-lg" in (sp.get("class") or []) for sp in spans]
+        names = [clean(sp.get_text()) for sp, p in zip(spans, is_pos) if not p]
+        positions = [clean(sp.get_text()) for sp, p in zip(spans, is_pos) if p]
+        if not positions:  # markup without the class: two name lines, then the position
+            names, positions = names[:2], names[2:3]
         imgs = el.find_all("img")
         cards.append({
             "site_id": int(href.rsplit("/", 1)[1]),
             "href": href,
             "section_he": section,
             "number_text": clean(num.get_text()) if num else None,
-            "name_lines": lines[:2],
-            "position_he": lines[2] if len(lines) > 2 else None,
+            "name_lines": [line for line in names if line],
+            "position_he": positions[0] if positions else None,
             "cover_src": imgs[0].get("src") if imgs else None,
             "photo_src": imgs[1].get("src") if len(imgs) > 1 else None,
         })
