@@ -1,5 +1,13 @@
 {
   "names": "full",
+  "title": "tiers",
+  "trophy": {
+    "cup": "#ffffff",
+    "stem": "#ffb5ba",
+    "star": "#ff1521",
+    "shine": "#ffe6e6",
+    "shade": "#ffb5ba"
+  },
   "images": {
     "mode": "box",
     "fade": 0,
