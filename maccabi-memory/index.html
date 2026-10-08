@@ -732,7 +732,6 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   const FLIP_MS = 460;
   const MISMATCH_MS = 2200;
   const DEAL_STAGGER_MS = 16;
-  const MUTE_KEY = 'maccabi-memory:muted';
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
 
@@ -742,11 +741,6 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   const pipsEl = $('pips');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const landscapeQuery = matchMedia('(orientation: landscape)');
-
-  const store = {
-    get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
-    set(key, value) { try { localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ } },
-  };
 
   function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -811,7 +805,8 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     let ctx = null;
     let voiceBus = null;
     let sfxBus = null;
-    let muted = store.get(MUTE_KEY) === '1';
+    // Never persisted: one stray tap must not silence every later launch.
+    let muted = false;
     let token = 0;
     let stopCurrent = null;
     let hebrewVoice = null;
@@ -1048,7 +1043,6 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
 
     function setMuted(value) {
       muted = value;
-      store.set(MUTE_KEY, value ? '1' : '0');
       if (value) halt();
     }
 
