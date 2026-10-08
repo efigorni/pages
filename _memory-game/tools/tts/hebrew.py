@@ -126,10 +126,14 @@ def normalize_for_compare(text: str) -> str:
     t = t.replace("_", " ")
     t = re.sub(r"\s+", " ", t).strip()
     t = t.translate(_FINALS)
-    # "ושתיים" vs "ושתים": both spellings are standard.
-    t = re.sub(r"שתים\b", "שתיימ", t)
-    t = re.sub(r"שתיימ\b", "שתיימ", t)
+    # "ושתיים" vs "ושתים": both spellings are standard. Final letters are folded by now (ם→מ).
+    t = re.sub(r"שתימ\b", "שתיימ", t)
     return t
+
+
+# The fold above once ran with an unfolded final letter and silently never matched.
+assert normalize_for_compare("מספר ארבעים ושתים") == normalize_for_compare("מספר ארבעים ושתיים")
+assert normalize_for_compare("שתים עשרה") == normalize_for_compare("שתיים עשרה")
 
 
 # Letters that spell the same sound in Israeli Hebrew whatever the context:
