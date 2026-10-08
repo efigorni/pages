@@ -51,230 +51,23 @@
   --yellow: #f8d734;
   --yellow-deep: #c4a30c;
   --white: #ffffff;
-  --pad: clamp(6px, 1.4vmin, 14px);
-  --gap: clamp(4px, 1.1vmin, 10px);
-  --hud: clamp(46px, 8vmin, 68px);
-  --flip: 460ms;
-  --cw: 110px;
-  --ch: 130px;
-  --short: min(var(--cw), var(--ch));
-  --r: calc(var(--short) * .09);
-  color-scheme: dark;
-}
-
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  height: 100%;
-  background: var(--ink);
-  overscroll-behavior: none;
-}
-
-body {
-  overflow: hidden;
-  color: var(--white);
-  font-family: Karantina, "Arial Hebrew", system-ui, sans-serif;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-button {
-  font: inherit;
-  color: inherit;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  touch-action: manipulation;
-}
-
-img {
-  -webkit-user-drag: none;
-  pointer-events: none;
-}
-
-:focus { outline: none; }
-:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
-
-/* ---------- frame ---------- */
-
-.app {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  display: grid;
-  gap: var(--gap);
-  padding:
-    max(var(--pad), env(safe-area-inset-top))
-    max(var(--pad), env(safe-area-inset-right))
-    max(var(--pad), env(safe-area-inset-bottom))
-    max(var(--pad), env(safe-area-inset-left));
-  background: radial-gradient(130% 95% at 50% 45%, #0b2a55 0%, #051737 45%, var(--ink) 100%);
-  grid-template: "hud" var(--hud) "board" minmax(0, 1fr) / minmax(0, 1fr);
-}
-
-@media (orientation: landscape) {
-  .app { grid-template: "hud board" minmax(0, 1fr) / var(--hud) minmax(0, 1fr); }
-}
-
-/* ---------- HUD ---------- */
-
-.hud {
-  grid-area: hud;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap);
-  min-width: 0;
-  min-height: 0;
-}
-
-@media (orientation: landscape) {
-  .hud { flex-direction: column; }
-}
-
-.icon-btn {
-  flex: none;
-  width: var(--hud);
-  height: var(--hud);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, .09);
-  color: var(--white);
-  transition: transform .12s ease;
-}
-
-.icon-btn:active { transform: scale(.88); }
-.icon-btn svg { width: 52%; height: 52%; }
-
-#mute .i-off { display: none; }
-#mute[aria-pressed="true"] .i-on { display: none; }
-#mute[aria-pressed="true"] .i-off { display: block; }
-#mute[aria-pressed="true"] { color: rgba(255, 255, 255, .55); }
-
-.pips {
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 0;
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(2px, .6vmin, 6px);
-}
-
-@media (orientation: landscape) {
-  .pips { flex-direction: column; }
-}
-
-.pip {
-  position: relative;
-  flex: 0 1 calc(var(--hud) * .6);
-  aspect-ratio: 1;
-  min-width: 0;
-  min-height: 0;
-  max-width: calc(var(--hud) * .6);
-  max-height: calc(var(--hud) * .6);
-  border-radius: 50%;
-  overflow: hidden;
-  background: rgba(255, 255, 255, .05);
-}
-
-.pip::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid rgba(248, 215, 52, .32);
-}
-
-.pip img,
-.flyer img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.5);
-  transform-origin: 50% 30%;
-}
-
-.pip.full { background: var(--lift); }
-.pip.full::after { border-color: var(--yellow); }
-.pip.full { animation: pip-pop .5s cubic-bezier(.3, 1.7, .5, 1); }
-
-@keyframes pip-pop {
-  0% { transform: scale(.4); }
-  100% { transform: scale(1); }
-}
-
-.flyer {
-  position: fixed;
-  z-index: 15;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--lift);
-  box-shadow: 0 0 0 3px var(--yellow);
-  pointer-events: none;
-  will-change: transform;
-}
-
-/* ---------- board ---------- */
-
-.board {
-  grid-area: board;
-  display: grid;
-  gap: var(--gap);
-  min-width: 0;
-  min-height: 0;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  grid-template-rows: repeat(6, minmax(0, 1fr));
-}
-
-@media (orientation: landscape) {
-  .board {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-template-rows: repeat(5, minmax(0, 1fr));
-  }
-}
-
-.card {
-  position: relative;
-  display: block;
-  min-width: 0;
-  min-height: 0;
-  border-radius: var(--r);
-  perspective: calc(var(--cw) * 4);
-}
-
-.card-inner {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transition: transform var(--flip) cubic-bezier(.3, 1.3, .5, 1);
-}
-
-.card[data-state="up"] .card-inner,
-.card[data-state="matched"] .card-inner { transform: rotateY(180deg); }
-
-.face {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r);
-  overflow: hidden;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  /* read by the shared base styles */
+  --font: Karantina, "Arial Hebrew", system-ui, sans-serif;
+  --accent: var(--yellow);
+  --surface: var(--lift);
+  --pip-ring: rgba(248, 215, 52, .32);
+  --app-bg: radial-gradient(130% 95% at 50% 45%, #0b2a55 0%, #051737 45%, var(--ink) 100%);
+  --burst: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%23f8d734'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E");
+  --big-bg: var(--yellow);
+  --big-fg: var(--navy);
+  --big-drop: var(--yellow-deep);
+  --no-bg: var(--lift);
+  --no-drop: #071a3d;
+  --start-bg: radial-gradient(90% 70% at 50% 40%, rgba(15, 52, 112, .9) 0%, rgba(15, 52, 112, 0) 70%), var(--navy);
+  --halo: var(--yellow);
+  --scrim-install: rgba(2, 12, 28, .35);
+  --scrim-confirm: rgba(2, 12, 28, .74);
+  --scrim-win: rgba(2, 12, 28, .58);
 }
 
 /* card back: our own yellow/navy motif */
@@ -298,7 +91,6 @@ img {
 
 /* card face: a pocket version of the club's player page */
 .front {
-  transform: rotateY(180deg);
   display: grid;
   background:
     radial-gradient(85% 70% at 50% 32%, var(--lift) 0%, rgba(15, 52, 112, 0) 72%),
@@ -415,6 +207,250 @@ img {
 .name > span { display: block; }
 [data-face="side"] .name { text-align: right; }
 
+.title {
+  margin: 0;
+  font-family: Karantina, sans-serif;
+  font-weight: 700;
+  font-size: clamp(56px, 15vmin, 150px);
+  line-height: .8;
+  letter-spacing: -.01em;
+  color: var(--yellow);
+}
+</style>
+<style id="base">
+/* _memory-game/base.css, shared by the memory games: build_page.py assemble stamps it into the
+   base style block of each game's page. Edit it there, not in a page. Colours and fonts come from
+   the club's tokens in the page's own style block, which comes first. */
+
+:root {
+  --pad: clamp(6px, 1.4vmin, 14px);
+  --gap: clamp(4px, 1.1vmin, 10px);
+  --hud: clamp(46px, 8vmin, 68px);
+  --flip: 460ms;
+  --cw: 110px;
+  --ch: 130px;
+  --short: min(var(--cw), var(--ch));
+  --r: calc(var(--short) * .09);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--ink);
+  overscroll-behavior: none;
+}
+
+body {
+  overflow: hidden;
+  color: var(--white);
+  font-family: var(--font);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+:focus { outline: none; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- frame ---------- */
+
+.app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  gap: var(--gap);
+  padding:
+    max(var(--pad), env(safe-area-inset-top))
+    max(var(--pad), env(safe-area-inset-right))
+    max(var(--pad), env(safe-area-inset-bottom))
+    max(var(--pad), env(safe-area-inset-left));
+  background: var(--app-bg);
+  grid-template: "hud" var(--hud) "board" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+@media (orientation: landscape) {
+  .app { grid-template: "hud board" minmax(0, 1fr) / var(--hud) minmax(0, 1fr); }
+}
+
+/* ---------- HUD ---------- */
+
+.hud {
+  grid-area: hud;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (orientation: landscape) {
+  .hud { flex-direction: column; }
+}
+
+.icon-btn {
+  flex: none;
+  width: var(--hud);
+  height: var(--hud);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, .09);
+  color: var(--white);
+  transition: transform .12s ease;
+}
+
+.icon-btn:active { transform: scale(.88); }
+.icon-btn svg { width: 52%; height: 52%; }
+
+#mute .i-off { display: none; }
+#mute[aria-pressed="true"] .i-on { display: none; }
+#mute[aria-pressed="true"] .i-off { display: block; }
+#mute[aria-pressed="true"] { color: rgba(255, 255, 255, .55); }
+
+.pips {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2px, .6vmin, 6px);
+}
+
+@media (orientation: landscape) {
+  .pips { flex-direction: column; }
+}
+
+.pip {
+  position: relative;
+  flex: 0 1 calc(var(--hud) * .6);
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  max-width: calc(var(--hud) * .6);
+  max-height: calc(var(--hud) * .6);
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .05);
+}
+
+.pip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--pip-ring);
+}
+
+.pip img,
+.flyer img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.5);
+  transform-origin: 50% 30%;
+}
+
+.pip.full { background: var(--surface); }
+.pip.full::after { border-color: var(--accent); }
+.pip.full { animation: pip-pop .5s cubic-bezier(.3, 1.7, .5, 1); }
+
+@keyframes pip-pop {
+  0% { transform: scale(.4); }
+  100% { transform: scale(1); }
+}
+
+.flyer {
+  position: fixed;
+  z-index: 15;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ---------- board ---------- */
+
+.board {
+  grid-area: board;
+  display: grid;
+  gap: var(--gap);
+  min-width: 0;
+  min-height: 0;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+}
+
+@media (orientation: landscape) {
+  .board {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.card {
+  position: relative;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  border-radius: var(--r);
+  perspective: calc(var(--cw) * 4);
+}
+
+.card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform var(--flip) cubic-bezier(.3, 1.3, .5, 1);
+}
+
+.card[data-state="up"] .card-inner,
+.card[data-state="matched"] .card-inner { transform: rotateY(180deg); }
+
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.front { transform: rotateY(180deg); }
+
 /* motion */
 .board.dealing .card {
   animation: deal 520ms cubic-bezier(.25, 1.35, .5, 1) both;
@@ -448,7 +484,7 @@ img {
   margin: calc(max(var(--cw), var(--ch)) * -.725) 0 0 calc(max(var(--cw), var(--ch)) * -.725);
   pointer-events: none;
   opacity: 0;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%23f8d734'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  background: var(--burst) center / contain no-repeat;
   animation: burst 720ms cubic-bezier(.2, .7, .3, 1) forwards;
 }
 
@@ -486,9 +522,9 @@ img {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--yellow);
-  color: var(--navy);
-  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 var(--yellow-deep);
+  background: var(--big-bg);
+  color: var(--big-fg);
+  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 var(--big-drop);
   transition: transform .12s ease;
 }
 
@@ -496,18 +532,15 @@ img {
 .big svg { width: 48%; height: 48%; }
 
 .big.no {
-  background: var(--lift);
+  background: var(--no-bg);
   color: var(--white);
-  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 #071a3d;
+  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 var(--no-drop);
 }
 
-.start {
-  background:
-    radial-gradient(90% 70% at 50% 40%, rgba(15, 52, 112, .9) 0%, rgba(15, 52, 112, 0) 70%),
-    var(--navy);
-}
+.start { background: var(--start-bg); }
 
 .start-stage {
+  position: relative;
   display: grid;
   justify-items: center;
   align-items: center;
@@ -524,16 +557,6 @@ img {
     grid-template-areas: "title fan" "play fan";
     column-gap: clamp(32px, 9vmin, 120px);
   }
-}
-
-.title {
-  margin: 0;
-  font-family: Karantina, sans-serif;
-  font-weight: 700;
-  font-size: clamp(56px, 15vmin, 150px);
-  line-height: .8;
-  letter-spacing: -.01em;
-  color: var(--yellow);
 }
 
 .fan {
@@ -564,7 +587,7 @@ img {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: clamp(3px, .8vmin, 6px) solid var(--yellow);
+  border: clamp(3px, .8vmin, 6px) solid var(--halo);
   opacity: 0;
   pointer-events: none;
 }
@@ -590,7 +613,7 @@ img {
   padding: 6px 14px 6px 12px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, .22);
-  background: rgba(2, 12, 28, .35);
+  background: var(--scrim-install);
   color: rgba(255, 255, 255, .78);
   font: 600 14px/1.1 system-ui, "Arial Hebrew", sans-serif;
 }
@@ -602,8 +625,8 @@ img {
   .install { display: none; }
 }
 
-.confirm { background: rgba(2, 12, 28, .74); }
-.win { background: rgba(2, 12, 28, .58); }
+.confirm { background: var(--scrim-confirm); }
+.win { background: var(--scrim-win); }
 
 .confirm-box {
   display: flex;
@@ -721,7 +744,121 @@ img {
 <script id="data">
 const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"אופק מליקה","number":1,"role":"starter","img":"img/ofek-melika.webp"},{"id":"raz-shlomo","name_he":"רז שלמה","number":13,"role":"starter","img":"img/raz-shlomo.webp"},{"id":"dor-peretz","name_he":"דור פרץ","number":42,"role":"starter","img":"img/dor-peretz.webp"},{"id":"issouf-sissokho","name_he":"איסוף סיסוקו","number":28,"role":"starter","img":"img/issouf-sissokho.webp"},{"id":"helio-varela","name_he":"הליו וארלה","number":29,"role":"starter","img":"img/helio-varela.webp"},{"id":"mohamed-ali-camara","name_he":"מוחמד עלי קמארה","number":5,"role":"starter","img":"img/mohamed-ali-camara.webp"},{"id":"osher-davida","name_he":"אושר דוידה","number":77,"role":"starter","img":"img/osher-davida.webp"},{"id":"ido-shahar","name_he":"עידו שחר","number":36,"role":"starter","img":"img/ido-shahar.webp"},{"id":"ester-sokler","name_he":"אסטר סוקלר","number":9,"role":"starter","img":"img/ester-sokler.webp"},{"id":"noam-ben-harush","name_he":"נועם בן הרוש","number":22,"role":"starter","img":"img/noam-ben-harush.webp"},{"id":"tyrese-asante","name_he":"טייריס אסנטה","number":6,"role":"starter","img":"img/tyrese-asante.webp"}],"bench":[{"id":"itay-ben-hemo","name_he":"איתי בן חמו","number":41,"role":"bench","img":"img/itay-ben-hemo.webp"},{"id":"itamar-noy","name_he":"איתמר נוי","number":30,"role":"bench","img":"img/itamar-noy.webp"},{"id":"gabi-kanichowsky","name_he":"גבי קניקובסקי","number":16,"role":"bench","img":"img/gabi-kanichowsky.webp"},{"id":"james-tavernier","name_he":"ג׳יימס טברנייר","number":2,"role":"bench","img":"img/james-tavernier.webp"},{"id":"sagiv-jehezkel","name_he":"שגיב יחזקאל","number":11,"role":"bench","img":"img/sagiv-jehezkel.webp"},{"id":"shachar-rosen","name_he":"שחר רוזן","number":25,"role":"bench","img":"img/shachar-rosen.webp"},{"id":"elad-madmon","name_he":"אלעד מדמון","number":19,"role":"bench","img":"img/elad-madmon.webp"},{"id":"dan-glazer","name_he":"דן גלזר","number":18,"role":"bench","img":"img/dan-glazer.webp"},{"id":"hisham-layous","name_he":"הישאם לאיוס","number":33,"role":"bench","img":"img/hisham-layous.webp"},{"id":"ilay-ben-simon","name_he":"עילאי בן סימון","number":60,"role":"bench","img":"img/ilay-ben-simon.webp"},{"id":"kristijan-belic","name_he":"כריסטיאן בליץ'","number":17,"role":"bench","img":"img/kristijan-belic.webp"}],"audio":{"ui":["start","win"],"name":["ofek-melika","raz-shlomo","dor-peretz","issouf-sissokho","helio-varela","mohamed-ali-camara","osher-davida","ido-shahar","ester-sokler","noam-ben-harush","tyrese-asante","itay-ben-hemo","itamar-noy","gabi-kanichowsky","james-tavernier","sagiv-jehezkel","shachar-rosen","elad-madmon","dan-glazer","hisham-layous","ilay-ben-simon","kristijan-belic"],"match":["ofek-melika","raz-shlomo","dor-peretz","issouf-sissokho","helio-varela","mohamed-ali-camara","osher-davida","ido-shahar","ester-sokler","noam-ben-harush","tyrese-asante","itay-ben-hemo","itamar-noy","gabi-kanichowsky","james-tavernier","sagiv-jehezkel","shachar-rosen","elad-madmon","dan-glazer","hisham-layous","ilay-ben-simon","kristijan-belic"]}};
 </script>
-<script>
+<script id="club">
+const CLUB = {
+  confetti: ['#f8d734', '#ffffff', '#2f6fdb', '#ffe680', '#f8d734'],
+  fonts: [['700 40px Karantina', 'אבג'], ['800 40px "Barlow Condensed"', '0123456789']],
+
+  // The card face, a pocket version of the club's player page: the photo, then the number and a
+  // one-tier name. The engine calls prepare(players) once fonts are in, apply(style, cw, ch, mode)
+  // per board size, build(p) per card and fit(cardEl, p, geo) per card and size.
+  face(kit) {
+    'use strict';
+
+    const { el, textEm, words, bestSplit, photoFront } = kit;
+    const NAME_FONT = '700 100px Karantina';
+    const NAME_LINE_HEIGHT = 0.84;
+    const digitEm = { value: 0.46 };
+
+    function prepare(players) {
+      digitEm.value = textEm('0123456789', '800 100px "Barlow Condensed"') / 10 || 0.46;
+      players.forEach((p) => {
+        const list = words(p.name_he);
+        const whole = bestSplit(list, 1, NAME_FONT);
+        p.split2 = (list.length > 1 && bestSplit(list, 2, NAME_FONT)) || whole;
+        p.split3 = list.length >= 3 ? bestSplit(list, 3, NAME_FONT) : null;
+      });
+    }
+
+    function faceVars(cw, ch, mode) {
+      if (mode === 'side') {
+        const photoW = Math.min(ch * 0.84, cw * 0.6);
+        const pad = Math.max(3, ch * 0.07);
+        const infoW = cw - photoW - pad * 1.4;
+        const num = Math.min(ch * 0.46, infoW / (digitEm.value * 2.1));
+        return { photoW, photoH: ch, pad, num, name: Math.min(ch * 0.2, num * 0.55), nameW: infoW };
+      }
+      if (mode === 'band') {
+        const photoH = ch * 0.63;
+        const band = ch - photoH;
+        const pad = Math.max(3, cw * 0.06);
+        const num = Math.min(band * 0.9, cw * 0.42);
+        return { photoW: cw, photoH, pad, num, name: Math.min(band * 0.38, num * 0.5), nameW: 0, zoom: 1.04 };
+      }
+      const photoH = ch * 0.56;
+      const rest = ch - photoH;
+      const pad = Math.max(2, cw * 0.06);
+      const num = Math.min(rest * 0.46, (cw - pad * 2) / (digitEm.value * 2.1));
+      return { photoW: cw, photoH, pad, num, name: rest * 0.21, nameW: cw - pad * 2 };
+    }
+
+    function apply(s, cw, ch, mode) {
+      const v = faceVars(cw, ch, mode);
+      s.setProperty('--photo-w', `${v.photoW}px`);
+      s.setProperty('--photo-h', `${v.photoH}px`);
+      s.setProperty('--ipad', `${v.pad}px`);
+      s.setProperty('--num-fs', `${v.num}px`);
+      s.setProperty('--name-fs', `${v.name}px`);
+      s.setProperty('--zoom', String(v.zoom || 1));
+      return v;
+    }
+
+    function nameBox(geo, p) {
+      const { v, mode, cw, ch } = geo;
+      if (mode === 'side') return { w: v.nameW, h: ch - v.pad * 2.7 - v.num * 0.78 };
+      if (mode === 'band') {
+        const numW = String(p.number).length * digitEm.value * v.num;
+        return { w: cw - numW - v.pad * 3, h: (ch - v.photoH) * 0.92 };
+      }
+      return { w: v.nameW, h: ch - v.photoH - v.num * 0.78 - v.pad * 1.2 };
+    }
+
+    function nameSize(split, box, base) {
+      return Math.min(base, box.w / split.em, box.h / (split.lines.length * NAME_LINE_HEIGHT));
+    }
+
+    function renderName(cardEl, lines) {
+      const name = cardEl.querySelector('.name');
+      const key = lines.join('|');
+      if (name.dataset.lines === key) return;
+      name.dataset.lines = key;
+      name.textContent = '';
+      lines.forEach((line) => name.appendChild(el('span', null, line)));
+    }
+
+    function fit(cardEl, p, geo) {
+      if (!p.split2) return;
+      const box = nameBox(geo, p);
+      const base = geo.v.name;
+      let split = p.split2;
+      let size = nameSize(split, box, base);
+      if (p.split3) {
+        const size3 = nameSize(p.split3, box, base);
+        if (size3 > size * 1.04) {
+          split = p.split3;
+          size = size3;
+        }
+      }
+      renderName(cardEl, split.lines);
+      cardEl.style.setProperty('--fit', Math.max(0.4, size / base).toFixed(3));
+    }
+
+    function build(p) {
+      const front = photoFront(p);
+      const info = el('span', 'info');
+      info.append(el('span', 'num', String(p.number)), el('span', 'name'));
+      front.appendChild(info);
+      renderName(front, p.split2 ? p.split2.lines : [p.name_he]);
+      return front;
+    }
+
+    return { prepare, apply, build, fit };
+  },
+};
+</script>
+<script id="engine">
+// _memory-game/engine.js, shared by the memory games: build_page.py assemble stamps it into the
+// engine script of each game's page. Edit it there, not in a page. The page's DATA and CLUB come first.
 (() => {
   'use strict';
 
@@ -784,11 +921,14 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     match: new Set(AUDIO.match || []),
   };
 
+  // The card shows name_he; the voice says speak_he when the roster has one (a trailing nickname in
+  // parentheses), else name_he.
+  const spoken = (p) => p.speak_he || p.name_he;
   const clip = {
-    name: (p) => ({ url: recorded.name.has(p.id) ? `audio/name/${p.id}.mp3` : null, text: p.name_he }),
+    name: (p) => ({ url: recorded.name.has(p.id) ? `audio/name/${p.id}.mp3` : null, text: spoken(p) }),
     match: (p) => ({
       url: recorded.match.has(p.id) ? `audio/match/${p.id}.mp3` : null,
-      text: `מספר ${hebrewNumber(p.number)}, ${p.name_he}!`,
+      text: `מספר ${hebrewNumber(p.number)}, ${spoken(p)}!`,
     }),
     ui: (key, text) => ({ url: recorded.ui.has(key) ? `audio/ui/${key}.mp3` : null, text }),
   };
@@ -1049,137 +1189,48 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     return { unlock, wake, prefetch, say, halt, sfx, setMuted, get muted() { return muted; } };
   })();
 
-  /* ---------- names: line breaks and fit ---------- */
+  /* ---------- names: the kit a club's card face measures and splits them with ---------- */
 
-  const KEEP_WITH_NEXT = new Set(['בן', 'בר', 'אבו', 'אל', 'דה', 'די', 'ואן', 'פון']);
-  const NAME_LINE_HEIGHT = 0.84;
-  const digitEm = { value: 0.46 };
+  const KEEP_WITH_NEXT = new Set(['בן', 'בר', 'אבו', 'אל', 'דה', 'די', 'דוס', 'ואן', 'פון']);
   let measurer = null;
 
-  function textEm(text, font) {
+  // `track` is CSS letter-spacing in em, which canvas measurement leaves out.
+  function textEm(text, font, track) {
     measurer = measurer || document.createElement('canvas').getContext('2d');
-    measurer.font = font || '700 100px Karantina';
-    return measurer.measureText(text).width / 100;
+    measurer.font = font;
+    return measurer.measureText(text).width / 100 + (track || 0) * [...text].length;
   }
 
-  function partitions(words, count) {
-    if (count === 1) return [[words.join(' ')]];
+  // A parenthetical is one unbreakable word, so "(אבו פאני)" never splits across lines.
+  function words(text) {
+    return String(text || '').match(/\([^)]*\)|\S+/g) || [];
+  }
+
+  function partitions(list, count) {
+    if (count === 1) return [[list.join(' ')]];
     const out = [];
-    for (let i = 1; i <= words.length - count + 1; i++) {
-      if (KEEP_WITH_NEXT.has(words[i - 1])) continue;
-      const head = words.slice(0, i).join(' ');
-      partitions(words.slice(i), count - 1).forEach((rest) => out.push([head].concat(rest)));
+    for (let i = 1; i <= list.length - count + 1; i++) {
+      if (KEEP_WITH_NEXT.has(list[i - 1])) continue;
+      const head = list.slice(0, i).join(' ');
+      partitions(list.slice(i), count - 1).forEach((rest) => out.push([head].concat(rest)));
     }
     return out;
   }
 
-  function bestSplit(words, count) {
+  // The split into `count` lines whose widest line is the narrowest; null when no split is allowed.
+  function bestSplit(list, count, font, track) {
     let best = null;
-    partitions(words, count).forEach((lines) => {
-      const em = Math.max(...lines.map((line) => textEm(line)));
+    partitions(list, count).forEach((lines) => {
+      const em = Math.max(...lines.map((line) => textEm(line, font, track)));
       if (!best || em < best.em) best = { lines, em };
     });
     return best;
   }
 
-  function prepareNames() {
-    digitEm.value = textEm('0123456789', '800 100px "Barlow Condensed"') / 10 || 0.46;
-    ALL.forEach((p) => {
-      const words = p.name_he.trim().split(/\s+/);
-      const whole = { lines: [words.join(' ')], em: textEm(words.join(' ')) };
-      p.split2 = (words.length > 1 && bestSplit(words, 2)) || whole;
-      p.split3 = words.length >= 3 ? bestSplit(words, 3) : null;
-    });
-  }
+  /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
-  /* ---------- card face geometry ---------- */
-
-  function faceMode(cw, ch) {
-    const ratio = cw / ch;
-    if (ratio >= 1.1) return 'side';
-    return ratio < 0.7 ? 'stack' : 'band';
-  }
-
-  function faceVars(cw, ch, mode) {
-    if (mode === 'side') {
-      const photoW = Math.min(ch * 0.84, cw * 0.6);
-      const pad = Math.max(3, ch * 0.07);
-      const infoW = cw - photoW - pad * 1.4;
-      const num = Math.min(ch * 0.46, infoW / (digitEm.value * 2.1));
-      return { photoW, photoH: ch, pad, num, name: Math.min(ch * 0.2, num * 0.55), nameW: infoW };
-    }
-    if (mode === 'band') {
-      const photoH = ch * 0.63;
-      const band = ch - photoH;
-      const pad = Math.max(3, cw * 0.06);
-      const num = Math.min(band * 0.9, cw * 0.42);
-      return { photoW: cw, photoH, pad, num, name: Math.min(band * 0.38, num * 0.5), nameW: 0, zoom: 1.04 };
-    }
-    const photoH = ch * 0.56;
-    const rest = ch - photoH;
-    const pad = Math.max(2, cw * 0.06);
-    const num = Math.min(rest * 0.46, (cw - pad * 2) / (digitEm.value * 2.1));
-    return { photoW: cw, photoH, pad, num, name: rest * 0.21, nameW: cw - pad * 2 };
-  }
-
-  function applyFace(target, cw, ch, mode) {
-    const v = faceVars(cw, ch, mode);
-    const s = target.style;
-    target.dataset.face = mode;
-    s.setProperty('--cw', `${cw}px`);
-    s.setProperty('--ch', `${ch}px`);
-    s.setProperty('--photo-w', `${v.photoW}px`);
-    s.setProperty('--photo-h', `${v.photoH}px`);
-    s.setProperty('--ipad', `${v.pad}px`);
-    s.setProperty('--num-fs', `${v.num}px`);
-    s.setProperty('--name-fs', `${v.name}px`);
-    s.setProperty('--zoom', String(v.zoom || 1));
-    return { cw, ch, mode, v };
-  }
-
-  function nameBox(geo, p) {
-    const { v, mode, cw, ch } = geo;
-    if (mode === 'side') return { w: v.nameW, h: ch - v.pad * 2.7 - v.num * 0.78 };
-    if (mode === 'band') {
-      const numW = String(p.number).length * digitEm.value * v.num;
-      return { w: cw - numW - v.pad * 3, h: (ch - v.photoH) * 0.92 };
-    }
-    return { w: v.nameW, h: ch - v.photoH - v.num * 0.78 - v.pad * 1.2 };
-  }
-
-  function nameSize(split, box, base) {
-    return Math.min(base, box.w / split.em, box.h / (split.lines.length * NAME_LINE_HEIGHT));
-  }
-
-  function renderName(cardEl, lines) {
-    const name = cardEl.querySelector('.name');
-    const key = lines.join('|');
-    if (name.dataset.lines === key) return;
-    name.dataset.lines = key;
-    name.textContent = '';
-    lines.forEach((line) => name.appendChild(el('span', null, line)));
-  }
-
-  function fitName(cardEl, p, geo) {
-    if (!p.split2) return;
-    const box = nameBox(geo, p);
-    const base = geo.v.name;
-    let split = p.split2;
-    let size = nameSize(split, box, base);
-    if (p.split3) {
-      const size3 = nameSize(p.split3, box, base);
-      if (size3 > size * 1.04) {
-        split = p.split3;
-        size = size3;
-      }
-    }
-    renderName(cardEl, split.lines);
-    cardEl.style.setProperty('--fit', Math.max(0.4, size / base).toFixed(3));
-  }
-
-  /* ---------- DOM ---------- */
-
-  function buildFront(p) {
+  // Every face starts with the photo; a match flight starts from its `.photo img`.
+  function photoFront(p) {
     const front = el('span', 'face front');
     const photo = el('span', 'photo');
     const img = el('img');
@@ -1188,16 +1239,27 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     img.decoding = 'async';
     img.draggable = false;
     photo.appendChild(img);
-    const info = el('span', 'info');
-    info.appendChild(el('span', 'num', String(p.number)));
-    const name = el('span', 'name');
-    const lines = p.split2 ? p.split2.lines : [p.name_he];
-    name.dataset.lines = lines.join('|');
-    lines.forEach((line) => name.appendChild(el('span', null, line)));
-    info.appendChild(name);
-    front.append(photo, info);
+    front.appendChild(photo);
     return front;
   }
+
+  const face = CLUB.face({ el, textEm, words, bestSplit, photoFront });
+
+  function faceMode(cw, ch) {
+    const ratio = cw / ch;
+    if (ratio >= 1.1) return 'side';
+    return ratio < 0.7 ? 'stack' : 'band';
+  }
+
+  function applyFace(target, cw, ch, mode) {
+    const s = target.style;
+    target.dataset.face = mode;
+    s.setProperty('--cw', `${cw}px`);
+    s.setProperty('--ch', `${ch}px`);
+    return { cw, ch, mode, v: face.apply(s, cw, ch, mode) };
+  }
+
+  /* ---------- DOM ---------- */
 
   function buildCard(p, index, tag) {
     const card = el(tag || 'button', 'card');
@@ -1210,7 +1272,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     card.dataset.state = 'down';
     card.style.setProperty('--i', String(index));
     const inner = el('span', 'card-inner');
-    inner.append(el('span', 'face back'), buildFront(p));
+    inner.append(el('span', 'face back'), face.build(p));
     card.appendChild(inner);
     return card;
   }
@@ -1255,7 +1317,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     const cw = (rect.width - gx * (cols - 1)) / cols;
     const ch = (rect.height - gy * (rows - 1)) / rows;
     game.geo = applyFace(board, cw, ch, faceMode(cw, ch));
-    game.cards.forEach((card) => fitName(card.el, card.p, game.geo));
+    game.cards.forEach((card) => face.fit(card.el, card.p, game.geo));
   }
 
   function renderPips() {
@@ -1415,12 +1477,15 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
       pip.classList.add('full');
     };
     const photo = card.el.querySelector('.photo');
-    if (reducedMotion.matches || !photo || !document.body.animate) return fill();
+    const pic = photo && photo.querySelector('img');
+    if (reducedMotion.matches || !pic || !document.body.animate) return fill();
 
+    // Centred on the photo itself, which a face may place off the middle of its .photo box.
     const from = photo.getBoundingClientRect();
+    const shot = pic.getBoundingClientRect();
     const to = pip.getBoundingClientRect();
     const size = Math.min(from.width, from.height);
-    const x0 = from.left + (from.width - size) / 2;
+    const x0 = shot.left + (shot.width - size) / 2;
     const y0 = from.top;
     const flyer = el('span', 'flyer');
     const img = el('img');
@@ -1497,7 +1562,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   const confetti = (() => {
     const canvas = $('confetti');
     const g = canvas.getContext('2d');
-    const colors = ['#f8d734', '#ffffff', '#2f6fdb', '#ffe680', '#f8d734'];
+    const colors = CLUB.confetti;
     let parts = [];
     let frame = 0;
     let last = 0;
@@ -1585,7 +1650,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     [star, star, star].forEach((p, i) => {
       const card = buildCard(p, i, 'span');
       if (i === 1) card.dataset.state = 'up';
-      fitName(card, p, geo);
+      face.fit(card, p, geo);
       fan.appendChild(card);
     });
   }
@@ -1713,16 +1778,13 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
 
   sound.prefetch([clip.ui('start').url]);
-  prepareNames();
+  face.prepare(ALL);
   buildFan();
   const fontsReady = document.fonts && document.fonts.load
-    ? Promise.all([
-      document.fonts.load('700 40px Karantina', 'אבג'),
-      document.fonts.load('800 40px "Barlow Condensed"', '0123456789'),
-    ])
+    ? Promise.all(CLUB.fonts.map(([spec, sample]) => document.fonts.load(spec, sample)))
     : Promise.resolve();
   fontsReady.catch(() => {}).then(() => {
-    prepareNames();
+    face.prepare(ALL);
     buildFan();
     layout();
   });
