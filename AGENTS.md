@@ -16,6 +16,7 @@ Whenever you create, import, rename, or delete an HTML page:
 #### Unlisted pages
 Kept private on purpose, at the owner's request: each stays out of `index.html` and the catalog below, and carries `<meta name="robots" content="noindex, nofollow">`.
 - `maccabi-memory/` (`/pages/maccabi-memory/`): Maccabi Tel Aviv memory game for a young child. Refresh its roster, photos and voice clips with `maccabi-memory/tools/README.md`.
+- `maccabi-haifa-memory/` (`/pages/maccabi-haifa-memory/`): Maccabi Haifa memory game, a standalone copy of the Tel Aviv one with its own roster, look and voice clips; changes to one game never touch the other. Refresh its roster, photos and voice clips with `maccabi-haifa-memory/tools/README.md`.
 
 ### 2. Card Design Standard in `index.html`
 Each card in `index.html` must follow the aesthetic established by `gibush.html`:

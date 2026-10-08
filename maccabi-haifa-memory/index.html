@@ -1,0 +1,1802 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#204126">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="זיכרון חיפה">
+<title>זיכרון מכבי חיפה</title>
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<script>
+  if (location.protocol !== 'file:') {
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = 'manifest.webmanifest';
+    document.head.appendChild(link);
+  }
+</script>
+<style>
+/* Heebo (variable 100-900) stands in for the club's proprietary Atlas */
+@font-face {
+  font-family: Heebo;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(fonts/heebo-hebrew.woff2) format("woff2");
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: Heebo;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(fonts/heebo-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* the club site's own greens: card ground, primary, secondary, darkest */
+  --pitch: #204126;
+  --club: #007638;
+  --forest: #284d2f;
+  --ink: #001d05;
+  --mint: #86d094;
+  --white: #ffffff;
+  --stripes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 292 356'%3E%3Cdefs%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='1' x2='273'%3E%3Cstop offset='.04' stop-color='%23fff' stop-opacity='.44'/%3E%3Cstop offset='.74' stop-color='%23fff' stop-opacity='.22'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' stroke='url(%23g)' d='M-158.0-78.8l-2.3 2.3L186.2 267.4zM-148.3-78.8l-2.3 2.3L195.9 267.4zM-138.7-78.8l-2.3 2.3L205.5 267.4zM-129.0-78.8l-2.3 2.3L215.2 267.4zM-119.3-78.8l-2.3 2.3L224.9 267.4zM-109.6-78.8l-2.3 2.3L234.6 267.4zM-100.0-78.8l-2.3 2.3L244.2 267.4zM-90.3-78.8l-2.3 2.3L253.9 267.4zM-80.6-78.8l-2.3 2.3L263.6 267.4zM-70.9-78.8l-2.3 2.3L273.3 267.4zM-61.2-78.8l-2.3 2.3L283.0 267.4zM-51.6-78.8l-2.3 2.3L292.6 267.4zM-41.9-78.8l-2.3 2.3L302.3 267.4zM-32.2-78.8l-2.3 2.3L312.0 267.4zM-22.5-78.8l-2.3 2.3L321.7 267.4zM-12.9-78.8l-2.3 2.3L331.3 267.4zM-3.2-78.8l-2.3 2.3L341.0 267.4zM6.5-78.8l-2.3 2.3L350.7 267.4z'/%3E%3C/svg%3E");
+  --pad: clamp(6px, 1.4vmin, 14px);
+  --gap: clamp(4px, 1.1vmin, 10px);
+  --hud: clamp(46px, 8vmin, 68px);
+  --flip: 460ms;
+  --cw: 110px;
+  --ch: 130px;
+  --short: min(var(--cw), var(--ch));
+  --r: calc(var(--short) * .09);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--ink);
+  overscroll-behavior: none;
+}
+
+body {
+  overflow: hidden;
+  color: var(--white);
+  font-family: Heebo, "Arial Hebrew", system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+:focus { outline: none; }
+:focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; }
+
+/* ---------- frame ---------- */
+
+.app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  gap: var(--gap);
+  padding:
+    max(var(--pad), env(safe-area-inset-top))
+    max(var(--pad), env(safe-area-inset-right))
+    max(var(--pad), env(safe-area-inset-bottom))
+    max(var(--pad), env(safe-area-inset-left));
+  background: radial-gradient(130% 95% at 50% 45%, #0e3a18 0%, #052a0e 45%, var(--ink) 100%);
+  grid-template: "hud" var(--hud) "board" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+@media (orientation: landscape) {
+  .app { grid-template: "hud board" minmax(0, 1fr) / var(--hud) minmax(0, 1fr); }
+}
+
+/* ---------- HUD ---------- */
+
+.hud {
+  grid-area: hud;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (orientation: landscape) {
+  .hud { flex-direction: column; }
+}
+
+.icon-btn {
+  flex: none;
+  width: var(--hud);
+  height: var(--hud);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, .09);
+  color: var(--white);
+  transition: transform .12s ease;
+}
+
+.icon-btn:active { transform: scale(.88); }
+.icon-btn svg { width: 52%; height: 52%; }
+
+#mute .i-off { display: none; }
+#mute[aria-pressed="true"] .i-on { display: none; }
+#mute[aria-pressed="true"] .i-off { display: block; }
+#mute[aria-pressed="true"] { color: rgba(255, 255, 255, .55); }
+
+.pips {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2px, .6vmin, 6px);
+}
+
+@media (orientation: landscape) {
+  .pips { flex-direction: column; }
+}
+
+.pip {
+  position: relative;
+  flex: 0 1 calc(var(--hud) * .6);
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  max-width: calc(var(--hud) * .6);
+  max-height: calc(var(--hud) * .6);
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .05);
+}
+
+.pip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(134, 208, 148, .3);
+}
+
+.pip img,
+.flyer img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.5);
+  transform-origin: 50% 30%;
+}
+
+.pip.full { background: var(--pitch); }
+.pip.full::after { border-color: var(--mint); }
+.pip.full { animation: pip-pop .5s cubic-bezier(.3, 1.7, .5, 1); }
+
+@keyframes pip-pop {
+  0% { transform: scale(.4); }
+  100% { transform: scale(1); }
+}
+
+.flyer {
+  position: fixed;
+  z-index: 15;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--pitch);
+  box-shadow: 0 0 0 3px var(--mint);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ---------- board ---------- */
+
+.board {
+  grid-area: board;
+  display: grid;
+  gap: var(--gap);
+  min-width: 0;
+  min-height: 0;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+}
+
+@media (orientation: landscape) {
+  .board {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.card {
+  position: relative;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  border-radius: var(--r);
+  perspective: calc(var(--cw) * 4);
+}
+
+.card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform var(--flip) cubic-bezier(.3, 1.3, .5, 1);
+}
+
+.card[data-state="up"] .card-inner,
+.card[data-state="matched"] .card-inner { transform: rotateY(180deg); }
+
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* card back: club green, the /players pinstripe band, and our own ball (not the crest) */
+.back {
+  background-color: var(--club);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -60 120 120'%3E%3Cdefs%3E%3CclipPath id='b'%3E%3Ccircle r='42'/%3E%3C/clipPath%3E%3Cg id='s'%3E%3Cpath d='M0-17V-29' stroke='%23204126' stroke-width='3.4'/%3E%3Cpath d='M0-28L-12.4-37-7.6-51.5H7.6L12.4-37Z' fill='%23204126'/%3E%3C/g%3E%3C/defs%3E%3Cellipse cy='49' rx='40' ry='8' fill='%23001d05' fill-opacity='.35'/%3E%3Cg transform='scale(1.1)'%3E%3Ccircle r='42' fill='%23fff'/%3E%3Cg clip-path='url(%23b)'%3E%3Cpath d='M0-17 16.2-5.3 10 13.8H-10L-16.2-5.3Z' fill='%23204126'/%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' transform='rotate(72)'/%3E%3Cuse href='%23s' transform='rotate(144)'/%3E%3Cuse href='%23s' transform='rotate(216)'/%3E%3Cuse href='%23s' transform='rotate(288)'/%3E%3C/g%3E%3Ccircle r='42' fill='none' stroke='%23204126' stroke-width='2.2'/%3E%3C/g%3E%3C/svg%3E"),
+    var(--stripes);
+  background-repeat: no-repeat;
+  background-position: center, left top;
+  background-size: min(calc(var(--short) * .64), calc(var(--cw) * .58)) auto, cover;
+}
+
+.back::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--short) * .055);
+  border: max(1.5px, calc(var(--short) * .016)) solid rgba(255, 255, 255, .72);
+  border-radius: calc(var(--r) * .6);
+}
+
+/* card face: a pocket version of the club's /players card */
+.front {
+  transform: rotateY(180deg);
+  background: var(--stripes) left top / cover no-repeat, var(--pitch);
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.photo img {
+  position: absolute;
+  left: var(--photo-x);
+  top: var(--photo-y);
+  width: var(--photo-s);
+  height: var(--photo-s);
+}
+
+/* the site's bottom shadow: over the photo, under the type */
+.front::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--fade-h);
+  background: linear-gradient(to top, rgba(0, 0, 0, .9) 0%, rgba(0, 0, 0, .62) 42%, rgba(0, 0, 0, 0) 100%);
+}
+
+[data-face="side"] .front::before {
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, .88) 0%, rgba(0, 0, 0, .5) 45%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(to left, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 55%);
+}
+
+.front::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14);
+  transition: box-shadow .2s ease;
+}
+
+.card.found .front::after {
+  box-shadow: inset 0 0 0 var(--frame, 4px) var(--mint);
+}
+
+/* the club's white-to-transparent shirt number, stopped at 30% so a child can still read the digits */
+.num {
+  position: absolute;
+  z-index: 2;
+  top: var(--num-top);
+  right: var(--num-x);
+  direction: ltr;
+  font-weight: 700;
+  font-size: var(--num-fs);
+  line-height: .86;
+  letter-spacing: -.02em;
+  color: var(--white);
+  background: linear-gradient(#fff 33%, rgba(255, 255, 255, .3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.name {
+  position: absolute;
+  z-index: 2;
+  right: var(--ipad);
+  bottom: var(--name-b);
+  width: var(--name-w);
+  text-align: right;
+  white-space: nowrap;
+  color: var(--white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+.name span { display: block; }
+
+.first {
+  font-weight: 400;
+  font-size: var(--first-px, 12px);
+  line-height: 1.04;
+}
+
+.last {
+  font-weight: 800;
+  font-size: var(--last-px, 22px);
+  line-height: .94;
+  letter-spacing: -.04em;
+}
+
+/* motion */
+.board.dealing .card {
+  animation: deal 520ms cubic-bezier(.25, 1.35, .5, 1) both;
+  animation-delay: calc(var(--i) * 16ms);
+}
+
+@keyframes deal {
+  from { opacity: 0; transform: translateY(-24%) scale(.55); }
+  to { opacity: 1; transform: none; }
+}
+
+.card.found {
+  z-index: 2;
+  animation: found 640ms cubic-bezier(.3, 1.5, .5, 1);
+}
+
+@keyframes found {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.16) rotate(-3deg); }
+  70% { transform: scale(.97) rotate(1.5deg); }
+  100% { transform: scale(1); }
+}
+
+.burst {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 50%;
+  width: calc(max(var(--cw), var(--ch)) * 1.45);
+  height: calc(max(var(--cw), var(--ch)) * 1.45);
+  margin: calc(max(var(--cw), var(--ch)) * -.725) 0 0 calc(max(var(--cw), var(--ch)) * -.725);
+  pointer-events: none;
+  opacity: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%2386d094'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  animation: burst 720ms cubic-bezier(.2, .7, .3, 1) forwards;
+}
+
+@keyframes burst {
+  0% { opacity: 1; transform: scale(.35) rotate(0deg); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.1) rotate(30deg); }
+}
+
+/* ---------- overlays ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: var(--pad);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s ease, visibility 0s linear .35s;
+}
+
+.overlay.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .35s ease;
+}
+
+.overlay:not(.show) { pointer-events: none; }
+
+.big {
+  width: clamp(104px, 24vmin, 200px);
+  height: clamp(104px, 24vmin, 200px);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--white);
+  color: var(--club);
+  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 #9cc4a5;
+  transition: transform .12s ease;
+}
+
+.big:active { transform: translateY(clamp(3px, .7vmin, 6px)); }
+.big svg { width: 48%; height: 48%; }
+
+.big.no {
+  background: var(--forest);
+  color: var(--white);
+  box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 #10291a;
+}
+
+.start {
+  background:
+    radial-gradient(90% 70% at 50% 42%, rgba(52, 110, 62, .55) 0%, rgba(52, 110, 62, 0) 70%),
+    var(--pitch);
+}
+
+/* the cards' pinstripe band at screen scale, softened so the type and the fan lead */
+.start::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--stripes) left top / cover no-repeat;
+  opacity: .45;
+  pointer-events: none;
+}
+
+.start-stage { position: relative; }
+
+.start-stage {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  gap: clamp(14px, 4.5vmin, 44px);
+  grid-template-areas: "title" "fan" "play";
+}
+
+.start-stage .title { grid-area: title; }
+.start-stage .fan { grid-area: fan; }
+.start-stage .play { grid-area: play; }
+
+@media (orientation: landscape) {
+  .start-stage {
+    grid-template-areas: "title fan" "play fan";
+    column-gap: clamp(32px, 9vmin, 120px);
+  }
+}
+
+/* the cards' two-tier name, at title size */
+.title {
+  margin: 0;
+  display: grid;
+  justify-items: start;
+  color: var(--white);
+}
+
+.title > span { display: block; }
+
+.title-small {
+  font-weight: 400;
+  font-size: clamp(22px, 5.6vmin, 56px);
+  line-height: 1;
+}
+
+.title-big {
+  font-weight: 800;
+  font-size: clamp(48px, 12.5vmin, 128px);
+  line-height: .92;
+  letter-spacing: -.045em;
+}
+
+.fan {
+  position: relative;
+  width: calc(var(--cw) * 2.1);
+  height: calc(var(--ch) * 1.1);
+}
+
+.fan .card {
+  position: absolute;
+  top: calc(var(--ch) * .05);
+  left: 50%;
+  width: var(--cw);
+  height: var(--ch);
+  margin-left: calc(var(--cw) * -.5);
+  transform-origin: 50% 135%;
+  pointer-events: none;
+}
+
+.fan .card:nth-child(1) { transform: rotate(-15deg); }
+.fan .card:nth-child(3) { transform: rotate(15deg); }
+.fan .card:nth-child(2) { z-index: 1; }
+
+.play { position: relative; }
+
+.play::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: clamp(3px, .8vmin, 6px) solid var(--white);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.start.show .play::before { animation: halo 1.9s ease-out infinite; }
+
+@keyframes halo {
+  0% { opacity: .85; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.45); }
+}
+
+.play svg { margin-left: 8%; }
+
+/* parent-facing: small, quiet, in a corner of the start screen, never on the board */
+.install {
+  position: absolute;
+  bottom: max(var(--pad), env(safe-area-inset-bottom));
+  left: max(var(--pad), env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  background: rgba(0, 29, 5, .35);
+  color: rgba(255, 255, 255, .78);
+  font: 600 14px/1.1 system-ui, "Arial Hebrew", sans-serif;
+}
+
+.install[hidden] { display: none; }
+.install svg { width: 18px; height: 18px; flex: none; }
+
+@media (display-mode: fullscreen), (display-mode: standalone) {
+  .install { display: none; }
+}
+
+.confirm { background: rgba(0, 29, 5, .76); }
+.win { background: rgba(0, 29, 5, .6); }
+
+.confirm-box {
+  display: flex;
+  gap: clamp(28px, 9vmin, 96px);
+}
+
+.confirm.show .big { animation: pop-in .38s cubic-bezier(.3, 1.6, .5, 1) both; }
+.confirm.show .big.no { animation-delay: .06s; }
+
+@keyframes pop-in {
+  from { transform: scale(.3); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.win-stage {
+  display: grid;
+  justify-items: center;
+  gap: clamp(16px, 5vmin, 48px);
+}
+
+.trophy {
+  width: clamp(130px, 36vmin, 320px);
+  height: clamp(130px, 36vmin, 320px);
+}
+
+.win.show .trophy { animation: trophy-in .9s cubic-bezier(.3, 1.45, .5, 1) both; }
+.win.show .big { animation: pop-in .45s .55s cubic-bezier(.3, 1.6, .5, 1) both; }
+
+@keyframes trophy-in {
+  0% { opacity: 0; transform: scale(.2) rotate(-24deg); }
+  60% { opacity: 1; transform: scale(1.08) rotate(5deg); }
+  100% { opacity: 1; transform: none; }
+}
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-inner { transition-duration: 1ms; }
+  .board.dealing .card,
+  .card.found,
+  .burst,
+  .pip.full,
+  .start.show .play::before,
+  .confirm.show .big,
+  .win.show .trophy,
+  .win.show .big { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app" data-phase="start" data-found="0">
+  <header class="hud">
+    <button class="icon-btn" id="mute" type="button" aria-label="קול" aria-pressed="false">
+      <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="i-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="pips" id="pips" aria-hidden="true"></div>
+    <button class="icon-btn" id="again" type="button" aria-label="משחק חדש">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 1 1 17.3 5.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M18.8 2.6v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </header>
+  <main class="board" id="board"></main>
+</div>
+
+<section class="overlay start show" id="start">
+  <div class="start-stage">
+    <h1 class="title"><span class="title-small">זיכרון</span> <span class="title-big">מכבי חיפה</span></h1>
+    <div class="fan" id="fan" data-face="band" aria-hidden="true"></div>
+    <button class="big play" id="play" type="button" aria-label="התחלה">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.6v12.8a1.1 1.1 0 0 0 1.7.94l10-6.4a1.1 1.1 0 0 0 0-1.88l-10-6.4A1.1 1.1 0 0 0 8 5.6z" fill="currentColor"/></svg>
+    </button>
+  </div>
+  <button class="install" id="install" type="button" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v7M8.8 11.6 12 14.8l3.2-3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>הוספה למסך הבית</span>
+  </button>
+</section>
+
+<section class="overlay confirm" id="confirm" inert>
+  <div class="confirm-box">
+    <button class="big yes" id="yes" type="button" aria-label="כן, משחק חדש">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.8l4.6 4.6L19.2 7.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="big no" id="no" type="button" aria-label="לא, להמשיך לשחק">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</section>
+
+<section class="overlay win" id="win" inert>
+  <div class="win-stage">
+    <svg class="trophy" viewBox="0 0 120 120" aria-hidden="true">
+      <path d="M31 13h58v27c0 19-13 34-29 34S31 59 31 40z" fill="#eef5ef"/>
+      <path d="M31 22H15v7c0 13 9 22 21 22M89 22h16v7c0 13-9 22-21 22" fill="none" stroke="#eef5ef" stroke-width="7" stroke-linecap="round"/>
+      <path d="M53 72h14v15H53z" fill="#c9dccd"/>
+      <path d="M39 86h42a5 5 0 0 1 5 5v12H34V91a5 5 0 0 1 5-5z" fill="#eef5ef"/>
+      <path d="M60 25l3.64 9.98 10.63.38-8.37 6.56 2.92 10.22L60 46.2l-8.82 5.94 2.92-10.22-8.37-6.56 10.63-.38z" fill="#007638"/>
+      <path d="M38 19v19c0 6 2 11 5 15" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M82 18v20c0 9-4 17-10 22" fill="none" stroke="#b5ccba" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <button class="big" id="replay" type="button" aria-label="משחק חדש">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 1 1 17.3 5.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M18.8 2.6v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</section>
+
+<canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+
+<script id="data">
+const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמרי גלזר","first_he":"עמרי","last_he":"גלזר","speak_he":"עמרי גלזר","number":55,"role":"starter","img":"img/omri-glazer.webp"},{"id":"ethan-azoulay","name_he":"איתן אזולאי","first_he":"איתן","last_he":"אזולאי","speak_he":"איתן אזולאי","number":19,"role":"starter","img":"img/ethan-azoulay.webp"},{"id":"bruninho","name_he":"ברונו רוברטו פריירה דה סילבה (ברוניניו)","first_he":"ברונו רוברטו פריירה דה סילבה","last_he":"(ברוניניו)","speak_he":"ברוניניו","number":10,"role":"starter","img":"img/bruninho.webp"},{"id":"nigel-lonwijk","name_he":"נייג'ל לונווייק","first_he":"נייג'ל","last_he":"לונווייק","speak_he":"נייג'ל לונווייק","number":21,"role":"starter","img":"img/nigel-lonwijk.webp"},{"id":"jelle-bataille","name_he":"יילה בטאיי","first_he":"יילה","last_he":"בטאיי","speak_he":"יילה בטאיי","number":25,"role":"starter","img":"img/jelle-bataille.webp"},{"id":"kenji-gorre","name_he":"קנג'י חורה","first_he":"קנג'י","last_he":"חורה","speak_he":"קנג'י חורה","number":11,"role":"starter","img":"img/kenji-gorre.webp"},{"id":"iyad-khalaili","name_he":"איאד חלאיילי","first_he":"איאד","last_he":"חלאיילי","speak_he":"איאד חלאיילי","number":29,"role":"starter","img":"img/iyad-khalaili.webp"},{"id":"tzunami","name_he":"וונדרסון דה פריאטס סוארס (צונאמי)","first_he":"וונדרסון דה פריאטס סוארס","last_he":"(צונאמי)","speak_he":"צונאמי","number":66,"role":"starter","img":"img/tzunami.webp"},{"id":"kenny-saief","name_he":"קני סייף","first_he":"קני","last_he":"סייף","speak_he":"קני סייף","number":16,"role":"starter","img":"img/kenny-saief.webp"},{"id":"cedric-don","name_he":"סדריק דון","first_he":"סדריק","last_he":"דון","speak_he":"סדריק דון","number":45,"role":"starter","img":"img/cedric-don.webp"},{"id":"noam-shtaifman","name_he":"נועם שטייפמן","first_he":"נועם","last_he":"שטייפמן","speak_he":"נועם שטייפמן","number":35,"role":"starter","img":"img/noam-shtaifman.webp"}],"bench":[{"id":"yarin-levi","name_he":"ירין לוי","first_he":"ירין","last_he":"לוי","speak_he":"ירין לוי","number":8,"role":"bench","img":"img/yarin-levi.webp"},{"id":"ali-mohamed","name_he":"עלי מוחמד","first_he":"עלי","last_he":"מוחמד","speak_he":"עלי מוחמד","number":4,"role":"bench","img":"img/ali-mohamed.webp"},{"id":"pedrao","name_he":"פדרו אוליביירה","first_he":"פדרו","last_he":"אוליביירה","speak_he":"פדרו אוליביירה","number":44,"role":"bench","img":"img/pedrao.webp"},{"id":"silva-kani","name_he":"סילבה קאני","first_he":"סילבה","last_he":"קאני","speak_he":"סילבה קאני","number":26,"role":"bench","img":"img/silva-kani.webp"},{"id":"andrija-novakovich","name_he":"אנדריאה נובאקוביץ'","first_he":"אנדריאה","last_he":"נובאקוביץ'","speak_he":"אנדריאה נובאקוביץ'","number":9,"role":"bench","img":"img/andrija-novakovich.webp"},{"id":"yair-mordechai","name_he":"יאיר מרדכי","first_he":"יאיר","last_he":"מרדכי","speak_he":"יאיר מרדכי","number":7,"role":"bench","img":"img/yair-mordechai.webp"},{"id":"guy-melamed","name_he":"גיא מלמד","first_he":"גיא","last_he":"מלמד","speak_he":"גיא מלמד","number":18,"role":"bench","img":"img/guy-melamed.webp"},{"id":"sean-goldberg","name_he":"שון גולדברג","first_he":"שון","last_he":"גולדברג","speak_he":"שון גולדברג","number":3,"role":"bench","img":"img/sean-goldberg.webp"},{"id":"navot-ratner","name_he":"נבות רטנר","first_he":"נבות","last_he":"רטנר","speak_he":"נבות רטנר","number":36,"role":"bench","img":"img/navot-ratner.webp"},{"id":"pedro-barzao","name_he":"פדרו ברזאו","first_he":"פדרו","last_he":"ברזאו","speak_he":"פדרו ברזאו","number":30,"role":"bench","img":"img/pedro-barzao.webp"},{"id":"adam-grimberg","name_he":"אדם גרימברג","first_he":"אדם","last_he":"גרימברג","speak_he":"אדם גרימברג","number":38,"role":"bench","img":"img/adam-grimberg.webp"}],"audio":{"ui":["start","win"],"name":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg"],"match":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg"]}};
+</script>
+<script>
+(() => {
+  'use strict';
+
+  const STARTERS = DATA.starters;
+  const BENCH = DATA.bench;
+  const ALL = STARTERS.concat(BENCH);
+  const PAIRS = 15;
+  const FLIP_MS = 460;
+  const MISMATCH_MS = 2200;
+  const DEAL_STAGGER_MS = 16;
+  const START_LINE = 'יאללה, בואי נשחק!';
+  const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
+
+  const $ = (id) => document.getElementById(id);
+  const app = $('app');
+  const board = $('board');
+  const pipsEl = $('pips');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const landscapeQuery = matchMedia('(orientation: landscape)');
+
+  function el(tag, cls, text) {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  function shuffled(list) {
+    const a = list.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  /* ---------- Hebrew numbers, feminine counting form ("מספר ארבעים ושתיים") ---------- */
+
+  const UNITS = ['', 'אחת', 'שתיים', 'שלוש', 'ארבע', 'חמש', 'שש', 'שבע', 'שמונה', 'תשע'];
+  const TEENS = ['עשר', 'אחת עשרה', 'שתים עשרה', 'שלוש עשרה', 'ארבע עשרה', 'חמש עשרה', 'שש עשרה', 'שבע עשרה', 'שמונה עשרה', 'תשע עשרה'];
+  const TENS = ['', '', 'עשרים', 'שלושים', 'ארבעים', 'חמישים', 'שישים', 'שבעים', 'שמונים', 'תשעים'];
+
+  function hebrewNumber(n) {
+    if (n === 0) return 'אפס';
+    if (n < 10) return UNITS[n];
+    if (n < 20) return TEENS[n - 10];
+    if (n < 100) {
+      const unit = n % 10;
+      return TENS[(n - unit) / 10] + (unit ? ' ו' + UNITS[unit] : '');
+    }
+    return String(n);
+  }
+
+  /* ---------- clips ---------- */
+
+  const AUDIO = DATA.audio || {};
+  const recorded = {
+    ui: new Set(AUDIO.ui || []),
+    name: new Set(AUDIO.name || []),
+    match: new Set(AUDIO.match || []),
+  };
+
+  // The card shows name_he; the voice says speak_he (a trailing nickname in parentheses, else the name).
+  const clip = {
+    name: (p) => ({ url: recorded.name.has(p.id) ? `audio/name/${p.id}.mp3` : null, text: p.speak_he }),
+    match: (p) => ({
+      url: recorded.match.has(p.id) ? `audio/match/${p.id}.mp3` : null,
+      text: `מספר ${hebrewNumber(p.number)}, ${p.speak_he}!`,
+    }),
+    ui: (key, text) => ({ url: recorded.ui.has(key) ? `audio/ui/${key}.mp3` : null, text }),
+  };
+
+  /* ---------- audio: Web Audio buffers → HTMLAudio → speechSynthesis (he-IL) ---------- */
+
+  const sound = (() => {
+    const canFetch = location.protocol === 'http:' || location.protocol === 'https:';
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
+    const raw = new Map();
+    const decoded = new Map();
+    const elements = new Map();
+    let ctx = null;
+    let voiceBus = null;
+    let sfxBus = null;
+    // Never persisted: one stray tap must not silence every later launch.
+    let muted = false;
+    let token = 0;
+    let stopCurrent = null;
+    let hebrewVoice = null;
+    let lastCancel = 0;
+
+    function pickVoice() {
+      if (!synth) return;
+      const voices = synth.getVoices();
+      hebrewVoice = voices.find((v) => /^(he|iw)([-_]|$)/i.test(v.lang)) || null;
+    }
+    if (synth) {
+      pickVoice();
+      if (synth.addEventListener) synth.addEventListener('voiceschanged', pickVoice);
+    }
+
+    function prefetch(urls) {
+      urls.forEach((url) => {
+        if (!url) return;
+        if (!canFetch) {
+          if (!elements.has(url)) {
+            const audio = new Audio();
+            audio.preload = 'auto';
+            audio.src = url;
+            elements.set(url, audio);
+          }
+          return;
+        }
+        fetchRaw(url);
+        if (ctx) decode(url);
+      });
+    }
+
+    // A clip whose fetch or decode failed is forgotten, so the next request for it tries again.
+    function forget(url) {
+      raw.delete(url);
+      decoded.delete(url);
+    }
+
+    function fetchRaw(url) {
+      if (!raw.has(url)) {
+        raw.set(url, fetch(url)
+          .then((r) => (r.ok ? r.arrayBuffer() : null))
+          .catch(() => null)
+          .then((buf) => {
+            if (!buf) forget(url);
+            return buf;
+          }));
+      }
+      return raw.get(url);
+    }
+
+    function decode(url) {
+      if (!decoded.has(url)) {
+        decoded.set(url, fetchRaw(url).then((buf) => buf && new Promise((resolve) => {
+          const done = (buffer) => {
+            if (!buffer) forget(url);
+            resolve(buffer || null);
+          };
+          const pending = ctx.decodeAudioData(buf, done, () => done(null));
+          if (pending && pending.catch) pending.catch(() => {});
+        })));
+      }
+      return decoded.get(url);
+    }
+
+    function running() {
+      return !!ctx && ctx.state === 'running';
+    }
+
+    // Resumes a context the system suspended (screen lock, audio focus loss). Never creates one:
+    // that needs the ▶ tap.
+    function wake() {
+      if (ctx && ctx.state !== 'running' && ctx.state !== 'closed') ctx.resume().catch(() => {});
+    }
+
+    function unlock() {
+      if (!ctx && AudioCtx) {
+        try {
+          ctx = new AudioCtx();
+          voiceBus = ctx.createGain();
+          voiceBus.connect(ctx.destination);
+          sfxBus = ctx.createGain();
+          sfxBus.gain.value = 0.28;
+          sfxBus.connect(ctx.destination);
+          const blip = ctx.createBufferSource();
+          blip.buffer = ctx.createBuffer(1, 1, 22050);
+          blip.connect(ctx.destination);
+          blip.start(0);
+          raw.forEach((_, url) => decode(url));
+        } catch (e) {
+          ctx = null;
+        }
+      }
+      wake();
+      if (!hebrewVoice) pickVoice();
+    }
+
+    function halt() {
+      token++;
+      const stop = stopCurrent;
+      stopCurrent = null;
+      if (stop) stop();
+      if (synth && (synth.speaking || synth.pending)) {
+        synth.cancel();
+        lastCancel = performance.now();
+      }
+    }
+
+    function speak(text, my) {
+      return new Promise((done) => {
+        if (!synth || !hebrewVoice || !text || muted || my !== token) return done();
+        let over = false;
+        let guard = 0;
+        const finish = () => {
+          if (over) return;
+          over = true;
+          clearTimeout(guard);
+          if (stopCurrent === finish) stopCurrent = null;
+          done();
+        };
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.voice = hebrewVoice;
+        utter.lang = hebrewVoice.lang;
+        utter.rate = 0.92;
+        utter.onend = finish;
+        utter.onerror = finish;
+        stopCurrent = finish;
+        guard = setTimeout(finish, 2500 + text.length * 180);
+        // Chrome drops an utterance queued in the same tick as cancel().
+        const wait = Math.max(0, 80 - (performance.now() - lastCancel));
+        setTimeout(() => { if (!over && my === token) synth.speak(utter); }, wait);
+      });
+    }
+
+    function viaElement(item, my) {
+      return new Promise((done) => {
+        if (!elements.has(item.url)) {
+          const fresh = new Audio(item.url);
+          fresh.preload = 'auto';
+          elements.set(item.url, fresh);
+        }
+        const audio = elements.get(item.url);
+        let over = false;
+        const finish = (ok) => {
+          if (over) return;
+          over = true;
+          audio.removeEventListener('ended', onEnded);
+          audio.removeEventListener('error', onError);
+          if (stopCurrent === stop) stopCurrent = null;
+          if (ok || my !== token) done();
+          else speak(item.text, my).then(done);
+        };
+        const onEnded = () => finish(true);
+        const onError = () => finish(false);
+        const stop = () => { audio.pause(); finish(true); };
+        audio.addEventListener('ended', onEnded);
+        audio.addEventListener('error', onError);
+        stopCurrent = stop;
+        try { audio.currentTime = 0; } catch (e) { /* not seekable yet */ }
+        const playing = audio.play();
+        if (playing && playing.catch) playing.catch(() => finish(false));
+      });
+    }
+
+    function viaBuffer(item, my) {
+      return decode(item.url).then((buffer) => {
+        if (my !== token) return undefined;
+        if (!buffer || !running()) return viaElement(item, my);
+        return new Promise((done) => {
+          const src = ctx.createBufferSource();
+          let over = false;
+          const finish = () => {
+            if (over) return;
+            over = true;
+            if (stopCurrent === stop) stopCurrent = null;
+            done();
+          };
+          const stop = () => { try { src.stop(); } catch (e) { /* already stopped */ } finish(); };
+          src.buffer = buffer;
+          src.connect(voiceBus);
+          src.onended = finish;
+          stopCurrent = stop;
+          src.start();
+        });
+      });
+    }
+
+    function playItem(item, my) {
+      if (muted || my !== token) return Promise.resolve();
+      if (!item.url) return speak(item.text, my);
+      // A suspended or interrupted context would swallow the clip and never fire 'ended'.
+      if (canFetch && running()) return viaBuffer(item, my);
+      return viaElement(item, my);
+    }
+
+    async function say(items) {
+      halt();
+      const my = token;
+      for (const item of items) {
+        if (my !== token) return;
+        if (item.onstart) item.onstart();
+        await playItem(item, my);
+      }
+    }
+
+    function tone(type, f0, f1, at, dur, peak) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(f0, at);
+      if (f1 !== f0) osc.frequency.exponentialRampToValueAtTime(f1, at + dur);
+      gain.gain.setValueAtTime(0.0001, at);
+      gain.gain.exponentialRampToValueAtTime(peak, at + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+      osc.connect(gain);
+      gain.connect(sfxBus);
+      osc.start(at);
+      osc.stop(at + dur + 0.05);
+    }
+
+    function sfx(kind) {
+      if (muted || !ctx || ctx.state !== 'running') return;
+      const t = ctx.currentTime + 0.01;
+      if (kind === 'flip') {
+        tone('sine', 420, 880, t, 0.1, 0.55);
+      } else if (kind === 'match') {
+        [1046.5, 1318.5, 1568].forEach((f, i) => tone('triangle', f, f, t + i * 0.08, 0.45, 0.5));
+      } else if (kind === 'win') {
+        const notes = [523.25, 659.25, 783.99, 1046.5];
+        notes.forEach((f, i) => tone('triangle', f, f, t + i * 0.12, 0.28, 0.55));
+        notes.forEach((f) => tone('triangle', f, f, t + 0.5, 1.3, 0.3));
+      }
+    }
+
+    function setMuted(value) {
+      muted = value;
+      if (value) halt();
+    }
+
+    return { unlock, wake, prefetch, say, halt, sfx, setMuted, get muted() { return muted; } };
+  })();
+
+  /* ---------- names: the club's two tiers (small first name over a big surname), breaks and fit ---------- */
+
+  const KEEP_WITH_NEXT = new Set(['בן', 'בר', 'אבו', 'אל', 'דה', 'די', 'דוס', 'ואן', 'פון']);
+  const FIRST_FONT = '400 100px Heebo';
+  const LAST_FONT = '800 100px Heebo';
+  const LAST_TRACK = -0.04;
+  const FIRST_LH = 1.04;
+  const LAST_LH = 0.94;
+  const FIRST_RATIO = 0.62;
+  const digitEm = { value: 0.57 };
+  let measurer = null;
+
+  // `track` is CSS letter-spacing in em, which canvas measurement leaves out.
+  function textEm(text, font, track) {
+    measurer = measurer || document.createElement('canvas').getContext('2d');
+    measurer.font = font;
+    return measurer.measureText(text).width / 100 + (track || 0) * [...text].length;
+  }
+
+  // A parenthetical is one unbreakable word, so "(אבו פאני)" never splits across lines.
+  function words(text) {
+    return String(text || '').match(/\([^)]*\)|\S+/g) || [];
+  }
+
+  function partitions(list, count) {
+    if (count === 1) return [[list.join(' ')]];
+    const out = [];
+    for (let i = 1; i <= list.length - count + 1; i++) {
+      if (KEEP_WITH_NEXT.has(list[i - 1])) continue;
+      const head = list.slice(0, i).join(' ');
+      partitions(list.slice(i), count - 1).forEach((rest) => out.push([head].concat(rest)));
+    }
+    return out;
+  }
+
+  // One line, plus the most balanced two-line split when there are several words.
+  function splits(text, font, track) {
+    const list = words(text);
+    if (!list.length) return [];
+    const measure = (lines) => ({ lines, em: Math.max(...lines.map((line) => textEm(line, font, track))) });
+    const out = [measure([list.join(' ')])];
+    let two = null;
+    if (list.length > 1) {
+      partitions(list, 2).forEach((lines) => {
+        const m = measure(lines);
+        if (!two || m.em < two.em) two = m;
+      });
+    }
+    if (two) out.push(two);
+    return out;
+  }
+
+  function prepareNames() {
+    digitEm.value = textEm('0123456789', '700 100px Heebo') / 10 || 0.57;
+    ALL.forEach((p) => {
+      p.firstSplits = splits(p.first_he, FIRST_FONT, 0);
+      p.lastSplits = splits(p.last_he || p.name_he, LAST_FONT, LAST_TRACK);
+    });
+  }
+
+  /* ---------- card face geometry ---------- */
+
+  function faceMode(cw, ch) {
+    const ratio = cw / ch;
+    if (ratio >= 1.1) return 'side';
+    return ratio < 0.7 ? 'stack' : 'band';
+  }
+
+  // The photo is a square head-and-shoulders cutout, nudged toward the end side (left in RTL)
+  // so the number gets the top start corner, as on the club's cards. Type always clears the
+  // found frame, whose glyph ink would otherwise overhang under it.
+  function faceVars(cw, ch, mode) {
+    const twoDigits = digitEm.value * 2.04;
+    const frame = Math.max(3, Math.min(cw, ch) * 0.045);
+    const edge = frame + 3;
+    if (mode === 'side') {
+      const pad = Math.max(edge, ch * 0.065);
+      const s = ch * 0.94;
+      const x = -s * 0.1;
+      const col = cw - (x + s * 0.74) - pad;
+      const num = Math.min(ch * 0.42, col / twoDigits);
+      return {
+        s, x, y: 0, pad, frame, num, numTop: pad * 0.55, numX: pad,
+        last: Math.min(ch * 0.21, num * 0.62), nameW: Math.max(col, cw * 0.4), nameH: ch * 0.44, nameB: pad * 0.8, fade: 0.6,
+      };
+    }
+    if (mode === 'band') {
+      const pad = Math.max(edge, cw * 0.065);
+      const s = cw * 1.02;
+      const x = -cw * 0.16;
+      const num = Math.min(cw * 0.35, ch * 0.28);
+      return {
+        s, x, y: 0, pad, frame, num, numTop: pad * 0.55, numX: pad,
+        last: Math.min(cw * 0.2, ch * 0.16), nameW: cw - pad * 2, nameH: ch * 0.36, nameB: pad * 0.8, fade: 0.56,
+      };
+    }
+    const pad = Math.max(edge, cw * 0.06);
+    const s = cw * 1.1;
+    const x = -cw * 0.12;
+    const num = Math.min(cw * 0.36, ((cw - pad * 2) / twoDigits) * 0.8);
+    return {
+      s, x, y: 0, pad, frame, num, numTop: pad * 0.5, numX: pad,
+      last: cw * 0.22, nameW: cw - pad * 2, nameH: ch * 0.36, nameB: pad, fade: 0.5,
+    };
+  }
+
+  function applyFace(target, cw, ch, mode) {
+    const v = faceVars(cw, ch, mode);
+    const s = target.style;
+    target.dataset.face = mode;
+    s.setProperty('--cw', `${cw}px`);
+    s.setProperty('--ch', `${ch}px`);
+    s.setProperty('--frame', `${v.frame}px`);
+    s.setProperty('--photo-s', `${v.s}px`);
+    s.setProperty('--photo-x', `${v.x}px`);
+    s.setProperty('--photo-y', `${v.y}px`);
+    s.setProperty('--ipad', `${v.pad}px`);
+    s.setProperty('--num-fs', `${v.num}px`);
+    s.setProperty('--num-top', `${v.numTop}px`);
+    s.setProperty('--num-x', `${v.numX}px`);
+    s.setProperty('--name-w', `${v.nameW}px`);
+    s.setProperty('--name-b', `${v.nameB}px`);
+    s.setProperty('--fade-h', `${v.fade * 100}%`);
+    return { cw, ch, mode, v };
+  }
+
+  function renderName(scope, first, last) {
+    const name = scope.querySelector('.name');
+    const key = `${first.join('|')}/${last.join('|')}`;
+    if (name.dataset.lines === key) return;
+    name.dataset.lines = key;
+    name.textContent = '';
+    if (first.length) {
+      const top = el('span', 'first');
+      first.forEach((line) => top.appendChild(el('span', null, line)));
+      name.appendChild(top);
+    }
+    const big = el('span', 'last');
+    last.forEach((line) => big.appendChild(el('span', null, line)));
+    name.appendChild(big);
+  }
+
+  // Tries one or two lines per tier and keeps the biggest surname; an extra line has to buy
+  // more than 4% of size.
+  function fitName(cardEl, p, geo) {
+    if (!p.lastSplits || !p.lastSplits.length) return;
+    const v = geo.v;
+    const firsts = p.firstSplits.length ? p.firstSplits : [null];
+    let best = null;
+    firsts.forEach((f) => p.lastSplits.forEach((l) => {
+      let last = Math.min(v.last, v.nameW / l.em);
+      let first = f ? Math.min(v.last * FIRST_RATIO, last * 0.8, v.nameW / f.em) : 0;
+      const height = (f ? f.lines.length * first * FIRST_LH : 0) + l.lines.length * last * LAST_LH;
+      const k = Math.min(1, v.nameH / height);
+      last *= k;
+      first *= k;
+      const lines = (f ? f.lines.length : 0) + l.lines.length;
+      const score = last + first * 0.4;
+      if (!best || score > best.score * 1.04 || (score >= best.score && lines <= best.lines)) {
+        best = { f, l, first, last, lines, score };
+      }
+    }));
+    renderName(cardEl, best.f ? best.f.lines : [], best.l.lines);
+    cardEl.style.setProperty('--first-px', `${best.first.toFixed(2)}px`);
+    cardEl.style.setProperty('--last-px', `${best.last.toFixed(2)}px`);
+  }
+
+  /* ---------- DOM ---------- */
+
+  function buildFront(p) {
+    const front = el('span', 'face front');
+    const photo = el('span', 'photo');
+    const img = el('img');
+    img.src = p.img;
+    img.alt = '';
+    img.decoding = 'async';
+    img.draggable = false;
+    photo.appendChild(img);
+    front.append(photo, el('span', 'num', String(p.number)), el('span', 'name'));
+    const first = p.firstSplits && p.firstSplits[0];
+    const last = p.lastSplits && p.lastSplits[0];
+    renderName(front, first ? first.lines : [], last ? last.lines : [p.name_he]);
+    return front;
+  }
+
+  function buildCard(p, index, tag) {
+    const card = el(tag || 'button', 'card');
+    if (!tag) {
+      card.type = 'button';
+      card.setAttribute('aria-label', 'קלף');
+    }
+    card.dataset.id = p.id;
+    card.dataset.index = String(index);
+    card.dataset.state = 'down';
+    card.style.setProperty('--i', String(index));
+    const inner = el('span', 'card-inner');
+    inner.append(el('span', 'face back'), buildFront(p));
+    card.appendChild(inner);
+    return card;
+  }
+
+  /* ---------- game state ---------- */
+
+  const game = {
+    phase: 'start',
+    round: 0,
+    cards: [],
+    pairs: PAIRS,
+    up: [],
+    found: 0,
+    flipBack: 0,
+    winFallback: 0,
+    winEarliest: 0,
+    busyUntil: 0,
+    geo: null,
+    flights: new Set(),
+  };
+
+  function setPhase(phase) {
+    game.phase = phase;
+    app.dataset.phase = phase;
+  }
+
+  function setCard(card, state) {
+    card.state = state;
+    card.el.dataset.state = state;
+    card.el.setAttribute('aria-label', state === 'down' ? 'קלף' : card.p.name_he);
+  }
+
+  function layout() {
+    const rect = board.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const landscape = landscapeQuery.matches;
+    const cols = landscape ? 6 : 5;
+    const rows = landscape ? 5 : 6;
+    const cs = getComputedStyle(board);
+    const gx = parseFloat(cs.columnGap) || 0;
+    const gy = parseFloat(cs.rowGap) || 0;
+    const cw = (rect.width - gx * (cols - 1)) / cols;
+    const ch = (rect.height - gy * (rows - 1)) / rows;
+    game.geo = applyFace(board, cw, ch, faceMode(cw, ch));
+    game.cards.forEach((card) => fitName(card.el, card.p, game.geo));
+  }
+
+  function renderPips() {
+    pipsEl.textContent = '';
+    for (let i = 0; i < game.pairs; i++) pipsEl.appendChild(el('span', 'pip'));
+  }
+
+  function warmImages(players) {
+    players.forEach((p) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = p.img;
+      if (img.decode) img.decode().catch(() => {});
+    });
+  }
+
+  function newGame() {
+    clearTimeout(game.flipBack);
+    clearTimeout(game.winFallback);
+    game.round += 1;
+    game.flights.forEach((flight) => flight.cancel());
+    game.flights.clear();
+    confetti.stop();
+    hide('win');
+    hide('confirm');
+
+    const benchPicks = shuffled(BENCH).slice(0, Math.max(0, PAIRS - STARTERS.length));
+    const picks = STARTERS.concat(benchPicks);
+    const deck = shuffled(picks.concat(picks));
+
+    game.pairs = picks.length;
+    game.found = 0;
+    game.up = [];
+    app.dataset.found = '0';
+    board.textContent = '';
+    game.cards = deck.map((p, i) => {
+      const card = { p, el: buildCard(p, i), state: 'down' };
+      board.appendChild(card.el);
+      return card;
+    });
+    renderPips();
+    layout();
+    warmImages(picks);
+    sound.prefetch(picks.flatMap((p) => [clip.name(p).url, clip.match(p).url]).concat(clip.ui('win').url));
+
+    if (!reducedMotion.matches) {
+      const round = game.round;
+      const dealMs = 520 + deck.length * DEAL_STAGGER_MS;
+      board.classList.add('dealing');
+      game.busyUntil = performance.now() + dealMs * 0.6;
+      setTimeout(() => { if (game.round === round) board.classList.remove('dealing'); }, dealMs);
+    }
+    setPhase('idle');
+    keepAwake();
+  }
+
+  function lift(card) {
+    if (reducedMotion.matches || !card.el.animate) return;
+    card.lift = card.el.animate([
+      { transform: 'scale(1)', zIndex: 3 },
+      { transform: 'scale(1.09)', zIndex: 3, offset: 0.45 },
+      { transform: 'scale(1)', zIndex: 3 },
+    ], { duration: FLIP_MS, easing: 'ease-out' });
+  }
+
+  function tap(card) {
+    if (game.phase !== 'idle' && game.phase !== 'one' && game.phase !== 'two') return;
+    if (card.state !== 'down' || performance.now() < game.busyUntil) return;
+    sound.unlock();
+
+    if (game.up.length === 2) {
+      clearTimeout(game.flipBack);
+      game.up.forEach((c) => setCard(c, 'down'));
+      game.up = [];
+    }
+
+    setCard(card, 'up');
+    lift(card);
+    sound.sfx('flip');
+    game.up.push(card);
+
+    if (game.up.length === 1) {
+      setPhase('one');
+      sound.say([clip.name(card.p)]);
+      return;
+    }
+
+    const [a, b] = game.up;
+    if (a.p.id !== b.p.id) {
+      setPhase('two');
+      sound.say([clip.name(card.p)]);
+      game.flipBack = setTimeout(() => {
+        game.up.forEach((c) => setCard(c, 'down'));
+        game.up = [];
+        setPhase('idle');
+      }, MISMATCH_MS);
+      return;
+    }
+
+    game.up = [];
+    setCard(a, 'matched');
+    setCard(b, 'matched');
+    game.found += 1;
+    app.dataset.found = String(game.found);
+    const pipIndex = game.found - 1;
+    const round = game.round;
+    setTimeout(() => { if (game.round === round) celebrate(a, b, pipIndex); }, FLIP_MS * 0.85);
+
+    const lines = [clip.name(card.p), clip.match(card.p)];
+    if (game.found === game.pairs) {
+      setPhase('finishing');
+      game.winEarliest = performance.now() + 1500;
+      const finish = () => { if (game.round === round) showWin(); };
+      const win = clip.ui('win', WIN_LINE);
+      win.onstart = () => setTimeout(finish, Math.max(0, game.winEarliest - performance.now()));
+      lines.push(win);
+      game.winFallback = setTimeout(finish, sound.muted ? 1500 : 9000);
+    } else {
+      setPhase('idle');
+    }
+    sound.say(lines);
+  }
+
+  // When the voice queue is cut while finishing (mute, page hidden), the win clip never starts,
+  // so bring the win screen forward instead of waiting for the long fallback.
+  function hurryWin() {
+    if (game.phase !== 'finishing') return;
+    clearTimeout(game.winFallback);
+    const round = game.round;
+    game.winFallback = setTimeout(() => { if (game.round === round) showWin(); },
+      Math.max(0, game.winEarliest - performance.now()));
+  }
+
+  function celebrate(a, b, pipIndex) {
+    [a, b].forEach((card) => {
+      if (card.lift) card.lift.cancel();
+      card.el.classList.add('found');
+      if (!reducedMotion.matches) {
+        const burst = el('span', 'burst');
+        card.el.appendChild(burst);
+        setTimeout(() => burst.remove(), 800);
+      }
+    });
+    sound.sfx('match');
+    flyToPip(a, pipIndex);
+  }
+
+  function flyToPip(card, index) {
+    const pip = pipsEl.children[index];
+    if (!pip) return;
+    const fill = () => {
+      pip.textContent = '';
+      const img = el('img');
+      img.src = card.p.img;
+      img.alt = '';
+      pip.appendChild(img);
+      pip.classList.add('full');
+    };
+    const photo = card.el.querySelector('.photo');
+    const face = photo && photo.querySelector('img');
+    if (reducedMotion.matches || !face || !document.body.animate) return fill();
+
+    const from = photo.getBoundingClientRect();
+    const shot = face.getBoundingClientRect();
+    const to = pip.getBoundingClientRect();
+    const size = Math.min(from.width, from.height);
+    const x0 = shot.left + (shot.width - size) / 2;
+    const y0 = from.top;
+    const flyer = el('span', 'flyer');
+    const img = el('img');
+    img.src = card.p.img;
+    img.alt = '';
+    flyer.appendChild(img);
+    flyer.style.width = `${size}px`;
+    flyer.style.height = `${size}px`;
+    flyer.style.left = `${x0}px`;
+    flyer.style.top = `${y0}px`;
+    document.body.appendChild(flyer);
+
+    const dx = to.left + to.width / 2 - (x0 + size / 2);
+    const dy = to.top + to.height / 2 - (y0 + size / 2);
+    const end = to.width / size;
+    const anim = flyer.animate([
+      { transform: 'translate(0, 0) scale(1)' },
+      { transform: `translate(${dx * 0.4}px, ${dy * 0.4 - size * 0.35}px) scale(${Math.max(end, 0.75)})`, offset: 0.45 },
+      { transform: `translate(${dx}px, ${dy}px) scale(${end})` },
+    ], { duration: 720, easing: 'cubic-bezier(.45, 0, .3, 1)' });
+    const flight = {
+      cancel() {
+        anim.onfinish = null;
+        anim.cancel();
+        flyer.remove();
+      },
+    };
+    game.flights.add(flight);
+    anim.onfinish = () => {
+      game.flights.delete(flight);
+      flyer.remove();
+      fill();
+    };
+  }
+
+  function showWin() {
+    if (game.phase === 'won') return;
+    clearTimeout(game.winFallback);
+    setPhase('won');
+    letSleep();
+    show('win');
+    sound.sfx('win');
+    if (!reducedMotion.matches) {
+      confetti.burst(150);
+      setTimeout(() => { if (game.phase === 'won') confetti.burst(90); }, 1300);
+    }
+  }
+
+  /* ---------- overlays ---------- */
+
+  const OVERLAYS = ['start', 'confirm', 'win'];
+
+  function syncInert() {
+    app.inert = OVERLAYS.some((id) => $(id).classList.contains('show'));
+  }
+
+  function show(id) {
+    const node = $(id);
+    node.inert = false;
+    node.classList.add('show');
+    syncInert();
+  }
+
+  function hide(id) {
+    const node = $(id);
+    if (node.contains(document.activeElement)) document.activeElement.blur();
+    node.classList.remove('show');
+    node.inert = true;
+    syncInert();
+  }
+
+  /* ---------- confetti (canvas at CSS-pixel resolution keeps it cheap) ---------- */
+
+  const confetti = (() => {
+    const canvas = $('confetti');
+    const g = canvas.getContext('2d');
+    const colors = ['#ffffff', '#86d094', '#007638', '#4aa45b', '#ffffff'];
+    let parts = [];
+    let frame = 0;
+    let last = 0;
+
+    function resize() {
+      canvas.width = Math.round(window.innerWidth);
+      canvas.height = Math.round(window.innerHeight);
+    }
+
+    function burst(count) {
+      if (!frame) resize();
+      const w = canvas.width;
+      const h = canvas.height;
+      for (let i = 0; i < count; i++) {
+        parts.push({
+          x: Math.random() * w,
+          y: -20 - Math.random() * h * 0.6,
+          vx: (Math.random() - 0.5) * 60,
+          vy: 120 + Math.random() * 160,
+          spin: Math.random() * Math.PI * 2,
+          vspin: (Math.random() - 0.5) * 9,
+          tilt: Math.random() * Math.PI * 2,
+          vtilt: 4 + Math.random() * 6,
+          size: 7 + Math.random() * 7,
+          color: colors[i % colors.length],
+        });
+      }
+      if (!frame) {
+        last = performance.now();
+        frame = requestAnimationFrame(tick);
+      }
+    }
+
+    function tick(now) {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      if (canvas.width !== Math.round(window.innerWidth) || canvas.height !== Math.round(window.innerHeight)) resize();
+      const h = canvas.height;
+      g.clearRect(0, 0, canvas.width, h);
+      parts = parts.filter((p) => p.y < h + 30);
+      for (const p of parts) {
+        p.vy = Math.min(p.vy + 140 * dt, 320);
+        p.x += (p.vx + Math.sin(p.tilt) * 40) * dt;
+        p.y += p.vy * dt;
+        p.spin += p.vspin * dt;
+        p.tilt += p.vtilt * dt;
+        g.save();
+        g.translate(p.x, p.y);
+        g.rotate(p.spin);
+        g.scale(1, Math.cos(p.tilt));
+        g.fillStyle = p.color;
+        g.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.66);
+        g.restore();
+      }
+      frame = parts.length ? requestAnimationFrame(tick) : 0;
+      if (!frame) g.clearRect(0, 0, canvas.width, h);
+    }
+
+    function stop() {
+      parts = [];
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      g.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    return { burst, stop };
+  })();
+
+  /* ---------- start screen ---------- */
+
+  let fanStar = null;
+
+  function buildFan() {
+    const fan = $('fan');
+    const short = Math.min(window.innerWidth, window.innerHeight);
+    const landscape = landscapeQuery.matches;
+    const cw = Math.max(84, Math.min(230, short * (landscape ? 0.36 : 0.34), window.innerHeight * (landscape ? 0.42 : 0.24)));
+    const ch = cw * 1.28;
+    const geo = applyFace(fan, cw, ch, 'band');
+    const pool = STARTERS.length ? STARTERS : ALL;
+    if (!pool.length) return;
+    fanStar = fanStar || pool[Math.floor(Math.random() * pool.length)];
+    const star = fanStar;
+    fan.textContent = '';
+    [star, star, star].forEach((p, i) => {
+      const card = buildCard(p, i, 'span');
+      if (i === 1) card.dataset.state = 'up';
+      fitName(card, p, geo);
+      fan.appendChild(card);
+    });
+  }
+
+  let wakeLock = null;
+  let wakePending = false;
+
+  function inGame() {
+    return game.phase === 'idle' || game.phase === 'one' || game.phase === 'two' || game.phase === 'finishing';
+  }
+
+  function letSleep() {
+    const lock = wakeLock;
+    wakeLock = null;
+    if (lock) lock.release().catch(() => {});
+  }
+
+  async function keepAwake() {
+    if (!('wakeLock' in navigator) || wakeLock || wakePending || document.visibilityState !== 'visible') return;
+    wakePending = true;
+    try {
+      const lock = await navigator.wakeLock.request('screen');
+      lock.addEventListener('release', () => { if (wakeLock === lock) wakeLock = null; });
+      wakeLock = lock;
+      if (!inGame()) letSleep();
+    } catch (e) {
+      wakeLock = null;
+    } finally {
+      wakePending = false;
+    }
+  }
+
+  const installedQuery = matchMedia('(display-mode: fullscreen), (display-mode: standalone)');
+
+  function goFullscreen() {
+    if (!matchMedia('(pointer: coarse)').matches || document.fullscreenElement || installedQuery.matches) return;
+    const root = document.documentElement;
+    const request = root.requestFullscreen || root.webkitRequestFullscreen;
+    if (!request) return;
+    try {
+      const pending = request.call(root, { navigationUI: 'hide' });
+      if (pending && pending.catch) pending.catch(() => {});
+    } catch (e) { /* fullscreen refused */ }
+  }
+
+  /* ---------- wiring ---------- */
+
+  function cardFromEvent(event) {
+    const node = event.target.closest && event.target.closest('.card');
+    return node && node.parentElement === board ? game.cards[Number(node.dataset.index)] : null;
+  }
+
+  board.addEventListener('pointerdown', (event) => {
+    if (event.button > 0) return;
+    const card = cardFromEvent(event);
+    if (card) tap(card);
+  });
+
+  board.addEventListener('click', (event) => {
+    if (event.detail !== 0) return;
+    const card = cardFromEvent(event);
+    if (card) tap(card);
+  });
+
+  $('play').addEventListener('click', () => {
+    if (game.phase !== 'start') return;
+    sound.unlock();
+    goFullscreen();
+    hide('start');
+    newGame();
+    sound.say([clip.ui('start', START_LINE)]);
+  });
+
+  $('replay').addEventListener('click', () => {
+    if (game.phase !== 'won') return;
+    sound.unlock();
+    newGame();
+    sound.say([clip.ui('start', START_LINE)]);
+  });
+
+  $('again').addEventListener('click', () => {
+    if (game.phase === 'idle' || game.phase === 'one' || game.phase === 'two') show('confirm');
+  });
+
+  $('yes').addEventListener('click', () => {
+    sound.unlock();
+    hide('confirm');
+    newGame();
+    sound.say([clip.ui('start', START_LINE)]);
+  });
+
+  $('no').addEventListener('click', () => hide('confirm'));
+
+  const muteBtn = $('mute');
+  function syncMute() { muteBtn.setAttribute('aria-pressed', sound.muted ? 'true' : 'false'); }
+  muteBtn.addEventListener('click', () => {
+    sound.unlock();
+    sound.setMuted(!sound.muted);
+    syncMute();
+    if (sound.muted) hurryWin();
+  });
+  syncMute();
+  syncInert();
+
+  document.addEventListener('contextmenu', (event) => event.preventDefault());
+  document.addEventListener('gesturestart', (event) => event.preventDefault());
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') {
+      letSleep();
+      sound.halt();
+      hurryWin();
+    } else {
+      sound.wake();
+      if (inGame()) keepAwake();
+    }
+  });
+  window.addEventListener('pageshow', () => sound.wake());
+  // Some browsers (iOS Safari) resume audio only inside a real gesture event, not on pointerdown.
+  ['touchend', 'click'].forEach((type) => {
+    document.addEventListener(type, () => sound.wake(), { capture: true, passive: true });
+  });
+
+  if (window.ResizeObserver) new ResizeObserver(() => layout()).observe(board);
+  else window.addEventListener('resize', layout);
+  window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
+
+  sound.prefetch([clip.ui('start').url]);
+  prepareNames();
+  buildFan();
+  const fontsReady = document.fonts && document.fonts.load
+    ? Promise.all([
+      document.fonts.load('800 40px Heebo', 'אבג'),
+      document.fonts.load('700 40px Heebo', '0123456789()'),
+    ])
+    : Promise.resolve();
+  fontsReady.catch(() => {}).then(() => {
+    prepareNames();
+    buildFan();
+    layout();
+  });
+
+  /* ---------- home-screen install (parent-facing, start screen only) ---------- */
+
+  const installBtn = $('install');
+  let installPrompt = null;
+
+  function syncInstall() {
+    installBtn.hidden = !installPrompt || installedQuery.matches;
+  }
+
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    installPrompt = event;
+    syncInstall();
+  });
+  window.addEventListener('appinstalled', () => {
+    installPrompt = null;
+    syncInstall();
+  });
+  installBtn.addEventListener('click', () => {
+    const pending = installPrompt;
+    installPrompt = null;
+    syncInstall();
+    if (pending) pending.prompt().catch(() => {});
+  });
+
+  const secure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  if ('serviceWorker' in navigator && secure) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
+})();
+</script>
+</body>
+</html>
