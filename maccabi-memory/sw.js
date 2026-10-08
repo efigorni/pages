@@ -1,6 +1,6 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
 // VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
-const VERSION = 'maccabi-memory-dd02c2171b36';
+const VERSION = 'maccabi-memory-225f49194891';
 const ASSETS = [
   './',
   'index.html',
@@ -87,19 +87,14 @@ const ASSETS = [
 // only ever deletes caches carrying its own prefix.
 const PREFIX = 'maccabi-memory-';
 
-// Without these the game can't start offline, so failing either one fails the install and the
-// previous version stays in charge.
-const CORE = ['./', 'index.html'];
 const NAV_TIMEOUT_MS = 3000;
 
+// Offline play needs every file, so one failed download fails the whole install (addAll stores
+// nothing then): the previous version stays in charge and the browser tries again on a later visit.
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(VERSION)
-      .then((cache) => Promise.all(ASSETS.map((url) => cache.add(new Request(url, { cache: 'reload' })).catch((err) => {
-        if (CORE.includes(url)) throw err;
-        // Keep offline play whole: reuse the previous version's copy of a file that failed to download.
-        return caches.match(url).then((old) => (old ? cache.put(url, old) : undefined)).catch(() => {});
-      }))))
+      .then((cache) => cache.addAll(ASSETS.map((url) => new Request(url, { cache: 'reload' }))))
       .then(() => self.skipWaiting()),
   );
 });
