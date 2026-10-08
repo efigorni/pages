@@ -32,7 +32,9 @@ shows name_he on one card line; "first-last" adds the card's two tiers (first_he
 text the voice reads, ships whenever it differs from name_he (and always with "first-last").
 `assemble` writes every game's index.html and sw.js, or the named games'. `--check` writes nothing and fails
 if a page or sw.js is not what assemble would write, or if img/ or audio/ holds a player the roster
-doesn't (every file there is precached). Run it before committing: the repo has no CI. `--watch`
+doesn't (every file there is precached), or if the fonts and CREDITS.md disagree: every shipped .woff2 has
+an @font-face, the declared families are the ones credited under Fonts, every OFL link resolves and every
+OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left. Run it before committing: the repo has no CI. `--watch`
 assembles the named games again whenever one of their sources or a shared file changes.
 `new` starts a club: it checks the id, the cache prefix and the app id first and writes nothing if one
 clashes; then it writes the manifest (from --like's, with the new name, colours and id), copies --like's
@@ -205,6 +207,31 @@ def write_data(players_json, game, prune):
         print(f"{game}: {'removed' if prune else 'not in the roster (data --prune removes it)'}: {rel}", flush=True)
 
 
+def lint_credits(game):
+    """The fonts the club style declares vs the files it ships vs what CREDITS.md credits."""
+    page = REPO / game
+    style = read(page / "club/style.css")
+    credits = read(page / "CREDITS.md")
+    faces = re.findall(r"@font-face\s*\{(.*?)\}", style, re.S)
+    declared = {re.search(r"font-family:\s*\"?([^\";]+)\"?;", f).group(1) for f in faces}
+    srcs = {re.search(r"url\(([^)]+)\)", f).group(1) for f in faces}
+    shipped = {f"fonts/{f.name}" for f in (page / "fonts").glob("*.woff2")}
+    fonts_md = credits.split("## Fonts", 1)[-1].split("\n## ", 1)[0]
+    credited = set(re.findall(r"^- \*\*([^*]+)\*\*", fonts_md, re.M))
+    licences = set(re.findall(r"\((fonts/OFL-[^)]+)\)", credits))
+    voice = read(SHARED / "new/CREDITS.md").split("## Voice", 1)[1]
+    return ([f"CREDITS.md: a TODO is left" for _ in [1] if "TODO" in credits]
+            + [f"{f} is shipped but no @font-face uses it" for f in sorted(shipped - srcs)]
+            + [f"an @font-face uses {f}, which isn't shipped" for f in sorted(srcs - shipped)]
+            + [f"CREDITS.md doesn't credit the font {f}" for f in sorted(declared - credited)]
+            + [f"CREDITS.md credits {f}, which no @font-face declares" for f in sorted(credited - declared)]
+            + [f"CREDITS.md links {f}, which doesn't exist" for f in sorted(licences) if not (page / f).is_file()]
+            + [f"CREDITS.md doesn't link fonts/{f.name}" for f in sorted((page / "fonts").glob("OFL-*.txt"))
+               if f"fonts/{f.name}" not in licences]
+            + ["CREDITS.md's Voice section differs from _memory-game/new/CREDITS.md's"
+               for _ in [1] if credits.split("## Voice", 1)[-1] != voice])
+
+
 def source(path, closer):
     """A shared or club source spliced into the page: it must not close its own element early."""
     text = read(path)
@@ -323,9 +350,12 @@ def assemble(game, check):
     strays = orphans(game, read_roster(game))
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
+    lint = lint_credits(game)
+    for msg in lint:
+        print(f"{game}: {msg}", flush=True)
     if check:
         print(f"{game}: {'out of date: ' + ', '.join(stale) if stale else 'up to date'} ({version})", flush=True)
-        return not stale and not strays
+        return not stale and not strays and not lint
     index.write_text(html_, encoding="utf-8")
     sw.write_text(new_sw, encoding="utf-8")
     total = sum(f.stat().st_size for f in files) + len(html_.encode())
@@ -471,7 +501,7 @@ def main():
             continue
         ok.append(assemble(g, args.check))
     if not all(ok):
-        sys.exit("build_page: run `build_page.py assemble` and commit the result")
+        sys.exit("build_page: fix what is listed above, run `build_page.py assemble`, then commit the result")
 
 
 if __name__ == "__main__":
