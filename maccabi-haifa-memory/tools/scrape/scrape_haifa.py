@@ -36,13 +36,16 @@ import unicodedata
 from pathlib import Path
 from urllib.parse import quote, unquote
 
+sys.dont_write_bytecode = True  # no __pycache__ in the repo
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # -I drops the script dir; these helpers are ours
+sys.path.insert(1, str(Path(__file__).resolve().parents[1] / "tts"))
 
 from bs4 import BeautifulSoup  # noqa: E402
 from PIL import Image  # noqa: E402
 
 from fetch import Fetcher, log_line  # noqa: E402
 from framing import landmarks, square_crop  # noqa: E402
+from hebrew import nickname  # noqa: E402
 from rsc import page_objects  # noqa: E402
 
 BASE = "https://www.mhaifafc.com"
@@ -58,7 +61,6 @@ POSITION_EN = {  # translation of the site's Hebrew position labels (the site sh
     "כנף": "Winger", "חלוץ": "Striker",
 }
 FULL_MATCH = 90
-TRAILING_PARENS = re.compile(r"\(([^()]*)\)\s*$")
 TRANSLIT_EXTRA = {"ł": "l", "Ł": "l", "đ": "d", "Đ": "d", "ø": "o", "Ø": "o", "æ": "ae", "ß": "ss", "ı": "i"}
 
 
@@ -83,10 +85,8 @@ def ascii_slug(text: str) -> str:
 
 def speak_he(name: str) -> tuple[str, str | None]:
     """H4: the text inside a trailing (...) when there is one, else the full name."""
-    m = TRAILING_PARENS.search(name)
-    if m and clean(m.group(1)):
-        return clean(m.group(1)), clean(m.group(1))
-    return name, None
+    nick = nickname(name)
+    return (nick, nick) if nick else (name, None)
 
 
 def minute(text) -> int | None:

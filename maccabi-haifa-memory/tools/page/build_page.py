@@ -21,8 +21,11 @@ import re
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True  # no __pycache__ in the repo
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tts"))
+from hebrew import speak_text, split_display_name  # noqa: E402
+
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-TRAILING_PARENS = re.compile(r"^(.*?)\s*\(([^()]+)\)$")
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
 UI_CLIPS = ("start", "win")
@@ -31,20 +34,6 @@ CACHE_PREFIX = "maccabi-haifa-memory-"
 
 def clean(text):
     return " ".join(str(text or "").split())
-
-
-def default_split(name):
-    """The club card's split: the trailing (nickname) or the last word is the big line, the rest the small one."""
-    m = TRAILING_PARENS.match(name)
-    if m:
-        return m.group(1), f"({m.group(2)})"
-    head, _, tail = name.rpartition(" ")
-    return head, tail
-
-
-def spoken(name):
-    m = TRAILING_PARENS.match(name)
-    return clean(m.group(2)) if m else name
 
 
 def entry(p, page):
@@ -61,8 +50,8 @@ def entry(p, page):
     elif p.get("last_he"):
         first, last = clean(p.get("first_he")), clean(p["last_he"])
     else:
-        first, last = default_split(name)
-    speak = clean(p.get("speak_he")) or spoken(name)
+        first, last = split_display_name(name)
+    speak = clean(p.get("speak_he")) or speak_text(name)
     for label, text in (("name_he", name), ("first_he", first), ("last_he", last), ("speak_he", speak)):
         if any(ch in text for ch in "<>&\"`"):
             sys.exit(f"{pid}: unexpected characters in {label}: {text!r}")
@@ -70,8 +59,8 @@ def entry(p, page):
         sys.exit(f"{pid}: empty name field")
     if clean(f"{first} {last}") != name:
         sys.exit(f"{pid}: first/last {first!r} + {last!r} do not reproduce name_he {name!r}")
-    if speak != spoken(name):
-        print(f"note: {pid}: speak_he {speak!r} differs from the parentheses rule ({spoken(name)!r})", flush=True)
+    if speak != speak_text(name):
+        print(f"note: {pid}: speak_he {speak!r} differs from the parentheses rule ({speak_text(name)!r})", flush=True)
     img = f"img/{pid}.webp"
     if not (page / img).is_file():
         sys.exit(f"{pid}: missing {img} (run tools/images first)")
