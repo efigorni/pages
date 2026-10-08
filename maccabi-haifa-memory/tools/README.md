@@ -98,11 +98,11 @@ directory the scrape wrote `data/` into.
 
 ```sh
 # once: finds a working install ($MACCABI_TTS_ENGINES, then <work>/tts) or installs one under <work>/tts
-MACCABI_ROOT=<work> bash maccabi-haifa-memory/tools/tts/setup.sh
+MACCABI_ROOT=<work> bash _memory-game/tools/tts/setup.sh
 
 # every refresh: reads <work>/data/players.json, writes <work>/tts/out/ (+ manifest and listen.html)
-MACCABI_ROOT=<work> <engines>/.venv-stt/bin/python -u maccabi-haifa-memory/tools/tts/generate.py \
-    --takes 8 --second-opinion --ready
+MACCABI_ROOT=<work> <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py \
+    --pron maccabi-haifa-memory/tools/tts/pronunciations.json --takes 8 --second-opinion --ready
 
 # into the game, then run step 4
 cp <work>/tts/out/audio/name/*.mp3 maccabi-haifa-memory/audio/name/
@@ -119,9 +119,10 @@ cp <work>/tts/out/audio/match/*.mp3 maccabi-haifa-memory/audio/match/
   `speak_he` and is logged as having no pinned IPA. Listen to those first in
   `<work>/tts/listen.html` (it also shows the second model's transcript and the
   judgement calls). To fix a name, edit its `ipa` and re-run with `--only <id>`.
-- `ab_ipa.py` compares candidate pronunciations across seeds in both clip contexts before
-  one is pinned. `render_blue.py --g2p "טקסט"` (run with `<engines>/.venv-blue/bin/python`
-  and `MACCABI_TTS_ENGINES` set) prints what the G2P would say.
+- `_memory-game/tools/tts/ab_ipa.py` compares candidate pronunciations across seeds in both
+  clip contexts before one is pinned. `_memory-game/tools/tts/render_blue.py --g2p "טקסט"`
+  (run with `<engines>/.venv-blue/bin/python` and `MACCABI_TTS_ENGINES` set) prints what the
+  G2P would say.
 - The scripts only read the engine install (no bytecode written, Hugging Face offline), so
   an install shared with another project stays untouched.
 - The voice needs its credit line: keep [`../CREDITS.md`](../CREDITS.md) in step with the

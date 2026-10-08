@@ -1,6 +1,6 @@
 """A/B pronunciation candidates: render each one in both contexts, round-trip through STT.
 
-    <engines>/.venv-stt/bin/python -u tools/tts/ab_ipa.py SPEC.json [--seeds 6] [--run NAME] [--fw]
+    <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/ab_ipa.py SPEC.json [--seeds 6] [--run NAME] [--fw]
 
 SPEC.json:
     {"cases": [{"id": "player-id", "speak": "טקסט", "number": 7,
@@ -58,7 +58,7 @@ def main() -> None:
             items.append({**base, "kind": "match", "text": hebrew.match_text(c.get("number"), expect),
                           "variants": [hebrew.match_text(c.get("number"), v) for v in var],
                           "job": {"parts": [{"ipa": g.LEAD_IN}] + lead + [cand_part(cand, "!")]}})
-    g.render(args.voice, items, args.seeds, 0.88, work)
+    g.render("blue", args.voice, items, args.seeds, 0.88, work)
     paths = {(it["id"], it["kind"], s): str(work / "raw" / f"{it['kind']}__{it['id']}__s{s}.wav")
              for it in items for s in range(1, args.seeds + 1)}
     res = g.transcribe(list(paths.values()), "ab")

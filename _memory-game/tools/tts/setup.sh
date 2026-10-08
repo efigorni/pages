@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# One-time, idempotent setup for the Maccabi Haifa memory-game voice clips.
+# One-time, idempotent setup for the memory games' voice clips.
 #
-#   MACCABI_ROOT=<work> tools/tts/setup.sh            # reuse a working BlueTTS install, else install
-#   MACCABI_ROOT=<work> tools/tts/setup.sh --fresh    # install under $MACCABI_TTS_HOME regardless
+#   MACCABI_ROOT=<work> _memory-game/tools/tts/setup.sh           # reuse a working BlueTTS install, else install
+#   MACCABI_ROOT=<work> _memory-game/tools/tts/setup.sh --fresh   # install under $MACCABI_TTS_HOME regardless
+#   ... setup.sh --all     also the runner-up engine (Phonikud + Piper) for generate.py --engine piper
 #
 # <work> is the scratch directory outside the repo that holds data/ and tts/.
 # An engine home holds:
 #   _engines/BlueTTS   pinned clone of github.com/maxmelichov/BlueTTS + its ONNX bundle
 #   .venv-blue         BlueTTS + RenikudPlus G2P (Python 3.12)
 #   .venv-stt          numpy + faster-whisper (orchestrator, metrics, second-opinion STT)
+#   .venv-phonikud     phonikud-tts (Piper), only with --all
 # Lookup order (generate.py uses the same): $MACCABI_TTS_ENGINES (e.g. an install another
 # project already made), then $MACCABI_TTS_HOME (default $MACCABI_ROOT/tts).
 # The first that passes the check is used as is: it is only run (no bytecode, offline
@@ -22,15 +24,24 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="${MACCABI_ROOT:?set MACCABI_ROOT to the work directory (outside the repo) that holds data/ and tts/}"
 TTS="${MACCABI_TTS_HOME:-$ROOT/tts}"
 HF_CACHE="${HF_HUB_CACHE:-${HF_HOME:-$HOME/.cache/huggingface}/hub}"
-BLUE_COMMIT=0e38dbf08ed53f85863d1eab092bd9572c53a503   # BlueTTS main, 2026-08-13 (same as Tel Aviv)
-FRESH=0; [[ "${1:-}" == "--fresh" ]] && FRESH=1
+BLUE_COMMIT=0e38dbf08ed53f85863d1eab092bd9572c53a503   # BlueTTS main, 2026-08-13
+FRESH=0
+ALL=0
+for arg in "$@"; do
+  case "$arg" in
+    --fresh) FRESH=1 ;;
+    --all) ALL=1 ;;
+    *) echo "unknown option: $arg"; exit 2 ;;
+  esac
+done
 
 for tool in uv git ffmpeg whisper-cli; do
   command -v "$tool" >/dev/null || { echo "missing $tool — brew install ${tool/whisper-cli/whisper-cpp}"; exit 1; }
 done
 
 # check <engine home>: exit 0 when BlueTTS (pinned commit, noa voice), RenikudPlus,
-# faster-whisper and both ivrit.ai models all load, without writing anything.
+# faster-whisper and both ivrit.ai models all load (and, with --all, Phonikud + Piper),
+# without writing anything.
 check() {
   local e="$1"
   [[ -x "$e/.venv-blue/bin/python" && -x "$e/.venv-stt/bin/python" ]] || return 1
@@ -42,6 +53,10 @@ check() {
     "$e/.venv-stt/bin/python" -c "import numpy, faster_whisper; print('[setup]   faster-whisper', faster_whisper.__version__)" || return 1
   ls "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-turbo-ggml/snapshots/*/ggml-model.bin >/dev/null 2>&1 || return 1
   ls -d "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-ct2/snapshots/* >/dev/null 2>&1 || return 1
+  if (( ALL )); then
+    PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 "$e/.venv-phonikud/bin/python" -c "import phonikud_tts" || return 1
+    ls "$HF_CACHE"/models--Phonikud--phonikud-tts-checkpoints/snapshots/*/shaul.onnx >/dev/null 2>&1 || return 1
+  fi
 }
 
 if (( ! FRESH )); then
@@ -51,7 +66,7 @@ if (( ! FRESH )); then
     if check "$e" 2>/dev/null; then
       echo "[setup] reusing $e — nothing installed or changed"
       [[ "$e" == "$TTS" ]] || echo "[setup] keep MACCABI_TTS_ENGINES=$e exported for generate.py"
-      echo "[setup] next: $e/.venv-stt/bin/python -u $HERE/generate.py"
+      echo "[setup] next: $e/.venv-stt/bin/python -u $HERE/generate.py --pron <game>/tools/tts/pronunciations.json"
       exit 0
     fi
     echo "[setup]   not usable"
@@ -79,5 +94,14 @@ echo "[setup] STT + tooling venv"
 uv pip install --python "$TTS/.venv-stt/bin/python" faster-whisper numpy
 "$TTS/.venv-stt/bin/hf" download ivrit-ai/whisper-large-v3-turbo-ggml ggml-model.bin >/dev/null
 "$TTS/.venv-stt/bin/hf" download ivrit-ai/whisper-large-v3-ct2 >/dev/null
+
+if (( ALL )); then
+  echo "[setup] runner-up: Phonikud + Piper"
+  [[ -x "$TTS/.venv-phonikud/bin/python" ]] || uv venv "$TTS/.venv-phonikud" --python 3.12
+  uv pip install --python "$TTS/.venv-phonikud/bin/python" phonikud-tts "huggingface-hub[cli]"
+  "$TTS/.venv-phonikud/bin/hf" download Phonikud/phonikud-onnx phonikud-1.0.int8.onnx >/dev/null
+  "$TTS/.venv-phonikud/bin/hf" download Phonikud/phonikud-tts-checkpoints \
+    model.onnx shaul.onnx michael.onnx model.config.json >/dev/null
+fi
 check "$TTS" || { echo "[setup] the fresh install does not pass the check"; exit 1; }
-echo "[setup] done — next: $TTS/.venv-stt/bin/python -u $HERE/generate.py"
+echo "[setup] done — next: $TTS/.venv-stt/bin/python -u $HERE/generate.py --pron <game>/tools/tts/pronunciations.json"

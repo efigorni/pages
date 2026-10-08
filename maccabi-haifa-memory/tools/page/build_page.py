@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 sys.dont_write_bytecode = True  # no __pycache__ in the repo
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/tts"))
 from hebrew import speak_text, split_display_name  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")

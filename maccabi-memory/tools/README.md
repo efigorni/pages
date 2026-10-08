@@ -77,28 +77,33 @@ by an ivrit.ai Whisper round-trip. Needs uv, git, ffmpeg and whisper-cli
 wrote `data/` into.
 
 ```sh
-# once (idempotent): BlueTTS checkout, venvs and models under <work>/tts
-MACCABI_WORK=<work> bash maccabi-memory/tools/tts/setup.sh
+# once: finds a working install ($MACCABI_TTS_ENGINES, then <work>/tts) or installs one under <work>/tts
+MACCABI_ROOT=<work> bash _memory-game/tools/tts/setup.sh
 
-# every refresh: reads <work>/data/players.json, writes <work>/tts/out/
-<work>/tts/.venv-stt/bin/python -u maccabi-memory/tools/tts/generate.py \
-    --work <work> --takes 8 --second-opinion
+# every refresh: reads <work>/data/players.json, writes <work>/tts/out/ (+ manifest and listen.html)
+MACCABI_ROOT=<work> <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py \
+    --pron maccabi-memory/tools/tts/pronunciations.json --ui --takes 8 --second-opinion --ready
 
 # into the game, then run step 4
 cp -R <work>/tts/out/audio/name <work>/tts/out/audio/match <work>/tts/out/audio/ui maccabi-memory/audio/
 ```
 
+- `<engines>` is the folder `setup.sh` reports (it holds `.venv-blue`, `.venv-stt` and
+  `_engines/BlueTTS`). Export `MACCABI_TTS_ENGINES=<engines>` when it isn't `<work>/tts`.
+- `--ui` also makes the start and win clips (`audio/ui/`).
 - `git rm` the `audio/name/<id>.mp3` and `audio/match/<id>.mp3` of players who left;
   `build_page.py` precaches every file under `audio/`.
 - A new player missing from `pronunciations.json` falls back to the G2P reading of
   `name_he` and shows `pinned_ipa: false` in `<work>/tts/qa/<run>.json`. Listen to
   those first. To fix a name, edit its `ipa` and re-run with `--only <id>`.
 - Hear what the G2P would say:
-  `MACCABI_WORK=<work> <work>/tts/.venv-blue/bin/python maccabi-memory/tools/tts/render_blue.py --g2p "טקסט" 2`
+  `MACCABI_TTS_ENGINES=<engines> <engines>/.venv-blue/bin/python _memory-game/tools/tts/render_blue.py --g2p "טקסט" 2`
   (`2` = a female listener, for phrases like מצאת).
-- `generate.py --voice adam` switches to a male voice. `make_compare.py` builds a
-  side-by-side listening page. `eval_probe.py`, `probe_set.json` and `render_torch.py`
-  are the bake-off that chose the engine.
+- `generate.py --voice adam` switches to a male voice; `--engine piper|say` with
+  `--phonemes-from <manifest>` renders the runner-up engines for comparison
+  (`setup.sh --all` installs Piper). `make_compare.py` builds a side-by-side listening
+  page. `eval_probe.py`, `probe_set.json` and `render_torch.py` are the bake-off that
+  chose the engine.
 - The voice needs its credit line: keep [`../CREDITS.md`](../CREDITS.md) in step
   with the engine and voice actually shipped. It also credits the fonts and the
   club's photos.
