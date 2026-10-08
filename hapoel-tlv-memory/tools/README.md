@@ -44,8 +44,13 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
      appearances plus the 10 outfield players with the most (tiebreaks: starts, minutes,
      lower number); bench = the other outfield players in the pool; backup goalkeepers are
      excluded.
-   - `SEASON`, `COMP_BY_LOGO` and `STAGE_BY_DATE` at the top of `scrape_hapoel.py` describe
-     the 2026/27 games; update them for a new season.
+   - **A new season** changes three things at the top of `scrape_hapoel.py`: `SEASON`; its
+     `SEASON_DATA` row (each official game's stage name and the club's `htafc_match` id by
+     date, from `/wp-json/wp/v2/htafc_match`, and Transfermarkt's report id by date, from the
+     season's fixtures page); and `COMP_BY_LOGO` if a competition's logo is new. Save that
+     season's pages into the cache first (`rest/reports-cat30.json` with `after=<season
+     start>`, `rest/seasons.json`, `ext/tm-leistungsdaten-<start year>.html`). The dates, the
+     Transfermarkt file and URL, the club's season id and the metric text follow from `SEASON`.
    - **Photos.** Every club photo has the shirt number baked in as a flat red numeral
      behind the player. The scraper keys it out with `clean_number.py` into
      `<work>/data/clean/` and points `photo_file` there, since the card draws its own number.
