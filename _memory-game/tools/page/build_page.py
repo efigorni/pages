@@ -3,6 +3,7 @@
 
     python3 -I _memory-game/tools/page/build_page.py data <players.json> <game>
     python3 -I _memory-game/tools/page/build_page.py assemble [--check] [<game> ...]
+    python3 -I _memory-game/tools/page/build_page.py list [--json]
 
 A game is a folder at the repo root whose index.html has an engine script (<script id="engine">);
 nothing else in the repo is read or written. In each game:
@@ -242,6 +243,17 @@ def assemble(game, check):
     return True
 
 
+def listing(all_games):
+    out = []
+    for game in all_games:
+        sw = REPO / game / "sw.js"
+        version = re.search(r"^const VERSION = '([^']*)';$", sw.read_text(encoding="utf-8"), flags=re.M) if sw.is_file() else None
+        names = json.loads((REPO / game / "tools/game.json").read_text(encoding="utf-8")).get("names")
+        out.append({"id": game, "prefix": f"{game}-", "version": version and version.group(1),
+                    "app_id": app_id(game).removeprefix("https://origin.invalid"), "names": names})
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description="Build the memory games (see the module docstring).")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -251,11 +263,17 @@ def main():
     a = sub.add_parser("assemble", help="stamp the shared code into the pages and write each sw.js")
     a.add_argument("--check", action="store_true", help="write nothing; fail if anything is out of date")
     a.add_argument("games", nargs="*")
+    li = sub.add_parser("list", help="print the games, one per line (the one place that lists them)")
+    li.add_argument("--json", action="store_true", help="id, cache prefix, VERSION, app id and name model")
     args = ap.parse_args()
 
     all_games = games()
     check_prefixes(all_games)
     check_apps(all_games)
+    if args.cmd == "list":
+        rows = listing(all_games)
+        print(json.dumps(rows, ensure_ascii=False, indent=2) if args.json else "\n".join(r["id"] for r in rows))
+        return
     if args.cmd == "data":
         game = games([args.game])[0]
         write_data(args.players_json, game)
