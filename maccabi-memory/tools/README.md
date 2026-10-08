@@ -53,13 +53,14 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
 4. **Page data and offline cache**:
 
    ```sh
-   python3 -I maccabi-memory/tools/page/build_page.py <work>/data/players.json maccabi-memory
+   python3 -I _memory-game/tools/page/build_page.py data <work>/data/players.json maccabi-memory
    ```
 
-   Rewrites `const DATA` in `index.html` (starters, bench, which clips exist) and the
-   `VERSION` / `ASSETS` lines of `sw.js`. Run it after **any** change to `index.html`,
-   images, audio, fonts or icons: the new cache version is what makes installed copies
-   pick up the change.
+   Rewrites `const DATA` in `index.html` (starters, bench, which clips exist), then
+   assembles the game: it stamps the shared code into the page and writes `sw.js` with a
+   new cache `VERSION`. After any other change (images, audio, fonts, icons, the club parts
+   of `index.html`) run `python3 -I _memory-game/tools/page/build_page.py assemble maccabi-memory`:
+   the new cache version is what makes installed copies pick up the change.
 
 5. **Test**: `python3 -m http.server 8765` from the repo root, open
    `http://localhost:8765/maccabi-memory/`, and play a full round in portrait and

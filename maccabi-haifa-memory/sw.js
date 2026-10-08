@@ -1,4 +1,6 @@
-const VERSION = 'maccabi-haifa-memory-0ff2738209c5';
+// build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
+// VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
+const VERSION = 'maccabi-haifa-memory-8de31946f7a5';
 const ASSETS = [
   './',
   'index.html',
