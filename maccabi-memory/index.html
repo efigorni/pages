@@ -765,18 +765,18 @@ const CLUB = {
   face(kit) {
     'use strict';
 
-    const { el, textEm, words, bestSplit, photoFront } = kit;
+    const { el, photoFront, splits, fitLines, renderName, setVars } = kit;
     const NAME_FONT = '700 100px Karantina';
     const NAME_LINE_HEIGHT = 0.84;
     const digitEm = { value: 0.46 };
 
+    // Two lines (one for a single word), or three when that sets the name bigger.
     function prepare(players) {
-      digitEm.value = textEm('0123456789', '800 100px "Barlow Condensed"') / 10 || 0.46;
+      digitEm.value = kit.digitEm('800 100px "Barlow Condensed"', 0.46);
       players.forEach((p) => {
-        const list = words(p.name_he);
-        const whole = bestSplit(list, 1, NAME_FONT);
-        p.split2 = (list.length > 1 && bestSplit(list, 2, NAME_FONT)) || whole;
-        p.split3 = list.length >= 3 ? bestSplit(list, 3, NAME_FONT) : null;
+        const all = splits(p.name_he, NAME_FONT, 0, 3);
+        p.split2 = all.find((s) => s.lines.length === 2) || all[0];
+        p.split3 = all.find((s) => s.lines.length === 3) || null;
       });
     }
 
@@ -804,12 +804,10 @@ const CLUB = {
 
     function apply(s, cw, ch, mode) {
       const v = faceVars(cw, ch, mode);
-      s.setProperty('--photo-w', `${v.photoW}px`);
-      s.setProperty('--photo-h', `${v.photoH}px`);
-      s.setProperty('--ipad', `${v.pad}px`);
-      s.setProperty('--num-fs', `${v.num}px`);
-      s.setProperty('--name-fs', `${v.name}px`);
-      s.setProperty('--zoom', String(v.zoom || 1));
+      setVars(s, {
+        '--photo-w': `${v.photoW}px`, '--photo-h': `${v.photoH}px`, '--ipad': `${v.pad}px`,
+        '--num-fs': `${v.num}px`, '--name-fs': `${v.name}px`, '--zoom': String(v.zoom || 1),
+      });
       return v;
     }
 
@@ -823,34 +821,13 @@ const CLUB = {
       return { w: v.nameW, h: ch - v.photoH - v.num * 0.78 - v.pad * 1.2 };
     }
 
-    function nameSize(split, box, base) {
-      return Math.min(base, box.w / split.em, box.h / (split.lines.length * NAME_LINE_HEIGHT));
-    }
-
-    function renderName(cardEl, lines) {
-      const name = cardEl.querySelector('.name');
-      const key = lines.join('|');
-      if (name.dataset.lines === key) return;
-      name.dataset.lines = key;
-      name.textContent = '';
-      lines.forEach((line) => name.appendChild(el('span', null, line)));
-    }
-
     function fit(cardEl, p, geo) {
       if (!p.split2) return;
       const box = nameBox(geo, p);
       const base = geo.v.name;
-      let split = p.split2;
-      let size = nameSize(split, box, base);
-      if (p.split3) {
-        const size3 = nameSize(p.split3, box, base);
-        if (size3 > size * 1.04) {
-          split = p.split3;
-          size = size3;
-        }
-      }
-      renderName(cardEl, split.lines);
-      cardEl.style.setProperty('--fit', Math.max(0.4, size / base).toFixed(3));
+      const best = fitLines([p.split2, p.split3].filter(Boolean), { cap: base, w: box.w, h: box.h, lh: NAME_LINE_HEIGHT });
+      renderName(cardEl, best.split.lines);
+      cardEl.style.setProperty('--fit', Math.max(0.4, best.size / base).toFixed(3));
     }
 
     function build(p) {
@@ -1237,6 +1214,61 @@ const CLUB = {
     return best;
   }
 
+  // The one-line split, then the best split into 2..max lines; a count no split allows is left out.
+  function splits(text, font, track, max = 2) {
+    const list = words(text);
+    const out = [];
+    for (let n = 1; n <= Math.min(max, list.length); n++) {
+      const split = bestSplit(list, n, font, track);
+      if (split) out.push(split);
+    }
+    return out;
+  }
+
+  // The candidate split that sets the name biggest in a w x h box, at most cap; a later candidate
+  // has to buy more than 4% of size.
+  function fitLines(candidates, { cap, w, h, lh }) {
+    let best = null;
+    candidates.forEach((split) => {
+      const size = Math.min(cap, w / split.em, h / (split.lines.length * lh));
+      if (!best || size > best.size * 1.04) best = { split, size };
+    });
+    return best;
+  }
+
+  // The name element's lines: one tier (an array of lines), or {first, last} tiers, each a span of
+  // line spans. data-lines keeps a resize from rebuilding an unchanged name.
+  function renderName(scope, lines) {
+    const name = scope.querySelector('.name');
+    const tiers = Array.isArray(lines) ? null : lines;
+    const key = tiers ? `${tiers.first.join('|')}/${tiers.last.join('|')}` : lines.join('|');
+    if (name.dataset.lines === key) return;
+    name.dataset.lines = key;
+    name.textContent = '';
+    const fill = (parent, list) => list.forEach((line) => parent.appendChild(el('span', null, line)));
+    if (!tiers) {
+      fill(name, lines);
+      return;
+    }
+    if (tiers.first.length) {
+      const top = el('span', 'first');
+      fill(top, tiers.first);
+      name.appendChild(top);
+    }
+    const big = el('span', 'last');
+    fill(big, tiers.last);
+    name.appendChild(big);
+  }
+
+  function setVars(style, vars) {
+    Object.entries(vars).forEach(([key, value]) => style.setProperty(key, value));
+  }
+
+  // The width of one digit of `font`, in em.
+  function digitEm(font, fallback) {
+    return textEm('0123456789', font) / 10 || fallback;
+  }
+
   /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
   // Every face starts with the photo; a match flight starts from its `.photo img`.
@@ -1253,7 +1285,9 @@ const CLUB = {
     return front;
   }
 
-  const face = CLUB.face({ el, textEm, words, bestSplit, photoFront });
+  const face = CLUB.face({
+    el, textEm, words, bestSplit, photoFront, splits, fitLines, renderName, setVars, digitEm,
+  });
 
   function faceMode(cw, ch) {
     const ratio = cw / ch;

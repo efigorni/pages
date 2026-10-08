@@ -1,6 +1,6 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
 // VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
-const VERSION = 'maccabi-memory-d1a0839d5414';
+const VERSION = 'maccabi-memory-569398e6dd6a';
 const ASSETS = [
   './',
   'index.html',

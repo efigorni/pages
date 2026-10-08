@@ -312,7 +312,7 @@ def lint_variables(game):
     and a club read without a fallback that nothing defines."""
     style, club = read(REPO / game / "club/style.css"), read(REPO / game / "club/club.js")
     base, engine = read(SHARED / "base.css"), read(SHARED / "engine.js")
-    js_set = set(re.findall(r"setProperty\(\s*['`](--[\w-]+)['`]", club))
+    js_set = set(re.findall(r"['`](--[\w-]+)['`]", club))  # setProperty('--x', …) and setVars keys
     engine_set = set(re.findall(r"setProperty\(\s*['`](--[\w-]+)['`]", engine))
     defined = set(re.findall(r"(--[\w-]+)\s*:", style))
     reads = set(re.findall(r"var\(\s*(--[\w-]+)", style + base + club + engine))

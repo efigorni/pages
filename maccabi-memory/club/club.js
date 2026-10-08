@@ -8,18 +8,18 @@ const CLUB = {
   face(kit) {
     'use strict';
 
-    const { el, textEm, words, bestSplit, photoFront } = kit;
+    const { el, photoFront, splits, fitLines, renderName, setVars } = kit;
     const NAME_FONT = '700 100px Karantina';
     const NAME_LINE_HEIGHT = 0.84;
     const digitEm = { value: 0.46 };
 
+    // Two lines (one for a single word), or three when that sets the name bigger.
     function prepare(players) {
-      digitEm.value = textEm('0123456789', '800 100px "Barlow Condensed"') / 10 || 0.46;
+      digitEm.value = kit.digitEm('800 100px "Barlow Condensed"', 0.46);
       players.forEach((p) => {
-        const list = words(p.name_he);
-        const whole = bestSplit(list, 1, NAME_FONT);
-        p.split2 = (list.length > 1 && bestSplit(list, 2, NAME_FONT)) || whole;
-        p.split3 = list.length >= 3 ? bestSplit(list, 3, NAME_FONT) : null;
+        const all = splits(p.name_he, NAME_FONT, 0, 3);
+        p.split2 = all.find((s) => s.lines.length === 2) || all[0];
+        p.split3 = all.find((s) => s.lines.length === 3) || null;
       });
     }
 
@@ -47,12 +47,10 @@ const CLUB = {
 
     function apply(s, cw, ch, mode) {
       const v = faceVars(cw, ch, mode);
-      s.setProperty('--photo-w', `${v.photoW}px`);
-      s.setProperty('--photo-h', `${v.photoH}px`);
-      s.setProperty('--ipad', `${v.pad}px`);
-      s.setProperty('--num-fs', `${v.num}px`);
-      s.setProperty('--name-fs', `${v.name}px`);
-      s.setProperty('--zoom', String(v.zoom || 1));
+      setVars(s, {
+        '--photo-w': `${v.photoW}px`, '--photo-h': `${v.photoH}px`, '--ipad': `${v.pad}px`,
+        '--num-fs': `${v.num}px`, '--name-fs': `${v.name}px`, '--zoom': String(v.zoom || 1),
+      });
       return v;
     }
 
@@ -66,34 +64,13 @@ const CLUB = {
       return { w: v.nameW, h: ch - v.photoH - v.num * 0.78 - v.pad * 1.2 };
     }
 
-    function nameSize(split, box, base) {
-      return Math.min(base, box.w / split.em, box.h / (split.lines.length * NAME_LINE_HEIGHT));
-    }
-
-    function renderName(cardEl, lines) {
-      const name = cardEl.querySelector('.name');
-      const key = lines.join('|');
-      if (name.dataset.lines === key) return;
-      name.dataset.lines = key;
-      name.textContent = '';
-      lines.forEach((line) => name.appendChild(el('span', null, line)));
-    }
-
     function fit(cardEl, p, geo) {
       if (!p.split2) return;
       const box = nameBox(geo, p);
       const base = geo.v.name;
-      let split = p.split2;
-      let size = nameSize(split, box, base);
-      if (p.split3) {
-        const size3 = nameSize(p.split3, box, base);
-        if (size3 > size * 1.04) {
-          split = p.split3;
-          size = size3;
-        }
-      }
-      renderName(cardEl, split.lines);
-      cardEl.style.setProperty('--fit', Math.max(0.4, size / base).toFixed(3));
+      const best = fitLines([p.split2, p.split3].filter(Boolean), { cap: base, w: box.w, h: box.h, lh: NAME_LINE_HEIGHT });
+      renderName(cardEl, best.split.lines);
+      cardEl.style.setProperty('--fit', Math.max(0.4, best.size / base).toFixed(3));
     }
 
     function build(p) {

@@ -9,19 +9,16 @@ const CLUB = {
   face(kit) {
     'use strict';
 
-    const { el, textEm, words, bestSplit, photoFront } = kit;
+    const { el, photoFront, splits, fitLines, renderName, setVars } = kit;
     const NAME_FONT = '600 100px Rubik';
     const NAME_LH = 1.04;
     const digitEm = { value: 0.3 };
 
+    // One line, plus a two-line split when the name allows one ("בר כהן" doesn't).
     function prepare(players) {
-      digitEm.value = textEm('0123456789', '700 100px Karantina') / 10 || 0.3;
+      digitEm.value = kit.digitEm('700 100px Karantina', 0.3);
       players.forEach((p) => {
-        const list = words(p.name_he);
-        p.nameSplits = [bestSplit(list, 1, NAME_FONT)];
-        // null when no two-line split is allowed: "בר כהן" keeps בר with its next word
-        const two = list.length > 1 && bestSplit(list, 2, NAME_FONT);
-        if (two) p.nameSplits.push(two);
+        p.nameSplits = splits(p.name_he, NAME_FONT);
       });
     }
 
@@ -45,36 +42,19 @@ const CLUB = {
 
     function apply(st, cw, ch, mode) {
       const v = faceVars(cw, ch, mode);
-      st.setProperty('--frame', `${v.frame}px`);
-      st.setProperty('--band-h', `${v.band}px`);
-      st.setProperty('--photo-s', `${v.s}px`);
-      st.setProperty('--photo-x', `${v.x}px`);
-      st.setProperty('--photo-y', `${v.y}px`);
-      st.setProperty('--panel-w', `${v.panelW}px`);
-      st.setProperty('--hex-w', `${v.panelW * 0.96}px`);
-      st.setProperty('--num-fs', `${v.num}px`);
-      st.setProperty('--num-top', `${v.numTop}px`);
+      setVars(st, {
+        '--frame': `${v.frame}px`, '--band-h': `${v.band}px`, '--photo-s': `${v.s}px`, '--photo-x': `${v.x}px`,
+        '--photo-y': `${v.y}px`, '--panel-w': `${v.panelW}px`, '--hex-w': `${v.panelW * 0.96}px`,
+        '--num-fs': `${v.num}px`, '--num-top': `${v.numTop}px`,
+      });
       return v;
-    }
-
-    function renderName(scope, lines) {
-      const name = scope.querySelector('.name');
-      const key = lines.join('|');
-      if (name.dataset.lines === key) return;
-      name.dataset.lines = key;
-      name.textContent = '';
-      lines.forEach((line) => name.appendChild(el('span', null, line)));
     }
 
     // One line or two, whichever sets the name bigger; the second line has to buy more than 4%.
     function fit(cardEl, p, geo) {
       if (!p.nameSplits) return;
       const v = geo.v;
-      let best = null;
-      p.nameSplits.forEach((split) => {
-        const size = Math.min(v.band * 0.5, v.nameW / split.em, v.nameH / (split.lines.length * NAME_LH));
-        if (!best || size > best.size * 1.04) best = { split, size };
-      });
+      const best = fitLines(p.nameSplits, { cap: v.band * 0.5, w: v.nameW, h: v.nameH, lh: NAME_LH });
       renderName(cardEl, best.split.lines);
       cardEl.style.setProperty('--name-px', `${best.size.toFixed(2)}px`);
     }

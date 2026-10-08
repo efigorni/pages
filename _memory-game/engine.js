@@ -368,6 +368,61 @@
     return best;
   }
 
+  // The one-line split, then the best split into 2..max lines; a count no split allows is left out.
+  function splits(text, font, track, max = 2) {
+    const list = words(text);
+    const out = [];
+    for (let n = 1; n <= Math.min(max, list.length); n++) {
+      const split = bestSplit(list, n, font, track);
+      if (split) out.push(split);
+    }
+    return out;
+  }
+
+  // The candidate split that sets the name biggest in a w x h box, at most cap; a later candidate
+  // has to buy more than 4% of size.
+  function fitLines(candidates, { cap, w, h, lh }) {
+    let best = null;
+    candidates.forEach((split) => {
+      const size = Math.min(cap, w / split.em, h / (split.lines.length * lh));
+      if (!best || size > best.size * 1.04) best = { split, size };
+    });
+    return best;
+  }
+
+  // The name element's lines: one tier (an array of lines), or {first, last} tiers, each a span of
+  // line spans. data-lines keeps a resize from rebuilding an unchanged name.
+  function renderName(scope, lines) {
+    const name = scope.querySelector('.name');
+    const tiers = Array.isArray(lines) ? null : lines;
+    const key = tiers ? `${tiers.first.join('|')}/${tiers.last.join('|')}` : lines.join('|');
+    if (name.dataset.lines === key) return;
+    name.dataset.lines = key;
+    name.textContent = '';
+    const fill = (parent, list) => list.forEach((line) => parent.appendChild(el('span', null, line)));
+    if (!tiers) {
+      fill(name, lines);
+      return;
+    }
+    if (tiers.first.length) {
+      const top = el('span', 'first');
+      fill(top, tiers.first);
+      name.appendChild(top);
+    }
+    const big = el('span', 'last');
+    fill(big, tiers.last);
+    name.appendChild(big);
+  }
+
+  function setVars(style, vars) {
+    Object.entries(vars).forEach(([key, value]) => style.setProperty(key, value));
+  }
+
+  // The width of one digit of `font`, in em.
+  function digitEm(font, fallback) {
+    return textEm('0123456789', font) / 10 || fallback;
+  }
+
   /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
   // Every face starts with the photo; a match flight starts from its `.photo img`.
@@ -384,7 +439,9 @@
     return front;
   }
 
-  const face = CLUB.face({ el, textEm, words, bestSplit, photoFront });
+  const face = CLUB.face({
+    el, textEm, words, bestSplit, photoFront, splits, fitLines, renderName, setVars, digitEm,
+  });
 
   function faceMode(cw, ch) {
     const ratio = cw / ch;

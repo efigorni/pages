@@ -9,7 +9,7 @@ const CLUB = {
   face(kit) {
     'use strict';
 
-    const { el, textEm, words, bestSplit, photoFront } = kit;
+    const { photoFront, el, splits, renderName, setVars } = kit;
     const FIRST_FONT = '400 100px Heebo';
     const LAST_FONT = '800 100px Heebo';
     const LAST_TRACK = -0.04;
@@ -18,17 +18,9 @@ const CLUB = {
     const FIRST_RATIO = 0.62;
     const digitEm = { value: 0.57 };
 
-    // One line, plus the most balanced two-line split when there are several words.
-    function splits(text, font, track) {
-      const list = words(text);
-      if (!list.length) return [];
-      const one = bestSplit(list, 1, font, track);
-      const two = list.length > 1 && bestSplit(list, 2, font, track);
-      return two ? [one, two] : [one];
-    }
-
+    // Each tier: one line, plus the most balanced two-line split when there are several words.
     function prepare(players) {
-      digitEm.value = textEm('0123456789', '700 100px Heebo') / 10 || 0.57;
+      digitEm.value = kit.digitEm('700 100px Heebo', 0.57);
       players.forEach((p) => {
         p.firstSplits = splits(p.first_he, FIRST_FONT, 0);
         p.lastSplits = splits(p.last_he || p.name_he, LAST_FONT, LAST_TRACK);
@@ -75,32 +67,12 @@ const CLUB = {
 
     function apply(s, cw, ch, mode) {
       const v = faceVars(cw, ch, mode);
-      s.setProperty('--frame', `${v.frame}px`);
-      s.setProperty('--photo-s', `${v.s}px`);
-      s.setProperty('--photo-x', `${v.x}px`);
-      s.setProperty('--ipad', `${v.pad}px`);
-      s.setProperty('--num-fs', `${v.num}px`);
-      s.setProperty('--num-top', `${v.numTop}px`);
-      s.setProperty('--name-w', `${v.nameW}px`);
-      s.setProperty('--name-b', `${v.nameB}px`);
-      s.setProperty('--fade-h', `${v.fade * 100}%`);
+      setVars(s, {
+        '--frame': `${v.frame}px`, '--photo-s': `${v.s}px`, '--photo-x': `${v.x}px`, '--ipad': `${v.pad}px`,
+        '--num-fs': `${v.num}px`, '--num-top': `${v.numTop}px`, '--name-w': `${v.nameW}px`, '--name-b': `${v.nameB}px`,
+        '--fade-h': `${v.fade * 100}%`,
+      });
       return v;
-    }
-
-    function renderName(scope, first, last) {
-      const name = scope.querySelector('.name');
-      const key = `${first.join('|')}/${last.join('|')}`;
-      if (name.dataset.lines === key) return;
-      name.dataset.lines = key;
-      name.textContent = '';
-      if (first.length) {
-        const top = el('span', 'first');
-        first.forEach((line) => top.appendChild(el('span', null, line)));
-        name.appendChild(top);
-      }
-      const big = el('span', 'last');
-      last.forEach((line) => big.appendChild(el('span', null, line)));
-      name.appendChild(big);
     }
 
     // Tries one or two lines per tier and keeps the biggest surname; an extra line has to buy
@@ -123,7 +95,7 @@ const CLUB = {
           best = { f, l, first, last, lines, score };
         }
       }));
-      renderName(cardEl, best.f ? best.f.lines : [], best.l.lines);
+      renderName(cardEl, { first: best.f ? best.f.lines : [], last: best.l.lines });
       cardEl.style.setProperty('--first-px', `${best.first.toFixed(2)}px`);
       cardEl.style.setProperty('--last-px', `${best.last.toFixed(2)}px`);
     }
@@ -133,7 +105,7 @@ const CLUB = {
       front.append(el('span', 'num', String(p.number)), el('span', 'name'));
       const first = p.firstSplits && p.firstSplits[0];
       const last = p.lastSplits && p.lastSplits[0];
-      renderName(front, first ? first.lines : [], last ? last.lines : [p.name_he]);
+      renderName(front, { first: first ? first.lines : [], last: last ? last.lines : [p.name_he] });
       return front;
     }
 

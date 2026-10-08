@@ -762,7 +762,7 @@ const CLUB = {
   face(kit) {
     'use strict';
 
-    const { el, textEm, words, bestSplit, photoFront } = kit;
+    const { photoFront, el, splits, renderName, setVars } = kit;
     const FIRST_FONT = '400 100px Heebo';
     const LAST_FONT = '800 100px Heebo';
     const LAST_TRACK = -0.04;
@@ -771,17 +771,9 @@ const CLUB = {
     const FIRST_RATIO = 0.62;
     const digitEm = { value: 0.57 };
 
-    // One line, plus the most balanced two-line split when there are several words.
-    function splits(text, font, track) {
-      const list = words(text);
-      if (!list.length) return [];
-      const one = bestSplit(list, 1, font, track);
-      const two = list.length > 1 && bestSplit(list, 2, font, track);
-      return two ? [one, two] : [one];
-    }
-
+    // Each tier: one line, plus the most balanced two-line split when there are several words.
     function prepare(players) {
-      digitEm.value = textEm('0123456789', '700 100px Heebo') / 10 || 0.57;
+      digitEm.value = kit.digitEm('700 100px Heebo', 0.57);
       players.forEach((p) => {
         p.firstSplits = splits(p.first_he, FIRST_FONT, 0);
         p.lastSplits = splits(p.last_he || p.name_he, LAST_FONT, LAST_TRACK);
@@ -828,32 +820,12 @@ const CLUB = {
 
     function apply(s, cw, ch, mode) {
       const v = faceVars(cw, ch, mode);
-      s.setProperty('--frame', `${v.frame}px`);
-      s.setProperty('--photo-s', `${v.s}px`);
-      s.setProperty('--photo-x', `${v.x}px`);
-      s.setProperty('--ipad', `${v.pad}px`);
-      s.setProperty('--num-fs', `${v.num}px`);
-      s.setProperty('--num-top', `${v.numTop}px`);
-      s.setProperty('--name-w', `${v.nameW}px`);
-      s.setProperty('--name-b', `${v.nameB}px`);
-      s.setProperty('--fade-h', `${v.fade * 100}%`);
+      setVars(s, {
+        '--frame': `${v.frame}px`, '--photo-s': `${v.s}px`, '--photo-x': `${v.x}px`, '--ipad': `${v.pad}px`,
+        '--num-fs': `${v.num}px`, '--num-top': `${v.numTop}px`, '--name-w': `${v.nameW}px`, '--name-b': `${v.nameB}px`,
+        '--fade-h': `${v.fade * 100}%`,
+      });
       return v;
-    }
-
-    function renderName(scope, first, last) {
-      const name = scope.querySelector('.name');
-      const key = `${first.join('|')}/${last.join('|')}`;
-      if (name.dataset.lines === key) return;
-      name.dataset.lines = key;
-      name.textContent = '';
-      if (first.length) {
-        const top = el('span', 'first');
-        first.forEach((line) => top.appendChild(el('span', null, line)));
-        name.appendChild(top);
-      }
-      const big = el('span', 'last');
-      last.forEach((line) => big.appendChild(el('span', null, line)));
-      name.appendChild(big);
     }
 
     // Tries one or two lines per tier and keeps the biggest surname; an extra line has to buy
@@ -876,7 +848,7 @@ const CLUB = {
           best = { f, l, first, last, lines, score };
         }
       }));
-      renderName(cardEl, best.f ? best.f.lines : [], best.l.lines);
+      renderName(cardEl, { first: best.f ? best.f.lines : [], last: best.l.lines });
       cardEl.style.setProperty('--first-px', `${best.first.toFixed(2)}px`);
       cardEl.style.setProperty('--last-px', `${best.last.toFixed(2)}px`);
     }
@@ -886,7 +858,7 @@ const CLUB = {
       front.append(el('span', 'num', String(p.number)), el('span', 'name'));
       const first = p.firstSplits && p.firstSplits[0];
       const last = p.lastSplits && p.lastSplits[0];
-      renderName(front, first ? first.lines : [], last ? last.lines : [p.name_he]);
+      renderName(front, { first: first ? first.lines : [], last: last ? last.lines : [p.name_he] });
       return front;
     }
 
@@ -1265,6 +1237,61 @@ const CLUB = {
     return best;
   }
 
+  // The one-line split, then the best split into 2..max lines; a count no split allows is left out.
+  function splits(text, font, track, max = 2) {
+    const list = words(text);
+    const out = [];
+    for (let n = 1; n <= Math.min(max, list.length); n++) {
+      const split = bestSplit(list, n, font, track);
+      if (split) out.push(split);
+    }
+    return out;
+  }
+
+  // The candidate split that sets the name biggest in a w x h box, at most cap; a later candidate
+  // has to buy more than 4% of size.
+  function fitLines(candidates, { cap, w, h, lh }) {
+    let best = null;
+    candidates.forEach((split) => {
+      const size = Math.min(cap, w / split.em, h / (split.lines.length * lh));
+      if (!best || size > best.size * 1.04) best = { split, size };
+    });
+    return best;
+  }
+
+  // The name element's lines: one tier (an array of lines), or {first, last} tiers, each a span of
+  // line spans. data-lines keeps a resize from rebuilding an unchanged name.
+  function renderName(scope, lines) {
+    const name = scope.querySelector('.name');
+    const tiers = Array.isArray(lines) ? null : lines;
+    const key = tiers ? `${tiers.first.join('|')}/${tiers.last.join('|')}` : lines.join('|');
+    if (name.dataset.lines === key) return;
+    name.dataset.lines = key;
+    name.textContent = '';
+    const fill = (parent, list) => list.forEach((line) => parent.appendChild(el('span', null, line)));
+    if (!tiers) {
+      fill(name, lines);
+      return;
+    }
+    if (tiers.first.length) {
+      const top = el('span', 'first');
+      fill(top, tiers.first);
+      name.appendChild(top);
+    }
+    const big = el('span', 'last');
+    fill(big, tiers.last);
+    name.appendChild(big);
+  }
+
+  function setVars(style, vars) {
+    Object.entries(vars).forEach(([key, value]) => style.setProperty(key, value));
+  }
+
+  // The width of one digit of `font`, in em.
+  function digitEm(font, fallback) {
+    return textEm('0123456789', font) / 10 || fallback;
+  }
+
   /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
   // Every face starts with the photo; a match flight starts from its `.photo img`.
@@ -1281,7 +1308,9 @@ const CLUB = {
     return front;
   }
 
-  const face = CLUB.face({ el, textEm, words, bestSplit, photoFront });
+  const face = CLUB.face({
+    el, textEm, words, bestSplit, photoFront, splits, fitLines, renderName, setVars, digitEm,
+  });
 
   function faceMode(cw, ch) {
     const ratio = cw / ch;
