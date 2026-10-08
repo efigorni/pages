@@ -1,4 +1,4 @@
-const VERSION = 'maccabi-memory-59b159fad37e';
+const VERSION = 'maccabi-memory-de75c900b2db';
 const ASSETS = [
   './',
   'index.html',

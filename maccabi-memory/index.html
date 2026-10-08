@@ -998,6 +998,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   /* ---------- names: line breaks and fit ---------- */
 
   const KEEP_WITH_NEXT = new Set(['בן', 'בר', 'אבו', 'אל', 'דה', 'די', 'ואן', 'פון']);
+  const NAME_LINE_HEIGHT = 0.84;
   const digitEm = { value: 0.46 };
   let measurer = null;
 
@@ -1007,24 +1008,33 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     return measurer.measureText(text).width / 100;
   }
 
-  function splitName(name) {
-    const words = name.trim().split(/\s+/);
-    if (words.length < 2) return [name.trim()];
-    let best = null;
-    for (let i = 1; i < words.length; i++) {
+  function partitions(words, count) {
+    if (count === 1) return [[words.join(' ')]];
+    const out = [];
+    for (let i = 1; i <= words.length - count + 1; i++) {
       if (KEEP_WITH_NEXT.has(words[i - 1])) continue;
-      const lines = [words.slice(0, i).join(' '), words.slice(i).join(' ')];
-      const width = Math.max(textEm(lines[0]), textEm(lines[1]));
-      if (!best || width < best.width) best = { lines, width };
+      const head = words.slice(0, i).join(' ');
+      partitions(words.slice(i), count - 1).forEach((rest) => out.push([head].concat(rest)));
     }
-    return best ? best.lines : [name.trim()];
+    return out;
+  }
+
+  function bestSplit(words, count) {
+    let best = null;
+    partitions(words, count).forEach((lines) => {
+      const em = Math.max(...lines.map((line) => textEm(line)));
+      if (!best || em < best.em) best = { lines, em };
+    });
+    return best;
   }
 
   function prepareNames() {
     digitEm.value = textEm('0123456789', '800 100px "Barlow Condensed"') / 10 || 0.46;
     ALL.forEach((p) => {
-      p.lines = splitName(p.name_he);
-      p.lineEm = Math.max(...p.lines.map((line) => textEm(line)));
+      const words = p.name_he.trim().split(/\s+/);
+      const whole = { lines: [words.join(' ')], em: textEm(words.join(' ')) };
+      p.split2 = (words.length > 1 && bestSplit(words, 2)) || whole;
+      p.split3 = words.length >= 3 ? bestSplit(words, 3) : null;
     });
   }
 
@@ -1073,12 +1083,44 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     return { cw, ch, mode, v };
   }
 
+  function nameBox(geo, p) {
+    const { v, mode, cw, ch } = geo;
+    if (mode === 'side') return { w: v.nameW, h: ch - v.pad * 2.7 - v.num * 0.78 };
+    if (mode === 'band') {
+      const numW = String(p.number).length * digitEm.value * v.num;
+      return { w: cw - numW - v.pad * 3, h: (ch - v.photoH) * 0.92 };
+    }
+    return { w: v.nameW, h: ch - v.photoH - v.num * 0.78 - v.pad * 1.2 };
+  }
+
+  function nameSize(split, box, base) {
+    return Math.min(base, box.w / split.em, box.h / (split.lines.length * NAME_LINE_HEIGHT));
+  }
+
+  function renderName(cardEl, lines) {
+    const name = cardEl.querySelector('.name');
+    const key = lines.join('|');
+    if (name.dataset.lines === key) return;
+    name.dataset.lines = key;
+    name.textContent = '';
+    lines.forEach((line) => name.appendChild(el('span', null, line)));
+  }
+
   function fitName(cardEl, p, geo) {
-    const { v, mode, cw } = geo;
-    const numW = String(p.number).length * digitEm.value * v.num;
-    const avail = mode === 'band' ? cw - numW - v.pad * 3 : v.nameW;
-    const fit = Math.max(0.4, Math.min(1, avail / ((p.lineEm || 3) * v.name)));
-    cardEl.style.setProperty('--fit', fit.toFixed(3));
+    if (!p.split2) return;
+    const box = nameBox(geo, p);
+    const base = geo.v.name;
+    let split = p.split2;
+    let size = nameSize(split, box, base);
+    if (p.split3) {
+      const size3 = nameSize(p.split3, box, base);
+      if (size3 > size * 1.04) {
+        split = p.split3;
+        size = size3;
+      }
+    }
+    renderName(cardEl, split.lines);
+    cardEl.style.setProperty('--fit', Math.max(0.4, size / base).toFixed(3));
   }
 
   /* ---------- DOM ---------- */
@@ -1095,7 +1137,9 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     const info = el('span', 'info');
     info.appendChild(el('span', 'num', String(p.number)));
     const name = el('span', 'name');
-    (p.lines || [p.name_he]).forEach((line) => name.appendChild(el('span', null, line)));
+    const lines = p.split2 ? p.split2.lines : [p.name_he];
+    name.dataset.lines = lines.join('|');
+    lines.forEach((line) => name.appendChild(el('span', null, line)));
     info.appendChild(name);
     front.append(photo, info);
     return front;
@@ -1207,6 +1251,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
       setTimeout(() => { if (game.round === round) board.classList.remove('dealing'); }, dealMs);
     }
     setPhase('idle');
+    keepAwake();
   }
 
   function lift(card) {
@@ -1334,6 +1379,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     if (game.phase === 'won') return;
     clearTimeout(game.winFallback);
     setPhase('won');
+    letSleep();
     show('win');
     sound.sfx('win');
     if (!reducedMotion.matches) {
@@ -1463,14 +1509,30 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   }
 
   let wakeLock = null;
+  let wakePending = false;
+
+  function inGame() {
+    return game.phase === 'idle' || game.phase === 'one' || game.phase === 'two' || game.phase === 'finishing';
+  }
+
+  function letSleep() {
+    const lock = wakeLock;
+    wakeLock = null;
+    if (lock) lock.release().catch(() => {});
+  }
+
   async function keepAwake() {
+    if (!('wakeLock' in navigator) || wakeLock || wakePending || document.visibilityState !== 'visible') return;
+    wakePending = true;
     try {
-      if ('wakeLock' in navigator && !wakeLock && document.visibilityState === 'visible') {
-        wakeLock = await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release', () => { wakeLock = null; });
-      }
+      const lock = await navigator.wakeLock.request('screen');
+      lock.addEventListener('release', () => { if (wakeLock === lock) wakeLock = null; });
+      wakeLock = lock;
+      if (!inGame()) letSleep();
     } catch (e) {
       wakeLock = null;
+    } finally {
+      wakePending = false;
     }
   }
 
@@ -1508,7 +1570,6 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     if (game.phase !== 'start') return;
     sound.unlock();
     goFullscreen();
-    keepAwake();
     hide('start');
     newGame();
     sound.say([clip.ui('start', START_LINE)]);
@@ -1551,7 +1612,8 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   document.addEventListener('contextmenu', (event) => event.preventDefault());
   document.addEventListener('gesturestart', (event) => event.preventDefault());
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && game.phase !== 'start') keepAwake();
+    if (document.visibilityState !== 'visible') letSleep();
+    else if (inGame()) keepAwake();
   });
 
   if (window.ResizeObserver) new ResizeObserver(() => layout()).observe(board);
@@ -1570,11 +1632,6 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   fontsReady.catch(() => {}).then(() => {
     prepareNames();
     buildFan();
-    game.cards.forEach((card) => {
-      const name = card.el.querySelector('.name');
-      name.textContent = '';
-      card.p.lines.forEach((line) => name.appendChild(el('span', null, line)));
-    });
     layout();
   });
 
