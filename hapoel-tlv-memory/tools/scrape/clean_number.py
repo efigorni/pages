@@ -3,8 +3,8 @@
 The numeral is one flat colour (measured per photo: the most common opaque colour in the top-right quarter,
 #FF1521 in every photo so far); the shirt reds are shaded and differ. Pixels within --tol of that colour are labelled
 into connected blobs, and only blobs of at least --min-area pixels that start in the top 15% of the photo (the
-glyphs), plus any number-coloured blob lying wholly within the glyphs' rows and slivers within 25 px of them and no
-lower than their bottom (the pieces where the white outline cuts a glyph), are cleared. A flat shirt highlight can match the colour (Toriel's shoulder does), but it never starts
+glyphs), plus any number-coloured blob lying wholly within the glyphs' rows and columns (25 px either side) and slivers
+within 25 px of them and no lower than their bottom (the pieces where the white outline cuts a glyph), are cleared. A flat shirt highlight can match the colour (Toriel's shoulder does), but it never starts
 in the top band, so the shirt is never punched out. The glyphs' anti-aliased rim (a red-to-white or red-to-transparent blend) is cleared within --rim px
 when it is redder than it is white. The white sticker outline was drawn semi-transparent over the numeral, so where
 they overlapped it is pink: pinkish pixels within 24 px of a glyph are set to white. The player and the shirt are
@@ -25,18 +25,25 @@ from PIL import Image
 from scipy import ndimage
 
 
-def number_colour(arr: np.ndarray) -> tuple[int, int, int]:
+def number_colour(arr: np.ndarray) -> tuple[int, int, int] | None:
+    """The numeral's flat red, or None when the photo has no numeral-red pixel at all."""
     h, w, _ = arr.shape
     q = arr[: h // 2, w // 2:].reshape(-1, 4)
     q = q[q[:, 3] == 255]
     red = q[(q[:, 0] > 200) & (q[:, 1] < 80) & (q[:, 2] < 90)]
+    if not len(red):
+        return None
     vals, counts = np.unique(red[:, :3], axis=0, return_counts=True)
     return tuple(int(v) for v in vals[counts.argmax()])
 
 
 def clean(img: Image.Image, tol: int = 14, min_area: int = 3000, rim: int = 3, top_band: float = 0.15):
     arr = np.array(img.convert("RGBA"))
-    c = np.array(number_colour(arr), dtype=np.int16)
+    colour = number_colour(arr)
+    if colour is None:  # nothing to remove; the caller's check reports the missing numeral
+        return Image.fromarray(arr, "RGBA"), {"number_rgb": None, "blobs": 0, "cleared_px": 0, "cleared_share": 0.0,
+                                              "outline_px_whitened": 0, "bbox_number": None}
+    c = np.array(colour, dtype=np.int16)
     rgb = arr[:, :, :3].astype(np.int16)
     close = (np.abs(rgb - c) <= tol).all(axis=2) & (arr[:, :, 3] > 0)
     labels, n = ndimage.label(close, structure=np.ones((3, 3)))
@@ -51,9 +58,13 @@ def clean(img: Image.Image, tol: int = 14, min_area: int = 3000, rim: int = 3, t
     if keep.any():
         rows = np.nonzero(keep.any(axis=1))[0]
         top, bottom = rows.min(), rows.max()
+        cols = np.nonzero(keep.any(axis=0))[0]
+        left, right = cols.min() - 25, cols.max() + 25
         # pieces the white outline cuts off a glyph: number-coloured blobs lying wholly within the numeral's rows
+        # and beside its glyphs (a red shirt highlight at those rows but elsewhere stays)
         pieces = [i + 1 for i, sl in enumerate(slices)
-                  if sl is not None and areas[i] >= 20 and sl[0].start >= top - 5 and sl[0].stop - 1 <= bottom + 3]
+                  if sl is not None and areas[i] >= 20 and sl[0].start >= top - 5 and sl[0].stop - 1 <= bottom + 3
+                  and sl[1].start >= left and sl[1].stop - 1 <= right]
         keep |= np.isin(labels, pieces)
         # slivers: number-coloured pixels close to a glyph and no lower than its bottom
         near = ndimage.binary_dilation(keep, iterations=25)
