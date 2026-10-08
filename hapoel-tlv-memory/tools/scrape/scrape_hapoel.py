@@ -95,6 +95,27 @@ def season_date(ddmm: str) -> str:
     return f"{2026 if m >= 7 else 2027:04d}-{m:02d}-{d:02d}"
 
 
+def pair_listings(he: list[dict], en: list[dict]) -> list[tuple[dict, dict]]:
+    """Each Hebrew card with its English twin, in Hebrew page order. The two language versions are separate
+    WordPress posts with different ids, but they show the same uploaded photo, so that is the key; a card
+    without exactly one twin stops the scrape (a wrong pair would put one player's id, clips and photo on
+    another's card)."""
+    by_photo = {}
+    for y in en:
+        if not y["card_img_largest"] or y["card_img_largest"] in by_photo:
+            raise SystemExit(f"English listing: {y['name']} has no photo of its own ({y['card_img_largest']})")
+        by_photo[y["card_img_largest"]] = y
+    pairs = []
+    for x in he:
+        y = by_photo.pop(x["card_img_largest"], None)
+        if y is None:
+            raise SystemExit(f"Hebrew listing: {x['name']} has no English card with the same photo ({x['card_img_largest']})")
+        pairs.append((x, y))
+    if by_photo:
+        raise SystemExit(f"English listing: no Hebrew card for {', '.join(y['name'] for y in by_photo.values())}")
+    return pairs
+
+
 def load_json(p: Path):
     return json.loads(p.read_text(encoding="utf-8"))
 
@@ -283,12 +304,8 @@ def main() -> int:
 
     he_html = (html_dir / "players-fresh.html").read_text(encoding="utf-8")
     en_html = (html_dir / "players-en.html").read_text(encoding="utf-8")
-    he, en = parse_listing(he_html), parse_listing(en_html)
-    if len(he) != len(en) or any(x["section_index"] != y["section_index"] for x, y in zip(he, en)):
-        raise SystemExit("HE and EN listings differ in shape")
-
     players = []
-    for x, y in zip(he, en):
+    for x, y in pair_listings(parse_listing(he_html), parse_listing(en_html)):
         pop = parse_popup(load_json(html_dir / f"members/{x['member_id']}.json")["data"])
         if norm_name(pop["name"]) != norm_name(x["name"]):
             raise SystemExit(f"popup name differs: {pop['name']} vs {x['name']}")
