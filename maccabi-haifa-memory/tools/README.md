@@ -1,144 +1,39 @@
 # maccabi-haifa-memory tools
 
-What this game needs to refresh its roster when the squad changes (a new season,
-transfers). The game itself (`../index.html`) needs none of it at runtime. The engine,
-the shared styles, the service worker and the generic tools live in
-[`_memory-game/`](../../_memory-game/README.md), which also explains which parts of
-`../index.html` are generated.
+What this game needs besides the shared tools: its scraper. Everything after the scrape
+(photos, voice clips, the page, the test) is the same for every club; see "Refresh a
+club" in [`_memory-game/README.md`](../../_memory-game/README.md).
 
 | Here | What it is |
 |---|---|
-| `scrape/` | Reads mhaifafc.com (the /players cards, each player page, the season's game records) into a data directory: `players.json`, raw photos, contact sheets, design reference |
-| `tts/` | `pronunciations.json`: each name's pinned IPA, the reason for every change and what to listen for |
-| `page/icons/` | The two icon SVGs |
-| `game.json` | The name model `build_page.py data` writes into DATA: `"first-last"`, the card's two tiers and `speak_he` |
+| `scrape/` | Reads mhaifafc.com (the /players cards, each player page, the season's game records) into `<work>/data/`: `players.json`, `matches.json`, raw photos, design reference |
+| `tts/pronunciations.json` | Each name's pinned IPA, the reason for every change and what to listen for |
+| `page/icons/` | The two icon SVGs (`render_icons.sh --game maccabi-haifa-memory`) |
 
-Downloads are untrusted data: keep them in a work directory **outside the repo**, run
-Python with `-I`, and pass paths as arguments. Commands below run from the repo root;
-`<work>` is that scratch directory.
+## Scrape
 
-## Refreshing the roster
-
-1. **Scrape** (about 75 polite requests, cached in `<work>/data/html/`):
-
-   ```sh
-   uv run --with requests --with beautifulsoup4 --with pillow python -I -u \
-       maccabi-haifa-memory/tools/scrape/scrape_haifa.py --out <work>/data \
-       --shoulder-override pedro-barzao=0.415 --shoulder-override adam-grimberg=0.39 --refresh
-   uv run --with pillow python -I -u _memory-game/tools/scrape/contact_sheet.py --game maccabi-haifa-memory --data <work>/data
-   ```
-
-   - **Selection** happens here. The metric is this season's appearances in all
-     competitions, counted from the club's own game records (`/matches/<id>`): the
-     "הופעות" number in a player page's header carries last season over, so it is not
-     used. Pool = the top 23 by appearances; main 11 = the goalkeeper with the most
-     appearances plus the 10 outfield players with the most (tiebreaks: starts, minutes,
-     lower number); bench = the other outfield players in the pool; backup goalkeepers
-     are excluded.
-   - **Names**: `name_he` is the name as the site shows it, `card_name_lines` is the
-     card's own split (small first line, bold second line), and `speak_he` is what the
-     voice says: the text inside a trailing "(...)" when there is one, else the name.
-   - Check `players.json` before trusting a run: expect 11 starters and at least 4 bench
-     players, and look at `contact-sheet-crops.png`. The `metric` and `crop_rule` texts
-     in the script describe the 2026/27 season; update them for a new one.
-   - The `--shoulder-override` values are hand-read for two photos where the alpha
-     outline's shoulder test fires inside the hair. A new photo set needs a fresh look
-     (`contact-sheet-auto.png` shows where auto framing fails).
-   - `design_capture.py` (Playwright) retakes the /players reference screenshots and
-     computed styles. `check_games.py`, `compare_apps.py` and `explore_*.py` are the
-     cross-checks behind the metric choice; each takes the scrape folder (for `rsc.py`)
-     and a saved page or folder as arguments.
-
-2. **Photos**:
-
-   ```sh
-   uv run --with pillow python -I _memory-game/tools/images/build_images.py \
-       <work>/data/players.json maccabi-haifa-memory/img --mode box \
-       --sheet <work>/crops.png --sheet-colors 001d05,204126,86d094
-   ```
-
-   - `--mode box` uses each player's `crop` from the scrape. Open `crops.png`: faces
-     should be the same size and height. Fix an outlier with `--overrides <file>.json`,
-     e.g. `{"some-id": {"dy": 0.02, "zoom": 1.1}}`.
-   - Output: WebP with alpha at the crop's native resolution, capped at 400 px, never
-     upscaled, with the shirt faded out over the bottom 14% (`--fade`) so it never ends
-     in a hard line on a card taller than the photo. `git rm` the `img/<id>.webp` of
-     players who left.
-
-3. **Voice clips**: see [Voice clips](#voice-clips) below.
-
-4. **Page data and offline cache**:
-
-   ```sh
-   python3 -I _memory-game/tools/page/build_page.py data <work>/data/players.json maccabi-haifa-memory
-   ```
-
-   Rewrites `const DATA` in `index.html` (starters, bench, names, which clips exist), then
-   assembles the game: it stamps the shared code into the page and writes `sw.js` with a
-   new cache `VERSION`. After any other change (images, audio, fonts, icons, the club parts
-   of `index.html`) run `python3 -I _memory-game/tools/page/build_page.py assemble maccabi-haifa-memory`:
-   the new cache version is what makes installed copies pick up the change. It refuses a
-   name split that doesn't reproduce `name_he` exactly.
-
-5. **Test**: `python3 -m http.server 8765` from the repo root, open
-   `http://localhost:8765/maccabi-haifa-memory/`, and play a full round in portrait and
-   landscape. Every card should show its own face, number and name, the console should be
-   clean, and the voice should read the right name (only the nickname for a name in
-   parentheses).
-
-6. **Commit** with explicit paths (`git add maccabi-haifa-memory/...`). A roster refresh
-   touches only this game. A change in `_memory-game/` changes both games: assemble, commit
-   and verify both (see [`_memory-game/README.md`](../../_memory-game/README.md)).
-
-## Voice clips
-
-Generated locally with BlueTTS 2.5 (ONNX, MIT) and the `noa` voice: the same engine, voice
-and settings as maccabi-memory. The voice reads each player's `speak_he`, so a name ending
-in parentheses is read as the nickname alone. Each name's pronunciation is pinned as IPA in
-`tts/pronunciations.json` (with the reason for every change and what to listen for), the
-same IPA is used in the name clip and inside the match clip, and every final MP3 is checked
-by an ivrit.ai Whisper round-trip (and a second model with `--second-opinion`). Needs uv,
-git, ffmpeg and whisper-cli (`brew install uv ffmpeg whisper-cpp`). `<work>` is the same
-directory the scrape wrote `data/` into.
+About 75 polite requests, cached in `<work>/data/html/`:
 
 ```sh
-# once: finds a working install ($MACCABI_TTS_ENGINES, then <work>/tts) or installs one under <work>/tts
-MACCABI_ROOT=<work> bash _memory-game/tools/tts/setup.sh
-
-# every refresh: reads <work>/data/players.json, writes <work>/tts/out/ (+ manifest and listen.html)
-MACCABI_ROOT=<work> <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py \
-    --pron maccabi-haifa-memory/tools/tts/pronunciations.json --takes 8 --second-opinion --ready
-
-# into the game, then run step 4
-cp <work>/tts/out/audio/name/*.mp3 maccabi-haifa-memory/audio/name/
-cp <work>/tts/out/audio/match/*.mp3 maccabi-haifa-memory/audio/match/
+uv run --with requests --with beautifulsoup4 --with pillow python -I -u \
+    maccabi-haifa-memory/tools/scrape/scrape_haifa.py --out <work>/data --refresh
+uv run --with pillow python -I -u _memory-game/tools/scrape/contact_sheet.py --game maccabi-haifa-memory --data <work>/data --auto
 ```
 
-- `<engines>` is the folder `setup.sh` reports (it holds `.venv-blue`, `.venv-stt` and
-  `_engines/BlueTTS`). Export `MACCABI_TTS_ENGINES=<engines>` when it isn't `<work>/tts`.
-- The start and win clips (`audio/ui/`) aren't generated here: they are the same phrases
-  as maccabi-memory's and were copied from there.
-- `git rm` the clips of players who left; `build_page.py` precaches every file under
-  `audio/`.
-- A new player missing from `pronunciations.json` falls back to the G2P reading of
-  `speak_he` and is logged as having no pinned IPA. Listen to those first in
-  `<work>/tts/listen.html` (it also shows the second model's transcript and the
-  judgement calls). To fix a name, edit its `ipa` and re-run with `--only <id>`.
-- `_memory-game/tools/tts/ab_ipa.py` compares candidate pronunciations across seeds in both
-  clip contexts before one is pinned. `_memory-game/tools/tts/render_blue.py --g2p "טקסט"`
-  (run with `<engines>/.venv-blue/bin/python` and `MACCABI_TTS_ENGINES` set) prints what the
-  G2P would say.
-- The scripts only read the engine install (no bytecode written, Hugging Face offline), so
-  an install shared with another project stays untouched.
-- The voice needs its credit line: keep [`../CREDITS.md`](../CREDITS.md) in step with the
-  engine and voice actually shipped. It also credits the fonts and the club's photos.
-
-## Icons
-
-Only needed if the card-back design changes:
-
-```sh
-bash _memory-game/tools/icons/render_icons.sh maccabi-haifa-memory/tools/page/icons maccabi-haifa-memory/icons
-```
-
-Uses headless Chrome (`CHROME=<binary>` to override the macOS default) and Pillow.
+- **Selection** happens here (`_memory-game/tools/scrape/roster.py`). The metric is this
+  season's appearances in all competitions, counted from the club's own game records
+  (`/matches/<id>`): the "הופעות" number in a player page's header carries last season
+  over, so it is not used.
+- **Names**: `name_he` is the name as the site shows it, `card_name_lines` is the card's
+  own split (small first line, bold second line), and `speak_he` is what the voice says:
+  the text inside a trailing "(...)" when there is one, else the name.
+- Check `players.json` before trusting a run, and look at `contact-sheet-crops.png`. The
+  `metric` and `crop_rule` texts in the script describe the 2026/27 season; update them for
+  a new one.
+- **Photos**: `club/club.json` `images.shoulder_overrides` holds hand-read shoulder lines
+  for two photos where the alpha outline's shoulder test fires inside the hair. A new photo
+  set needs a fresh look: `contact-sheet-auto.png` shows where the default rule fails. The
+  shirt fades out over the bottom 14% (`images.fade`) so it never ends in a hard line.
+- `design_capture.py` (Playwright) retakes the /players reference screenshots and computed
+  styles. `check_games.py`, `compare_apps.py` and `explore_*.py` are the cross-checks behind
+  the metric choice; each takes the scrape folder (for `rsc.py`) and a saved page or folder.
