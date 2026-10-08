@@ -34,11 +34,14 @@ text the voice reads, ships whenever it differs from name_he (and always with "f
 if a page or sw.js is not what assemble would write, or if img/ or audio/ holds a player the roster
 doesn't (every file there is precached), or if the fonts and CREDITS.md disagree: every shipped .woff2 has
 an @font-face, the declared families are the ones credited under Fonts, every OFL link resolves and every
-OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left. Run it before committing: the repo has no CI. `--watch`
+OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left; or if a game's
+start/win clip isn't the master in _memory-game/audio/ui/ (the engine's lines, which tools/tts/hebrew.py
+renders). Run it before committing: the repo has no CI. `--watch`
 assembles the named games again whenever one of their sources or a shared file changes.
 `new` starts a club: it checks the id, the cache prefix and the app id first and writes nothing if one
 clashes; then it writes the manifest (from --like's, with the new name, colours and id), copies --like's
-club/ sources, fonts, icon designs and start/win clips as the design's starting point, and writes CREDITS.md
+club/ sources, fonts and icon designs as the design's starting point, the start/win clips from
+_memory-game/audio/ui/, and writes CREDITS.md
 and tools/README.md from _memory-game/new/ with TODOs. No page until `data` has a roster.
 """
 import argparse
@@ -56,7 +59,7 @@ sys.dont_write_bytecode = True  # no __pycache__ in the repo
 SHARED = Path(__file__).resolve().parents[2]
 REPO = SHARED.parent
 sys.path.insert(0, str(SHARED / "tools/tts"))
-from hebrew import speak_text, split_display_name  # noqa: E402
+from hebrew import START_TEXT, WIN_TEXT, speak_text, split_display_name  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
@@ -232,6 +235,19 @@ def lint_credits(game):
                for _ in [1] if credits.split("## Voice", 1)[-1] != voice])
 
 
+def check_ui_clips(game):
+    """Each game ships its own copy of the engine's start and win clips; the master is _memory-game/audio/ui/."""
+    engine = read(SHARED / "engine.js")
+    lines = {k: re.search(rf"const {k}_LINE = '([^']*)';", engine).group(1) for k in ("START", "WIN")}
+    problems = [f"engine.js's {k}_LINE is not hebrew.py's {k}_TEXT, which the clip says"
+                for k, text in (("START", START_TEXT), ("WIN", WIN_TEXT)) if lines[k] != text]
+    for clip in UI_CLIPS:
+        copy = REPO / game / "audio/ui" / f"{clip}.mp3"
+        if not copy.is_file() or copy.read_bytes() != (SHARED / "audio/ui" / f"{clip}.mp3").read_bytes():
+            problems.append(f"audio/ui/{clip}.mp3 is not _memory-game/audio/ui/{clip}.mp3")
+    return problems
+
+
 def source(path, closer):
     """A shared or club source spliced into the page: it must not close its own element early."""
     text = read(path)
@@ -350,7 +366,7 @@ def assemble(game, check):
     strays = orphans(game, read_roster(game))
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
-    lint = lint_credits(game)
+    lint = lint_credits(game) + check_ui_clips(game)
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:
@@ -410,7 +426,7 @@ def new_game(game, like, name, short, color, description):
     if (REPO / like / "fonts").is_dir():
         shutil.copytree(REPO / like / "fonts", tmp / "fonts")
     for clip in UI_CLIPS:
-        shutil.copyfile(REPO / like / "audio/ui" / f"{clip}.mp3", tmp / "audio/ui" / f"{clip}.mp3")
+        shutil.copyfile(SHARED / "audio/ui" / f"{clip}.mp3", tmp / "audio/ui" / f"{clip}.mp3")
     (tmp / "tools/tts/pronunciations.json").write_text('{\n  "players": {}\n}\n', encoding="utf-8")
     for template, dest in (("CREDITS.md", "CREDITS.md"), ("README.md", "tools/README.md")):
         body = read(SHARED / "new" / template).replace("{name}", name).replace("{game}", game)
