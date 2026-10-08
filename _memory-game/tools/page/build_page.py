@@ -4,6 +4,7 @@
     python3 -I _memory-game/tools/page/build_page.py data <players.json> <game> [--prune]
     python3 -I _memory-game/tools/page/build_page.py assemble [--check] [<game> ...] [--watch]
     python3 -I _memory-game/tools/page/build_page.py list [--json]
+    python3 -I _memory-game/tools/page/build_page.py new <game> --like <club> --name … --short … --color "#…"
 Every command takes --repo <dir>: build the games in another folder (a scratch copy, to try a design
 with stand-in data before the real roster exists) with this checkout's _memory-game/.
 
@@ -33,12 +34,17 @@ text the voice reads, ships whenever it differs from name_he (and always with "f
 if a page or sw.js is not what assemble would write, or if img/ or audio/ holds a player the roster
 doesn't (every file there is precached). Run it before committing: the repo has no CI. `--watch`
 assembles the named games again whenever one of their sources or a shared file changes.
+`new` starts a club: it checks the id, the cache prefix and the app id first and writes nothing if one
+clashes; then it writes the manifest (from --like's, with the new name, colours and id), copies --like's
+club/ sources, fonts, icon designs and start/win clips as the design's starting point, and writes CREDITS.md
+and tools/README.md from _memory-game/new/ with TODOs. No page until `data` has a roster.
 """
 import argparse
 import hashlib
 import html
 import json
 import re
+import shutil
 import sys
 import time
 from pathlib import Path
@@ -341,6 +347,55 @@ def listing(all_games):
     return out
 
 
+def new_game(game, like, name, short, color, description):
+    if not ID_RE.match(game):
+        fail(f"{game!r} is not a usable folder name (lowercase letters, digits and dashes)")
+    if (REPO / game).exists():
+        fail(f"{game} already exists")
+    like = games([like])[0]
+    check_prefixes(games() + [game])
+    taken = {app_id(g): g for g in games() if (REPO / g / "manifest.webmanifest").is_file()}
+    if urljoin("https://origin.invalid/", game) in taken:
+        fail(f"{game}'s app id is already {taken[urljoin('https://origin.invalid/', game)]}'s")
+    if not re.fullmatch(r"#[0-9a-fA-F]{6}", color):
+        fail(f"--color wants #rrggbb, not {color!r}")
+    description = description or f"משחק זיכרון עם שחקני {name.removeprefix('זיכרון ').strip()}"
+    text = read(REPO / like / "manifest.webmanifest")
+    for key, value in (("name", name), ("short_name", short), ("description", description), ("id", game),
+                       ("background_color", color), ("theme_color", color)):
+        text, n = re.subn(rf'^(  "{key}": ).*?(,?)$', lambda m, v=value: m.group(1) + json.dumps(v, ensure_ascii=False)
+                          + m.group(2), text, count=1, flags=re.M)
+        if n != 1:
+            fail(f"{like}/manifest.webmanifest has no \"{key}\" line to start from")
+    json.loads(text)
+    tmp = REPO / f".new-{game}"
+    shutil.rmtree(tmp, ignore_errors=True)
+    for d in ("club", "tools/page/icons", "tools/tts", "audio/ui"):
+        (tmp / d).mkdir(parents=True)
+    (tmp / "manifest.webmanifest").write_text(text, encoding="utf-8")
+    for f in ("club.json", "style.css", "club.js"):
+        shutil.copyfile(REPO / like / "club" / f, tmp / "club" / f)
+    for svg in (REPO / like / "tools/page/icons").glob("*.svg"):
+        shutil.copyfile(svg, tmp / "tools/page/icons" / svg.name)
+    if (REPO / like / "fonts").is_dir():
+        shutil.copytree(REPO / like / "fonts", tmp / "fonts")
+    for clip in UI_CLIPS:
+        shutil.copyfile(REPO / like / "audio/ui" / f"{clip}.mp3", tmp / "audio/ui" / f"{clip}.mp3")
+    (tmp / "tools/tts/pronunciations.json").write_text('{\n  "players": {}\n}\n', encoding="utf-8")
+    for template, dest in (("CREDITS.md", "CREDITS.md"), ("README.md", "tools/README.md")):
+        body = read(SHARED / "new" / template).replace("{name}", name).replace("{game}", game)
+        (tmp / dest).write_text(body, encoding="utf-8")
+    tmp.rename(REPO / game)
+    print(f"""{game}: started from {like} (manifest, club/, fonts/, icon designs, start/win clips, CREDITS.md and
+tools/README.md with TODOs). Next:
+  1. design: club/style.css, club/club.js and club/club.json (title, trophy, images), the icon SVGs, the fonts
+     (and CREDITS.md); try it with stand-in data in a scratch folder: build_page.py assemble {game} --watch --repo <scratch>
+  2. the club's scraper in {game}/tools/scrape/ writes <work>/data/players.json
+  3. _memory-game/tools/refresh.sh {game} <work>: photos, voice, then the page
+  4. bash _memory-game/tools/icons/render_icons.sh --game {game}
+  5. _memory-game/tools/verify/verify.sh local --out <dir> {game}, then commit with explicit paths""", flush=True)
+
+
 def watch(names):
     """Assemble `names` again whenever a source changes (Ctrl-C stops)."""
     def stamp():
@@ -379,6 +434,13 @@ def main():
     a.add_argument("games", nargs="*")
     li = sub.add_parser("list", parents=[common], help="print the games, one per line (the one place that lists them)")
     li.add_argument("--json", action="store_true", help="id, cache prefix, VERSION, app id and name model")
+    n = sub.add_parser("new", parents=[common], help="start a club's game from another club's")
+    n.add_argument("game")
+    n.add_argument("--like", required=True, help="the club whose design, fonts and tools start it")
+    n.add_argument("--name", required=True, help="the manifest name, e.g. \"זיכרון הפועל תל אביב\"")
+    n.add_argument("--short", required=True, help="the home-screen name, e.g. \"זיכרון הפועל\"")
+    n.add_argument("--color", required=True, help="theme and background colour, #rrggbb")
+    n.add_argument("--description", help="default: \"משחק זיכרון עם שחקני <the name without זיכרון>\"")
     args = ap.parse_args()
     if args.repo:
         REPO = args.repo.expanduser().resolve()
@@ -386,6 +448,9 @@ def main():
     all_games = games()
     check_prefixes(all_games)
     check_apps(all_games)
+    if args.cmd == "new":
+        new_game(args.game, args.like, args.name, args.short, args.color, args.description)
+        return
     if args.cmd == "list":
         rows = listing(all_games)
         print(json.dumps(rows, ensure_ascii=False, indent=2) if args.json else "\n".join(r["id"] for r in rows))
