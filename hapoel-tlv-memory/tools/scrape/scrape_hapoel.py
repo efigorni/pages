@@ -155,6 +155,10 @@ def build_lineups(games: list[dict], roster_by_name: dict) -> tuple[dict, list[d
             chain = [(s["name"], 0)]
             red_at = None
             for x in s["subs"]:
+                if x["minute"] is None:
+                    raise SystemExit(f"{g['date']} {g['opponent']}: no minute in «{x['name']}» ({s['raw'].strip()}): a "
+                                     "substitution or red card without one can't be counted; fix that report's text in "
+                                     "<data>/html/rest/reports-cat30.json and run again")
                 if x["name"] == SENT_OFF:
                     red_at = x["minute"]
                     continue
