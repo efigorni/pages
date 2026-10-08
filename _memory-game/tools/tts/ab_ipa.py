@@ -23,11 +23,13 @@ from __future__ import annotations
 import argparse
 import collections
 import json
+import sys
 import time
 from pathlib import Path
 
-import generate as g  # sets the read-only environment for the engine install first
-import hebrew
+sys.dont_write_bytecode = True  # before importing generate: its own .pyc would land in the repo
+import generate as g  # noqa: E402  (sets the read-only environment for the engine install)
+import hebrew  # noqa: E402
 
 
 def cand_part(c: str, end: str) -> dict:
