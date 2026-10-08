@@ -811,21 +811,52 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
           }
           return;
         }
-        if (!raw.has(url)) {
-          raw.set(url, fetch(url).then((r) => (r.ok ? r.arrayBuffer() : null)).catch(() => null));
-        }
+        fetchRaw(url);
         if (ctx) decode(url);
       });
     }
 
+    // A clip whose fetch or decode failed is forgotten, so the next request for it tries again.
+    function forget(url) {
+      raw.delete(url);
+      decoded.delete(url);
+    }
+
+    function fetchRaw(url) {
+      if (!raw.has(url)) {
+        raw.set(url, fetch(url)
+          .then((r) => (r.ok ? r.arrayBuffer() : null))
+          .catch(() => null)
+          .then((buf) => {
+            if (!buf) forget(url);
+            return buf;
+          }));
+      }
+      return raw.get(url);
+    }
+
     function decode(url) {
       if (!decoded.has(url)) {
-        if (!raw.has(url)) prefetch([url]);
-        decoded.set(url, raw.get(url).then((buf) => buf && new Promise((resolve) => {
-          ctx.decodeAudioData(buf, resolve, () => resolve(null));
+        decoded.set(url, fetchRaw(url).then((buf) => buf && new Promise((resolve) => {
+          const done = (buffer) => {
+            if (!buffer) forget(url);
+            resolve(buffer || null);
+          };
+          const pending = ctx.decodeAudioData(buf, done, () => done(null));
+          if (pending && pending.catch) pending.catch(() => {});
         })));
       }
       return decoded.get(url);
+    }
+
+    function running() {
+      return !!ctx && ctx.state === 'running';
+    }
+
+    // Resumes a context the system suspended (screen lock, audio focus loss). Never creates one:
+    // that needs the ▶ tap.
+    function wake() {
+      if (ctx && ctx.state !== 'running' && ctx.state !== 'closed') ctx.resume().catch(() => {});
     }
 
     function unlock() {
@@ -846,7 +877,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
           ctx = null;
         }
       }
-      if (ctx && ctx.state !== 'running' && ctx.state !== 'closed') ctx.resume().catch(() => {});
+      wake();
       if (!hebrewVoice) pickVoice();
     }
 
@@ -920,7 +951,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     function viaBuffer(item, my) {
       return decode(item.url).then((buffer) => {
         if (my !== token) return undefined;
-        if (!buffer) return speak(item.text, my);
+        if (!buffer || !running()) return viaElement(item, my);
         return new Promise((done) => {
           const src = ctx.createBufferSource();
           let over = false;
@@ -943,7 +974,8 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     function playItem(item, my) {
       if (muted || my !== token) return Promise.resolve();
       if (!item.url) return speak(item.text, my);
-      if (ctx && canFetch) return viaBuffer(item, my);
+      // A suspended or interrupted context would swallow the clip and never fire 'ended'.
+      if (canFetch && running()) return viaBuffer(item, my);
       return viaElement(item, my);
     }
 
@@ -992,7 +1024,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
       if (value) halt();
     }
 
-    return { unlock, prefetch, say, halt, sfx, setMuted, get muted() { return muted; } };
+    return { unlock, wake, prefetch, say, halt, sfx, setMuted, get muted() { return muted; } };
   })();
 
   /* ---------- names: line breaks and fit ---------- */
@@ -1172,8 +1204,10 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     found: 0,
     flipBack: 0,
     winFallback: 0,
+    winEarliest: 0,
     busyUntil: 0,
     geo: null,
+    flights: new Set(),
   };
 
   function setPhase(phase) {
@@ -1220,6 +1254,8 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     clearTimeout(game.flipBack);
     clearTimeout(game.winFallback);
     game.round += 1;
+    game.flights.forEach((flight) => flight.cancel());
+    game.flights.clear();
     confetti.stop();
     hide('win');
     hide('confirm');
@@ -1309,16 +1345,26 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     const lines = [clip.name(card.p), clip.match(card.p)];
     if (game.found === game.pairs) {
       setPhase('finishing');
-      const earliest = performance.now() + 1500;
+      game.winEarliest = performance.now() + 1500;
       const finish = () => { if (game.round === round) showWin(); };
       const win = clip.ui('win', WIN_LINE);
-      win.onstart = () => setTimeout(finish, Math.max(0, earliest - performance.now()));
+      win.onstart = () => setTimeout(finish, Math.max(0, game.winEarliest - performance.now()));
       lines.push(win);
       game.winFallback = setTimeout(finish, sound.muted ? 1500 : 9000);
     } else {
       setPhase('idle');
     }
     sound.say(lines);
+  }
+
+  // When the voice queue is cut while finishing (mute, page hidden), the win clip never starts,
+  // so bring the win screen forward instead of waiting for the long fallback.
+  function hurryWin() {
+    if (game.phase !== 'finishing') return;
+    clearTimeout(game.winFallback);
+    const round = game.round;
+    game.winFallback = setTimeout(() => { if (game.round === round) showWin(); },
+      Math.max(0, game.winEarliest - performance.now()));
   }
 
   function celebrate(a, b, pipIndex) {
@@ -1373,7 +1419,19 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
       { transform: `translate(${dx * 0.4}px, ${dy * 0.4 - size * 0.35}px) scale(${Math.max(end, 0.75)})`, offset: 0.45 },
       { transform: `translate(${dx}px, ${dy}px) scale(${end})` },
     ], { duration: 720, easing: 'cubic-bezier(.45, 0, .3, 1)' });
-    anim.onfinish = () => { flyer.remove(); fill(); };
+    const flight = {
+      cancel() {
+        anim.onfinish = null;
+        anim.cancel();
+        flyer.remove();
+      },
+    };
+    game.flights.add(flight);
+    anim.onfinish = () => {
+      game.flights.delete(flight);
+      flyer.remove();
+      fill();
+    };
   }
 
   function showWin() {
@@ -1454,6 +1512,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     function tick(now) {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
+      if (canvas.width !== Math.round(window.innerWidth) || canvas.height !== Math.round(window.innerHeight)) resize();
       const h = canvas.height;
       g.clearRect(0, 0, canvas.width, h);
       parts = parts.filter((p) => p.y < h + 30);
@@ -1584,15 +1643,11 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   });
 
   $('again').addEventListener('click', () => {
-    if (game.phase === 'won') {
-      newGame();
-      sound.say([clip.ui('start', START_LINE)]);
-    } else if (game.phase === 'idle' || game.phase === 'one' || game.phase === 'two') {
-      show('confirm');
-    }
+    if (game.phase === 'idle' || game.phase === 'one' || game.phase === 'two') show('confirm');
   });
 
   $('yes').addEventListener('click', () => {
+    sound.unlock();
     hide('confirm');
     newGame();
     sound.say([clip.ui('start', START_LINE)]);
@@ -1606,6 +1661,7 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     sound.unlock();
     sound.setMuted(!sound.muted);
     syncMute();
+    if (sound.muted) hurryWin();
   });
   syncMute();
   syncInert();
@@ -1613,8 +1669,19 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
   document.addEventListener('contextmenu', (event) => event.preventDefault());
   document.addEventListener('gesturestart', (event) => event.preventDefault());
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState !== 'visible') letSleep();
-    else if (inGame()) keepAwake();
+    if (document.visibilityState !== 'visible') {
+      letSleep();
+      sound.halt();
+      hurryWin();
+    } else {
+      sound.wake();
+      if (inGame()) keepAwake();
+    }
+  });
+  window.addEventListener('pageshow', () => sound.wake());
+  // Some browsers (iOS Safari) resume audio only inside a real gesture event, not on pointerdown.
+  ['touchend', 'click'].forEach((type) => {
+    document.addEventListener(type, () => sound.wake(), { capture: true, passive: true });
   });
 
   if (window.ResizeObserver) new ResizeObserver(() => layout()).observe(board);
