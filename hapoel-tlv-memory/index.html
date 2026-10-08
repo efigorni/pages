@@ -788,7 +788,9 @@ const CLUB = {
       players.forEach((p) => {
         const list = words(p.name_he);
         p.nameSplits = [bestSplit(list, 1, NAME_FONT)];
-        if (list.length > 1) p.nameSplits.push(bestSplit(list, 2, NAME_FONT));
+        // null when no two-line split is allowed: "בר כהן" keeps בר with its next word
+        const two = list.length > 1 && bestSplit(list, 2, NAME_FONT);
+        if (two) p.nameSplits.push(two);
       });
     }
 
