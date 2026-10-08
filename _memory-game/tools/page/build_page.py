@@ -2,8 +2,10 @@
 """Build the memory games from _memory-game/ and each game's club sources.
 
     python3 -I _memory-game/tools/page/build_page.py data <players.json> <game> [--prune]
-    python3 -I _memory-game/tools/page/build_page.py assemble [--check] [<game> ...]
+    python3 -I _memory-game/tools/page/build_page.py assemble [--check] [<game> ...] [--watch]
     python3 -I _memory-game/tools/page/build_page.py list [--json]
+Every command takes --repo <dir>: build the games in another folder (a scratch copy, to try a design
+with stand-in data before the real roster exists) with this checkout's _memory-game/.
 
 A game is a folder at the repo root with club/club.json. Its sources, all hand-owned except the roster:
 
@@ -29,7 +31,8 @@ shows name_he on one card line; "first-last" adds the card's two tiers (first_he
 text the voice reads, ships whenever it differs from name_he (and always with "first-last").
 `assemble` writes every game's index.html and sw.js, or the named games'. `--check` writes nothing and fails
 if a page or sw.js is not what assemble would write, or if img/ or audio/ holds a player the roster
-doesn't (every file there is precached). Run it before committing: the repo has no CI.
+doesn't (every file there is precached). Run it before committing: the repo has no CI. `--watch`
+assembles the named games again whenever one of their sources or a shared file changes.
 """
 import argparse
 import hashlib
@@ -37,6 +40,7 @@ import html
 import json
 import re
 import sys
+import time
 from pathlib import Path
 from urllib.parse import urljoin
 
@@ -337,19 +341,47 @@ def listing(all_games):
     return out
 
 
+def watch(names):
+    """Assemble `names` again whenever a source changes (Ctrl-C stops)."""
+    def stamp():
+        paths = [SHARED / f for f in ("base.css", "engine.js", "page.template.html", "sw.template.js")]
+        for g in names:
+            paths += [REPO / g / "manifest.webmanifest", *(REPO / g / "club").glob("*")]
+            paths += [f for d in PRECACHE_DIRS for f in (REPO / g / d).rglob("*")]
+        return sorted((str(p), p.stat().st_mtime_ns) for p in paths if p.is_file())
+    seen = None
+    print(f"watching {', '.join(names)} (Ctrl-C stops)", flush=True)
+    while True:
+        now = stamp()
+        if now != seen:
+            for g in names:
+                try:
+                    assemble(g, check=False)
+                except SystemExit as e:
+                    print(e, flush=True)
+            seen = stamp()
+        time.sleep(0.5)
+
+
 def main():
+    global REPO
     ap = argparse.ArgumentParser(description="Build the memory games (see the module docstring).")
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--repo", type=Path, help="the folder that holds the games (default: this checkout)")
     sub = ap.add_subparsers(dest="cmd", required=True)
-    d = sub.add_parser("data", help="write a game's club/roster.json from players.json, then assemble it")
+    d = sub.add_parser("data", parents=[common], help="write a game's club/roster.json from players.json, then assemble it")
     d.add_argument("players_json")
     d.add_argument("game")
     d.add_argument("--prune", action="store_true", help="delete photos and clips of players not in the roster")
-    a = sub.add_parser("assemble", help="write each game's index.html and sw.js")
+    a = sub.add_parser("assemble", parents=[common], help="write each game's index.html and sw.js")
     a.add_argument("--check", action="store_true", help="write nothing; fail if anything is out of date")
+    a.add_argument("--watch", action="store_true", help="assemble the named games again on every change")
     a.add_argument("games", nargs="*")
-    li = sub.add_parser("list", help="print the games, one per line (the one place that lists them)")
+    li = sub.add_parser("list", parents=[common], help="print the games, one per line (the one place that lists them)")
     li.add_argument("--json", action="store_true", help="id, cache prefix, VERSION, app id and name model")
     args = ap.parse_args()
+    if args.repo:
+        REPO = args.repo.expanduser().resolve()
 
     all_games = games()
     check_prefixes(all_games)
@@ -363,6 +395,10 @@ def main():
         write_data(args.players_json, game, args.prune)
         assemble(game, check=False)
         return
+    if getattr(args, "watch", False):
+        if not args.games or args.check:
+            ap.error("--watch needs the games to assemble, and no --check")
+        watch(games(args.games))
     ok = []
     for g in games(args.games):
         if not args.games and not args.check and not has_roster(g):
