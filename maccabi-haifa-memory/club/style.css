@@ -40,6 +40,10 @@
   --scrim-install: rgba(0, 29, 5, .35);
   --scrim-confirm: rgba(0, 29, 5, .76);
   --scrim-win: rgba(0, 29, 5, .6);
+  /* the frames base.css draws: the back's inset line, the front's hairline, the found frame */
+  --back-line: max(1.5px, calc(var(--short) * .016)) solid rgba(255, 255, 255, .72);
+  --edge: rgba(255, 255, 255, .14);
+  --found: var(--mint);
 }
 
 /* card back: club green, the /players pinstripe band, and our own ball (not the crest) */
@@ -51,14 +55,6 @@
   background-repeat: no-repeat;
   background-position: center, left top;
   background-size: min(calc(var(--short) * .64), calc(var(--cw) * .58)) auto, cover;
-}
-
-.back::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--short) * .055);
-  border: max(1.5px, calc(var(--short) * .016)) solid rgba(255, 255, 255, .72);
-  border-radius: calc(var(--r) * .6);
 }
 
 /* card face: a pocket version of the club's /players card */
@@ -96,20 +92,6 @@
   background:
     linear-gradient(to top, rgba(0, 0, 0, .88) 0%, rgba(0, 0, 0, .5) 45%, rgba(0, 0, 0, 0) 100%),
     linear-gradient(to left, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 55%);
-}
-
-.front::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14);
-  transition: box-shadow .2s ease;
-}
-
-.card.found .front::after {
-  box-shadow: inset 0 0 0 var(--frame, 4px) var(--mint);
 }
 
 /* the club's white-to-transparent shirt number, stopped at 30% so a child can still read the digits */

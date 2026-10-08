@@ -68,6 +68,11 @@
   --scrim-install: rgba(2, 12, 28, .35);
   --scrim-confirm: rgba(2, 12, 28, .74);
   --scrim-win: rgba(2, 12, 28, .58);
+  /* the frames base.css draws: the back's inset line, the front's hairline, the found frame */
+  --back-line: max(2px, calc(var(--short) * .02)) solid rgba(6, 30, 63, .9);
+  --edge: rgba(255, 255, 255, .16);
+  --found: var(--yellow);
+  --found-w: max(3px, calc(var(--short) * .045));
 }
 
 /* card back: our own yellow/navy motif */
@@ -79,14 +84,6 @@
   background-repeat: no-repeat, repeat;
   background-position: center, 0 0;
   background-size: min(calc(var(--short) * .66), calc(var(--cw) * .6)) auto, auto;
-}
-
-.back::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--short) * .055);
-  border: max(2px, calc(var(--short) * .02)) solid rgba(6, 30, 63, .9);
-  border-radius: calc(var(--r) * .6);
 }
 
 /* card face: a pocket version of the club's player page */
@@ -104,19 +101,6 @@
 
 [data-face="side"] .front {
   grid-template: "info photo" minmax(0, 1fr) / minmax(0, 1fr) var(--photo-w);
-}
-
-.front::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16);
-  transition: box-shadow .2s ease;
-}
-
-.card.found .front::after {
-  box-shadow: inset 0 0 0 max(3px, calc(var(--short) * .045)) var(--yellow);
 }
 
 .photo {
@@ -453,6 +437,29 @@ img {
 }
 
 .front { transform: rotateY(180deg); }
+
+/* The back's inset frame, the front's hairline and the found frame. Their shape is the game's (a found
+   pair is feedback); the club's tokens give the colours: --back-line (a border, or none), --edge, --found,
+   and --found-w for a fixed width (the default follows the board's --frame, which the face sets). */
+.back::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--short) * .055);
+  border: var(--back-line);
+  border-radius: calc(var(--r) * .6);
+}
+
+.front::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--edge);
+  transition: box-shadow .2s ease;
+}
+
+.card.found .front::after { box-shadow: inset 0 0 0 var(--found-w, var(--frame, 4px)) var(--found); }
 
 /* motion */
 .board.dealing .card {
