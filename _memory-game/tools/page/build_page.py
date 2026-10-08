@@ -178,6 +178,8 @@ def app_id(game):
 def check_apps(all_games):
     ids = {}
     for game in all_games:
+        if not (REPO / game / "manifest.webmanifest").is_file():
+            continue  # it can't be installed, so it can't collide; its own assemble names what's missing
         aid = app_id(game)
         if aid == "https://origin.invalid/" and game not in ROOT_ID_GAMES:
             fail(f"{game}/manifest.webmanifest: its id resolves to the origin root, so it would install as the "
@@ -251,8 +253,10 @@ def listing(all_games):
         sw = REPO / game / "sw.js"
         version = re.search(r"^const VERSION = '([^']*)';$", sw.read_text(encoding="utf-8"), flags=re.M) if sw.is_file() else None
         names = json.loads((REPO / game / "club/club.json").read_text(encoding="utf-8")).get("names")
+        installable = (REPO / game / "manifest.webmanifest").is_file()
         out.append({"id": game, "prefix": f"{game}-", "version": version and version.group(1),
-                    "app_id": app_id(game).removeprefix("https://origin.invalid"), "names": names})
+                    "app_id": app_id(game).removeprefix("https://origin.invalid") if installable else None,
+                    "names": names})
     return out
 
 
