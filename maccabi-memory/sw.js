@@ -1,4 +1,4 @@
-const VERSION = 'maccabi-memory-5b2064b81271';
+const VERSION = 'maccabi-memory-f3c452c2fe68';
 const ASSETS = [
   './',
   'index.html',
@@ -55,6 +55,7 @@ const ASSETS = [
   'icons/apple-touch-icon.png',
   'icons/icon-192.png',
   'icons/icon-512.png',
+  'icons/icon-maskable-192.png',
   'icons/icon-maskable-512.png',
   'img/dan-glazer.webp',
   'img/dor-peretz.webp',

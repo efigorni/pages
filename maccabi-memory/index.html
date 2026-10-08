@@ -578,6 +578,30 @@ img {
 
 .play svg { margin-left: 8%; }
 
+/* parent-facing: small, quiet, in a corner of the start screen, never on the board */
+.install {
+  position: absolute;
+  bottom: max(var(--pad), env(safe-area-inset-bottom));
+  left: max(var(--pad), env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  background: rgba(2, 12, 28, .35);
+  color: rgba(255, 255, 255, .78);
+  font: 600 14px/1.1 system-ui, "Arial Hebrew", sans-serif;
+}
+
+.install[hidden] { display: none; }
+.install svg { width: 18px; height: 18px; flex: none; }
+
+@media (display-mode: fullscreen), (display-mode: standalone) {
+  .install { display: none; }
+}
+
 .confirm { background: rgba(2, 12, 28, .74); }
 .win { background: rgba(2, 12, 28, .58); }
 
@@ -659,6 +683,10 @@ img {
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.6v12.8a1.1 1.1 0 0 0 1.7.94l10-6.4a1.1 1.1 0 0 0 0-1.88l-10-6.4A1.1 1.1 0 0 0 8 5.6z" fill="currentColor"/></svg>
     </button>
   </div>
+  <button class="install" id="install" type="button" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v7M8.8 11.6 12 14.8l3.2-3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>הוספה למסך הבית</span>
+  </button>
 </section>
 
 <section class="overlay confirm" id="confirm" inert>
@@ -1596,8 +1624,10 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     }
   }
 
+  const installedQuery = matchMedia('(display-mode: fullscreen), (display-mode: standalone)');
+
   function goFullscreen() {
-    if (!matchMedia('(pointer: coarse)').matches || document.fullscreenElement) return;
+    if (!matchMedia('(pointer: coarse)').matches || document.fullscreenElement || installedQuery.matches) return;
     const root = document.documentElement;
     const request = root.requestFullscreen || root.webkitRequestFullscreen;
     if (!request) return;
@@ -1701,6 +1731,31 @@ const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"או
     prepareNames();
     buildFan();
     layout();
+  });
+
+  /* ---------- home-screen install (parent-facing, start screen only) ---------- */
+
+  const installBtn = $('install');
+  let installPrompt = null;
+
+  function syncInstall() {
+    installBtn.hidden = !installPrompt || installedQuery.matches;
+  }
+
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    installPrompt = event;
+    syncInstall();
+  });
+  window.addEventListener('appinstalled', () => {
+    installPrompt = null;
+    syncInstall();
+  });
+  installBtn.addEventListener('click', () => {
+    const pending = installPrompt;
+    installPrompt = null;
+    syncInstall();
+    if (pending) pending.prompt().catch(() => {});
   });
 
   const secure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
