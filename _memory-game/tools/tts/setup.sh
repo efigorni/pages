@@ -20,6 +20,8 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 TTS="${MEMORY_GAME_TTS_ENGINES:-${MACCABI_TTS_ENGINES:-${XDG_CACHE_HOME:-$HOME/.cache}/memory-game-tts}}"
 HF_CACHE="${HF_HUB_CACHE:-${HF_HOME:-$HOME/.cache/huggingface}/hub}"
 BLUE_COMMIT=0e38dbf08ed53f85863d1eab092bd9572c53a503   # BlueTTS main, 2026-08-13
+FASTER_WHISPER=1.2.1   # the versions the clips in the repo were checked and finished with
+NUMPY=2.5.3
 INSTALL=0
 ALL=0
 for arg in "$@"; do
@@ -39,23 +41,28 @@ done
 # without writing anything.
 check() {
   local e="$1"
-  [[ -x "$e/.venv-blue/bin/python" && -x "$e/.venv-stt/bin/python" ]] || return 1
-  [[ -f "$e/_engines/BlueTTS/onnx_models/vector_estimator.onnx" && -f "$e/_engines/BlueTTS/voices/noa.json" ]] || return 1
-  [[ "$(git -C "$e/_engines/BlueTTS" rev-parse HEAD 2>/dev/null)" == "$BLUE_COMMIT" ]] || return 1
+  no() { echo "[setup]   not usable: $*"; }
+  [[ -x "$e/.venv-blue/bin/python" && -x "$e/.venv-stt/bin/python" ]] || { no "no .venv-blue or .venv-stt"; return 1; }
+  [[ -f "$e/_engines/BlueTTS/onnx_models/vector_estimator.onnx" && -f "$e/_engines/BlueTTS/voices/noa.json" ]] \
+    || { no "no BlueTTS ONNX bundle or noa voice in _engines/BlueTTS"; return 1; }
+  [[ "$(git -C "$e/_engines/BlueTTS" rev-parse HEAD 2>/dev/null)" == "$BLUE_COMMIT" ]] || { no "BlueTTS is not at ${BLUE_COMMIT:0:8}"; return 1; }
   PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 PYTHONPATH="$e/_engines/BlueTTS/src" \
-    "$e/.venv-blue/bin/python" -c "import blue_onnx; from renikud_onnx import G2P; print('[setup]   G2P שלום ->', G2P().phonemize('שלום'))" || return 1
+    "$e/.venv-blue/bin/python" -c "import blue_onnx; from renikud_onnx import G2P; print('[setup]   G2P שלום ->', G2P().phonemize('שלום'))" \
+    || { no "BlueTTS or RenikudPlus does not load (the error above)"; return 1; }
   PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 \
-    "$e/.venv-stt/bin/python" -c "import numpy, faster_whisper; print('[setup]   faster-whisper', faster_whisper.__version__)" || return 1
-  ls "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-turbo-ggml/snapshots/*/ggml-model.bin >/dev/null 2>&1 || return 1
-  ls -d "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-ct2/snapshots/* >/dev/null 2>&1 || return 1
+    "$e/.venv-stt/bin/python" -c "import numpy, faster_whisper; print('[setup]   faster-whisper', faster_whisper.__version__)" \
+    || { no "faster-whisper does not load (the error above)"; return 1; }
+  ls "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-turbo-ggml/snapshots/*/ggml-model.bin >/dev/null 2>&1 \
+    || { no "no ivrit-ai/whisper-large-v3-turbo-ggml in $HF_CACHE"; return 1; }
+  ls -d "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-ct2/snapshots/* >/dev/null 2>&1 || { no "no ivrit-ai/whisper-large-v3-ct2 in $HF_CACHE"; return 1; }
   if (( ALL )); then
-    PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 "$e/.venv-phonikud/bin/python" -c "import phonikud_tts" || return 1
-    ls "$HF_CACHE"/models--Phonikud--phonikud-tts-checkpoints/snapshots/*/shaul.onnx >/dev/null 2>&1 || return 1
+    PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 "$e/.venv-phonikud/bin/python" -c "import phonikud_tts" || { no "phonikud-tts does not load"; return 1; }
+    ls "$HF_CACHE"/models--Phonikud--phonikud-tts-checkpoints/snapshots/*/shaul.onnx >/dev/null 2>&1 || { no "no Piper checkpoints"; return 1; }
   fi
 }
 
 echo "[setup] checking $TTS"
-if [[ -d "$TTS" ]] && check "$TTS" 2>/dev/null; then
+if [[ -d "$TTS" ]] && check "$TTS"; then
   echo "[setup] $TTS works — nothing installed or changed"
   echo "[setup] next: $HERE/tts.sh <game> <work> generate"
   exit 0
@@ -84,7 +91,8 @@ PYTHONPATH="$TTS/_engines/BlueTTS/src" "$TTS/.venv-blue/bin/python" -c "from ren
 
 echo "[setup] STT + tooling venv"
 [[ -x "$TTS/.venv-stt/bin/python" ]] || uv venv "$TTS/.venv-stt" --python 3.12
-uv pip install --python "$TTS/.venv-stt/bin/python" faster-whisper numpy
+# pinned: a newer faster-whisper (or numpy) can hear, and trim, the same take differently
+uv pip install --python "$TTS/.venv-stt/bin/python" "faster-whisper==$FASTER_WHISPER" "numpy==$NUMPY"
 "$TTS/.venv-stt/bin/hf" download ivrit-ai/whisper-large-v3-turbo-ggml ggml-model.bin >/dev/null
 "$TTS/.venv-stt/bin/hf" download ivrit-ai/whisper-large-v3-ct2 >/dev/null
 
