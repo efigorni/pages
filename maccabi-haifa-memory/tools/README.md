@@ -131,7 +131,7 @@ cp <work>/tts/out/audio/match/*.mp3 maccabi-haifa-memory/audio/match/
 Only needed if the card-back design changes:
 
 ```sh
-bash maccabi-haifa-memory/tools/page/icons/render_icons.sh maccabi-haifa-memory/icons
+bash _memory-game/tools/icons/render_icons.sh maccabi-haifa-memory/tools/page/icons maccabi-haifa-memory/icons
 ```
 
 Uses headless Chrome (`CHROME=<binary>` to override the macOS default) and Pillow.

@@ -107,7 +107,7 @@ cp -R <work>/tts/out/audio/name <work>/tts/out/audio/match <work>/tts/out/audio/
 Only needed if the card-back design changes:
 
 ```sh
-bash maccabi-memory/tools/page/icons/render_icons.sh maccabi-memory/icons
+bash _memory-game/tools/icons/render_icons.sh maccabi-memory/tools/page/icons maccabi-memory/icons
 ```
 
 Uses headless Chrome (`CHROME=<binary>` to override the macOS default) and Pillow.

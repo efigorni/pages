@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Render the PWA icons from the two SVGs next to this script.
+# Render a game's PWA icons from its two SVGs (icon-any.svg, icon-maskable.svg).
 #
-# usage: render_icons.sh <out-dir>        (normally maccabi-haifa-memory/icons)
+# usage: render_icons.sh <svg-dir> <out-dir>
+#   e.g. render_icons.sh maccabi-memory/tools/page/icons maccabi-memory/icons
 #   CHROME=<chrome binary>  overrides the macOS default below.
 #
 # Headless Chrome won't render a window narrower than ~500 px, so both icons are
@@ -9,7 +10,8 @@
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"
-out="${1:?usage: render_icons.sh <out-dir>}"
+svgs="$(cd "${1:?usage: render_icons.sh <svg-dir> <out-dir>}" && pwd)"
+out="${2:?usage: render_icons.sh <svg-dir> <out-dir>}"
 chrome="${CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
 profile="$(mktemp -d)"
 trap 'rm -rf "$profile"' EXIT
@@ -18,7 +20,7 @@ mkdir -p "$out"
 shot() {
   "$chrome" --headless=new --disable-gpu --hide-scrollbars --user-data-dir="$profile" \
     --default-background-color=00000000 --window-size=512,512 \
-    --screenshot="$2" "file://$here/$1" >/dev/null 2>&1
+    --screenshot="$2" "file://$svgs/$1" >/dev/null 2>&1
 }
 
 shot icon-any.svg "$out/icon-512.png"

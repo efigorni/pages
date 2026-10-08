@@ -59,6 +59,7 @@ import numpy as np  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+sys.path.insert(1, str(HERE.parents[2] / "_memory-game/tools/tts"))  # stt, stt_fw, audio_metrics
 import audio_metrics  # noqa: E402
 import hebrew  # noqa: E402
 import stt  # noqa: E402
