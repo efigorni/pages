@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><clipPath id="card"><rect x="16" y="16" width="480" height="480" rx="100"/></clipPath><linearGradient id="g" gradientUnits="userSpaceOnUse" x1="1" x2="273"><stop offset=".04" stop-color="#fff" stop-opacity=".44"/><stop offset=".74" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><clipPath id="b"><circle r="42"/></clipPath><g id="s"><path d="M0-17V-29" stroke="#204126" stroke-width="3.4"/><path d="M0-28L-12.4-37-7.6-51.5H7.6L12.4-37Z" fill="#204126"/></g></defs>
+  <rect x="16" y="16" width="480" height="480" rx="100" fill="#007638"/>
+  <g clip-path="url(#card)"><path transform="translate(16 16) scale(1.644)" fill="url(#g)" stroke="url(#g)" d="M-158.0-78.8l-2.3 2.3L186.2 267.4zM-148.3-78.8l-2.3 2.3L195.9 267.4zM-138.7-78.8l-2.3 2.3L205.5 267.4zM-129.0-78.8l-2.3 2.3L215.2 267.4zM-119.3-78.8l-2.3 2.3L224.9 267.4zM-109.6-78.8l-2.3 2.3L234.6 267.4zM-100.0-78.8l-2.3 2.3L244.2 267.4zM-90.3-78.8l-2.3 2.3L253.9 267.4zM-80.6-78.8l-2.3 2.3L263.6 267.4zM-70.9-78.8l-2.3 2.3L273.3 267.4zM-61.2-78.8l-2.3 2.3L283.0 267.4zM-51.6-78.8l-2.3 2.3L292.6 267.4zM-41.9-78.8l-2.3 2.3L302.3 267.4zM-32.2-78.8l-2.3 2.3L312.0 267.4zM-22.5-78.8l-2.3 2.3L321.7 267.4zM-12.9-78.8l-2.3 2.3L331.3 267.4zM-3.2-78.8l-2.3 2.3L341.0 267.4zM6.5-78.8l-2.3 2.3L350.7 267.4z"/></g>
+  <rect x="46" y="46" width="420" height="420" rx="72" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="9"/>
+  <g transform="translate(256 252) scale(2.75)">
+    <ellipse cy="49" rx="40" ry="8" fill="#001d05" fill-opacity=".35"/>
+    <g transform="scale(1.1)">
+      <circle r="42" fill="#fff"/>
+      <g clip-path="url(#b)">
+        <path d="M0-17 16.2-5.3 10 13.8H-10L-16.2-5.3Z" fill="#204126"/>
+        <use href="#s"/><use href="#s" transform="rotate(72)"/><use href="#s" transform="rotate(144)"/><use href="#s" transform="rotate(216)"/><use href="#s" transform="rotate(288)"/>
+      </g>
+      <circle r="42" fill="none" stroke="#204126" stroke-width="2.2"/>
+    </g>
+  </g></svg>
