@@ -11,7 +11,11 @@ This repository (`efigorni/pages`) hosts standalone, single-file HTML web applic
 ### 1. Always Update `index.html` When Adding / Modifying Pages
 Whenever you create, import, rename, or delete an HTML page:
 - **YOU MUST update `index.html`** to add or update a card linking to the new page.
-- Every page in this repository **must** have a corresponding card in the `index.html` directory grid.
+- Every page in this repository **must** have a corresponding card in the `index.html` directory grid, except the unlisted pages below.
+
+#### Unlisted pages
+Kept private on purpose, at the owner's request: each stays out of `index.html` and the catalog below, and carries `<meta name="robots" content="noindex, nofollow">`.
+- `maccabi-memory/` (`/pages/maccabi-memory/`): Maccabi Tel Aviv memory game for a young child. Refresh its roster, photos and voice clips with `maccabi-memory/tools/README.md`.
 
 ### 2. Card Design Standard in `index.html`
 Each card in `index.html` must follow the aesthetic established by `gibush.html`:
