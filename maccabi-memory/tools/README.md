@@ -36,8 +36,9 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
 2. **Photos**:
 
    ```sh
-   uv run --with pillow python -I maccabi-memory/tools/images/build_images.py \
-       <work>/data/players.json maccabi-memory/img --mode auto --sheet <work>/crops.png
+   uv run --with pillow python -I _memory-game/tools/images/build_images.py \
+       <work>/data/players.json maccabi-memory/img --mode auto --fade 0 \
+       --sheet <work>/crops.png --sheet-colors 020f24,061e3f,f8d734
    ```
 
    - `--mode auto` frames every photo from its alpha outline: hair top at 4%, shoulder

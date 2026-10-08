@@ -50,8 +50,9 @@ Python with `-I`, and pass paths as arguments. Commands below run from the repo 
 2. **Photos**:
 
    ```sh
-   uv run --with pillow python -I maccabi-haifa-memory/tools/images/build_images.py \
-       <work>/data/players.json maccabi-haifa-memory/img --mode box --sheet <work>/crops.png
+   uv run --with pillow python -I _memory-game/tools/images/build_images.py \
+       <work>/data/players.json maccabi-haifa-memory/img --mode box \
+       --sheet <work>/crops.png --sheet-colors 001d05,204126,86d094
    ```
 
    - `--mode box` uses each player's `crop` from the scrape. Open `crops.png`: faces

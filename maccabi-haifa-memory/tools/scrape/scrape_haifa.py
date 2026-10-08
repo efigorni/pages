@@ -39,6 +39,7 @@ from urllib.parse import quote, unquote
 sys.dont_write_bytecode = True  # no __pycache__ in the repo
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # -I drops the script dir; these helpers are ours
 sys.path.insert(1, str(Path(__file__).resolve().parents[1] / "tts"))
+sys.path.insert(2, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/images"))  # framing.py
 
 from bs4 import BeautifulSoup  # noqa: E402
 from PIL import Image  # noqa: E402

@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
 """Crop the club's cutout player photos to one consistent head-and-shoulders square WebP.
 
-The Maccabi Haifa photos are transparent cutouts (palette PNGs with a transparency
-chunk), so framing comes from the alpha mask.
-
-Two framing modes:
+Two framing modes; each club's README passes its own, there is no default:
   box   the crop box from players.json (the shared `crop`, or a player's own `crop`),
         as fractions of the source image.
-  auto  framing derived from the alpha mask: the hair top sits --top below the crop's
-        top edge and the shoulder line sits at --shoulder of the crop height, so faces
-        come out the same size on every card.
+  auto  framing derived from the alpha mask (framing.py): the hair top sits --top below
+        the crop's top edge and the shoulder line sits at --shoulder of the crop height,
+        so faces come out the same size on every card.
 
 Output is written at the crop's native resolution, capped at --max-size, and never
-upscaled.
+upscaled. --fade ramps the alpha to zero over the bottom of the crop (0 = off).
 
 usage:
-  uv run --with pillow python -I build_images.py <players.json> <out-dir>
-      [--mode box|auto] [--top 0.04] [--shoulder 0.90] [--max-size 400]
-      [--quality 82] [--sheet sheet.png] [--overrides overrides.json]
+  uv run --with pillow python -I build_images.py <players.json> <out-dir> --mode box|auto
+      [--top 0.04] [--shoulder 0.90] [--fade 0.14] [--max-size 400] [--quality 82]
+      [--sheet sheet.png] [--sheet-colors BG,TILE,GUIDE] [--overrides overrides.json]
 
 <players.json> is the scrape output; each player's `photo_file` is resolved relative to
 the JSON's directory and must stay inside it. Only role starter/bench is processed.
 overrides.json maps a player id to {"dx": .., "dy": .., "zoom": ..}, applied after
-framing (dx/dy as fractions of the crop side, zoom > 1 = tighter).
+framing (dx/dy as fractions of the crop side, zoom > 1 = tighter). --sheet-colors takes
+three hex colours: the sheet, the tile behind each cutout, and the guide marks.
 """
 import argparse
 import json
@@ -31,30 +29,9 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-ALPHA_SOLID = 128
-
-
-def row_extents(alpha):
-    w, h = alpha.size
-    solid = alpha.point(lambda v: 255 if v >= ALPHA_SOLID else 0)
-    rows = []
-    for y in range(h):
-        box = solid.crop((0, y, w, y + 1)).getbbox()
-        rows.append((box[0], box[2]) if box else None)
-    return rows
-
-
-def landmarks(img):
-    """(head centre x, hair top y, shoulder line y) in source pixels."""
-    w, h = img.size
-    rows = row_extents(img.getchannel("A"))
-    widths = [(r[1] - r[0]) if r else 0 for r in rows]
-    top = next(y for y, wd in enumerate(widths) if wd >= max(3, 0.02 * w))
-    body_max = max(widths)
-    shoulder = next(y for y in range(top, h) if widths[y] >= 0.5 * body_max)
-    head_rows = [rows[y] for y in range(top, top + max(1, int(0.6 * (shoulder - top)))) if rows[y]]
-    centres = sorted((r[0] + r[1]) / 2 for r in head_rows)
-    return centres[len(centres) // 2], top, shoulder
+sys.dont_write_bytecode = True  # no __pycache__ in the repo
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from framing import SHOULDER_AT, TOP_MARGIN, outline  # noqa: E402
 
 
 def box_from_fractions(img, crop):
@@ -63,7 +40,7 @@ def box_from_fractions(img, crop):
 
 
 def box_auto(img, top_margin, shoulder_at):
-    cx, top, shoulder = landmarks(img)
+    _, cx, top, shoulder = outline(img)
     side = (shoulder - top) / (shoulder_at - top_margin)
     x0, y0 = cx - side / 2, top - top_margin * side
     return (x0, y0, x0 + side, y0 + side)
@@ -100,20 +77,25 @@ def render(img, box, size, fade):
     return canvas
 
 
-def contact_sheet(entries, path, guides, cell=200, cols=6):
+def hex_rgb(text):
+    text = text.strip().lstrip("#")
+    return tuple(int(text[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def contact_sheet(entries, path, guides, colors, cell=200, cols=6):
+    bg, tile_bg, guide = colors
     rows = (len(entries) + cols - 1) // cols
     label_h = 36
-    sheet = Image.new("RGB", (cols * (cell + 10) + 10, rows * (cell + label_h + 10) + 10), (0, 29, 5))
+    sheet = Image.new("RGB", (cols * (cell + 10) + 10, rows * (cell + label_h + 10) + 10), bg)
     draw = ImageDraw.Draw(sheet)
     try:
         font = ImageFont.load_default(size=14)
     except TypeError:
         font = ImageFont.load_default()
-    guide = (134, 208, 148)
     for i, (pid, img, kb) in enumerate(entries):
         x = 10 + (i % cols) * (cell + 10)
         y = 10 + (i // cols) * (cell + label_h + 10)
-        tile = Image.new("RGBA", (cell, cell), (32, 65, 38, 255))
+        tile = Image.new("RGBA", (cell, cell), (*tile_bg, 255))
         tile.alpha_composite(img.resize((cell, cell), Image.LANCZOS))
         sheet.paste(tile.convert("RGB"), (x, y))
         for frac in guides:
@@ -129,15 +111,19 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("players_json", type=Path)
     ap.add_argument("out_dir", type=Path)
-    ap.add_argument("--mode", choices=("box", "auto"), default="auto")
-    ap.add_argument("--top", type=float, default=0.04, help="hair top, as a fraction of the crop (auto)")
-    ap.add_argument("--shoulder", type=float, default=0.90, help="shoulder line, as a fraction of the crop (auto)")
+    ap.add_argument("--mode", choices=("box", "auto"), required=True)
+    ap.add_argument("--top", type=float, default=TOP_MARGIN, help="hair top, as a fraction of the crop (auto)")
+    ap.add_argument("--shoulder", type=float, default=SHOULDER_AT, help="shoulder line, as a fraction of the crop (auto)")
     ap.add_argument("--fade", type=float, default=0.14, help="alpha ramp over the bottom of the crop (0 = off)")
     ap.add_argument("--max-size", type=int, default=400)
     ap.add_argument("--quality", type=int, default=82)
     ap.add_argument("--sheet", type=Path)
+    ap.add_argument("--sheet-colors", default="111111,333333,ffffff", help="sheet,tile,guide as hex")
     ap.add_argument("--overrides", type=Path)
     args = ap.parse_args()
+    colors = [hex_rgb(c) for c in args.sheet_colors.split(",")]
+    if len(colors) != 3:
+        ap.error("--sheet-colors takes three hex colours: sheet,tile,guide")
 
     data = json.loads(args.players_json.read_text(encoding="utf-8"))
     base = args.players_json.parent.resolve()
@@ -163,7 +149,7 @@ def main():
         dest = args.out_dir / f"{p['id']}.webp"
         out.save(dest, "WEBP", quality=args.quality, alpha_quality=90, method=6)
         kb = dest.stat().st_size / 1024
-        cx, top, shoulder = landmarks(img)
+        _, _, top, shoulder = outline(img)
         print(f"{p['id']:24} src={img.width}x{img.height} box=({box[0]:.0f},{box[1]:.0f},{box[2]:.0f},{box[3]:.0f}) "
               f"native={native} out={size} hair={(top - box[1]) / (box[3] - box[1]):.3f} "
               f"shoulder={(shoulder - box[1]) / (box[3] - box[1]):.3f} {kb:5.1f} KB", flush=True)
@@ -172,7 +158,7 @@ def main():
     total = sum(kb for _, _, kb in entries)
     print(f"{len(entries)} images, {total:.0f} KB total, max {max(kb for _, _, kb in entries):.1f} KB", flush=True)
     if args.sheet:
-        contact_sheet(entries, args.sheet, (args.top, args.shoulder))
+        contact_sheet(entries, args.sheet, (args.top, args.shoulder), colors)
         print(f"sheet: {args.sheet}", flush=True)
 
 
