@@ -7,11 +7,11 @@ it as an orphan.
 
 | File | What it is |
 |---|---|
-| `engine.js` | The game: deal, flips, audio, overlays, confetti, wake lock, install, service-worker registration, and the face kit a club's card face is drawn with |
+| `engine.js` | The game, in two modes: memory (deal, flips) and the quiz (who is this?); audio, overlays, confetti, wake lock, install, service-worker registration, and the face kit a club's card face is drawn with |
 | `base.css` | Every style the games share; colours and fonts come from each club's tokens |
-| `page.template.html` | The page with slots, filled per game: head, club style, base, title, trophy, DATA, club script, engine |
+| `page.template.html` | The page with slots, filled per game: head, club style, base, title, trophy, DATA, club script, engine; the two mode icons |
 | `sw.template.js` | The service worker; each game's `sw.js` is this file with `VERSION`, `ASSETS` and `PREFIX` filled in |
-| `audio/ui/` | The start and win clips (the engine's own lines); every game ships a copy |
+| `audio/ui/` | The start, win and who clips (the engine's own lines); every game ships a copy |
 | `new/` | The templates `build_page.py new` fills: `CREDITS.md`, the club's `tools/README.md` |
 | `tools/page/build_page.py` | `new`, `data`, `assemble [--check] [--watch]`, `list [--json]` (below) |
 | `tools/refresh.sh` | Everything after a club's scrape, in one command |
@@ -33,8 +33,16 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 | `<game>/club/club.json` | The name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`) |
 | `<game>/club/style.css` | Hand-written: fonts, colour tokens, card back, card face, title |
 | `<game>/club/club.js` | Hand-written: `CLUB = { confetti, fonts, face(kit) }` |
-| `<game>/club/roster.json` | Starters and bench, written by `build_page.py data` |
+| `<game>/club/roster.json` | Starters, bench and the quiz-only players (`quiz`), written by `build_page.py data` |
 | `_memory-game/*` | The engine, the base styles and the two templates |
+
+Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the two modes side by side.
+Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
+"מי זה" (`audio/ui/who.mp3`) then his match clip, four photo-only cards; a wrong pick greys out with a soft
+sound, the right one turns to the club's card face, says the name and moves on. Players with role `quiz` in
+players.json (the pool's backup goalkeepers) go in the roster's `quiz` list: asked in the quiz, never dealt.
+The image, voice and refresh tools take them like starters and bench; a club's scraper has to give them that
+role (today's scrapers mark them `excluded`).
 
 Scripts run in the order data, club, engine. `CLUB.face(kit)` returns the card face's four hooks:
 `prepare(players)`, `apply(style, cw, ch, mode)`, `build(p)` (its front must keep `.photo > img`, where a
@@ -111,8 +119,9 @@ _memory-game/tools/verify/verify.sh local --out <dir outside the repo> [<game>..
 ```
 
 P9 for the named games (default: all): `assemble --check`; seeded start, mid and win screenshots at
-600×960 and 960×600; one audio playthrough (the right clip on every flip); the worker online, offline and
-installable; the state machine. `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and
+600×960 and 960×600; one audio playthrough (the right clip on every flip); a whole quiz at both sizes (every
+player once, a wrong pick, the clips in order, question/wrong/reveal/end screenshots); the worker online,
+offline (memory and quiz) and installable; the state machine. `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and
 audio-identical, `verify.sh upgrade <old-ref> <new-ref>` simulates the GitHub Pages upgrade under
 `/pages/`, online then offline, and `verify.sh live` checks the deployed game after a merge. To look at a
 game by hand, serve the repo with `python3 -I _memory-game/tools/verify/serve.py 8765 .` (the stock

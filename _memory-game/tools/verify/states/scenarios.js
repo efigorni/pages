@@ -261,6 +261,57 @@ async function playToLastPair(h) {
     check('S17 silent device: win after ~1.5 s', wonAt !== null && wonAt <= 1600, `won after ${wonAt} ms`);
   }
 
+  // ---------- Q1-Q5 the quiz (speech only: the fake voice takes 60 ms a character) ----------
+  {
+    const h = boot({ noClips: true });
+    const { DATA, quiz, game } = h.T;
+    const pool = DATA.starters.concat(DATA.bench, DATA.quiz || []).map((p) => p.id);
+    await h.click('play-quiz');
+    const ids = () => quiz.cards.map((c) => c.p.id);
+    check('Q1 the quiz asks: 4 distinct cards with the answer, every pool player a pip',
+      h.phase() === 'ask' && new Set(ids()).size === 4 && ids().includes(quiz.answer.p.id) && game.pairs === pool.length);
+    const first = quiz.answer;
+    await h.pick(quiz.cards.find((c) => c !== first));
+    check('Q2 a pick in the first 450 ms of a question is ignored', quiz.cards.every((c) => c.state === 'down'));
+    await h.advance(500);
+    const wrong = quiz.cards.find((c) => c !== first);
+    await h.pick(wrong);
+    await h.pick(wrong);
+    check('Q2 a wrong pick greys out, stays on the question, no voice',
+      wrong.state === 'out' && h.phase() === 'ask' && quiz.answer === first && game.found === 0 && h.synth.spoken.length <= 1);
+    h.synth.spoken.length = 0;
+    await h.pick(first);
+    const name = first.p.speak_he || first.p.name_he;
+    await h.advance(100);
+    check('Q3 the right pick reveals and says the name', first.state === 'up' && h.phase() === 'reveal' && game.found === 1
+      && h.synth.spoken.map((s) => s.text).join('|') === name, JSON.stringify(h.synth.spoken.map((s) => s.text)));
+    await h.advance(60 * name.length + 1300);
+    check('Q3 still on the reveal until 1.5 s after the name', h.phase() === 'reveal');
+    await h.advance(300);
+    const next = quiz.answer.p;
+    await h.advance(3000);
+    const said = h.synth.spoken.map((s) => s.text);
+    check('Q3 then the next question: "who", then the match line', h.phase() === 'ask' && next !== first.p
+      && said.slice(1).join('|') === `מי זה?|${h.T.clip.match(next).text}`, JSON.stringify(said));
+    const asked = [first.p.id];
+    for (let i = 0; i < pool.length && h.phase() === 'ask'; i++) {
+      asked.push(quiz.answer.p.id);
+      await h.advance(500);
+      await h.pick(quiz.answer);
+      await h.advance(800);
+      if (h.phase() === 'reveal') await h.pick(quiz.cards[0]);
+      await h.advance(50);
+    }
+    let wonAt = null;
+    for (let i = 0; i < 200 && wonAt === null; i++) { await h.advance(50); if (h.phase() === 'won') wonAt = i; }
+    check('Q4 every quiz player asked exactly once, then the win screen', asked.length === pool.length
+      && new Set(asked).size === pool.length && wonAt !== null && h.byId.win.classList.contains('show'), `${asked.length}/${pool.length}`);
+    const quizOnly = new Set((DATA.quiz || []).map((p) => p.id));
+    let dealtQuizOnly = 0;
+    for (let i = 0; i < 200; i++) { h.T.newGame(); dealtQuizOnly += h.cards().filter((c) => quizOnly.has(c.p.id)).length; }
+    check('Q5 memory never deals a quiz-only player', dealtQuizOnly === 0, `${quizOnly.size} quiz-only, ${dealtQuizOnly} dealt in 200 games`);
+  }
+
   const failed = results.filter((r) => !r.ok).length;
   console.log(`\n${results.length - failed}/${results.length} pass, ${failed} fail`);
   process.exit(failed ? 1 : 0);

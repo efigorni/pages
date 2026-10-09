@@ -231,7 +231,7 @@ function boot(opts = {}) {
     d.audio = { ui: opts.noClips ? [] : ['start', 'win'], name: all, match: all };
     data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
   }
-  const exportLine = 'globalThis.__t = { DATA, game, tap, newGame, sound, clip, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
+  const exportLine = 'globalThis.__t = { DATA, game, quiz, tap, newGame, sound, clip, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
   const cut = main.lastIndexOf('})();');
   const patched = main.slice(0, cut) + exportLine + main.slice(cut);
   vm.createContext(g);
@@ -243,6 +243,7 @@ function boot(opts = {}) {
     advance, flush,
     click: async (id) => { byId[id].dispatch('click', { detail: 1 }); await flush(); },
     down: async (card) => { byId.board.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },
+    pick: async (card) => { byId.picks.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },
     cards: () => T.game.cards,
     phase: () => T.game.phase,
     pairOf: (card) => T.game.cards.find((c) => c !== card && c.p.id === card.p.id),

@@ -3,8 +3,10 @@
 #
 #   verify.sh local   --out <dir> [--tree <dir>] [<game>...]
 #       P9 before a commit: assemble --check; seeded start/mid/win screenshots at 600x960 and 960x600;
-#       one audio playthrough (the right clip on every flip); the worker online, offline and
-#       installable; the state machine. Serves the working tree, or --tree <dir>.
+#       one audio playthrough (the right clip on every flip); a whole quiz at both sizes (every
+#       player once, a wrong pick, the clips, question/wrong/reveal/end screenshots); the worker
+#       online, offline (memory and quiz) and installable; the state machine. Serves the working
+#       tree, or --tree <dir>.
 #   verify.sh compare <ref-a> <ref-b> --out <dir> [<game>...]
 #       The same seeded screenshots and playthrough on two commits: pixels, DOM, the computed HUD
 #       styles and the clip sequence must all match.
@@ -122,6 +124,7 @@ case "$cmd" in
     serve "$root"
     base="http://127.0.0.1:$PORT/"
     drive "$dir" "$base" "$(csv "${GAMES[@]}")"
+    node "$HERE/drive.js" "$dir" "$base" --games "$(csv "${GAMES[@]}")" --vps tab-portrait,tab-landscape --modes quiz
     pids=()
     for g in "${GAMES[@]}"; do
       node "$HERE/sw_check.js" "$base" "$g" "$dir" >"$dir/sw-$g.txt" 2>&1 &

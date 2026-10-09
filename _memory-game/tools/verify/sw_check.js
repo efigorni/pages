@@ -1,6 +1,6 @@
 // One game with its service worker on, in a fresh persistent profile at 600x960 touch: wait for the
 // worker to control the page, play a few flips online, read installability over CDP, then go
-// offline, reload and play again.
+// offline, reload and play again, then start the quiz offline and check its files are all cached.
 //
 //   node sw_check.js <base-url> <game> <out-dir> [<want-version>]
 //   e.g. node sw_check.js http://127.0.0.1:8781/ hapoel-tlv-memory /tmp/v/local
@@ -135,6 +135,29 @@ function audit(log) {
   R.offline.audio = { ...g2, ...audit((await page.evaluate(() => window.__log)).slice(at)) };
   R.offline.imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline.png`) });
+  // The quiz offline: the who clip, every quiz player's photo and clips (quiz-only players too) are
+  // in the cache, and a reloaded page asks its first question with them.
+  R.offline.quizCache = await page.evaluate(async () => {
+    const ids = DATA.starters.concat(DATA.bench, DATA.quiz || []).map((p) => p.id);
+    const urls = ['audio/ui/who.mp3'].concat(...ids.map((id) => [`img/${id}.webp`, `audio/name/${id}.mp3`, `audio/match/${id}.mp3`]));
+    const missing = [];
+    for (const u of urls) if (!(await caches.match(new URL(u, location.href).href))) missing.push(u);
+    return { checked: urls.length, missing, quizOnly: (DATA.quiz || []).map((p) => p.id) };
+  });
+  await page.reload({ waitUntil: 'load' });
+  await sleep(2000);
+  await page.tap('#play-quiz');
+  const answer = await page.evaluate(() => document.getElementById('picks').dataset.answer);
+  const heard = await until(page, (id) => window.__log.some((e) => (e.type === 'buf-start' || e.type === 'html-play') && e.url === `audio/match/${id}.mp3`), 15000, answer);
+  await sleep(600);
+  R.offline.quiz = await page.evaluate((id) => {
+    const clips = window.__log.filter((e) => e.type === 'buf-start' || e.type === 'html-play').map((e) => e.url);
+    const imgs = [...document.querySelectorAll('#picks img')];
+    return { answer: id, clips, imgs: [imgs.length, imgs.filter((x) => x.complete && x.naturalWidth > 0).length] };
+  }, answer);
+  R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips.slice(-2)) === JSON.stringify(['audio/ui/who.mp3', `audio/match/${answer}.mp3`])
+    && R.offline.quiz.imgs[0] === 4 && R.offline.quiz.imgs[1] === 4;
+  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-quiz.png`) });
   await context.setOffline(false);
   R.console = R.console.filter((m) => !m.includes('Banner not shown'));
   fs.writeFileSync(path.join(OUT, `sw-${GAME}.json`), JSON.stringify(R, null, 1));
