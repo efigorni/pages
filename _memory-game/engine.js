@@ -1347,15 +1347,15 @@
 
   // A locked quiz button points at the other two: its padlock wiggles, theirs bounce (base.css .hint).
   let hintTimer = 0;
-  function hintLocked(button) {
-    const row = button.parentElement;
+  function hintLocked() {
+    const { body } = document;
     sound.unlock();
     sound.sfx('hint');
-    row.classList.remove('hint');
-    void row.offsetWidth; // restart the animation
-    row.classList.add('hint');
+    body.classList.remove('hint');
+    void body.offsetWidth; // restart the animation
+    body.classList.add('hint');
     clearTimeout(hintTimer);
-    hintTimer = setTimeout(() => row.classList.remove('hint'), 1700);
+    hintTimer = setTimeout(() => body.classList.remove('hint'), 1700);
   }
 
   // Every new game starts from one of the three mode buttons: on the start screen, on the win screen
@@ -1364,7 +1364,7 @@
     ids.forEach((id) => $(id).addEventListener('click', () => {
       if (!allowed()) return;
       if (id.endsWith('-quiz') && quizLocked()) {
-        hintLocked($(id));
+        hintLocked();
         return;
       }
       if (reloadIfStale()) return;

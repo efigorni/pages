@@ -397,8 +397,8 @@ circle.cut { fill: var(--big-bg); }
 .modes .big .lock svg { width: 58%; height: 58%; }
 
 /* a tap on it: the padlock shakes its head and the two open games bounce */
-.modes.hint .mode[data-locked="true"] .lock { animation: wiggle .5s ease-in-out 2; }
-.modes.hint .mode:not([data-locked="true"]) { animation: nudge .6s cubic-bezier(.3, 1.6, .5, 1) 2; }
+.hint .mode[data-locked="true"] .lock { animation: wiggle .5s ease-in-out 2; }
+.hint .modes .mode:not([data-locked="true"]) { animation: nudge .6s cubic-bezier(.3, 1.6, .5, 1) 2; }
 
 @keyframes wiggle {
   0%, 100% { rotate: 0deg; }
@@ -974,8 +974,8 @@ circle.cut { fill: var(--big-bg); }
   .confirm.show .big,
   .win.show .trophy,
   .win.show .big,
-  .modes.hint .mode,
-  .modes.hint .lock,
+  .hint .modes .mode,
+  .hint .lock,
   .tile.fresh::after,
   .flash.show .flash-slot .card,
   .progress.gained .progress-star { animation: none; }

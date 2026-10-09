@@ -607,8 +607,8 @@ circle.cut { fill: var(--big-bg); }
 .modes .big .lock svg { width: 58%; height: 58%; }
 
 /* a tap on it: the padlock shakes its head and the two open games bounce */
-.modes.hint .mode[data-locked="true"] .lock { animation: wiggle .5s ease-in-out 2; }
-.modes.hint .mode:not([data-locked="true"]) { animation: nudge .6s cubic-bezier(.3, 1.6, .5, 1) 2; }
+.hint .mode[data-locked="true"] .lock { animation: wiggle .5s ease-in-out 2; }
+.hint .modes .mode:not([data-locked="true"]) { animation: nudge .6s cubic-bezier(.3, 1.6, .5, 1) 2; }
 
 @keyframes wiggle {
   0%, 100% { rotate: 0deg; }
@@ -1184,8 +1184,8 @@ circle.cut { fill: var(--big-bg); }
   .confirm.show .big,
   .win.show .trophy,
   .win.show .big,
-  .modes.hint .mode,
-  .modes.hint .lock,
+  .hint .modes .mode,
+  .hint .lock,
   .tile.fresh::after,
   .flash.show .flash-slot .card,
   .progress.gained .progress-star { animation: none; }
@@ -2801,15 +2801,15 @@ const CLUB = {
 
   // A locked quiz button points at the other two: its padlock wiggles, theirs bounce (base.css .hint).
   let hintTimer = 0;
-  function hintLocked(button) {
-    const row = button.parentElement;
+  function hintLocked() {
+    const { body } = document;
     sound.unlock();
     sound.sfx('hint');
-    row.classList.remove('hint');
-    void row.offsetWidth; // restart the animation
-    row.classList.add('hint');
+    body.classList.remove('hint');
+    void body.offsetWidth; // restart the animation
+    body.classList.add('hint');
     clearTimeout(hintTimer);
-    hintTimer = setTimeout(() => row.classList.remove('hint'), 1700);
+    hintTimer = setTimeout(() => body.classList.remove('hint'), 1700);
   }
 
   // Every new game starts from one of the three mode buttons: on the start screen, on the win screen
@@ -2818,7 +2818,7 @@ const CLUB = {
     ids.forEach((id) => $(id).addEventListener('click', () => {
       if (!allowed()) return;
       if (id.endsWith('-quiz') && quizLocked()) {
-        hintLocked($(id));
+        hintLocked();
         return;
       }
       if (reloadIfStale()) return;
