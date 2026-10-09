@@ -1,9 +1,4 @@
 {
-  "_doc": [
-    "Engine input per player, keyed by players.json id. `ipa` is fed to BlueTTS verbatim (RenikudPlus IPA: ˈ before the stressed vowel, ʁ χ ʔ ts dʒ tʃ). The same IPA is used in the name clip and inside the match clip, so the two always sound alike.",
-    "`g2p` is what RenikudPlus produced on its own for the bare name (kept to show what was changed). `why` explains each change. `stt_variants` are spellings the STT check accepts as the same pronunciation; never add a spelling that implies a different sound. Optional `speed` overrides the global pace for that player (BlueTTS divides duration by it).",
-    "A player missing from this file falls back to RenikudPlus G2P of name_he and is flagged in the QA report."
-  ],
   "players": {
     "ofek-melika": {"ipa": "ʔˈofek melˈika", "g2p": "ʔˈofek milˈika", "why": "G2P said mi-LI-ka for the bare name but me-LI-ka inside the match phrase; me-LI-ka is the reading of מליקה."},
     "raz-shlomo": {"ipa": "ʁˈaz ʃlˈomo", "g2p": "ʁˈaz ʃlomˈo", "why": "Colloquial Israeli stress SHLO-mo (G2P gave the formal shlo-MO)."},

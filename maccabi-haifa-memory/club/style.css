@@ -1,0 +1,173 @@
+/* Heebo (variable 100-900) stands in for the club's proprietary Atlas */
+@font-face {
+  font-family: Heebo;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(fonts/heebo-hebrew.woff2) format("woff2");
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: Heebo;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(fonts/heebo-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* the club site's own greens: card ground, primary, secondary, darkest */
+  --pitch: #204126;
+  --club: #007638;
+  --forest: #284d2f;
+  --ink: #001d05;
+  --mint: #86d094;
+  --white: #ffffff;
+  --stripes: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 292 356'%3E%3Cdefs%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='1' x2='273'%3E%3Cstop offset='.04' stop-color='%23fff' stop-opacity='.44'/%3E%3Cstop offset='.74' stop-color='%23fff' stop-opacity='.22'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' stroke='url(%23g)' d='M-158.0-78.8l-2.3 2.3L186.2 267.4zM-148.3-78.8l-2.3 2.3L195.9 267.4zM-138.7-78.8l-2.3 2.3L205.5 267.4zM-129.0-78.8l-2.3 2.3L215.2 267.4zM-119.3-78.8l-2.3 2.3L224.9 267.4zM-109.6-78.8l-2.3 2.3L234.6 267.4zM-100.0-78.8l-2.3 2.3L244.2 267.4zM-90.3-78.8l-2.3 2.3L253.9 267.4zM-80.6-78.8l-2.3 2.3L263.6 267.4zM-70.9-78.8l-2.3 2.3L273.3 267.4zM-61.2-78.8l-2.3 2.3L283.0 267.4zM-51.6-78.8l-2.3 2.3L292.6 267.4zM-41.9-78.8l-2.3 2.3L302.3 267.4zM-32.2-78.8l-2.3 2.3L312.0 267.4zM-22.5-78.8l-2.3 2.3L321.7 267.4zM-12.9-78.8l-2.3 2.3L331.3 267.4zM-3.2-78.8l-2.3 2.3L341.0 267.4zM6.5-78.8l-2.3 2.3L350.7 267.4z'/%3E%3C/svg%3E");
+  /* read by the shared base styles */
+  --font: Heebo, "Arial Hebrew", system-ui, sans-serif;
+  --accent: var(--mint);
+  --surface: var(--pitch);
+  --pip-ring: rgba(134, 208, 148, .3);
+  --app-bg: radial-gradient(130% 95% at 50% 45%, #0e3a18 0%, #052a0e 45%, var(--ink) 100%);
+  --burst: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%2386d094'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E");
+  --big-bg: var(--white);
+  --big-fg: var(--club);
+  --big-drop: #9cc4a5;
+  --no-bg: var(--forest);
+  --no-drop: #10291a;
+  --start-bg: radial-gradient(90% 70% at 50% 42%, rgba(52, 110, 62, .55) 0%, rgba(52, 110, 62, 0) 70%), var(--pitch);
+  --halo: var(--white);
+  --scrim-install: rgba(0, 29, 5, .35);
+  --scrim-confirm: rgba(0, 29, 5, .76);
+  --scrim-win: rgba(0, 29, 5, .6);
+  /* the frames base.css draws: the back's inset line, the front's hairline, the found frame */
+  --back-line: max(1.5px, calc(var(--short) * .016)) solid rgba(255, 255, 255, .72);
+  --edge: rgba(255, 255, 255, .14);
+  --found: var(--mint);
+}
+
+/* card back: club green, the /players pinstripe band, and our own ball (not the crest) */
+.back {
+  background-color: var(--club);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -60 120 120'%3E%3Cdefs%3E%3CclipPath id='b'%3E%3Ccircle r='42'/%3E%3C/clipPath%3E%3Cg id='s'%3E%3Cpath d='M0-17V-29' stroke='%23204126' stroke-width='3.4'/%3E%3Cpath d='M0-28L-12.4-37-7.6-51.5H7.6L12.4-37Z' fill='%23204126'/%3E%3C/g%3E%3C/defs%3E%3Cellipse cy='49' rx='40' ry='8' fill='%23001d05' fill-opacity='.35'/%3E%3Cg transform='scale(1.1)'%3E%3Ccircle r='42' fill='%23fff'/%3E%3Cg clip-path='url(%23b)'%3E%3Cpath d='M0-17 16.2-5.3 10 13.8H-10L-16.2-5.3Z' fill='%23204126'/%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' transform='rotate(72)'/%3E%3Cuse href='%23s' transform='rotate(144)'/%3E%3Cuse href='%23s' transform='rotate(216)'/%3E%3Cuse href='%23s' transform='rotate(288)'/%3E%3C/g%3E%3Ccircle r='42' fill='none' stroke='%23204126' stroke-width='2.2'/%3E%3C/g%3E%3C/svg%3E"),
+    var(--stripes);
+  background-repeat: no-repeat;
+  background-position: center, left top;
+  background-size: min(calc(var(--short) * .64), calc(var(--cw) * .58)) auto, cover;
+}
+
+/* card face: a pocket version of the club's /players card */
+.front {
+  background: var(--stripes) left top / cover no-repeat, var(--pitch);
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.photo img {
+  position: absolute;
+  left: var(--photo-x);
+  top: 0;
+  width: var(--photo-s);
+  height: var(--photo-s);
+}
+
+/* the site's bottom shadow: over the photo, under the type */
+.front::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--fade-h);
+  background: linear-gradient(to top, rgba(0, 0, 0, .9) 0%, rgba(0, 0, 0, .62) 42%, rgba(0, 0, 0, 0) 100%);
+}
+
+[data-face="side"] .front::before {
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, .88) 0%, rgba(0, 0, 0, .5) 45%, rgba(0, 0, 0, 0) 100%),
+    linear-gradient(to left, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 55%);
+}
+
+/* the club's white-to-transparent shirt number, stopped at 30% so a child can still read the digits */
+.num {
+  position: absolute;
+  z-index: 2;
+  top: var(--num-top);
+  right: var(--ipad);
+  direction: ltr;
+  font-weight: 700;
+  font-size: var(--num-fs);
+  line-height: .86;
+  letter-spacing: -.02em;
+  color: var(--white);
+  background: linear-gradient(#fff 33%, rgba(255, 255, 255, .3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.name {
+  position: absolute;
+  z-index: 2;
+  right: var(--ipad);
+  bottom: var(--name-b);
+  width: var(--name-w);
+  text-align: right;
+  white-space: nowrap;
+  color: var(--white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+.name span { display: block; }
+
+.first {
+  font-weight: 400;
+  font-size: var(--first-px, 12px);
+  line-height: 1.04;
+}
+
+.last {
+  font-weight: 800;
+  font-size: var(--last-px, 22px);
+  line-height: .94;
+  letter-spacing: -.04em;
+}
+
+/* the cards' pinstripe band at screen scale, softened so the type and the fan lead */
+.start::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--stripes) left top / cover no-repeat;
+  opacity: .45;
+  pointer-events: none;
+}
+
+/* the cards' two-tier name, at title size */
+.title {
+  margin: 0;
+  display: grid;
+  justify-items: start;
+  color: var(--white);
+}
+
+.title > span { display: block; }
+
+.title-small {
+  font-weight: 400;
+  font-size: clamp(22px, 5.6vmin, 56px);
+  line-height: 1;
+}
+
+.title-big {
+  font-weight: 800;
+  font-size: clamp(48px, 12.5vmin, 128px);
+  line-height: .92;
+  letter-spacing: -.045em;
+}

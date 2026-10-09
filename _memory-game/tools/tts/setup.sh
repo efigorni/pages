@@ -1,35 +1,32 @@
 #!/usr/bin/env bash
-# One-time, idempotent setup for the memory games' voice clips.
+# The voice clips' engine install, shared by every game. Without --install it only reports.
 #
-#   MACCABI_ROOT=<work> _memory-game/tools/tts/setup.sh           # reuse a working BlueTTS install, else install
-#   MACCABI_ROOT=<work> _memory-game/tools/tts/setup.sh --fresh   # install under $MACCABI_TTS_HOME regardless
-#   ... setup.sh --all     also the runner-up engine (Phonikud + Piper) for generate.py --engine piper
+#   _memory-game/tools/tts/setup.sh              is there a working install? (installs nothing)
+#   _memory-game/tools/tts/setup.sh --install    install one into the engine home if there is none (~1 GB)
+#   ... --all                                    also the runner-up engine (Phonikud + Piper), for --engine piper
 #
-# <work> is the scratch directory outside the repo that holds data/ and tts/.
-# An engine home holds:
+# The engine home is $MEMORY_GAME_TTS_ENGINES (or the older $MACCABI_TTS_ENGINES), else
+# ${XDG_CACHE_HOME:-~/.cache}/memory-game-tts: it belongs to no club, so every game uses the same one. It holds:
 #   _engines/BlueTTS   pinned clone of github.com/maxmelichov/BlueTTS + its ONNX bundle
 #   .venv-blue         BlueTTS + RenikudPlus G2P (Python 3.12)
 #   .venv-stt          numpy + faster-whisper (orchestrator, metrics, second-opinion STT)
 #   .venv-phonikud     phonikud-tts (Piper), only with --all
-# Lookup order (generate.py uses the same): $MACCABI_TTS_ENGINES (e.g. an install another
-# project already made), then $MACCABI_TTS_HOME (default $MACCABI_ROOT/tts).
-# The first that passes the check is used as is: it is only run (no bytecode, offline
-# Hugging Face), never modified. If none passes, a fresh install goes to $MACCABI_TTS_HOME.
-# Models live in the Hugging Face cache ($HF_HUB_CACHE, else $HF_HOME/hub, else
-# ~/.cache/huggingface/hub). Needs: uv, git, ffmpeg, whisper-cli
-# (brew install uv ffmpeg whisper-cpp). No sudo, no global pip.
+# A working install is only ever run (no bytecode, offline Hugging Face), never modified. Models
+# live in the Hugging Face cache ($HF_HUB_CACHE, else $HF_HOME/hub, else ~/.cache/huggingface/hub).
+# Needs: uv, git, ffmpeg, whisper-cli (brew install uv ffmpeg whisper-cpp). No sudo, no global pip.
 set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="${MACCABI_ROOT:?set MACCABI_ROOT to the work directory (outside the repo) that holds data/ and tts/}"
-TTS="${MACCABI_TTS_HOME:-$ROOT/tts}"
+TTS="${MEMORY_GAME_TTS_ENGINES:-${MACCABI_TTS_ENGINES:-${XDG_CACHE_HOME:-$HOME/.cache}/memory-game-tts}}"
 HF_CACHE="${HF_HUB_CACHE:-${HF_HOME:-$HOME/.cache/huggingface}/hub}"
 BLUE_COMMIT=0e38dbf08ed53f85863d1eab092bd9572c53a503   # BlueTTS main, 2026-08-13
-FRESH=0
+FASTER_WHISPER=1.2.1   # the versions the clips in the repo were checked and finished with
+NUMPY=2.5.3
+INSTALL=0
 ALL=0
 for arg in "$@"; do
   case "$arg" in
-    --fresh) FRESH=1 ;;
+    --install|--fresh) INSTALL=1 ;;
     --all) ALL=1 ;;
     *) echo "unknown option: $arg"; exit 2 ;;
   esac
@@ -44,33 +41,36 @@ done
 # without writing anything.
 check() {
   local e="$1"
-  [[ -x "$e/.venv-blue/bin/python" && -x "$e/.venv-stt/bin/python" ]] || return 1
-  [[ -f "$e/_engines/BlueTTS/onnx_models/vector_estimator.onnx" && -f "$e/_engines/BlueTTS/voices/noa.json" ]] || return 1
-  [[ "$(git -C "$e/_engines/BlueTTS" rev-parse HEAD 2>/dev/null)" == "$BLUE_COMMIT" ]] || return 1
+  no() { echo "[setup]   not usable: $*"; }
+  [[ -x "$e/.venv-blue/bin/python" && -x "$e/.venv-stt/bin/python" ]] || { no "no .venv-blue or .venv-stt"; return 1; }
+  [[ -f "$e/_engines/BlueTTS/onnx_models/vector_estimator.onnx" && -f "$e/_engines/BlueTTS/voices/noa.json" ]] \
+    || { no "no BlueTTS ONNX bundle or noa voice in _engines/BlueTTS"; return 1; }
+  [[ "$(git -C "$e/_engines/BlueTTS" rev-parse HEAD 2>/dev/null)" == "$BLUE_COMMIT" ]] || { no "BlueTTS is not at ${BLUE_COMMIT:0:8}"; return 1; }
   PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 PYTHONPATH="$e/_engines/BlueTTS/src" \
-    "$e/.venv-blue/bin/python" -c "import blue_onnx; from renikud_onnx import G2P; print('[setup]   G2P שלום ->', G2P().phonemize('שלום'))" || return 1
+    "$e/.venv-blue/bin/python" -c "import blue_onnx; from renikud_onnx import G2P; print('[setup]   G2P שלום ->', G2P().phonemize('שלום'))" \
+    || { no "BlueTTS or RenikudPlus does not load (the error above)"; return 1; }
   PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 \
-    "$e/.venv-stt/bin/python" -c "import numpy, faster_whisper; print('[setup]   faster-whisper', faster_whisper.__version__)" || return 1
-  ls "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-turbo-ggml/snapshots/*/ggml-model.bin >/dev/null 2>&1 || return 1
-  ls -d "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-ct2/snapshots/* >/dev/null 2>&1 || return 1
+    "$e/.venv-stt/bin/python" -c "import numpy, faster_whisper; print('[setup]   faster-whisper', faster_whisper.__version__)" \
+    || { no "faster-whisper does not load (the error above)"; return 1; }
+  ls "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-turbo-ggml/snapshots/*/ggml-model.bin >/dev/null 2>&1 \
+    || { no "no ivrit-ai/whisper-large-v3-turbo-ggml in $HF_CACHE"; return 1; }
+  ls -d "$HF_CACHE"/models--ivrit-ai--whisper-large-v3-ct2/snapshots/* >/dev/null 2>&1 || { no "no ivrit-ai/whisper-large-v3-ct2 in $HF_CACHE"; return 1; }
   if (( ALL )); then
-    PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 "$e/.venv-phonikud/bin/python" -c "import phonikud_tts" || return 1
-    ls "$HF_CACHE"/models--Phonikud--phonikud-tts-checkpoints/snapshots/*/shaul.onnx >/dev/null 2>&1 || return 1
+    PYTHONDONTWRITEBYTECODE=1 HF_HUB_OFFLINE=1 "$e/.venv-phonikud/bin/python" -c "import phonikud_tts" || { no "phonikud-tts does not load"; return 1; }
+    ls "$HF_CACHE"/models--Phonikud--phonikud-tts-checkpoints/snapshots/*/shaul.onnx >/dev/null 2>&1 || { no "no Piper checkpoints"; return 1; }
   fi
 }
 
-if (( ! FRESH )); then
-  for e in ${MACCABI_TTS_ENGINES:-} "$TTS"; do
-    [[ -d "$e" ]] || continue
-    echo "[setup] checking $e"
-    if check "$e" 2>/dev/null; then
-      echo "[setup] reusing $e — nothing installed or changed"
-      [[ "$e" == "$TTS" ]] || echo "[setup] keep MACCABI_TTS_ENGINES=$e exported for generate.py"
-      echo "[setup] next: $e/.venv-stt/bin/python -u $HERE/generate.py --pron <game>/tools/tts/pronunciations.json"
-      exit 0
-    fi
-    echo "[setup]   not usable"
-  done
+echo "[setup] checking $TTS"
+if [[ -d "$TTS" ]] && check "$TTS"; then
+  echo "[setup] $TTS works — nothing installed or changed"
+  echo "[setup] next: $HERE/tts.sh <game> <work> generate"
+  exit 0
+fi
+if (( ! INSTALL )); then
+  echo "[setup] no working install in $TTS. Install one there (about 1 GB: BlueTTS, two venvs, the models) with:"
+  echo "        $0 --install"
+  exit 1
 fi
 
 echo "[setup] fresh install under $TTS"
@@ -91,7 +91,8 @@ PYTHONPATH="$TTS/_engines/BlueTTS/src" "$TTS/.venv-blue/bin/python" -c "from ren
 
 echo "[setup] STT + tooling venv"
 [[ -x "$TTS/.venv-stt/bin/python" ]] || uv venv "$TTS/.venv-stt" --python 3.12
-uv pip install --python "$TTS/.venv-stt/bin/python" faster-whisper numpy
+# pinned: a newer faster-whisper (or numpy) can hear, and trim, the same take differently
+uv pip install --python "$TTS/.venv-stt/bin/python" "faster-whisper==$FASTER_WHISPER" "numpy==$NUMPY"
 "$TTS/.venv-stt/bin/hf" download ivrit-ai/whisper-large-v3-turbo-ggml ggml-model.bin >/dev/null
 "$TTS/.venv-stt/bin/hf" download ivrit-ai/whisper-large-v3-ct2 >/dev/null
 
@@ -104,4 +105,4 @@ if (( ALL )); then
     model.onnx shaul.onnx michael.onnx model.config.json >/dev/null
 fi
 check "$TTS" || { echo "[setup] the fresh install does not pass the check"; exit 1; }
-echo "[setup] done — next: $TTS/.venv-stt/bin/python -u $HERE/generate.py --pron <game>/tools/tts/pronunciations.json"
+echo "[setup] done — next: $HERE/tts.sh <game> <work> generate"

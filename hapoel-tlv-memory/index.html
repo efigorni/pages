@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#6d052a">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="זיכרון הפועל">
 <title>זיכרון הפועל תל אביב</title>
 <link rel="icon" type="image/png" href="icons/icon-192.png">
@@ -58,7 +58,6 @@
   --red: #ff1521;
   --wine: #6d052a;
   --claret: #800029;
-  --magenta: #ff009d;
   --salmon: #ff9495;
   --rose: #ffb5ba;
   --blush: #ffe6e6;
@@ -86,23 +85,19 @@
   --scrim-install: rgba(109, 5, 42, .6);
   --scrim-confirm: rgba(109, 5, 42, .8);
   --scrim-win: rgba(109, 5, 42, .66);
+  /* the shared HUD is drawn for a dark board; this board is the site's pale pink */
+  --scheme: light;
+  --hud-btn-bg: var(--wine);
+  --pip-bg: rgba(109, 5, 42, .07);
+  /* the frames base.css draws: the back's inset line, the front's hairline, the found frame */
+  --back-line: max(2px, calc(var(--short) * .022)) solid var(--white);
+  --edge: rgba(109, 5, 42, .16);
+  --found: var(--red);
 }
-
-/* the shared HUD is drawn for a dark board; this board is the site's pale pink */
-.hud .icon-btn { background: var(--wine); }
-.hud .pip { background: rgba(109, 5, 42, .07); }
 
 /* card back: our honeycomb on club red, inside a white frame */
 .back {
   background: var(--hex) center / calc(var(--short) * .66) auto repeat, var(--red);
-}
-
-.back::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--short) * .055);
-  border: max(2px, calc(var(--short) * .022)) solid var(--white);
-  border-radius: calc(var(--r) * .6);
 }
 
 /* card face: the site's player card (a cutout on white, the name in wine under it) with its
@@ -172,20 +167,6 @@
 
 .name > span { display: block; }
 
-.front::after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(109, 5, 42, .16);
-  transition: box-shadow .2s ease;
-}
-
-.card.found .front::after {
-  box-shadow: inset 0 0 0 var(--frame, 4px) var(--red);
-}
-
 /* the banner's net and hexagon panels, behind the start screen */
 .start::before,
 .start::after {
@@ -239,7 +220,10 @@
 <style id="base">
 /* _memory-game/base.css, shared by the memory games: build_page.py assemble stamps it into the
    base style block of each game's page. Edit it there, not in a page. Colours and fonts come from
-   the club's tokens in the page's own style block, which comes first. */
+   the club's tokens in the page's own style block, which comes first. Optional tokens are read as
+   var(--token, the dark board's value), never declared here: a default on this :root would beat the
+   club's own. A light board sets --scheme, --hud-btn-bg, --hud-btn-muted, --pip-bg, --install-line
+   and --install-fg. */
 
 :root {
   --pad: clamp(6px, 1.4vmin, 14px);
@@ -250,7 +234,7 @@
   --ch: 130px;
   --short: min(var(--cw), var(--ch));
   --r: calc(var(--short) * .09);
-  color-scheme: dark;
+  color-scheme: var(--scheme, dark);
 }
 
 * { box-sizing: border-box; }
@@ -341,7 +325,7 @@ img {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, .09);
+  background: var(--hud-btn-bg, rgba(255, 255, 255, .09));
   color: var(--white);
   transition: transform .12s ease;
 }
@@ -352,7 +336,7 @@ img {
 #mute .i-off { display: none; }
 #mute[aria-pressed="true"] .i-on { display: none; }
 #mute[aria-pressed="true"] .i-off { display: block; }
-#mute[aria-pressed="true"] { color: rgba(255, 255, 255, .55); }
+#mute[aria-pressed="true"] { color: var(--hud-btn-muted, rgba(255, 255, 255, .55)); }
 
 .pips {
   flex: 1 1 auto;
@@ -379,7 +363,7 @@ img {
   max-height: calc(var(--hud) * .6);
   border-radius: 50%;
   overflow: hidden;
-  background: rgba(255, 255, 255, .05);
+  background: var(--pip-bg, rgba(255, 255, 255, .05));
 }
 
 .pip::after {
@@ -469,6 +453,29 @@ img {
 }
 
 .front { transform: rotateY(180deg); }
+
+/* The back's inset frame, the front's hairline and the found frame. Their shape is the game's (a found
+   pair is feedback); the club's tokens give the colours: --back-line (a border, or none), --edge, --found,
+   and --found-w for a fixed width (the default follows the board's --frame, which the face sets). */
+.back::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--short) * .055);
+  border: var(--back-line);
+  border-radius: calc(var(--r) * .6);
+}
+
+.front::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--edge);
+  transition: box-shadow .2s ease;
+}
+
+.card.found .front::after { box-shadow: inset 0 0 0 var(--found-w, var(--frame, 4px)) var(--found); }
 
 /* motion */
 .board.dealing .card {
@@ -631,9 +638,9 @@ img {
   min-height: 40px;
   padding: 6px 14px 6px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, .22);
+  border: 1px solid var(--install-line, rgba(255, 255, 255, .22));
   background: var(--scrim-install);
-  color: rgba(255, 255, 255, .78);
+  color: var(--install-fg, rgba(255, 255, 255, .78));
   font: 600 14px/1.1 system-ui, "Arial Hebrew", sans-serif;
 }
 
@@ -776,17 +783,16 @@ const CLUB = {
   face(kit) {
     'use strict';
 
-    const { el, textEm, words, bestSplit, photoFront } = kit;
+    const { el, photoFront, splits, fitLines, renderName, setVars } = kit;
     const NAME_FONT = '600 100px Rubik';
     const NAME_LH = 1.04;
     const digitEm = { value: 0.3 };
 
+    // One line, plus a two-line split when the name allows one ("בר כהן" doesn't).
     function prepare(players) {
-      digitEm.value = textEm('0123456789', '700 100px Karantina') / 10 || 0.3;
+      digitEm.value = kit.digitEm('700 100px Karantina', 0.3);
       players.forEach((p) => {
-        const list = words(p.name_he);
-        p.nameSplits = [bestSplit(list, 1, NAME_FONT)];
-        if (list.length > 1) p.nameSplits.push(bestSplit(list, 2, NAME_FONT));
+        p.nameSplits = splits(p.name_he, NAME_FONT);
       });
     }
 
@@ -810,37 +816,19 @@ const CLUB = {
 
     function apply(st, cw, ch, mode) {
       const v = faceVars(cw, ch, mode);
-      st.setProperty('--frame', `${v.frame}px`);
-      st.setProperty('--ipad', `${v.pad}px`);
-      st.setProperty('--band-h', `${v.band}px`);
-      st.setProperty('--photo-s', `${v.s}px`);
-      st.setProperty('--photo-x', `${v.x}px`);
-      st.setProperty('--photo-y', `${v.y}px`);
-      st.setProperty('--panel-w', `${v.panelW}px`);
-      st.setProperty('--hex-w', `${v.panelW * 0.96}px`);
-      st.setProperty('--num-fs', `${v.num}px`);
-      st.setProperty('--num-top', `${v.numTop}px`);
+      setVars(st, {
+        '--frame': `${v.frame}px`, '--band-h': `${v.band}px`, '--photo-s': `${v.s}px`, '--photo-x': `${v.x}px`,
+        '--photo-y': `${v.y}px`, '--panel-w': `${v.panelW}px`, '--hex-w': `${v.panelW * 0.96}px`,
+        '--num-fs': `${v.num}px`, '--num-top': `${v.numTop}px`,
+      });
       return v;
-    }
-
-    function renderName(scope, lines) {
-      const name = scope.querySelector('.name');
-      const key = lines.join('|');
-      if (name.dataset.lines === key) return;
-      name.dataset.lines = key;
-      name.textContent = '';
-      lines.forEach((line) => name.appendChild(el('span', null, line)));
     }
 
     // One line or two, whichever sets the name bigger; the second line has to buy more than 4%.
     function fit(cardEl, p, geo) {
       if (!p.nameSplits) return;
       const v = geo.v;
-      let best = null;
-      p.nameSplits.forEach((split) => {
-        const size = Math.min(v.band * 0.5, v.nameW / split.em, v.nameH / (split.lines.length * NAME_LH));
-        if (!best || size > best.size * 1.04) best = { split, size };
-      });
+      const best = fitLines(p.nameSplits, { cap: v.band * 0.5, w: v.nameW, h: v.nameH, lh: NAME_LH });
       renderName(cardEl, best.split.lines);
       cardEl.style.setProperty('--name-px', `${best.size.toFixed(2)}px`);
     }
@@ -1227,6 +1215,61 @@ const CLUB = {
     return best;
   }
 
+  // The one-line split, then the best split into 2..max lines; a count no split allows is left out.
+  function splits(text, font, track, max = 2) {
+    const list = words(text);
+    const out = [];
+    for (let n = 1; n <= Math.min(max, list.length); n++) {
+      const split = bestSplit(list, n, font, track);
+      if (split) out.push(split);
+    }
+    return out;
+  }
+
+  // The candidate split that sets the name biggest in a w x h box, at most cap; a later candidate
+  // has to buy more than 4% of size.
+  function fitLines(candidates, { cap, w, h, lh }) {
+    let best = null;
+    candidates.forEach((split) => {
+      const size = Math.min(cap, w / split.em, h / (split.lines.length * lh));
+      if (!best || size > best.size * 1.04) best = { split, size };
+    });
+    return best;
+  }
+
+  // The name element's lines: one tier (an array of lines), or {first, last} tiers, each a span of
+  // line spans. data-lines keeps a resize from rebuilding an unchanged name.
+  function renderName(scope, lines) {
+    const name = scope.querySelector('.name');
+    const tiers = Array.isArray(lines) ? null : lines;
+    const key = tiers ? `${tiers.first.join('|')}/${tiers.last.join('|')}` : lines.join('|');
+    if (name.dataset.lines === key) return;
+    name.dataset.lines = key;
+    name.textContent = '';
+    const fill = (parent, list) => list.forEach((line) => parent.appendChild(el('span', null, line)));
+    if (!tiers) {
+      fill(name, lines);
+      return;
+    }
+    if (tiers.first.length) {
+      const top = el('span', 'first');
+      fill(top, tiers.first);
+      name.appendChild(top);
+    }
+    const big = el('span', 'last');
+    fill(big, tiers.last);
+    name.appendChild(big);
+  }
+
+  function setVars(style, vars) {
+    Object.entries(vars).forEach(([key, value]) => style.setProperty(key, value));
+  }
+
+  // The width of one digit of `font`, in em.
+  function digitEm(font, fallback) {
+    return textEm('0123456789', font) / 10 || fallback;
+  }
+
   /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
   // Every face starts with the photo; a match flight starts from its `.photo img`.
@@ -1243,7 +1286,9 @@ const CLUB = {
     return front;
   }
 
-  const face = CLUB.face({ el, textEm, words, bestSplit, photoFront });
+  const face = CLUB.face({
+    el, textEm, words, bestSplit, photoFront, splits, fitLines, renderName, setVars, digitEm,
+  });
 
   function faceMode(cw, ch) {
     const ratio = cw / ch;

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Render a game's PWA icons from its two SVGs (icon-any.svg, icon-maskable.svg).
 #
-# usage: render_icons.sh <svg-dir> <out-dir>
-#   e.g. render_icons.sh maccabi-memory/tools/page/icons maccabi-memory/icons
+# usage: render_icons.sh --game <game>          its tools/page/icons/*.svg into its icons/
+#        render_icons.sh <svg-dir> <out-dir>
 #   CHROME=<chrome binary>  overrides the macOS default below.
 #
 # Headless Chrome won't render a window narrower than ~500 px, so both icons are
@@ -10,8 +10,11 @@
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"
-svgs="$(cd "${1:?usage: render_icons.sh <svg-dir> <out-dir>}" && pwd)"
-out="${2:?usage: render_icons.sh <svg-dir> <out-dir>}"
+if [[ "${1:-}" == "--game" ]]; then
+  set -- "${2:?usage: render_icons.sh --game <game>}/tools/page/icons" "$2/icons"
+fi
+svgs="$(cd "${1:?usage: render_icons.sh --game <game> | <svg-dir> <out-dir>}" && pwd)"
+out="${2:?usage: render_icons.sh --game <game> | <svg-dir> <out-dir>}"
 chrome="${CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
 profile="$(mktemp -d)"
 trap 'rm -rf "$profile"' EXIT

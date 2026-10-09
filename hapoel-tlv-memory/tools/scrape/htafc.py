@@ -104,7 +104,8 @@ def report_text(content_html: str) -> str:
     return H.unescape(t)
 
 
-LINEUP_RE = re.compile(r"שיחקו בהפועל\s*:?\s*\n+\s*(.+?)\n", re.S)
+# The line-up follows "שיחקו בהפועל:" on the next line, or on the same one.
+LINEUP_RE = re.compile(r"שיחקו בהפועל\s*:?\s*([^\s:].*?)(?:\n|$)", re.S)
 
 
 def parse_lineup_block(text: str) -> list[dict]:
@@ -136,7 +137,7 @@ def parse_lineup_block(text: str) -> list[dict]:
         subs = []
         for inner in re.findall(r"\(([^()]*)\)", part):
             for piece in inner.split(","):
-                mm = re.match(r"\s*(.+?)\s*[–\-—]\s*(\d+)(?:\s*\+\s*(\d+))?\s*$", piece)
+                mm = re.match(r"\s*(.+?)\s*[–\-—]\s*(\d+)(?:\s*\+\s*(\d*))?\s*$", piece)  # 62, 45+3, 90+
                 if mm:
                     subs.append({"name": squash(mm.group(1)), "minute": int(mm.group(2)),
                                  "added": int(mm.group(3)) if mm.group(3) else 0})

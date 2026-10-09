@@ -1,11 +1,11 @@
-"""Hapoel Tel Aviv FC roster + 2026/27 appearances -> players.json (Haifa's shape).
+"""Hapoel Tel Aviv FC roster + this season's appearances -> players.json (Haifa's shape).
 
 Sources (all cached under <data>/html/, re-runs make no network calls unless --refresh):
   * htafc.co.il team & players page (Hebrew, uncached render for a fresh nonce) + its English twin
   * the member popup per player (admin-ajax get_team_member_info): number, position, age, bio
   * the club's own match reports (WP posts, category 30): the "שיחקו בהפועל:" line-up block per game
   * the club's fixture list (homepage): date, opponent, score, competition logo
-  * Transfermarkt (club 1017) squad stats, all competitions 2026/27: cross-check only
+  * Transfermarkt (club 1017) squad stats, all competitions of the season: cross-check only
 Photos: the listing card image (original upload) per starter/bench player -> <data>/raw/<id>.png
 
 Usage:
@@ -17,36 +17,39 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
-import hashlib
 import json
-import os
 import re
 import sys
-import tempfile
-import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(1, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/images"))  # framing.py
+sys.path.insert(1, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/scrape"))  # the shared kit
+sys.path.insert(2, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/images"))  # framing.py
 
 from PIL import Image  # noqa: E402
 
-from fetch import Fetcher, log_line  # noqa: E402
-from framing import landmarks, square_crop  # noqa: E402
-from htafc import LISTING_EN, LISTING_HE, SECTION_EN, parse_lineup_block, parse_listing, parse_popup, report_text  # noqa: E402
-from tm_parse import parse_squadstats  # noqa: E402
+from common import Fetcher, ascii_slug, log_line, norm_name, photo_facts, write_json_atomic  # noqa: E402
+from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
+from htafc import (LINEUP_RE, LISTING_EN, LISTING_HE, SECTION_EN, parse_lineup_block, parse_listing,  # noqa: E402
+                   parse_popup, report_text)
+from roster import check, output_key, select  # noqa: E402
+from transfermarkt import parse_squadstats, squadstats_url  # noqa: E402
 
+# The season this scrape counts. Its dates, the cached Transfermarkt file, the club's season id and every
+# text below follow from it; SEASON_DATA and COMP_BY_LOGO are the per-season facts typed in by hand.
 SEASON = "2026/27"
+SEASON_START = int(SEASON[:4])
 TZ = dt.timezone(dt.timedelta(hours=3))
 COMP_BY_LOGO = {
     "logo-winner-ligat.png": "ליגת ווינר",
     "gvia-hatoto.png": "גביע הטוטו",
     "uefa-conference-league-full-logo-2024-version1.png": "קונפרנס ליג - מוקדמות",
 }
-# Stage names from the club's own match records (wp-json/wp/v2/htafc_match titles), keyed by fixture date.
-STAGE_BY_DATE = {
+# Per season, keyed by fixture date: each official game's stage name and the club's own match record id
+# (wp-json/wp/v2/htafc_match titles), and Transfermarkt's match report id (its fixtures page).
+SEASON_DATA = {"2026/27": {"stages": {
     "2026-07-18": ("גביע הטוטו - משחק האירופאיות", 67500),
     "2026-07-23": ("קונפרנס ליג - מוקדמות, סיבוב שני (1)", 67493),
     "2026-07-30": ("קונפרנס ליג - מוקדמות, סיבוב שני (2)", 67494),
@@ -60,24 +63,22 @@ STAGE_BY_DATE = {
     "2026-09-07": ("ליגת ווינר - מחזור 3", 67449),
     "2026-09-14": ("ליגת ווינר - מחזור 4", 67450),
     "2026-09-18": ("ליגת ווינר - מחזור 5", 67451),
-}
-TM_REPORT_BY_DATE = {
+}, "tm_reports": {
     "2026-07-23": 4897987, "2026-07-30": 4898025, "2026-08-06": 4973731, "2026-08-12": 4973761,
     "2026-08-20": 5013818, "2026-08-27": 5013842, "2026-08-30": 4912901, "2026-09-03": 4912932,
     "2026-09-07": 4912945, "2026-09-14": 4912916, "2026-09-18": 4912958,
-}
+}}}
+STAGE_BY_DATE = SEASON_DATA.get(SEASON, {}).get("stages", {})
+TM_REPORT_BY_DATE = SEASON_DATA.get(SEASON, {}).get("tm_reports", {})
+TM_CLUB = ("hapoel-tel-aviv", 1017)
+# The club's photo rules (club/club.json `images`). The shared shoulder rule (50%) fires inside the head on
+# these chest-up photos, whose white sticker outline makes the head about half as wide as the chest: the
+# first row >= 75% of the widest, from 30% of the height down, lands on the shoulder slope instead.
+IMAGES = json.loads((Path(__file__).resolve().parents[2] / "club/club.json").read_text(encoding="utf-8"))["images"]
+SHOULDER_RULE = {k: IMAGES[k] for k in ("shoulder_share", "shoulder_from") if k in IMAGES}
 POSITION_EN = {"שוער": "Goalkeeper", "הגנה": "Defender", "קישור": "Midfielder", "קשר": "Midfielder", "התקפה": "Forward"}
 SENT_OFF = "הורחק"
 HOME_NAMES = ("הפועל תל-אביב", "הפועל תל אביב")
-METRIC = (
-    "2026/27 appearances in all competitions (13 official games played 2026-07-18 to 2026-09-18: 2x גביע הטוטו "
-    "(משחק האירופאיות, חצי גמר), 6x UEFA Conference League qualifying (2nd round, 3rd round, play-off), 5x ליגת ווינר "
-    "rounds 1-5), counted from the club's own match reports on htafc.co.il (the 'שיחקו בהפועל:' block: the starting "
-    "eleven, each substitute in parentheses with his minute). Pre-season friendlies are not counted. Neither the "
-    "listing nor the player popup shows any 2026/27 number (the popup bio only quotes 2025/26 totals in prose). "
-    "Cross-check: Transfermarkt's all-competitions squad stats (which lack the two Toto Cup games) match the club "
-    "count over the other 11 games for every player (appearances, substitutions on/off)."
-)
 POOL_RULE = (
     "P3: pool = top 23 by appearances (>= 1) across all players on the team & players page, ranked by appearances, "
     "then starts, then minutes, then lower jersey number (pool_rank); main 11 = the goalkeeper with the most "
@@ -86,19 +87,30 @@ POOL_RULE = (
 )
 
 
-def norm_name(s: str) -> str:
-    s = s.replace("׳", "'").replace("״", '"').replace("’", "'").replace("`", "'")
-    return " ".join(s.split())
-
-
-def slug(en: str) -> str:
-    s = unicodedata.normalize("NFKD", en).encode("ascii", "ignore").decode().lower()
-    return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
-
-
 def season_date(ddmm: str) -> str:
     d, m = (int(x) for x in ddmm.split("."))
-    return f"{2026 if m >= 7 else 2027:04d}-{m:02d}-{d:02d}"
+    return f"{SEASON_START if m >= 7 else SEASON_START + 1:04d}-{m:02d}-{d:02d}"
+
+
+def pair_listings(he: list[dict], en: list[dict]) -> list[tuple[dict, dict]]:
+    """Each Hebrew card with its English twin, in Hebrew page order. The two language versions are separate
+    WordPress posts with different ids, but they show the same uploaded photo, so that is the key; a card
+    without exactly one twin stops the scrape (a wrong pair would put one player's id, clips and photo on
+    another's card)."""
+    by_photo = {}
+    for y in en:
+        if not y["card_img_largest"] or y["card_img_largest"] in by_photo:
+            raise SystemExit(f"English listing: {y['name']} has no photo of its own ({y['card_img_largest']})")
+        by_photo[y["card_img_largest"]] = y
+    pairs = []
+    for x in he:
+        y = by_photo.pop(x["card_img_largest"], None)
+        if y is None:
+            raise SystemExit(f"Hebrew listing: {x['name']} has no English card with the same photo ({x['card_img_largest']})")
+        pairs.append((x, y))
+    if by_photo:
+        raise SystemExit(f"English listing: no Hebrew card for {', '.join(y['name'] for y in by_photo.values())}")
+    return pairs
 
 
 def load_json(p: Path):
@@ -154,6 +166,10 @@ def build_lineups(games: list[dict], roster_by_name: dict) -> tuple[dict, list[d
             raise SystemExit(f"no club report for {g['date']} {g['opponent']}")
         text = report_text(r["content"]["rendered"])
         block = parse_lineup_block(text)
+        if not block:
+            raise SystemExit(f"{g['date']} {g['opponent']}: the club's report ({r['link']}) has no line-up after "
+                             "'שיחקו בהפועל:', so every player would lose this appearance; fix the report text in "
+                             "<data>/html/rest/reports-cat30.json and run again")
         notes, unknown = [], []
         if len(block) != 11:
             notes.append(f"line-up block has {len(block)} starters")
@@ -162,6 +178,10 @@ def build_lineups(games: list[dict], roster_by_name: dict) -> tuple[dict, list[d
             chain = [(s["name"], 0)]
             red_at = None
             for x in s["subs"]:
+                if x["minute"] is None:
+                    raise SystemExit(f"{g['date']} {g['opponent']}: no minute in «{x['name']}» ({s['raw'].strip()}): a "
+                                     "substitution or red card without one can't be counted; fix that report's text in "
+                                     "<data>/html/rest/reports-cat30.json and run again")
                 if x["name"] == SENT_OFF:
                     red_at = x["minute"]
                     continue
@@ -202,12 +222,37 @@ def build_lineups(games: list[dict], roster_by_name: dict) -> tuple[dict, list[d
 
 
 def LINEUP_LINE(text: str) -> str:
-    m = re.search(r"שיחקו בהפועל\s*:?\s*\n+\s*(.+?)\n", text, re.S)
+    m = LINEUP_RE.search(text)
     return " ".join(m.group(1).split()) if m else ""
 
 
-def tm_crosscheck(html_dir: Path, players: list[dict], logs: dict) -> dict:
-    d = parse_squadstats((html_dir / "ext/tm-leistungsdaten-2026.html").read_text(encoding="utf-8"))
+def metric(game_rows: list[dict], tm: dict) -> str:
+    comps = {}
+    for g in game_rows:
+        comps.setdefault(g["competition"].split(" - ")[0], []).append(g["competition"].partition(" - ")[2])
+    games = ", ".join(f"{len(stages)}x {comp}" + (f" ({', '.join(s for s in stages if s)})" if any(stages) else "")
+                      for comp, stages in comps.items())
+    agree = ("match the club count over those games for every player" if not tm["mismatches"]
+             else f"differ for {len(tm['mismatches'])} players (see transfermarkt_crosscheck)")
+    return (f"{SEASON} appearances in all competitions ({len(game_rows)} official games played {game_rows[0]['date']} to "
+            f"{game_rows[-1]['date']}: {games}), counted from the club's own match reports on htafc.co.il (the "
+            "'שיחקו בהפועל:' block: the starting eleven, each substitute in parentheses with his minute). Pre-season "
+            f"friendlies are not counted. Neither the listing nor the player popup shows any {SEASON} number (the popup "
+            f"bio only quotes earlier seasons in prose). Cross-check: Transfermarkt's all-competitions squad stats "
+            f"({tm['games']} of the games" + (f"; no {', '.join(tm['missing'])}" if tm["missing"] else "")
+            + f") {agree} (appearances, substitutions on/off).")
+
+
+def season_id(html_dir: Path) -> int:
+    slug = f"{SEASON_START}-{SEASON_START + 1}"
+    for s in load_json(html_dir / "rest/seasons.json"):
+        if s["slug"] == slug:
+            return s["id"]
+    raise SystemExit(f"no season {slug} in {html_dir / 'rest/seasons.json'} (the club's /wp-json/wp/v2/htafc_season)")
+
+
+def tm_crosscheck(html_dir: Path, players: list[dict], logs: dict, game_rows: list[dict]) -> dict:
+    d = parse_squadstats((html_dir / f"ext/tm-leistungsdaten-{SEASON_START}.html").read_text(encoding="utf-8"))
     by_number = {}
     for row in d["rows"]:
         c = row["cells"]
@@ -222,7 +267,10 @@ def tm_crosscheck(html_dir: Path, players: list[dict], logs: dict) -> dict:
             "status": c[5] if not c[5].isdigit() else None,
         })
     tm_dates = set(TM_REPORT_BY_DATE)
-    result = {"mismatches": [], "compared": 0, "tm_only": []}
+    missing = sorted({g["competition"].split(" - ")[0] for g in game_rows if g["date"] not in tm_dates})
+    scope = (f"Transfermarkt 'all competitions' {SEASON} = the {len(tm_dates)} games it lists"
+             + (f" (no {', '.join(missing)})" if missing else ""))
+    result = {"mismatches": [], "compared": 0, "tm_only": [], "games": len(tm_dates), "missing": missing}
     matched_tm = set()
     for p in players:
         rows = by_number.get(str(p["number"]), [])
@@ -238,9 +286,9 @@ def tm_crosscheck(html_dir: Path, players: list[dict], logs: dict) -> dict:
                 "minutes_approx": sum(e["minutes"] for e in mine)}
         same = club["appearances"] == t["appearances"] and club["subs_on"] == t["subs_on"] and club["subs_off"] == t["subs_off"]
         p["crosscheck"]["transfermarkt"] = {
-            "tm_id": t["tm_id"], "tm_name": t["tm_name"], "scope": "Transfermarkt 'all competitions' 2026/27 = the 11 "
-            "league + Conference League games (no Toto Cup)", "tm": {k: t[k] for k in ("appearances", "subs_on", "subs_off", "minutes", "in_squad")},
-            "club_count_same_11_games": club, "match": same,
+            "tm_id": t["tm_id"], "tm_name": t["tm_name"], "scope": scope,
+            "tm": {k: t[k] for k in ("appearances", "subs_on", "subs_off", "minutes", "in_squad")},
+            "club_count_same_games": club, "match": same,
         }
         result["compared"] += 1
         if not same:
@@ -250,32 +298,6 @@ def tm_crosscheck(html_dir: Path, players: list[dict], logs: dict) -> dict:
             if t["tm_id"] not in matched_tm and t["appearances"]:
                 result["tm_only"].append(f"{t['tm_name']} #{t['number']}: {t['appearances']} apps (not on the club listing)")
     return result
-
-
-def photo_facts(path: Path) -> dict:
-    raw = path.read_bytes()
-    im = Image.open(path)
-    fmt, mode, size = im.format, im.mode, im.size
-    rgba = im.convert("RGBA")
-    hist = rgba.getchannel("A").histogram()
-    n = size[0] * size[1]
-    return {"photo_px": list(size), "photo_format": fmt, "photo_mode": mode,
-            "photo_has_alpha": hist[255] != n, "photo_transparent_share": round(hist[0] / n, 3),
-            "photo_alpha_levels": sum(1 for v in hist if v), "photo_bytes": len(raw),
-            "photo_sha1": hashlib.sha1(raw).hexdigest()}
-
-
-def shoulder_line(img: Image.Image, share: float = 0.75) -> float:
-    """First row below 30% of the height whose solid alpha is >= `share` of the widest row (fraction of the height).
-
-    The shared rule (50%) fires inside the head on these chest-up photos: the white sticker outline makes the head
-    about half as wide as the chest. 75% lands on the shoulder slope for every photo of the 2026/27 set."""
-    from framing import row_widths
-
-    rows = row_widths(img.convert("RGBA"))
-    widths = [(r[1] - r[0]) if r else 0 for r in rows]
-    h, mx = len(widths), max(widths)
-    return round(next(y for y in range(int(0.3 * h), h) if widths[y] >= share * mx) / h, 3)
 
 
 def clean_photo(raw_path: Path, clean_path: Path) -> dict:
@@ -292,38 +314,30 @@ def clean_photo(raw_path: Path, clean_path: Path) -> dict:
     return stats
 
 
-def atomic_write(path: Path, data: str) -> None:
-    fd, tmp = tempfile.mkstemp(dir=path.parent, prefix=path.name + ".", suffix=".tmp")
-    with os.fdopen(fd, "w", encoding="utf-8") as fh:
-        fh.write(data)
-    os.chmod(tmp, 0o644)  # mkstemp creates 0600
-    os.replace(tmp, path)
-
-
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True, type=Path)
     ap.add_argument("--refresh", action="store_true")
     ap.add_argument("--crop-override", action="append", default=[], help="id=x0,y0,x1,y1 (fractions)")
-    ap.add_argument("--shoulder-override", action="append", default=[], help="id=y (hand-read shoulder line, fraction)")
+    ap.add_argument("--shoulder-override", action="append", default=[],
+                    help="id=y (hand-read shoulder line, fraction); adds to club.json's shoulder_overrides")
     ap.add_argument("--mark-ready", action="store_true")
     a = ap.parse_args()
+    if SEASON not in SEASON_DATA:
+        raise SystemExit(f"no SEASON_DATA row for {SEASON}: add each official game's stage, club match id and "
+                         "Transfermarkt report id (see tools/README.md)")
     data = a.data.expanduser().resolve()
     html_dir = data / "html"
     f = photos = Fetcher(data, 0.6, a.refresh)  # only photos are fetched here; pages are cached by the explore/fetch steps
 
     he_html = (html_dir / "players-fresh.html").read_text(encoding="utf-8")
     en_html = (html_dir / "players-en.html").read_text(encoding="utf-8")
-    he, en = parse_listing(he_html), parse_listing(en_html)
-    if len(he) != len(en) or any(x["section_index"] != y["section_index"] for x, y in zip(he, en)):
-        raise SystemExit("HE and EN listings differ in shape")
-
     players = []
-    for x, y in zip(he, en):
+    for x, y in pair_listings(parse_listing(he_html), parse_listing(en_html)):
         pop = parse_popup(load_json(html_dir / f"members/{x['member_id']}.json")["data"])
         if norm_name(pop["name"]) != norm_name(x["name"]):
             raise SystemExit(f"popup name differs: {pop['name']} vs {x['name']}")
-        pid = slug(y["name"])
+        pid = ascii_slug(y["name"])
         players.append({
             "id": pid, "id_from": "english_name",
             "name_he": x["name"], "speak_he": x["name"], "name_parenthetical": None,
@@ -363,32 +377,24 @@ def main() -> int:
         }
         p["crosscheck"] = {"listing_name": p["name_he"], "popup_number": p["number"]}
 
-    tm = tm_crosscheck(html_dir, players, logs)
+    tm = tm_crosscheck(html_dir, players, logs, game_rows)
     log_line(f"TM cross-check: {tm['compared']} compared, mismatches: {tm['mismatches'] or 'none'}")
     for s in tm["tm_only"]:
         log_line(f"  TM only: {s}")
 
     # selection (P3)
-    ranked = sorted([p for p in players if p["stats"]["appearances"] >= 1],
-                    key=lambda p: (-p["stats"]["appearances"], -p["stats"]["starts"], -p["stats"]["minutes"], p["number"]))
-    for i, p in enumerate(ranked, 1):
-        p["pool_rank"] = i
+    sel = select(players)
     for p in players:
         p.setdefault("pool_rank", None)
-    pool = [p for p in ranked if p["pool_rank"] <= 23]
-    gks = [p for p in pool if p["is_gk"]]
-    outfield = [p for p in pool if not p["is_gk"]]
-    starters = set([gks[0]["id"]] + [p["id"] for p in outfield[:10]])
-    bench = set(p["id"] for p in outfield[10:])
+    outfield = sel.outfield
     for p in players:
-        if p["id"] in starters:
-            p["role"], p["excluded_reason"] = "starter", None
-        elif p["id"] in bench:
-            p["role"], p["excluded_reason"] = "bench", None
+        if p.get("role") in ("starter", "bench"):
+            p["excluded_reason"] = None
         else:
             p["role"] = "excluded"
             if p["stats"]["appearances"] == 0:
-                p["excluded_reason"] = ("goalkeeper, " if p["is_gk"] else "") + "0 appearances in 2026/27 (in no club line-up of the 13 official games)"
+                p["excluded_reason"] = (("goalkeeper, " if p["is_gk"] else "") + f"0 appearances in {SEASON} (in no club "
+                                        f"line-up of the {len(game_rows)} official games)")
             elif p["is_gk"]:
                 p["excluded_reason"] = f"backup goalkeeper (pool_rank {p['pool_rank']})"
             else:
@@ -411,7 +417,8 @@ def main() -> int:
         pid, _, vals = o.partition("=")
         x0, y0, x1, y1 = (float(v) for v in vals.split(","))
         overrides[pid] = {"x0": x0, "y0": y0, "x1": x1, "y1": y1}
-    shoulder_overrides = {o.partition("=")[0]: float(o.partition("=")[2]) for o in a.shoulder_override}
+    shoulder_overrides = {**IMAGES.get("shoulder_overrides", {}),
+                          **{o.partition("=")[0]: float(o.partition("=")[2]) for o in a.shoulder_override}}
     for p in players:
         if p["role"] not in ("starter", "bench"):
             p["photo_file"] = None
@@ -422,7 +429,7 @@ def main() -> int:
         if not dest.exists() or a.refresh:
             photos.cached(p["photo_url"], rel, force=True)
         p["photo_file_original"] = rel
-        p.update(photo_facts(dest))
+        p.update({f"photo_{k}": v for k, v in photo_facts(dest.read_bytes()).items()})
         crel = f"clean/{p['id']}.png"
         p["number_removal"] = clean_photo(dest, data / crel)
         nb = p["number_removal"]["bbox_number"]
@@ -432,19 +439,19 @@ def main() -> int:
         img = Image.open(data / crel)
         lm = landmarks(img)
         sh = shoulder_overrides.get(p["id"])
-        sh_used = sh if sh is not None else shoulder_line(img)
+        sh_used, sh_source = pick_shoulder(landmarks(img, **SHOULDER_RULE), sh)
         crop = overrides.get(p["id"]) or square_crop(img, lm, sh_used)
         p["crop"] = crop
         p["framing"] = {"hair_top": lm["hair_top"], "head_cx": lm["head_cx"], "neck_y": lm["neck_y"],
                         "shoulder_y_shared_rule": lm["shoulder_y"], "shoulder_y_used": sh_used,
-                        "shoulder_source": "hand-read" if sh is not None else "alpha outline, first row >= 75% of the widest",
+                        "shoulder_source": sh_source if sh_source != "alpha outline" else
+                        f"alpha outline, first row >= {SHOULDER_RULE.get('shoulder_share', 0.5):.0%} of the widest",
                         "crop_source": "override" if p["id"] in overrides else "auto rule on the number-free photo",
                         "crop_px": round((crop["x1"] - crop["x0"]) * img.size[0])}
         log_line(f"photo {p['id']}: {p['photo_px']} {p['photo_mode']} alpha {p['photo_transparent_share']} | number {p['number_removal']['bbox_number']} "
                  f"| {lm} | crop {crop} {p['framing']['crop_px']}px")
 
-    order = {"starter": 0, "bench": 1, "excluded": 2}
-    players.sort(key=lambda p: (order[p["role"]], not p["is_gk"], p["pool_rank"] or 99, p["number"]))
+    players.sort(key=output_key)
     pooled = [p for p in players if p.get("crop")]
     shared = {"x0": round(min(p["crop"]["x0"] for p in pooled), 4), "y0": round(min(p["crop"]["y0"] for p in pooled), 4),
               "x1": round(max(p["crop"]["x1"] for p in pooled), 4), "y1": round(max(p["crop"]["y1"] for p in pooled), 4)}
@@ -452,7 +459,7 @@ def main() -> int:
     design_path = data / "design/design.json"
     design = load_json(design_path) if design_path.exists() else None
     doc = {
-        "season": SEASON, "season_id": 11226,
+        "season": SEASON, "season_id": season_id(html_dir),
         "scraped_at": dt.datetime.fromtimestamp((html_dir / "players-fresh.html").stat().st_mtime, TZ).isoformat(timespec="seconds"),
         "built_at": dt.datetime.now(TZ).isoformat(timespec="seconds"),
         "sources": {
@@ -461,9 +468,9 @@ def main() -> int:
                            "the real player page is the listing's popup: POST admin-ajax.php action=get_team_member_info",
             "season_games": "https://www.htafc.co.il/ (fixture list) + https://www.htafc.co.il/wp-json/wp/v2/htafc_match",
             "game_page": "https://www.htafc.co.il/wp-json/wp/v2/posts?categories=30 (the club's match report per game)",
-            "crosscheck": "https://www.transfermarkt.com/hapoel-tel-aviv/leistungsdaten/verein/1017/reldata/%262026/plus/1",
+            "crosscheck": squadstats_url(*TM_CLUB, SEASON_START),
         },
-        "metric": METRIC, "pool_rule": POOL_RULE,
+        "metric": metric(game_rows, tm), "pool_rule": POOL_RULE,
         "starts_method": "Starter = named in the report's line-up block outside parentheses; sub = named inside parentheses with a minute.",
         "minutes_method": "Starter: until his substitution or red-card minute, else 90. Substitute: from his minute to 90 (or to his own "
                           "substitution/red card). Stoppage time ignored (45+6 counts as 45). Tiebreak only.",
@@ -482,14 +489,20 @@ def main() -> int:
                       "photos --mode auto frames on the numeral."),
         "players": players,
     }
-    atomic_write(data / "players.json", json.dumps(doc, ensure_ascii=False, indent=2) + "\n")
+    write_json_atomic(data / "players.json", doc)
     log_line(f"wrote players.json: {sum(p['role']=='starter' for p in players)} starters, {sum(p['role']=='bench' for p in players)} bench, "
              f"{sum(p['role']=='excluded' for p in players)} excluded; requests this run: {f.requests}")
     for p in players:
         s = p["stats"]
-        print(f"{p['role']:8} {str(p['pool_rank'] or '-'):>3} #{p['number']:<3} {p['id']:22} {p['name_he']:18} apps {s['appearances']:2} st {s['starts']:2} "
+        print(f"{p['role']:8} {str(p['pool_rank'] or '-'):>3} #{'-' if p['number'] is None else p['number']:<3} {p['id']:22} {p['name_he']:18} apps {s['appearances']:2} st {s['starts']:2} "
               f"min {s['minutes']:4} | TM {'ok' if (p['crosscheck'].get('transfermarkt') or {}).get('match') else (p['crosscheck'].get('transfermarkt') or {}).get('tm')} "
               f"| {p['excluded_reason'] or ''}", flush=True)
+    problems = check(doc)
+    for msg in problems:
+        log_line(f"PROBLEM: {msg}")
+    if problems:
+        log_line("players.json is written but not usable by the game tools; fix the problems above (no PLAYERS_READY)")
+        return 1
     if a.mark_ready:
         (data / "PLAYERS_READY").write_text(dt.datetime.now(TZ).isoformat(timespec="seconds") + "\n", encoding="utf-8")
         log_line("PLAYERS_READY written")

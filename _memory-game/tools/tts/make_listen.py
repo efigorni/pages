@@ -1,6 +1,7 @@
 """Build tts/listen.html: one row per player, the name clip and the match clip.
 
-    MACCABI_ROOT=<work> python3 _memory-game/tools/tts/make_listen.py --pron <game>/tools/tts/pronunciations.json
+    _memory-game/tools/tts/tts.sh <game> <work> listen [--alt id=label:ipa ...]
+    python3 _memory-game/tools/tts/make_listen.py --game <game> --work <work>
 
 Reads tts/out/manifest.json, data/players.json, the club's pronunciations.json and
 the QA files in tts/qa/ (for the second-opinion transcript). Paths in the page are
@@ -9,20 +10,22 @@ run that writes tts/out.
 
 Alternative pronunciations for a judgement call go in tts/alternatives/<id>--<label>/
 (a generate.py --out folder); they are shown next to that player's note, labelled
-<label> with dashes as spaces.
+<label> with dashes as spaces. `--alt ID=LABEL:IPA` renders one there first (its takes and QA go to
+tts/alternatives/.work, away from the club's own qa/).
 """
 from __future__ import annotations
 
 import argparse
 import html
 import json
-import os
+import sys
 from pathlib import Path
 
-if not os.environ.get("MACCABI_ROOT"):
-    raise SystemExit("set MACCABI_ROOT to the work directory (outside the repo) that holds data/ and tts/")
-ROOT = Path(os.environ["MACCABI_ROOT"])
-TTS = Path(os.environ.get("MACCABI_TTS_HOME", ROOT / "tts"))
+sys.dont_write_bytecode = True
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import config  # noqa: E402
+
+TTS = None  # the tts home; main() sets it
 
 
 def _second_opinions(manifest: list[dict]) -> dict:
@@ -39,9 +42,33 @@ def _second_opinions(manifest: list[dict]) -> dict:
     return got
 
 
-def main(players_path: str | None = None, pron_path: str | None = None) -> None:
+def render_alternative(spec: str, work: Path, players_path: str, pron_path: str, tts: Path) -> None:
+    import subprocess
+
+    pid, _, rest = spec.partition("=")
+    label, _, ipa = rest.partition(":")
+    if not (pid and label and ipa):
+        raise SystemExit(f"--alt wants ID=LABEL:IPA, not {spec!r}")
+    player = next((p for p in json.load(open(players_path, encoding="utf-8"))["players"] if p["id"] == pid), None)
+    if player is None:
+        raise SystemExit(f"{pid} is not in {players_path}")
+    entry = {k: v for k, v in json.load(open(pron_path, encoding="utf-8"))["players"].get(pid, {}).items()
+             if k != "ipa_match"} | {"ipa": ipa}
+    folder = tts / "alternatives" / f"{pid}--{label.replace(' ', '-')}"
+    (folder / "input").mkdir(parents=True, exist_ok=True)
+    (folder / "input/players.json").write_text(json.dumps({"players": [player]}, ensure_ascii=False), encoding="utf-8")
+    (folder / "input/pronunciations.json").write_text(json.dumps({"players": {pid: entry}}, ensure_ascii=False),
+                                                       encoding="utf-8")
+    subprocess.run([sys.executable, "-u", str(Path(__file__).resolve().parent / "generate.py"), "--work", str(work),
+                    "--tts-home", str(tts / "alternatives/.work"), "--players", str(folder / "input/players.json"),
+                    "--pron", str(folder / "input/pronunciations.json"), "--only", pid, "--out", str(folder)], check=True)
+
+
+def main(players_path: str, pron_path: str, tts: Path) -> None:
+    global TTS
+    TTS = Path(tts)
     man = json.load(open(TTS / "out/manifest.json", encoding="utf-8"))
-    roster = json.load(open(players_path or ROOT / "data/players.json", encoding="utf-8"))["players"]
+    roster = json.load(open(players_path, encoding="utf-8"))["players"]
     pron = json.load(open(pron_path, encoding="utf-8"))["players"]
     rows_by = {(m["id"], m["kind"]): m for m in man}
     fw = _second_opinions(man)
@@ -157,7 +184,19 @@ document.addEventListener('play', e => {{
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pron", required=True, help="the club's pronunciations.json")
-    ap.add_argument("--players", help="default <root>/data/players.json")
+    ap.add_argument("--game", help="the game folder (its tools/tts/pronunciations.json)")
+    ap.add_argument("--work", help="the work directory (data/, tts/)")
+    ap.add_argument("--tts-home", help="default <work>/tts")
+    ap.add_argument("--pron", help="the club's pronunciations.json, when there is no --game")
+    ap.add_argument("--players", help="default <work>/data/players.json")
+    ap.add_argument("--alt", action="append", default=[], metavar="ID=LABEL:IPA",
+                    help="first render that pronunciation as an alternative for the player")
     a = ap.parse_args()
-    main(players_path=a.players, pron_path=a.pron)
+    work = config.work_dir(a.work)
+    pron = a.pron or (a.game and str(config.game_dir(a.game) / "tools/tts/pronunciations.json"))
+    if not pron:
+        ap.error("pass --game <folder> (or --pron)")
+    players, tts = a.players or str(work / "data/players.json"), config.tts_home(work, a.tts_home)
+    for alt in a.alt:
+        render_alternative(alt, work, players, pron, tts)
+    main(players_path=players, pron_path=pron, tts=tts)

@@ -1,0 +1,16 @@
+{
+  "names": "full",
+  "title": "plain",
+  "trophy": {
+    "cup": "#f8d734",
+    "stem": "#f8d734",
+    "star": "#061e3f",
+    "shine": "#fff",
+    "shine_opacity": ".55"
+  },
+  "images": {
+    "mode": "auto",
+    "fade": 0,
+    "sheet_colors": "020f24,061e3f,f8d734"
+  }
+}

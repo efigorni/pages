@@ -1,0 +1,20 @@
+{
+  "names": "first-last",
+  "title": "tiers",
+  "trophy": {
+    "cup": "#eef5ef",
+    "stem": "#c9dccd",
+    "star": "#007638",
+    "shine": "#fff",
+    "shade": "#b5ccba"
+  },
+  "images": {
+    "mode": "box",
+    "fade": 0.14,
+    "sheet_colors": "001d05,204126,86d094",
+    "shoulder_overrides": {
+      "pedro-barzao": 0.415,
+      "adam-grimberg": 0.39
+    }
+  }
+}

@@ -1,11 +1,12 @@
-"""Parsers for saved Transfermarkt pages (Hapoel Tel Aviv, club 1017).
+"""Transfermarkt, the cross-check source every club's scraper can use: URLs and parsers for saved pages.
 
 Usage:
-  uv run --with beautifulsoup4 python -I -u tm_parse.py fixtures <spielplan.html>
-  uv run --with beautifulsoup4 python -I -u tm_parse.py squadstats <leistungsdaten.html>
-  uv run --with beautifulsoup4 python -I -u tm_parse.py report <spielbericht.html>
+  uv run --with beautifulsoup4 python -I -u transfermarkt.py fixtures <spielplan.html>
+  uv run --with beautifulsoup4 python -I -u transfermarkt.py squadstats <leistungsdaten.html>
+  uv run --with beautifulsoup4 python -I -u transfermarkt.py report <spielbericht.html>
 
-Importable: parse_fixtures(html), parse_squadstats(html), parse_report(html).
+Importable: squadstats_url(club_slug, club_id, season_start), parse_fixtures(html), parse_squadstats(html),
+parse_report(html). A club is its Transfermarkt slug and id (Hapoel Tel Aviv: "hapoel-tel-aviv", 1017).
 """
 
 from __future__ import annotations
@@ -17,7 +18,11 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 
-CLUB_ID = "1017"
+
+
+def squadstats_url(club_slug: str, club_id: int, season_start: int) -> str:
+    """All competitions of the season that starts in `season_start`, every player's appearances and minutes."""
+    return f"https://www.transfermarkt.com/{club_slug}/leistungsdaten/verein/{club_id}/reldata/%26{season_start}/plus/1"
 
 
 def text(el) -> str:

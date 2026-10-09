@@ -15,11 +15,9 @@ Whenever you create, import, rename, or delete an HTML page:
 
 #### Unlisted pages
 Kept private on purpose, at the owner's request: each stays out of `index.html` and the catalog below, and carries `<meta name="robots" content="noindex, nofollow">`.
-- `maccabi-memory/` (`/pages/maccabi-memory/`): Maccabi Tel Aviv memory game for a young child. Refresh its roster, photos and voice clips with `maccabi-memory/tools/README.md`.
-- `maccabi-haifa-memory/` (`/pages/maccabi-haifa-memory/`): Maccabi Haifa memory game, the same game with its own roster, look and voice clips. Refresh its roster, photos and voice clips with `maccabi-haifa-memory/tools/README.md`.
-- `hapoel-tlv-memory/` (`/pages/hapoel-tlv-memory/`): Hapoel Tel Aviv memory game, the same game with its own roster, look and voice clips. Refresh its roster, photos and voice clips with `hapoel-tlv-memory/tools/README.md`.
+- **Every memory game** is unlisted: any folder at the root with a `club/club.json` (`python3 -I _memory-game/tools/page/build_page.py list` names them): a football club's memory game for a young child, at `/pages/<folder>/`. Never add one to `index.html` or the catalog, never remove its `noindex`, and never delete one, or `_memory-game/`, as an orphan. A new club needs no edit here.
 
-Every memory game is built from `_memory-game/`, which is not a page: it gets no card in `index.html` and must not be deleted as an orphan. Each game's `index.html` keeps its club parts by hand, but its `<style id="base">`, `<script id="data">` and `<script id="engine">` and its whole `sw.js` are generated: edit `_memory-game/` (or the roster) and run `python3 -I _memory-game/tools/page/build_page.py assemble`, never the generated parts. A shared change changes every game, so commit and verify all of them; run `assemble --check` before committing. See `_memory-game/README.md`.
+Every memory game is built from `_memory-game/`, which is not a page. A game's `index.html` and `sw.js` are generated whole from its `club/` sources and `_memory-game/`: edit those (or refresh the roster) and run `python3 -I _memory-game/tools/page/build_page.py assemble`, never the generated files. A shared change changes every game, so commit and verify all of them (`_memory-game/tools/verify/verify.sh`); run `assemble --check` before committing. Adding or refreshing a club: see `_memory-game/README.md`.
 
 ### 2. Card Design Standard in `index.html`
 Each card in `index.html` must follow the aesthetic established by `gibush.html`:
