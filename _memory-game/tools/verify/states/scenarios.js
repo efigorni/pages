@@ -737,14 +737,29 @@ async function playToLastPair(h) {
     const second = quiz.answer.p;
     const wrong = quiz.cards.find((x) => x !== quiz.answer);
     const wrongBefore = JSON.stringify(JSON.parse(q.store.get(statsKey)).items[wrong.p.id] || null);
+    const metBefore = stats.met(second.id);
     await q.pick(wrong);
     await q.advance(1500);
     await q.pick(quiz.answer);
     const after = JSON.parse(q.store.get(statsKey)).items;
     check('M2 a right first pick is a success (firstTry 1, asked in this quiz, its shelf tile at its level); a wrong first '
-      + 'pick is a miss, and the right pick after it counts nothing; the wrong card\'s item is untouched', right
-      && second !== first && after[second.id].firstTry === 0 && after[second.id].misses === 1
+      + 'pick is a miss (and meets nothing), and the right pick after it counts nothing; the wrong card\'s item is untouched',
+      right && second !== first && after[second.id].firstTry === 0 && after[second.id].misses === 1
+      && after[second.id].encountered === metBefore && stats.met(second.id) === metBefore
       && JSON.stringify(after[wrong.p.id] || null) === wrongBefore, JSON.stringify({ first: after[first.id], second: after[second.id] }));
+    // a squad's quiz asks players she hasn't met: a right first pick meets one, a miss doesn't
+    if (SQUAD) {
+      const f = boot({ noClips: true });
+      await f.click('play-quiz');
+      await f.advance(500);
+      const named = f.T.quiz.answer.p;
+      await f.pick(f.T.quiz.answer);
+      await f.advance(8000);
+      const missed = f.T.quiz.answer.p;
+      await f.pick(f.T.quiz.cards.find((x) => x !== f.T.quiz.answer));
+      check('M2 a squad\'s quiz: a player named on the first pick is met (firstTry 1), one missed stays new',
+        f.T.stats.met(named.id) && f.T.stats.firstTry(named.id) === 1 && !f.T.stats.met(missed.id));
+    }
     const w = boot({ noClips: true });
     await start(w);
     const pair = w.firstDown();

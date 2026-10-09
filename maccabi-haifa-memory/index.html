@@ -2036,14 +2036,14 @@ const CLUB = {
   /* ---------- what she knows: the items she has met, and how well (her first-try quiz answers) ---------- */
 
   // Per item: `encountered`, she has met it (a match in memory, a flash card she looked at, or a quiz
-  // question); `firstTry`, the quiz questions she answered with her first pick, the only success there is
-  // (a match, a flash card or a right pick after a wrong one count for nothing); `misses`, the questions
-  // whose first pick was wrong; `lastAsked`, the quiz that last asked it, on the quiz clock `session`
-  // (one tick per quiz started; no `lastAsked`: never asked). Kept per game on this device, in
-  // `<game>:stats` as { session, items } (the games share one origin, so the key carries the game's
-  // folder). `<game>:learned`, the list of the items met, is what older pages kept: it is read at every
-  // start, so nothing they wrote is lost (each such item met, never asked), and kept in step, so they still
-  // find it. Private mode or blocked storage keeps it all for this visit only.
+  // question she answered right on her first pick); `firstTry`, the quiz questions she answered with her
+  // first pick, the only success there is (a match, a flash card or a right pick after a wrong one count
+  // for nothing); `misses`, the questions whose first pick was wrong; `lastAsked`, the quiz that last asked
+  // it, on the quiz clock `session` (one tick per quiz started; no `lastAsked`: never asked). Kept per game
+  // on this device, in `<game>:stats` as { session, items } (the games share one origin, so the key carries
+  // the game's folder). `<game>:learned`, the list of the items met, is what older pages kept: it is read
+  // at every start, so nothing they wrote is lost (each such item met, never asked), and kept in step, so
+  // they still find it. Private mode or blocked storage keeps it all for this visit only.
   const stats = (() => {
     const key = `${DATA.game}:stats`;
     const legacy = `${DATA.game}:learned`;
@@ -2083,9 +2083,12 @@ const CLUB = {
         save();
         return true;
       },
-      // a question's first pick, in the quiz `asked` on the quiz clock
+      // a question's first pick, in the quiz `asked` on the quiz clock; a miss on an item she hasn't met (a
+      // squad's quiz asks every player) doesn't meet it
       answered(id, right, asked) {
+        const known = !!items[id] && items[id].encountered;
         updateStats(items, id, right, asked, LEARN);
+        if (!right && !known) items[id].encountered = false;
         save();
       },
       // a quiz starts: its tick of the quiz clock
@@ -2182,9 +2185,9 @@ const CLUB = {
     return a;
   }
 
-  // One answered question, in every game: she has met the item; a first-pick success adds one to
-  // `firstTry` (capped at `master` when a miss can take it back), a miss adds to `misses` and follows
-  // `decrement`. `now` is the quiz that asked it.
+  // One answered question, in every game (the simulation's rule): the item is met; a first-pick success
+  // adds one to `firstTry` (capped at `master` when a miss can take it back), a miss adds to `misses` and
+  // follows `decrement`. `now` is the quiz that asked it.
   function updateStats(entries, id, right, now, o) {
     const prev = entries[id] || {};
     const entry = {
@@ -2239,7 +2242,7 @@ const CLUB = {
     tile.dataset.level = String(level(p.id));
   }
 
-  // She has met an item (a match, a flash card, a quiz question): the count, its tile and the bar's star.
+  // She has met an item (a match, a flash card, a right first pick): the count, its tile and the bar's star.
   function meet(p) {
     if (!stats.meet(p.id)) return;
     syncLearned();
@@ -2655,10 +2658,10 @@ const CLUB = {
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
     if (quiz.first) {
-      // Her first pick is the one that counts: right, a success; wrong, a miss. Either way she has met it.
+      // Her first pick is the one that counts: right, a success (and she has met it); wrong, a miss.
       quiz.first = false;
       const p = quiz.answer.p;
-      meet(p);
+      if (card === quiz.answer) meet(p);
       stats.answered(p.id, card === quiz.answer, quiz.session);
       markTile(p);
     }

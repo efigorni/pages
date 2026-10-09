@@ -66,7 +66,7 @@ counts as met, and pages with ← →.
 
 What she knows is kept on the device per game, in `localStorage` under `<game>:stats` (the games share one
 origin), as `{ session, items }`: `session` is the quiz clock (one tick per quiz started) and, per item,
-`encountered` (a match in memory, a flash card, or a quiz question), `firstTry` (the questions she answered
+`encountered` (a match in memory, a flash card, or a right first pick in the quiz), `firstTry` (the questions she answered
 with her first pick, the only success: a match, a flash card or a right pick after a wrong one never count),
 `misses` (wrong first picks) and `lastAsked` (the quiz that last asked it; none: never asked). A first-pick
 miss on a fully learned item sends it back to `master - 1` (`decrement` "demote"). The older

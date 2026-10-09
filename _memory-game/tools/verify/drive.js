@@ -429,7 +429,9 @@ async function quizFlow(page, vp, dir, res) {
     await mark(page, `right ${q.id}`);
     const pickedAt = Date.now();
     await tapCard(page, vp, q.cards.indexOf(q.id), '#picks');
-    q.named = await played(from, clipsOf(res.voice, q.id, 'right')[0]);
+    // its line's last clip has started (a word's Hebrew after its English), so a tap that moves on cuts no
+    // clip of it short of starting
+    q.named = await played(from, clipsOf(res.voice, q.id, 'right').slice(-1)[0]);
     q.revealed = await page.evaluate(() => document.getElementById('app').dataset.phase);
     if (n === 0) {
       await sleep(1100);
