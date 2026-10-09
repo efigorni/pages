@@ -563,6 +563,27 @@ async function playToLastPair(h) {
       check('W6 storage that refuses a write keeps the game going, learned for this visit', k.T.learned.has(b.p.id)
         && k.byId['progress-count'].textContent === `2 / ${N}`);
     }
+    // W8 two pictures that look alike (PLAY.quiz.apart) are never offered against each other
+    for (const [a, b] of PLAY.quiz.apart || []) {
+      const others = ITEMS.filter((p) => p.id !== a && p.id !== b).slice(0, 3);
+      const k = boot({ noClips: true, storage: learnedOf(ITEMS.filter((p) => p.id === a || p.id === b).concat(others)) });
+      let together = 0;
+      let asked = 0;
+      for (let round = 0; round < 12; round++) {
+        await k.click('yes-quiz');
+        for (let i = 0; i < 6 && k.phase() === 'ask'; i++) {
+          const cards = k.T.quiz.cards.map((c) => c.p.id);
+          if ([a, b].includes(k.T.quiz.answer.p.id)) { asked += 1; together += cards.includes(a) && cards.includes(b); }
+          await k.advance(500);
+          await k.pick(k.T.quiz.answer);
+          await k.advance(800);
+          if (k.phase() === 'reveal') await k.pick(k.T.quiz.cards[0]);
+          await k.advance(50);
+        }
+      }
+      check(`W8 "${a}" and "${b}" never share a question, and it still has four cards`, asked > 0 && together === 0
+        && k.T.quiz.cards.length === 4, `${asked} questions asked ${a} or ${b}`);
+    }
     // W7 the win in the game's own words (club.json lines), when it has them
     if (h.T.DATA.lines && h.T.DATA.lines.win) {
       const k = boot({ noClips: true });

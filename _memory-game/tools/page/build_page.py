@@ -174,6 +174,10 @@ def play_of(game):
             fail(f"{where}.quiz: pool \"learned\" wants unlock >= 4 (the four cards) and size >= 1")
     elif quiz.get("pool") != "all":
         fail(f"{where}.quiz.pool: \"all\" or \"learned\"")
+    apart = quiz.get("apart", [])
+    if not (isinstance(apart, list) and all(isinstance(p, list) and len(p) == 2 and all(isinstance(i, str) for i in p)
+                                            for p in apart)):
+        fail(f"{where}.quiz.apart: a list of [id, id] pairs never offered against each other")
     if play.get("progress") not in ("inventory", "bar"):
         fail(f"{where}.progress: \"inventory\" (the shelf's marks only) or \"bar\" (on every screen)")
     if precache.get("policy") == "core":

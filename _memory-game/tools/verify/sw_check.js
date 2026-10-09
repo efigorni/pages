@@ -238,6 +238,10 @@ async function steps(context, page, R) {
     && R.offline.quiz.imgs[0] === 4 && R.offline.quiz.imgs[1] === 4;
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-quiz.png`) });
   // Flash cards offline, from the ↻ confirm: the next new one turns up, says its line and is learned.
+  // A word game keeps only what she learned and what comes next, so offline the shelf's tiles of words
+  // she hasn't met yet ask for pictures that aren't there: expected, counted apart, not a finding.
+  const httpAt = R.http.length;
+  const consoleAt2 = R.console.length;
   await page.tap('#again');
   await page.tap('#yes-cards');
   await sleep(600);
@@ -262,5 +266,13 @@ async function steps(context, page, R) {
     && R.offline.card.tile === 'true' && JSON.stringify(R.offline.card.clips) === JSON.stringify(line)
     && !before.ids.includes(id) && R.offline.card.learned.after.ids.includes(id);
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-card.png`) });
+  const known = new Set(R.offline.card.learned.after.ids);
+  const unmet = (u) => { const m = /\/img\/([\w-]+)\.webp/.exec(u); return !!m && !known.has(m[1]); };
+  const failed = R.http.splice(httpAt);
+  R.offline.unmetPictures = failed.filter((u) => u.startsWith('failed ') && unmet(u)).length;
+  R.http.push(...failed.filter((u) => !(u.startsWith('failed ') && unmet(u))));
+  if (R.offline.unmetPictures) {
+    R.console = R.console.filter((m, i) => i < consoleAt2 || !m.includes('Failed to load resource: net::ERR_INTERNET_DISCONNECTED'));
+  }
   await context.setOffline(false);
 }

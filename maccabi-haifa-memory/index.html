@@ -2364,14 +2364,16 @@ const CLUB = {
   }
 
   // Three others to pick from: a squad's whole roster; a word game's learned words (while fewer than
-  // four are learned, the next words in teaching order fill in).
+  // four are learned, the next words in teaching order fill in). Never one PLAY.quiz.apart pairs with the
+  // asked one: two pictures that look alike at a glance.
   function distractors(p) {
-    let pool = ITEMS;
+    const fits = (q) => q !== p && !(PLAY.quiz.apart || []).some((pair) => pair.includes(p.id) && pair.includes(q.id));
+    let pool = ITEMS.filter(fits);
     if (PLAY.quiz.pool === 'learned') {
-      const known = learned.items();
-      pool = known.length >= CHOICES ? known : known.concat(ITEMS.filter((q) => !learned.has(q.id)).slice(0, CHOICES));
+      const known = learned.items().filter(fits);
+      pool = known.length >= CHOICES - 1 ? known : known.concat(pool.filter((q) => !learned.has(q.id)).slice(0, CHOICES));
     }
-    return shuffled(pool.filter((q) => q !== p)).slice(0, CHOICES - 1);
+    return shuffled(pool).slice(0, CHOICES - 1);
   }
 
   // The asked item and three others, shuffled.
@@ -2573,6 +2575,7 @@ const CLUB = {
   function fetchAhead(items) {
     const sw = navigator.serviceWorker;
     if (PLAY.precache.policy !== 'core' || !canFetch || !window.caches || !sw || !sw.controller) return;
+    if (navigator.onLine === false) return; // the 'online' event starts it again
     items.forEach((p) => [p.img].concat(clipUrls(p, Object.keys(PLAY.voice))).forEach((url) => {
       if (url && !ahead.seen.has(url)) {
         ahead.seen.add(url);
