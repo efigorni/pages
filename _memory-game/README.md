@@ -66,7 +66,7 @@ origin); when storage is blocked it lasts the visit.
 |---|---|---|
 | `voice` | flip `name`; match `name`, `match`; ask `match`; wrong `match`; right `name`; card `match` | flip `en`; match `en`, `he`; ask `en`; wrong and right `en`, `he`; card `en`, `he` |
 | `deal` | `squad`: the starters, the rest of the 15 pairs from the bench | `new-first`: up to `new` (8) unlearned words in teaching order, the rest a random review of learned ones, more new ones while few are learned |
-| `quiz` | `all`: every player once | `learned`: up to `size` (15) random learned words, locked below `unlock` (4) learned; the three others are learned words |
+| `quiz` | `all`: every player once | `learned`: up to `size` (15) random learned words, locked below `unlock` (4) learned; the three others are learned words, never one `apart` pairs with the asked one (girl, boy) |
 | `progress` | `inventory`: the marks on the shelf only | `bar`: "learned X / N" on every screen |
 | `precache` | `all`: every file, strictly | `core` with `items` (30): the page, fonts, icons, start/win and the first 30 words strictly; every other picture and clip in `RUNTIME` |
 
@@ -93,14 +93,18 @@ python3 -I _memory-game/tools/page/build_page.py assemble <game> --watch   # whi
   until it does. The repo has no CI, so run `--check` before every commit. It also fails when a photo or
   clip has no roster entry, the fonts and `CREDITS.md` disagree, a club CSS variable is set but never read,
   a start/win clip isn't the master, or `og.jpg` is missing, not a JPEG or over 300 KB.
-- `VERSION` hashes every precached file and the template. Any change to a page, a photo, a clip, a font or
-  an icon gives a new cache, and that is what makes installed copies pick it up (one full re-download).
+- `VERSION` hashes every file a game ships and the template. Any change to a page, a photo, a clip, a font
+  or an icon gives a new cache, and that is what makes installed copies pick it up (one re-download of
+  what is precached).
 - A shared change changes every game: assemble, commit and verify all of them.
 - The builder refuses a cache prefix that isn't the folder name, a prefix another game's starts with, and
   a manifest `id` that resolves to the origin root or to another game's app (Tel Aviv's `"./"` is
   grandfathered: changing it would break installed copies).
 
 ## Add a club
+
+(The word game, `english-words`, is not a club: its words, pictures and clips and how to refresh them are
+in [`english-words/tools/README.md`](../english-words/tools/README.md).)
 
 1. **Start it from the closest club**, which also checks the id, the cache prefix and the app id first:
 

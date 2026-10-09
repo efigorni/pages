@@ -740,15 +740,14 @@ circle.cut { fill: var(--big-bg); }
 
 .next-new[data-done="true"] .new-dot { display: none; }
 
+/* for the parents, in the mode labels' plain face: a club's display font draws digits for a poster */
 .shelf-count {
   display: flex;
   align-items: center;
   gap: .3em;
   margin: 0;
   color: var(--white);
-  font-weight: 700;
-  font-size: clamp(20px, 3.6vmin, 32px);
-  line-height: 1;
+  font: 700 clamp(20px, 3.6vmin, 32px)/1 system-ui, "Arial Hebrew", sans-serif;
   font-variant-numeric: tabular-nums;
 }
 
@@ -953,9 +952,7 @@ circle.cut { fill: var(--big-bg); }
 
 .progress-count {
   flex: none;
-  font-weight: 700;
-  font-size: calc(var(--bar) * .5);
-  line-height: 1;
+  font: 700 calc(var(--bar) * .48)/1 system-ui, "Arial Hebrew", sans-serif;
   font-variant-numeric: tabular-nums;
 }
 
