@@ -9,6 +9,7 @@ club" in [`_memory-game/README.md`](../../_memory-game/README.md).
 | `scrape/` | Reads htafc.co.il (the team & players cards, each player's popup, the club's match reports) into `<work>/data/`: `players.json`, raw and number-free photos, design reference |
 | `tts/pronunciations.json` | Each name's pinned IPA, the reason for every change and what to listen for |
 | `page/icons/` | The two icon SVGs (`render_icons.sh --game hapoel-tlv-memory`) |
+| `look/paint.py` | Renders the cards' dark red wall paint, `img/club/paint.webp` (a seamless tile, fixed seed; its docstring has the command). The icon SVGs draw it too: render the icons again after a change |
 
 ## Scrape
 

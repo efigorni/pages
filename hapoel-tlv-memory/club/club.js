@@ -1,11 +1,11 @@
 const CLUB = {
-  confetti: ['#ff1521', '#ffffff', '#ff009d', '#6d052a', '#ffb5ba'],
+  confetti: ['#ff1521', '#ffffff', '#ffb5ba', '#ff5a64', '#ffffff'],
   fonts: [['600 40px Rubik', 'אבג'], ['700 40px Karantina', 'אבג'], ['700 40px Karantina', '0123456789']],
 
-  // The card face, the site's player card in a pocket: a cutout on white in front of the player
-  // view's hexagon panel, the white number on the panel and the name under the picture. The engine
-  // calls prepare(players) once fonts are in, apply(style, cw, ch, mode) per board size, build(p)
-  // per card and fit(cardEl, p, geo) per card and size.
+  // The card face, the site's player card in a pocket: a cutout on the wall paint, the big white
+  // number beside it and the name under the picture. The engine calls prepare(players) once fonts
+  // are in, apply(style, cw, ch, mode) per board size, build(p) per card and fit(cardEl, p, geo) per
+  // card and size.
   face(kit) {
     'use strict';
 
@@ -23,7 +23,7 @@ const CLUB = {
     }
 
     // The name band is the card's bottom strip; the photo stands on it, shifted to the end side
-    // (left in RTL), in front of the panel, which holds the number in the top start corner.
+    // (left in RTL), and the number fills the strip the photo leaves at the top start corner.
     function faceVars(cw, ch, mode) {
       const short = Math.min(cw, ch);
       const frame = Math.max(3, short * 0.045);
@@ -44,8 +44,7 @@ const CLUB = {
       const v = faceVars(cw, ch, mode);
       setVars(st, {
         '--frame': `${v.frame}px`, '--band-h': `${v.band}px`, '--photo-s': `${v.s}px`, '--photo-x': `${v.x}px`,
-        '--photo-y': `${v.y}px`, '--panel-w': `${v.panelW}px`, '--hex-w': `${v.panelW * 0.96}px`,
-        '--num-fs': `${v.num}px`, '--num-top': `${v.numTop}px`,
+        '--photo-y': `${v.y}px`, '--panel-w': `${v.panelW}px`, '--num-fs': `${v.num}px`, '--num-top': `${v.numTop}px`,
       });
       return v;
     }
