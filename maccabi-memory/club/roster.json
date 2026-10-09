@@ -25,5 +25,8 @@
     {"id": "hisham-layous", "name_he": "הישאם לאיוס", "number": 33, "role": "bench", "img": "img/hisham-layous.webp"},
     {"id": "ilay-ben-simon", "name_he": "עילאי בן סימון", "number": 60, "role": "bench", "img": "img/ilay-ben-simon.webp"},
     {"id": "kristijan-belic", "name_he": "כריסטיאן בליץ'", "number": 17, "role": "bench", "img": "img/kristijan-belic.webp"}
+  ],
+  "backup": [
+    {"id": "roi-mishpati", "name_he": "רועי משפתי", "number": 90, "role": "backup", "img": "img/roi-mishpati.webp"}
   ]
 }

@@ -53,6 +53,8 @@ START_TEXT = "יאללה, בואי נשחק!"
 WIN_TEXT = "כל הכבוד! מצאת את כל השחקנים!"
 # The quiz's question opens with this clip; the asked player's match clip follows it.
 WHO_TEXT = "מי זה?"
+# The engine's own lines: audio/ui/<key>.mp3, one master each in _memory-game/audio/ui/.
+UI_TEXTS = {"start": START_TEXT, "win": WIN_TEXT, "who": WHO_TEXT}
 
 
 _TRAILING_PARENS = re.compile(r"\(([^()]*)\)\s*$")

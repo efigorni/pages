@@ -274,8 +274,8 @@ async function shotsFlow(page, vp, dir, reduced, res) {
     await sleep(750);
   }
   res.won = await until(page, () => document.getElementById('app').dataset.phase === 'won', 15000);
+  await sleep(1600); // past the second confetti burst
   res.confettiClear = await confettiClear(page);
-  await sleep(1300);
   await settle(page);
   await snap('win');
   res.domWin = await dom(page);
@@ -314,6 +314,7 @@ async function audioFlow(page, vp, dir, res) {
   res.winAfterMs = Date.now() - t0;
   await sleep(4000);
   await mark('end');
+  await confettiClear(page);
   await settle(page);
   await snap('audio-win');
 }
@@ -330,7 +331,7 @@ async function quizFlow(page, vp, dir, res) {
   const played = (from, url) => until(page, ([k, u]) => window.__log.slice(k)
     .some((e) => (e.type === 'buf-start' || e.type === 'html-play') && e.url === u), 10000, [from, url]);
   await ready(page);
-  res.pool = await page.evaluate(() => DATA.starters.concat(DATA.bench, DATA.quiz || []).map((p) => p.id));
+  res.pool = await page.evaluate(() => DATA.starters.concat(DATA.bench, DATA.backup || []).map((p) => p.id));
   res.questions = [];
   let from = await logLen();
   await mark('start');

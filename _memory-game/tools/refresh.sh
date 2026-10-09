@@ -6,7 +6,7 @@
 # <work>/data/players.json is the club scraper's output (see <game>/tools/README.md). In order:
 #   1. photos      build_images.py --game (mode, fade and sheet colours from <game>/club/club.json);
 #                  look at <work>/crops.png
-#   2. pins        stops here when a starter, bench or quiz player has no pinned IPA in
+#   2. pins        stops here when a player with a shipped role (starter, bench, backup) has no pinned IPA in
 #                  <game>/tools/tts/pronunciations.json: listen first (tts.sh g2p, ab, listen), pin, rerun
 #   3. voice       tts.sh generate --stale (only new or changed clips), check, sync into <game>/audio/
 #   4. page        build_page.py data, then assemble --check for every game
@@ -21,11 +21,13 @@ echo "== photos"
 uv run --quiet --with pillow python -I "$here/images/build_images.py" --game "$game" --work "$work"
 
 echo "== pins"
-unpinned="$(python3 -I - "$work/data/players.json" "$game/tools/tts/pronunciations.json" <<'PY'
+unpinned="$(python3 -I - "$work/data/players.json" "$game/tools/tts/pronunciations.json" "$here/scrape" <<'PY'
 import json, sys
+sys.path.insert(0, sys.argv[3])
+from roster import SHIPPED
 pins = json.load(open(sys.argv[2], encoding="utf-8"))["players"]
 print(" ".join(p["id"] for p in json.load(open(sys.argv[1], encoding="utf-8"))["players"]
-               if p.get("role") in ("starter", "bench", "quiz") and not pins.get(p["id"], {}).get("ipa")))
+               if p.get("role") in SHIPPED and not pins.get(p["id"], {}).get("ipa")))
 PY
 )"
 if [[ -n "$unpinned" ]]; then

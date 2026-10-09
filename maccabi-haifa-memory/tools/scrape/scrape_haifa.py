@@ -45,7 +45,7 @@ from PIL import Image  # noqa: E402
 from common import Fetcher, ascii_slug, log_line, photo_facts, write_json_atomic  # noqa: E402
 from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
 from hebrew import nickname  # noqa: E402
-from roster import check, output_key, rank_key, select  # noqa: E402
+from roster import SHIPPED, check, output_key, rank_key, select  # noqa: E402
 from rsc import page_objects  # noqa: E402
 
 BASE = "https://www.mhaifafc.com"
@@ -613,7 +613,7 @@ def main() -> int:
         if pl["stats"]["appearances"] == 0:
             pl["role"], pl["excluded_reason"] = "excluded", f"0 appearances in {season_label}"
         elif pl["is_gk"]:
-            pl["role"], pl["excluded_reason"] = "excluded", f"backup goalkeeper (the main 11 uses {top_gk['id']})"
+            pl["role"], pl["excluded_reason"] = "excluded", f"goalkeeper outside the top {args.pool_size} (pool_rank {pl['pool_rank']})"
         else:
             pl["role"], pl["excluded_reason"] = "excluded", f"outside the top {args.pool_size} by appearances (pool_rank {pl['pool_rank']})"
     if len(outfield_pool) > 10 and rank_key(outfield_pool[9])[:3] == rank_key(outfield_pool[10])[:3]:
@@ -641,9 +641,9 @@ def main() -> int:
                       "tenth_starts": s_sorted[9]["stats"]["starts"], "eleventh_starts": s_sorted[10]["stats"]["starts"],
                       "decided_by": "starts" if s_sorted[9]["stats"]["starts"] != s_sorted[10]["stats"]["starts"] else "minutes"}
 
-    # ---- photos for starters + bench
+    # ---- photos for starters, bench and backups
     for pl in players:
-        if pl["role"] not in ("starter", "bench"):
+        if pl["role"] not in SHIPPED:
             continue
         url = pl["photo_url_cdn"] or pl["photo_url"]
         ext = Path(url).suffix.lower() or ".png"
@@ -736,7 +736,7 @@ def main() -> int:
     write_json_atomic(out / "players.json", payload)
     write_json_atomic(out / "matches.json", {"season": season_label, "matches": [
         {k: v for k, v in g.items() if k != "roles"} | {"roles": {str(k): v for k, v in g["roles"].items()}} for g in games]})
-    counts = {r: sum(pl["role"] == r for pl in players) for r in ("starter", "bench", "excluded")}
+    counts = {r: sum(pl["role"] == r for pl in players) for r in SHIPPED + ("excluded",)}
     log(f"wrote {out / 'players.json'} ({counts}); {f.requests} network requests")
     for note in tie_notes:
         log("TIE: " + note)

@@ -1019,9 +1019,9 @@ const CLUB = {
   const STARTERS = DATA.starters;
   const BENCH = DATA.bench;
   const ALL = STARTERS.concat(BENCH);
-  // The quiz asks every pool player once: the starters, the bench and the quiz-only players (the
-  // pool's backup goalkeepers, whom the memory game never deals).
-  const QUIZ = ALL.concat(DATA.quiz || []);
+  // The quiz asks every pool player once: the starters, the bench and the backups (the pool's other
+  // goalkeepers, whom the memory game never deals).
+  const QUIZ = ALL.concat(DATA.backup || []);
   const CHOICES = 4;
   const ADVANCE_MS = 1500;
   const TAP_ADVANCE_MS = 700;

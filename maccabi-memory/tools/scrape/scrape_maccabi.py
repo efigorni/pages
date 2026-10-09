@@ -37,6 +37,9 @@ import requests
 from bs4 import BeautifulSoup, NavigableString
 from PIL import Image
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "_memory-game/tools/scrape"))  # the shared kit
+from roster import SHIPPED  # noqa: E402
+
 BASE = "https://www.maccabi-tlv.co.il"
 STATS_URL = BASE + "/%d7%94%d7%a7%d7%91%d7%95%d7%a6%d7%95%d7%aa/%d7%a7%d7%91%d7%95%d7%a6%d7%94-%d7%91%d7%95%d7%92%d7%a8%d7%aa/stats/"
 ROSTER_URL = BASE + "/%D7%94%D7%A7%D7%91%D7%95%D7%A6%D7%95%D7%AA/%D7%A7%D7%91%D7%95%D7%A6%D7%94-%D7%91%D7%95%D7%92%D7%A8%D7%AA/%D7%A1%D7%92%D7%9C/"
@@ -752,7 +755,10 @@ def main() -> int:
     if gks:
         gks[0]["role"] = "starter"
         for g in gks[1:]:
-            g["role"], g["excluded_reason"] = "excluded", f"goalkeeper, not the most-started GK ({gks[0]['id']})"
+            if g["stats"]["appearances"] >= 1:
+                g["role"] = "backup"  # never dealt, asked in the quiz
+            else:
+                g["role"], g["excluded_reason"] = "excluded", f"goalkeeper, not the most-started GK ({gks[0]['id']})"
         if len(gks) > 1 and rank_key(gks[0]) == rank_key(gks[1]):
             tie_notes.append(f"GK tie between {gks[0]['id']} and {gks[1]['id']}")
     for i, p in enumerate(outfield):
@@ -762,7 +768,7 @@ def main() -> int:
 
     for p in final:
         data = p.pop("_photo_bytes")
-        if p["role"] in ("starter", "bench") and data:
+        if p["role"] in SHIPPED and data:
             ext = Path(p["photo_url"]).suffix.lower() or ".png"
             dest = out / "raw" / f"{p['id']}{ext}"
             dest.write_bytes(data)
@@ -789,7 +795,7 @@ def main() -> int:
         "details": design,
     }
 
-    role_order = {"starter": 0, "bench": 1, "excluded": 2}
+    role_order = {"starter": 0, "bench": 1, "backup": 2, "excluded": 3}
     final.sort(key=lambda p: (role_order[p["role"]], not p["is_gk"], rank_key(p)))
     now = dt.datetime.now(dt.timezone.utc).astimezone()
     fetched = dt.datetime.fromtimestamp(fetcher.newest_fetch, dt.timezone.utc).astimezone() if fetcher.newest_fetch else now
@@ -821,7 +827,8 @@ def main() -> int:
     write_json_atomic(out / "players.json", payload)
     write_json_atomic(out / "matches.json", {"season": season_label, "matches": lineup_matches})
     log(f"wrote {out / 'players.json'} ({sum(p['role'] == 'starter' for p in final)} starters, "
-        f"{sum(p['role'] == 'bench' for p in final)} bench, {sum(p['role'] == 'excluded' for p in final)} excluded); "
+        f"{sum(p['role'] == 'bench' for p in final)} bench, {sum(p['role'] == 'backup' for p in final)} backup, "
+        f"{sum(p['role'] == 'excluded' for p in final)} excluded); "
         f"{fetcher.network_requests} network requests")
     if tie_notes:
         log("TIES: " + "; ".join(tie_notes))

@@ -33,16 +33,16 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 | `<game>/club/club.json` | The name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`) |
 | `<game>/club/style.css` | Hand-written: fonts, colour tokens, card back, card face, title |
 | `<game>/club/club.js` | Hand-written: `CLUB = { confetti, fonts, face(kit) }` |
-| `<game>/club/roster.json` | Starters, bench and the quiz-only players (`quiz`), written by `build_page.py data` |
+| `<game>/club/roster.json` | Starters, bench and backups (quiz only), written by `build_page.py data` |
 | `_memory-game/*` | The engine, the base styles and the two templates |
 
 Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the two modes side by side.
 Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
 "מי זה" (`audio/ui/who.mp3`) then his match clip, four photo-only cards; a wrong pick greys out with a soft
-sound, the right one turns to the club's card face, says the name and moves on. Players with role `quiz` in
-players.json (the pool's backup goalkeepers) go in the roster's `quiz` list: asked in the quiz, never dealt.
-The image, voice and refresh tools take them like starters and bench; a club's scraper has to give them that
-role (today's scrapers mark them `excluded`).
+sound, the right one turns to the club's card face, says the name and moves on. The squad rule
+(`tools/scrape/roster.py`) gives the pool's backup goalkeepers role `backup`: the roster's `backup` list, asked
+in the quiz, never dealt. Every tool that images, voices, checks, syncs or prunes takes `roster.SHIPPED`
+(starter, bench, backup), so a refresh keeps them.
 
 Scripts run in the order data, club, engine. `CLUB.face(kit)` returns the card face's four hooks:
 `prepare(players)`, `apply(style, cw, ch, mode)`, `build(p)` (its front must keep `.photo > img`, where a

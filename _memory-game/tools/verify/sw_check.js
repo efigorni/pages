@@ -135,14 +135,14 @@ function audit(log) {
   R.offline.audio = { ...g2, ...audit((await page.evaluate(() => window.__log)).slice(at)) };
   R.offline.imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline.png`) });
-  // The quiz offline: the who clip, every quiz player's photo and clips (quiz-only players too) are
+  // The quiz offline: the who clip, every quiz player's photo and clips (the backups' too) are
   // in the cache, and a reloaded page asks its first question with them.
   R.offline.quizCache = await page.evaluate(async () => {
-    const ids = DATA.starters.concat(DATA.bench, DATA.quiz || []).map((p) => p.id);
+    const ids = DATA.starters.concat(DATA.bench, DATA.backup || []).map((p) => p.id);
     const urls = ['audio/ui/who.mp3'].concat(...ids.map((id) => [`img/${id}.webp`, `audio/name/${id}.mp3`, `audio/match/${id}.mp3`]));
     const missing = [];
     for (const u of urls) if (!(await caches.match(new URL(u, location.href).href))) missing.push(u);
-    return { checked: urls.length, missing, quizOnly: (DATA.quiz || []).map((p) => p.id) };
+    return { checked: urls.length, missing, backups: (DATA.backup || []).map((p) => p.id) };
   });
   await page.reload({ waitUntil: 'load' });
   await sleep(2000);

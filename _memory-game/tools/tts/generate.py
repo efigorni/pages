@@ -3,7 +3,7 @@
     _memory-game/tools/tts/tts.sh <game> <work> generate [options]     # the usual way
     <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py --game <game> --work <work> [options]
 
-Reads <work>/data/players.json (role starter|bench|quiz) and the club's pronunciations.json.
+Reads <work>/data/players.json (roster.SHIPPED: role starter|bench|backup) and the club's pronunciations.json.
 The voice reads each player's `speak_he`: the text inside a trailing "(...)"
 of the displayed name when there is one, else the full name (HR3/H4). Every
 clip is rendered with several seeds; the take whose ivrit.ai STT round-trip
@@ -58,7 +58,10 @@ pronunciations.json, one per club (<game>/tools/tts/), the only schema:
                                 differently from the card (the clip's text stays speak_he)
         "ipa_match": "...",     optional: the same pronunciation nudged for the match clip only
         "speed": 0.95,          optional: this player's pace (BlueTTS divides the duration by it)
-        "listen": "..."}}}      optional: a judgement call worth a listen; listen.html highlights it
+        "listen": "..."         optional: a judgement call worth a listen; listen.html highlights it
+        "stt2_accepted": [...]}}} optional: what the second model (--second-opinion) heard in this player's clips
+                                and a person accepted, the primary STT having passed; `check` reports each as a
+                                note, not a problem, while the clip's transcript is still exactly that
 A player missing from the file is read by RenikudPlus G2P from speak_he and flagged in the QA report.
 """
 from __future__ import annotations
@@ -83,6 +86,8 @@ import numpy as np  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scrape"))  # roster.py: the roles a game ships
+from roster import SHIPPED  # noqa: E402
 import audio_metrics  # noqa: E402
 import config  # noqa: E402
 import hebrew  # noqa: E402
@@ -132,7 +137,7 @@ def speak_he(p: dict) -> str:
 
 def check_speak(players: list[dict]) -> None:
     for p in players:
-        if p.get("role") not in ("starter", "bench", "quiz"):
+        if p.get("role") not in SHIPPED:
             continue
         rule = hebrew.speak_text(display_name(p))
         if p.get("speak_he") and p["speak_he"].strip() != rule:
@@ -145,7 +150,7 @@ def check_speak(players: list[dict]) -> None:
 def build_items(players: list[dict], pron: dict, only: set[str] | None, ui: bool = False) -> list[dict]:
     items = []
     for p in players:
-        if p.get("role") not in ("starter", "bench", "quiz"):
+        if p.get("role") not in SHIPPED:
             continue
         if only and p["id"] not in only:
             continue
@@ -174,7 +179,7 @@ def build_items(players: list[dict], pron: dict, only: set[str] | None, ui: bool
         items.append({**common, "kind": "match", "text": hebrew.match_text(num, say),
                       "expect": hebrew.match_text(num, expect),
                       "variants": [hebrew.match_text(num, v) for v in var], "job": match_job})
-    for uid, text in (("start", hebrew.START_TEXT), ("win", hebrew.WIN_TEXT), ("who", hebrew.WHO_TEXT)) if ui else ():
+    for uid, text in hebrew.UI_TEXTS.items() if ui else ():
         if only and uid not in only:
             continue
         # target_speaker 2: the G2P's female-listener forms (בואי, מָצָאת).

@@ -18,21 +18,21 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
                         follow it, and a light club's style sets --scheme: light for base.css.
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
-  club/roster.json      season, starters, bench and quiz; written by `data`
+  club/roster.json      season, starters, bench and backup; written by `data`
 
 The builder writes two files per game, whole:
 
   index.html  _memory-game/page.template.html filled in: the head, the club style, base.css, the title, the
               trophy, DATA (the roster plus the clips that exist under audio/, in roster order), the club
               script and engine.js. The page plays two modes: memory deals the starters and bench; the
-              quiz ("who is this?") asks every player in the roster once, the quiz-only players too
+              quiz ("who is this?") asks every player in the roster once, the backups too
   sw.js       _memory-game/sw.template.js with VERSION, ASSETS and PREFIX filled in. VERSION hashes every
               precached file and the template, so any change installs a fresh cache.
 
 `data` writes club/roster.json from players.json (one player per line), then assembles that game; --prune
-deletes photos and clips of players who are no longer in it. Role "quiz" in players.json (the pool's backup
-goalkeepers) puts a player in the roster's `quiz` list: asked in the quiz, never dealt in the memory game; his
-photo and clips are made and shipped like everyone else's. The name model (club.json `names`): "full"
+deletes photos and clips of players who are no longer in it. Role "backup" in players.json (the pool's backup
+goalkeepers, roster.py's squad rule) puts a player in the roster's `backup` list: asked in the quiz, never dealt
+in the memory game; his photo and clips are made, checked and shipped like everyone else's (roster.SHIPPED). The name model (club.json `names`): "full"
 shows name_he on one card line; "first-last" adds the card's two tiers (first_he / last_he). speak_he, the
 text the voice reads, ships whenever it differs from name_he (and always with "first-last").
 `assemble` writes every game's index.html and sw.js, or the named games'. `--check` writes nothing and fails
@@ -65,14 +65,15 @@ sys.dont_write_bytecode = True  # no __pycache__ in the repo
 SHARED = Path(__file__).resolve().parents[2]
 REPO = SHARED.parent
 sys.path.insert(0, str(SHARED / "tools/tts"))
-from hebrew import START_TEXT, WHO_TEXT, WIN_TEXT, speak_text, split_display_name  # noqa: E402
+sys.path.insert(0, str(SHARED / "tools/scrape"))
+from hebrew import UI_TEXTS, speak_text, split_display_name  # noqa: E402
+from roster import SHIPPED  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
-UI_CLIPS = ("start", "win", "who")
-ROLES = ("starter", "bench", "quiz")  # in the game; "quiz" players are asked in the quiz and never dealt
+UI_CLIPS = tuple(UI_TEXTS)
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say")
@@ -159,15 +160,15 @@ def entry(p, page, model):
 
 
 def players(roster):
-    """Everyone in the game, in roster order: the starters, the bench, then the quiz-only players."""
-    return roster["starters"] + roster["bench"] + roster.get("quiz", [])
+    """Everyone in the game, in roster order: the starters, the bench, then the backups (quiz only)."""
+    return roster["starters"] + roster["bench"] + roster.get("backup", [])
 
 
 def roster_text(roster):
     """club/roster.json: one player per line, so a roster refresh diffs per player."""
     def rows(players):
         return ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in players)
-    lists = [k for k in ("starters", "bench", "quiz") if k != "quiz" or roster.get("quiz")]
+    lists = [k for k in ("starters", "bench", "backup") if k != "backup" or roster.get("backup")]
     body = ",\n".join(f'  "{k}": [\n{rows(roster[k])}\n  ]' for k in lists)
     return f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n{body}\n}}\n'
 
@@ -208,16 +209,15 @@ def write_data(players_json, game, prune):
     if model not in ("full", "first-last"):
         fail(f"{game}/{CONFIG}: names must be \"full\" or \"first-last\", not {model!r}")
     data = json.loads(Path(players_json).read_text(encoding="utf-8"))
-    starters = [entry(p, page, model) for p in data["players"] if p.get("role") == "starter"]
-    bench = [entry(p, page, model) for p in data["players"] if p.get("role") == "bench"]
-    quiz = [entry(p, page, model) for p in data["players"] if p.get("role") == "quiz"]
+    lists = {role: [entry(p, page, model) for p in data["players"] if p.get("role") == role] for role in SHIPPED}
+    starters, bench, backup = lists["starter"], lists["bench"], lists["backup"]
     if len(starters) != 11:
         fail(f"expected 11 starters, found {len(starters)}")
     if len(bench) < 4:
         fail(f"need at least 4 bench players, found {len(bench)}")
-    roster = {"season": data.get("season"), "starters": starters, "bench": bench, **({"quiz": quiz} if quiz else {})}
+    roster = {"season": data.get("season"), "starters": starters, "bench": bench, **({"backup": backup} if backup else {})}
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
-    print(f"{game}: club/roster.json: starters={len(starters)} bench={len(bench)} quiz={len(quiz)}", flush=True)
+    print(f"{game}: club/roster.json: starters={len(starters)} bench={len(bench)} backup={len(backup)}", flush=True)
     for rel in orphans(game, roster):
         if prune:
             (page / rel).unlink()
@@ -252,10 +252,9 @@ def lint_credits(game):
 def check_ui_clips(game):
     """Each game ships its own copy of the engine's start, win and who clips; the master is _memory-game/audio/ui/."""
     engine = read(SHARED / "engine.js")
-    texts = (("START", START_TEXT), ("WIN", WIN_TEXT), ("WHO", WHO_TEXT))
-    lines = {k: re.search(rf"const {k}_LINE = '([^']*)';", engine).group(1) for k, _ in texts}
-    problems = [f"engine.js's {k}_LINE is not hebrew.py's {k}_TEXT, which the clip says"
-                for k, text in texts if lines[k] != text]
+    problems = [f"engine.js's {k.upper()}_LINE is not hebrew.py's UI_TEXTS[{k!r}], which the clip says"
+                for k, text in UI_TEXTS.items()
+                if re.search(rf"const {k.upper()}_LINE = '([^']*)';", engine).group(1) != text]
     for clip in UI_CLIPS:
         copy = REPO / game / "audio/ui" / f"{clip}.mp3"
         if not copy.is_file() or copy.read_bytes() != (SHARED / "audio/ui" / f"{clip}.mp3").read_bytes():

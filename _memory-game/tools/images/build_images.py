@@ -21,7 +21,8 @@ usage:
 <work>/data/players.json, writes <game>/img/ and the sheet <work>/crops.png.
 
 <players.json> is the scrape output; each player's `photo_file` is resolved relative to
-the JSON's directory and must stay inside it. Only role starter/bench/quiz is processed.
+the JSON's directory and must stay inside it. Only the shipped roles are processed (roster.SHIPPED:
+starter, bench, backup).
 overrides.json maps a player id to {"dx": .., "dy": .., "zoom": ..}, applied after
 framing (dx/dy as fractions of the crop side, zoom > 1 = tighter). --sheet-colors takes
 three hex colours: the sheet, the tile behind each cutout, and the guide marks.
@@ -37,6 +38,8 @@ sys.dont_write_bytecode = True  # no __pycache__ in the repo
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 REPO = Path(__file__).resolve().parents[3]
 from framing import SHOULDER_AT, TOP_MARGIN, outline  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scrape"))  # roster.py: the roles a game ships
+from roster import SHIPPED  # noqa: E402
 
 
 def box_from_fractions(img, crop):
@@ -152,7 +155,7 @@ def main():
 
     entries = []
     for p in data["players"]:
-        if p.get("role") not in ("starter", "bench", "quiz"):
+        if p.get("role") not in SHIPPED:
             continue
         src = (base / p["photo_file"]).resolve()
         if base not in src.parents:

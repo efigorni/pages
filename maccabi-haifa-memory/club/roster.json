@@ -25,5 +25,8 @@
     {"id": "navot-ratner", "name_he": "נבות רטנר", "first_he": "נבות", "last_he": "רטנר", "speak_he": "נבות רטנר", "number": 36, "role": "bench", "img": "img/navot-ratner.webp"},
     {"id": "pedro-barzao", "name_he": "פדרו ברזאו", "first_he": "פדרו", "last_he": "ברזאו", "speak_he": "פדרו ברזאו", "number": 30, "role": "bench", "img": "img/pedro-barzao.webp"},
     {"id": "adam-grimberg", "name_he": "אדם גרימברג", "first_he": "אדם", "last_he": "גרימברג", "speak_he": "אדם גרימברג", "number": 38, "role": "bench", "img": "img/adam-grimberg.webp"}
+  ],
+  "backup": [
+    {"id": "glenn-alvin", "name_he": "גלן אלוין", "first_he": "גלן", "last_he": "אלוין", "speak_he": "גלן אלוין", "number": 90, "role": "backup", "img": "img/glenn-alvin.webp"}
   ]
 }

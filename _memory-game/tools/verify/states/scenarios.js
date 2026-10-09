@@ -265,7 +265,7 @@ async function playToLastPair(h) {
   {
     const h = boot({ noClips: true });
     const { DATA, quiz, game } = h.T;
-    const pool = DATA.starters.concat(DATA.bench, DATA.quiz || []).map((p) => p.id);
+    const pool = DATA.starters.concat(DATA.bench, DATA.backup || []).map((p) => p.id);
     await h.click('play-quiz');
     const ids = () => quiz.cards.map((c) => c.p.id);
     check('Q1 the quiz asks: 4 distinct cards with the answer, every pool player a pip',
@@ -306,10 +306,10 @@ async function playToLastPair(h) {
     for (let i = 0; i < 200 && wonAt === null; i++) { await h.advance(50); if (h.phase() === 'won') wonAt = i; }
     check('Q4 every quiz player asked exactly once, then the win screen', asked.length === pool.length
       && new Set(asked).size === pool.length && wonAt !== null && h.byId.win.classList.contains('show'), `${asked.length}/${pool.length}`);
-    const quizOnly = new Set((DATA.quiz || []).map((p) => p.id));
-    let dealtQuizOnly = 0;
-    for (let i = 0; i < 200; i++) { h.T.newGame(); dealtQuizOnly += h.cards().filter((c) => quizOnly.has(c.p.id)).length; }
-    check('Q5 memory never deals a quiz-only player', dealtQuizOnly === 0, `${quizOnly.size} quiz-only, ${dealtQuizOnly} dealt in 200 games`);
+    const backups = new Set((DATA.backup || []).map((p) => p.id));
+    let dealt = 0;
+    for (let i = 0; i < 200; i++) { h.T.newGame(); dealt += h.cards().filter((c) => backups.has(c.p.id)).length; }
+    check('Q5 memory never deals a backup', dealt === 0, `${backups.size} backup(s), ${dealt} dealt in 200 games`);
   }
 
   const failed = results.filter((r) => !r.ok).length;

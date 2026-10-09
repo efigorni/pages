@@ -1,6 +1,6 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
 // VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
-const VERSION = 'maccabi-memory-7525d66fe36a';
+const VERSION = 'maccabi-memory-a474abe606ad';
 const ASSETS = [
   './',
   'index.html',
@@ -24,6 +24,7 @@ const ASSETS = [
   'audio/match/ofek-melika.mp3',
   'audio/match/osher-davida.mp3',
   'audio/match/raz-shlomo.mp3',
+  'audio/match/roi-mishpati.mp3',
   'audio/match/sagiv-jehezkel.mp3',
   'audio/match/shachar-rosen.mp3',
   'audio/match/tyrese-asante.mp3',
@@ -46,6 +47,7 @@ const ASSETS = [
   'audio/name/ofek-melika.mp3',
   'audio/name/osher-davida.mp3',
   'audio/name/raz-shlomo.mp3',
+  'audio/name/roi-mishpati.mp3',
   'audio/name/sagiv-jehezkel.mp3',
   'audio/name/shachar-rosen.mp3',
   'audio/name/tyrese-asante.mp3',
@@ -79,6 +81,7 @@ const ASSETS = [
   'img/ofek-melika.webp',
   'img/osher-davida.webp',
   'img/raz-shlomo.webp',
+  'img/roi-mishpati.webp',
   'img/sagiv-jehezkel.webp',
   'img/shachar-rosen.webp',
   'img/tyrese-asante.webp'

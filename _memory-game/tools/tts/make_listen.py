@@ -24,6 +24,8 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scrape"))  # roster.py: the roles a game ships
+from roster import SHIPPED  # noqa: E402
 
 TTS = None  # the tts home; main() sets it
 
@@ -104,7 +106,7 @@ def main(players_path: str, pron_path: str, tts: Path) -> None:
 
     rows, n = [], 0
     for p in roster:
-        if p.get("role") not in ("starter", "bench", "quiz"):
+        if p.get("role") not in SHIPPED:
             continue
         n += 1
         e = pron.get(p["id"], {})

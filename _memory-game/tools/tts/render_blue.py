@@ -40,6 +40,8 @@ import soundfile as sf
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scrape"))  # roster.py: the roles a game ships
+from roster import SHIPPED  # noqa: E402
 
 ROOT = config.engines_home() / "_engines/BlueTTS"
 sys.path.insert(0, str(ROOT / "src"))
@@ -112,7 +114,7 @@ def g2p_roster(players_path: str, pron_path: str | None) -> None:
     tp = TextProcessor(target_speaker=0)
     pins = json.load(open(pron_path, encoding="utf-8"))["players"] if pron_path else {}
     for p in json.load(open(players_path, encoding="utf-8"))["players"]:
-        if p.get("role") not in ("starter", "bench", "quiz"):
+        if p.get("role") not in SHIPPED:
             continue
         say = (p.get("speak_he") or hebrew.speak_text(p.get("name_he") or p["name"])).strip()
         ipa = TAG.sub("", tp.phonemize(say, lang="he")).strip()

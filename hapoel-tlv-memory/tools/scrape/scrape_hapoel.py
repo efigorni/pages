@@ -34,7 +34,7 @@ from common import Fetcher, ascii_slug, log_line, norm_name, photo_facts, write_
 from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
 from htafc import (LINEUP_RE, LISTING_EN, LISTING_HE, SECTION_EN, parse_lineup_block, parse_listing,  # noqa: E402
                    parse_popup, report_text)
-from roster import check, output_key, select  # noqa: E402
+from roster import SHIPPED, check, output_key, select  # noqa: E402
 from transfermarkt import parse_squadstats, squadstats_url  # noqa: E402
 
 # The season this scrape counts. Its dates, the cached Transfermarkt file, the club's season id and every
@@ -388,7 +388,7 @@ def main() -> int:
         p.setdefault("pool_rank", None)
     outfield = sel.outfield
     for p in players:
-        if p.get("role") in ("starter", "bench"):
+        if p.get("role") in SHIPPED:
             p["excluded_reason"] = None
         else:
             p["role"] = "excluded"
@@ -396,7 +396,7 @@ def main() -> int:
                 p["excluded_reason"] = (("goalkeeper, " if p["is_gk"] else "") + f"0 appearances in {SEASON} (in no club "
                                         f"line-up of the {len(game_rows)} official games)")
             elif p["is_gk"]:
-                p["excluded_reason"] = f"backup goalkeeper (pool_rank {p['pool_rank']})"
+                p["excluded_reason"] = f"goalkeeper outside the top 23 (pool_rank {p['pool_rank']})"
             else:
                 p["excluded_reason"] = f"outside the top 23 (pool_rank {p['pool_rank']})"
 
@@ -420,7 +420,7 @@ def main() -> int:
     shoulder_overrides = {**IMAGES.get("shoulder_overrides", {}),
                           **{o.partition("=")[0]: float(o.partition("=")[2]) for o in a.shoulder_override}}
     for p in players:
-        if p["role"] not in ("starter", "bench"):
+        if p["role"] not in SHIPPED:
             p["photo_file"] = None
             continue
         ext = Path(p["photo_url"]).suffix.lower() or ".png"
