@@ -2,11 +2,12 @@
 // fake speechSynthesis, fake Web Audio and fake Wake Lock, so state-machine and audio paths can be
 // exercised deterministically. Usage: HARNESS_HTML=<game>/index.html, then require('./harness').boot({...}).
 // boot({ clips: true }) pretends every clip ships; boot({ noClips: true }) that none does (speech only);
-// boot({ storage: [[key, value]] }) starts with that localStorage (what she has learned, a reload later).
+// boot({ storage: [[key, value]] }) starts with that localStorage (what she has learned, a reload later);
+// boot({ html: <path> }) runs another page than HARNESS_HTML (a game built in a scratch folder).
 const fs = require('fs');
 const vm = require('vm');
 
-const HTML = fs.readFileSync(process.env.HARNESS_HTML, 'utf8');
+const HTML = process.env.HARNESS_HTML ? fs.readFileSync(process.env.HARNESS_HTML, 'utf8') : '';
 
 function extractScripts(html) {
   const dataSrc = html.match(/<script id="data">([\s\S]*?)<\/script>/)[1];
@@ -172,7 +173,8 @@ function boot(opts = {}) {
   }
 
   // Every element of the page that has an id, with its tag, so a new one the engine looks up needs no edit here.
-  const byId = Object.fromEntries([...HTML.matchAll(/<([a-z]+)\b[^>]*\sid="([\w-]+)"/g)].map(([, tag, id]) => [id, new El(tag, id)]));
+  const html = opts.html ? fs.readFileSync(opts.html, 'utf8') : HTML;
+  const byId = Object.fromEntries([...html.matchAll(/<([a-z]+)\b[^>]*\sid="([\w-]+)"/g)].map(([, tag, id]) => [id, new El(tag, id)]));
   byId.start.classList.add('show');
   byId.confirm.inert = true;
   byId.win.inert = true;
@@ -223,7 +225,7 @@ function boot(opts = {}) {
   if (opts.webAudio) g.AudioContext = FakeAudioContext;
   g.window = g;
 
-  const { dataSrc, main } = extractScripts(HTML);
+  const { dataSrc, main } = extractScripts(html);
   let data = dataSrc;
   if (opts.clips || opts.noClips) {
     const d = JSON.parse(data.match(/const DATA = (\{.*\});/)[1]);

@@ -816,46 +816,67 @@ async function playToLastPair(h) {
       + 'its asked word avoids', listed && asked >= 100 && broken === 0 && together === 0, `${asked} questions, ${broken} with an avoided word`);
   }
 
-  // ---------- P1-P4 a word game's quiz picks its words as round 2's simulation does ----------
-  if (!SQUAD) {
-    // The simulation's recommended constants (quiz-selection-sim.md) and its seeded random source (mulberry32).
-    const SIM = { size: 10, master: 3, newMin: 1, newMax: 4, sureMin: 3, growth: 2, jitter: 0.5, decrement: 'demote' };
-    const seeded = (seed) => {
-      let s = seed >>> 0;
-      return () => {
-        s = (s + 0x6d2b79f5) >>> 0;
-        let t = Math.imul(s ^ (s >>> 15), 1 | s);
-        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-      };
-    };
-    // ids w0.. in teaching order: groups of [count, firstTry, lastAsked (a value, k => value, or none: never asked)]
-    const snap = (groups, extra = 0) => {
-      const items = [];
-      const stats = {};
-      let i = 0;
-      for (const [count, firstTry, lastAsked] of groups) {
-        for (let k = 0; k < count; k++, i++) {
-          items.push(`w${i}`);
-          stats[`w${i}`] = { encountered: true, firstTry };
-          if (lastAsked !== undefined) stats[`w${i}`].lastAsked = typeof lastAsked === 'function' ? lastAsked(k) : lastAsked;
+  // ---------- A2 a squad's look-alike pair (club.json play.quiz.apart) never shares a question ----------
+  // No club sets one, so the game is built again in a scratch folder with a pair, through build_page.py: this
+  // checks the builder's DATA (each player's `avoid`) as well as the quiz.
+  if (SQUAD) {
+    const os = require('os');
+    const path = require('path');
+    const fs = require('fs');
+    const { execFileSync } = require('child_process');
+    const page = path.resolve(process.argv[2]);
+    const game = path.basename(path.dirname(page));
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-game-apart-'));
+    try {
+      fs.cpSync(path.dirname(page), path.join(tmp, game), { recursive: true });
+      const config = path.join(tmp, game, 'club/club.json');
+      const cfg = JSON.parse(fs.readFileSync(config, 'utf8'));
+      const [a, b] = probe.ITEMS.filter((p) => p.role === 'starter').slice(0, 2).map((p) => p.id);
+      fs.writeFileSync(config, JSON.stringify({ ...cfg, play: { ...cfg.play, quiz: { pool: 'all', apart: [[a, b]] } } }));
+      execFileSync('python3', ['-I', path.join(__dirname, '../../page/build_page.py'), 'assemble', '--repo', tmp, game], { stdio: 'pipe' });
+      const k = boot({ noClips: true, html: path.join(tmp, game, 'index.html') });
+      const byId = Object.fromEntries(k.T.ITEMS.map((p) => [p.id, p]));
+      const wired = (byId[a].avoid || []).includes(b) && (byId[b].avoid || []).includes(a);
+      let asked = 0;
+      let together = 0;
+      for (let round = 0; round < 4; round++) {
+        await k.click(round ? 'yes-quiz' : 'play-quiz');
+        for (let i = 0; i < 40 && k.phase() === 'ask'; i++) {
+          const cards = k.T.quiz.cards.map((c) => c.p.id);
+          if ([a, b].includes(k.T.quiz.answer.p.id)) { asked += 1; together += cards.includes(a) && cards.includes(b); }
+          await k.advance(500);
+          await k.pick(k.T.quiz.answer);
+          await k.advance(800);
+          if (k.phase() === 'reveal') await k.pick(k.T.quiz.cards[0]);
+          await k.advance(50);
         }
       }
-      for (let k = 0; k < extra; k++, i++) items.push(`w${i}`);
-      return { items, stats };
-    };
+      check(`A2 a squad's look-alike pair (play.quiz.apart: ${a}, ${b}) reaches both players' avoid in DATA and never shares a question`,
+        wired && asked >= 8 && together === 0, `${asked} questions asked one of them, ${together} offered both`);
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  }
+
+  // ---------- P1-P4 a word game's quiz picks its words as round 2's simulation does ----------
+  if (!SQUAD) {
+    // The simulation's reference module (selection.ref.js, its recommended constants and seeded random source) and
+    // the pools P2 picks from (selection-pools.js).
+    const ref = require('./selection.ref.js');
+    const { snap, poolA, poolB, poolC } = require('./selection-pools.js');
+    const SIM = ref.RECOMMENDED;
+    const seeded = ref.seededRng;
     const { pickQuiz, updateStats, LEARN } = probe;
     check("P1 the word game's quiz constants are the simulation's recommendation (size 10, master 3, new 1-4, sure 3, demote)",
       Object.keys(SIM).every((k) => LEARN[k] === SIM[k]), JSON.stringify(Object.fromEntries(Object.keys(SIM).map((k) => [k, LEARN[k]]))));
-    // What sim/selection.js (round 2's simulation) returns for the same inputs and seeds, recorded from it.
-    const A = snap([[30, 0], [20, 1, (k) => 90 - k], [20, 2, (k) => 80 - 2 * k], [40, 3, (k) => 50 + k]], 10);
-    const wantA = {
-      1: ['w72', 'w48', 'w69', 'w68', 'w64', 'w66', 'w71', 'w49', 'w0', 'w74'],
-      2: ['w71', 'w49', 'w48', 'w67', 'w70', 'w47', 'w0', 'w69', 'w46', 'w72'],
-      3: ['w76', 'w49', 'w48', 'w45', 'w71', 'w47', 'w68', 'w66', 'w0', 'w74'],
-    };
-    const B = snap([[6, 0]], 5);
-    const C = snap([[12, 0]]);
+    // What the reference module picks for P2's pools and seeds, recorded (selection-fixtures.js prints them again).
+    const wantA = {"1":["w72","w48","w69","w68","w64","w66","w71","w49","w0","w74"],"2":["w71","w49","w48","w67","w70","w47","w0","w69","w46","w72"],"3":["w76","w49","w48","w45","w71","w47","w68","w66","w0","w74"]};
+    const wantB = "w3 w2 w5 w0 w4 w1";
+    const wantSeq = ["w5 w8 w9 w0 w6 w4 w3 w1 w2 w7","w9 w7 w6 w0 w2 w1 w10 w5 w3 w4","w3 w8 w6 w1 w5 w7 w10 w0 w11 w2","w2 w10 w5 w11 w0 w4 w8 w9 w3 w7","w4 w1 w5 w10 w8 w11 w0 w3 w6 w9","w0 w10 w8 w2 w5 w11 w4 w6 w7 w3"];
+    const wantTries = [3,3,3,3,3,2,2,3,3,3,2,2];
+    const A = snap(poolA.groups, poolA.extra);
+    const B = snap(poolB.groups, poolB.extra);
+    const C = snap(poolC.groups);
     const rng = seeded(42);
     const seq = [];
     for (let now = 0; now < 6; now++) {
@@ -863,16 +884,17 @@ async function playToLastPair(h) {
       ids.forEach((id, j) => updateStats(C.stats, id, (j + now) % 3 !== 0, now, SIM));
       seq.push(ids.join(' '));
     }
-    const wantSeq = ['w5 w8 w9 w0 w6 w4 w3 w1 w2 w7', 'w9 w7 w6 w0 w2 w1 w10 w5 w3 w4', 'w3 w8 w6 w1 w5 w7 w10 w0 w11 w2',
-      'w2 w10 w5 w11 w0 w4 w8 w9 w3 w7', 'w4 w1 w5 w10 w8 w11 w0 w3 w6 w9', 'w0 w10 w8 w2 w5 w11 w4 w6 w7 w3'];
-    const wantTries = [3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 2, 2];
-    check('P2 the same quizzes as the simulation\'s own module, to the word: three seeded picks, a small pool, and six quizzes '
-      + 'in a row with their answers scored (demote)',
+    // and, live, the module itself on 200 more seeds
+    const live = [...Array(200).keys()].filter((seed) => JSON.stringify(pickQuiz(A.items, A.stats, { ...SIM, now: 100 }, seeded(seed + 10)))
+      !== JSON.stringify(ref.pickQuiz(A.items, A.stats, { now: 100 }, seeded(seed + 10))));
+    check('P2 the same quizzes as the simulation\'s own module, to the word: three recorded seeded picks, a small pool, six quizzes '
+      + 'in a row with their answers scored (demote), and 200 more seeds against the module itself',
       [1, 2, 3].every((seed) => JSON.stringify(pickQuiz(A.items, A.stats, { ...SIM, now: 100 }, seeded(seed))) === JSON.stringify(wantA[seed]))
-      && pickQuiz(B.items, B.stats, { ...SIM, now: 0 }, seeded(9)).join(' ') === 'w3 w2 w5 w0 w4 w1'
-      && JSON.stringify(seq) === JSON.stringify(wantSeq) && C.items.every((id, i) => C.stats[id].firstTry === wantTries[i]),
-      JSON.stringify(seq));
-    // The group shares over many seeded quizzes: the simulation's own check, then Adam's extremes from its report.
+      && pickQuiz(B.items, B.stats, { ...SIM, now: 0 }, seeded(9)).join(' ') === wantB
+      && JSON.stringify(seq) === JSON.stringify(wantSeq) && C.items.every((id, i) => C.stats[id].firstTry === wantTries[i])
+      && live.length === 0, `${live.length} of 200 live seeds differ`);
+    // The group shares over many seeded quizzes: the simulation's own check, then the edge-case pools from the
+    // selection simulation's report.
     const shares = (s, draws, seed) => {
       const r = seeded(seed);
       const n = { fresh: 0, learning: 0, sure: 0, noFresh: 0 };
@@ -907,7 +929,12 @@ async function playToLastPair(h) {
         : i < 8 ? { encountered: true, firstTry: 1, misses: 1, lastAsked: 4 } : { encountered: true, firstTry: 0, misses: 0 };
     });
     const k = boot({ noClips: true, storage: [[`${probe.DATA.game}:stats`, JSON.stringify({ session: 5, items })]] });
+    // a quiz left before any answer, then a new one: the clock hasn't moved
     await k.click('play-quiz');
+    await k.advance(500);
+    await k.click('again');
+    await k.click('yes-quiz');
+    const unaged = k.T.quiz.session === 5 && JSON.parse(k.store.get(`${probe.DATA.game}:stats`) || '{"session":5}').session === 5;
     const order = k.T.quiz.order.map((p) => items[p.id]);
     const sure = (e) => e.firstTry >= 3;
     const firstId = k.T.quiz.order[0].id;
@@ -916,11 +943,12 @@ async function playToLastPair(h) {
     await k.advance(1500);
     await k.pick(k.T.quiz.answer);
     const saved = JSON.parse(k.store.get(`${probe.DATA.game}:stats`));
-    check('P4 the quiz asks 10 of what she has met, a sure word first and last, a new one among them; the quiz clock ticks, '
-      + 'and a sure word missed on the first pick goes back to practice (firstTry 2, asked in quiz 5)',
-      order.length === 10 && sure(order[0]) && sure(order[9]) && order.some((e) => !('lastAsked' in e)) && k.T.quiz.session === 5
+    check('P4 the quiz asks 10 of what she has met, a sure word first and last, a new one among them; a quiz left before any '
+      + 'answer ages nothing, the first answer moves the clock on, and a sure word missed on the first pick goes back to '
+      + 'practice (firstTry 2, asked in quiz 5)',
+      unaged && order.length === 10 && sure(order[0]) && sure(order[9]) && order.some((e) => !('lastAsked' in e)) && k.T.quiz.session === 5
       && saved.session === 6 && saved.items[firstId].firstTry === 2 && saved.items[firstId].misses === 1 && saved.items[firstId].lastAsked === 5,
-      JSON.stringify(saved.items[firstId]));
+      JSON.stringify({ unaged, saved: saved.items[firstId], session: saved.session }));
   }
 
   const failed = results.filter((r) => !r.ok).length;

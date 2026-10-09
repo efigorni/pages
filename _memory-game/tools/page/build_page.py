@@ -100,23 +100,15 @@ MOMENTS = ("flip", "match", "ask", "wrong", "right", "card")
 # How a word game's quiz picks its questions and how every game scores an answer (engine.js LEARN, whose
 # defaults are round 2's simulation's): play.quiz may set any of these.
 LEARN_KEYS = {
-    "size": ("questions per quiz, >= 1", lambda v, q: _int(v) and v >= 1),
-    "master": ("first-pick successes that make an item fully learned, >= 1", lambda v, q: _int(v) and v >= 1),
-    "newMin": ("never-asked words per quiz, at least, >= 0", lambda v, q: _int(v) and v >= 0),
-    "newMax": ("never-asked words per quiz, at most, >= newMin", lambda v, q: _int(v) and v >= q.get("newMin", 1)),
-    "sureMin": ("fully learned words per quiz, >= 0", lambda v, q: _int(v) and v >= 0),
-    "growth": ("a learning level's wait multiplier, >= 1", lambda v, q: _num(v) and v >= 1),
-    "jitter": ("the random spread on the overdue order, >= 0", lambda v, q: _num(v) and v >= 0),
-    "decrement": ("\"none\", \"demote\" or \"dec\"", lambda v, q: v in ("none", "demote", "dec")),
+    "size": ("questions per quiz, >= 1", lambda v: _int(v) and v >= 1),
+    "master": ("first-pick successes that make an item fully learned, >= 1", lambda v: _int(v) and v >= 1),
+    "newMin": ("never-asked words per quiz, at least, >= 0", lambda v: _int(v) and v >= 0),
+    "newMax": ("never-asked words per quiz, at most, >= 0", lambda v: _int(v) and v >= 0),
+    "sureMin": ("fully learned words per quiz, >= 0", lambda v: _int(v) and v >= 0),
+    "growth": ("a learning level's wait multiplier, >= 1", lambda v: _num(v) and v >= 1),
+    "jitter": ("the random spread on the overdue order, >= 0", lambda v: _num(v) and v >= 0),
+    "decrement": ("\"none\", \"demote\" or \"dec\"", lambda v: v in ("none", "demote", "dec")),
 }
-
-
-def _int(v):
-    return isinstance(v, int) and not isinstance(v, bool)
-
-
-def _num(v):
-    return isinstance(v, (int, float)) and not isinstance(v, bool)
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say",
@@ -146,6 +138,22 @@ TROPHY = (
     'stroke-linecap="round"/>',
 )
 SHADE = '<path d="M82 18v20c0 9-4 17-10 22" fill="none" stroke="{shade}" stroke-width="3" stroke-linecap="round"/>'
+
+
+def _int(v):
+    return isinstance(v, int) and not isinstance(v, bool)
+
+
+def _num(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
+def engine_learn():
+    """engine.js LEARN's defaults, {key: value}: what a play.quiz that leaves a key out gets."""
+    line = re.search(r"const LEARN = \{(.*?)\.\.\.PLAY\.quiz \};", read(SHARED / "engine.js"))
+    if not line:
+        fail("_memory-game/engine.js has no `const LEARN = { ..., ...PLAY.quiz };` line")
+    return {k: json.loads(v.replace("'", '"')) for k, v in re.findall(r"(\w+): ([^,]+),", line.group(1))}
 
 
 def fail(msg):
@@ -210,8 +218,12 @@ def play_of(game):
     elif quiz.get("pool") != "all":
         fail(f"{where}.quiz.pool: \"all\" or \"learned\"")
     for key, (want, ok) in LEARN_KEYS.items():
-        if key in quiz and not ok(quiz[key], quiz):
+        if key in quiz and not ok(quiz[key]):
             fail(f"{where}.quiz.{key}: {want}, not {quiz[key]!r}")
+    learn = {**engine_learn(), **quiz}
+    if learn["newMin"] > learn["newMax"]:
+        fail(f"{where}.quiz: newMin ({learn['newMin']}) over newMax ({learn['newMax']}; engine.js LEARN's default "
+             "when play.quiz leaves it out)")
     apart = quiz.get("apart", [])
     if not (isinstance(apart, list) and all(isinstance(p, list) and len(p) == 2 and all(isinstance(i, str) for i in p)
                                             for p in apart)):
@@ -330,8 +342,9 @@ def sound_alikes(game):
 
 
 def avoid_of(game):
-    """What a word game's quiz never offers as a wrong answer to each word: its sound-alikes (club/avoid.json)
-    and its look-alike pictures (club.json play.quiz.apart). {id: sorted ids}, for the words that have any."""
+    """What a game's quiz never offers as a wrong answer to each item: a word game's sound-alikes
+    (club/avoid.json) and any game's look-alike pictures (club.json play.quiz.apart). {id: sorted ids}, for the
+    items that have any."""
     avoid = {wid: set(others) for wid, others in (sound_alikes(game) or {}).items()}
     for a, b in play_of(game)["quiz"].get("apart", []):
         avoid.setdefault(a, set()).add(b)
@@ -340,12 +353,13 @@ def avoid_of(game):
 
 
 def data_line(game, roster):
-    """The DATA script: the roster (a word game's words with their `avoid`), the clips that exist (per kind,
-    in roster order), the game's folder (the key of what she knows) and its play config."""
+    """The DATA script: the roster (each item with its `avoid`, when it has one), the clips that exist (per
+    kind, in roster order), the game's folder (the key of what she knows) and its play config."""
     page = REPO / game
-    if "words" in roster:
-        avoid = avoid_of(game)
-        roster = {**roster, "words": [{**w, "avoid": avoid[w["id"]]} if w["id"] in avoid else w for w in roster["words"]]}
+    avoid = avoid_of(game)
+    if avoid:
+        key = "words" if "words" in roster else "players"
+        roster = {**roster, key: [{**p, "avoid": avoid[p["id"]]} if p["id"] in avoid else p for p in roster[key]]}
     ids = [p["id"] for p in items_of(roster)]
     audio = {"ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()]}
     for kind in KINDS[kind_of(game)]:
@@ -496,9 +510,15 @@ def check_takes(game):
         if wid not in ids:
             problems.append(f"{EN_PINS}: {wid} is not on the roster")
             continue
-        want = (pin.get("take") or {}).get("sha256")
+        if "take" not in pin:
+            continue
+        want = str((pin["take"] or {}).get("sha256") or "")
+        if not re.fullmatch(r"[0-9a-f]{16,64}", want):
+            problems.append(f"{EN_PINS}: {wid}'s take needs its file's sha256, 16 to 64 lowercase hex characters, "
+                            f"not {want!r}")
+            continue
         clip = REPO / game / "audio/en" / f"{wid}.mp3"
-        if want and not (clip.is_file() and hashlib.sha256(clip.read_bytes()).hexdigest().startswith(want)):
+        if not (clip.is_file() and hashlib.sha256(clip.read_bytes()).hexdigest()[:len(want)] == want):
             problems.append(f"audio/en/{wid}.mp3 is not the take picked by ear ({EN_PINS}): put that file back, "
                             "or pick a new take by ear and update its pin")
     return problems

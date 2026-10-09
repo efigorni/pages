@@ -1543,10 +1543,10 @@ const CLUB = {
     return node;
   }
 
-  function shuffled(list) {
+  function shuffled(list, rng = Math.random) {
     const a = list.slice();
     for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(rng() * (i + 1));
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
@@ -2039,7 +2039,7 @@ const CLUB = {
   // question she answered right on her first pick); `firstTry`, the quiz questions she answered with her
   // first pick, the only success there is (a match, a flash card or a right pick after a wrong one count
   // for nothing); `misses`, the questions whose first pick was wrong; `lastAsked`, the quiz that last asked
-  // it, on the quiz clock `session` (one tick per quiz started; no `lastAsked`: never asked). Kept per game
+  // it, on the quiz clock `session` (a tick per quiz she answers; no `lastAsked`: never asked). Kept per game
   // on this device, in `<game>:stats` as { session, items } (the games share one origin, so the key carries
   // the game's folder). `<game>:learned`, the list of the items met, is what older pages kept: it is read
   // at every start, so nothing they wrote is lost (each such item met, never asked), and kept in step, so
@@ -2083,19 +2083,17 @@ const CLUB = {
         save();
         return true;
       },
-      // a question's first pick, in the quiz `asked` on the quiz clock; a miss on an item she hasn't met (a
-      // squad's quiz asks every player) doesn't meet it
+      // a question's first pick, in the quiz `asked` on the quiz clock
       answered(id, right, asked) {
-        const known = !!items[id] && items[id].encountered;
         updateStats(items, id, right, asked, LEARN);
-        if (!right && !known) items[id].encountered = false;
         save();
       },
-      // a quiz starts: its tick of the quiz clock
+      // the quiz clock: a quiz asks at `session`, which moves on once she answers its first question, so a
+      // quiz left before any answer ages nothing
+      session: () => session,
       tick() {
         session += 1;
         save();
-        return session - 1;
       },
       firstTry: (id) => (items[id] ? items[id].firstTry : 0),
       // every item's entry, by id, for pickQuiz
@@ -2163,7 +2161,7 @@ const CLUB = {
     take('sure', left);
     take('fresh', left);
     const sureIds = sure.slice(0, count.sure).map((e) => e.id);
-    const middle = shuffledBy(fresh.slice(0, count.fresh).concat(learning.slice(0, count.learning)).map((e) => e.id)
+    const middle = shuffled(fresh.slice(0, count.fresh).concat(learning.slice(0, count.learning)).map((e) => e.id)
       .concat(sureIds.slice(2)), rng);
     if (sureIds.length >= 1) middle.unshift(sureIds[0]);
     if (sureIds.length >= 2) middle.push(sureIds[1]);
@@ -2176,22 +2174,14 @@ const CLUB = {
     return Math.max(0, Math.min(n, master));
   }
 
-  function shuffledBy(list, rng) {
-    const a = list.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(rng() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  // One answered question, in every game (the simulation's rule): the item is met; a first-pick success
-  // adds one to `firstTry` (capped at `master` when a miss can take it back), a miss adds to `misses` and
-  // follows `decrement`. `now` is the quiz that asked it.
+  // One answered question, in every game (the simulation's rule, except that only a right answer meets an
+  // item: a squad's quiz asks players she may not have met): a first-pick success adds one to `firstTry`
+  // (capped at `master` when a miss can take it back), a miss adds to `misses` and follows `decrement`.
+  // `now` is the quiz that asked it.
   function updateStats(entries, id, right, now, o) {
     const prev = entries[id] || {};
     const entry = {
-      encountered: true,
+      encountered: prev.encountered === true || right,
       firstTry: Number.isFinite(prev.firstTry) ? Math.max(0, Math.floor(prev.firstTry)) : 0,
       misses: Number.isFinite(prev.misses) ? prev.misses : 0,
       lastAsked: now,
@@ -2575,8 +2565,9 @@ const CLUB = {
   /* ---------- quiz: who is this? ---------- */
 
   // `first`: no pick yet on this question, so the next one is her first pick, the one that counts;
-  // `session`: this quiz's tick of the quiz clock.
-  const quiz = { order: [], at: 0, cards: [], answer: null, first: false, session: 0, next: 0, shownAt: 0 };
+  // `session`: this quiz's time on the quiz clock; `clocked`: she has answered a question, so the clock
+  // has moved on.
+  const quiz = { order: [], at: 0, cards: [], answer: null, first: false, session: 0, clocked: false, next: 0, shownAt: 0 };
   const BY_ID = new Map(ITEMS.map((p) => [p.id, p]));
 
   // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
@@ -2590,7 +2581,8 @@ const CLUB = {
   // The questions (PLAY.quiz): a squad's every player once, the backups too; a word game's `size` of the
   // words she has met, picked by pickQuiz.
   function startQuiz() {
-    quiz.session = stats.tick();
+    quiz.session = stats.session();
+    quiz.clocked = false;
     quiz.order = PLAY.quiz.pool === 'learned'
       ? pickQuiz(ITEMS, stats.all(), { ...LEARN, now: quiz.session }, Math.random).map((id) => BY_ID.get(id))
       : shuffled(ITEMS);
@@ -2660,6 +2652,10 @@ const CLUB = {
     if (quiz.first) {
       // Her first pick is the one that counts: right, a success (and she has met it); wrong, a miss.
       quiz.first = false;
+      if (!quiz.clocked) {
+        quiz.clocked = true;
+        stats.tick();
+      }
       const p = quiz.answer.p;
       if (card === quiz.answer) meet(p);
       stats.answered(p.id, card === quiz.answer, quiz.session);
