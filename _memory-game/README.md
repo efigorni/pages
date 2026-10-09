@@ -11,7 +11,7 @@ it as an orphan.
 | `base.css` | Every style the games share; colours and fonts come from each club's tokens |
 | `page.template.html` | The page with slots, filled per game: head, club style, base, title, trophy, DATA, club script, engine; the two mode icons |
 | `sw.template.js` | The service worker; each game's `sw.js` is this file with `VERSION`, `ASSETS` and `PREFIX` filled in |
-| `audio/ui/` | The start, win and who clips (the engine's own lines); every game ships a copy |
+| `audio/ui/` | The start and win clips (the engine's own lines); every game ships a copy |
 | `new/` | The templates `build_page.py new` fills: `CREDITS.md`, the club's `tools/README.md` |
 | `tools/page/build_page.py` | `new`, `data`, `assemble [--check] [--watch]`, `list [--json]` (below) |
 | `tools/refresh.sh` | Everything after a club's scrape, in one command |
@@ -38,8 +38,10 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 
 Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the two modes side by side.
 Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
-"מי זה" (`audio/ui/who.mp3`) then his match clip, four photo-only cards; a wrong pick greys out with a soft
-sound, the right one turns to the club's card face, says the name and moves on. The squad rule
+"מי זה מספר N, <name>?" in text, his match clip out loud, four photo-only cards. A wrong pick teaches too:
+a soft sound, then that card turns to its face (grey, smaller, marked ✗, out of play) and plays that
+player's match clip; her next pick or the replay button cuts it off. The right one turns to the club's
+card face, says the name and moves on. The squad rule
 (`tools/scrape/roster.py`) gives the pool's backup goalkeepers role `backup`: the roster's `backup` list, asked
 in the quiz, never dealt. Every tool that images, voices, checks, syncs or prunes takes `roster.SHIPPED`
 (starter, bench, backup), so a refresh keeps them.

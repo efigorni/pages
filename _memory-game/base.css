@@ -626,14 +626,38 @@ circle.cut { fill: var(--big-bg); }
   box-shadow: inset 0 0 0 1px var(--edge);
 }
 
-/* a wrong pick: a soft shake, then it greys out and stays out of the way */
+/* a wrong pick: a soft shake, then it turns over to show who it is, grey, smaller and marked with a
+   ✗ (never the right answer's colour, frame and burst), and stays out of play */
 .picks .card.nope { animation: nope .42s ease-in-out; }
 
 .picks .card[data-state="out"] {
-  opacity: .4;
-  filter: grayscale(1);
-  scale: .92;
-  transition: opacity .35s ease .3s, filter .35s ease .3s, scale .35s ease .3s;
+  scale: .9;
+  transition: scale .35s ease .3s;
+}
+
+.picks .card[data-state="out"] .card-inner {
+  transform: rotateY(180deg);
+  transition-delay: .3s;
+}
+
+.picks .card[data-state="out"] .front {
+  filter: grayscale(1) brightness(.8);
+  transition: filter .35s ease .3s;
+}
+
+.picks .card[data-state="out"]::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  top: calc(var(--mark) * -.3);
+  left: calc(var(--mark) * -.3);
+  width: var(--mark);
+  height: var(--mark);
+  border-radius: 50%;
+  background: #d93a3f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 7l10 10M17 7 7 17' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E") center / 72% no-repeat;
+  box-shadow: 0 0 0 max(2px, calc(var(--mark) * .07)) #fff, 0 3px 10px rgba(0, 0, 0, .4);
+  animation: pop-in .38s .62s cubic-bezier(.3, 1.6, .5, 1) both;
+  --mark: calc(min(var(--cw), var(--ch)) * .24);
 }
 
 @keyframes nope {
@@ -655,6 +679,7 @@ circle.cut { fill: var(--big-bg); }
   .board.dealing .card,
   .picks.dealing .card,
   .picks .card.nope,
+  .picks .card[data-state="out"]::after,
   .card.found,
   .burst,
   .pip.full,
@@ -663,5 +688,7 @@ circle.cut { fill: var(--big-bg); }
   .win.show .trophy,
   .win.show .big { animation: none; }
   .picks .card[data-state="out"],
+  .picks .card[data-state="out"] .front,
   .picks.solved .card { transition: none; }
+  .picks .card[data-state="out"] .card-inner { transition-delay: 0s; }
 }

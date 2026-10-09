@@ -41,7 +41,7 @@ doesn't (every file there is precached), or if the fonts and CREDITS.md disagree
 an @font-face, the declared families are the ones credited under Fonts, every OFL link resolves and every
 OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left; or if the
 club sets a CSS variable nothing reads, or reads one (without a fallback) nothing defines; or if a game's
-start/win/who clip isn't the master in _memory-game/audio/ui/ (the engine's lines, which tools/tts/hebrew.py
+start/win clip isn't the master in _memory-game/audio/ui/ (the engine's lines, which tools/tts/hebrew.py
 renders). Run it before committing: the repo has no CI. `--watch`
 assembles the named games again whenever one of their sources or a shared file changes.
 `new` starts a club: it checks the id, the cache prefix and the app id first and writes nothing if one
@@ -66,14 +66,14 @@ SHARED = Path(__file__).resolve().parents[2]
 REPO = SHARED.parent
 sys.path.insert(0, str(SHARED / "tools/tts"))
 sys.path.insert(0, str(SHARED / "tools/scrape"))
-from hebrew import UI_TEXTS, speak_text, split_display_name  # noqa: E402
+from hebrew import START_TEXT, WIN_TEXT, speak_text, split_display_name  # noqa: E402
 from roster import SHIPPED  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
-UI_CLIPS = tuple(UI_TEXTS)
+UI_CLIPS = ("start", "win")
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say")
@@ -250,11 +250,11 @@ def lint_credits(game):
 
 
 def check_ui_clips(game):
-    """Each game ships its own copy of the engine's start, win and who clips; the master is _memory-game/audio/ui/."""
+    """Each game ships its own copy of the engine's start and win clips; the master is _memory-game/audio/ui/."""
     engine = read(SHARED / "engine.js")
-    problems = [f"engine.js's {k.upper()}_LINE is not hebrew.py's UI_TEXTS[{k!r}], which the clip says"
-                for k, text in UI_TEXTS.items()
-                if re.search(rf"const {k.upper()}_LINE = '([^']*)';", engine).group(1) != text]
+    lines = {k: re.search(rf"const {k}_LINE = '([^']*)';", engine).group(1) for k in ("START", "WIN")}
+    problems = [f"engine.js's {k}_LINE is not hebrew.py's {k}_TEXT, which the clip says"
+                for k, text in (("START", START_TEXT), ("WIN", WIN_TEXT)) if lines[k] != text]
     for clip in UI_CLIPS:
         copy = REPO / game / "audio/ui" / f"{clip}.mp3"
         if not copy.is_file() or copy.read_bytes() != (SHARED / "audio/ui" / f"{clip}.mp3").read_bytes():

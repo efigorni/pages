@@ -274,16 +274,43 @@ async function playToLastPair(h) {
     await h.pick(quiz.cards.find((c) => c !== first));
     check('Q2 a pick in the first 450 ms of a question is ignored', quiz.cards.every((c) => c.state === 'down'));
     await h.advance(500);
-    const wrong = quiz.cards.find((c) => c !== first);
-    await h.pick(wrong);
-    await h.pick(wrong);
-    check('Q2 a wrong pick greys out, stays on the question, no voice',
-      wrong.state === 'out' && h.phase() === 'ask' && quiz.answer === first && game.found === 0 && h.synth.spoken.length <= 1);
+    // A wrong pick turns over and says that player's match line; a next pick, the replay button or
+    // the right pick cuts it off.
+    const line = (card) => h.T.clip.match(card.p).text;
+    const from = h.synth.spoken.length;
+    const heard = () => h.synth.spoken.slice(from).map((s) => s.text);
+    const [w1, w2, w3] = quiz.cards.filter((c) => c !== first);
+    await h.pick(w1);
+    await h.pick(w1);
+    await h.advance(100);
+    const quiet = heard().length === 0;
+    await h.advance(600);
+    check('Q2 a wrong pick turns over (named, out of play), stays on the question; a second tap is ignored',
+      w1.state === 'out' && w1.el.getAttribute('aria-label') === w1.p.name_he && h.phase() === 'ask'
+      && quiz.answer === first && game.found === 0);
+    check("Q2 a beat after the wrong pick, that player's match line, once", quiet && heard().join('|') === line(w1),
+      JSON.stringify(heard()));
+    let cancels = h.synth.cancels;
+    await h.pick(w2);
+    const cutByPick = h.synth.cancels > cancels && !h.synth.speaking;
+    await h.advance(700);
+    check('Q2 the next wrong pick cuts it off and says its own', cutByPick && heard().join('|') === `${line(w1)}|${line(w2)}`,
+      JSON.stringify(heard()));
+    cancels = h.synth.cancels;
+    await h.click('say');
+    await h.advance(100);
+    check('Q2 the replay button cuts it off and asks the question again', h.synth.cancels > cancels
+      && heard().join('|') === `${line(w1)}|${line(w2)}|${line(first)}`, JSON.stringify(heard()));
+    await h.pick(w3);
+    await h.advance(700);
+    const wrongLine = h.synth.speaking && heard().slice(-1)[0] === line(w3);
+    cancels = h.synth.cancels;
     h.synth.spoken.length = 0;
     await h.pick(first);
     const name = first.p.speak_he || first.p.name_he;
     await h.advance(100);
-    check('Q3 the right pick reveals and says the name', first.state === 'up' && h.phase() === 'reveal' && game.found === 1
+    check('Q3 the right pick cuts off the wrong line, reveals and says the name', wrongLine && h.synth.cancels > cancels
+      && first.state === 'up' && h.phase() === 'reveal' && game.found === 1
       && h.synth.spoken.map((s) => s.text).join('|') === name, JSON.stringify(h.synth.spoken.map((s) => s.text)));
     await h.advance(60 * name.length + 1300);
     check('Q3 still on the reveal until 1.5 s after the name', h.phase() === 'reveal');
@@ -291,8 +318,8 @@ async function playToLastPair(h) {
     const next = quiz.answer.p;
     await h.advance(3000);
     const said = h.synth.spoken.map((s) => s.text);
-    check('Q3 then the next question: "who", then the match line', h.phase() === 'ask' && next !== first.p
-      && said.slice(1).join('|') === `מי זה?|${h.T.clip.match(next).text}`, JSON.stringify(said));
+    check("Q3 then the next question, asked by its player's match line alone", h.phase() === 'ask' && next !== first.p
+      && said.slice(1).join('|') === h.T.clip.match(next).text, JSON.stringify(said));
     const asked = [first.p.id];
     for (let i = 0; i < pool.length && h.phase() === 'ask'; i++) {
       asked.push(quiz.answer.p.id);

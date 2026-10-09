@@ -811,14 +811,38 @@ circle.cut { fill: var(--big-bg); }
   box-shadow: inset 0 0 0 1px var(--edge);
 }
 
-/* a wrong pick: a soft shake, then it greys out and stays out of the way */
+/* a wrong pick: a soft shake, then it turns over to show who it is, grey, smaller and marked with a
+   ✗ (never the right answer's colour, frame and burst), and stays out of play */
 .picks .card.nope { animation: nope .42s ease-in-out; }
 
 .picks .card[data-state="out"] {
-  opacity: .4;
-  filter: grayscale(1);
-  scale: .92;
-  transition: opacity .35s ease .3s, filter .35s ease .3s, scale .35s ease .3s;
+  scale: .9;
+  transition: scale .35s ease .3s;
+}
+
+.picks .card[data-state="out"] .card-inner {
+  transform: rotateY(180deg);
+  transition-delay: .3s;
+}
+
+.picks .card[data-state="out"] .front {
+  filter: grayscale(1) brightness(.8);
+  transition: filter .35s ease .3s;
+}
+
+.picks .card[data-state="out"]::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  top: calc(var(--mark) * -.3);
+  left: calc(var(--mark) * -.3);
+  width: var(--mark);
+  height: var(--mark);
+  border-radius: 50%;
+  background: #d93a3f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 7l10 10M17 7 7 17' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E") center / 72% no-repeat;
+  box-shadow: 0 0 0 max(2px, calc(var(--mark) * .07)) #fff, 0 3px 10px rgba(0, 0, 0, .4);
+  animation: pop-in .38s .62s cubic-bezier(.3, 1.6, .5, 1) both;
+  --mark: calc(min(var(--cw), var(--ch)) * .24);
 }
 
 @keyframes nope {
@@ -840,6 +864,7 @@ circle.cut { fill: var(--big-bg); }
   .board.dealing .card,
   .picks.dealing .card,
   .picks .card.nope,
+  .picks .card[data-state="out"]::after,
   .card.found,
   .burst,
   .pip.full,
@@ -848,7 +873,9 @@ circle.cut { fill: var(--big-bg); }
   .win.show .trophy,
   .win.show .big { animation: none; }
   .picks .card[data-state="out"],
+  .picks .card[data-state="out"] .front,
   .picks.solved .card { transition: none; }
+  .picks .card[data-state="out"] .card-inner { transition-delay: 0s; }
 }
 </style>
 </head>
@@ -936,7 +963,7 @@ circle.cut { fill: var(--big-bg); }
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 
 <script id="data">
-const DATA = {"season":"2026/27","starters":[{"id":"assaf-tzur","name_he":"אסף צור","number":22,"role":"starter","img":"img/assaf-tzur.webp"},{"id":"fernand-mayembo","name_he":"פרנאן מאיימבו","number":5,"role":"starter","img":"img/fernand-mayembo.webp"},{"id":"chico-alves","name_he":"צ׳יקו אלבס","number":4,"role":"starter","img":"img/chico-alves.webp"},{"id":"lucas-falcao","name_he":"לוקאס פלקאו","number":98,"role":"starter","img":"img/lucas-falcao.webp"},{"id":"marcus-coco","name_he":"מרקוס קוקו","number":97,"role":"starter","img":"img/marcus-coco.webp"},{"id":"emmanuel-boateng","name_he":"עמנואל בואטנג","number":9,"role":"starter","img":"img/emmanuel-boateng.webp"},{"id":"roei-alkukin","name_he":"רועי אלקוקין","number":15,"role":"starter","img":"img/roei-alkukin.webp"},{"id":"daniel-dappa","name_he":"דניאל דאפה","number":44,"role":"starter","img":"img/daniel-dappa.webp"},{"id":"mor-buskila","name_he":"מור בוסקילה","number":27,"role":"starter","img":"img/mor-buskila.webp"},{"id":"andrian-kraev","name_he":"אנדריאן קרייב","number":6,"role":"starter","img":"img/andrian-kraev.webp"},{"id":"doron-leidner","name_he":"דורון ליידנר","number":16,"role":"starter","img":"img/doron-leidner.webp"}],"bench":[{"id":"stav-toriel","name_he":"סתיו טוריאל","number":11,"role":"bench","img":"img/stav-toriel.webp"},{"id":"omri-altman","name_he":"עמרי אלטמן","number":51,"role":"bench","img":"img/omri-altman.webp"},{"id":"shahar-piven","name_he":"שחר פיבן","number":21,"role":"bench","img":"img/shahar-piven.webp"},{"id":"douglas-owusu","name_he":"דגלאס אווסו","number":35,"role":"bench","img":"img/douglas-owusu.webp"},{"id":"yonatan-ferber","name_he":"יונתן פרבר","number":8,"role":"bench","img":"img/yonatan-ferber.webp"},{"id":"amit-lemkin","name_he":"עמית למקין","number":23,"role":"bench","img":"img/amit-lemkin.webp"},{"id":"el-yam-kancepolsky","name_he":"אל ים קנצפולסקי","number":14,"role":"bench","img":"img/el-yam-kancepolsky.webp"},{"id":"roy-korine","name_he":"רוי קורין","number":7,"role":"bench","img":"img/roy-korine.webp"},{"id":"tal-archel","name_he":"טל ארצ׳ל","number":18,"role":"bench","img":"img/tal-archel.webp"},{"id":"yannick-leliendal","name_he":"יאניק ללינדאל","number":32,"role":"bench","img":"img/yannick-leliendal.webp"},{"id":"itay-shavit","name_he":"איתי שביט","number":17,"role":"bench","img":"img/itay-shavit.webp"}],"audio":{"ui":["start","win","who"],"name":["assaf-tzur","fernand-mayembo","chico-alves","lucas-falcao","marcus-coco","emmanuel-boateng","roei-alkukin","daniel-dappa","mor-buskila","andrian-kraev","doron-leidner","stav-toriel","omri-altman","shahar-piven","douglas-owusu","yonatan-ferber","amit-lemkin","el-yam-kancepolsky","roy-korine","tal-archel","yannick-leliendal","itay-shavit"],"match":["assaf-tzur","fernand-mayembo","chico-alves","lucas-falcao","marcus-coco","emmanuel-boateng","roei-alkukin","daniel-dappa","mor-buskila","andrian-kraev","doron-leidner","stav-toriel","omri-altman","shahar-piven","douglas-owusu","yonatan-ferber","amit-lemkin","el-yam-kancepolsky","roy-korine","tal-archel","yannick-leliendal","itay-shavit"]}};
+const DATA = {"season":"2026/27","starters":[{"id":"assaf-tzur","name_he":"אסף צור","number":22,"role":"starter","img":"img/assaf-tzur.webp"},{"id":"fernand-mayembo","name_he":"פרנאן מאיימבו","number":5,"role":"starter","img":"img/fernand-mayembo.webp"},{"id":"chico-alves","name_he":"צ׳יקו אלבס","number":4,"role":"starter","img":"img/chico-alves.webp"},{"id":"lucas-falcao","name_he":"לוקאס פלקאו","number":98,"role":"starter","img":"img/lucas-falcao.webp"},{"id":"marcus-coco","name_he":"מרקוס קוקו","number":97,"role":"starter","img":"img/marcus-coco.webp"},{"id":"emmanuel-boateng","name_he":"עמנואל בואטנג","number":9,"role":"starter","img":"img/emmanuel-boateng.webp"},{"id":"roei-alkukin","name_he":"רועי אלקוקין","number":15,"role":"starter","img":"img/roei-alkukin.webp"},{"id":"daniel-dappa","name_he":"דניאל דאפה","number":44,"role":"starter","img":"img/daniel-dappa.webp"},{"id":"mor-buskila","name_he":"מור בוסקילה","number":27,"role":"starter","img":"img/mor-buskila.webp"},{"id":"andrian-kraev","name_he":"אנדריאן קרייב","number":6,"role":"starter","img":"img/andrian-kraev.webp"},{"id":"doron-leidner","name_he":"דורון ליידנר","number":16,"role":"starter","img":"img/doron-leidner.webp"}],"bench":[{"id":"stav-toriel","name_he":"סתיו טוריאל","number":11,"role":"bench","img":"img/stav-toriel.webp"},{"id":"omri-altman","name_he":"עמרי אלטמן","number":51,"role":"bench","img":"img/omri-altman.webp"},{"id":"shahar-piven","name_he":"שחר פיבן","number":21,"role":"bench","img":"img/shahar-piven.webp"},{"id":"douglas-owusu","name_he":"דגלאס אווסו","number":35,"role":"bench","img":"img/douglas-owusu.webp"},{"id":"yonatan-ferber","name_he":"יונתן פרבר","number":8,"role":"bench","img":"img/yonatan-ferber.webp"},{"id":"amit-lemkin","name_he":"עמית למקין","number":23,"role":"bench","img":"img/amit-lemkin.webp"},{"id":"el-yam-kancepolsky","name_he":"אל ים קנצפולסקי","number":14,"role":"bench","img":"img/el-yam-kancepolsky.webp"},{"id":"roy-korine","name_he":"רוי קורין","number":7,"role":"bench","img":"img/roy-korine.webp"},{"id":"tal-archel","name_he":"טל ארצ׳ל","number":18,"role":"bench","img":"img/tal-archel.webp"},{"id":"yannick-leliendal","name_he":"יאניק ללינדאל","number":32,"role":"bench","img":"img/yannick-leliendal.webp"},{"id":"itay-shavit","name_he":"איתי שביט","number":17,"role":"bench","img":"img/itay-shavit.webp"}],"audio":{"ui":["start","win"],"name":["assaf-tzur","fernand-mayembo","chico-alves","lucas-falcao","marcus-coco","emmanuel-boateng","roei-alkukin","daniel-dappa","mor-buskila","andrian-kraev","doron-leidner","stav-toriel","omri-altman","shahar-piven","douglas-owusu","yonatan-ferber","amit-lemkin","el-yam-kancepolsky","roy-korine","tal-archel","yannick-leliendal","itay-shavit"],"match":["assaf-tzur","fernand-mayembo","chico-alves","lucas-falcao","marcus-coco","emmanuel-boateng","roei-alkukin","daniel-dappa","mor-buskila","andrian-kraev","doron-leidner","stav-toriel","omri-altman","shahar-piven","douglas-owusu","yonatan-ferber","amit-lemkin","el-yam-kancepolsky","roy-korine","tal-archel","yannick-leliendal","itay-shavit"]}};
 </script>
 <script id="club">
 const CLUB = {
@@ -1025,13 +1052,14 @@ const CLUB = {
   const CHOICES = 4;
   const ADVANCE_MS = 1500;
   const TAP_ADVANCE_MS = 700;
+  // A wrong pick's clip waits for the soft sound and for the card to turn over (base.css: .3 s + flip).
+  const NOPE_SAY_MS = 650;
   const PAIRS = 15;
   const FLIP_MS = 460;
   const MISMATCH_MS = 2200;
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
-  const WHO_LINE = 'מי זה?';
 
   const $ = (id) => document.getElementById(id);
   const app = $('app');
@@ -1299,6 +1327,8 @@ const CLUB = {
 
     function playItem(item, my) {
       if (muted || my !== token) return Promise.resolve();
+      // { wait: ms } is a beat of silence; a newer say() or halt() during it drops the rest.
+      if (item.wait) return new Promise((done) => setTimeout(done, item.wait));
       if (!item.url) return speak(item.text, my);
       // A suspended or interrupted context would swallow the clip and never fire 'ended'.
       if (canFetch && running()) return viaBuffer(item, my);
@@ -1803,7 +1833,7 @@ const CLUB = {
     app.dataset.found = '0';
     renderPips();
     warmImages(QUIZ);
-    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('who').url, clip.ui('win').url));
+    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('win').url));
     deal();
     keepAwake();
   }
@@ -1836,20 +1866,21 @@ const CLUB = {
     setPhase('ask');
   }
 
-  // "Who is" and the player's match clip, back to back.
+  // The question out loud is the asked player's match clip: "number N, <name>!".
   function question() {
-    return [clip.ui('who', WHO_LINE), clip.match(quiz.answer.p)];
+    return [clip.match(quiz.answer.p)];
   }
 
   function pick(card) {
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
     if (card !== quiz.answer) {
-      card.state = 'out';
-      card.el.dataset.state = 'out';
-      card.el.classList.remove('nope');
+      // Not him, and she learns who it is: the soft sound, then the card turns over (greyed and
+      // marked, out of play) and says his number and name. Her next pick or #say cuts that off.
+      setCard(card, 'out');
       card.el.classList.add('nope');
       sound.sfx('nope');
+      sound.say([{ wait: NOPE_SAY_MS }, clip.match(card.p)]);
       return;
     }
     card.state = 'up';

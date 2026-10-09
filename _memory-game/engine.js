@@ -12,13 +12,14 @@
   const CHOICES = 4;
   const ADVANCE_MS = 1500;
   const TAP_ADVANCE_MS = 700;
+  // A wrong pick's clip waits for the soft sound and for the card to turn over (base.css: .3 s + flip).
+  const NOPE_SAY_MS = 650;
   const PAIRS = 15;
   const FLIP_MS = 460;
   const MISMATCH_MS = 2200;
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
-  const WHO_LINE = 'מי זה?';
 
   const $ = (id) => document.getElementById(id);
   const app = $('app');
@@ -286,6 +287,8 @@
 
     function playItem(item, my) {
       if (muted || my !== token) return Promise.resolve();
+      // { wait: ms } is a beat of silence; a newer say() or halt() during it drops the rest.
+      if (item.wait) return new Promise((done) => setTimeout(done, item.wait));
       if (!item.url) return speak(item.text, my);
       // A suspended or interrupted context would swallow the clip and never fire 'ended'.
       if (canFetch && running()) return viaBuffer(item, my);
@@ -790,7 +793,7 @@
     app.dataset.found = '0';
     renderPips();
     warmImages(QUIZ);
-    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('who').url, clip.ui('win').url));
+    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('win').url));
     deal();
     keepAwake();
   }
@@ -823,20 +826,21 @@
     setPhase('ask');
   }
 
-  // "Who is" and the player's match clip, back to back.
+  // The question out loud is the asked player's match clip: "number N, <name>!".
   function question() {
-    return [clip.ui('who', WHO_LINE), clip.match(quiz.answer.p)];
+    return [clip.match(quiz.answer.p)];
   }
 
   function pick(card) {
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
     if (card !== quiz.answer) {
-      card.state = 'out';
-      card.el.dataset.state = 'out';
-      card.el.classList.remove('nope');
+      // Not him, and she learns who it is: the soft sound, then the card turns over (greyed and
+      // marked, out of play) and says his number and name. Her next pick or #say cuts that off.
+      setCard(card, 'out');
       card.el.classList.add('nope');
       sound.sfx('nope');
+      sound.say([{ wait: NOPE_SAY_MS }, clip.match(card.p)]);
       return;
     }
     card.state = 'up';

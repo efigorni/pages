@@ -14,7 +14,6 @@ final MP3 is checked again. Writes:
     <out>/audio/match/<id>.mp3    "מספר <N in words>, <speak_he>!"
     <out>/audio/ui/start.mp3      "יאללה, בואי נשחק!"  (only with --ui)
     <out>/audio/ui/win.mp3        "כל הכבוד! מצאת את כל השחקנים!"  (only with --ui)
-    <out>/audio/ui/who.mp3        "מי זה?"  (only with --ui; the quiz's question opens with it)
     <out>/manifest.json           [{id, kind, text, engine_input, file, duration_ms,
                                     stt_transcript, stt_ok}]
     <out>/TTS_READY               only with --ready, and only when every clip exists and passed STT
@@ -32,10 +31,10 @@ Options:
     --voice NAME          default noa / shaul / Carmit per engine (`female` is refused, see tts.md)
     --takes N             seeds per clip (default 8)
     --speed X             pace; BlueTTS speed, Piper length_scale = 1/X (default 0.88)
-    --only ID,ID          only these ids (merged into an existing manifest; ui clips: start,win,who)
+    --only ID,ID          only these ids (merged into an existing manifest; ui clips: start,win)
     --stale               only the ids whose clips are missing or no longer match the roster and the
                           pronunciations (each manifest row records what it was rendered from)
-    --ui                  also the start, win and who clips
+    --ui                  also the start and win clips
     --phonemes-from FILE  reuse engine_input IPA from another manifest (identical pronunciation
                           across engines, for comparison samples)
     --out DIR             default tts/out
@@ -179,7 +178,7 @@ def build_items(players: list[dict], pron: dict, only: set[str] | None, ui: bool
         items.append({**common, "kind": "match", "text": hebrew.match_text(num, say),
                       "expect": hebrew.match_text(num, expect),
                       "variants": [hebrew.match_text(num, v) for v in var], "job": match_job})
-    for uid, text in hebrew.UI_TEXTS.items() if ui else ():
+    for uid, text in (("start", hebrew.START_TEXT), ("win", hebrew.WIN_TEXT)) if ui else ():
         if only and uid not in only:
             continue
         # target_speaker 2: the G2P's female-listener forms (בואי, מָצָאת).

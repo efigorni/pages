@@ -825,14 +825,38 @@ circle.cut { fill: var(--big-bg); }
   box-shadow: inset 0 0 0 1px var(--edge);
 }
 
-/* a wrong pick: a soft shake, then it greys out and stays out of the way */
+/* a wrong pick: a soft shake, then it turns over to show who it is, grey, smaller and marked with a
+   ✗ (never the right answer's colour, frame and burst), and stays out of play */
 .picks .card.nope { animation: nope .42s ease-in-out; }
 
 .picks .card[data-state="out"] {
-  opacity: .4;
-  filter: grayscale(1);
-  scale: .92;
-  transition: opacity .35s ease .3s, filter .35s ease .3s, scale .35s ease .3s;
+  scale: .9;
+  transition: scale .35s ease .3s;
+}
+
+.picks .card[data-state="out"] .card-inner {
+  transform: rotateY(180deg);
+  transition-delay: .3s;
+}
+
+.picks .card[data-state="out"] .front {
+  filter: grayscale(1) brightness(.8);
+  transition: filter .35s ease .3s;
+}
+
+.picks .card[data-state="out"]::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  top: calc(var(--mark) * -.3);
+  left: calc(var(--mark) * -.3);
+  width: var(--mark);
+  height: var(--mark);
+  border-radius: 50%;
+  background: #d93a3f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 7l10 10M17 7 7 17' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E") center / 72% no-repeat;
+  box-shadow: 0 0 0 max(2px, calc(var(--mark) * .07)) #fff, 0 3px 10px rgba(0, 0, 0, .4);
+  animation: pop-in .38s .62s cubic-bezier(.3, 1.6, .5, 1) both;
+  --mark: calc(min(var(--cw), var(--ch)) * .24);
 }
 
 @keyframes nope {
@@ -854,6 +878,7 @@ circle.cut { fill: var(--big-bg); }
   .board.dealing .card,
   .picks.dealing .card,
   .picks .card.nope,
+  .picks .card[data-state="out"]::after,
   .card.found,
   .burst,
   .pip.full,
@@ -862,7 +887,9 @@ circle.cut { fill: var(--big-bg); }
   .win.show .trophy,
   .win.show .big { animation: none; }
   .picks .card[data-state="out"],
+  .picks .card[data-state="out"] .front,
   .picks.solved .card { transition: none; }
+  .picks .card[data-state="out"] .card-inner { transition-delay: 0s; }
 }
 </style>
 </head>
@@ -950,7 +977,7 @@ circle.cut { fill: var(--big-bg); }
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 
 <script id="data">
-const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמרי גלזר","first_he":"עמרי","last_he":"גלזר","speak_he":"עמרי גלזר","number":55,"role":"starter","img":"img/omri-glazer.webp"},{"id":"ethan-azoulay","name_he":"איתן אזולאי","first_he":"איתן","last_he":"אזולאי","speak_he":"איתן אזולאי","number":19,"role":"starter","img":"img/ethan-azoulay.webp"},{"id":"bruninho","name_he":"ברונו רוברטו פריירה דה סילבה (ברוניניו)","first_he":"ברונו רוברטו פריירה דה סילבה","last_he":"(ברוניניו)","speak_he":"ברוניניו","number":10,"role":"starter","img":"img/bruninho.webp"},{"id":"nigel-lonwijk","name_he":"נייג'ל לונווייק","first_he":"נייג'ל","last_he":"לונווייק","speak_he":"נייג'ל לונווייק","number":21,"role":"starter","img":"img/nigel-lonwijk.webp"},{"id":"jelle-bataille","name_he":"יילה בטאיי","first_he":"יילה","last_he":"בטאיי","speak_he":"יילה בטאיי","number":25,"role":"starter","img":"img/jelle-bataille.webp"},{"id":"kenji-gorre","name_he":"קנג'י חורה","first_he":"קנג'י","last_he":"חורה","speak_he":"קנג'י חורה","number":11,"role":"starter","img":"img/kenji-gorre.webp"},{"id":"iyad-khalaili","name_he":"איאד חלאיילי","first_he":"איאד","last_he":"חלאיילי","speak_he":"איאד חלאיילי","number":29,"role":"starter","img":"img/iyad-khalaili.webp"},{"id":"tzunami","name_he":"וונדרסון דה פריאטס סוארס (צונאמי)","first_he":"וונדרסון דה פריאטס סוארס","last_he":"(צונאמי)","speak_he":"צונאמי","number":66,"role":"starter","img":"img/tzunami.webp"},{"id":"kenny-saief","name_he":"קני סייף","first_he":"קני","last_he":"סייף","speak_he":"קני סייף","number":16,"role":"starter","img":"img/kenny-saief.webp"},{"id":"cedric-don","name_he":"סדריק דון","first_he":"סדריק","last_he":"דון","speak_he":"סדריק דון","number":45,"role":"starter","img":"img/cedric-don.webp"},{"id":"noam-shtaifman","name_he":"נועם שטייפמן","first_he":"נועם","last_he":"שטייפמן","speak_he":"נועם שטייפמן","number":35,"role":"starter","img":"img/noam-shtaifman.webp"}],"bench":[{"id":"yarin-levi","name_he":"ירין לוי","first_he":"ירין","last_he":"לוי","speak_he":"ירין לוי","number":8,"role":"bench","img":"img/yarin-levi.webp"},{"id":"ali-mohamed","name_he":"עלי מוחמד","first_he":"עלי","last_he":"מוחמד","speak_he":"עלי מוחמד","number":4,"role":"bench","img":"img/ali-mohamed.webp"},{"id":"pedrao","name_he":"פדרו אוליביירה","first_he":"פדרו","last_he":"אוליביירה","speak_he":"פדרו אוליביירה","number":44,"role":"bench","img":"img/pedrao.webp"},{"id":"silva-kani","name_he":"סילבה קאני","first_he":"סילבה","last_he":"קאני","speak_he":"סילבה קאני","number":26,"role":"bench","img":"img/silva-kani.webp"},{"id":"andrija-novakovich","name_he":"אנדריאה נובאקוביץ'","first_he":"אנדריאה","last_he":"נובאקוביץ'","speak_he":"אנדריאה נובאקוביץ'","number":9,"role":"bench","img":"img/andrija-novakovich.webp"},{"id":"yair-mordechai","name_he":"יאיר מרדכי","first_he":"יאיר","last_he":"מרדכי","speak_he":"יאיר מרדכי","number":7,"role":"bench","img":"img/yair-mordechai.webp"},{"id":"guy-melamed","name_he":"גיא מלמד","first_he":"גיא","last_he":"מלמד","speak_he":"גיא מלמד","number":18,"role":"bench","img":"img/guy-melamed.webp"},{"id":"sean-goldberg","name_he":"שון גולדברג","first_he":"שון","last_he":"גולדברג","speak_he":"שון גולדברג","number":3,"role":"bench","img":"img/sean-goldberg.webp"},{"id":"navot-ratner","name_he":"נבות רטנר","first_he":"נבות","last_he":"רטנר","speak_he":"נבות רטנר","number":36,"role":"bench","img":"img/navot-ratner.webp"},{"id":"pedro-barzao","name_he":"פדרו ברזאו","first_he":"פדרו","last_he":"ברזאו","speak_he":"פדרו ברזאו","number":30,"role":"bench","img":"img/pedro-barzao.webp"},{"id":"adam-grimberg","name_he":"אדם גרימברג","first_he":"אדם","last_he":"גרימברג","speak_he":"אדם גרימברג","number":38,"role":"bench","img":"img/adam-grimberg.webp"}],"backup":[{"id":"glenn-alvin","name_he":"גלן אלוין","first_he":"גלן","last_he":"אלוין","speak_he":"גלן אלוין","number":90,"role":"backup","img":"img/glenn-alvin.webp"}],"audio":{"ui":["start","win","who"],"name":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg","glenn-alvin"],"match":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg","glenn-alvin"]}};
+const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמרי גלזר","first_he":"עמרי","last_he":"גלזר","speak_he":"עמרי גלזר","number":55,"role":"starter","img":"img/omri-glazer.webp"},{"id":"ethan-azoulay","name_he":"איתן אזולאי","first_he":"איתן","last_he":"אזולאי","speak_he":"איתן אזולאי","number":19,"role":"starter","img":"img/ethan-azoulay.webp"},{"id":"bruninho","name_he":"ברונו רוברטו פריירה דה סילבה (ברוניניו)","first_he":"ברונו רוברטו פריירה דה סילבה","last_he":"(ברוניניו)","speak_he":"ברוניניו","number":10,"role":"starter","img":"img/bruninho.webp"},{"id":"nigel-lonwijk","name_he":"נייג'ל לונווייק","first_he":"נייג'ל","last_he":"לונווייק","speak_he":"נייג'ל לונווייק","number":21,"role":"starter","img":"img/nigel-lonwijk.webp"},{"id":"jelle-bataille","name_he":"יילה בטאיי","first_he":"יילה","last_he":"בטאיי","speak_he":"יילה בטאיי","number":25,"role":"starter","img":"img/jelle-bataille.webp"},{"id":"kenji-gorre","name_he":"קנג'י חורה","first_he":"קנג'י","last_he":"חורה","speak_he":"קנג'י חורה","number":11,"role":"starter","img":"img/kenji-gorre.webp"},{"id":"iyad-khalaili","name_he":"איאד חלאיילי","first_he":"איאד","last_he":"חלאיילי","speak_he":"איאד חלאיילי","number":29,"role":"starter","img":"img/iyad-khalaili.webp"},{"id":"tzunami","name_he":"וונדרסון דה פריאטס סוארס (צונאמי)","first_he":"וונדרסון דה פריאטס סוארס","last_he":"(צונאמי)","speak_he":"צונאמי","number":66,"role":"starter","img":"img/tzunami.webp"},{"id":"kenny-saief","name_he":"קני סייף","first_he":"קני","last_he":"סייף","speak_he":"קני סייף","number":16,"role":"starter","img":"img/kenny-saief.webp"},{"id":"cedric-don","name_he":"סדריק דון","first_he":"סדריק","last_he":"דון","speak_he":"סדריק דון","number":45,"role":"starter","img":"img/cedric-don.webp"},{"id":"noam-shtaifman","name_he":"נועם שטייפמן","first_he":"נועם","last_he":"שטייפמן","speak_he":"נועם שטייפמן","number":35,"role":"starter","img":"img/noam-shtaifman.webp"}],"bench":[{"id":"yarin-levi","name_he":"ירין לוי","first_he":"ירין","last_he":"לוי","speak_he":"ירין לוי","number":8,"role":"bench","img":"img/yarin-levi.webp"},{"id":"ali-mohamed","name_he":"עלי מוחמד","first_he":"עלי","last_he":"מוחמד","speak_he":"עלי מוחמד","number":4,"role":"bench","img":"img/ali-mohamed.webp"},{"id":"pedrao","name_he":"פדרו אוליביירה","first_he":"פדרו","last_he":"אוליביירה","speak_he":"פדרו אוליביירה","number":44,"role":"bench","img":"img/pedrao.webp"},{"id":"silva-kani","name_he":"סילבה קאני","first_he":"סילבה","last_he":"קאני","speak_he":"סילבה קאני","number":26,"role":"bench","img":"img/silva-kani.webp"},{"id":"andrija-novakovich","name_he":"אנדריאה נובאקוביץ'","first_he":"אנדריאה","last_he":"נובאקוביץ'","speak_he":"אנדריאה נובאקוביץ'","number":9,"role":"bench","img":"img/andrija-novakovich.webp"},{"id":"yair-mordechai","name_he":"יאיר מרדכי","first_he":"יאיר","last_he":"מרדכי","speak_he":"יאיר מרדכי","number":7,"role":"bench","img":"img/yair-mordechai.webp"},{"id":"guy-melamed","name_he":"גיא מלמד","first_he":"גיא","last_he":"מלמד","speak_he":"גיא מלמד","number":18,"role":"bench","img":"img/guy-melamed.webp"},{"id":"sean-goldberg","name_he":"שון גולדברג","first_he":"שון","last_he":"גולדברג","speak_he":"שון גולדברג","number":3,"role":"bench","img":"img/sean-goldberg.webp"},{"id":"navot-ratner","name_he":"נבות רטנר","first_he":"נבות","last_he":"רטנר","speak_he":"נבות רטנר","number":36,"role":"bench","img":"img/navot-ratner.webp"},{"id":"pedro-barzao","name_he":"פדרו ברזאו","first_he":"פדרו","last_he":"ברזאו","speak_he":"פדרו ברזאו","number":30,"role":"bench","img":"img/pedro-barzao.webp"},{"id":"adam-grimberg","name_he":"אדם גרימברג","first_he":"אדם","last_he":"גרימברג","speak_he":"אדם גרימברג","number":38,"role":"bench","img":"img/adam-grimberg.webp"}],"backup":[{"id":"glenn-alvin","name_he":"גלן אלוין","first_he":"גלן","last_he":"אלוין","speak_he":"גלן אלוין","number":90,"role":"backup","img":"img/glenn-alvin.webp"}],"audio":{"ui":["start","win"],"name":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg","glenn-alvin"],"match":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg","glenn-alvin"]}};
 </script>
 <script id="club">
 const CLUB = {
@@ -1083,13 +1110,14 @@ const CLUB = {
   const CHOICES = 4;
   const ADVANCE_MS = 1500;
   const TAP_ADVANCE_MS = 700;
+  // A wrong pick's clip waits for the soft sound and for the card to turn over (base.css: .3 s + flip).
+  const NOPE_SAY_MS = 650;
   const PAIRS = 15;
   const FLIP_MS = 460;
   const MISMATCH_MS = 2200;
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
-  const WHO_LINE = 'מי זה?';
 
   const $ = (id) => document.getElementById(id);
   const app = $('app');
@@ -1357,6 +1385,8 @@ const CLUB = {
 
     function playItem(item, my) {
       if (muted || my !== token) return Promise.resolve();
+      // { wait: ms } is a beat of silence; a newer say() or halt() during it drops the rest.
+      if (item.wait) return new Promise((done) => setTimeout(done, item.wait));
       if (!item.url) return speak(item.text, my);
       // A suspended or interrupted context would swallow the clip and never fire 'ended'.
       if (canFetch && running()) return viaBuffer(item, my);
@@ -1861,7 +1891,7 @@ const CLUB = {
     app.dataset.found = '0';
     renderPips();
     warmImages(QUIZ);
-    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('who').url, clip.ui('win').url));
+    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('win').url));
     deal();
     keepAwake();
   }
@@ -1894,20 +1924,21 @@ const CLUB = {
     setPhase('ask');
   }
 
-  // "Who is" and the player's match clip, back to back.
+  // The question out loud is the asked player's match clip: "number N, <name>!".
   function question() {
-    return [clip.ui('who', WHO_LINE), clip.match(quiz.answer.p)];
+    return [clip.match(quiz.answer.p)];
   }
 
   function pick(card) {
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
     if (card !== quiz.answer) {
-      card.state = 'out';
-      card.el.dataset.state = 'out';
-      card.el.classList.remove('nope');
+      // Not him, and she learns who it is: the soft sound, then the card turns over (greyed and
+      // marked, out of play) and says his number and name. Her next pick or #say cuts that off.
+      setCard(card, 'out');
       card.el.classList.add('nope');
       sound.sfx('nope');
+      sound.say([{ wait: NOPE_SAY_MS }, clip.match(card.p)]);
       return;
     }
     card.state = 'up';
