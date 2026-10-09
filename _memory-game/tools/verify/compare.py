@@ -26,7 +26,8 @@ for pa in sorted(A.rglob("*.png")):
         print(f"MISSING  {rel}")
         n_diff += 1
         continue
-    ia, ib = Image.open(pa).convert("RGBA"), Image.open(pb).convert("RGBA")
+    # RGB: Pillow's getbbox() on an RGBA difference looks at alpha only, so opaque shots would always match.
+    ia, ib = Image.open(pa).convert("RGB"), Image.open(pb).convert("RGB")
     if ia.size != ib.size:
         print(f"SIZE     {rel}: {ia.size} vs {ib.size}")
         n_diff += 1
