@@ -23,10 +23,12 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO / "_memory-game/tools/images"))  # framing.py
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # roster.py, beside this file (-I leaves it off the path)
 
 from PIL import Image, ImageDraw, ImageFont  # noqa: E402
 
 from framing import SHOULDER_AT, TOP_MARGIN, landmarks, square_crop  # noqa: E402
+from roster import SHIPPED  # noqa: E402
 
 WHITE = (255, 255, 255)
 GREY = (160, 160, 160)
@@ -91,7 +93,7 @@ def main() -> int:
     data_dir = args.data.expanduser().resolve()
     doc = json.loads((data_dir / "players.json").read_text(encoding="utf-8"))
     shared = doc["crop"]
-    players = [p for p in doc["players"] if p["role"] in ("starter", "bench") and p.get("photo_file")]
+    players = [p for p in doc["players"] if p["role"] in SHIPPED and p.get("photo_file")]
     photos = [(p, Image.open(data_dir / p["photo_file"]).convert("RGBA")) for p in players]
 
     t, cols = args.thumb, args.cols

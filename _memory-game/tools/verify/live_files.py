@@ -17,7 +17,9 @@ from pathlib import Path
 REPO = Path(sys.argv[1])
 GAME = sys.argv[2]
 OTHERS = sys.argv[3:]
-LIVE = "https://efigorni.github.io/pages/"
+sys.dont_write_bytecode = True  # no __pycache__ in the repo
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "page"))
+from build_page import SITE as LIVE  # noqa: E402
 
 
 def get(url):

@@ -31,4 +31,7 @@ shot icon-maskable.svg "$out/icon-maskable-512.png"
 uv run --with pillow python -I "$here/resize_icon.py" "$out/icon-512.png" 192 "$out/icon-192.png"
 uv run --with pillow python -I "$here/resize_icon.py" "$out/icon-maskable-512.png" 192 "$out/icon-maskable-192.png"
 uv run --with pillow python -I "$here/resize_icon.py" "$out/icon-maskable-512.png" 180 "$out/apple-touch-icon.png"
+# Lossless (the same pixels in fewer bytes): every install precaches them.
+uv run --quiet --with pyoxipng==9.1.1 python -I -c \
+  'import oxipng, sys; [oxipng.optimize(f, level=6, deflate=oxipng.Deflaters.zopfli(15)) for f in sys.argv[1:]]' "$out"/*.png
 echo "icons written to $out"

@@ -1,6 +1,7 @@
 // One game with its service worker on, in a fresh persistent profile at 600x960 touch: wait for the
-// worker to control the page, play a few flips online, read installability over CDP, then go
-// offline, reload and play again.
+// worker to control the page, play a few flips online, read the link preview's tags and fetch og.jpg,
+// read installability over CDP, then go offline, reload and play again, then start the quiz offline
+// from the ↻ confirm and check its files are all cached.
 //
 //   node sw_check.js <base-url> <game> <out-dir> [<want-version>]
 //   e.g. node sw_check.js http://127.0.0.1:8781/ hapoel-tlv-memory /tmp/v/local
@@ -112,6 +113,16 @@ function audit(log) {
   let at = await page.evaluate(() => window.__log.length);
   const g1 = await flips(page, 3);
   R.online.audio = { ...g1, ...audit((await page.evaluate(() => window.__log)).slice(at)) };
+  // The link preview: the head's Open Graph tags, and the image they point at as this server serves it.
+  R.og = await page.evaluate(async () => {
+    const tags = Object.fromEntries([...document.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]')]
+      .map((m) => [m.getAttribute('property') || m.getAttribute('name'), m.getAttribute('content')]));
+    const r = await fetch('og.jpg', { cache: 'no-store' });
+    const blob = await r.blob();
+    const img = r.ok ? await createImageBitmap(blob).catch(() => null) : null;
+    return { tags, image: { status: r.status, type: r.headers.get('content-type'), bytes: blob.size,
+      width: img && img.width, height: img && img.height } };
+  });
   const cdp = await context.newCDPSession(page);
   R.installability = (await cdp.send('Page.getInstallabilityErrors')).installabilityErrors;
   const manifest = await cdp.send('Page.getAppManifest');
@@ -135,6 +146,28 @@ function audit(log) {
   R.offline.audio = { ...g2, ...audit((await page.evaluate(() => window.__log)).slice(at)) };
   R.offline.imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline.png`) });
+  // The quiz offline: every quiz player's photo and clips (the backups' too) are in the cache, and the
+  // offline page, from its ↻ confirm, asks the first question with them.
+  R.offline.quizCache = await page.evaluate(async () => {
+    const ids = DATA.players.map((p) => p.id);
+    const urls = [].concat(...ids.map((id) => [`img/${id}.webp`, `audio/name/${id}.mp3`, `audio/match/${id}.mp3`]));
+    const missing = [];
+    for (const u of urls) if (!(await caches.match(new URL(u, location.href).href))) missing.push(u);
+    return { checked: urls.length, missing, backups: DATA.players.filter((p) => p.role === 'backup').map((p) => p.id) };
+  });
+  await page.tap('#again');
+  await page.tap('#yes-quiz');
+  const answer = await page.evaluate(() => document.getElementById('picks').dataset.answer);
+  const heard = await until(page, (id) => window.__log.some((e) => (e.type === 'buf-start' || e.type === 'html-play') && e.url === `audio/match/${id}.mp3`), 15000, answer);
+  await sleep(600);
+  R.offline.quiz = await page.evaluate((id) => {
+    const clips = window.__log.filter((e) => e.type === 'buf-start' || e.type === 'html-play').map((e) => e.url);
+    const imgs = [...document.querySelectorAll('#picks .ask img')];
+    return { answer: id, clips, imgs: [imgs.length, imgs.filter((x) => x.complete && x.naturalWidth > 0).length] };
+  }, answer);
+  R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips.slice(-2)) === JSON.stringify(['audio/ui/start.mp3', `audio/match/${answer}.mp3`])
+    && R.offline.quiz.imgs[0] === 4 && R.offline.quiz.imgs[1] === 4;
+  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-quiz.png`) });
   await context.setOffline(false);
   R.console = R.console.filter((m) => !m.includes('Banner not shown'));
   fs.writeFileSync(path.join(OUT, `sw-${GAME}.json`), JSON.stringify(R, null, 1));

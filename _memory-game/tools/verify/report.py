@@ -4,14 +4,23 @@
 
 Per game: the seeded shots at 600x960 and 960x600 (won, no failure, no 404, a clean console), the
 audio playthrough (the right name clip on every flip, the match clip after the name, start and win,
-no speech fallback), the worker (controls the page, flips online, installability [], an offline
-reload plays with every photo) and the state machine. Exits 1 if any game fails.
+no speech fallback), the quiz at both sizes (every player once, four distinct cards, a wrong pick that
+turns over to that player's number and name and says his match clip until the right pick cuts it off,
+the clips in order, the reveal moving on by itself), the worker (controls the page, flips online,
+installability [], an offline reload plays the memory game with every photo and the quiz with its
+clips, every quiz player's photo and clips cached, the link preview's tags and og.jpg as served) and the
+state machine. Exits 1 if any game fails.
 """
 import json
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True  # no __pycache__ in the repo
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "page"))
+from build_page import OG_IMAGE, OG_MAX_KB, SITE  # noqa: E402
+
 OUT = Path(sys.argv[1])
+# Playwright's own notices.
 NOISE = ("Service Worker registration blocked by Playwright", "Banner not shown")
 
 
@@ -44,7 +53,47 @@ def drive_checks(r, mode):
             f"match clip after the name ({a['matchesWithFollow']} of {a['matches']} let finish)": a["matchesWithFollow"] > 0,
             "start and win clips": a["startClip"] == 1 and a["winClip"] == 1,
         })
+    if mode == "quiz":
+        checks.update(quiz_checks(r))
     return checks
+
+
+def quiz_checks(r):
+    q, qs = r.get("quiz") or {}, r.get("questions") or []
+    first = qs[0] if qs else {}
+    wrong = first.get("wrong") or {}
+    # The first three reveals move on by themselves, but the last question ends in the win screen.
+    advancing = qs[:min(3, len(qs) - 1)]
+    times = ", ".join(f"{x.get('advanceMs')} ms" for x in advancing)
+    return {
+        f"every player asked once ({len(qs)}/{len(r.get('pool') or [])})": bool(q.get("everyPlayerOnce")),
+        "4 distinct cards, the answer among them": bool(q.get("fourDistinct")),
+        f"wrong pick turns to {wrong.get('id')}'s number and name, says his match clip, stays on the question":
+            wrong.get("state") == "out" and wrong.get("turned") is True and wrong.get("shows") is True
+            and wrong.get("phase") == "ask" and wrong.get("answer") == first.get("id") and bool(q.get("wrongTeaches")),
+        "the right pick cuts off the wrong player's clip": bool(q.get("wrongCut")),
+        "clips: start, the asked player's match per question, the wrong one's, the name on success, win":
+            bool(q.get("sequenceOk")),
+        f"the reveal moves on by itself ({times} after the pick)":
+            bool(advancing) and all(x.get("auto") for x in advancing),
+    }
+
+
+def og_checks(r):
+    """The head's link-preview tags (absolute, under SITE) and the image they name, as the server serves it."""
+    og = r.get("og") or {}
+    tags, img = og.get("tags") or {}, og.get("image") or {}
+    want = {"og:type": "website", "og:locale": "he_IL", "og:url": f"{SITE}{r['game']}/",
+            "og:image": f"{SITE}{r['game']}/{OG_IMAGE}", "og:image:type": "image/jpeg",
+            "twitter:card": "summary_large_image"}
+    return {
+        f"link preview tags (og:image {tags.get('og:image')})": all(tags.get(k) == v for k, v in want.items())
+        and all(tags.get(k) for k in ("og:title", "og:description", "og:image:alt")),
+        f"{OG_IMAGE} served: {img.get('width')}x{img.get('height')} {img.get('type')}, {(img.get('bytes') or 0) // 1024} KB, "
+        f"the size the tags give":
+            img.get("status") == 200 and img.get("type") == "image/jpeg" and 0 < img.get("bytes", 0) <= OG_MAX_KB * 1024
+            and [str(img.get("width")), str(img.get("height"))] == [tags.get("og:image:width"), tags.get("og:image:height")],
+    }
 
 
 def sw_checks(r):
@@ -59,6 +108,10 @@ def sw_checks(r):
         "offline reload controlled": bool(r["offline"]["state"]["controlled"]),
         f"offline photos ({imgs[1]}/{imgs[0]})": imgs[0] > 0 and imgs[0] == imgs[1],
         f"offline flips ({off['rightNameClip']}/{off['of']})": off["rightNameClip"] == off["of"] > 0 and not off["errors"] and not off["fetchBad"],
+        f"offline quiz: start + match, {(r['offline'].get('quiz') or {}).get('imgs')} photos": bool((r["offline"].get("quiz") or {}).get("ok")),
+        f"cached: every quiz player's photo and clips ({(r['offline'].get('quizCache') or {}).get('checked')})":
+            (r["offline"].get("quizCache") or {}).get("missing") == [],
+        **og_checks(r),
         "no 404, clean console": not r["http"] and not console_clean(r["console"]),
     }
 
@@ -71,6 +124,8 @@ for game in [a for a in sys.argv[2:] if not a.startswith("--")]:
         sections["shots 600x960"] = drive_checks(load(OUT / game / "tab-portrait-shots/result.json"), "shots")
         sections["shots 960x600"] = drive_checks(load(OUT / game / "tab-landscape-shots/result.json"), "shots")
         sections["audio 600x960"] = drive_checks(load(OUT / game / "tab-portrait-audio/result.json"), "audio")
+        sections["quiz 600x960"] = drive_checks(load(OUT / game / "tab-portrait-quiz/result.json"), "quiz")
+        sections["quiz 960x600"] = drive_checks(load(OUT / game / "tab-landscape-quiz/result.json"), "quiz")
         path = OUT / f"states-{game}.txt"
         states = path.read_text(encoding="utf-8").strip().splitlines() if path.exists() else []
         sections["state machine"] = {states[-1] if states else "ran": bool(states) and " 0 fail" in states[-1]}

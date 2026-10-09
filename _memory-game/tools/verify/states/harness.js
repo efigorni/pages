@@ -170,8 +170,8 @@ function boot(opts = {}) {
     release() { if (this.released) return Promise.resolve(); this.released = true; this.ls.forEach((fn) => fn()); return Promise.resolve(); }
   }
 
-  const ids = ['app', 'board', 'pips', 'start', 'confirm', 'win', 'fan', 'play', 'replay', 'again', 'yes', 'no', 'mute', 'confetti', 'install'];
-  const byId = Object.fromEntries(ids.map((id) => [id, new El(id === 'board' ? 'main' : 'div', id)]));
+  // Every element of the page that has an id, with its tag, so a new one the engine looks up needs no edit here.
+  const byId = Object.fromEntries([...HTML.matchAll(/<([a-z]+)\b[^>]*\sid="([\w-]+)"/g)].map(([, tag, id]) => [id, new El(tag, id)]));
   byId.start.classList.add('show');
   byId.confirm.inert = true;
   byId.win.inert = true;
@@ -226,11 +226,11 @@ function boot(opts = {}) {
   let data = dataSrc;
   if (opts.clips || opts.noClips) {
     const d = JSON.parse(data.match(/const DATA = (\{.*\});/)[1]);
-    const all = opts.noClips ? [] : d.starters.concat(d.bench).map((p) => p.id);
+    const all = opts.noClips ? [] : d.players.map((p) => p.id);
     d.audio = { ui: opts.noClips ? [] : ['start', 'win'], name: all, match: all };
     data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
   }
-  const exportLine = 'globalThis.__t = { DATA, game, tap, newGame, sound, clip, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
+  const exportLine = 'globalThis.__t = { DATA, game, quiz, tap, newGame, sound, clip, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
   const cut = main.lastIndexOf('})();');
   const patched = main.slice(0, cut) + exportLine + main.slice(cut);
   vm.createContext(g);
@@ -242,6 +242,7 @@ function boot(opts = {}) {
     advance, flush,
     click: async (id) => { byId[id].dispatch('click', { detail: 1 }); await flush(); },
     down: async (card) => { byId.board.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },
+    pick: async (card) => { byId.picks.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },
     cards: () => T.game.cards,
     phase: () => T.game.phase,
     pairOf: (card) => T.game.cards.find((c) => c !== card && c.p.id === card.p.id),

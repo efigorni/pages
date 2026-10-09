@@ -1,12 +1,14 @@
 // Seeded, instrumented playthroughs of the memory games, for P9 and for before/after comparison.
 //
-//   node drive.js <out-dir> <base-url> --games a,b [--vps tab-portrait,...] [--modes shots,audio]
+//   node drive.js <out-dir> <base-url> --games a,b [--vps tab-portrait,...] [--modes shots,audio,quiz]
 //                 [--reduced both|on|off] [--seed N] [--jobs N]
 //
 // <base-url> serves a tree whose root holds the game folders (e.g. http://127.0.0.1:8767/). Service
 // workers are blocked, so two runs differ only by the page code. `shots` takes start, focus, install,
 // mid, confirm and win screenshots, the DOM and the computed HUD styles; `audio` plays a whole game
-// and logs every clip. Output: <out-dir>/<game>/<vp>[-rm]-<mode>/{*.png,result.json}
+// and logs every clip; `quiz` plays a whole quiz (a wrong pick that turns over and says who it is,
+// every player once, the end) with question, wrong, reveal and end screenshots and every clip logged.
+// Output: <out-dir>/<game>/<vp>[-rm]-<mode>/{*.png,result.json}
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
@@ -79,21 +81,15 @@ async function settle(page) {
   await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
 }
 
-async function confettiClear(page) {
-  return until(page, () => {
-    const c = document.getElementById('confetti');
-    if (!c.width || !c.height) return true;
-    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
-    for (let i = 3; i < d.length; i += 4) if (d[i]) return false;
-    return true;
-  }, 20000);
-}
-
+// The confetti is random in every frame, so the shots leave it out rather than wait for it to fall.
 function snapper(page, dir) {
   return async (name) => {
-    await page.screenshot({ path: path.join(dir, `${name}.png`), animations: 'disabled', caret: 'hide' });
+    await page.screenshot({ path: path.join(dir, `${name}.png`), animations: 'disabled', caret: 'hide',
+      style: '#confetti { visibility: hidden; }' });
   };
 }
+
+const mark = (page, label) => page.evaluate((x) => window.__push('mark', { label: x }), label);
 
 async function tapXY(page, vp, x, y) {
   if (vp.hasTouch) await page.touchscreen.tap(x, y);
@@ -105,11 +101,11 @@ async function tapSel(page, vp, sel) {
   else await page.click(sel);
 }
 
-async function tapCard(page, vp, index) {
-  const [x, y] = await page.evaluate((i) => {
-    const b = document.querySelector(`#board > .card[data-index="${i}"]`).getBoundingClientRect();
+async function tapCard(page, vp, index, where = '#board') {
+  const [x, y] = await page.evaluate(([w, i]) => {
+    const b = document.querySelector(`${w} > .card[data-index="${i}"]`).getBoundingClientRect();
     return [b.left + b.width / 2, b.top + b.height / 2];
-  }, index);
+  }, [where, index]);
   await tapXY(page, vp, x, y);
 }
 
@@ -272,8 +268,6 @@ async function shotsFlow(page, vp, dir, reduced, res) {
     await sleep(750);
   }
   res.won = await until(page, () => document.getElementById('app').dataset.phase === 'won', 15000);
-  res.confettiClear = await confettiClear(page);
-  await sleep(1300);
   await settle(page);
   await snap('win');
   res.domWin = await dom(page);
@@ -281,16 +275,15 @@ async function shotsFlow(page, vp, dir, reduced, res) {
 
 async function audioFlow(page, vp, dir, res) {
   const snap = snapper(page, dir);
-  const mark = (l) => page.evaluate((x) => window.__push('mark', { label: x }), l);
   await ready(page);
-  await mark('play');
+  await mark(page, 'play');
   await tapSel(page, vp, '#play');
   await sleep(2600);
   await waitImages(page);
   const { deck, pairs } = await deckPairs(page);
   res.deck = deck;
   const P = pairs;
-  const tap = async (k, side, what, wait) => { await mark(`${what} ${P[k].id}`); await tapCard(page, vp, P[k].idx[side]); await sleep(wait); };
+  const tap = async (k, side, what, wait) => { await mark(page, `${what} ${P[k].id}`); await tapCard(page, vp, P[k].idx[side]); await sleep(wait); };
   await tap(0, 0, 'flip', 300);
   await tap(0, 0, 'double', 200);
   await tap(1, 0, 'flip', 250);
@@ -311,46 +304,168 @@ async function audioFlow(page, vp, dir, res) {
   res.won = await until(page, () => document.getElementById('app').dataset.phase === 'won', 15000);
   res.winAfterMs = Date.now() - t0;
   await sleep(4000);
-  await mark('end');
+  await mark(page, 'end');
   await settle(page);
   await snap('audio-win');
 }
 
-function analyse(log, game) {
-  const marks = [];
-  const starts = [];
-  const stops = [];
-  log.forEach((e, i) => {
-    if (e.type === 'mark') marks.push({ ...e, i });
-    if (e.type === 'buf-start') starts.push({ ...e, i });
-    if (e.type === 'buf-stop') stops.push({ ...e, i });
-  });
+const CLIP_EVENTS = ['buf-start', 'html-play'];
+
+// The log split at its marks: each mark with the events of `kinds` between it and the next mark.
+function markWindows(log, kinds = CLIP_EVENTS) {
+  const at = log.map((e, i) => ({ ...e, i }));
+  const marks = at.filter((e) => e.type === 'mark');
+  return marks.map((m, j) => ({
+    ...m, events: at.filter((e) => kinds.includes(e.type) && e.i > m.i && (!marks[j + 1] || e.i < marks[j + 1].i)),
+  }));
+}
+
+// The wrong card after its turn: face up (the card turned), its number and name on the face.
+function wrongCard(i) {
+  const card = document.querySelector(`#picks > .card[data-index="${i}"]`);
+  const m = new DOMMatrixReadOnly(getComputedStyle(card.querySelector('.card-inner')).transform);
+  const front = card.querySelector('.front');
+  return {
+    state: card.dataset.state,
+    turned: m.m11 < -0.99,
+    face: front.textContent.replace(/\s+/g, ' ').trim(),
+    phase: document.getElementById('app').dataset.phase,
+    answer: document.getElementById('picks').dataset.answer,
+  };
+}
+
+// The quiz, played to the end at this viewport: on the first question a wrong pick (it turns over
+// and says that player's match clip, which the right pick then cuts off), then the right one; every
+// question waits for its match clip to start before the pick; the first three reveals move on by
+// themselves, the others on a tap.
+async function quizFlow(page, vp, dir, res) {
+  const snap = snapper(page, dir);
+  const logLen = () => page.evaluate(() => window.__log.length);
+  const played = (from, url) => until(page, ([k, u, kinds]) => window.__log.slice(k)
+    .some((e) => kinds.includes(e.type) && e.url === u), 10000, [from, url, CLIP_EVENTS]);
+  await ready(page);
+  // `compare` drives older trees too, whose roster still came in starters/bench/backup lists.
+  const players = await page.evaluate(() => (DATA.players || DATA.starters.concat(DATA.bench, DATA.backup || []))
+    .map((p) => ({ id: p.id, number: String(p.number), name: p.name_he })));
+  res.pool = players.map((p) => p.id);
+  const faces = Object.fromEntries(players.map((p) => [p.id, p]));
+  res.questions = [];
+  let from = await logLen();
+  await mark(page, 'start');
+  await tapSel(page, vp, '#play-quiz');
+  for (let n = 0; n < res.pool.length; n++) {
+    const q = { n, asked: await until(page, () => document.getElementById('app').dataset.phase === 'ask', 10000) };
+    Object.assign(q, await page.evaluate(() => ({
+      id: document.getElementById('picks').dataset.answer,
+      cards: [...document.querySelectorAll('#picks > .card')].map((c) => c.dataset.id),
+      text: document.getElementById('question').textContent,
+    })));
+    res.questions.push(q);
+    q.heard = await played(from, `audio/match/${q.id}.mp3`);
+    // The question's clip starts with the deal, and a pick in its first 450 ms is ignored (a tap that
+    // moved on must not also pick).
+    await sleep(500);
+    if (n === 0) {
+      await waitImages(page);
+      await snap('quiz-question');
+      const wrong = q.cards.findIndex((id) => id !== q.id);
+      const wrongId = q.cards[wrong];
+      from = await logLen();
+      await mark(page, `wrong ${wrongId}`);
+      const wrongAt = Date.now();
+      await tapCard(page, vp, wrong, '#picks');
+      const said = await played(from, `audio/match/${wrongId}.mp3`);
+      const saidMs = Date.now() - wrongAt;
+      await sleep(Math.max(0, 1150 - (Date.now() - wrongAt))); // the turn and the ✗ settle
+      q.wrong = { id: wrongId, said, saidMs, ...await page.evaluate(wrongCard, wrong) };
+      const shown = faces[wrongId];
+      q.wrong.shows = q.wrong.face.includes(shown.number) && q.wrong.face.replace(/\s/g, '').includes(shown.name.replace(/\s/g, ''));
+      await snap('quiz-wrong');
+    }
+    from = await logLen();
+    await mark(page, `right ${q.id}`);
+    const pickedAt = Date.now();
+    await tapCard(page, vp, q.cards.indexOf(q.id), '#picks');
+    q.named = await played(from, `audio/name/${q.id}.mp3`);
+    q.revealed = await page.evaluate(() => document.getElementById('app').dataset.phase);
+    if (n === 0) {
+      await sleep(1100);
+      await settle(page);
+      await snap('quiz-reveal');
+    }
+    if (n === res.pool.length - 1) break;
+    from = await logLen();
+    if (n < 3) {
+      q.auto = await until(page, (id) => document.getElementById('picks').dataset.answer !== id, 12000, q.id);
+      q.advanceMs = Date.now() - pickedAt;
+    } else {
+      await sleep(Math.max(0, 750 - (Date.now() - pickedAt)));
+      await mark(page, 'advance');
+      await tapCard(page, vp, 0, '#picks');
+    }
+  }
+  res.found = await page.evaluate(() => document.getElementById('app').dataset.found);
+  res.won = await until(page, () => document.getElementById('app').dataset.phase === 'won', 15000);
+  await settle(page);
+  await snap('quiz-end');
+}
+
+// The quiz's clips, in order: start, then per question the asked player's match clip alone, the
+// wrong player's match clip after a wrong pick, the name on the right pick; then win. The right pick
+// cuts off the wrong player's clip.
+function analyseQuiz(res) {
+  const log = res.log || [];
+  const qs = res.questions || [];
+  const asked = qs.map((q) => q.id);
+  const expected = ['audio/ui/start.mp3'].concat(...qs.map((q) => [`audio/match/${q.id}.mp3`]
+    .concat(q.wrong ? [`audio/match/${q.wrong.id}.mp3`] : [], [`audio/name/${q.id}.mp3`])), 'audio/ui/win.mp3');
+  const sequence = log.filter((e) => CLIP_EVENTS.includes(e.type)).map((e) => e.url);
+  const pool = res.pool || [];
+  const windows = markWindows(log, CLIP_EVENTS.concat('buf-stop', 'html-pause'));
+  const wrongs = windows.map((w, j) => ({ ...w, next: windows[j + 1] })).filter((w) => w.label.startsWith('wrong'));
+  const started = (events) => events.filter((e) => CLIP_EVENTS.includes(e.type)).map((e) => e.url);
+  const said = (w) => `audio/match/${w.label.split(' ')[1]}.mp3`;
+  return {
+    sequence,
+    sequenceOk: JSON.stringify(sequence) === JSON.stringify(expected),
+    firstMismatch: expected.findIndex((u, i) => sequence[i] !== u),
+    everyPlayerOnce: asked.length === pool.length && new Set(asked).size === pool.length && pool.every((id) => asked.includes(id)),
+    fourDistinct: qs.every((q) => q.cards.length === 4 && new Set(q.cards).size === 4 && q.cards.includes(q.id)),
+    // Between a wrong pick and the next mark: exactly that player's match clip.
+    wrongTeaches: wrongs.length > 0 && wrongs.every((w) => JSON.stringify(started(w.events)) === JSON.stringify([said(w)])),
+    // The next mark, the right pick, stops that clip before the name starts.
+    wrongCut: wrongs.length > 0 && wrongs.every((w) => {
+      const events = w.next ? w.next.events : [];
+      const stop = events.findIndex((e) => (e.type === 'buf-stop' || e.type === 'html-pause') && e.url === said(w));
+      const name = events.findIndex((e) => CLIP_EVENTS.includes(e.type));
+      return stop >= 0 && (name < 0 || stop < name);
+    }),
+  };
+}
+
+function analyse(log) {
+  const windows = markWindows(log, ['buf-start']);
+  const urls = (w) => w.events.map((e) => e.url);
   const flipsOk = [];
   const bad = [];
-  marks.forEach((m, j) => {
-    const [what, id] = m.label.split(' ');
+  windows.forEach((w) => {
+    const [what, id] = w.label.split(' ');
     if (!['flip', 'hurry', 'match'].includes(what)) return;
-    const next = marks[j + 1] ? marks[j + 1].i : Infinity;
-    const clips = starts.filter((s) => s.i > m.i && s.i < next).map((s) => s.url);
-    const want = `audio/name/${id}.mp3`;
-    if (clips[0] === want) flipsOk.push(m.label); else bad.push({ mark: m.label, clips });
-    if (what === 'match' && clips.length > 1 && clips[1] !== `audio/match/${id}.mp3` && clips[1] !== 'audio/ui/win.mp3') bad.push({ mark: m.label, clips, why: 'second clip' });
+    const clips = urls(w);
+    if (clips[0] === `audio/name/${id}.mp3`) flipsOk.push(w.label); else bad.push({ mark: w.label, clips });
+    if (what === 'match' && clips.length > 1 && clips[1] !== `audio/match/${id}.mp3` && clips[1] !== 'audio/ui/win.mp3') bad.push({ mark: w.label, clips, why: 'second clip' });
   });
-  const matchFollow = marks.filter((m) => m.label.startsWith('match')).map((m, j, arr) => {
-    const id = m.label.split(' ')[1];
-    const nextMark = marks.find((x) => x.i > m.i);
-    const clips = starts.filter((s) => s.i > m.i && (!nextMark || s.i < nextMark.i)).map((s) => s.url);
-    return { id, clips };
-  });
+  const matchFollow = windows.filter((w) => w.label.startsWith('match')).map((w) => ({ id: w.label.split(' ')[1], clips: urls(w) }));
+  const starts = log.filter((e) => e.type === 'buf-start').map((e) => e.url);
   return {
     effectiveFlips: flipsOk.length,
     badFlips: bad,
-    starts: starts.map((s) => s.url),
-    stops: stops.map((s) => s.url),
+    starts,
+    stops: log.filter((e) => e.type === 'buf-stop').map((e) => e.url),
     matchesWithFollow: matchFollow.filter((m) => m.clips[1] === `audio/match/${m.id}.mp3`).length,
     matches: matchFollow.length,
-    startClip: starts.filter((s) => s.url === 'audio/ui/start.mp3').length,
-    winClip: starts.filter((s) => s.url === 'audio/ui/win.mp3').length,
+    startClip: starts.filter((u) => u === 'audio/ui/start.mp3').length,
+    winClip: starts.filter((u) => u === 'audio/ui/win.mp3').length,
     speech: log.filter((e) => e.type === 'speech').map((e) => e.text),
     html: log.filter((e) => e.type === 'html-play').map((e) => e.url),
     fetchBad: log.filter((e) => (e.type === 'fetch' && e.status !== 200) || e.type === 'fetch-fail'),
@@ -382,18 +497,22 @@ async function run(browser, game, vpName, mode, reduced) {
   try {
     await page.goto(`${baseUrl}${game}/`, { waitUntil: 'load' });
     if (mode === 'shots') await shotsFlow(page, vp, dir, reduced, res);
+    else if (mode === 'quiz') await quizFlow(page, vp, dir, res);
     else await audioFlow(page, vp, dir, res);
   } catch (e) {
     res.failure = String(e && e.stack || e);
   }
   res.log = await page.evaluate(() => window.__log).catch(() => []);
-  res.analysis = analyse(res.log, game);
+  res.analysis = analyse(res.log);
+  if (mode === 'quiz') res.quiz = analyseQuiz(res);
   res.ms = Date.now() - t0;
   fs.writeFileSync(path.join(dir, 'result.json'), JSON.stringify(res, null, 1));
   await context.close();
+  const detail = res.quiz
+    ? `asked=${(res.questions || []).length}/${(res.pool || []).length} once=${res.quiz.everyPlayerOnce} clips=${res.quiz.sequenceOk} wrongTeaches=${res.quiz.wrongTeaches} wrongCut=${res.quiz.wrongCut}`
+    : `flips=${res.analysis.effectiveFlips} bad=${res.analysis.badFlips.length} follow=${res.analysis.matchesWithFollow}/${res.analysis.matches}`;
   console.log(`[${label}] ${game} ${name}: ${res.failure ? 'FAIL ' + res.failure.split('\n')[0] : 'ok'} won=${res.won} `
-    + `flips=${res.analysis.effectiveFlips} bad=${res.analysis.badFlips.length} follow=${res.analysis.matchesWithFollow}/${res.analysis.matches} `
-    + `errors=${res.analysis.errors.length} http=${res.http.length} ${res.ms} ms`);
+    + `${detail} errors=${res.analysis.errors.length} http=${res.http.length} ${res.ms} ms`);
 }
 
 (async () => {
@@ -402,7 +521,7 @@ async function run(browser, game, vpName, mode, reduced) {
   for (const game of GAMES) {
     for (const vp of VPS_SEL) {
       for (const mode of MODES) {
-        const rm = mode === 'audio' ? [false] : REDUCED === 'both' ? [false, true] : [REDUCED === 'on'];
+        const rm = mode !== 'shots' ? [false] : REDUCED === 'both' ? [false, true] : [REDUCED === 'on'];
         rm.forEach((r) => jobs.push([game, vp, mode, r]));
       }
     }

@@ -5,12 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#6d052a">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="זיכרון הפועל">
 <title>זיכרון הפועל תל אביב</title>
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:url" content="https://efigorni.github.io/pages/hapoel-tlv-memory/">
+<meta property="og:title" content="זיכרון הפועל תל אביב">
+<meta property="og:description" content="משחק זיכרון וחידון שחקנים — לומדים פרצופים, מספרים ושמות">
+<meta property="og:image" content="https://efigorni.github.io/pages/hapoel-tlv-memory/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="זיכרון הפועל תל אביב: שלושה שחקנים על קלפי המשחק">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <script>
@@ -54,66 +65,52 @@
 }
 
 :root {
-  /* the club site's own colours: red, the tabs' wine, the names' claret, and the banner's panels */
+  /* the club site's own colours: red, the tabs' wine, the names' claret */
   --red: #ff1521;
   --wine: #6d052a;
   --claret: #800029;
-  --salmon: #ff9495;
-  --rose: #ffb5ba;
-  --blush: #ffe6e6;
   --white: #ffffff;
-  /* our honeycomb, after the banner's hexagon panel: magenta columns on red */
-  --hex: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 17.32'%3E%3Cpath d='M10 0H20L25 8.66 20 17.32H10L5 8.66Z' fill='%23ff009d'/%3E%3Cpath d='M10 0H20L25 8.66 20 17.32H10L5 8.66ZM0 8.66H5M25 8.66H30' fill='none' stroke='%23c8001c' stroke-width='1.1'/%3E%3C/svg%3E");
-  /* the same cells as a wine net, after the banner's salmon panel */
-  --net: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 17.32'%3E%3Cpath d='M10 0H20L25 8.66 20 17.32H10L5 8.66ZM0 8.66H5M25 8.66H30' fill='none' stroke='%236d052a' stroke-width='.8'/%3E%3C/svg%3E");
+  /* our dark red wall paint after the banner's wine panel (tools/look/paint.py), the tile's mean colour
+     (paint.py prints it; it shows while the tile loads, and as --surface), and the night red of the
+     board around the cards */
+  --paint: url(img/club/paint.webp);
+  --paint-ground: #6b0a1e;
+  --night: #1e0309;
   /* read by the shared base styles */
   --font: Rubik, "Arial Hebrew", system-ui, sans-serif;
-  --ink: var(--blush);
+  --ink: var(--night);
   --accent: var(--red);
-  --surface: var(--white);
-  --pip-ring: rgba(109, 5, 42, .28);
-  --app-bg: linear-gradient(var(--blush), #fff3f3);
-  --burst: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%23ff009d'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%23ff1521'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E");
+  --surface: var(--paint-ground);
+  --pip-ring: rgba(255, 181, 186, .3);
+  --app-bg: radial-gradient(120% 90% at 50% 40%, #3b0612 0%, #2a040d 55%, var(--night) 100%);
+  --burst: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%23fff'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%23ff1521'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E");
   --big-bg: var(--red);
   --big-fg: var(--white);
-  --big-drop: var(--wine);
+  --big-drop: #4a0012;
   --no-bg: var(--wine);
-  --no-drop: #3a0016;
-  /* the banner's vertical panels: salmon net, hexagons, pink, wine, red */
-  --start-bg: linear-gradient(to right, var(--salmon) 0 13%, var(--red) 13% 25%, var(--rose) 25% 61%, var(--wine) 61% 83%, var(--red) 83%);
+  --no-drop: #2a0010;
+  /* the same wall behind the start screen, larger and in shadow, so the title and the cards lead */
+  --start-bg: radial-gradient(110% 80% at 50% 45%, rgba(30, 3, 9, .3) 30%, rgba(30, 3, 9, .75) 100%),
+    var(--paint) center / clamp(380px, 84vmin, 900px) auto repeat, var(--paint-ground);
   --halo: var(--white);
-  --scrim-install: rgba(109, 5, 42, .6);
-  --scrim-confirm: rgba(109, 5, 42, .8);
-  --scrim-win: rgba(109, 5, 42, .66);
-  /* the shared HUD is drawn for a dark board; this board is the site's pale pink */
-  --scheme: light;
-  --hud-btn-bg: var(--wine);
-  --pip-bg: rgba(109, 5, 42, .07);
+  --scrim-install: rgba(30, 3, 9, .55);
+  --scrim-confirm: rgba(30, 3, 9, .8);
+  --scrim-win: rgba(30, 3, 9, .66);
   /* the frames base.css draws: the back's inset line, the front's hairline, the found frame */
   --back-line: max(2px, calc(var(--short) * .022)) solid var(--white);
-  --edge: rgba(109, 5, 42, .16);
+  --edge: rgba(255, 255, 255, .14);
   --found: var(--red);
 }
 
-/* card back: our honeycomb on club red, inside a white frame */
-.back {
-  background: var(--hex) center / calc(var(--short) * .66) auto repeat, var(--red);
+/* both sides of a card are the wall paint: the back inside its white frame, the face as the site's
+   player card, the cutout standing on the white name band beside the big white number */
+.back,
+.front {
+  background: var(--paint) 0 0 / calc(var(--short) * 2.4) auto repeat, var(--paint-ground);
 }
 
-/* card face: the site's player card (a cutout on white, the name in wine under it) with its
-   player view's hexagon panel and white number in the top start corner */
-.front { background: var(--white); }
-
-.front::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  top: 0;
-  right: 0;
-  width: var(--panel-w);
-  bottom: var(--band-h);
-  background: var(--hex) calc(50% + var(--hex-w) / 2) 0 / var(--hex-w) auto repeat, var(--red);
-}
+/* the start screen's fan stands off the wall it is painted like */
+.fan .card { box-shadow: 0 calc(var(--short) * .05) calc(var(--short) * .16) rgba(20, 2, 6, .6); }
 
 .photo {
   position: absolute;
@@ -143,6 +140,7 @@
   font-size: var(--num-fs);
   line-height: .8;
   color: var(--white);
+  text-shadow: 0 .03em .06em rgba(30, 3, 9, .55);
 }
 
 .name {
@@ -166,29 +164,6 @@
 }
 
 .name > span { display: block; }
-
-/* the banner's net and hexagon panels, behind the start screen */
-.start::before,
-.start::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.start::before {
-  left: 0;
-  width: 13%;
-  background: var(--net) left top / 100% auto repeat-y;
-}
-
-.start::after {
-  left: 13%;
-  width: 12%;
-  background: var(--hex) left top / 100% auto repeat-y;
-}
 
 /* the site's buttons, as the title */
 .title {
@@ -274,6 +249,17 @@ img {
   -webkit-user-drag: none;
   pointer-events: none;
 }
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* the mode icons' cut-outs take the disc's own colour */
+.cut { stroke: var(--big-bg); }
+circle.cut { fill: var(--big-bg); }
 
 :focus { outline: none; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
@@ -440,8 +426,7 @@ img {
   transition: transform var(--flip) cubic-bezier(.3, 1.3, .5, 1);
 }
 
-.card[data-state="up"] .card-inner,
-.card[data-state="matched"] .card-inner { transform: rotateY(180deg); }
+.card:not([data-state="down"]) .card-inner { transform: rotateY(180deg); }
 
 .face {
   position: absolute;
@@ -465,22 +450,27 @@ img {
   border-radius: calc(var(--r) * .6);
 }
 
-.front::after {
+.front::after,
+.ask::after {
   content: "";
   position: absolute;
-  z-index: 3;
   inset: 0;
   border-radius: inherit;
   box-shadow: inset 0 0 0 1px var(--edge);
+}
+
+.front::after {
+  z-index: 3;
   transition: box-shadow .2s ease;
 }
 
 .card.found .front::after { box-shadow: inset 0 0 0 var(--found-w, var(--frame, 4px)) var(--found); }
 
-/* motion */
-.board.dealing .card {
+/* motion; the memory board's step is the engine's DEAL_STAGGER_MS */
+.board.dealing .card,
+.picks.dealing .card {
   animation: deal 520ms cubic-bezier(.25, 1.35, .5, 1) both;
-  animation-delay: calc(var(--i) * 16ms);
+  animation-delay: calc(var(--i) * var(--deal-step, 16ms));
 }
 
 @keyframes deal {
@@ -543,8 +533,8 @@ img {
 .overlay:not(.show) { pointer-events: none; }
 
 .big {
-  width: clamp(104px, 24vmin, 200px);
-  height: clamp(104px, 24vmin, 200px);
+  width: clamp(92px, 21vmin, 180px);
+  height: clamp(92px, 21vmin, 180px);
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -554,8 +544,33 @@ img {
   transition: transform .12s ease;
 }
 
-.big:active { transform: translateY(clamp(3px, .7vmin, 6px)); }
+.big:active,
+.mode:active .big { transform: translateY(clamp(3px, .7vmin, 6px)); }
 .big svg { width: 48%; height: 48%; }
+
+/* the two ways to play, side by side wherever a new game starts */
+.modes {
+  display: flex;
+  justify-content: center;
+  gap: clamp(18px, 6vmin, 64px);
+}
+
+.mode {
+  display: grid;
+  justify-items: center;
+  gap: clamp(6px, 1.5vmin, 12px);
+}
+
+.modes .big svg { width: 60%; height: 60%; }
+
+/* for the parents: as quiet as the install pill, and drawn with its tokens */
+.mode-label {
+  padding: 3px 10px 2px;
+  border-radius: 999px;
+  background: var(--scrim-install);
+  color: var(--install-fg, rgba(255, 255, 255, .78));
+  font: 600 clamp(13px, 2vmin, 17px)/1.15 system-ui, "Arial Hebrew", sans-serif;
+}
 
 .big.no {
   background: var(--no-bg);
@@ -576,7 +591,7 @@ img {
 
 .start-stage .title { grid-area: title; }
 .start-stage .fan { grid-area: fan; }
-.start-stage .play { grid-area: play; }
+.start-stage .modes { grid-area: play; }
 
 @media (orientation: landscape) {
   .start-stage {
@@ -619,13 +634,12 @@ img {
 }
 
 .start.show .play::before { animation: halo 1.9s ease-out infinite; }
+.start.show .mode + .mode .play::before { animation-delay: .95s; }
 
 @keyframes halo {
   0% { opacity: .85; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.45); }
 }
-
-.play svg { margin-left: 8%; }
 
 /* parent-facing: small, quiet, in a corner of the start screen, never on the board */
 .install {
@@ -656,11 +670,13 @@ img {
 
 .confirm-box {
   display: flex;
+  align-items: flex-start;
   gap: clamp(28px, 9vmin, 96px);
 }
 
 .confirm.show .big { animation: pop-in .38s cubic-bezier(.3, 1.6, .5, 1) both; }
-.confirm.show .big.no { animation-delay: .06s; }
+.confirm.show .mode + .mode .big { animation-delay: .04s; }
+.confirm.show .big.no { animation-delay: .08s; }
 
 @keyframes pop-in {
   from { transform: scale(.3); opacity: 0; }
@@ -680,6 +696,7 @@ img {
 
 .win.show .trophy { animation: trophy-in .9s cubic-bezier(.3, 1.45, .5, 1) both; }
 .win.show .big { animation: pop-in .45s .55s cubic-bezier(.3, 1.6, .5, 1) both; }
+.win.show .mode + .mode .big { animation-delay: .62s; }
 
 @keyframes trophy-in {
   0% { opacity: 0; transform: scale(.2) rotate(-24deg); }
@@ -696,9 +713,145 @@ img {
   pointer-events: none;
 }
 
+/* ---------- quiz: who is this? ---------- */
+
+.quiz {
+  grid-area: board;
+  display: none;
+  min-width: 0;
+  min-height: 0;
+  gap: calc(var(--gap) * 1.5);
+  grid-template: "prompt" auto "picks" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+.app[data-mode="quiz"] .quiz { display: grid; }
+.app[data-mode="quiz"] .board { display: none; }
+
+/* drawn like the HUD buttons, so it reads on a dark board and a light one */
+.prompt {
+  grid-area: prompt;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2.4vmin, 22px);
+  min-width: 0;
+  padding: clamp(6px, 1.2vmin, 12px);
+  padding-inline-end: clamp(12px, 3vmin, 28px);
+  border-radius: 999px;
+  background: var(--hud-btn-bg, rgba(255, 255, 255, .09));
+}
+
+/* a small .big */
+.say {
+  flex: none;
+  width: calc(var(--hud) * 1.1);
+  height: calc(var(--hud) * 1.1);
+  box-shadow: 0 clamp(3px, .6vmin, 5px) 0 var(--big-drop);
+}
+
+.say:active { transform: translateY(clamp(2px, .5vmin, 4px)); }
+.say svg { width: 56%; height: 56%; }
+
+.question {
+  min-width: 0;
+  margin: 0;
+  color: var(--white);
+  font-weight: 700;
+  font-size: clamp(24px, 5.2vmin, 52px);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+/* the shirt number: the one word a child who can't read yet can */
+.qnum {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: .06em .28em 0;
+  border-radius: .3em;
+  background: var(--big-bg);
+  color: var(--big-fg);
+  direction: ltr;
+  text-align: center;
+  font-size: 1.3em;
+  line-height: 1;
+}
+
+.picks {
+  --deal-step: 70ms;
+  grid-area: picks;
+  display: grid;
+  gap: calc(var(--gap) * 2);
+  min-width: 0;
+  min-height: 0;
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+/* the side of a quiz card that asks: the photo alone, as big as the card allows */
+.ask {
+  background:
+    radial-gradient(80% 70% at 50% 42%, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 72%),
+    var(--surface);
+}
+
+.ask img {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(var(--cw) * 1.12, var(--ch));
+  height: min(var(--cw) * 1.12, var(--ch));
+  transform: translateX(-50%);
+}
+
+/* a wrong pick: a soft shake, then it turns over to show who it is, grey, smaller and marked with a
+   ✗ (never the right answer's colour, frame and burst), and stays out of play */
+.picks .card[data-state="out"] {
+  animation: nope .42s ease-in-out;
+  scale: .9;
+  transition: scale .35s ease .3s;
+}
+
+.picks .card[data-state="out"] .card-inner { transition-delay: .3s; }
+
+.picks .card[data-state="out"] .front {
+  filter: grayscale(1) brightness(.8);
+  transition: filter .35s ease .3s;
+}
+
+.picks .card[data-state="out"]::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  top: calc(var(--mark) * -.3);
+  left: calc(var(--mark) * -.3);
+  width: var(--mark);
+  height: var(--mark);
+  border-radius: 50%;
+  background: #d93a3f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 7l10 10M17 7 7 17' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E") center / 72% no-repeat;
+  box-shadow: 0 0 0 max(2px, calc(var(--mark) * .07)) #fff, 0 3px 10px rgba(0, 0, 0, .4);
+  animation: pop-in .38s .62s cubic-bezier(.3, 1.6, .5, 1) both;
+  --mark: calc(min(var(--cw), var(--ch)) * .24);
+}
+
+@keyframes nope {
+  0%, 100% { translate: 0; }
+  20% { translate: -6% 0; }
+  40% { translate: 5% 0; }
+  60% { translate: -3% 0; }
+  80% { translate: 1.5% 0; }
+}
+
+/* the right pick: the others step back while its face shows */
+.picks.solved .card:not([data-state="up"]) {
+  opacity: .22;
+  transition: opacity .3s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card-inner { transition-duration: 1ms; }
   .board.dealing .card,
+  .picks.dealing .card,
+  .picks .card[data-state="out"],
+  .picks .card[data-state="out"]::after,
   .card.found,
   .burst,
   .pip.full,
@@ -706,11 +859,27 @@ img {
   .confirm.show .big,
   .win.show .trophy,
   .win.show .big { animation: none; }
+  .picks .card[data-state="out"],
+  .picks .card[data-state="out"] .front,
+  .picks.solved .card { transition: none; }
+  .picks .card[data-state="out"] .card-inner { transition-delay: 0s; }
 }
 </style>
 </head>
 <body>
-<div class="app" id="app" data-phase="start" data-found="0">
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-memory" viewBox="0 0 48 48">
+    <path fill-rule="evenodd" fill="currentColor" transform="translate(12.5 24) rotate(-5)" d="M-6.5-14H6.5A3 3 0 0 1 9.5-11V11A3 3 0 0 1 6.5 14H-6.5A3 3 0 0 1-9.5 11V-11A3 3 0 0 1-6.5-14ZM0-6.5 1.6-2.2 6.2-2 2.6.85 3.8 5.3 0 2.75-3.8 5.3-2.6.85-6.2-2-1.6-2.2Z"/>
+    <path fill-rule="evenodd" fill="currentColor" transform="translate(35.5 24) rotate(5)" d="M-6.5-14H6.5A3 3 0 0 1 9.5-11V11A3 3 0 0 1 6.5 14H-6.5A3 3 0 0 1-9.5 11V-11A3 3 0 0 1-6.5-14ZM0-6.5 1.6-2.2 6.2-2 2.6.85 3.8 5.3 0 2.75-3.8 5.3-2.6.85-6.2-2-1.6-2.2Z"/>
+  </symbol>
+  <symbol id="i-quiz" viewBox="0 0 48 48">
+    <circle cx="24" cy="16.5" r="12" fill="currentColor"/>
+    <path d="M4 46.5C4 36.5 12.5 31 24 31S44 36.5 44 46.5Z" fill="currentColor"/>
+    <path class="cut" d="M20.1 12.6A4 4 0 1 1 26.9 15.2C25.2 16.4 24 17.3 24 19.6" fill="none" stroke-width="3.2" stroke-linecap="round"/>
+    <circle class="cut" cx="24" cy="24" r="1.9"/>
+  </symbol>
+</svg>
+<div class="app" id="app" data-phase="start" data-mode="memory" data-found="0">
   <header class="hud">
     <button class="icon-btn" id="mute" type="button" aria-label="קול" aria-pressed="false">
       <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -722,15 +891,25 @@ img {
     </button>
   </header>
   <main class="board" id="board"></main>
+  <section class="quiz" id="quiz">
+    <div class="prompt">
+      <button class="big say" id="say" type="button" aria-label="לשמוע שוב">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <p class="question" id="question" aria-live="polite"></p>
+    </div>
+    <div class="picks" id="picks"></div>
+  </section>
 </div>
 
 <section class="overlay start show" id="start">
   <div class="start-stage">
     <h1 class="title"><span class="title-small">זיכרון</span> <span class="title-big">הפועל תל אביב</span></h1>
     <div class="fan" id="fan" data-face="band" aria-hidden="true"></div>
-    <button class="big play" id="play" type="button" aria-label="התחלה">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.6v12.8a1.1 1.1 0 0 0 1.7.94l10-6.4a1.1 1.1 0 0 0 0-1.88l-10-6.4A1.1 1.1 0 0 0 8 5.6z" fill="currentColor"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="play" type="button" aria-label="משחק זיכרון"><span class="big play"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="play-quiz" type="button" aria-label="חידון: מי זה?"><span class="big play"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
   </div>
   <button class="install" id="install" type="button" hidden>
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v7M8.8 11.6 12 14.8l3.2-3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -740,9 +919,10 @@ img {
 
 <section class="overlay confirm" id="confirm" inert>
   <div class="confirm-box">
-    <button class="big yes" id="yes" type="button" aria-label="כן, משחק חדש">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.8l4.6 4.6L19.2 7.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="yes" type="button" aria-label="משחק זיכרון חדש"><span class="big"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="yes-quiz" type="button" aria-label="חידון חדש: מי זה?"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
     <button class="big no" id="no" type="button" aria-label="לא, להמשיך לשחק">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
     </button>
@@ -760,26 +940,27 @@ img {
       <path d="M38 19v19c0 6 2 11 5 15" fill="none" stroke="#ffe6e6" stroke-width="3.5" stroke-linecap="round"/>
       <path d="M82 18v20c0 9-4 17-10 22" fill="none" stroke="#ffb5ba" stroke-width="3" stroke-linecap="round"/>
     </svg>
-    <button class="big" id="replay" type="button" aria-label="משחק חדש">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 1 1 17.3 5.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M18.8 2.6v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="replay" type="button" aria-label="משחק זיכרון חדש"><span class="big"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="replay-quiz" type="button" aria-label="חידון חדש: מי זה?"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
   </div>
 </section>
 
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 
 <script id="data">
-const DATA = {"season":"2026/27","starters":[{"id":"assaf-tzur","name_he":"אסף צור","number":22,"role":"starter","img":"img/assaf-tzur.webp"},{"id":"fernand-mayembo","name_he":"פרנאן מאיימבו","number":5,"role":"starter","img":"img/fernand-mayembo.webp"},{"id":"chico-alves","name_he":"צ׳יקו אלבס","number":4,"role":"starter","img":"img/chico-alves.webp"},{"id":"lucas-falcao","name_he":"לוקאס פלקאו","number":98,"role":"starter","img":"img/lucas-falcao.webp"},{"id":"marcus-coco","name_he":"מרקוס קוקו","number":97,"role":"starter","img":"img/marcus-coco.webp"},{"id":"emmanuel-boateng","name_he":"עמנואל בואטנג","number":9,"role":"starter","img":"img/emmanuel-boateng.webp"},{"id":"roei-alkukin","name_he":"רועי אלקוקין","number":15,"role":"starter","img":"img/roei-alkukin.webp"},{"id":"daniel-dappa","name_he":"דניאל דאפה","number":44,"role":"starter","img":"img/daniel-dappa.webp"},{"id":"mor-buskila","name_he":"מור בוסקילה","number":27,"role":"starter","img":"img/mor-buskila.webp"},{"id":"andrian-kraev","name_he":"אנדריאן קרייב","number":6,"role":"starter","img":"img/andrian-kraev.webp"},{"id":"doron-leidner","name_he":"דורון ליידנר","number":16,"role":"starter","img":"img/doron-leidner.webp"}],"bench":[{"id":"stav-toriel","name_he":"סתיו טוריאל","number":11,"role":"bench","img":"img/stav-toriel.webp"},{"id":"omri-altman","name_he":"עמרי אלטמן","number":51,"role":"bench","img":"img/omri-altman.webp"},{"id":"shahar-piven","name_he":"שחר פיבן","number":21,"role":"bench","img":"img/shahar-piven.webp"},{"id":"douglas-owusu","name_he":"דגלאס אווסו","number":35,"role":"bench","img":"img/douglas-owusu.webp"},{"id":"yonatan-ferber","name_he":"יונתן פרבר","number":8,"role":"bench","img":"img/yonatan-ferber.webp"},{"id":"amit-lemkin","name_he":"עמית למקין","number":23,"role":"bench","img":"img/amit-lemkin.webp"},{"id":"el-yam-kancepolsky","name_he":"אל ים קנצפולסקי","number":14,"role":"bench","img":"img/el-yam-kancepolsky.webp"},{"id":"roy-korine","name_he":"רוי קורין","number":7,"role":"bench","img":"img/roy-korine.webp"},{"id":"tal-archel","name_he":"טל ארצ׳ל","number":18,"role":"bench","img":"img/tal-archel.webp"},{"id":"yannick-leliendal","name_he":"יאניק ללינדאל","number":32,"role":"bench","img":"img/yannick-leliendal.webp"},{"id":"itay-shavit","name_he":"איתי שביט","number":17,"role":"bench","img":"img/itay-shavit.webp"}],"audio":{"ui":["start","win"],"name":["assaf-tzur","fernand-mayembo","chico-alves","lucas-falcao","marcus-coco","emmanuel-boateng","roei-alkukin","daniel-dappa","mor-buskila","andrian-kraev","doron-leidner","stav-toriel","omri-altman","shahar-piven","douglas-owusu","yonatan-ferber","amit-lemkin","el-yam-kancepolsky","roy-korine","tal-archel","yannick-leliendal","itay-shavit"],"match":["assaf-tzur","fernand-mayembo","chico-alves","lucas-falcao","marcus-coco","emmanuel-boateng","roei-alkukin","daniel-dappa","mor-buskila","andrian-kraev","doron-leidner","stav-toriel","omri-altman","shahar-piven","douglas-owusu","yonatan-ferber","amit-lemkin","el-yam-kancepolsky","roy-korine","tal-archel","yannick-leliendal","itay-shavit"]}};
+const DATA = {"season":"2026/27","players":[{"id":"assaf-tzur","name_he":"אסף צור","number":22,"role":"starter","img":"img/assaf-tzur.webp"},{"id":"fernand-mayembo","name_he":"פרנאן מאיימבו","number":5,"role":"starter","img":"img/fernand-mayembo.webp"},{"id":"chico-alves","name_he":"צ׳יקו אלבס","number":4,"role":"starter","img":"img/chico-alves.webp"},{"id":"lucas-falcao","name_he":"לוקאס פלקאו","number":98,"role":"starter","img":"img/lucas-falcao.webp"},{"id":"marcus-coco","name_he":"מרקוס קוקו","number":97,"role":"starter","img":"img/marcus-coco.webp"},{"id":"emmanuel-boateng","name_he":"עמנואל בואטנג","number":9,"role":"starter","img":"img/emmanuel-boateng.webp"},{"id":"roei-alkukin","name_he":"רועי אלקוקין","number":15,"role":"starter","img":"img/roei-alkukin.webp"},{"id":"daniel-dappa","name_he":"דניאל דאפה","number":44,"role":"starter","img":"img/daniel-dappa.webp"},{"id":"mor-buskila","name_he":"מור בוסקילה","number":27,"role":"starter","img":"img/mor-buskila.webp"},{"id":"andrian-kraev","name_he":"אנדריאן קרייב","number":6,"role":"starter","img":"img/andrian-kraev.webp"},{"id":"doron-leidner","name_he":"דורון ליידנר","number":16,"role":"starter","img":"img/doron-leidner.webp"},{"id":"stav-toriel","name_he":"סתיו טוריאל","number":11,"role":"bench","img":"img/stav-toriel.webp"},{"id":"omri-altman","name_he":"עמרי אלטמן","number":51,"role":"bench","img":"img/omri-altman.webp"},{"id":"shahar-piven","name_he":"שחר פיבן","number":21,"role":"bench","img":"img/shahar-piven.webp"},{"id":"douglas-owusu","name_he":"דגלאס אווסו","number":35,"role":"bench","img":"img/douglas-owusu.webp"},{"id":"yonatan-ferber","name_he":"יונתן פרבר","number":8,"role":"bench","img":"img/yonatan-ferber.webp"},{"id":"amit-lemkin","name_he":"עמית למקין","number":23,"role":"bench","img":"img/amit-lemkin.webp"},{"id":"el-yam-kancepolsky","name_he":"אל ים קנצפולסקי","number":14,"role":"bench","img":"img/el-yam-kancepolsky.webp"},{"id":"roy-korine","name_he":"רוי קורין","number":7,"role":"bench","img":"img/roy-korine.webp"},{"id":"tal-archel","name_he":"טל ארצ׳ל","number":18,"role":"bench","img":"img/tal-archel.webp"},{"id":"yannick-leliendal","name_he":"יאניק ללינדאל","number":32,"role":"bench","img":"img/yannick-leliendal.webp"},{"id":"itay-shavit","name_he":"איתי שביט","number":17,"role":"bench","img":"img/itay-shavit.webp"}],"audio":{"ui":["start","win"],"name":["assaf-tzur","fernand-mayembo","chico-alves","lucas-falcao","marcus-coco","emmanuel-boateng","roei-alkukin","daniel-dappa","mor-buskila","andrian-kraev","doron-leidner","stav-toriel","omri-altman","shahar-piven","douglas-owusu","yonatan-ferber","amit-lemkin","el-yam-kancepolsky","roy-korine","tal-archel","yannick-leliendal","itay-shavit"],"match":["assaf-tzur","fernand-mayembo","chico-alves","lucas-falcao","marcus-coco","emmanuel-boateng","roei-alkukin","daniel-dappa","mor-buskila","andrian-kraev","doron-leidner","stav-toriel","omri-altman","shahar-piven","douglas-owusu","yonatan-ferber","amit-lemkin","el-yam-kancepolsky","roy-korine","tal-archel","yannick-leliendal","itay-shavit"]}};
 </script>
 <script id="club">
 const CLUB = {
-  confetti: ['#ff1521', '#ffffff', '#ff009d', '#6d052a', '#ffb5ba'],
+  confetti: ['#ff1521', '#ffffff', '#ffb5ba', '#ff5a64', '#ffffff'],
   fonts: [['600 40px Rubik', 'אבג'], ['700 40px Karantina', 'אבג'], ['700 40px Karantina', '0123456789']],
 
-  // The card face, the site's player card in a pocket: a cutout on white in front of the player
-  // view's hexagon panel, the white number on the panel and the name under the picture. The engine
-  // calls prepare(players) once fonts are in, apply(style, cw, ch, mode) per board size, build(p)
-  // per card and fit(cardEl, p, geo) per card and size.
+  // The card face, the site's player card in a pocket: a cutout on the wall paint, the big white
+  // number beside it and the name under the picture. The engine calls prepare(players) once fonts
+  // are in, apply(style, cw, ch, mode) per board size, build(p) per card and fit(cardEl, p, geo) per
+  // card and size.
   face(kit) {
     'use strict';
 
@@ -797,7 +978,7 @@ const CLUB = {
     }
 
     // The name band is the card's bottom strip; the photo stands on it, shifted to the end side
-    // (left in RTL), in front of the panel, which holds the number in the top start corner.
+    // (left in RTL), and the number fills the strip the photo leaves at the top start corner.
     function faceVars(cw, ch, mode) {
       const short = Math.min(cw, ch);
       const frame = Math.max(3, short * 0.045);
@@ -818,8 +999,7 @@ const CLUB = {
       const v = faceVars(cw, ch, mode);
       setVars(st, {
         '--frame': `${v.frame}px`, '--band-h': `${v.band}px`, '--photo-s': `${v.s}px`, '--photo-x': `${v.x}px`,
-        '--photo-y': `${v.y}px`, '--panel-w': `${v.panelW}px`, '--hex-w': `${v.panelW * 0.96}px`,
-        '--num-fs': `${v.num}px`, '--num-top': `${v.numTop}px`,
+        '--photo-y': `${v.y}px`, '--panel-w': `${v.panelW}px`, '--num-fs': `${v.num}px`, '--num-top': `${v.numTop}px`,
       });
       return v;
     }
@@ -850,9 +1030,17 @@ const CLUB = {
 (() => {
   'use strict';
 
-  const STARTERS = DATA.starters;
-  const BENCH = DATA.bench;
+  // The quiz asks every player once, in roster order: the starters, the bench and the backups (the
+  // pool's other goalkeepers, whom the memory game never deals).
+  const QUIZ = DATA.players;
+  const STARTERS = QUIZ.filter((p) => p.role === 'starter');
+  const BENCH = QUIZ.filter((p) => p.role === 'bench');
   const ALL = STARTERS.concat(BENCH);
+  const CHOICES = 4;
+  const ADVANCE_MS = 1500;
+  const TAP_ADVANCE_MS = 700;
+  // A wrong pick's clip waits for the soft sound and for the card to turn over (base.css: .3 s + flip).
+  const NOPE_SAY_MS = 650;
   const PAIRS = 15;
   const FLIP_MS = 460;
   const MISMATCH_MS = 2200;
@@ -864,6 +1052,8 @@ const CLUB = {
   const app = $('app');
   const board = $('board');
   const pipsEl = $('pips');
+  const picksEl = $('picks');
+  const questionEl = $('question');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const landscapeQuery = matchMedia('(orientation: landscape)');
 
@@ -1124,6 +1314,8 @@ const CLUB = {
 
     function playItem(item, my) {
       if (muted || my !== token) return Promise.resolve();
+      // { wait: ms } is a beat of silence; a newer say() or halt() during it drops the rest.
+      if (item.wait) return new Promise((done) => setTimeout(done, item.wait));
       if (!item.url) return speak(item.text, my);
       // A suspended or interrupted context would swallow the clip and never fire 'ended'.
       if (canFetch && running()) return viaBuffer(item, my);
@@ -1162,6 +1354,9 @@ const CLUB = {
         tone('sine', 420, 880, t, 0.1, 0.55);
       } else if (kind === 'match') {
         [1046.5, 1318.5, 1568].forEach((f, i) => tone('triangle', f, f, t + i * 0.08, 0.45, 0.5));
+      } else if (kind === 'nope') {
+        tone('sine', 330, 262, t, 0.16, 0.4);
+        tone('sine', 262, 220, t + 0.15, 0.24, 0.34);
       } else if (kind === 'win') {
         const notes = [523.25, 659.25, 783.99, 1046.5];
         notes.forEach((f, i) => tone('triangle', f, f, t + i * 0.12, 0.28, 0.55));
@@ -1272,16 +1467,15 @@ const CLUB = {
 
   /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
+  function photoImg(p) {
+    return Object.assign(el('img'), { src: p.img, alt: '', decoding: 'async', draggable: false });
+  }
+
   // Every face starts with the photo; a match flight starts from its `.photo img`.
   function photoFront(p) {
     const front = el('span', 'face front');
     const photo = el('span', 'photo');
-    const img = el('img');
-    img.src = p.img;
-    img.alt = '';
-    img.decoding = 'async';
-    img.draggable = false;
-    photo.appendChild(img);
+    photo.appendChild(photoImg(p));
     front.appendChild(photo);
     return front;
   }
@@ -1306,7 +1500,8 @@ const CLUB = {
 
   /* ---------- DOM ---------- */
 
-  function buildCard(p, index, tag) {
+  // `back` is the side that shows first: the card back, or a quiz card's photo-only side.
+  function buildCard(p, index, tag, back) {
     const card = el(tag || 'button', 'card');
     if (!tag) {
       card.type = 'button';
@@ -1317,9 +1512,16 @@ const CLUB = {
     card.dataset.state = 'down';
     card.style.setProperty('--i', String(index));
     const inner = el('span', 'card-inner');
-    inner.append(el('span', 'face back'), face.build(p));
+    inner.append(back || el('span', 'face back'), face.build(p));
     card.appendChild(inner);
     return card;
+  }
+
+  // A quiz card asks with the photo alone: no name, no number.
+  function askFace(p) {
+    const side = el('span', 'face ask');
+    side.appendChild(photoImg(p));
+    return side;
   }
 
   /* ---------- game state ---------- */
@@ -1328,14 +1530,13 @@ const CLUB = {
     phase: 'start',
     round: 0,
     cards: [],
-    pairs: PAIRS,
+    total: 0, // finds that win: the memory game's pairs, or the quiz's players
     up: [],
     found: 0,
     flipBack: 0,
     winFallback: 0,
     winEarliest: 0,
     busyUntil: 0,
-    geo: null,
     flights: new Set(),
   };
 
@@ -1350,24 +1551,27 @@ const CLUB = {
     card.el.setAttribute('aria-label', state === 'down' ? 'קלף' : card.p.name_he);
   }
 
-  function layout() {
-    const rect = board.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    const landscape = landscapeQuery.matches;
-    const cols = landscape ? 6 : 5;
-    const rows = landscape ? 5 : 6;
-    const cs = getComputedStyle(board);
+  // A grid's cell for the [cols, rows] shape that shows the faces biggest, from the grid's own box
+  // and gaps; null while the grid isn't shown.
+  function cell(grid, shapes) {
+    const rect = grid.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    const cs = getComputedStyle(grid);
     const gx = parseFloat(cs.columnGap) || 0;
     const gy = parseFloat(cs.rowGap) || 0;
-    const cw = (rect.width - gx * (cols - 1)) / cols;
-    const ch = (rect.height - gy * (rows - 1)) / rows;
-    game.geo = applyFace(board, cw, ch, faceMode(cw, ch));
-    game.cards.forEach((card) => face.fit(card.el, card.p, game.geo));
+    return shapes.map(([cols, rows]) => ({
+      cols, cw: (rect.width - gx * (cols - 1)) / cols, ch: (rect.height - gy * (rows - 1)) / rows,
+    })).reduce((a, b) => (Math.min(b.cw, b.ch) > Math.min(a.cw, a.ch) ? b : a));
   }
 
-  function renderPips() {
-    pipsEl.textContent = '';
-    for (let i = 0; i < game.pairs; i++) pipsEl.appendChild(el('span', 'pip'));
+  function fitCards(grid, cards, { cw, ch }) {
+    const geo = applyFace(grid, cw, ch, faceMode(cw, ch));
+    cards.forEach((card) => face.fit(card.el, card.p, geo));
+  }
+
+  function layout() {
+    const c = cell(board, [landscapeQuery.matches ? [6, 5] : [5, 6]]);
+    if (c) fitCards(board, game.cards, c);
   }
 
   function warmImages(players) {
@@ -1379,31 +1583,37 @@ const CLUB = {
     });
   }
 
-  function newGame() {
+  // What every new game, of either mode, starts from: `total` finds to win, one pip each.
+  function reset(mode, total) {
     clearTimeout(game.flipBack);
     clearTimeout(game.winFallback);
+    clearTimeout(quiz.next);
     game.round += 1;
     game.flights.forEach((flight) => flight.cancel());
     game.flights.clear();
     confetti.stop();
-    hide('win');
-    hide('confirm');
+    OVERLAYS.forEach(hide);
+    app.dataset.mode = mode;
+    game.total = total;
+    game.found = 0;
+    app.dataset.found = '0';
+    pipsEl.textContent = '';
+    for (let i = 0; i < total; i++) pipsEl.appendChild(el('span', 'pip'));
+  }
 
+  function newGame() {
     const benchPicks = shuffled(BENCH).slice(0, Math.max(0, PAIRS - STARTERS.length));
     const picks = STARTERS.concat(benchPicks);
     const deck = shuffled(picks.concat(picks));
 
-    game.pairs = picks.length;
-    game.found = 0;
+    reset('memory', picks.length);
     game.up = [];
-    app.dataset.found = '0';
     board.textContent = '';
     game.cards = deck.map((p, i) => {
       const card = { p, el: buildCard(p, i), state: 'down' };
       board.appendChild(card.el);
       return card;
     });
-    renderPips();
     layout();
     warmImages(picks);
     sound.prefetch(picks.flatMap((p) => [clip.name(p).url, clip.match(p).url]).concat(clip.ui('win').url));
@@ -1428,6 +1638,25 @@ const CLUB = {
     ], { duration: FLIP_MS, easing: 'ease-out' });
   }
 
+  // A card shows its face: memory's flip and the quiz's picks. A face that turns up lifts; a wrong pick
+  // ('out') shakes instead (base.css), so it never moves like a right one.
+  function turn(card, state, sfx = 'flip') {
+    setCard(card, state);
+    if (state !== 'out') lift(card);
+    sound.sfx(sfx);
+  }
+
+  // A find of either mode: the count, then its pip and celebration once the flip lands; true for the
+  // last one.
+  function scored(cards) {
+    game.found += 1;
+    app.dataset.found = String(game.found);
+    const pipIndex = game.found - 1;
+    const round = game.round;
+    setTimeout(() => { if (game.round === round) celebrate(cards, pipIndex); }, FLIP_MS * 0.85);
+    return game.found === game.total;
+  }
+
   function tap(card) {
     if (game.phase !== 'idle' && game.phase !== 'one' && game.phase !== 'two') return;
     if (card.state !== 'down' || performance.now() < game.busyUntil) return;
@@ -1439,9 +1668,7 @@ const CLUB = {
       game.up = [];
     }
 
-    setCard(card, 'up');
-    lift(card);
-    sound.sfx('flip');
+    turn(card, 'up');
     game.up.push(card);
 
     if (game.up.length === 1) {
@@ -1465,25 +1692,23 @@ const CLUB = {
     game.up = [];
     setCard(a, 'matched');
     setCard(b, 'matched');
-    game.found += 1;
-    app.dataset.found = String(game.found);
-    const pipIndex = game.found - 1;
-    const round = game.round;
-    setTimeout(() => { if (game.round === round) celebrate(a, b, pipIndex); }, FLIP_MS * 0.85);
-
     const lines = [clip.name(card.p), clip.match(card.p)];
-    if (game.found === game.pairs) {
-      setPhase('finishing');
-      game.winEarliest = performance.now() + 1500;
-      const finish = () => { if (game.round === round) showWin(); };
-      const win = clip.ui('win', WIN_LINE);
-      win.onstart = () => setTimeout(finish, Math.max(0, game.winEarliest - performance.now()));
-      lines.push(win);
-      game.winFallback = setTimeout(finish, sound.muted ? 1500 : 9000);
-    } else {
-      setPhase('idle');
-    }
+    if (scored([a, b])) finishing(lines);
+    else setPhase('idle');
     sound.say(lines);
+  }
+
+  // The last find of either mode: the win clip follows `lines`, and the win screen comes when it
+  // starts (at least 1.5 s on), or after a fallback when the voice never gets there.
+  function finishing(lines) {
+    setPhase('finishing');
+    const round = game.round;
+    game.winEarliest = performance.now() + 1500;
+    const finish = () => { if (game.round === round) showWin(); };
+    const win = clip.ui('win', WIN_LINE);
+    win.onstart = () => setTimeout(finish, Math.max(0, game.winEarliest - performance.now()));
+    lines.push(win);
+    game.winFallback = setTimeout(finish, sound.muted ? 1500 : 9000);
   }
 
   // When the voice queue is cut while finishing (mute, page hidden), the win clip never starts,
@@ -1496,8 +1721,8 @@ const CLUB = {
       Math.max(0, game.winEarliest - performance.now()));
   }
 
-  function celebrate(a, b, pipIndex) {
-    [a, b].forEach((card) => {
+  function celebrate(cards, pipIndex) {
+    cards.forEach((card) => {
       if (card.lift) card.lift.cancel();
       card.el.classList.add('found');
       if (!reducedMotion.matches) {
@@ -1507,7 +1732,7 @@ const CLUB = {
       }
     });
     sound.sfx('match');
-    flyToPip(a, pipIndex);
+    flyToPip(cards[0], pipIndex);
   }
 
   function flyToPip(card, index) {
@@ -1566,6 +1791,108 @@ const CLUB = {
     };
   }
 
+  /* ---------- quiz: who is this? ---------- */
+
+  const quiz = { order: [], at: 0, cards: [], answer: null, next: 0, shownAt: 0 };
+
+  // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
+  function quizLayout() {
+    const c = cell(picksEl, [[2, 2], [4, 1]]);
+    if (!c) return;
+    picksEl.style.setProperty('--cols', String(c.cols));
+    fitCards(picksEl, quiz.cards, c);
+  }
+
+  function startQuiz() {
+    reset('quiz', QUIZ.length);
+    quiz.order = shuffled(QUIZ);
+    quiz.at = 0;
+    warmImages(QUIZ);
+    deal();
+    // The first question's clips first: its match line, the other three cards' (a wrong pick says one)
+    // and its name; then everyone's, in question order.
+    const first = [quiz.answer].concat(quiz.cards.filter((card) => card !== quiz.answer)).map((card) => card.p);
+    sound.prefetch(first.map((p) => clip.match(p).url).concat(clip.name(first[0]).url,
+      quiz.order.flatMap((p) => [clip.match(p).url, clip.name(p).url]), clip.ui('win').url));
+    keepAwake();
+  }
+
+  // The asked player and three others from the quiz roster, shuffled.
+  function deal() {
+    const p = quiz.order[quiz.at];
+    const others = shuffled(QUIZ.filter((q) => q !== p)).slice(0, CHOICES - 1);
+    picksEl.textContent = '';
+    picksEl.classList.remove('solved');
+    quiz.cards = shuffled(others.concat(p)).map((q, i) => {
+      const card = { p: q, el: buildCard(q, i, null, askFace(q)), state: 'down' };
+      card.el.setAttribute('aria-label', 'שחקן');
+      picksEl.appendChild(card.el);
+      return card;
+    });
+    quiz.answer = quiz.cards.find((card) => card.p === p);
+    picksEl.dataset.answer = p.id;
+    questionEl.textContent = '';
+    questionEl.append(el('span', null, 'מי זה מספר '), el('span', 'qnum', String(p.number)), el('span', null, `, ${spoken(p)}?`));
+    quizLayout();
+    // A tap that moved on to this question must not also pick on it.
+    game.busyUntil = performance.now() + 450;
+    if (!reducedMotion.matches) {
+      const round = game.round;
+      const at = quiz.at;
+      picksEl.classList.add('dealing');
+      setTimeout(() => { if (game.round === round && quiz.at === at) picksEl.classList.remove('dealing'); }, 900);
+    }
+    setPhase('ask');
+  }
+
+  // The question out loud is the asked player's match clip: "number N, <name>!".
+  function question() {
+    return [clip.match(quiz.answer.p)];
+  }
+
+  function pick(card) {
+    if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
+    sound.unlock();
+    if (card !== quiz.answer) {
+      // Not him, and she learns who it is: the soft sound and a shake, then the card turns over (greyed
+      // and marked, out of play) and says his number and name. Her next pick or #say cuts that off.
+      turn(card, 'out', 'nope');
+      sound.say([{ wait: NOPE_SAY_MS }, clip.match(card.p)]);
+      return;
+    }
+    turn(card, 'up');
+    picksEl.classList.add('solved');
+    quiz.shownAt = performance.now();
+    const lines = [clip.name(card.p)];
+    if (scored([card])) {
+      finishing(lines);
+      sound.say(lines);
+      return;
+    }
+    setPhase('reveal');
+    // On after the name clip, or after a fallback when the voice never ends.
+    const round = game.round;
+    const at = quiz.at;
+    advance(8000);
+    sound.say(lines).then(() => { if (game.round === round && quiz.at === at) advance(ADVANCE_MS); });
+  }
+
+  // The reveal moves on by itself `ms` from now, but not under the ↻ confirm or on a hidden page: closing
+  // the one or coming back to the other arms it again.
+  function advance(ms) {
+    clearTimeout(quiz.next);
+    if (game.phase !== 'reveal' || isShown('confirm') || document.visibilityState !== 'visible') return;
+    quiz.next = setTimeout(nextQuestion, ms);
+  }
+
+  function nextQuestion() {
+    clearTimeout(quiz.next);
+    if (game.phase !== 'reveal') return;
+    quiz.at += 1;
+    deal();
+    sound.say(question());
+  }
+
   function showWin() {
     if (game.phase === 'won') return;
     clearTimeout(game.winFallback);
@@ -1583,8 +1910,12 @@ const CLUB = {
 
   const OVERLAYS = ['start', 'confirm', 'win'];
 
+  function isShown(id) {
+    return $(id).classList.contains('show');
+  }
+
   function syncInert() {
-    app.inert = OVERLAYS.some((id) => $(id).classList.contains('show'));
+    app.inert = OVERLAYS.some(isShown);
   }
 
   function show(id) {
@@ -1704,7 +2035,7 @@ const CLUB = {
   let wakePending = false;
 
   function inGame() {
-    return game.phase === 'idle' || game.phase === 'one' || game.phase === 'two' || game.phase === 'finishing';
+    return game.phase !== 'start' && game.phase !== 'won';
   }
 
   function letSleep() {
@@ -1743,21 +2074,28 @@ const CLUB = {
 
   /* ---------- wiring ---------- */
 
-  function cardFromEvent(event) {
-    const node = event.target.closest && event.target.closest('.card');
-    return node && node.parentElement === board ? game.cards[Number(node.dataset.index)] : null;
+  // A grid's cards answer the first touch (pointerdown) and a keyboard press (a click with no pointer).
+  function onCard(grid, cards, fn) {
+    const handle = (event) => {
+      const node = event.target.closest && event.target.closest('.card');
+      fn(node && node.parentElement === grid ? cards()[Number(node.dataset.index)] : null);
+    };
+    grid.addEventListener('pointerdown', (event) => { if (event.button <= 0) handle(event); });
+    grid.addEventListener('click', (event) => { if (event.detail === 0) handle(event); });
   }
 
-  board.addEventListener('pointerdown', (event) => {
-    if (event.button > 0) return;
-    const card = cardFromEvent(event);
-    if (card) tap(card);
+  onCard(board, () => game.cards, (card) => { if (card) tap(card); });
+  // A tap on a quiz card picks it; once the face shows, a tap anywhere on the cards moves on.
+  onCard(picksEl, () => quiz.cards, (card) => {
+    if (game.phase === 'reveal') {
+      if (performance.now() - quiz.shownAt >= TAP_ADVANCE_MS) nextQuestion();
+    } else if (card) pick(card);
   });
 
-  board.addEventListener('click', (event) => {
-    if (event.detail !== 0) return;
-    const card = cardFromEvent(event);
-    if (card) tap(card);
+  $('say').addEventListener('click', () => {
+    if (game.phase !== 'ask') return;
+    sound.unlock();
+    sound.say(question());
   });
 
   // A newer service worker took over this open page, and its cache only holds the files of its own
@@ -1769,35 +2107,39 @@ const CLUB = {
     return stale;
   }
 
-  $('play').addEventListener('click', () => {
-    if (game.phase !== 'start' || reloadIfStale()) return;
-    sound.unlock();
-    goFullscreen();
-    hide('start');
-    newGame();
-    sound.say([clip.ui('start', START_LINE)]);
-  });
+  // Every new game starts from one of the two mode buttons: on the start screen, on the win screen
+  // and in the ↻ confirm. A quiz opens with its first question right after the start line.
+  function wireModes(ids, allowed, before) {
+    ids.forEach((id) => $(id).addEventListener('click', () => {
+      if (!allowed() || reloadIfStale()) return;
+      sound.unlock();
+      if (before) before();
+      const start = clip.ui('start', START_LINE);
+      if (id.endsWith('-quiz')) {
+        startQuiz();
+        sound.say([start].concat(question()));
+      } else {
+        newGame();
+        sound.say([start]);
+      }
+    }));
+  }
 
-  $('replay').addEventListener('click', () => {
-    if (game.phase !== 'won' || reloadIfStale()) return;
-    sound.unlock();
-    newGame();
-    sound.say([clip.ui('start', START_LINE)]);
-  });
+  wireModes(['play', 'play-quiz'], () => game.phase === 'start', goFullscreen);
+  wireModes(['replay', 'replay-quiz'], () => game.phase === 'won');
+  wireModes(['yes', 'yes-quiz'], () => true);
 
+  // A quiz reveal waits under the confirm: "no" picks it up again, a mode button starts afresh.
   $('again').addEventListener('click', () => {
-    if (game.phase === 'idle' || game.phase === 'one' || game.phase === 'two') show('confirm');
+    if (!inGame() || game.phase === 'finishing') return;
+    clearTimeout(quiz.next);
+    show('confirm');
   });
 
-  $('yes').addEventListener('click', () => {
-    if (reloadIfStale()) return;
-    sound.unlock();
+  $('no').addEventListener('click', () => {
     hide('confirm');
-    newGame();
-    sound.say([clip.ui('start', START_LINE)]);
+    advance(ADVANCE_MS);
   });
-
-  $('no').addEventListener('click', () => hide('confirm'));
 
   const muteBtn = $('mute');
   function syncMute() { muteBtn.setAttribute('aria-pressed', sound.muted ? 'true' : 'false'); }
@@ -1815,11 +2157,13 @@ const CLUB = {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') {
       letSleep();
+      clearTimeout(quiz.next); // a reveal waits for her: the halted name clip must not move it on
       sound.halt();
       hurryWin();
     } else {
       sound.wake();
       if (inGame()) keepAwake();
+      advance(ADVANCE_MS);
     }
   });
   window.addEventListener('pageshow', () => sound.wake());
@@ -1828,20 +2172,22 @@ const CLUB = {
     document.addEventListener(type, () => sound.wake(), { capture: true, passive: true });
   });
 
-  if (window.ResizeObserver) new ResizeObserver(() => layout()).observe(board);
-  else window.addEventListener('resize', layout);
+  // Only the shown grid has a box; the other's layout returns at once.
+  const relayout = () => { layout(); quizLayout(); };
+  if (window.ResizeObserver) [board, picksEl].forEach((grid) => new ResizeObserver(relayout).observe(grid));
+  else window.addEventListener('resize', relayout);
   window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
 
   sound.prefetch([clip.ui('start').url]);
-  face.prepare(ALL);
+  face.prepare(QUIZ);
   buildFan();
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all(CLUB.fonts.map(([spec, sample]) => document.fonts.load(spec, sample)))
     : Promise.resolve();
   fontsReady.catch(() => {}).then(() => {
-    face.prepare(ALL);
+    face.prepare(QUIZ);
     buildFan();
-    layout();
+    relayout();
   });
 
   /* ---------- home-screen install (parent-facing, start screen only) ---------- */

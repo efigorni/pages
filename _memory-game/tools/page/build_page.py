@@ -18,18 +18,23 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
                         follow it, and a light club's style sets --scheme: light for base.css.
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
-  club/roster.json      season, starters and bench; written by `data`
+  club/roster.json      season and players (roles starter, bench, backup, in that order); written by `data`
 
 The builder writes two files per game, whole:
 
   index.html  _memory-game/page.template.html filled in: the head, the club style, base.css, the title, the
               trophy, DATA (the roster plus the clips that exist under audio/, in roster order), the club
-              script and engine.js
+              script and engine.js. The page plays two modes: memory deals the starters and bench; the
+              quiz ("who is this?") asks every player in the roster once, the backups too. The head carries
+              the link preview (Open Graph): the manifest name, OG_DESCRIPTION and the absolute URLs, under
+              SITE, of the game and of its og.jpg, which tools/og/render_og.sh renders and nothing precaches
   sw.js       _memory-game/sw.template.js with VERSION, ASSETS and PREFIX filled in. VERSION hashes every
               precached file and the template, so any change installs a fresh cache.
 
 `data` writes club/roster.json from players.json (one player per line), then assembles that game; --prune
-deletes photos and clips of players who are no longer in it. The name model (club.json `names`): "full"
+deletes photos and clips of players who are no longer in it. The roster keeps every role in roster.SHIPPED; role
+"backup" (the pool's backup goalkeepers, roster.py's squad rule) is asked in the quiz and never dealt in the memory
+game, and his photo and clips are made, checked and shipped like everyone else's. The name model (club.json `names`): "full"
 shows name_he on one card line; "first-last" adds the card's two tiers (first_he / last_he). speak_he, the
 text the voice reads, ships whenever it differs from name_he (and always with "first-last").
 `assemble` writes every game's index.html and sw.js, or the named games'. `--check` writes nothing and fails
@@ -39,7 +44,8 @@ an @font-face, the declared families are the ones credited under Fonts, every OF
 OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left; or if the
 club sets a CSS variable nothing reads, or reads one (without a fallback) nothing defines; or if a game's
 start/win clip isn't the master in _memory-game/audio/ui/ (the engine's lines, which tools/tts/hebrew.py
-renders). Run it before committing: the repo has no CI. `--watch`
+renders); or if its og.jpg is missing, not a JPEG or over OG_MAX_KB. Run it before committing: the repo
+has no CI. `--watch`
 assembles the named games again whenever one of their sources or a shared file changes.
 `new` starts a club: it checks the id, the cache prefix and the app id first and writes nothing if one
 clashes; then it writes the manifest (from --like's, with the new name, colours and id), copies --like's
@@ -62,17 +68,26 @@ sys.dont_write_bytecode = True  # no __pycache__ in the repo
 SHARED = Path(__file__).resolve().parents[2]
 REPO = SHARED.parent
 sys.path.insert(0, str(SHARED / "tools/tts"))
-from hebrew import START_TEXT, WIN_TEXT, speak_text, split_display_name  # noqa: E402
+sys.path.insert(0, str(SHARED / "tools/scrape"))
+from hebrew import UI_TEXTS, speak_text, split_display_name  # noqa: E402
+from roster import SHIPPED, check as check_players  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
-UI_CLIPS = ("start", "win")
+UI_CLIPS = tuple(UI_TEXTS)
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
-              "mute", "confetti", "install")
+              "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say")
 RUNTIME_VARS = {"--i"}
+# Where GitHub Pages publishes the games. A link preview needs absolute URLs; the verify tools read it here too.
+SITE = "https://efigorni.github.io/pages/"
+# The link preview's image, at the game's root (tools/og/render_og.sh renders it). Outside PRECACHE_DIRS, so
+# a device never downloads it: only the crawlers of WhatsApp and the like do.
+OG_IMAGE = "og.jpg"
+OG_MAX_KB = 300
+OG_DESCRIPTION = "משחק זיכרון וחידון שחקנים — לומדים פרצופים, מספרים ושמות"
 # Tel Aviv's manifest id "./" resolves to the origin root. It shipped that way and changing it would
 # break installed copies, so it is the only game allowed a root id.
 ROOT_ID_GAMES = {"maccabi-memory"}
@@ -156,10 +171,8 @@ def entry(p, page, model):
 
 def roster_text(roster):
     """club/roster.json: one player per line, so a roster refresh diffs per player."""
-    def rows(players):
-        return ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in players)
-    return (f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n'
-            f'  "starters": [\n{rows(roster["starters"])}\n  ],\n  "bench": [\n{rows(roster["bench"])}\n  ]\n}}\n')
+    rows = ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in roster["players"])
+    return f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n  "players": [\n{rows}\n  ]\n}}\n'
 
 
 def has_roster(game):
@@ -173,7 +186,7 @@ def read_roster(game):
 def orphans(game, roster):
     """Photos and clips of players the roster doesn't have: precached, never shown or played."""
     page = REPO / game
-    ids = {p["id"] for p in roster["starters"] + roster["bench"]}
+    ids = {p["id"] for p in roster["players"]}
     return sorted(f.relative_to(page).as_posix() for d, suffix in (("img", ".webp"), ("audio/name", ".mp3"),
                                                                     ("audio/match", ".mp3"))
                   for f in (page / d).glob(f"*{suffix}") if f.stem not in ids)
@@ -182,7 +195,7 @@ def orphans(game, roster):
 def data_line(game, roster):
     """The DATA script: the roster plus the clips that exist, in roster order."""
     page = REPO / game
-    ids = [p["id"] for p in roster["starters"] + roster["bench"]]
+    ids = [p["id"] for p in roster["players"]]
     audio = {
         "ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()],
         "name": [i for i in ids if (page / "audio" / "name" / f"{i}.mp3").is_file()],
@@ -198,15 +211,14 @@ def write_data(players_json, game, prune):
     if model not in ("full", "first-last"):
         fail(f"{game}/{CONFIG}: names must be \"full\" or \"first-last\", not {model!r}")
     data = json.loads(Path(players_json).read_text(encoding="utf-8"))
-    starters = [entry(p, page, model) for p in data["players"] if p.get("role") == "starter"]
-    bench = [entry(p, page, model) for p in data["players"] if p.get("role") == "bench"]
-    if len(starters) != 11:
-        fail(f"expected 11 starters, found {len(starters)}")
-    if len(bench) < 4:
-        fail(f"need at least 4 bench players, found {len(bench)}")
-    roster = {"season": data.get("season"), "starters": starters, "bench": bench}
+    problems = check_players(data)
+    if problems:
+        fail(f"{players_json}: {'; '.join(problems)}")
+    shipped = [entry(p, page, model) for role in SHIPPED for p in data["players"] if p.get("role") == role]
+    roster = {"season": data.get("season"), "players": shipped}
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
-    print(f"{game}: club/roster.json: starters={len(starters)} bench={len(bench)}", flush=True)
+    counts = " ".join(f"{role}={sum(p['role'] == role for p in shipped)}" for role in SHIPPED)
+    print(f"{game}: club/roster.json: {counts}", flush=True)
     for rel in orphans(game, roster):
         if prune:
             (page / rel).unlink()
@@ -241,14 +253,28 @@ def lint_credits(game):
 def check_ui_clips(game):
     """Each game ships its own copy of the engine's start and win clips; the master is _memory-game/audio/ui/."""
     engine = read(SHARED / "engine.js")
-    lines = {k: re.search(rf"const {k}_LINE = '([^']*)';", engine).group(1) for k in ("START", "WIN")}
-    problems = [f"engine.js's {k}_LINE is not hebrew.py's {k}_TEXT, which the clip says"
-                for k, text in (("START", START_TEXT), ("WIN", WIN_TEXT)) if lines[k] != text]
+    problems = []
+    for key, text in UI_TEXTS.items():
+        line = re.search(rf"const {key.upper()}_LINE = '([^']*)';", engine)
+        if not line:
+            problems.append(f"engine.js has no {key.upper()}_LINE, the {key} clip's text")
+        elif line.group(1) != text:
+            problems.append(f"engine.js's {key.upper()}_LINE is not hebrew.py's UI_TEXTS[{key!r}], which the clip says")
     for clip in UI_CLIPS:
         copy = REPO / game / "audio/ui" / f"{clip}.mp3"
         if not copy.is_file() or copy.read_bytes() != (SHARED / "audio/ui" / f"{clip}.mp3").read_bytes():
             problems.append(f"audio/ui/{clip}.mp3 is not _memory-game/audio/ui/{clip}.mp3")
     return problems
+
+
+def check_og(game):
+    """The link preview's image the head points at: a JPEG small enough for WhatsApp to show."""
+    path = REPO / game / OG_IMAGE
+    if not path.is_file():
+        return [f"{OG_IMAGE} is missing (render it: _memory-game/tools/og/render_og.sh {game})"]
+    data = path.read_bytes()
+    return ([f"{OG_IMAGE} is not a JPEG" for _ in [1] if data[:3] != b"\xff\xd8\xff"]
+            + [f"{OG_IMAGE} is {len(data) // 1024} KB, over {OG_MAX_KB} KB" for _ in [1] if len(data) > OG_MAX_KB * 1024])
 
 
 def source(path, closer):
@@ -292,6 +318,8 @@ def render(game):
         "scheme": scheme, "status_bar": "black-translucent" if scheme == "dark" else "default",
         "theme_color": html.escape(man["theme_color"]), "short_name": html.escape(man["short_name"]),
         "name": html.escape(man["name"]), "style": style, "base": base,
+        "url": html.escape(f"{SITE}{game}/"), "og_image": html.escape(f"{SITE}{game}/{OG_IMAGE}"),
+        "og_description": html.escape(OG_DESCRIPTION), "og_alt": html.escape(f"{man['name']}: שלושה שחקנים על קלפי המשחק"),
         "title": title_html(man["name"], config.get("title", "plain")), "trophy": trophy_svg(config["trophy"]),
         "data": data_line(game, read_roster(game)), "club": source(REPO / game / "club/club.js", "</script"),
         "engine": source(SHARED / "engine.js", "</script"),
@@ -318,8 +346,15 @@ def lint_variables(game):
     reads = set(re.findall(r"var\(\s*(--[\w-]+)", style + base + club + engine))
     nothing = (set(re.findall(r"var\(\s*(--[\w-]+)\s*\)", style + club)) - defined - js_set - engine_set
                - set(re.findall(r"(--[\w-]+)\s*:", base)))
+    # A :root token resolves there, where the per-card variables the engine sets (RUNTIME_VARS) are unset,
+    # and every card inherits that one value.
+    root = "".join(re.findall(r":root\s*\{(.*?)\}", style, re.S))
+    frozen = sorted(name for name, value in re.findall(r"(--[\w-]+)\s*:([^;]*)", root)
+                    if any(re.search(rf"var\(\s*{re.escape(v)}\b", value) for v in RUNTIME_VARS))
     return ([f"{v} is set by the club but nothing reads it" for v in sorted((defined | js_set) - reads)]
-            + [f"{v} is read by the club but nothing defines it" for v in sorted(nothing)])
+            + [f"{v} is read by the club but nothing defines it" for v in sorted(nothing)]
+            + [f"{v} is declared on :root but reads a per-card variable ({', '.join(sorted(RUNTIME_VARS))}): "
+               "it never varies; declare it on the card" for v in frozen])
 
 
 def app_id(game):
@@ -391,7 +426,7 @@ def assemble(game, check):
     strays = orphans(game, read_roster(game))
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
-    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game)
+    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game)
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:
@@ -462,7 +497,7 @@ tools/README.md with TODOs). Next:
   1. design: club/style.css, club/club.js and club/club.json (title, trophy, images), the icon SVGs, the fonts
      (and CREDITS.md); try it with stand-in data in a scratch folder: build_page.py assemble {game} --watch --repo <scratch>
   2. the club's scraper in {game}/tools/scrape/ writes <work>/data/players.json
-  3. _memory-game/tools/refresh.sh {game} <work>: photos, voice, then the page
+  3. _memory-game/tools/refresh.sh {game} <work>: photos, voice, the page, then the link preview (look at {game}/og.jpg)
   4. bash _memory-game/tools/icons/render_icons.sh --game {game}
   5. _memory-game/tools/verify/verify.sh local --out <dir> {game}, then commit with explicit paths""", flush=True)
 

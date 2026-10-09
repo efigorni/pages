@@ -6,7 +6,7 @@ Sources (all cached under <data>/html/, re-runs make no network calls unless --r
   * the club's own match reports (WP posts, category 30): the "שיחקו בהפועל:" line-up block per game
   * the club's fixture list (homepage): date, opponent, score, competition logo
   * Transfermarkt (club 1017) squad stats, all competitions of the season: cross-check only
-Photos: the listing card image (original upload) per starter/bench player -> <data>/raw/<id>.png
+Photos: the listing card image (original upload) per shipped player (starter, bench, backup) -> <data>/raw/<id>.png
 
 Usage:
   uv run --with requests --with beautifulsoup4 --with pillow python -I -u scrape_hapoel.py --data <data-dir> \
@@ -34,7 +34,7 @@ from common import Fetcher, ascii_slug, log_line, norm_name, photo_facts, write_
 from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
 from htafc import (LINEUP_RE, LISTING_EN, LISTING_HE, SECTION_EN, parse_lineup_block, parse_listing,  # noqa: E402
                    parse_popup, report_text)
-from roster import check, output_key, select  # noqa: E402
+from roster import SHIPPED, check, output_key, rule_text, select  # noqa: E402
 from transfermarkt import parse_squadstats, squadstats_url  # noqa: E402
 
 # The season this scrape counts. Its dates, the cached Transfermarkt file, the club's season id and every
@@ -79,12 +79,7 @@ SHOULDER_RULE = {k: IMAGES[k] for k in ("shoulder_share", "shoulder_from") if k 
 POSITION_EN = {"שוער": "Goalkeeper", "הגנה": "Defender", "קישור": "Midfielder", "קשר": "Midfielder", "התקפה": "Forward"}
 SENT_OFF = "הורחק"
 HOME_NAMES = ("הפועל תל-אביב", "הפועל תל אביב")
-POOL_RULE = (
-    "P3: pool = top 23 by appearances (>= 1) across all players on the team & players page, ranked by appearances, "
-    "then starts, then minutes, then lower jersey number (pool_rank); main 11 = the goalkeeper with the most "
-    "appearances + the 10 outfield players with the most; bench = the other outfield players in the pool; backup "
-    "goalkeepers excluded."
-)
+POOL_RULE = "P3: " + rule_text(23, "the team & players page")
 
 
 def season_date(ddmm: str) -> str:
@@ -388,7 +383,7 @@ def main() -> int:
         p.setdefault("pool_rank", None)
     outfield = sel.outfield
     for p in players:
-        if p.get("role") in ("starter", "bench"):
+        if p.get("role") in SHIPPED:
             p["excluded_reason"] = None
         else:
             p["role"] = "excluded"
@@ -396,7 +391,7 @@ def main() -> int:
                 p["excluded_reason"] = (("goalkeeper, " if p["is_gk"] else "") + f"0 appearances in {SEASON} (in no club "
                                         f"line-up of the {len(game_rows)} official games)")
             elif p["is_gk"]:
-                p["excluded_reason"] = f"backup goalkeeper (pool_rank {p['pool_rank']})"
+                p["excluded_reason"] = f"goalkeeper outside the top 23 (pool_rank {p['pool_rank']})"
             else:
                 p["excluded_reason"] = f"outside the top 23 (pool_rank {p['pool_rank']})"
 
@@ -420,7 +415,7 @@ def main() -> int:
     shoulder_overrides = {**IMAGES.get("shoulder_overrides", {}),
                           **{o.partition("=")[0]: float(o.partition("=")[2]) for o in a.shoulder_override}}
     for p in players:
-        if p["role"] not in ("starter", "bench"):
+        if p["role"] not in SHIPPED:
             p["photo_file"] = None
             continue
         ext = Path(p["photo_url"]).suffix.lower() or ".png"
@@ -482,7 +477,7 @@ def main() -> int:
         "crop": shared,
         "crop_rule": ("Every club photo has the player's shirt number baked in (a flat #FF1521 numeral behind his right shoulder). "
                       "`photo_file` is the photo with that numeral keyed out (clean/<id>.png, tools/scrape/clean_number.py); "
-                      "`photo_file_original` is the untouched download. Each starter/bench player has its own square `crop` "
+                      "`photo_file_original` is the untouched download. Each shipped player (starter, bench, backup) has its own square `crop` "
                       "(fractions of the 1617x2242 source) from the TLV/Haifa auto rule run on the number-free photo: hair top 4% "
                       "below the top edge, shoulder line at 90% of the height, centred on the head. The top-level `crop` is the union "
                       "of the per-player boxes (a fallback only). Use build_images.py --mode box with photo_file. On the original "
@@ -490,8 +485,8 @@ def main() -> int:
         "players": players,
     }
     write_json_atomic(data / "players.json", doc)
-    log_line(f"wrote players.json: {sum(p['role']=='starter' for p in players)} starters, {sum(p['role']=='bench' for p in players)} bench, "
-             f"{sum(p['role']=='excluded' for p in players)} excluded; requests this run: {f.requests}")
+    counts = ", ".join(f"{sum(p['role'] == r for p in players)} {r}" for r in SHIPPED + ("excluded",))
+    log_line(f"wrote players.json: {counts}; requests this run: {f.requests}")
     for p in players:
         s = p["stats"]
         print(f"{p['role']:8} {str(p['pool_rank'] or '-'):>3} #{'-' if p['number'] is None else p['number']:<3} {p['id']:22} {p['name_he']:18} apps {s['appearances']:2} st {s['starts']:2} "

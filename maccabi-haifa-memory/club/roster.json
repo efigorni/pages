@@ -1,6 +1,6 @@
 {
   "season": "2026/27",
-  "starters": [
+  "players": [
     {"id": "omri-glazer", "name_he": "עמרי גלזר", "first_he": "עמרי", "last_he": "גלזר", "speak_he": "עמרי גלזר", "number": 55, "role": "starter", "img": "img/omri-glazer.webp"},
     {"id": "ethan-azoulay", "name_he": "איתן אזולאי", "first_he": "איתן", "last_he": "אזולאי", "speak_he": "איתן אזולאי", "number": 19, "role": "starter", "img": "img/ethan-azoulay.webp"},
     {"id": "bruninho", "name_he": "ברונו רוברטו פריירה דה סילבה (ברוניניו)", "first_he": "ברונו רוברטו פריירה דה סילבה", "last_he": "(ברוניניו)", "speak_he": "ברוניניו", "number": 10, "role": "starter", "img": "img/bruninho.webp"},
@@ -11,9 +11,7 @@
     {"id": "tzunami", "name_he": "וונדרסון דה פריאטס סוארס (צונאמי)", "first_he": "וונדרסון דה פריאטס סוארס", "last_he": "(צונאמי)", "speak_he": "צונאמי", "number": 66, "role": "starter", "img": "img/tzunami.webp"},
     {"id": "kenny-saief", "name_he": "קני סייף", "first_he": "קני", "last_he": "סייף", "speak_he": "קני סייף", "number": 16, "role": "starter", "img": "img/kenny-saief.webp"},
     {"id": "cedric-don", "name_he": "סדריק דון", "first_he": "סדריק", "last_he": "דון", "speak_he": "סדריק דון", "number": 45, "role": "starter", "img": "img/cedric-don.webp"},
-    {"id": "noam-shtaifman", "name_he": "נועם שטייפמן", "first_he": "נועם", "last_he": "שטייפמן", "speak_he": "נועם שטייפמן", "number": 35, "role": "starter", "img": "img/noam-shtaifman.webp"}
-  ],
-  "bench": [
+    {"id": "noam-shtaifman", "name_he": "נועם שטייפמן", "first_he": "נועם", "last_he": "שטייפמן", "speak_he": "נועם שטייפמן", "number": 35, "role": "starter", "img": "img/noam-shtaifman.webp"},
     {"id": "yarin-levi", "name_he": "ירין לוי", "first_he": "ירין", "last_he": "לוי", "speak_he": "ירין לוי", "number": 8, "role": "bench", "img": "img/yarin-levi.webp"},
     {"id": "ali-mohamed", "name_he": "עלי מוחמד", "first_he": "עלי", "last_he": "מוחמד", "speak_he": "עלי מוחמד", "number": 4, "role": "bench", "img": "img/ali-mohamed.webp"},
     {"id": "pedrao", "name_he": "פדרו אוליביירה", "first_he": "פדרו", "last_he": "אוליביירה", "speak_he": "פדרו אוליביירה", "number": 44, "role": "bench", "img": "img/pedrao.webp"},
@@ -24,6 +22,7 @@
     {"id": "sean-goldberg", "name_he": "שון גולדברג", "first_he": "שון", "last_he": "גולדברג", "speak_he": "שון גולדברג", "number": 3, "role": "bench", "img": "img/sean-goldberg.webp"},
     {"id": "navot-ratner", "name_he": "נבות רטנר", "first_he": "נבות", "last_he": "רטנר", "speak_he": "נבות רטנר", "number": 36, "role": "bench", "img": "img/navot-ratner.webp"},
     {"id": "pedro-barzao", "name_he": "פדרו ברזאו", "first_he": "פדרו", "last_he": "ברזאו", "speak_he": "פדרו ברזאו", "number": 30, "role": "bench", "img": "img/pedro-barzao.webp"},
-    {"id": "adam-grimberg", "name_he": "אדם גרימברג", "first_he": "אדם", "last_he": "גרימברג", "speak_he": "אדם גרימברג", "number": 38, "role": "bench", "img": "img/adam-grimberg.webp"}
+    {"id": "adam-grimberg", "name_he": "אדם גרימברג", "first_he": "אדם", "last_he": "גרימברג", "speak_he": "אדם גרימברג", "number": 38, "role": "bench", "img": "img/adam-grimberg.webp"},
+    {"id": "glenn-alvin", "name_he": "גלן אלוין", "first_he": "גלן", "last_he": "אלוין", "speak_he": "גלן אלוין", "number": 90, "role": "backup", "img": "img/glenn-alvin.webp"}
   ]
 }

@@ -3,7 +3,7 @@
     _memory-game/tools/tts/tts.sh <game> <work> generate [options]     # the usual way
     <engines>/.venv-stt/bin/python -u _memory-game/tools/tts/generate.py --game <game> --work <work> [options]
 
-Reads <work>/data/players.json (role starter|bench) and the club's pronunciations.json.
+Reads <work>/data/players.json (roster.SHIPPED: role starter|bench|backup) and the club's pronunciations.json.
 The voice reads each player's `speak_he`: the text inside a trailing "(...)"
 of the displayed name when there is one, else the full name (HR3/H4). Every
 clip is rendered with several seeds; the take whose ivrit.ai STT round-trip
@@ -82,6 +82,8 @@ import numpy as np  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scrape"))  # roster.py: the roles a game ships
+from roster import SHIPPED  # noqa: E402
 import audio_metrics  # noqa: E402
 import config  # noqa: E402
 import hebrew  # noqa: E402
@@ -131,7 +133,7 @@ def speak_he(p: dict) -> str:
 
 def check_speak(players: list[dict]) -> None:
     for p in players:
-        if p.get("role") not in ("starter", "bench"):
+        if p.get("role") not in SHIPPED:
             continue
         rule = hebrew.speak_text(display_name(p))
         if p.get("speak_he") and p["speak_he"].strip() != rule:
@@ -144,7 +146,7 @@ def check_speak(players: list[dict]) -> None:
 def build_items(players: list[dict], pron: dict, only: set[str] | None, ui: bool = False) -> list[dict]:
     items = []
     for p in players:
-        if p.get("role") not in ("starter", "bench"):
+        if p.get("role") not in SHIPPED:
             continue
         if only and p["id"] not in only:
             continue
@@ -173,7 +175,7 @@ def build_items(players: list[dict], pron: dict, only: set[str] | None, ui: bool
         items.append({**common, "kind": "match", "text": hebrew.match_text(num, say),
                       "expect": hebrew.match_text(num, expect),
                       "variants": [hebrew.match_text(num, v) for v in var], "job": match_job})
-    for uid, text in (("start", hebrew.START_TEXT), ("win", hebrew.WIN_TEXT)) if ui else ():
+    for uid, text in hebrew.UI_TEXTS.items() if ui else ():
         if only and uid not in only:
             continue
         # target_speaker 2: the G2P's female-listener forms (בואי, מָצָאת).
@@ -421,7 +423,7 @@ def main() -> None:
     check_speak(roster)
     items = build_items(roster, pron, only, args.ui)
     if not items:
-        raise SystemExit("nothing to render (no starter/bench players matched)")
+        raise SystemExit("nothing to render (no starter, bench or backup player matched)")
     log(f"[gen] {len(items)} clips -> {out} (run {run})")
     for it in items:
         if it["kind"] == "name" and not it["pinned"]:

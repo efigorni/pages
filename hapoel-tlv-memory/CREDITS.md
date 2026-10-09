@@ -11,12 +11,12 @@ private family game.
 
 ## Design
 
-The cards follow the look of the club's team and players page: its pale pink page, its
-reds and wines, the big red shirt number behind each player and the name in wine under
-the picture. The honeycomb on the card back and the start screen's panels are our own
-drawings after the page's banner; no club files are included. The club's typefaces,
-RagSans and RAG Marom Poster, are commercial, so the game uses Rubik for the names and
-Karantina for the numbers and the title.
+The cards follow the look of the club's team and players page: its reds and wines, the
+big shirt number beside each player and the name in wine under the picture. The dark red
+wall paint on the cards and the start screen is our own render after the wine panel of
+the page's banner (`tools/look/paint.py`); no club files are included. The club's
+typefaces, RagSans and RAG Marom Poster, are commercial, so the game uses Rubik for the
+names and Karantina for the numbers and the title.
 
 ## Fonts
 

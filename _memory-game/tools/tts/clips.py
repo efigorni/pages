@@ -3,11 +3,12 @@
     _memory-game/tools/tts/tts.sh <game> <work> check
     _memory-game/tools/tts/tts.sh <game> <work> sync
 
-check: every starter/bench player has a name and a match clip in <tts>/out with a manifest row that
+check: every player with a shipped role (roster.SHIPPED: starter, bench, backup) has a name and a match clip in <tts>/out with a manifest row that
 passed the STT round-trip, and each clip is in the format spec (MP3, mono, 24 kHz, 64 kbps; -16 LUFS
 ±0.4; true peak <= -1.5 dBTP; <= 30 ms of silence before and 120 ms after). Loudness, peak and silence
-come from the QA row the clip was made in (re-measured when none matches); a second model's "no"
-fails too. Exits 1 on any problem.
+come from the QA row the clip was made in (re-measured when none matches). The primary STT is the
+gate: a second model's "no" (--second-opinion) is printed as a warning, never a problem, the way
+generate.py and --ready already treat it (listen.html shows it in red). Exits 1 on any problem.
 sync: check, then copy the roster's clips into <game>/audio/{name,match}/ and delete the clips of
 players who are no longer in it. The start and win clips are the engine's (_memory-game/audio/ui/).
 """
@@ -23,6 +24,8 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scrape"))  # roster.py: the roles a game ships
+from roster import SHIPPED  # noqa: E402
 
 KINDS = ("name", "match")
 FORMAT = ("mp3", 24000, 1, 64000)
@@ -30,7 +33,7 @@ FORMAT = ("mp3", 24000, 1, 64000)
 
 def roster_ids(players_path: Path) -> list[str]:
     return [p["id"] for p in json.load(open(players_path, encoding="utf-8"))["players"]
-            if p.get("role") in ("starter", "bench")]
+            if p.get("role") in SHIPPED]
 
 
 def qa_rows(tts: Path, rows: dict) -> dict:
@@ -67,7 +70,7 @@ def check(ids: list[str], tts: Path) -> list[str]:
                 problems.append(f"{kind} {pid}: STT heard «{m['stt_transcript']}»")
             q = qa.get((pid, kind))
             if q is not None and q.get("stt2_ok") is False:
-                problems.append(f"{kind} {pid}: the second model heard «{q.get('stt2_transcript')}»")
+                print(f"[check] warning: {kind} {pid}: the second model heard «{q.get('stt2_transcript')}»", flush=True)
             if q is None:
                 import audio_metrics
                 q = audio_metrics.measure(str(f))
