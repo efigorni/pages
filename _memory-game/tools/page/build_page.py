@@ -21,6 +21,7 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
   club/roster.json      season and players (roles starter, bench, backup, in that order); written by `data`
   club/avoid.json       a word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it;
                         checked against the roster, and each word's list (with play.quiz.apart) is its `avoid`
+  tools/tts/en_pins.json  a word game's English voice pins; a `take` picked by ear must stay the shipped clip
 
 The builder writes two files per game, whole:
 
@@ -78,6 +79,8 @@ ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
 # A word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it from CMUdict.
 AVOID = "club/avoid.json"
+# A word game's English voice pins; a pin's `take` is a clip picked by ear, with the shipped file's sha256.
+EN_PINS = "tools/tts/en_pins.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
 UI_CLIPS = tuple(UI_TEXTS)
@@ -481,6 +484,26 @@ def check_apart(game):
     return problems
 
 
+def check_takes(game):
+    """A word game's English clips picked by ear (tools/tts/en_pins.json `take`) are the files it ships, so a
+    refresh never replaces one with a default render; every pin names a word on the roster."""
+    path = REPO / game / EN_PINS
+    if not path.is_file():
+        return []
+    ids = {p["id"] for p in items_of(read_roster(game))}
+    problems = []
+    for wid, pin in json.loads(read(path)).get("words", {}).items():
+        if wid not in ids:
+            problems.append(f"{EN_PINS}: {wid} is not on the roster")
+            continue
+        want = (pin.get("take") or {}).get("sha256")
+        clip = REPO / game / "audio/en" / f"{wid}.mp3"
+        if want and not (clip.is_file() and hashlib.sha256(clip.read_bytes()).hexdigest().startswith(want)):
+            problems.append(f"audio/en/{wid}.mp3 is not the take picked by ear ({EN_PINS}): put that file back, "
+                            "or pick a new take by ear and update its pin")
+    return problems
+
+
 def check_og(game):
     """The link preview's image the head points at: a JPEG small enough for WhatsApp to show."""
     path = REPO / game / OG_IMAGE
@@ -660,7 +683,8 @@ def assemble(game, check):
     strays = orphans(game, read_roster(game))
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
-    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game) + check_apart(game)
+    lint = (lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game) + check_apart(game)
+            + check_takes(game))
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:

@@ -124,7 +124,9 @@ python3 -I _memory-game/tools/page/build_page.py assemble <game> --watch   # whi
 - Never edit `index.html` or `sw.js` by hand: the next `assemble` overwrites them, and `--check` fails
   until it does. The repo has no CI, so run `--check` before every commit. It also fails when a photo or
   clip has no roster entry, the fonts and `CREDITS.md` disagree, a club CSS variable is set but never read,
-  a start/win clip isn't the master, or `og.jpg` is missing, not a JPEG or over 300 KB.
+  a start/win clip isn't the master, or `og.jpg` is missing, not a JPEG or over 300 KB; and for a word game,
+  when `club/avoid.json` isn't its roster's, or a clip picked by ear (`tools/tts/en_pins.json` `take`) is no
+  longer the file it ships.
 - `VERSION` hashes every file a game ships and the template. Any change to a page, a photo, a clip, a font
   or an icon gives a new cache, and that is what makes installed copies pick it up (one re-download of
   what is precached).

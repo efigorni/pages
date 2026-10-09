@@ -83,3 +83,7 @@ English: Kokoro-82M (Apache-2.0), voice `am_michael`. Hebrew: BlueTTS (MIT) with
   `Systran/faster-whisper-medium.en`, second opinion `large-v3-turbo`) for English, ivrit.ai's Whisper
   models (`ivrit-ai/whisper-large-v3-turbo-ggml`, second opinion `ivrit-ai/whisper-large-v3-ct2`) for
   Hebrew. Those models only listened; nothing of them ships.
+- 56 English words were re-voiced in the same `am_michael` voice and picked by ear: most said inside a
+  short sentence ("I see a cat.") and cut out at Whisper's word timestamps, a few spelled out as phonemes
+  (`tools/tts/en_pins.json`). A wav2vec2 phoneme recognizer (`facebook/wav2vec2-lv-60-espeak-cv-ft`,
+  Apache-2.0) flagged the suspects; it too only listened.
