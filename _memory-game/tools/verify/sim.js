@@ -6,15 +6,18 @@
 //      the HTMLAudio fallback with Web Audio suspended; installability;
 //   3. a second online load reaches the server only for the navigation and sw.js;
 //   4. offline (the server stopped): reload and play a whole game.
+// --quick (the sanity check) plays two pairs where the steps above play a whole game, one pair on the
+// old tree, and skips the HTMLAudio fallback.
 //
-//   node sim.js <out-dir> <old-tree> <new-tree> <port> <game>...
+//   node sim.js <out-dir> <old-tree> <new-tree> <port> [--quick] <game>...
 // Writes <out-dir>/result.json and prints one PASS/FAIL line per game. Exits 1 on any FAIL.
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chromium } = require('playwright');
 
-const [OUT_ARG, OLD, NEW, PORT_ARG, ...GAMES] = process.argv.slice(2);
+const QUICK = process.argv.includes('--quick');
+const [OUT_ARG, OLD, NEW, PORT_ARG, ...GAMES] = process.argv.slice(2).filter((a) => a !== '--quick');
 const OUT = path.resolve(OUT_ARG);
 const ROOT = path.join(OUT, 'root');
 const LINK = path.join(ROOT, 'pages');
@@ -81,9 +84,12 @@ async function state(page) {
 
 async function waitVersion(page, game, tree, timeout = 60000) {
   const { version, assets } = swInfo(tree, game);
+  // The new cache is complete before its worker finishes installing, while the old worker is still the
+  // active one: wait until no worker is installing or waiting too.
   const ok = await until(page, async ([v, n]) => {
     const reg = await navigator.serviceWorker.getRegistration();
     if (!reg || !reg.active || reg.active.state !== 'activated' || !navigator.serviceWorker.controller) return false;
+    if (reg.installing || reg.waiting) return false;
     const keys = await caches.keys();
     return keys.includes(v) && (await (await caches.open(v)).keys()).length === n;
   }, timeout, [version, assets]);
@@ -147,10 +153,21 @@ async function fullGame(page) {
   return { won, deck: P.map((p) => p.id) };
 }
 
+// --quick's game: two pairs, each match let finish so its match clip follows the name.
+async function twoPairs(page) {
+  const P = (await pairs(page)).slice(0, 2);
+  for (const p of P) {
+    await mark(page, `flip ${p.id}`); await tapCard(page, p.idx[0]); await sleep(1500);
+    await mark(page, `match ${p.id}`); await tapCard(page, p.idx[1]); await sleep(3500);
+  }
+  return { deck: P.map((p) => p.id) };
+}
+
 function audit(log) {
   const marks = log.map((e, i) => ({ ...e, i })).filter((e) => e.type === 'mark');
   const starts = log.map((e, i) => ({ ...e, i })).filter((e) => e.type === 'buf-start' || e.type === 'html-play');
   let flips = 0;
+  let follows = 0;
   const bad = [];
   marks.forEach((m, j) => {
     const [what, id] = m.label.split(' ');
@@ -158,12 +175,13 @@ function audit(log) {
     const next = marks[j + 1] ? marks[j + 1].i : Infinity;
     const clips = starts.filter((s) => s.i > m.i && s.i < next).map((s) => s.url);
     if (clips[0] === `audio/name/${id}.mp3`) flips++; else bad.push({ mark: m.label, clips });
+    if (what === 'match' && clips[1] === `audio/match/${id}.mp3`) follows++;
     if (what === 'match' && clips[1] && clips[1] !== `audio/match/${id}.mp3` && clips[1] !== 'audio/ui/win.mp3') {
       bad.push({ mark: m.label, clips, why: 'second clip' });
     }
   });
   return {
-    flips, bad,
+    flips, follows, bad,
     win: starts.filter((s) => s.url === 'audio/ui/win.mp3').length,
     speech: log.filter((e) => e.type === 'speech').length,
     htmlErrors: log.filter((e) => e.type === 'html-error').length,
@@ -174,7 +192,9 @@ function audit(log) {
 
 const own = (caches_, game) => Object.keys(caches_).filter((k) => k.startsWith(`${game}-`)).sort();
 const others = (caches_, game) => Object.fromEntries(Object.entries(caches_).filter(([k]) => !k.startsWith(`${game}-`)));
-const gameOk = (g) => g.won && !g.bad.length && !g.speech && !g.htmlErrors && !g.fetchBad.length && !g.errors.length;
+// A whole game must be won; --quick's two pairs must say every name and at least one match clip.
+const gameOk = (g) => (QUICK ? g.flips > 0 && g.follows > 0 : g.won) && !g.bad.length && !g.speech && !g.htmlErrors
+  && !g.fetchBad.length && !g.errors.length;
 
 (async () => {
   fs.mkdirSync(ROOT, { recursive: true });
@@ -205,7 +225,7 @@ const gameOk = (g) => g.won && !g.bad.length && !g.speech && !g.htmlErrors && !g
     const v = await waitVersion(page, game, 'old');
     await play(page);
     const P = await pairs(page);
-    for (const k of [0, 1]) { await tapCard(page, P[k].idx[0]); await sleep(300); await tapCard(page, P[k].idx[1]); await sleep(1500); }
+    for (const k of QUICK ? [0] : [0, 1]) { await tapCard(page, P[k].idx[0]); await sleep(300); await tapCard(page, P[k].idx[1]); await sleep(1500); }
     R[`${game}:old`] = { installed: v, state: await state(page) };
     say(game, 'old installed', JSON.stringify(v));
   }
@@ -219,7 +239,7 @@ const gameOk = (g) => g.won && !g.bad.length && !g.speech && !g.htmlErrors && !g
     const st = await state(page);
     const reloadedOnPlay = await play(page);
     const markAt = await page.evaluate(() => window.__log.length);
-    const g1 = await fullGame(page);
+    const g1 = QUICK ? await twoPairs(page) : await fullGame(page);
     const log = (await page.evaluate(() => window.__log)).slice(markAt);
     const ranges = await page.evaluate(async (id) => {
       const out = {};
@@ -232,17 +252,20 @@ const gameOk = (g) => g.won && !g.bad.length && !g.speech && !g.htmlErrors && !g
       out.whole = { status: whole.status, length: (await whole.arrayBuffer()).byteLength };
       return out;
     }, g1.deck[0]);
-    const fallbackMark = await page.evaluate(async () => {
-      await window.__ctx.suspend();
-      window.__ctx.resume = () => Promise.reject(new Error('refused'));
-      return window.__log.length;
-    });
-    await page.tap('#replay');
-    await sleep(3500);
-    const P2 = await pairs(page);
-    await mark(page, `flip ${P2[0].id}`); await tapCard(page, P2[0].idx[0]); await sleep(2500);
-    await mark(page, `match ${P2[0].id}`); await tapCard(page, P2[0].idx[1]); await sleep(5000);
-    const fb = (await page.evaluate(() => window.__log)).slice(fallbackMark);
+    let fb = [];
+    if (!QUICK) {
+      const fallbackMark = await page.evaluate(async () => {
+        await window.__ctx.suspend();
+        window.__ctx.resume = () => Promise.reject(new Error('refused'));
+        return window.__log.length;
+      });
+      await page.tap('#replay');
+      await sleep(3500);
+      const P2 = await pairs(page);
+      await mark(page, `flip ${P2[0].id}`); await tapCard(page, P2[0].idx[0]); await sleep(2500);
+      await mark(page, `match ${P2[0].id}`); await tapCard(page, P2[0].idx[1]); await sleep(5000);
+      fb = (await page.evaluate(() => window.__log)).slice(fallbackMark);
+    }
     const cdp = await context.newCDPSession(page);
     const installability = (await cdp.send('Page.getInstallabilityErrors')).installabilityErrors;
     await cdp.detach();
@@ -261,7 +284,7 @@ const gameOk = (g) => g.won && !g.bad.length && !g.speech && !g.htmlErrors && !g
       game: gameOk(r.game),
       ranges: ranges['bytes=0-'].status === 206 && ranges['bytes=0-'].contentRange === `bytes 0-${n - 1}/${n}`
         && ranges['bytes=100-199'].status === 206 && ranges['bytes=100-199'].length === 100,
-      htmlAudioFallback: r.fallback.html > 0 && !r.fallback.htmlErrors && !r.fallback.speech,
+      ...(QUICK ? {} : { htmlAudioFallback: r.fallback.html > 0 && !r.fallback.htmlErrors && !r.fallback.speech }),
       installable: Array.isArray(installability) && installability.length === 0,
     };
     R[`${game}:new`] = r;
@@ -285,8 +308,8 @@ const gameOk = (g) => g.won && !g.bad.length && !g.speech && !g.htmlErrors && !g
     await sleep(1500);
     await play(page);
     const markAt = await page.evaluate(() => window.__log.length);
-    const g1 = await fullGame(page);
-    await page.screenshot({ path: path.join(OUT, `${game}-offline-win.png`) });
+    const g1 = QUICK ? await twoPairs(page) : await fullGame(page);
+    await page.screenshot({ path: path.join(OUT, `${game}-offline-${QUICK ? 'play' : 'win'}.png`) });
     const log = (await page.evaluate(() => window.__log)).slice(markAt);
     const imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
     const st = await state(page);

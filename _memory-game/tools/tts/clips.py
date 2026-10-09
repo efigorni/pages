@@ -2,6 +2,7 @@
 
     _memory-game/tools/tts/tts.sh <game> <work> check
     _memory-game/tools/tts/tts.sh <game> <work> sync
+    python3 -I _memory-game/tools/tts/clips.py format <game-dir>...
 
 check: every player with a shipped role (roster.SHIPPED: starter, bench, backup) has a name and a match clip in <tts>/out with a manifest row that
 passed the STT round-trip, and each clip is in the format spec (MP3, mono, 24 kHz, 64 kbps; -16 LUFS
@@ -11,6 +12,8 @@ gate: a second model's "no" (--second-opinion) is printed as a warning, never a 
 generate.py and --ready already treat it (listen.html shows it in red). Exits 1 on any problem.
 sync: check, then copy the roster's clips into <game>/audio/{name,match}/ and delete the clips of
 players who are no longer in it. The start and win clips are the engine's (_memory-game/audio/ui/).
+format: every clip the named games ship (their audio/**/*.mp3) in the format part of the spec, read
+from the game folders alone: no work directory, no STT. verify.sh sanity runs it.
 """
 from __future__ import annotations
 
@@ -19,6 +22,7 @@ import json
 import shutil
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.dont_write_bytecode = True
@@ -29,6 +33,29 @@ from roster import SHIPPED  # noqa: E402
 
 KINDS = ("name", "match")
 FORMAT = ("mp3", 24000, 1, 64000)
+
+
+def probe(f: Path) -> tuple:
+    """(codec, sample rate, channels, bit rate) as ffprobe reads them; ("unreadable",) when it can't."""
+    run = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_name,sample_rate,channels,bit_rate",
+                          "-of", "json", str(f)], capture_output=True, text=True)
+    try:
+        s = json.loads(run.stdout)["streams"][0]
+        return (s["codec_name"], int(s["sample_rate"]), int(s["channels"]), int(s["bit_rate"]))
+    except (ValueError, KeyError, IndexError):
+        return ("unreadable",)
+
+
+def check_format(games: list[Path]) -> list[str]:
+    files = [(g, f) for g in games for f in sorted((g / "audio").rglob("*.mp3"))]
+    if not files:
+        return [f"no clips under {', '.join(str(g / 'audio') for g in games)}"]
+    with ThreadPoolExecutor(8) as pool:
+        got = list(pool.map(probe, (f for _, f in files)))
+    problems = [f"{g.name}/{f.relative_to(g)}: format {p}, not {FORMAT}" for (g, f), p in zip(files, got) if p != FORMAT]
+    print(f"[format] {len(files)} clips in {len(games)} games: {'OK' if not problems else f'{len(problems)} problems'}",
+          flush=True)
+    return problems
 
 
 def roster_ids(players_path: Path) -> list[str]:
@@ -80,10 +107,7 @@ def check(ids: list[str], tts: Path) -> list[str]:
                 problems.append(f"{kind} {pid}: true peak {q['tp_db']} dBTP")
             if q["lead_ms"] > 30 or q["trail_ms"] > 120:
                 problems.append(f"{kind} {pid}: silence {q['lead_ms']} ms before, {q['trail_ms']} ms after")
-            probe = json.loads(subprocess.run(
-                ["ffprobe", "-v", "error", "-show_entries", "stream=codec_name,sample_rate,channels,bit_rate",
-                 "-of", "json", str(f)], capture_output=True, text=True, check=True).stdout)["streams"][0]
-            got = (probe["codec_name"], int(probe["sample_rate"]), int(probe["channels"]), int(probe["bit_rate"]))
+            got = probe(f)
             if got != FORMAT:
                 problems.append(f"{kind} {pid}: format {got}")
     return problems
@@ -111,11 +135,21 @@ def sync(ids: list[str], tts: Path, game: Path) -> None:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=("check", "sync"))
-    ap.add_argument("--game", required=True)
+    ap.add_argument("cmd", choices=("check", "sync", "format"))
+    ap.add_argument("games", nargs="*", type=Path, help="format: the game folders")
+    ap.add_argument("--game")
     ap.add_argument("--work")
     ap.add_argument("--tts-home")
     a = ap.parse_args()
+    if a.cmd == "format":
+        if not a.games:
+            ap.error("format needs the game folders")
+        problems = check_format(a.games)
+        for p in problems:
+            print(f"[format] {p}", flush=True)
+        return 1 if problems else 0
+    if not a.game:
+        ap.error("--game is required")
     game, work = config.game_dir(a.game), config.work_dir(a.work)
     tts = config.tts_home(work, a.tts_home)
     ids = roster_ids(work / "data/players.json")

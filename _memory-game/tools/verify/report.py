@@ -1,15 +1,17 @@
 """P9's verdict for each game, from what verify.sh local wrote into <out-dir>.
 
     python3 -I report.py <out-dir> <game>... [--worker-only]
+    python3 -I report.py <out-dir> <game>... --sanity [--upgraded a,b --from <ref>]
 
 Per game: the seeded shots at 600x960 and 960x600 (won, no failure, no 404, a clean console), the
 audio playthrough (the right name clip on every flip, the match clip after the name, start and win,
 no speech fallback), the quiz at both sizes (every player once, four distinct cards, a wrong pick that
 turns over to that player's number and name and says his match clip until the right pick cuts it off,
-the clips in order, the reveal moving on by itself), the worker (controls the page, flips online,
-installability [], an offline reload plays the memory game with every photo and the quiz with its
-clips, every quiz player's photo and clips cached, the link preview's tags and og.jpg as served) and the
-state machine. Exits 1 if any game fails.
+the clips in order, the reveal moving on by itself), the worker (controls the page, flips online with
+their match clips, installability [], an offline reload plays the memory game with every photo and the
+quiz with its clips, every quiz player's photo and clips cached, the link preview's tags and og.jpg as
+served) and the state machine. --sanity (verify.sh sanity) reads the worker, the quiz's first question
+at 600x960, and, for the --upgraded games, sim.js --quick's verdict. Exits 1 if any game fails.
 """
 import json
 import sys
@@ -35,13 +37,25 @@ def console_clean(lines):
     return [m for m in lines if not any(n in m for n in NOISE) and not m.startswith(("log:", "info:", "debug:"))]
 
 
+def first(label, found):
+    """A check's label, naming the first thing that broke it and how many there were."""
+    if not found:
+        return label
+    item = found[0] if isinstance(found[0], str) else json.dumps(found[0], ensure_ascii=False)
+    return f"{label} (got {len(found)}: {item[:200]})"
+
+
 def drive_checks(r, mode):
     if r is None:
         return {"ran": False}
     a = r["analysis"]
-    checks = {"ran": not r.get("failure"), "won": bool(r.get("won")), "no 404": not r["http"],
-              "clean console": not console_clean(r["console"]), "no errors": not a["errors"],
-              "no speech fallback": not a["speech"], "all fetches 200": not a["fetchBad"]}
+    checks = {first("ran", [r["failure"].splitlines()[0]] if r.get("failure") else []): not r.get("failure")}
+    if mode != "first question":
+        checks["won"] = bool(r.get("won"))
+    dirty = console_clean(r["console"])
+    checks.update({first("no 404", r["http"]): not r["http"], first("clean console", dirty): not dirty,
+                   first("no errors", a["errors"]): not a["errors"], first("no speech fallback", a["speech"]): not a["speech"],
+                   first("all fetches 200", a["fetchBad"]): not a["fetchBad"]})
     if mode == "shots":
         fan = r.get("fanNames") or []
         checks[f"start-screen name fits ({', '.join(n.get('text') or '?' for n in fan)})"] = len(fan) == 1 and all(
@@ -55,28 +69,43 @@ def drive_checks(r, mode):
         })
     if mode == "quiz":
         checks.update(quiz_checks(r))
+    if mode == "first question":
+        checks.update(quiz_checks(r, whole=False))
     return checks
 
 
-def quiz_checks(r):
+def quiz_checks(r, whole=True):
+    """The whole quiz, or (whole=False) its first question: asked with his match clip, a wrong pick, the right one."""
     q, qs = r.get("quiz") or {}, r.get("questions") or []
-    first = qs[0] if qs else {}
-    wrong = first.get("wrong") or {}
-    # The first three reveals move on by themselves, but the last question ends in the win screen.
-    advancing = qs[:min(3, len(qs) - 1)]
-    times = ", ".join(f"{x.get('advanceMs')} ms" for x in advancing)
-    return {
-        f"every player asked once ({len(qs)}/{len(r.get('pool') or [])})": bool(q.get("everyPlayerOnce")),
+    one = qs[0] if qs else {}
+    wrong = one.get("wrong") or {}
+    checks = {}
+    if whole:
+        checks[f"every player asked once ({len(qs)}/{len(r.get('pool') or [])})"] = bool(q.get("everyPlayerOnce"))
+    else:
+        checks[f"asks {one.get('id')} with his match clip"] = bool(one.get("asked")) and bool(one.get("heard"))
+    checks.update({
         "4 distinct cards, the answer among them": bool(q.get("fourDistinct")),
         f"wrong pick turns to {wrong.get('id')}'s number and name, says his match clip, stays on the question":
             wrong.get("state") == "out" and wrong.get("turned") is True and wrong.get("shows") is True
-            and wrong.get("phase") == "ask" and wrong.get("answer") == first.get("id") and bool(q.get("wrongTeaches")),
+            and wrong.get("phase") == "ask" and wrong.get("answer") == one.get("id") and bool(q.get("wrongTeaches")),
         "the right pick cuts off the wrong player's clip": bool(q.get("wrongCut")),
+    })
+    if not whole:
+        checks["the right pick says his name and reveals"] = bool(one.get("named")) and one.get("revealed") == "reveal"
+        checks[first("clips: start, his match clip, the wrong one's, his name",
+                      [] if q.get("sequenceOk") else [" > ".join(q.get("sequence") or ["none"])])] = bool(q.get("sequenceOk"))
+        return checks
+    # The first three reveals move on by themselves, but the last question ends in the win screen.
+    advancing = qs[:min(3, len(qs) - 1)]
+    times = ", ".join(f"{x.get('advanceMs')} ms" for x in advancing)
+    checks.update({
         "clips: start, the asked player's match per question, the wrong one's, the name on success, win":
             bool(q.get("sequenceOk")),
         f"the reveal moves on by itself ({times} after the pick)":
             bool(advancing) and all(x.get("auto") for x in advancing),
-    }
+    })
+    return checks
 
 
 def og_checks(r):
@@ -99,28 +128,61 @@ def og_checks(r):
 def sw_checks(r):
     if r is None:
         return {"ran": False}
+    console = console_clean(r["console"])
+    # A page error first: it is usually what broke the rest.
+    dirty = [m for m in console if m.startswith("pageerror")] + r["http"] + [m for m in console if not m.startswith("pageerror")]
+    if r.get("failure"):
+        return {"worker controls the page": bool(r.get("controlled")), first("ran to the end", [r["failure"]]): False,
+                first("no 404, clean console", dirty): not dirty}
     on, off = r["online"]["audio"], r["offline"]["audio"]
     imgs = r["offline"]["imgs"]
+    cache = r["offline"].get("quizCache") or {}
     return {
         "worker controls the page": bool(r["controlled"]),
-        "installability []": r["installability"] == [] and not r["manifestErrors"],
-        f"online flips ({on['rightNameClip']}/{on['of']})": on["rightNameClip"] == on["of"] > 0 and not on["errors"] and not on["fetchBad"],
+        first("installability []", (r["installability"] or []) + (r["manifestErrors"] or [])):
+            r["installability"] == [] and not r["manifestErrors"],
+        first(f"online flips say the name ({on['rightNameClip']}/{on['of']})", on["bad"]):
+            on["rightNameClip"] == on["of"] > 0 and not on["errors"] and not on["fetchBad"],
+        f"online matches say the match clip ({on['matchFollows']}/{on['matches']})": on["matchFollows"] > 0,
         "offline reload controlled": bool(r["offline"]["state"]["controlled"]),
         f"offline photos ({imgs[1]}/{imgs[0]})": imgs[0] > 0 and imgs[0] == imgs[1],
-        f"offline flips ({off['rightNameClip']}/{off['of']})": off["rightNameClip"] == off["of"] > 0 and not off["errors"] and not off["fetchBad"],
+        first(f"offline flips say the name ({off['rightNameClip']}/{off['of']})", off["bad"]):
+            off["rightNameClip"] == off["of"] > 0 and not off["errors"] and not off["fetchBad"],
         f"offline quiz: start + match, {(r['offline'].get('quiz') or {}).get('imgs')} photos": bool((r["offline"].get("quiz") or {}).get("ok")),
-        f"cached: every quiz player's photo and clips ({(r['offline'].get('quizCache') or {}).get('checked')})":
-            (r["offline"].get("quizCache") or {}).get("missing") == [],
+        first(f"cached: every quiz player's photo and clips ({cache.get('checked')})", cache.get("missing") or []):
+            cache.get("missing") == [],
         **og_checks(r),
-        "no 404, clean console": not r["http"] and not console_clean(r["console"]),
+        first("no 404, clean console", dirty): not dirty,
     }
 
 
+def upgrade_checks(r, game, ref):
+    """sim.js's verdict for one game: its old version installed from <ref>, this tree's taking over online, then offline."""
+    if r is None:
+        return {"ran": False}
+    v = r.get("versions") or {}
+    old, new = ((v.get(t) or {}).get(game, {}).get("version") for t in ("old", "new"))
+    verdict = r.get(f"{game}:verdict") or "no verdict"
+    return {f"{ref} {old} -> {new}: {verdict}": verdict == "PASS"}
+
+
+def option(name):
+    return sys.argv[sys.argv.index(name) + 1] if name in sys.argv else ""
+
+
 worker_only = "--worker-only" in sys.argv
+sanity = "--sanity" in sys.argv
+upgraded, ref = [g for g in option("--upgraded").split(",") if g], option("--from")
+values = {option("--upgraded"), ref}
 failed = []
-for game in [a for a in sys.argv[2:] if not a.startswith("--")]:
+for game in [a for a in sys.argv[2:] if not a.startswith("--") and a not in values]:
     sections = {"worker": sw_checks(load(OUT / f"sw-{game}.json"))}
-    if not worker_only:
+    if sanity:
+        sections["quiz 600x960, first question"] = drive_checks(load(OUT / game / "tab-portrait-quiz/result.json"),
+                                                               "first question")
+        if game in upgraded:
+            sections["upgrade"] = upgrade_checks(load(OUT / "upgrade" / game / "result.json"), game, ref)
+    elif not worker_only:
         sections["shots 600x960"] = drive_checks(load(OUT / game / "tab-portrait-shots/result.json"), "shots")
         sections["shots 960x600"] = drive_checks(load(OUT / game / "tab-landscape-shots/result.json"), "shots")
         sections["audio 600x960"] = drive_checks(load(OUT / game / "tab-portrait-audio/result.json"), "audio")
@@ -132,7 +194,8 @@ for game in [a for a in sys.argv[2:] if not a.startswith("--")]:
     bad = [f"{s}: {c}" for s, checks in sections.items() for c, ok in checks.items() if not ok]
     for s, checks in sections.items():
         print(f"{game} {s}: {'PASS' if all(checks.values()) else 'FAIL'} ({'; '.join(checks)})")
-    print(f"P9 {'worker' if worker_only else 'local'} {game}: {'PASS' if not bad else 'FAIL: ' + ' | '.join(bad)}", flush=True)
+    kind = "sanity" if sanity else "worker" if worker_only else "local"
+    print(f"{'' if sanity else 'P9 '}{kind} {game}: {'PASS' if not bad else 'FAIL: ' + ' | '.join(bad)}", flush=True)
     if bad:
         failed.append(game)
 sys.exit(1 if failed else 0)
