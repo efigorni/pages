@@ -8,8 +8,8 @@
 #       online, offline (memory and quiz) and installable; the state machine. Serves the working
 #       tree, or --tree <dir>.
 #   verify.sh compare <ref-a> <ref-b> --out <dir> [<game>...]
-#       The same seeded screenshots and playthrough on two commits: pixels, DOM, the computed HUD
-#       styles and the clip sequence must all match.
+#       The same seeded screenshots, playthrough and quiz on two commits: pixels, DOM, the computed HUD
+#       styles, the clip sequences and the quiz's questions must all match.
 #   verify.sh upgrade <old-ref> <new-ref> --out <dir> [<game>...]
 #       The GitHub Pages upgrade under /pages/ (sim.js): the old version installed, the new one
 #       taking over online, then offline.
@@ -79,10 +79,12 @@ serve() {
   die "serve.py did not start on $PORT"
 }
 
-# drive <out-dir> <base-url> <games>: the seeded screenshots at both tablet sizes, then the audio game.
+# drive <out-dir> <base-url> <games>: the seeded screenshots at both tablet sizes, the audio game, then
+# the quiz at both sizes.
 drive() {
   node "$HERE/drive.js" "$1" "$2" --games "$3" --vps tab-portrait,tab-landscape --modes shots --reduced off
   node "$HERE/drive.js" "$1" "$2" --games "$3" --vps tab-portrait --modes audio
+  node "$HERE/drive.js" "$1" "$2" --games "$3" --vps tab-portrait,tab-landscape --modes quiz
 }
 
 GAMES=()
@@ -110,7 +112,6 @@ case "$cmd" in
     serve "$root"
     base="http://127.0.0.1:$PORT/"
     drive "$dir" "$base" "$(csv "${GAMES[@]}")"
-    node "$HERE/drive.js" "$dir" "$base" --games "$(csv "${GAMES[@]}")" --vps tab-portrait,tab-landscape --modes quiz
     pids=()
     for g in "${GAMES[@]}"; do
       node "$HERE/sw_check.js" "$base" "$g" "$dir" >"$dir/sw-$g.txt" 2>&1 &

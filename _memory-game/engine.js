@@ -3,12 +3,12 @@
 (() => {
   'use strict';
 
-  const STARTERS = DATA.starters;
-  const BENCH = DATA.bench;
+  // The quiz asks every player once, in roster order: the starters, the bench and the backups (the
+  // pool's other goalkeepers, whom the memory game never deals).
+  const QUIZ = DATA.players;
+  const STARTERS = QUIZ.filter((p) => p.role === 'starter');
+  const BENCH = QUIZ.filter((p) => p.role === 'bench');
   const ALL = STARTERS.concat(BENCH);
-  // The quiz asks every pool player once: the starters, the bench and the backups (the pool's other
-  // goalkeepers, whom the memory game never deals).
-  const QUIZ = ALL.concat(DATA.backup || []);
   const CHOICES = 4;
   const ADVANCE_MS = 1500;
   const TAP_ADVANCE_MS = 700;
@@ -440,16 +440,15 @@
 
   /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
+  function photoImg(p) {
+    return Object.assign(el('img'), { src: p.img, alt: '', decoding: 'async', draggable: false });
+  }
+
   // Every face starts with the photo; a match flight starts from its `.photo img`.
   function photoFront(p) {
     const front = el('span', 'face front');
     const photo = el('span', 'photo');
-    const img = el('img');
-    img.src = p.img;
-    img.alt = '';
-    img.decoding = 'async';
-    img.draggable = false;
-    photo.appendChild(img);
+    photo.appendChild(photoImg(p));
     front.appendChild(photo);
     return front;
   }
@@ -494,12 +493,7 @@
   // A quiz card asks with the photo alone: no name, no number.
   function askFace(p) {
     const side = el('span', 'face ask');
-    const img = el('img');
-    img.src = p.img;
-    img.alt = '';
-    img.decoding = 'async';
-    img.draggable = false;
-    side.appendChild(img);
+    side.appendChild(photoImg(p));
     return side;
   }
 
@@ -507,17 +501,15 @@
 
   const game = {
     phase: 'start',
-    mode: 'memory',
     round: 0,
     cards: [],
-    pairs: PAIRS,
+    total: 0, // finds that win: the memory game's pairs, or the quiz's players
     up: [],
     found: 0,
     flipBack: 0,
     winFallback: 0,
     winEarliest: 0,
     busyUntil: 0,
-    geo: null,
     flights: new Set(),
   };
 
@@ -532,24 +524,27 @@
     card.el.setAttribute('aria-label', state === 'down' ? 'קלף' : card.p.name_he);
   }
 
-  function layout() {
-    const rect = board.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    const landscape = landscapeQuery.matches;
-    const cols = landscape ? 6 : 5;
-    const rows = landscape ? 5 : 6;
-    const cs = getComputedStyle(board);
+  // A grid's cell for the [cols, rows] shape that shows the faces biggest, from the grid's own box
+  // and gaps; null while the grid isn't shown.
+  function cell(grid, shapes) {
+    const rect = grid.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    const cs = getComputedStyle(grid);
     const gx = parseFloat(cs.columnGap) || 0;
     const gy = parseFloat(cs.rowGap) || 0;
-    const cw = (rect.width - gx * (cols - 1)) / cols;
-    const ch = (rect.height - gy * (rows - 1)) / rows;
-    game.geo = applyFace(board, cw, ch, faceMode(cw, ch));
-    game.cards.forEach((card) => face.fit(card.el, card.p, game.geo));
+    return shapes.map(([cols, rows]) => ({
+      cols, cw: (rect.width - gx * (cols - 1)) / cols, ch: (rect.height - gy * (rows - 1)) / rows,
+    })).reduce((a, b) => (Math.min(b.cw, b.ch) > Math.min(a.cw, a.ch) ? b : a));
   }
 
-  function renderPips() {
-    pipsEl.textContent = '';
-    for (let i = 0; i < game.pairs; i++) pipsEl.appendChild(el('span', 'pip'));
+  function fitCards(grid, cards, { cw, ch }) {
+    const geo = applyFace(grid, cw, ch, faceMode(cw, ch));
+    cards.forEach((card) => face.fit(card.el, card.p, geo));
+  }
+
+  function layout() {
+    const c = cell(board, [landscapeQuery.matches ? [6, 5] : [5, 6]]);
+    if (c) fitCards(board, game.cards, c);
   }
 
   function warmImages(players) {
@@ -561,8 +556,8 @@
     });
   }
 
-  // What every new game, of either mode, starts from.
-  function reset(mode) {
+  // What every new game, of either mode, starts from: `total` finds to win, one pip each.
+  function reset(mode, total) {
     clearTimeout(game.flipBack);
     clearTimeout(game.winFallback);
     clearTimeout(quiz.next);
@@ -570,30 +565,28 @@
     game.flights.forEach((flight) => flight.cancel());
     game.flights.clear();
     confetti.stop();
-    hide('win');
-    hide('confirm');
-    game.mode = mode;
+    OVERLAYS.forEach(hide);
     app.dataset.mode = mode;
+    game.total = total;
+    game.found = 0;
+    app.dataset.found = '0';
+    pipsEl.textContent = '';
+    for (let i = 0; i < total; i++) pipsEl.appendChild(el('span', 'pip'));
   }
 
   function newGame() {
-    reset('memory');
-
     const benchPicks = shuffled(BENCH).slice(0, Math.max(0, PAIRS - STARTERS.length));
     const picks = STARTERS.concat(benchPicks);
     const deck = shuffled(picks.concat(picks));
 
-    game.pairs = picks.length;
-    game.found = 0;
+    reset('memory', picks.length);
     game.up = [];
-    app.dataset.found = '0';
     board.textContent = '';
     game.cards = deck.map((p, i) => {
       const card = { p, el: buildCard(p, i), state: 'down' };
       board.appendChild(card.el);
       return card;
     });
-    renderPips();
     layout();
     warmImages(picks);
     sound.prefetch(picks.flatMap((p) => [clip.name(p).url, clip.match(p).url]).concat(clip.ui('win').url));
@@ -618,6 +611,25 @@
     ], { duration: FLIP_MS, easing: 'ease-out' });
   }
 
+  // A card shows its face: memory's flip and the quiz's picks. A face that turns up lifts; a wrong pick
+  // ('out') shakes instead (base.css), so it never moves like a right one.
+  function turn(card, state, sfx = 'flip') {
+    setCard(card, state);
+    if (state !== 'out') lift(card);
+    sound.sfx(sfx);
+  }
+
+  // A find of either mode: the count, then its pip and celebration once the flip lands; true for the
+  // last one.
+  function scored(cards) {
+    game.found += 1;
+    app.dataset.found = String(game.found);
+    const pipIndex = game.found - 1;
+    const round = game.round;
+    setTimeout(() => { if (game.round === round) celebrate(cards, pipIndex); }, FLIP_MS * 0.85);
+    return game.found === game.total;
+  }
+
   function tap(card) {
     if (game.phase !== 'idle' && game.phase !== 'one' && game.phase !== 'two') return;
     if (card.state !== 'down' || performance.now() < game.busyUntil) return;
@@ -629,9 +641,7 @@
       game.up = [];
     }
 
-    setCard(card, 'up');
-    lift(card);
-    sound.sfx('flip');
+    turn(card, 'up');
     game.up.push(card);
 
     if (game.up.length === 1) {
@@ -655,25 +665,17 @@
     game.up = [];
     setCard(a, 'matched');
     setCard(b, 'matched');
-    game.found += 1;
-    app.dataset.found = String(game.found);
-    const pipIndex = game.found - 1;
-    const round = game.round;
-    setTimeout(() => { if (game.round === round) celebrate([a, b], pipIndex); }, FLIP_MS * 0.85);
-
     const lines = [clip.name(card.p), clip.match(card.p)];
-    if (game.found === game.pairs) {
-      finishing(lines, round);
-    } else {
-      setPhase('idle');
-    }
+    if (scored([a, b])) finishing(lines);
+    else setPhase('idle');
     sound.say(lines);
   }
 
   // The last find of either mode: the win clip follows `lines`, and the win screen comes when it
   // starts (at least 1.5 s on), or after a fallback when the voice never gets there.
-  function finishing(lines, round) {
+  function finishing(lines) {
     setPhase('finishing');
+    const round = game.round;
     game.winEarliest = performance.now() + 1500;
     const finish = () => { if (game.round === round) showWin(); };
     const win = clip.ui('win', WIN_LINE);
@@ -764,37 +766,27 @@
 
   /* ---------- quiz: who is this? ---------- */
 
-  const quiz = { order: [], at: 0, cards: [], answer: null, geo: null, next: 0, shownAt: 0 };
+  const quiz = { order: [], at: 0, cards: [], answer: null, next: 0, shownAt: 0 };
 
+  // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
   function quizLayout() {
-    const rect = picksEl.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    const cs = getComputedStyle(picksEl);
-    const gx = parseFloat(cs.columnGap) || 0;
-    const gy = parseFloat(cs.rowGap) || 0;
-    // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
-    const fit = [2, 4].map((cols) => {
-      const rows = CHOICES / cols;
-      const cw = (rect.width - gx * (cols - 1)) / cols;
-      const ch = (rect.height - gy * (rows - 1)) / rows;
-      return { cols, cw, ch };
-    }).reduce((a, b) => (Math.min(b.cw, b.ch) > Math.min(a.cw, a.ch) ? b : a));
-    picksEl.style.setProperty('--cols', String(fit.cols));
-    quiz.geo = applyFace(picksEl, fit.cw, fit.ch, faceMode(fit.cw, fit.ch));
-    quiz.cards.forEach((card) => face.fit(card.el, card.p, quiz.geo));
+    const c = cell(picksEl, [[2, 2], [4, 1]]);
+    if (!c) return;
+    picksEl.style.setProperty('--cols', String(c.cols));
+    fitCards(picksEl, quiz.cards, c);
   }
 
   function startQuiz() {
-    reset('quiz');
+    reset('quiz', QUIZ.length);
     quiz.order = shuffled(QUIZ);
     quiz.at = 0;
-    game.pairs = QUIZ.length;
-    game.found = 0;
-    app.dataset.found = '0';
-    renderPips();
     warmImages(QUIZ);
-    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('win').url));
     deal();
+    // The first question's clips first: its match line, the other three cards' (a wrong pick says one)
+    // and its name; then everyone's, in question order.
+    const first = [quiz.answer].concat(quiz.cards.filter((card) => card !== quiz.answer)).map((card) => card.p);
+    sound.prefetch(first.map((p) => clip.match(p).url).concat(clip.name(first[0]).url,
+      quiz.order.flatMap((p) => [clip.match(p).url, clip.name(p).url]), clip.ui('win').url));
     keepAwake();
   }
 
@@ -835,42 +827,35 @@
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
     if (card !== quiz.answer) {
-      // Not him, and she learns who it is: the soft sound, then the card turns over (greyed and
-      // marked, out of play) and says his number and name. Her next pick or #say cuts that off.
-      setCard(card, 'out');
-      card.el.classList.add('nope');
-      sound.sfx('nope');
+      // Not him, and she learns who it is: the soft sound and a shake, then the card turns over (greyed
+      // and marked, out of play) and says his number and name. Her next pick or #say cuts that off.
+      turn(card, 'out', 'nope');
       sound.say([{ wait: NOPE_SAY_MS }, clip.match(card.p)]);
       return;
     }
-    card.state = 'up';
-    card.el.dataset.state = 'up';
-    card.el.setAttribute('aria-label', card.p.name_he);
+    turn(card, 'up');
     picksEl.classList.add('solved');
-    lift(card);
-    sound.sfx('flip');
-    game.found += 1;
-    app.dataset.found = String(game.found);
     quiz.shownAt = performance.now();
-    const pipIndex = game.found - 1;
-    const round = game.round;
-    const at = quiz.at;
-    setTimeout(() => { if (game.round === round) celebrate([card], pipIndex); }, FLIP_MS * 0.85);
     const lines = [clip.name(card.p)];
-    if (game.found === game.pairs) {
-      finishing(lines, round);
+    if (scored([card])) {
+      finishing(lines);
       sound.say(lines);
       return;
     }
     setPhase('reveal');
     // On after the name clip, or after a fallback when the voice never ends.
-    const advance = (ms) => {
-      if (game.round !== round || quiz.at !== at || game.phase !== 'reveal') return;
-      clearTimeout(quiz.next);
-      quiz.next = setTimeout(nextQuestion, ms);
-    };
+    const round = game.round;
+    const at = quiz.at;
     advance(8000);
-    sound.say(lines).then(() => advance(ADVANCE_MS));
+    sound.say(lines).then(() => { if (game.round === round && quiz.at === at) advance(ADVANCE_MS); });
+  }
+
+  // The reveal moves on by itself `ms` from now, but not under the ↻ confirm or on a hidden page: closing
+  // the one or coming back to the other arms it again.
+  function advance(ms) {
+    clearTimeout(quiz.next);
+    if (game.phase !== 'reveal' || isShown('confirm') || document.visibilityState !== 'visible') return;
+    quiz.next = setTimeout(nextQuestion, ms);
   }
 
   function nextQuestion() {
@@ -898,8 +883,12 @@
 
   const OVERLAYS = ['start', 'confirm', 'win'];
 
+  function isShown(id) {
+    return $(id).classList.contains('show');
+  }
+
   function syncInert() {
-    app.inert = OVERLAYS.some((id) => $(id).classList.contains('show'));
+    app.inert = OVERLAYS.some(isShown);
   }
 
   function show(id) {
@@ -1019,8 +1008,7 @@
   let wakePending = false;
 
   function inGame() {
-    return game.phase === 'idle' || game.phase === 'one' || game.phase === 'two' || game.phase === 'finishing'
-      || game.phase === 'ask' || game.phase === 'reveal';
+    return game.phase !== 'start' && game.phase !== 'won';
   }
 
   function letSleep() {
@@ -1059,35 +1047,23 @@
 
   /* ---------- wiring ---------- */
 
-  function cardFromEvent(event) {
-    const node = event.target.closest && event.target.closest('.card');
-    return node && node.parentElement === board ? game.cards[Number(node.dataset.index)] : null;
+  // A grid's cards answer the first touch (pointerdown) and a keyboard press (a click with no pointer).
+  function onCard(grid, cards, fn) {
+    const handle = (event) => {
+      const node = event.target.closest && event.target.closest('.card');
+      fn(node && node.parentElement === grid ? cards()[Number(node.dataset.index)] : null);
+    };
+    grid.addEventListener('pointerdown', (event) => { if (event.button <= 0) handle(event); });
+    grid.addEventListener('click', (event) => { if (event.detail === 0) handle(event); });
   }
 
-  board.addEventListener('pointerdown', (event) => {
-    if (event.button > 0) return;
-    const card = cardFromEvent(event);
-    if (card) tap(card);
-  });
-
-  board.addEventListener('click', (event) => {
-    if (event.detail !== 0) return;
-    const card = cardFromEvent(event);
-    if (card) tap(card);
-  });
-
+  onCard(board, () => game.cards, (card) => { if (card) tap(card); });
   // A tap on a quiz card picks it; once the face shows, a tap anywhere on the cards moves on.
-  function quizTap(event) {
+  onCard(picksEl, () => quiz.cards, (card) => {
     if (game.phase === 'reveal') {
       if (performance.now() - quiz.shownAt >= TAP_ADVANCE_MS) nextQuestion();
-      return;
-    }
-    const node = event.target.closest && event.target.closest('.card');
-    if (node && node.parentElement === picksEl) pick(quiz.cards[Number(node.dataset.index)]);
-  }
-
-  picksEl.addEventListener('pointerdown', (event) => { if (event.button <= 0) quizTap(event); });
-  picksEl.addEventListener('click', (event) => { if (event.detail === 0) quizTap(event); });
+    } else if (card) pick(card);
+  });
 
   $('say').addEventListener('click', () => {
     if (game.phase !== 'ask') return;
@@ -1122,15 +1098,21 @@
     }));
   }
 
-  wireModes(['play', 'play-quiz'], () => game.phase === 'start', () => { goFullscreen(); hide('start'); });
+  wireModes(['play', 'play-quiz'], () => game.phase === 'start', goFullscreen);
   wireModes(['replay', 'replay-quiz'], () => game.phase === 'won');
-  wireModes(['yes', 'yes-quiz'], () => true, () => hide('confirm'));
+  wireModes(['yes', 'yes-quiz'], () => true);
 
+  // A quiz reveal waits under the confirm: "no" picks it up again, a mode button starts afresh.
   $('again').addEventListener('click', () => {
-    if (inGame() && game.phase !== 'finishing') show('confirm');
+    if (!inGame() || game.phase === 'finishing') return;
+    clearTimeout(quiz.next);
+    show('confirm');
   });
 
-  $('no').addEventListener('click', () => hide('confirm'));
+  $('no').addEventListener('click', () => {
+    hide('confirm');
+    advance(ADVANCE_MS);
+  });
 
   const muteBtn = $('mute');
   function syncMute() { muteBtn.setAttribute('aria-pressed', sound.muted ? 'true' : 'false'); }
@@ -1148,11 +1130,13 @@
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') {
       letSleep();
+      clearTimeout(quiz.next); // a reveal waits for her: the halted name clip must not move it on
       sound.halt();
       hurryWin();
     } else {
       sound.wake();
       if (inGame()) keepAwake();
+      advance(ADVANCE_MS);
     }
   });
   window.addEventListener('pageshow', () => sound.wake());
@@ -1161,13 +1145,10 @@
     document.addEventListener(type, () => sound.wake(), { capture: true, passive: true });
   });
 
-  if (window.ResizeObserver) {
-    new ResizeObserver(() => layout()).observe(board);
-    new ResizeObserver(() => quizLayout()).observe(picksEl);
-  } else {
-    window.addEventListener('resize', layout);
-    window.addEventListener('resize', quizLayout);
-  }
+  // Only the shown grid has a box; the other's layout returns at once.
+  const relayout = () => { layout(); quizLayout(); };
+  if (window.ResizeObserver) [board, picksEl].forEach((grid) => new ResizeObserver(relayout).observe(grid));
+  else window.addEventListener('resize', relayout);
   window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
 
   sound.prefetch([clip.ui('start').url]);
@@ -1179,8 +1160,7 @@
   fontsReady.catch(() => {}).then(() => {
     face.prepare(QUIZ);
     buildFan();
-    layout();
-    quizLayout();
+    relayout();
   });
 
   /* ---------- home-screen install (parent-facing, start screen only) ---------- */

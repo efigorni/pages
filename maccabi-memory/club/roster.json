@@ -1,6 +1,6 @@
 {
   "season": "2026/27",
-  "starters": [
+  "players": [
     {"id": "ofek-melika", "name_he": "אופק מליקה", "number": 1, "role": "starter", "img": "img/ofek-melika.webp"},
     {"id": "raz-shlomo", "name_he": "רז שלמה", "number": 13, "role": "starter", "img": "img/raz-shlomo.webp"},
     {"id": "dor-peretz", "name_he": "דור פרץ", "number": 42, "role": "starter", "img": "img/dor-peretz.webp"},
@@ -11,9 +11,7 @@
     {"id": "ido-shahar", "name_he": "עידו שחר", "number": 36, "role": "starter", "img": "img/ido-shahar.webp"},
     {"id": "ester-sokler", "name_he": "אסטר סוקלר", "number": 9, "role": "starter", "img": "img/ester-sokler.webp"},
     {"id": "noam-ben-harush", "name_he": "נועם בן הרוש", "number": 22, "role": "starter", "img": "img/noam-ben-harush.webp"},
-    {"id": "tyrese-asante", "name_he": "טייריס אסנטה", "number": 6, "role": "starter", "img": "img/tyrese-asante.webp"}
-  ],
-  "bench": [
+    {"id": "tyrese-asante", "name_he": "טייריס אסנטה", "number": 6, "role": "starter", "img": "img/tyrese-asante.webp"},
     {"id": "itay-ben-hemo", "name_he": "איתי בן חמו", "number": 41, "role": "bench", "img": "img/itay-ben-hemo.webp"},
     {"id": "itamar-noy", "name_he": "איתמר נוי", "number": 30, "role": "bench", "img": "img/itamar-noy.webp"},
     {"id": "gabi-kanichowsky", "name_he": "גבי קניקובסקי", "number": 16, "role": "bench", "img": "img/gabi-kanichowsky.webp"},
@@ -24,9 +22,7 @@
     {"id": "dan-glazer", "name_he": "דן גלזר", "number": 18, "role": "bench", "img": "img/dan-glazer.webp"},
     {"id": "hisham-layous", "name_he": "הישאם לאיוס", "number": 33, "role": "bench", "img": "img/hisham-layous.webp"},
     {"id": "ilay-ben-simon", "name_he": "עילאי בן סימון", "number": 60, "role": "bench", "img": "img/ilay-ben-simon.webp"},
-    {"id": "kristijan-belic", "name_he": "כריסטיאן בליץ'", "number": 17, "role": "bench", "img": "img/kristijan-belic.webp"}
-  ],
-  "backup": [
+    {"id": "kristijan-belic", "name_he": "כריסטיאן בליץ'", "number": 17, "role": "bench", "img": "img/kristijan-belic.webp"},
     {"id": "roi-mishpati", "name_he": "רועי משפתי", "number": 90, "role": "backup", "img": "img/roi-mishpati.webp"}
   ]
 }

@@ -37,8 +37,8 @@ uv run --with pillow python -I -u _memory-game/tools/scrape/contact_sheet.py --g
   who came on). Nothing on the site is a season counter: the popup's bio quotes last
   season. Pool = the top 23 by appearances; main 11 = the goalkeeper with the most
   appearances plus the 10 outfield players with the most (tiebreaks: starts, minutes,
-  lower number); bench = the other outfield players in the pool; backup goalkeepers are
-  excluded.
+  lower number); bench = the other outfield players in the pool; the pool's other
+  goalkeepers are its backups (role `backup`: asked in the quiz, never dealt).
 - **A new season** changes three things at the top of `scrape_hapoel.py`: `SEASON`; its
   `SEASON_DATA` row (each official game's stage name and the club's `htafc_match` id by
   date, from `/wp-json/wp/v2/htafc_match`, and Transfermarkt's report id by date, from the

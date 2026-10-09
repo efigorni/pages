@@ -8,7 +8,7 @@ are the goalkeeper with the most appearances and the 10 outfield players of the 
 the bench is the pool's other outfield players. The pool's other goalkeepers are its backups (role
 "backup"): never dealt in the memory game, asked in the quiz. Each scraper counts `stats` from its own
 site and words its own `excluded_reason`. SHIPPED is every role a game ships (the image, voice, page
-and refresh tools all read it).
+and refresh tools all read it); rule_text words the rule for players.json.
 """
 
 from __future__ import annotations
@@ -18,9 +18,15 @@ from typing import NamedTuple
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 DEALT = ("starter", "bench")
-# Every role a game ships with a photo and clips: the dealt ones and the backups, asked in the quiz only.
-# The image, voice, page and refresh tools all take exactly these, so none of them drops a backup.
 SHIPPED = DEALT + ("backup",)
+
+
+def rule_text(pool_size: int, source: str) -> str:
+    """The rule in words, for players.json's `pool_rule`; `source` is where the scraper finds the players."""
+    return (f"pool = top {pool_size} by appearances (>= 1) across all players on {source}, ranked by appearances, "
+            "then starts, then minutes, then lower jersey number (pool_rank); main 11 = the goalkeeper with the most "
+            "appearances + the 10 outfield players with the most; bench = the other outfield players in the pool; "
+            "the pool's other goalkeepers are its backups (role backup: asked in the quiz, never dealt).")
 
 
 def rank_key(p: dict) -> tuple:

@@ -23,6 +23,7 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO / "_memory-game/tools/images"))  # framing.py
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # roster.py, beside this file (-I leaves it off the path)
 
 from PIL import Image, ImageDraw, ImageFont  # noqa: E402
 

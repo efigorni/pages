@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageStat
 
 sys.dont_write_bytecode = True
 GAME = Path(__file__).resolve().parents[2]
@@ -77,7 +77,9 @@ def main():
     tile = render(args.size, args.seed)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     tile.save(args.out, "WEBP", quality=args.quality, method=6)
-    print(f"{args.out}: {args.size}x{args.size}, {args.out.stat().st_size / 1024:.1f} KB", flush=True)
+    # What a card shows before the tile loads: club/style.css's --paint-ground and the icon SVGs' ground.
+    mean = "#" + "".join(f"{round(c):02x}" for c in ImageStat.Stat(Image.open(args.out).convert("RGB")).mean)
+    print(f"{args.out}: {args.size}x{args.size}, {args.out.stat().st_size / 1024:.1f} KB, mean colour {mean}", flush=True)
 
 
 if __name__ == "__main__":

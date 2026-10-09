@@ -17,13 +17,14 @@ About 100 polite requests, cached in `<work>/data/html/`:
 ```sh
 uv run --with requests --with beautifulsoup4 --with pillow python -I -u \
     maccabi-memory/tools/scrape/scrape_maccabi.py --out <work>/data --refresh
-uv run --with pillow python -I -u maccabi-memory/tools/scrape/contact_sheet.py --data <work>/data
+uv run --with pillow python -I -u _memory-game/tools/scrape/contact_sheet.py --game maccabi-memory --data <work>/data
 ```
 
 - **Selection** (decisions D1/R3/R4) happens here. Eligible = on the season stats list
   and with a player page and photo. Starters = the goalkeeper with the most starts plus
   the 10 outfield players with the most starts (tiebreak: minutes, then appearances).
-  Bench = every other eligible outfield player. Other goalkeepers are excluded.
+  Bench = every other eligible outfield player. The other goalkeepers with an appearance are
+  its backups (role `backup`: asked in the quiz, never dealt in the memory game).
 - Check `players.json` before trusting a run: the stats page has no season parameter, so
   confirm the season label and goal totals agree with the player pages. Expect 11 starters
   and at least 4 bench players. Look at `contact-sheet.png`.

@@ -57,10 +57,7 @@ pronunciations.json, one per club (<game>/tools/tts/), the only schema:
                                 differently from the card (the clip's text stays speak_he)
         "ipa_match": "...",     optional: the same pronunciation nudged for the match clip only
         "speed": 0.95,          optional: this player's pace (BlueTTS divides the duration by it)
-        "listen": "..."         optional: a judgement call worth a listen; listen.html highlights it
-        "stt2_accepted": [...]}}} optional: what the second model (--second-opinion) heard in this player's clips
-                                and a person accepted, the primary STT having passed; `check` reports each as a
-                                note, not a problem, while the clip's transcript is still exactly that
+        "listen": "..."}}}      optional: a judgement call worth a listen; listen.html highlights it
 A player missing from the file is read by RenikudPlus G2P from speak_he and flagged in the QA report.
 """
 from __future__ import annotations
@@ -178,7 +175,7 @@ def build_items(players: list[dict], pron: dict, only: set[str] | None, ui: bool
         items.append({**common, "kind": "match", "text": hebrew.match_text(num, say),
                       "expect": hebrew.match_text(num, expect),
                       "variants": [hebrew.match_text(num, v) for v in var], "job": match_job})
-    for uid, text in (("start", hebrew.START_TEXT), ("win", hebrew.WIN_TEXT)) if ui else ():
+    for uid, text in hebrew.UI_TEXTS.items() if ui else ():
         if only and uid not in only:
             continue
         # target_speaker 2: the G2P's female-listener forms (בואי, מָצָאת).
@@ -426,7 +423,7 @@ def main() -> None:
     check_speak(roster)
     items = build_items(roster, pron, only, args.ui)
     if not items:
-        raise SystemExit("nothing to render (no starter/bench players matched)")
+        raise SystemExit("nothing to render (no starter, bench or backup player matched)")
     log(f"[gen] {len(items)} clips -> {out} (run {run})")
     for it in items:
         if it["kind"] == "name" and not it["pinned"]:

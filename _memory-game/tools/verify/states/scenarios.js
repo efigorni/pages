@@ -157,7 +157,7 @@ async function playToLastPair(h) {
   {
     const served = new Set();
     const tmp = boot({ clips: true, webAudio: true });
-    const all = tmp.T.DATA.starters.concat(tmp.T.DATA.bench).map((p) => p.id);
+    const all = tmp.T.DATA.players.map((p) => p.id);
     all.forEach((id) => { served.add(`audio/name/${id}.mp3`); served.add(`audio/match/${id}.mp3`); });
     served.add('audio/ui/start.mp3');
     served.add('audio/ui/win.mp3');
@@ -224,8 +224,9 @@ async function playToLastPair(h) {
   {
     const h = boot();
     await start(h);
-    const benchIds = h.T.DATA.bench.map((p) => p.id);
-    const starterIds = h.T.DATA.starters.map((p) => p.id);
+    const role = (r) => h.T.DATA.players.filter((p) => p.role === r).map((p) => p.id);
+    const benchIds = role('bench');
+    const starterIds = role('starter');
     const N = 20000;
     const benchCount = Object.fromEntries(benchIds.map((id) => [id, 0]));
     const posCount = new Array(30).fill(0);
@@ -265,11 +266,11 @@ async function playToLastPair(h) {
   {
     const h = boot({ noClips: true });
     const { DATA, quiz, game } = h.T;
-    const pool = DATA.starters.concat(DATA.bench, DATA.backup || []).map((p) => p.id);
+    const pool = DATA.players.map((p) => p.id);
     await h.click('play-quiz');
     const ids = () => quiz.cards.map((c) => c.p.id);
     check('Q1 the quiz asks: 4 distinct cards with the answer, every pool player a pip',
-      h.phase() === 'ask' && new Set(ids()).size === 4 && ids().includes(quiz.answer.p.id) && game.pairs === pool.length);
+      h.phase() === 'ask' && new Set(ids()).size === 4 && ids().includes(quiz.answer.p.id) && game.total === pool.length);
     const first = quiz.answer;
     await h.pick(quiz.cards.find((c) => c !== first));
     check('Q2 a pick in the first 450 ms of a question is ignored', quiz.cards.every((c) => c.state === 'down'));
@@ -333,10 +334,42 @@ async function playToLastPair(h) {
     for (let i = 0; i < 200 && wonAt === null; i++) { await h.advance(50); if (h.phase() === 'won') wonAt = i; }
     check('Q4 every quiz player asked exactly once, then the win screen', asked.length === pool.length
       && new Set(asked).size === pool.length && wonAt !== null && h.byId.win.classList.contains('show'), `${asked.length}/${pool.length}`);
-    const backups = new Set((DATA.backup || []).map((p) => p.id));
+    const backups = new Set(DATA.players.filter((p) => p.role === 'backup').map((p) => p.id));
     let dealt = 0;
     for (let i = 0; i < 200; i++) { h.T.newGame(); dealt += h.cards().filter((c) => backups.has(c.p.id)).length; }
     check('Q5 memory never deals a backup', dealt === 0, `${backups.size} backup(s), ${dealt} dealt in 200 games`);
+  }
+
+  // ---------- QC2, QC3: a quiz reveal waits under the ↻ confirm and on a hidden page ----------
+  {
+    const h = boot({ noClips: true });
+    const { quiz } = h.T;
+    await h.click('play-quiz');
+    await h.advance(3000);
+    let at = quiz.at;
+    await h.pick(quiz.answer);
+    await h.click('again');
+    await h.advance(20000);
+    check('QC2 the ↻ confirm holds a reveal: no next question behind it', h.phase() === 'reveal' && quiz.at === at
+      && h.byId.confirm.classList.contains('show'));
+    await h.click('no');
+    await h.advance(1499);
+    const held = h.phase() === 'reveal';
+    await h.advance(2);
+    check('QC2 "no" picks the reveal up again: the next question 1.5 s later', held && h.phase() === 'ask' && quiz.at === at + 1);
+    await h.advance(1000);
+    at = quiz.at;
+    await h.pick(quiz.answer);
+    await h.advance(100);
+    await h.setVisibility('hidden');
+    await h.advance(20000);
+    const hidden = h.phase() === 'reveal' && quiz.at === at;
+    await h.setVisibility('visible');
+    await h.advance(1499);
+    const back = h.phase() === 'reveal';
+    await h.advance(2);
+    check('QC3 no advance while the page is hidden; back on screen, the next question 1.5 s later',
+      hidden && back && h.phase() === 'ask' && quiz.at === at + 1);
   }
 
   const failed = results.filter((r) => !r.ok).length;

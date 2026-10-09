@@ -170,9 +170,8 @@ function boot(opts = {}) {
     release() { if (this.released) return Promise.resolve(); this.released = true; this.ls.forEach((fn) => fn()); return Promise.resolve(); }
   }
 
-  const ids = ['app', 'board', 'pips', 'start', 'confirm', 'win', 'fan', 'play', 'replay', 'again', 'yes', 'no', 'mute', 'confetti', 'install',
-    'play-quiz', 'replay-quiz', 'yes-quiz', 'picks', 'question', 'say'];
-  const byId = Object.fromEntries(ids.map((id) => [id, new El(id === 'board' ? 'main' : 'div', id)]));
+  // Every element of the page that has an id, with its tag, so a new one the engine looks up needs no edit here.
+  const byId = Object.fromEntries([...HTML.matchAll(/<([a-z]+)\b[^>]*\sid="([\w-]+)"/g)].map(([, tag, id]) => [id, new El(tag, id)]));
   byId.start.classList.add('show');
   byId.confirm.inert = true;
   byId.win.inert = true;
@@ -227,7 +226,7 @@ function boot(opts = {}) {
   let data = dataSrc;
   if (opts.clips || opts.noClips) {
     const d = JSON.parse(data.match(/const DATA = (\{.*\});/)[1]);
-    const all = opts.noClips ? [] : d.starters.concat(d.bench).map((p) => p.id);
+    const all = opts.noClips ? [] : d.players.map((p) => p.id);
     d.audio = { ui: opts.noClips ? [] : ['start', 'win'], name: all, match: all };
     data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
   }

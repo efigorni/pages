@@ -4,8 +4,9 @@ computed HUD styles, the flyer geometry and the audio event sequences.
     uv run --with pillow==12.3.0 python -I compare.py <dir-a> <dir-b> [--dom] [--diffs <dir>]
 
 Prints one line per screenshot (identical, or how many pixels differ, the largest channel delta and
-the bounding box) and one per run. With --diffs, writes an amplified difference image for each
-non-identical pair. Exits 1 if anything differs or is missing.
+the bounding box) and one per run; a quiz run also compares what it asked and the clips it heard. With
+--diffs, writes an amplified difference image for each non-identical pair. Exits 1 if anything differs or
+is missing, and 2 if it can't see a one-level difference (its canary).
 """
 import difflib
 import json
@@ -18,6 +19,20 @@ A, B = Path(sys.argv[1]), Path(sys.argv[2])
 show_dom = "--dom" in sys.argv
 diff_dir = Path(sys.argv[sys.argv.index("--diffs") + 1]) if "--diffs" in sys.argv else None
 
+
+def pixel_diff(ia, ib):
+    """The difference image and its bbox, or None when the two are identical. RGB: Pillow's getbbox() on an
+    RGBA difference looks at alpha only, so opaque shots would always match."""
+    d = ImageChops.difference(ia.convert("RGB"), ib.convert("RGB"))
+    bbox = d.getbbox()
+    return (d, bbox) if bbox else None
+
+
+# A compare that can't fail proves nothing: one level of one channel must read as a difference.
+if pixel_diff(Image.new("RGB", (2, 2), (9, 9, 9)), Image.new("RGB", (2, 2), (9, 10, 9))) is None:
+    print("compare.py is blind: a one-level difference reads as identical")
+    sys.exit(2)
+
 n_same = n_diff = n_runs_diff = 0
 for pa in sorted(A.rglob("*.png")):
     rel = pa.relative_to(A)
@@ -26,18 +41,17 @@ for pa in sorted(A.rglob("*.png")):
         print(f"MISSING  {rel}")
         n_diff += 1
         continue
-    # RGB: Pillow's getbbox() on an RGBA difference looks at alpha only, so opaque shots would always match.
-    ia, ib = Image.open(pa).convert("RGB"), Image.open(pb).convert("RGB")
+    ia, ib = Image.open(pa), Image.open(pb)
     if ia.size != ib.size:
         print(f"SIZE     {rel}: {ia.size} vs {ib.size}")
         n_diff += 1
         continue
-    d = ImageChops.difference(ia, ib)
-    bbox = d.getbbox()
-    if not bbox:
+    found = pixel_diff(ia, ib)
+    if not found:
         n_same += 1
         print(f"same     {rel}")
         continue
+    d, bbox = found
     n_diff += 1
     px = sum(1 for p in d.getdata() if any(p))
     mx = max(max(p) for p in d.getdata())
@@ -83,12 +97,20 @@ for ra in sorted(A.rglob("result.json")):
         notes.append(f"flight {x.get('flight')} vs {y.get('flight')}")
     strip = lambda f: [{k: v for k, v in e.items() if k != "t"} for e in f]  # noqa: E731
     fa, fb = x["analysis"]["flyers"], y["analysis"]["flyers"]
-    if strip(fa) != strip(fb):
+    # A quiz flight leaves while the right card's lift is still running, so its start box is the clock's too.
+    if x.get("mode") != "quiz" and strip(fa) != strip(fb):
         notes.append(f"flyers differ ({len(fa)} vs {len(fb)})")
     keys = ("starts", "stops", "speech", "html", "fetchBad", "errors", "startClip", "winClip", "effectiveFlips",
             "matchesWithFollow", "matches", "fullscreen", "wake") if x.get("mode") == "audio" else (
         "speech", "fetchBad", "errors", "fullscreen")
     notes += [f"audio.{k}" for k in keys if x["analysis"].get(k) != y["analysis"].get(k)]
+    if x.get("mode") == "quiz":  # what was asked and heard; how soon each reveal moved on is the clock's
+        def asked(r):
+            return [{**{k: q.get(k) for k in ("id", "cards", "text")},
+                     "wrong": {k: v for k, v in (q.get("wrong") or {}).items() if k != "saidMs"}} for q in r.get("questions") or []]
+        notes += [k for k, a, b in (("quiz.questions", asked(x), asked(y)),
+                                    ("quiz.clips", (x.get("quiz") or {}).get("sequence"), (y.get("quiz") or {}).get("sequence")))
+                  if a != b]
     if x.get("installedCss") != y.get("installedCss"):
         notes.append(f"installedCss {x.get('installedCss')} vs {y.get('installedCss')}")
     if x.get("focus") != y.get("focus"):

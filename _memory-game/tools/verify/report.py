@@ -20,9 +20,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "page"))
 from build_page import OG_IMAGE, OG_MAX_KB, SITE  # noqa: E402
 
 OUT = Path(sys.argv[1])
-# Playwright's own notices, and Chrome's hint about the confetti pixel check drive.js polls (confettiClear).
-NOISE = ("Service Worker registration blocked by Playwright", "Banner not shown",
-         "Multiple readback operations using getImageData")
+# Playwright's own notices.
+NOISE = ("Service Worker registration blocked by Playwright", "Banner not shown")
 
 
 def load(path):
@@ -54,20 +53,19 @@ def drive_checks(r, mode):
             f"match clip after the name ({a['matchesWithFollow']} of {a['matches']} let finish)": a["matchesWithFollow"] > 0,
             "start and win clips": a["startClip"] == 1 and a["winClip"] == 1,
         })
+    if mode == "quiz":
+        checks.update(quiz_checks(r))
     return checks
 
 
 def quiz_checks(r):
-    if r is None:
-        return {"ran": False}
-    a, q, qs = r["analysis"], r.get("quiz") or {}, r.get("questions") or []
+    q, qs = r.get("quiz") or {}, r.get("questions") or []
     first = qs[0] if qs else {}
     wrong = first.get("wrong") or {}
-    auto = [x.get("advanceMs") for x in qs[:3]]
+    # The first three reveals move on by themselves, but the last question ends in the win screen.
+    advancing = qs[:min(3, len(qs) - 1)]
+    times = ", ".join(f"{x.get('advanceMs')} ms" for x in advancing)
     return {
-        "ran": not r.get("failure"), "won": bool(r.get("won")), "no 404": not r["http"],
-        "clean console": not console_clean(r["console"]), "no errors": not a["errors"],
-        "no speech fallback": not a["speech"], "all fetches 200": not a["fetchBad"],
         f"every player asked once ({len(qs)}/{len(r.get('pool') or [])})": bool(q.get("everyPlayerOnce")),
         "4 distinct cards, the answer among them": bool(q.get("fourDistinct")),
         f"wrong pick turns to {wrong.get('id')}'s number and name, says his match clip, stays on the question":
@@ -76,8 +74,8 @@ def quiz_checks(r):
         "the right pick cuts off the wrong player's clip": bool(q.get("wrongCut")),
         "clips: start, the asked player's match per question, the wrong one's, the name on success, win":
             bool(q.get("sequenceOk")),
-        f"the reveal moves on by itself ({', '.join(f'{ms} ms' for ms in auto)} after the pick)":
-            len(auto) == min(3, len(qs) - 1) and all(x.get("auto") for x in qs[:3]),
+        f"the reveal moves on by itself ({times} after the pick)":
+            bool(advancing) and all(x.get("auto") for x in advancing),
     }
 
 
@@ -126,8 +124,8 @@ for game in [a for a in sys.argv[2:] if not a.startswith("--")]:
         sections["shots 600x960"] = drive_checks(load(OUT / game / "tab-portrait-shots/result.json"), "shots")
         sections["shots 960x600"] = drive_checks(load(OUT / game / "tab-landscape-shots/result.json"), "shots")
         sections["audio 600x960"] = drive_checks(load(OUT / game / "tab-portrait-audio/result.json"), "audio")
-        sections["quiz 600x960"] = quiz_checks(load(OUT / game / "tab-portrait-quiz/result.json"))
-        sections["quiz 960x600"] = quiz_checks(load(OUT / game / "tab-landscape-quiz/result.json"))
+        sections["quiz 600x960"] = drive_checks(load(OUT / game / "tab-portrait-quiz/result.json"), "quiz")
+        sections["quiz 960x600"] = drive_checks(load(OUT / game / "tab-landscape-quiz/result.json"), "quiz")
         path = OUT / f"states-{game}.txt"
         states = path.read_text(encoding="utf-8").strip().splitlines() if path.exists() else []
         sections["state machine"] = {states[-1] if states else "ran": bool(states) and " 0 fail" in states[-1]}

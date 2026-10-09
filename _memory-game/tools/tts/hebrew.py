@@ -49,8 +49,9 @@ def match_text(number: int | None, name: str) -> str:
     return f"מספר {number_words_fem(number)}, {name}!"
 
 
-START_TEXT = "יאללה, בואי נשחק!"
-WIN_TEXT = "כל הכבוד! מצאת את כל השחקנים!"
+# The engine's own lines (engine.js's START_LINE and WIN_LINE): audio/ui/<key>.mp3, one master each in
+# _memory-game/audio/ui/.
+UI_TEXTS = {"start": "יאללה, בואי נשחק!", "win": "כל הכבוד! מצאת את כל השחקנים!"}
 
 
 _TRAILING_PARENS = re.compile(r"\(([^()]*)\)\s*$")

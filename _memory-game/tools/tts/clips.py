@@ -6,9 +6,9 @@
 check: every player with a shipped role (roster.SHIPPED: starter, bench, backup) has a name and a match clip in <tts>/out with a manifest row that
 passed the STT round-trip, and each clip is in the format spec (MP3, mono, 24 kHz, 64 kbps; -16 LUFS
 ±0.4; true peak <= -1.5 dBTP; <= 30 ms of silence before and 120 ms after). Loudness, peak and silence
-come from the QA row the clip was made in (re-measured when none matches); a second model's "no"
-fails too, unless the player's pin lists exactly that transcript under `stt2_accepted` (a person
-listened and accepted it): then it is reported as a note. Exits 1 on any problem.
+come from the QA row the clip was made in (re-measured when none matches). The primary STT is the
+gate: a second model's "no" (--second-opinion) is printed as a warning, never a problem, the way
+generate.py and --ready already treat it (listen.html shows it in red). Exits 1 on any problem.
 sync: check, then copy the roster's clips into <game>/audio/{name,match}/ and delete the clips of
 players who are no longer in it. The start and win clips are the engine's (_memory-game/audio/ui/).
 """
@@ -24,7 +24,6 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config  # noqa: E402
-import hebrew  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scrape"))  # roster.py: the roles a game ships
 from roster import SHIPPED  # noqa: E402
 
@@ -49,13 +48,7 @@ def qa_rows(tts: Path, rows: dict) -> dict:
     return found
 
 
-def accepted_stt2(game: Path) -> dict:
-    """id -> the second-model transcripts a person accepted, folded for comparison."""
-    pins = json.load(open(game / "tools/tts/pronunciations.json", encoding="utf-8"))["players"]
-    return {pid: {hebrew.normalize_for_compare(t) for t in e.get("stt2_accepted", [])} for pid, e in pins.items()}
-
-
-def check(ids: list[str], tts: Path, accepted: dict | None = None) -> list[str]:
+def check(ids: list[str], tts: Path) -> list[str]:
     out = tts / "out"
     man_path = out / "manifest.json"
     if not man_path.exists():
@@ -77,11 +70,7 @@ def check(ids: list[str], tts: Path, accepted: dict | None = None) -> list[str]:
                 problems.append(f"{kind} {pid}: STT heard «{m['stt_transcript']}»")
             q = qa.get((pid, kind))
             if q is not None and q.get("stt2_ok") is False:
-                heard = q.get("stt2_transcript")
-                if hebrew.normalize_for_compare(heard or "") in (accepted or {}).get(pid, set()):
-                    print(f"[check] note: {kind} {pid}: the second model heard «{heard}», accepted in the pin", flush=True)
-                else:
-                    problems.append(f"{kind} {pid}: the second model heard «{heard}»")
+                print(f"[check] warning: {kind} {pid}: the second model heard «{q.get('stt2_transcript')}»", flush=True)
             if q is None:
                 import audio_metrics
                 q = audio_metrics.measure(str(f))
@@ -130,7 +119,7 @@ def main() -> int:
     game, work = config.game_dir(a.game), config.work_dir(a.work)
     tts = config.tts_home(work, a.tts_home)
     ids = roster_ids(work / "data/players.json")
-    problems = check(ids, tts, accepted_stt2(game))
+    problems = check(ids, tts)
     for p in problems:
         print(f"[check] {p}", flush=True)
     print(f"[check] {game.name}: {len(ids)} players, {2 * len(ids)} clips: "

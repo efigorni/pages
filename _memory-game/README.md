@@ -34,7 +34,7 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 | `<game>/club/club.json` | The name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`) |
 | `<game>/club/style.css` | Hand-written: fonts, colour tokens, card back, card face, title |
 | `<game>/club/club.js` | Hand-written: `CLUB = { confetti, fonts, face(kit) }` |
-| `<game>/club/roster.json` | Starters, bench and backups (quiz only), written by `build_page.py data` |
+| `<game>/club/roster.json` | The players with their roles (starter, bench, backup: quiz only), written by `build_page.py data` |
 | `_memory-game/*` | The engine, the base styles and the two templates |
 
 The head also carries the link preview that WhatsApp and the like show (Open Graph and Twitter tags): the
@@ -48,7 +48,7 @@ Memory deals the 11 starters and 4 of the bench. The quiz asks every roster play
 a soft sound, then that card turns to its face (grey, smaller, marked ✗, out of play) and plays that
 player's match clip; her next pick or the replay button cuts it off. The right one turns to the club's
 card face, says the name and moves on. The squad rule
-(`tools/scrape/roster.py`) gives the pool's backup goalkeepers role `backup`: the roster's `backup` list, asked
+(`tools/scrape/roster.py`) gives the pool's backup goalkeepers role `backup`: in the roster's `players`, asked
 in the quiz, never dealt. Every tool that images, voices, checks, syncs or prunes takes `roster.SHIPPED`
 (starter, bench, backup), so a refresh keeps them.
 

@@ -1,7 +1,7 @@
 // One game with its service worker on, in a fresh persistent profile at 600x960 touch: wait for the
 // worker to control the page, play a few flips online, read the link preview's tags and fetch og.jpg,
 // read installability over CDP, then go offline, reload and play again, then start the quiz offline
-// and check its files are all cached.
+// from the ↻ confirm and check its files are all cached.
 //
 //   node sw_check.js <base-url> <game> <out-dir> [<want-version>]
 //   e.g. node sw_check.js http://127.0.0.1:8781/ hapoel-tlv-memory /tmp/v/local
@@ -146,18 +146,17 @@ function audit(log) {
   R.offline.audio = { ...g2, ...audit((await page.evaluate(() => window.__log)).slice(at)) };
   R.offline.imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline.png`) });
-  // The quiz offline: every quiz player's photo and clips (the backups' too) are in the cache, and a
-  // reloaded page asks its first question with them.
+  // The quiz offline: every quiz player's photo and clips (the backups' too) are in the cache, and the
+  // offline page, from its ↻ confirm, asks the first question with them.
   R.offline.quizCache = await page.evaluate(async () => {
-    const ids = DATA.starters.concat(DATA.bench, DATA.backup || []).map((p) => p.id);
+    const ids = DATA.players.map((p) => p.id);
     const urls = [].concat(...ids.map((id) => [`img/${id}.webp`, `audio/name/${id}.mp3`, `audio/match/${id}.mp3`]));
     const missing = [];
     for (const u of urls) if (!(await caches.match(new URL(u, location.href).href))) missing.push(u);
-    return { checked: urls.length, missing, backups: (DATA.backup || []).map((p) => p.id) };
+    return { checked: urls.length, missing, backups: DATA.players.filter((p) => p.role === 'backup').map((p) => p.id) };
   });
-  await page.reload({ waitUntil: 'load' });
-  await sleep(2000);
-  await page.tap('#play-quiz');
+  await page.tap('#again');
+  await page.tap('#yes-quiz');
   const answer = await page.evaluate(() => document.getElementById('picks').dataset.answer);
   const heard = await until(page, (id) => window.__log.some((e) => (e.type === 'buf-start' || e.type === 'html-play') && e.url === `audio/match/${id}.mp3`), 15000, answer);
   await sleep(600);

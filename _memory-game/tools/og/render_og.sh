@@ -7,7 +7,7 @@
 set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
-REPO="$(git -C "$HERE" rev-parse --show-toplevel)"
+REPO="$(cd "$HERE/../../.." && pwd)"  # no git needed: refresh.sh runs it in scratch copies too
 # shellcheck source=../verify/playwright.sh
 source "$HERE/../verify/playwright.sh"
 

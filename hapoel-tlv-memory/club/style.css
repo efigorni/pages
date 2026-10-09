@@ -35,13 +35,12 @@
   --wine: #6d052a;
   --claret: #800029;
   --white: #ffffff;
-  /* our dark red wall paint after the banner's wine panel (tools/look/paint.py), its ground, and the
-     night red of the board around the cards */
+  /* our dark red wall paint after the banner's wine panel (tools/look/paint.py), the tile's mean colour
+     (paint.py prints it; it shows while the tile loads, and as --surface), and the night red of the
+     board around the cards */
   --paint: url(img/club/paint.webp);
   --paint-ground: #6b0a1e;
   --night: #1e0309;
-  /* one patch of the wall per card: the tile repeats seamlessly, so each card starts somewhere else */
-  --paint-at: calc(var(--i, 0) * 37%) calc(var(--i, 0) * 61%);
   /* read by the shared base styles */
   --font: Rubik, "Arial Hebrew", system-ui, sans-serif;
   --ink: var(--night);
@@ -72,7 +71,7 @@
    player card, the cutout standing on the white name band beside the big white number */
 .back,
 .front {
-  background: var(--paint) var(--paint-at) / calc(var(--short) * 2.4) auto repeat, var(--paint-ground);
+  background: var(--paint) 0 0 / calc(var(--short) * 2.4) auto repeat, var(--paint-ground);
 }
 
 /* the start screen's fan stands off the wall it is painted like */

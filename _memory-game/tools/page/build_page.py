@@ -18,7 +18,7 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
                         follow it, and a light club's style sets --scheme: light for base.css.
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
-  club/roster.json      season, starters, bench and backup; written by `data`
+  club/roster.json      season and players (roles starter, bench, backup, in that order); written by `data`
 
 The builder writes two files per game, whole:
 
@@ -32,9 +32,9 @@ The builder writes two files per game, whole:
               precached file and the template, so any change installs a fresh cache.
 
 `data` writes club/roster.json from players.json (one player per line), then assembles that game; --prune
-deletes photos and clips of players who are no longer in it. Role "backup" in players.json (the pool's backup
-goalkeepers, roster.py's squad rule) puts a player in the roster's `backup` list: asked in the quiz, never dealt
-in the memory game; his photo and clips are made, checked and shipped like everyone else's (roster.SHIPPED). The name model (club.json `names`): "full"
+deletes photos and clips of players who are no longer in it. The roster keeps every role in roster.SHIPPED; role
+"backup" (the pool's backup goalkeepers, roster.py's squad rule) is asked in the quiz and never dealt in the memory
+game, and his photo and clips are made, checked and shipped like everyone else's. The name model (club.json `names`): "full"
 shows name_he on one card line; "first-last" adds the card's two tiers (first_he / last_he). speak_he, the
 text the voice reads, ships whenever it differs from name_he (and always with "first-last").
 `assemble` writes every game's index.html and sw.js, or the named games'. `--check` writes nothing and fails
@@ -69,14 +69,14 @@ SHARED = Path(__file__).resolve().parents[2]
 REPO = SHARED.parent
 sys.path.insert(0, str(SHARED / "tools/tts"))
 sys.path.insert(0, str(SHARED / "tools/scrape"))
-from hebrew import START_TEXT, WIN_TEXT, speak_text, split_display_name  # noqa: E402
-from roster import SHIPPED  # noqa: E402
+from hebrew import UI_TEXTS, speak_text, split_display_name  # noqa: E402
+from roster import SHIPPED, check as check_players  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
-UI_CLIPS = ("start", "win")
+UI_CLIPS = tuple(UI_TEXTS)
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say")
@@ -169,18 +169,10 @@ def entry(p, page, model):
     return out
 
 
-def players(roster):
-    """Everyone in the game, in roster order: the starters, the bench, then the backups (quiz only)."""
-    return roster["starters"] + roster["bench"] + roster.get("backup", [])
-
-
 def roster_text(roster):
     """club/roster.json: one player per line, so a roster refresh diffs per player."""
-    def rows(players):
-        return ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in players)
-    lists = [k for k in ("starters", "bench", "backup") if k != "backup" or roster.get("backup")]
-    body = ",\n".join(f'  "{k}": [\n{rows(roster[k])}\n  ]' for k in lists)
-    return f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n{body}\n}}\n'
+    rows = ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in roster["players"])
+    return f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n  "players": [\n{rows}\n  ]\n}}\n'
 
 
 def has_roster(game):
@@ -194,7 +186,7 @@ def read_roster(game):
 def orphans(game, roster):
     """Photos and clips of players the roster doesn't have: precached, never shown or played."""
     page = REPO / game
-    ids = {p["id"] for p in players(roster)}
+    ids = {p["id"] for p in roster["players"]}
     return sorted(f.relative_to(page).as_posix() for d, suffix in (("img", ".webp"), ("audio/name", ".mp3"),
                                                                     ("audio/match", ".mp3"))
                   for f in (page / d).glob(f"*{suffix}") if f.stem not in ids)
@@ -203,7 +195,7 @@ def orphans(game, roster):
 def data_line(game, roster):
     """The DATA script: the roster plus the clips that exist, in roster order."""
     page = REPO / game
-    ids = [p["id"] for p in players(roster)]
+    ids = [p["id"] for p in roster["players"]]
     audio = {
         "ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()],
         "name": [i for i in ids if (page / "audio" / "name" / f"{i}.mp3").is_file()],
@@ -219,15 +211,14 @@ def write_data(players_json, game, prune):
     if model not in ("full", "first-last"):
         fail(f"{game}/{CONFIG}: names must be \"full\" or \"first-last\", not {model!r}")
     data = json.loads(Path(players_json).read_text(encoding="utf-8"))
-    lists = {role: [entry(p, page, model) for p in data["players"] if p.get("role") == role] for role in SHIPPED}
-    starters, bench, backup = lists["starter"], lists["bench"], lists["backup"]
-    if len(starters) != 11:
-        fail(f"expected 11 starters, found {len(starters)}")
-    if len(bench) < 4:
-        fail(f"need at least 4 bench players, found {len(bench)}")
-    roster = {"season": data.get("season"), "starters": starters, "bench": bench, **({"backup": backup} if backup else {})}
+    problems = check_players(data)
+    if problems:
+        fail(f"{players_json}: {'; '.join(problems)}")
+    shipped = [entry(p, page, model) for role in SHIPPED for p in data["players"] if p.get("role") == role]
+    roster = {"season": data.get("season"), "players": shipped}
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
-    print(f"{game}: club/roster.json: starters={len(starters)} bench={len(bench)} backup={len(backup)}", flush=True)
+    counts = " ".join(f"{role}={sum(p['role'] == role for p in shipped)}" for role in SHIPPED)
+    print(f"{game}: club/roster.json: {counts}", flush=True)
     for rel in orphans(game, roster):
         if prune:
             (page / rel).unlink()
@@ -262,9 +253,13 @@ def lint_credits(game):
 def check_ui_clips(game):
     """Each game ships its own copy of the engine's start and win clips; the master is _memory-game/audio/ui/."""
     engine = read(SHARED / "engine.js")
-    lines = {k: re.search(rf"const {k}_LINE = '([^']*)';", engine).group(1) for k in ("START", "WIN")}
-    problems = [f"engine.js's {k}_LINE is not hebrew.py's {k}_TEXT, which the clip says"
-                for k, text in (("START", START_TEXT), ("WIN", WIN_TEXT)) if lines[k] != text]
+    problems = []
+    for key, text in UI_TEXTS.items():
+        line = re.search(rf"const {key.upper()}_LINE = '([^']*)';", engine)
+        if not line:
+            problems.append(f"engine.js has no {key.upper()}_LINE, the {key} clip's text")
+        elif line.group(1) != text:
+            problems.append(f"engine.js's {key.upper()}_LINE is not hebrew.py's UI_TEXTS[{key!r}], which the clip says")
     for clip in UI_CLIPS:
         copy = REPO / game / "audio/ui" / f"{clip}.mp3"
         if not copy.is_file() or copy.read_bytes() != (SHARED / "audio/ui" / f"{clip}.mp3").read_bytes():
@@ -351,8 +346,15 @@ def lint_variables(game):
     reads = set(re.findall(r"var\(\s*(--[\w-]+)", style + base + club + engine))
     nothing = (set(re.findall(r"var\(\s*(--[\w-]+)\s*\)", style + club)) - defined - js_set - engine_set
                - set(re.findall(r"(--[\w-]+)\s*:", base)))
+    # A :root token resolves there, where the per-card variables the engine sets (RUNTIME_VARS) are unset,
+    # and every card inherits that one value.
+    root = "".join(re.findall(r":root\s*\{(.*?)\}", style, re.S))
+    frozen = sorted(name for name, value in re.findall(r"(--[\w-]+)\s*:([^;]*)", root)
+                    if any(re.search(rf"var\(\s*{re.escape(v)}\b", value) for v in RUNTIME_VARS))
     return ([f"{v} is set by the club but nothing reads it" for v in sorted((defined | js_set) - reads)]
-            + [f"{v} is read by the club but nothing defines it" for v in sorted(nothing)])
+            + [f"{v} is read by the club but nothing defines it" for v in sorted(nothing)]
+            + [f"{v} is declared on :root but reads a per-card variable ({', '.join(sorted(RUNTIME_VARS))}): "
+               "it never varies; declare it on the card" for v in frozen])
 
 
 def app_id(game):

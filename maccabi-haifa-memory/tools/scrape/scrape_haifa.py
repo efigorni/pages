@@ -45,7 +45,7 @@ from PIL import Image  # noqa: E402
 from common import Fetcher, ascii_slug, log_line, photo_facts, write_json_atomic  # noqa: E402
 from framing import landmarks, pick_shoulder, square_crop  # noqa: E402
 from hebrew import nickname  # noqa: E402
-from roster import SHIPPED, check, output_key, rank_key, select  # noqa: E402
+from roster import SHIPPED, check, output_key, rank_key, rule_text, select  # noqa: E402
 from rsc import page_objects  # noqa: E402
 
 BASE = "https://www.mhaifafc.com"
@@ -703,12 +703,7 @@ def main() -> int:
             "total carried into the 2026/27 entry plus 2026/27 games; it equals this count only for players new in "
             "summer 2026 (crosscheck.site_header_appearances / header_minus_season_appearances)."
         ),
-        "pool_rule": (
-            f"H3: pool = top {args.pool_size} by appearances (>= 1) across all /players players, ranked by appearances, "
-            "then starts, then minutes, then lower jersey number (pool_rank); main 11 = the goalkeeper with the most "
-            "appearances + the 10 outfield players with the most; bench = the other outfield players in the pool; "
-            "backup goalkeepers excluded."
-        ),
+        "pool_rule": "H3: " + rule_text(args.pool_size, "/players"),
         "starts_method": "Starter = in the game's starting line-up (gameLineUp); sub = not in it but marked as substituted on.",
         "minutes_method": ("Starter: until the substitution/red-card minute, else 90. Substitute: 90 minus the minute he "
                            "came on. Stoppage and extra time ignored (tiebreak only)."),
@@ -726,7 +721,7 @@ def main() -> int:
                             "cut": starts_cut},
         "design": design,
         "crop": {"x0": crop[0], "y0": crop[1], "x1": crop[2], "y1": crop[3]},
-        "crop_rule": ("Each starter/bench player has its own square `crop` (fractions of the 800x1000 source): hair top "
+        "crop_rule": ("Each shipped player (starter, bench, backup) has its own square `crop` (fractions of the 800x1000 source): hair top "
                       "4% below the top edge, shoulder line at 90% of the height, centred on the head (the TLV image "
                       "tool's auto rule, so `--mode box` reproduces it). Shoulder lines for pedro-barzao and "
                       "adam-grimberg are hand-read: the alpha detector fires inside their hair. The top-level `crop` is "

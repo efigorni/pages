@@ -441,8 +441,7 @@ circle.cut { fill: var(--big-bg); }
   transition: transform var(--flip) cubic-bezier(.3, 1.3, .5, 1);
 }
 
-.card[data-state="up"] .card-inner,
-.card[data-state="matched"] .card-inner { transform: rotateY(180deg); }
+.card:not([data-state="down"]) .card-inner { transform: rotateY(180deg); }
 
 .face {
   position: absolute;
@@ -466,27 +465,27 @@ circle.cut { fill: var(--big-bg); }
   border-radius: calc(var(--r) * .6);
 }
 
-.front::after {
+.front::after,
+.ask::after {
   content: "";
   position: absolute;
-  z-index: 3;
   inset: 0;
   border-radius: inherit;
   box-shadow: inset 0 0 0 1px var(--edge);
+}
+
+.front::after {
+  z-index: 3;
   transition: box-shadow .2s ease;
 }
 
 .card.found .front::after { box-shadow: inset 0 0 0 var(--found-w, var(--frame, 4px)) var(--found); }
 
-/* motion */
-.board.dealing .card {
-  animation: deal 520ms cubic-bezier(.25, 1.35, .5, 1) both;
-  animation-delay: calc(var(--i) * 16ms);
-}
-
+/* motion; the memory board's step is the engine's DEAL_STAGGER_MS */
+.board.dealing .card,
 .picks.dealing .card {
   animation: deal 520ms cubic-bezier(.25, 1.35, .5, 1) both;
-  animation-delay: calc(var(--i) * 70ms);
+  animation-delay: calc(var(--i) * var(--deal-step, 16ms));
 }
 
 @keyframes deal {
@@ -549,8 +548,8 @@ circle.cut { fill: var(--big-bg); }
 .overlay:not(.show) { pointer-events: none; }
 
 .big {
-  width: clamp(104px, 24vmin, 200px);
-  height: clamp(104px, 24vmin, 200px);
+  width: clamp(92px, 21vmin, 180px);
+  height: clamp(92px, 21vmin, 180px);
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -575,12 +574,6 @@ circle.cut { fill: var(--big-bg); }
   display: grid;
   justify-items: center;
   gap: clamp(6px, 1.5vmin, 12px);
-}
-
-.modes .big,
-.confirm-box > .big {
-  width: clamp(92px, 21vmin, 180px);
-  height: clamp(92px, 21vmin, 180px);
 }
 
 .modes .big svg { width: 60%; height: 60%; }
@@ -762,17 +755,12 @@ circle.cut { fill: var(--big-bg); }
   background: var(--hud-btn-bg, rgba(255, 255, 255, .09));
 }
 
+/* a small .big */
 .say {
   flex: none;
   width: calc(var(--hud) * 1.1);
   height: calc(var(--hud) * 1.1);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--big-bg);
-  color: var(--big-fg);
   box-shadow: 0 clamp(3px, .6vmin, 5px) 0 var(--big-drop);
-  transition: transform .12s ease;
 }
 
 .say:active { transform: translateY(clamp(2px, .5vmin, 4px)); }
@@ -803,6 +791,7 @@ circle.cut { fill: var(--big-bg); }
 }
 
 .picks {
+  --deal-step: 70ms;
   grid-area: picks;
   display: grid;
   gap: calc(var(--gap) * 2);
@@ -828,27 +817,15 @@ circle.cut { fill: var(--big-bg); }
   transform: translateX(-50%);
 }
 
-.ask::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px var(--edge);
-}
-
 /* a wrong pick: a soft shake, then it turns over to show who it is, grey, smaller and marked with a
    ✗ (never the right answer's colour, frame and burst), and stays out of play */
-.picks .card.nope { animation: nope .42s ease-in-out; }
-
 .picks .card[data-state="out"] {
+  animation: nope .42s ease-in-out;
   scale: .9;
   transition: scale .35s ease .3s;
 }
 
-.picks .card[data-state="out"] .card-inner {
-  transform: rotateY(180deg);
-  transition-delay: .3s;
-}
+.picks .card[data-state="out"] .card-inner { transition-delay: .3s; }
 
 .picks .card[data-state="out"] .front {
   filter: grayscale(1) brightness(.8);
@@ -888,7 +865,7 @@ circle.cut { fill: var(--big-bg); }
   .card-inner { transition-duration: 1ms; }
   .board.dealing .card,
   .picks.dealing .card,
-  .picks .card.nope,
+  .picks .card[data-state="out"],
   .picks .card[data-state="out"]::after,
   .card.found,
   .burst,
@@ -931,7 +908,7 @@ circle.cut { fill: var(--big-bg); }
   <main class="board" id="board"></main>
   <section class="quiz" id="quiz">
     <div class="prompt">
-      <button class="say" id="say" type="button" aria-label="לשמוע שוב">
+      <button class="big say" id="say" type="button" aria-label="לשמוע שוב">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
       <p class="question" id="question" aria-live="polite"></p>
@@ -988,7 +965,7 @@ circle.cut { fill: var(--big-bg); }
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 
 <script id="data">
-const DATA = {"season":"2026/27","starters":[{"id":"omri-glazer","name_he":"עמרי גלזר","first_he":"עמרי","last_he":"גלזר","speak_he":"עמרי גלזר","number":55,"role":"starter","img":"img/omri-glazer.webp"},{"id":"ethan-azoulay","name_he":"איתן אזולאי","first_he":"איתן","last_he":"אזולאי","speak_he":"איתן אזולאי","number":19,"role":"starter","img":"img/ethan-azoulay.webp"},{"id":"bruninho","name_he":"ברונו רוברטו פריירה דה סילבה (ברוניניו)","first_he":"ברונו רוברטו פריירה דה סילבה","last_he":"(ברוניניו)","speak_he":"ברוניניו","number":10,"role":"starter","img":"img/bruninho.webp"},{"id":"nigel-lonwijk","name_he":"נייג'ל לונווייק","first_he":"נייג'ל","last_he":"לונווייק","speak_he":"נייג'ל לונווייק","number":21,"role":"starter","img":"img/nigel-lonwijk.webp"},{"id":"jelle-bataille","name_he":"יילה בטאיי","first_he":"יילה","last_he":"בטאיי","speak_he":"יילה בטאיי","number":25,"role":"starter","img":"img/jelle-bataille.webp"},{"id":"kenji-gorre","name_he":"קנג'י חורה","first_he":"קנג'י","last_he":"חורה","speak_he":"קנג'י חורה","number":11,"role":"starter","img":"img/kenji-gorre.webp"},{"id":"iyad-khalaili","name_he":"איאד חלאיילי","first_he":"איאד","last_he":"חלאיילי","speak_he":"איאד חלאיילי","number":29,"role":"starter","img":"img/iyad-khalaili.webp"},{"id":"tzunami","name_he":"וונדרסון דה פריאטס סוארס (צונאמי)","first_he":"וונדרסון דה פריאטס סוארס","last_he":"(צונאמי)","speak_he":"צונאמי","number":66,"role":"starter","img":"img/tzunami.webp"},{"id":"kenny-saief","name_he":"קני סייף","first_he":"קני","last_he":"סייף","speak_he":"קני סייף","number":16,"role":"starter","img":"img/kenny-saief.webp"},{"id":"cedric-don","name_he":"סדריק דון","first_he":"סדריק","last_he":"דון","speak_he":"סדריק דון","number":45,"role":"starter","img":"img/cedric-don.webp"},{"id":"noam-shtaifman","name_he":"נועם שטייפמן","first_he":"נועם","last_he":"שטייפמן","speak_he":"נועם שטייפמן","number":35,"role":"starter","img":"img/noam-shtaifman.webp"}],"bench":[{"id":"yarin-levi","name_he":"ירין לוי","first_he":"ירין","last_he":"לוי","speak_he":"ירין לוי","number":8,"role":"bench","img":"img/yarin-levi.webp"},{"id":"ali-mohamed","name_he":"עלי מוחמד","first_he":"עלי","last_he":"מוחמד","speak_he":"עלי מוחמד","number":4,"role":"bench","img":"img/ali-mohamed.webp"},{"id":"pedrao","name_he":"פדרו אוליביירה","first_he":"פדרו","last_he":"אוליביירה","speak_he":"פדרו אוליביירה","number":44,"role":"bench","img":"img/pedrao.webp"},{"id":"silva-kani","name_he":"סילבה קאני","first_he":"סילבה","last_he":"קאני","speak_he":"סילבה קאני","number":26,"role":"bench","img":"img/silva-kani.webp"},{"id":"andrija-novakovich","name_he":"אנדריאה נובאקוביץ'","first_he":"אנדריאה","last_he":"נובאקוביץ'","speak_he":"אנדריאה נובאקוביץ'","number":9,"role":"bench","img":"img/andrija-novakovich.webp"},{"id":"yair-mordechai","name_he":"יאיר מרדכי","first_he":"יאיר","last_he":"מרדכי","speak_he":"יאיר מרדכי","number":7,"role":"bench","img":"img/yair-mordechai.webp"},{"id":"guy-melamed","name_he":"גיא מלמד","first_he":"גיא","last_he":"מלמד","speak_he":"גיא מלמד","number":18,"role":"bench","img":"img/guy-melamed.webp"},{"id":"sean-goldberg","name_he":"שון גולדברג","first_he":"שון","last_he":"גולדברג","speak_he":"שון גולדברג","number":3,"role":"bench","img":"img/sean-goldberg.webp"},{"id":"navot-ratner","name_he":"נבות רטנר","first_he":"נבות","last_he":"רטנר","speak_he":"נבות רטנר","number":36,"role":"bench","img":"img/navot-ratner.webp"},{"id":"pedro-barzao","name_he":"פדרו ברזאו","first_he":"פדרו","last_he":"ברזאו","speak_he":"פדרו ברזאו","number":30,"role":"bench","img":"img/pedro-barzao.webp"},{"id":"adam-grimberg","name_he":"אדם גרימברג","first_he":"אדם","last_he":"גרימברג","speak_he":"אדם גרימברג","number":38,"role":"bench","img":"img/adam-grimberg.webp"}],"backup":[{"id":"glenn-alvin","name_he":"גלן אלוין","first_he":"גלן","last_he":"אלוין","speak_he":"גלן אלוין","number":90,"role":"backup","img":"img/glenn-alvin.webp"}],"audio":{"ui":["start","win"],"name":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg","glenn-alvin"],"match":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg","glenn-alvin"]}};
+const DATA = {"season":"2026/27","players":[{"id":"omri-glazer","name_he":"עמרי גלזר","first_he":"עמרי","last_he":"גלזר","speak_he":"עמרי גלזר","number":55,"role":"starter","img":"img/omri-glazer.webp"},{"id":"ethan-azoulay","name_he":"איתן אזולאי","first_he":"איתן","last_he":"אזולאי","speak_he":"איתן אזולאי","number":19,"role":"starter","img":"img/ethan-azoulay.webp"},{"id":"bruninho","name_he":"ברונו רוברטו פריירה דה סילבה (ברוניניו)","first_he":"ברונו רוברטו פריירה דה סילבה","last_he":"(ברוניניו)","speak_he":"ברוניניו","number":10,"role":"starter","img":"img/bruninho.webp"},{"id":"nigel-lonwijk","name_he":"נייג'ל לונווייק","first_he":"נייג'ל","last_he":"לונווייק","speak_he":"נייג'ל לונווייק","number":21,"role":"starter","img":"img/nigel-lonwijk.webp"},{"id":"jelle-bataille","name_he":"יילה בטאיי","first_he":"יילה","last_he":"בטאיי","speak_he":"יילה בטאיי","number":25,"role":"starter","img":"img/jelle-bataille.webp"},{"id":"kenji-gorre","name_he":"קנג'י חורה","first_he":"קנג'י","last_he":"חורה","speak_he":"קנג'י חורה","number":11,"role":"starter","img":"img/kenji-gorre.webp"},{"id":"iyad-khalaili","name_he":"איאד חלאיילי","first_he":"איאד","last_he":"חלאיילי","speak_he":"איאד חלאיילי","number":29,"role":"starter","img":"img/iyad-khalaili.webp"},{"id":"tzunami","name_he":"וונדרסון דה פריאטס סוארס (צונאמי)","first_he":"וונדרסון דה פריאטס סוארס","last_he":"(צונאמי)","speak_he":"צונאמי","number":66,"role":"starter","img":"img/tzunami.webp"},{"id":"kenny-saief","name_he":"קני סייף","first_he":"קני","last_he":"סייף","speak_he":"קני סייף","number":16,"role":"starter","img":"img/kenny-saief.webp"},{"id":"cedric-don","name_he":"סדריק דון","first_he":"סדריק","last_he":"דון","speak_he":"סדריק דון","number":45,"role":"starter","img":"img/cedric-don.webp"},{"id":"noam-shtaifman","name_he":"נועם שטייפמן","first_he":"נועם","last_he":"שטייפמן","speak_he":"נועם שטייפמן","number":35,"role":"starter","img":"img/noam-shtaifman.webp"},{"id":"yarin-levi","name_he":"ירין לוי","first_he":"ירין","last_he":"לוי","speak_he":"ירין לוי","number":8,"role":"bench","img":"img/yarin-levi.webp"},{"id":"ali-mohamed","name_he":"עלי מוחמד","first_he":"עלי","last_he":"מוחמד","speak_he":"עלי מוחמד","number":4,"role":"bench","img":"img/ali-mohamed.webp"},{"id":"pedrao","name_he":"פדרו אוליביירה","first_he":"פדרו","last_he":"אוליביירה","speak_he":"פדרו אוליביירה","number":44,"role":"bench","img":"img/pedrao.webp"},{"id":"silva-kani","name_he":"סילבה קאני","first_he":"סילבה","last_he":"קאני","speak_he":"סילבה קאני","number":26,"role":"bench","img":"img/silva-kani.webp"},{"id":"andrija-novakovich","name_he":"אנדריאה נובאקוביץ'","first_he":"אנדריאה","last_he":"נובאקוביץ'","speak_he":"אנדריאה נובאקוביץ'","number":9,"role":"bench","img":"img/andrija-novakovich.webp"},{"id":"yair-mordechai","name_he":"יאיר מרדכי","first_he":"יאיר","last_he":"מרדכי","speak_he":"יאיר מרדכי","number":7,"role":"bench","img":"img/yair-mordechai.webp"},{"id":"guy-melamed","name_he":"גיא מלמד","first_he":"גיא","last_he":"מלמד","speak_he":"גיא מלמד","number":18,"role":"bench","img":"img/guy-melamed.webp"},{"id":"sean-goldberg","name_he":"שון גולדברג","first_he":"שון","last_he":"גולדברג","speak_he":"שון גולדברג","number":3,"role":"bench","img":"img/sean-goldberg.webp"},{"id":"navot-ratner","name_he":"נבות רטנר","first_he":"נבות","last_he":"רטנר","speak_he":"נבות רטנר","number":36,"role":"bench","img":"img/navot-ratner.webp"},{"id":"pedro-barzao","name_he":"פדרו ברזאו","first_he":"פדרו","last_he":"ברזאו","speak_he":"פדרו ברזאו","number":30,"role":"bench","img":"img/pedro-barzao.webp"},{"id":"adam-grimberg","name_he":"אדם גרימברג","first_he":"אדם","last_he":"גרימברג","speak_he":"אדם גרימברג","number":38,"role":"bench","img":"img/adam-grimberg.webp"},{"id":"glenn-alvin","name_he":"גלן אלוין","first_he":"גלן","last_he":"אלוין","speak_he":"גלן אלוין","number":90,"role":"backup","img":"img/glenn-alvin.webp"}],"audio":{"ui":["start","win"],"name":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg","glenn-alvin"],"match":["omri-glazer","ethan-azoulay","bruninho","nigel-lonwijk","jelle-bataille","kenji-gorre","iyad-khalaili","tzunami","kenny-saief","cedric-don","noam-shtaifman","yarin-levi","ali-mohamed","pedrao","silva-kani","andrija-novakovich","yair-mordechai","guy-melamed","sean-goldberg","navot-ratner","pedro-barzao","adam-grimberg","glenn-alvin"]}};
 </script>
 <script id="club">
 const CLUB = {
@@ -1112,12 +1089,12 @@ const CLUB = {
 (() => {
   'use strict';
 
-  const STARTERS = DATA.starters;
-  const BENCH = DATA.bench;
+  // The quiz asks every player once, in roster order: the starters, the bench and the backups (the
+  // pool's other goalkeepers, whom the memory game never deals).
+  const QUIZ = DATA.players;
+  const STARTERS = QUIZ.filter((p) => p.role === 'starter');
+  const BENCH = QUIZ.filter((p) => p.role === 'bench');
   const ALL = STARTERS.concat(BENCH);
-  // The quiz asks every pool player once: the starters, the bench and the backups (the pool's other
-  // goalkeepers, whom the memory game never deals).
-  const QUIZ = ALL.concat(DATA.backup || []);
   const CHOICES = 4;
   const ADVANCE_MS = 1500;
   const TAP_ADVANCE_MS = 700;
@@ -1549,16 +1526,15 @@ const CLUB = {
 
   /* ---------- card face: CLUB.face draws it, the engine sizes it ---------- */
 
+  function photoImg(p) {
+    return Object.assign(el('img'), { src: p.img, alt: '', decoding: 'async', draggable: false });
+  }
+
   // Every face starts with the photo; a match flight starts from its `.photo img`.
   function photoFront(p) {
     const front = el('span', 'face front');
     const photo = el('span', 'photo');
-    const img = el('img');
-    img.src = p.img;
-    img.alt = '';
-    img.decoding = 'async';
-    img.draggable = false;
-    photo.appendChild(img);
+    photo.appendChild(photoImg(p));
     front.appendChild(photo);
     return front;
   }
@@ -1603,12 +1579,7 @@ const CLUB = {
   // A quiz card asks with the photo alone: no name, no number.
   function askFace(p) {
     const side = el('span', 'face ask');
-    const img = el('img');
-    img.src = p.img;
-    img.alt = '';
-    img.decoding = 'async';
-    img.draggable = false;
-    side.appendChild(img);
+    side.appendChild(photoImg(p));
     return side;
   }
 
@@ -1616,17 +1587,15 @@ const CLUB = {
 
   const game = {
     phase: 'start',
-    mode: 'memory',
     round: 0,
     cards: [],
-    pairs: PAIRS,
+    total: 0, // finds that win: the memory game's pairs, or the quiz's players
     up: [],
     found: 0,
     flipBack: 0,
     winFallback: 0,
     winEarliest: 0,
     busyUntil: 0,
-    geo: null,
     flights: new Set(),
   };
 
@@ -1641,24 +1610,27 @@ const CLUB = {
     card.el.setAttribute('aria-label', state === 'down' ? 'קלף' : card.p.name_he);
   }
 
-  function layout() {
-    const rect = board.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    const landscape = landscapeQuery.matches;
-    const cols = landscape ? 6 : 5;
-    const rows = landscape ? 5 : 6;
-    const cs = getComputedStyle(board);
+  // A grid's cell for the [cols, rows] shape that shows the faces biggest, from the grid's own box
+  // and gaps; null while the grid isn't shown.
+  function cell(grid, shapes) {
+    const rect = grid.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    const cs = getComputedStyle(grid);
     const gx = parseFloat(cs.columnGap) || 0;
     const gy = parseFloat(cs.rowGap) || 0;
-    const cw = (rect.width - gx * (cols - 1)) / cols;
-    const ch = (rect.height - gy * (rows - 1)) / rows;
-    game.geo = applyFace(board, cw, ch, faceMode(cw, ch));
-    game.cards.forEach((card) => face.fit(card.el, card.p, game.geo));
+    return shapes.map(([cols, rows]) => ({
+      cols, cw: (rect.width - gx * (cols - 1)) / cols, ch: (rect.height - gy * (rows - 1)) / rows,
+    })).reduce((a, b) => (Math.min(b.cw, b.ch) > Math.min(a.cw, a.ch) ? b : a));
   }
 
-  function renderPips() {
-    pipsEl.textContent = '';
-    for (let i = 0; i < game.pairs; i++) pipsEl.appendChild(el('span', 'pip'));
+  function fitCards(grid, cards, { cw, ch }) {
+    const geo = applyFace(grid, cw, ch, faceMode(cw, ch));
+    cards.forEach((card) => face.fit(card.el, card.p, geo));
+  }
+
+  function layout() {
+    const c = cell(board, [landscapeQuery.matches ? [6, 5] : [5, 6]]);
+    if (c) fitCards(board, game.cards, c);
   }
 
   function warmImages(players) {
@@ -1670,8 +1642,8 @@ const CLUB = {
     });
   }
 
-  // What every new game, of either mode, starts from.
-  function reset(mode) {
+  // What every new game, of either mode, starts from: `total` finds to win, one pip each.
+  function reset(mode, total) {
     clearTimeout(game.flipBack);
     clearTimeout(game.winFallback);
     clearTimeout(quiz.next);
@@ -1679,30 +1651,28 @@ const CLUB = {
     game.flights.forEach((flight) => flight.cancel());
     game.flights.clear();
     confetti.stop();
-    hide('win');
-    hide('confirm');
-    game.mode = mode;
+    OVERLAYS.forEach(hide);
     app.dataset.mode = mode;
+    game.total = total;
+    game.found = 0;
+    app.dataset.found = '0';
+    pipsEl.textContent = '';
+    for (let i = 0; i < total; i++) pipsEl.appendChild(el('span', 'pip'));
   }
 
   function newGame() {
-    reset('memory');
-
     const benchPicks = shuffled(BENCH).slice(0, Math.max(0, PAIRS - STARTERS.length));
     const picks = STARTERS.concat(benchPicks);
     const deck = shuffled(picks.concat(picks));
 
-    game.pairs = picks.length;
-    game.found = 0;
+    reset('memory', picks.length);
     game.up = [];
-    app.dataset.found = '0';
     board.textContent = '';
     game.cards = deck.map((p, i) => {
       const card = { p, el: buildCard(p, i), state: 'down' };
       board.appendChild(card.el);
       return card;
     });
-    renderPips();
     layout();
     warmImages(picks);
     sound.prefetch(picks.flatMap((p) => [clip.name(p).url, clip.match(p).url]).concat(clip.ui('win').url));
@@ -1727,6 +1697,25 @@ const CLUB = {
     ], { duration: FLIP_MS, easing: 'ease-out' });
   }
 
+  // A card shows its face: memory's flip and the quiz's picks. A face that turns up lifts; a wrong pick
+  // ('out') shakes instead (base.css), so it never moves like a right one.
+  function turn(card, state, sfx = 'flip') {
+    setCard(card, state);
+    if (state !== 'out') lift(card);
+    sound.sfx(sfx);
+  }
+
+  // A find of either mode: the count, then its pip and celebration once the flip lands; true for the
+  // last one.
+  function scored(cards) {
+    game.found += 1;
+    app.dataset.found = String(game.found);
+    const pipIndex = game.found - 1;
+    const round = game.round;
+    setTimeout(() => { if (game.round === round) celebrate(cards, pipIndex); }, FLIP_MS * 0.85);
+    return game.found === game.total;
+  }
+
   function tap(card) {
     if (game.phase !== 'idle' && game.phase !== 'one' && game.phase !== 'two') return;
     if (card.state !== 'down' || performance.now() < game.busyUntil) return;
@@ -1738,9 +1727,7 @@ const CLUB = {
       game.up = [];
     }
 
-    setCard(card, 'up');
-    lift(card);
-    sound.sfx('flip');
+    turn(card, 'up');
     game.up.push(card);
 
     if (game.up.length === 1) {
@@ -1764,25 +1751,17 @@ const CLUB = {
     game.up = [];
     setCard(a, 'matched');
     setCard(b, 'matched');
-    game.found += 1;
-    app.dataset.found = String(game.found);
-    const pipIndex = game.found - 1;
-    const round = game.round;
-    setTimeout(() => { if (game.round === round) celebrate([a, b], pipIndex); }, FLIP_MS * 0.85);
-
     const lines = [clip.name(card.p), clip.match(card.p)];
-    if (game.found === game.pairs) {
-      finishing(lines, round);
-    } else {
-      setPhase('idle');
-    }
+    if (scored([a, b])) finishing(lines);
+    else setPhase('idle');
     sound.say(lines);
   }
 
   // The last find of either mode: the win clip follows `lines`, and the win screen comes when it
   // starts (at least 1.5 s on), or after a fallback when the voice never gets there.
-  function finishing(lines, round) {
+  function finishing(lines) {
     setPhase('finishing');
+    const round = game.round;
     game.winEarliest = performance.now() + 1500;
     const finish = () => { if (game.round === round) showWin(); };
     const win = clip.ui('win', WIN_LINE);
@@ -1873,37 +1852,27 @@ const CLUB = {
 
   /* ---------- quiz: who is this? ---------- */
 
-  const quiz = { order: [], at: 0, cards: [], answer: null, geo: null, next: 0, shownAt: 0 };
+  const quiz = { order: [], at: 0, cards: [], answer: null, next: 0, shownAt: 0 };
 
+  // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
   function quizLayout() {
-    const rect = picksEl.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    const cs = getComputedStyle(picksEl);
-    const gx = parseFloat(cs.columnGap) || 0;
-    const gy = parseFloat(cs.rowGap) || 0;
-    // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
-    const fit = [2, 4].map((cols) => {
-      const rows = CHOICES / cols;
-      const cw = (rect.width - gx * (cols - 1)) / cols;
-      const ch = (rect.height - gy * (rows - 1)) / rows;
-      return { cols, cw, ch };
-    }).reduce((a, b) => (Math.min(b.cw, b.ch) > Math.min(a.cw, a.ch) ? b : a));
-    picksEl.style.setProperty('--cols', String(fit.cols));
-    quiz.geo = applyFace(picksEl, fit.cw, fit.ch, faceMode(fit.cw, fit.ch));
-    quiz.cards.forEach((card) => face.fit(card.el, card.p, quiz.geo));
+    const c = cell(picksEl, [[2, 2], [4, 1]]);
+    if (!c) return;
+    picksEl.style.setProperty('--cols', String(c.cols));
+    fitCards(picksEl, quiz.cards, c);
   }
 
   function startQuiz() {
-    reset('quiz');
+    reset('quiz', QUIZ.length);
     quiz.order = shuffled(QUIZ);
     quiz.at = 0;
-    game.pairs = QUIZ.length;
-    game.found = 0;
-    app.dataset.found = '0';
-    renderPips();
     warmImages(QUIZ);
-    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('win').url));
     deal();
+    // The first question's clips first: its match line, the other three cards' (a wrong pick says one)
+    // and its name; then everyone's, in question order.
+    const first = [quiz.answer].concat(quiz.cards.filter((card) => card !== quiz.answer)).map((card) => card.p);
+    sound.prefetch(first.map((p) => clip.match(p).url).concat(clip.name(first[0]).url,
+      quiz.order.flatMap((p) => [clip.match(p).url, clip.name(p).url]), clip.ui('win').url));
     keepAwake();
   }
 
@@ -1944,42 +1913,35 @@ const CLUB = {
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
     if (card !== quiz.answer) {
-      // Not him, and she learns who it is: the soft sound, then the card turns over (greyed and
-      // marked, out of play) and says his number and name. Her next pick or #say cuts that off.
-      setCard(card, 'out');
-      card.el.classList.add('nope');
-      sound.sfx('nope');
+      // Not him, and she learns who it is: the soft sound and a shake, then the card turns over (greyed
+      // and marked, out of play) and says his number and name. Her next pick or #say cuts that off.
+      turn(card, 'out', 'nope');
       sound.say([{ wait: NOPE_SAY_MS }, clip.match(card.p)]);
       return;
     }
-    card.state = 'up';
-    card.el.dataset.state = 'up';
-    card.el.setAttribute('aria-label', card.p.name_he);
+    turn(card, 'up');
     picksEl.classList.add('solved');
-    lift(card);
-    sound.sfx('flip');
-    game.found += 1;
-    app.dataset.found = String(game.found);
     quiz.shownAt = performance.now();
-    const pipIndex = game.found - 1;
-    const round = game.round;
-    const at = quiz.at;
-    setTimeout(() => { if (game.round === round) celebrate([card], pipIndex); }, FLIP_MS * 0.85);
     const lines = [clip.name(card.p)];
-    if (game.found === game.pairs) {
-      finishing(lines, round);
+    if (scored([card])) {
+      finishing(lines);
       sound.say(lines);
       return;
     }
     setPhase('reveal');
     // On after the name clip, or after a fallback when the voice never ends.
-    const advance = (ms) => {
-      if (game.round !== round || quiz.at !== at || game.phase !== 'reveal') return;
-      clearTimeout(quiz.next);
-      quiz.next = setTimeout(nextQuestion, ms);
-    };
+    const round = game.round;
+    const at = quiz.at;
     advance(8000);
-    sound.say(lines).then(() => advance(ADVANCE_MS));
+    sound.say(lines).then(() => { if (game.round === round && quiz.at === at) advance(ADVANCE_MS); });
+  }
+
+  // The reveal moves on by itself `ms` from now, but not under the ↻ confirm or on a hidden page: closing
+  // the one or coming back to the other arms it again.
+  function advance(ms) {
+    clearTimeout(quiz.next);
+    if (game.phase !== 'reveal' || isShown('confirm') || document.visibilityState !== 'visible') return;
+    quiz.next = setTimeout(nextQuestion, ms);
   }
 
   function nextQuestion() {
@@ -2007,8 +1969,12 @@ const CLUB = {
 
   const OVERLAYS = ['start', 'confirm', 'win'];
 
+  function isShown(id) {
+    return $(id).classList.contains('show');
+  }
+
   function syncInert() {
-    app.inert = OVERLAYS.some((id) => $(id).classList.contains('show'));
+    app.inert = OVERLAYS.some(isShown);
   }
 
   function show(id) {
@@ -2128,8 +2094,7 @@ const CLUB = {
   let wakePending = false;
 
   function inGame() {
-    return game.phase === 'idle' || game.phase === 'one' || game.phase === 'two' || game.phase === 'finishing'
-      || game.phase === 'ask' || game.phase === 'reveal';
+    return game.phase !== 'start' && game.phase !== 'won';
   }
 
   function letSleep() {
@@ -2168,35 +2133,23 @@ const CLUB = {
 
   /* ---------- wiring ---------- */
 
-  function cardFromEvent(event) {
-    const node = event.target.closest && event.target.closest('.card');
-    return node && node.parentElement === board ? game.cards[Number(node.dataset.index)] : null;
+  // A grid's cards answer the first touch (pointerdown) and a keyboard press (a click with no pointer).
+  function onCard(grid, cards, fn) {
+    const handle = (event) => {
+      const node = event.target.closest && event.target.closest('.card');
+      fn(node && node.parentElement === grid ? cards()[Number(node.dataset.index)] : null);
+    };
+    grid.addEventListener('pointerdown', (event) => { if (event.button <= 0) handle(event); });
+    grid.addEventListener('click', (event) => { if (event.detail === 0) handle(event); });
   }
 
-  board.addEventListener('pointerdown', (event) => {
-    if (event.button > 0) return;
-    const card = cardFromEvent(event);
-    if (card) tap(card);
-  });
-
-  board.addEventListener('click', (event) => {
-    if (event.detail !== 0) return;
-    const card = cardFromEvent(event);
-    if (card) tap(card);
-  });
-
+  onCard(board, () => game.cards, (card) => { if (card) tap(card); });
   // A tap on a quiz card picks it; once the face shows, a tap anywhere on the cards moves on.
-  function quizTap(event) {
+  onCard(picksEl, () => quiz.cards, (card) => {
     if (game.phase === 'reveal') {
       if (performance.now() - quiz.shownAt >= TAP_ADVANCE_MS) nextQuestion();
-      return;
-    }
-    const node = event.target.closest && event.target.closest('.card');
-    if (node && node.parentElement === picksEl) pick(quiz.cards[Number(node.dataset.index)]);
-  }
-
-  picksEl.addEventListener('pointerdown', (event) => { if (event.button <= 0) quizTap(event); });
-  picksEl.addEventListener('click', (event) => { if (event.detail === 0) quizTap(event); });
+    } else if (card) pick(card);
+  });
 
   $('say').addEventListener('click', () => {
     if (game.phase !== 'ask') return;
@@ -2231,15 +2184,21 @@ const CLUB = {
     }));
   }
 
-  wireModes(['play', 'play-quiz'], () => game.phase === 'start', () => { goFullscreen(); hide('start'); });
+  wireModes(['play', 'play-quiz'], () => game.phase === 'start', goFullscreen);
   wireModes(['replay', 'replay-quiz'], () => game.phase === 'won');
-  wireModes(['yes', 'yes-quiz'], () => true, () => hide('confirm'));
+  wireModes(['yes', 'yes-quiz'], () => true);
 
+  // A quiz reveal waits under the confirm: "no" picks it up again, a mode button starts afresh.
   $('again').addEventListener('click', () => {
-    if (inGame() && game.phase !== 'finishing') show('confirm');
+    if (!inGame() || game.phase === 'finishing') return;
+    clearTimeout(quiz.next);
+    show('confirm');
   });
 
-  $('no').addEventListener('click', () => hide('confirm'));
+  $('no').addEventListener('click', () => {
+    hide('confirm');
+    advance(ADVANCE_MS);
+  });
 
   const muteBtn = $('mute');
   function syncMute() { muteBtn.setAttribute('aria-pressed', sound.muted ? 'true' : 'false'); }
@@ -2257,11 +2216,13 @@ const CLUB = {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') {
       letSleep();
+      clearTimeout(quiz.next); // a reveal waits for her: the halted name clip must not move it on
       sound.halt();
       hurryWin();
     } else {
       sound.wake();
       if (inGame()) keepAwake();
+      advance(ADVANCE_MS);
     }
   });
   window.addEventListener('pageshow', () => sound.wake());
@@ -2270,13 +2231,10 @@ const CLUB = {
     document.addEventListener(type, () => sound.wake(), { capture: true, passive: true });
   });
 
-  if (window.ResizeObserver) {
-    new ResizeObserver(() => layout()).observe(board);
-    new ResizeObserver(() => quizLayout()).observe(picksEl);
-  } else {
-    window.addEventListener('resize', layout);
-    window.addEventListener('resize', quizLayout);
-  }
+  // Only the shown grid has a box; the other's layout returns at once.
+  const relayout = () => { layout(); quizLayout(); };
+  if (window.ResizeObserver) [board, picksEl].forEach((grid) => new ResizeObserver(relayout).observe(grid));
+  else window.addEventListener('resize', relayout);
   window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
 
   sound.prefetch([clip.ui('start').url]);
@@ -2288,8 +2246,7 @@ const CLUB = {
   fontsReady.catch(() => {}).then(() => {
     face.prepare(QUIZ);
     buildFan();
-    layout();
-    quizLayout();
+    relayout();
   });
 
   /* ---------- home-screen install (parent-facing, start screen only) ---------- */

@@ -14,7 +14,7 @@ and then the exact hand-fixed IPA of the name.
 
     render_blue.py --g2p "טקסט" [target_speaker]   # print RenikudPlus IPA only
     render_blue.py --g2p-roster players.json [pronunciations.json]
-                                                   # every starter/bench name: G2P next to its pin
+                                                   # every shipped name: G2P next to its pin
 
 Hebrew G2P is RenikudPlus. Each job writes <key>.wav (44.1 kHz float→PCM16) and
 <key>.json with the exact IPA spoken, so a mispronounced name can be fixed by
