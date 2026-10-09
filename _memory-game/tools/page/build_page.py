@@ -291,13 +291,16 @@ def data_line(game, roster):
 def write_words(words_json, game):
     """A word game's club/roster.json from words.json (a list, or {"words": [...]}), in teaching order (`rank`
     when the list has one): id, en, he, he_niqqud when given, theme and the picture. Every word needs its
-    picture and both clips."""
+    picture and both clips. club.json `leave_out` ({id: why}) keeps a listed word out of the game."""
     page = REPO / game
     data = json.loads(Path(words_json).read_text(encoding="utf-8"))
     words = data["words"] if isinstance(data, dict) else data
     ids = [w.get("id") for w in words]
     if len(set(ids)) != len(ids):
         fail(f"{words_json}: duplicate ids: {sorted({i for i in ids if ids.count(i) > 1})}")
+    for wid, why in config(game).get("leave_out", {}).items():
+        print(f"{game}: left out {wid}{'' if wid in ids else ' (not in the list)'}: {why}", flush=True)
+    words = [w for w in words if w["id"] not in config(game).get("leave_out", {})]
     ordered = sorted(words, key=lambda w: w.get("rank", 0)) if all("rank" in w for w in words) else words
     roster = {"words": [word_entry(w, page) for w in ordered]}
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")

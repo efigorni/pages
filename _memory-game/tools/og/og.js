@@ -25,7 +25,7 @@ const ORIGIN = 'http://og.invalid/';
 // The poster: the title over three cards fanned out a little, side by side so no face, number or name is
 // covered, the middle one a little bigger.
 const POSTER_CSS = `
-  .start .modes, .install, .fan, .progress { display: none; }
+  .start .modes, .install, .fan, [data-progress] .progress { display: none; }
   .start-stage { grid-template-areas: "title" "cards"; row-gap: var(--og-gap); }
   .og-cards { grid-area: cards; display: flex; align-items: center; gap: calc(var(--cw) * .07); }
   .og-cards .card { flex: none; width: var(--cw); height: var(--ch); }
