@@ -23,7 +23,7 @@ They were made in the work directory of the round that built the game, `~/Docume
 - **The pictures**: Fluent UI Emoji 3D at the pinned commit (`CREDITS.md`), resized to WebP into
   `assets/img/<id>.webp`.
 - **The clips**: `assets/audio/en/<id>.mp3` (Kokoro `af_heart`) and `assets/audio/he/<id>.mp3` (BlueTTS
-  `noa`), each checked by a speech-to-text round trip, in the clubs' clip format; `assets/audio/listen.html`
+  `noa`), each checked by a speech-to-text round trip, in the clubs' clip format; `assets/listen.html`
   plays them all.
 
 ## Refresh the words

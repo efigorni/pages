@@ -1,6 +1,6 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
 // VERSION (a hash of every file it ships), ASSETS, PREFIX and RUNTIME: edit the template, not a sw.js.
-const VERSION = 'english-words-7f779fb8bd73';
+const VERSION = 'english-words-7d2a027ac9c9';
 const ASSETS = [
   './',
   'index.html',
@@ -114,7 +114,7 @@ const PREFIX = 'english-words-';
 // A game that precaches only its core (club.json play.precache "core": the page and its first words)
 // keeps every other picture and clip it fetches here, across versions. Its name hashes those files,
 // so it is replaced only when one of them changes. Empty when everything is precached.
-const RUNTIME = 'english-words-runtime-c0ae802dee89';
+const RUNTIME = 'english-words-runtime-cf597ce5bf95';
 
 const NAV_TIMEOUT_MS = 3000;
 
