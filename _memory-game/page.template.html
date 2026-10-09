@@ -27,7 +27,19 @@
 {{base}}</style>
 </head>
 <body>
-<div class="app" id="app" data-phase="start" data-found="0">
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-memory" viewBox="0 0 48 48">
+    <path fill-rule="evenodd" fill="currentColor" transform="translate(12.5 24) rotate(-5)" d="M-6.5-14H6.5A3 3 0 0 1 9.5-11V11A3 3 0 0 1 6.5 14H-6.5A3 3 0 0 1-9.5 11V-11A3 3 0 0 1-6.5-14ZM0-6.5 1.6-2.2 6.2-2 2.6.85 3.8 5.3 0 2.75-3.8 5.3-2.6.85-6.2-2-1.6-2.2Z"/>
+    <path fill-rule="evenodd" fill="currentColor" transform="translate(35.5 24) rotate(5)" d="M-6.5-14H6.5A3 3 0 0 1 9.5-11V11A3 3 0 0 1 6.5 14H-6.5A3 3 0 0 1-9.5 11V-11A3 3 0 0 1-6.5-14ZM0-6.5 1.6-2.2 6.2-2 2.6.85 3.8 5.3 0 2.75-3.8 5.3-2.6.85-6.2-2-1.6-2.2Z"/>
+  </symbol>
+  <symbol id="i-quiz" viewBox="0 0 48 48">
+    <circle cx="24" cy="16.5" r="12" fill="currentColor"/>
+    <path d="M4 46.5C4 36.5 12.5 31 24 31S44 36.5 44 46.5Z" fill="currentColor"/>
+    <path class="cut" d="M20.1 12.6A4 4 0 1 1 26.9 15.2C25.2 16.4 24 17.3 24 19.6" fill="none" stroke-width="3.2" stroke-linecap="round"/>
+    <circle class="cut" cx="24" cy="24" r="1.9"/>
+  </symbol>
+</svg>
+<div class="app" id="app" data-phase="start" data-mode="memory" data-found="0">
   <header class="hud">
     <button class="icon-btn" id="mute" type="button" aria-label="קול" aria-pressed="false">
       <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -39,15 +51,25 @@
     </button>
   </header>
   <main class="board" id="board"></main>
+  <section class="quiz" id="quiz">
+    <div class="prompt">
+      <button class="say" id="say" type="button" aria-label="לשמוע שוב">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <p class="question" id="question" aria-live="polite"></p>
+    </div>
+    <div class="picks" id="picks"></div>
+  </section>
 </div>
 
 <section class="overlay start show" id="start">
   <div class="start-stage">
     <h1 class="title">{{title}}</h1>
     <div class="fan" id="fan" data-face="band" aria-hidden="true"></div>
-    <button class="big play" id="play" type="button" aria-label="התחלה">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.6v12.8a1.1 1.1 0 0 0 1.7.94l10-6.4a1.1 1.1 0 0 0 0-1.88l-10-6.4A1.1 1.1 0 0 0 8 5.6z" fill="currentColor"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="play" type="button" aria-label="משחק זיכרון"><span class="big play"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="play-quiz" type="button" aria-label="חידון: מי זה?"><span class="big play"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
   </div>
   <button class="install" id="install" type="button" hidden>
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v7M8.8 11.6 12 14.8l3.2-3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -57,9 +79,10 @@
 
 <section class="overlay confirm" id="confirm" inert>
   <div class="confirm-box">
-    <button class="big yes" id="yes" type="button" aria-label="כן, משחק חדש">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.8l4.6 4.6L19.2 7.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="yes" type="button" aria-label="משחק זיכרון חדש"><span class="big"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="yes-quiz" type="button" aria-label="חידון חדש: מי זה?"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
     <button class="big no" id="no" type="button" aria-label="לא, להמשיך לשחק">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
     </button>
@@ -70,9 +93,10 @@
   <div class="win-stage">
     <svg class="trophy" viewBox="0 0 120 120" aria-hidden="true">
 {{trophy}}    </svg>
-    <button class="big" id="replay" type="button" aria-label="משחק חדש">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 1 1 17.3 5.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M18.8 2.6v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="replay" type="button" aria-label="משחק זיכרון חדש"><span class="big"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="replay-quiz" type="button" aria-label="חידון חדש: מי זה?"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
   </div>
 </section>
 

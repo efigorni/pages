@@ -55,6 +55,17 @@ img {
   pointer-events: none;
 }
 
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* the mode icons' cut-outs take the disc's own colour */
+.cut { stroke: var(--big-bg); }
+circle.cut { fill: var(--big-bg); }
+
 :focus { outline: none; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
@@ -263,6 +274,11 @@ img {
   animation-delay: calc(var(--i) * 16ms);
 }
 
+.picks.dealing .card {
+  animation: deal 520ms cubic-bezier(.25, 1.35, .5, 1) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+
 @keyframes deal {
   from { opacity: 0; transform: translateY(-24%) scale(.55); }
   to { opacity: 1; transform: none; }
@@ -334,8 +350,39 @@ img {
   transition: transform .12s ease;
 }
 
-.big:active { transform: translateY(clamp(3px, .7vmin, 6px)); }
+.big:active,
+.mode:active .big { transform: translateY(clamp(3px, .7vmin, 6px)); }
 .big svg { width: 48%; height: 48%; }
+
+/* the two ways to play, side by side wherever a new game starts */
+.modes {
+  display: flex;
+  justify-content: center;
+  gap: clamp(18px, 6vmin, 64px);
+}
+
+.mode {
+  display: grid;
+  justify-items: center;
+  gap: clamp(6px, 1.5vmin, 12px);
+}
+
+.modes .big,
+.confirm-box > .big {
+  width: clamp(92px, 21vmin, 180px);
+  height: clamp(92px, 21vmin, 180px);
+}
+
+.modes .big svg { width: 60%; height: 60%; }
+
+/* for the parents: as quiet as the install pill, and drawn with its tokens */
+.mode-label {
+  padding: 3px 10px 2px;
+  border-radius: 999px;
+  background: var(--scrim-install);
+  color: var(--install-fg, rgba(255, 255, 255, .78));
+  font: 600 clamp(13px, 2vmin, 17px)/1.15 system-ui, "Arial Hebrew", sans-serif;
+}
 
 .big.no {
   background: var(--no-bg);
@@ -356,7 +403,7 @@ img {
 
 .start-stage .title { grid-area: title; }
 .start-stage .fan { grid-area: fan; }
-.start-stage .play { grid-area: play; }
+.start-stage .modes { grid-area: play; }
 
 @media (orientation: landscape) {
   .start-stage {
@@ -399,13 +446,12 @@ img {
 }
 
 .start.show .play::before { animation: halo 1.9s ease-out infinite; }
+.start.show .mode + .mode .play::before { animation-delay: .95s; }
 
 @keyframes halo {
   0% { opacity: .85; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.45); }
 }
-
-.play svg { margin-left: 8%; }
 
 /* parent-facing: small, quiet, in a corner of the start screen, never on the board */
 .install {
@@ -436,11 +482,13 @@ img {
 
 .confirm-box {
   display: flex;
+  align-items: flex-start;
   gap: clamp(28px, 9vmin, 96px);
 }
 
 .confirm.show .big { animation: pop-in .38s cubic-bezier(.3, 1.6, .5, 1) both; }
-.confirm.show .big.no { animation-delay: .06s; }
+.confirm.show .mode + .mode .big { animation-delay: .04s; }
+.confirm.show .big.no { animation-delay: .08s; }
 
 @keyframes pop-in {
   from { transform: scale(.3); opacity: 0; }
@@ -460,6 +508,7 @@ img {
 
 .win.show .trophy { animation: trophy-in .9s cubic-bezier(.3, 1.45, .5, 1) both; }
 .win.show .big { animation: pop-in .45s .55s cubic-bezier(.3, 1.6, .5, 1) both; }
+.win.show .mode + .mode .big { animation-delay: .62s; }
 
 @keyframes trophy-in {
   0% { opacity: 0; transform: scale(.2) rotate(-24deg); }
@@ -476,9 +525,136 @@ img {
   pointer-events: none;
 }
 
+/* ---------- quiz: who is this? ---------- */
+
+.quiz {
+  grid-area: board;
+  display: none;
+  min-width: 0;
+  min-height: 0;
+  gap: calc(var(--gap) * 1.5);
+  grid-template: "prompt" auto "picks" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+.app[data-mode="quiz"] .quiz { display: grid; }
+.app[data-mode="quiz"] .board { display: none; }
+
+/* drawn like the HUD buttons, so it reads on a dark board and a light one */
+.prompt {
+  grid-area: prompt;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2.4vmin, 22px);
+  min-width: 0;
+  padding: clamp(6px, 1.2vmin, 12px);
+  padding-inline-end: clamp(12px, 3vmin, 28px);
+  border-radius: 999px;
+  background: var(--hud-btn-bg, rgba(255, 255, 255, .09));
+}
+
+.say {
+  flex: none;
+  width: calc(var(--hud) * 1.1);
+  height: calc(var(--hud) * 1.1);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--big-bg);
+  color: var(--big-fg);
+  box-shadow: 0 clamp(3px, .6vmin, 5px) 0 var(--big-drop);
+  transition: transform .12s ease;
+}
+
+.say:active { transform: translateY(clamp(2px, .5vmin, 4px)); }
+.say svg { width: 56%; height: 56%; }
+
+.question {
+  min-width: 0;
+  margin: 0;
+  color: var(--white);
+  font-weight: 700;
+  font-size: clamp(24px, 5.2vmin, 52px);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+/* the shirt number: the one word a child who can't read yet can */
+.qnum {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: .06em .28em 0;
+  border-radius: .3em;
+  background: var(--big-bg);
+  color: var(--big-fg);
+  direction: ltr;
+  text-align: center;
+  font-size: 1.3em;
+  line-height: 1;
+}
+
+.picks {
+  grid-area: picks;
+  display: grid;
+  gap: calc(var(--gap) * 2);
+  min-width: 0;
+  min-height: 0;
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+/* the side of a quiz card that asks: the photo alone, as big as the card allows */
+.ask {
+  background:
+    radial-gradient(80% 70% at 50% 42%, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 72%),
+    var(--surface);
+}
+
+.ask img {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(var(--cw) * 1.12, var(--ch));
+  height: min(var(--cw) * 1.12, var(--ch));
+  transform: translateX(-50%);
+}
+
+.ask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--edge);
+}
+
+/* a wrong pick: a soft shake, then it greys out and stays out of the way */
+.picks .card.nope { animation: nope .42s ease-in-out; }
+
+.picks .card[data-state="out"] {
+  opacity: .4;
+  filter: grayscale(1);
+  scale: .92;
+  transition: opacity .35s ease .3s, filter .35s ease .3s, scale .35s ease .3s;
+}
+
+@keyframes nope {
+  0%, 100% { translate: 0; }
+  20% { translate: -6% 0; }
+  40% { translate: 5% 0; }
+  60% { translate: -3% 0; }
+  80% { translate: 1.5% 0; }
+}
+
+/* the right pick: the others step back while its face shows */
+.picks.solved .card:not([data-state="up"]) {
+  opacity: .22;
+  transition: opacity .3s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card-inner { transition-duration: 1ms; }
   .board.dealing .card,
+  .picks.dealing .card,
+  .picks .card.nope,
   .card.found,
   .burst,
   .pip.full,
@@ -486,4 +662,6 @@ img {
   .confirm.show .big,
   .win.show .trophy,
   .win.show .big { animation: none; }
+  .picks .card[data-state="out"],
+  .picks.solved .card { transition: none; }
 }

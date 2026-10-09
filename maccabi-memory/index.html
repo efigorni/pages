@@ -259,6 +259,17 @@ img {
   pointer-events: none;
 }
 
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* the mode icons' cut-outs take the disc's own colour */
+.cut { stroke: var(--big-bg); }
+circle.cut { fill: var(--big-bg); }
+
 :focus { outline: none; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
@@ -467,6 +478,11 @@ img {
   animation-delay: calc(var(--i) * 16ms);
 }
 
+.picks.dealing .card {
+  animation: deal 520ms cubic-bezier(.25, 1.35, .5, 1) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+
 @keyframes deal {
   from { opacity: 0; transform: translateY(-24%) scale(.55); }
   to { opacity: 1; transform: none; }
@@ -538,8 +554,39 @@ img {
   transition: transform .12s ease;
 }
 
-.big:active { transform: translateY(clamp(3px, .7vmin, 6px)); }
+.big:active,
+.mode:active .big { transform: translateY(clamp(3px, .7vmin, 6px)); }
 .big svg { width: 48%; height: 48%; }
+
+/* the two ways to play, side by side wherever a new game starts */
+.modes {
+  display: flex;
+  justify-content: center;
+  gap: clamp(18px, 6vmin, 64px);
+}
+
+.mode {
+  display: grid;
+  justify-items: center;
+  gap: clamp(6px, 1.5vmin, 12px);
+}
+
+.modes .big,
+.confirm-box > .big {
+  width: clamp(92px, 21vmin, 180px);
+  height: clamp(92px, 21vmin, 180px);
+}
+
+.modes .big svg { width: 60%; height: 60%; }
+
+/* for the parents: as quiet as the install pill, and drawn with its tokens */
+.mode-label {
+  padding: 3px 10px 2px;
+  border-radius: 999px;
+  background: var(--scrim-install);
+  color: var(--install-fg, rgba(255, 255, 255, .78));
+  font: 600 clamp(13px, 2vmin, 17px)/1.15 system-ui, "Arial Hebrew", sans-serif;
+}
 
 .big.no {
   background: var(--no-bg);
@@ -560,7 +607,7 @@ img {
 
 .start-stage .title { grid-area: title; }
 .start-stage .fan { grid-area: fan; }
-.start-stage .play { grid-area: play; }
+.start-stage .modes { grid-area: play; }
 
 @media (orientation: landscape) {
   .start-stage {
@@ -603,13 +650,12 @@ img {
 }
 
 .start.show .play::before { animation: halo 1.9s ease-out infinite; }
+.start.show .mode + .mode .play::before { animation-delay: .95s; }
 
 @keyframes halo {
   0% { opacity: .85; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.45); }
 }
-
-.play svg { margin-left: 8%; }
 
 /* parent-facing: small, quiet, in a corner of the start screen, never on the board */
 .install {
@@ -640,11 +686,13 @@ img {
 
 .confirm-box {
   display: flex;
+  align-items: flex-start;
   gap: clamp(28px, 9vmin, 96px);
 }
 
 .confirm.show .big { animation: pop-in .38s cubic-bezier(.3, 1.6, .5, 1) both; }
-.confirm.show .big.no { animation-delay: .06s; }
+.confirm.show .mode + .mode .big { animation-delay: .04s; }
+.confirm.show .big.no { animation-delay: .08s; }
 
 @keyframes pop-in {
   from { transform: scale(.3); opacity: 0; }
@@ -664,6 +712,7 @@ img {
 
 .win.show .trophy { animation: trophy-in .9s cubic-bezier(.3, 1.45, .5, 1) both; }
 .win.show .big { animation: pop-in .45s .55s cubic-bezier(.3, 1.6, .5, 1) both; }
+.win.show .mode + .mode .big { animation-delay: .62s; }
 
 @keyframes trophy-in {
   0% { opacity: 0; transform: scale(.2) rotate(-24deg); }
@@ -680,9 +729,136 @@ img {
   pointer-events: none;
 }
 
+/* ---------- quiz: who is this? ---------- */
+
+.quiz {
+  grid-area: board;
+  display: none;
+  min-width: 0;
+  min-height: 0;
+  gap: calc(var(--gap) * 1.5);
+  grid-template: "prompt" auto "picks" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+.app[data-mode="quiz"] .quiz { display: grid; }
+.app[data-mode="quiz"] .board { display: none; }
+
+/* drawn like the HUD buttons, so it reads on a dark board and a light one */
+.prompt {
+  grid-area: prompt;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2.4vmin, 22px);
+  min-width: 0;
+  padding: clamp(6px, 1.2vmin, 12px);
+  padding-inline-end: clamp(12px, 3vmin, 28px);
+  border-radius: 999px;
+  background: var(--hud-btn-bg, rgba(255, 255, 255, .09));
+}
+
+.say {
+  flex: none;
+  width: calc(var(--hud) * 1.1);
+  height: calc(var(--hud) * 1.1);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--big-bg);
+  color: var(--big-fg);
+  box-shadow: 0 clamp(3px, .6vmin, 5px) 0 var(--big-drop);
+  transition: transform .12s ease;
+}
+
+.say:active { transform: translateY(clamp(2px, .5vmin, 4px)); }
+.say svg { width: 56%; height: 56%; }
+
+.question {
+  min-width: 0;
+  margin: 0;
+  color: var(--white);
+  font-weight: 700;
+  font-size: clamp(24px, 5.2vmin, 52px);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+/* the shirt number: the one word a child who can't read yet can */
+.qnum {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: .06em .28em 0;
+  border-radius: .3em;
+  background: var(--big-bg);
+  color: var(--big-fg);
+  direction: ltr;
+  text-align: center;
+  font-size: 1.3em;
+  line-height: 1;
+}
+
+.picks {
+  grid-area: picks;
+  display: grid;
+  gap: calc(var(--gap) * 2);
+  min-width: 0;
+  min-height: 0;
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+/* the side of a quiz card that asks: the photo alone, as big as the card allows */
+.ask {
+  background:
+    radial-gradient(80% 70% at 50% 42%, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 72%),
+    var(--surface);
+}
+
+.ask img {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(var(--cw) * 1.12, var(--ch));
+  height: min(var(--cw) * 1.12, var(--ch));
+  transform: translateX(-50%);
+}
+
+.ask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--edge);
+}
+
+/* a wrong pick: a soft shake, then it greys out and stays out of the way */
+.picks .card.nope { animation: nope .42s ease-in-out; }
+
+.picks .card[data-state="out"] {
+  opacity: .4;
+  filter: grayscale(1);
+  scale: .92;
+  transition: opacity .35s ease .3s, filter .35s ease .3s, scale .35s ease .3s;
+}
+
+@keyframes nope {
+  0%, 100% { translate: 0; }
+  20% { translate: -6% 0; }
+  40% { translate: 5% 0; }
+  60% { translate: -3% 0; }
+  80% { translate: 1.5% 0; }
+}
+
+/* the right pick: the others step back while its face shows */
+.picks.solved .card:not([data-state="up"]) {
+  opacity: .22;
+  transition: opacity .3s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card-inner { transition-duration: 1ms; }
   .board.dealing .card,
+  .picks.dealing .card,
+  .picks .card.nope,
   .card.found,
   .burst,
   .pip.full,
@@ -690,11 +866,25 @@ img {
   .confirm.show .big,
   .win.show .trophy,
   .win.show .big { animation: none; }
+  .picks .card[data-state="out"],
+  .picks.solved .card { transition: none; }
 }
 </style>
 </head>
 <body>
-<div class="app" id="app" data-phase="start" data-found="0">
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-memory" viewBox="0 0 48 48">
+    <path fill-rule="evenodd" fill="currentColor" transform="translate(12.5 24) rotate(-5)" d="M-6.5-14H6.5A3 3 0 0 1 9.5-11V11A3 3 0 0 1 6.5 14H-6.5A3 3 0 0 1-9.5 11V-11A3 3 0 0 1-6.5-14ZM0-6.5 1.6-2.2 6.2-2 2.6.85 3.8 5.3 0 2.75-3.8 5.3-2.6.85-6.2-2-1.6-2.2Z"/>
+    <path fill-rule="evenodd" fill="currentColor" transform="translate(35.5 24) rotate(5)" d="M-6.5-14H6.5A3 3 0 0 1 9.5-11V11A3 3 0 0 1 6.5 14H-6.5A3 3 0 0 1-9.5 11V-11A3 3 0 0 1-6.5-14ZM0-6.5 1.6-2.2 6.2-2 2.6.85 3.8 5.3 0 2.75-3.8 5.3-2.6.85-6.2-2-1.6-2.2Z"/>
+  </symbol>
+  <symbol id="i-quiz" viewBox="0 0 48 48">
+    <circle cx="24" cy="16.5" r="12" fill="currentColor"/>
+    <path d="M4 46.5C4 36.5 12.5 31 24 31S44 36.5 44 46.5Z" fill="currentColor"/>
+    <path class="cut" d="M20.1 12.6A4 4 0 1 1 26.9 15.2C25.2 16.4 24 17.3 24 19.6" fill="none" stroke-width="3.2" stroke-linecap="round"/>
+    <circle class="cut" cx="24" cy="24" r="1.9"/>
+  </symbol>
+</svg>
+<div class="app" id="app" data-phase="start" data-mode="memory" data-found="0">
   <header class="hud">
     <button class="icon-btn" id="mute" type="button" aria-label="קול" aria-pressed="false">
       <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -706,15 +896,25 @@ img {
     </button>
   </header>
   <main class="board" id="board"></main>
+  <section class="quiz" id="quiz">
+    <div class="prompt">
+      <button class="say" id="say" type="button" aria-label="לשמוע שוב">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <p class="question" id="question" aria-live="polite"></p>
+    </div>
+    <div class="picks" id="picks"></div>
+  </section>
 </div>
 
 <section class="overlay start show" id="start">
   <div class="start-stage">
     <h1 class="title">זיכרון מכבי</h1>
     <div class="fan" id="fan" data-face="band" aria-hidden="true"></div>
-    <button class="big play" id="play" type="button" aria-label="התחלה">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.6v12.8a1.1 1.1 0 0 0 1.7.94l10-6.4a1.1 1.1 0 0 0 0-1.88l-10-6.4A1.1 1.1 0 0 0 8 5.6z" fill="currentColor"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="play" type="button" aria-label="משחק זיכרון"><span class="big play"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="play-quiz" type="button" aria-label="חידון: מי זה?"><span class="big play"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
   </div>
   <button class="install" id="install" type="button" hidden>
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v7M8.8 11.6 12 14.8l3.2-3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -724,9 +924,10 @@ img {
 
 <section class="overlay confirm" id="confirm" inert>
   <div class="confirm-box">
-    <button class="big yes" id="yes" type="button" aria-label="כן, משחק חדש">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.8l4.6 4.6L19.2 7.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="yes" type="button" aria-label="משחק זיכרון חדש"><span class="big"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="yes-quiz" type="button" aria-label="חידון חדש: מי זה?"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
     <button class="big no" id="no" type="button" aria-label="לא, להמשיך לשחק">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
     </button>
@@ -743,16 +944,17 @@ img {
       <path d="M60 25l3.64 9.98 10.63.38-8.37 6.56 2.92 10.22L60 46.2l-8.82 5.94 2.92-10.22-8.37-6.56 10.63-.38z" fill="#061e3f"/>
       <path d="M38 19v19c0 6 2 11 5 15" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3.5" stroke-linecap="round"/>
     </svg>
-    <button class="big" id="replay" type="button" aria-label="משחק חדש">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 1 1 17.3 5.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M18.8 2.6v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+    <div class="modes">
+      <button class="mode" id="replay" type="button" aria-label="משחק זיכרון חדש"><span class="big"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
+      <button class="mode" id="replay-quiz" type="button" aria-label="חידון חדש: מי זה?"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+    </div>
   </div>
 </section>
 
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 
 <script id="data">
-const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"אופק מליקה","number":1,"role":"starter","img":"img/ofek-melika.webp"},{"id":"raz-shlomo","name_he":"רז שלמה","number":13,"role":"starter","img":"img/raz-shlomo.webp"},{"id":"dor-peretz","name_he":"דור פרץ","number":42,"role":"starter","img":"img/dor-peretz.webp"},{"id":"issouf-sissokho","name_he":"איסוף סיסוקו","number":28,"role":"starter","img":"img/issouf-sissokho.webp"},{"id":"helio-varela","name_he":"הליו וארלה","number":29,"role":"starter","img":"img/helio-varela.webp"},{"id":"mohamed-ali-camara","name_he":"מוחמד עלי קמארה","number":5,"role":"starter","img":"img/mohamed-ali-camara.webp"},{"id":"osher-davida","name_he":"אושר דוידה","number":77,"role":"starter","img":"img/osher-davida.webp"},{"id":"ido-shahar","name_he":"עידו שחר","number":36,"role":"starter","img":"img/ido-shahar.webp"},{"id":"ester-sokler","name_he":"אסטר סוקלר","number":9,"role":"starter","img":"img/ester-sokler.webp"},{"id":"noam-ben-harush","name_he":"נועם בן הרוש","number":22,"role":"starter","img":"img/noam-ben-harush.webp"},{"id":"tyrese-asante","name_he":"טייריס אסנטה","number":6,"role":"starter","img":"img/tyrese-asante.webp"}],"bench":[{"id":"itay-ben-hemo","name_he":"איתי בן חמו","number":41,"role":"bench","img":"img/itay-ben-hemo.webp"},{"id":"itamar-noy","name_he":"איתמר נוי","number":30,"role":"bench","img":"img/itamar-noy.webp"},{"id":"gabi-kanichowsky","name_he":"גבי קניקובסקי","number":16,"role":"bench","img":"img/gabi-kanichowsky.webp"},{"id":"james-tavernier","name_he":"ג׳יימס טברנייר","number":2,"role":"bench","img":"img/james-tavernier.webp"},{"id":"sagiv-jehezkel","name_he":"שגיב יחזקאל","number":11,"role":"bench","img":"img/sagiv-jehezkel.webp"},{"id":"shachar-rosen","name_he":"שחר רוזן","number":25,"role":"bench","img":"img/shachar-rosen.webp"},{"id":"elad-madmon","name_he":"אלעד מדמון","number":19,"role":"bench","img":"img/elad-madmon.webp"},{"id":"dan-glazer","name_he":"דן גלזר","number":18,"role":"bench","img":"img/dan-glazer.webp"},{"id":"hisham-layous","name_he":"הישאם לאיוס","number":33,"role":"bench","img":"img/hisham-layous.webp"},{"id":"ilay-ben-simon","name_he":"עילאי בן סימון","number":60,"role":"bench","img":"img/ilay-ben-simon.webp"},{"id":"kristijan-belic","name_he":"כריסטיאן בליץ'","number":17,"role":"bench","img":"img/kristijan-belic.webp"}],"audio":{"ui":["start","win"],"name":["ofek-melika","raz-shlomo","dor-peretz","issouf-sissokho","helio-varela","mohamed-ali-camara","osher-davida","ido-shahar","ester-sokler","noam-ben-harush","tyrese-asante","itay-ben-hemo","itamar-noy","gabi-kanichowsky","james-tavernier","sagiv-jehezkel","shachar-rosen","elad-madmon","dan-glazer","hisham-layous","ilay-ben-simon","kristijan-belic"],"match":["ofek-melika","raz-shlomo","dor-peretz","issouf-sissokho","helio-varela","mohamed-ali-camara","osher-davida","ido-shahar","ester-sokler","noam-ben-harush","tyrese-asante","itay-ben-hemo","itamar-noy","gabi-kanichowsky","james-tavernier","sagiv-jehezkel","shachar-rosen","elad-madmon","dan-glazer","hisham-layous","ilay-ben-simon","kristijan-belic"]}};
+const DATA = {"season":"2026/27","starters":[{"id":"ofek-melika","name_he":"אופק מליקה","number":1,"role":"starter","img":"img/ofek-melika.webp"},{"id":"raz-shlomo","name_he":"רז שלמה","number":13,"role":"starter","img":"img/raz-shlomo.webp"},{"id":"dor-peretz","name_he":"דור פרץ","number":42,"role":"starter","img":"img/dor-peretz.webp"},{"id":"issouf-sissokho","name_he":"איסוף סיסוקו","number":28,"role":"starter","img":"img/issouf-sissokho.webp"},{"id":"helio-varela","name_he":"הליו וארלה","number":29,"role":"starter","img":"img/helio-varela.webp"},{"id":"mohamed-ali-camara","name_he":"מוחמד עלי קמארה","number":5,"role":"starter","img":"img/mohamed-ali-camara.webp"},{"id":"osher-davida","name_he":"אושר דוידה","number":77,"role":"starter","img":"img/osher-davida.webp"},{"id":"ido-shahar","name_he":"עידו שחר","number":36,"role":"starter","img":"img/ido-shahar.webp"},{"id":"ester-sokler","name_he":"אסטר סוקלר","number":9,"role":"starter","img":"img/ester-sokler.webp"},{"id":"noam-ben-harush","name_he":"נועם בן הרוש","number":22,"role":"starter","img":"img/noam-ben-harush.webp"},{"id":"tyrese-asante","name_he":"טייריס אסנטה","number":6,"role":"starter","img":"img/tyrese-asante.webp"}],"bench":[{"id":"itay-ben-hemo","name_he":"איתי בן חמו","number":41,"role":"bench","img":"img/itay-ben-hemo.webp"},{"id":"itamar-noy","name_he":"איתמר נוי","number":30,"role":"bench","img":"img/itamar-noy.webp"},{"id":"gabi-kanichowsky","name_he":"גבי קניקובסקי","number":16,"role":"bench","img":"img/gabi-kanichowsky.webp"},{"id":"james-tavernier","name_he":"ג׳יימס טברנייר","number":2,"role":"bench","img":"img/james-tavernier.webp"},{"id":"sagiv-jehezkel","name_he":"שגיב יחזקאל","number":11,"role":"bench","img":"img/sagiv-jehezkel.webp"},{"id":"shachar-rosen","name_he":"שחר רוזן","number":25,"role":"bench","img":"img/shachar-rosen.webp"},{"id":"elad-madmon","name_he":"אלעד מדמון","number":19,"role":"bench","img":"img/elad-madmon.webp"},{"id":"dan-glazer","name_he":"דן גלזר","number":18,"role":"bench","img":"img/dan-glazer.webp"},{"id":"hisham-layous","name_he":"הישאם לאיוס","number":33,"role":"bench","img":"img/hisham-layous.webp"},{"id":"ilay-ben-simon","name_he":"עילאי בן סימון","number":60,"role":"bench","img":"img/ilay-ben-simon.webp"},{"id":"kristijan-belic","name_he":"כריסטיאן בליץ'","number":17,"role":"bench","img":"img/kristijan-belic.webp"}],"audio":{"ui":["start","win","who"],"name":["ofek-melika","raz-shlomo","dor-peretz","issouf-sissokho","helio-varela","mohamed-ali-camara","osher-davida","ido-shahar","ester-sokler","noam-ben-harush","tyrese-asante","itay-ben-hemo","itamar-noy","gabi-kanichowsky","james-tavernier","sagiv-jehezkel","shachar-rosen","elad-madmon","dan-glazer","hisham-layous","ilay-ben-simon","kristijan-belic"],"match":["ofek-melika","raz-shlomo","dor-peretz","issouf-sissokho","helio-varela","mohamed-ali-camara","osher-davida","ido-shahar","ester-sokler","noam-ben-harush","tyrese-asante","itay-ben-hemo","itamar-noy","gabi-kanichowsky","james-tavernier","sagiv-jehezkel","shachar-rosen","elad-madmon","dan-glazer","hisham-layous","ilay-ben-simon","kristijan-belic"]}};
 </script>
 <script id="club">
 const CLUB = {
@@ -852,17 +1054,26 @@ const CLUB = {
   const STARTERS = DATA.starters;
   const BENCH = DATA.bench;
   const ALL = STARTERS.concat(BENCH);
+  // The quiz asks every pool player once: the starters, the bench and the quiz-only players (the
+  // pool's backup goalkeepers, whom the memory game never deals).
+  const QUIZ = ALL.concat(DATA.quiz || []);
+  const CHOICES = 4;
+  const ADVANCE_MS = 1500;
+  const TAP_ADVANCE_MS = 700;
   const PAIRS = 15;
   const FLIP_MS = 460;
   const MISMATCH_MS = 2200;
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
+  const WHO_LINE = 'מי זה?';
 
   const $ = (id) => document.getElementById(id);
   const app = $('app');
   const board = $('board');
   const pipsEl = $('pips');
+  const picksEl = $('picks');
+  const questionEl = $('question');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const landscapeQuery = matchMedia('(orientation: landscape)');
 
@@ -1161,6 +1372,9 @@ const CLUB = {
         tone('sine', 420, 880, t, 0.1, 0.55);
       } else if (kind === 'match') {
         [1046.5, 1318.5, 1568].forEach((f, i) => tone('triangle', f, f, t + i * 0.08, 0.45, 0.5));
+      } else if (kind === 'nope') {
+        tone('sine', 330, 262, t, 0.16, 0.4);
+        tone('sine', 262, 220, t + 0.15, 0.24, 0.34);
       } else if (kind === 'win') {
         const notes = [523.25, 659.25, 783.99, 1046.5];
         notes.forEach((f, i) => tone('triangle', f, f, t + i * 0.12, 0.28, 0.55));
@@ -1305,7 +1519,8 @@ const CLUB = {
 
   /* ---------- DOM ---------- */
 
-  function buildCard(p, index, tag) {
+  // `back` is the side that shows first: the card back, or a quiz card's photo-only side.
+  function buildCard(p, index, tag, back) {
     const card = el(tag || 'button', 'card');
     if (!tag) {
       card.type = 'button';
@@ -1316,15 +1531,28 @@ const CLUB = {
     card.dataset.state = 'down';
     card.style.setProperty('--i', String(index));
     const inner = el('span', 'card-inner');
-    inner.append(el('span', 'face back'), face.build(p));
+    inner.append(back || el('span', 'face back'), face.build(p));
     card.appendChild(inner);
     return card;
+  }
+
+  // A quiz card asks with the photo alone: no name, no number.
+  function askFace(p) {
+    const side = el('span', 'face ask');
+    const img = el('img');
+    img.src = p.img;
+    img.alt = '';
+    img.decoding = 'async';
+    img.draggable = false;
+    side.appendChild(img);
+    return side;
   }
 
   /* ---------- game state ---------- */
 
   const game = {
     phase: 'start',
+    mode: 'memory',
     round: 0,
     cards: [],
     pairs: PAIRS,
@@ -1378,15 +1606,23 @@ const CLUB = {
     });
   }
 
-  function newGame() {
+  // What every new game, of either mode, starts from.
+  function reset(mode) {
     clearTimeout(game.flipBack);
     clearTimeout(game.winFallback);
+    clearTimeout(quiz.next);
     game.round += 1;
     game.flights.forEach((flight) => flight.cancel());
     game.flights.clear();
     confetti.stop();
     hide('win');
     hide('confirm');
+    game.mode = mode;
+    app.dataset.mode = mode;
+  }
+
+  function newGame() {
+    reset('memory');
 
     const benchPicks = shuffled(BENCH).slice(0, Math.max(0, PAIRS - STARTERS.length));
     const picks = STARTERS.concat(benchPicks);
@@ -1468,21 +1704,27 @@ const CLUB = {
     app.dataset.found = String(game.found);
     const pipIndex = game.found - 1;
     const round = game.round;
-    setTimeout(() => { if (game.round === round) celebrate(a, b, pipIndex); }, FLIP_MS * 0.85);
+    setTimeout(() => { if (game.round === round) celebrate([a, b], pipIndex); }, FLIP_MS * 0.85);
 
     const lines = [clip.name(card.p), clip.match(card.p)];
     if (game.found === game.pairs) {
-      setPhase('finishing');
-      game.winEarliest = performance.now() + 1500;
-      const finish = () => { if (game.round === round) showWin(); };
-      const win = clip.ui('win', WIN_LINE);
-      win.onstart = () => setTimeout(finish, Math.max(0, game.winEarliest - performance.now()));
-      lines.push(win);
-      game.winFallback = setTimeout(finish, sound.muted ? 1500 : 9000);
+      finishing(lines, round);
     } else {
       setPhase('idle');
     }
     sound.say(lines);
+  }
+
+  // The last find of either mode: the win clip follows `lines`, and the win screen comes when it
+  // starts (at least 1.5 s on), or after a fallback when the voice never gets there.
+  function finishing(lines, round) {
+    setPhase('finishing');
+    game.winEarliest = performance.now() + 1500;
+    const finish = () => { if (game.round === round) showWin(); };
+    const win = clip.ui('win', WIN_LINE);
+    win.onstart = () => setTimeout(finish, Math.max(0, game.winEarliest - performance.now()));
+    lines.push(win);
+    game.winFallback = setTimeout(finish, sound.muted ? 1500 : 9000);
   }
 
   // When the voice queue is cut while finishing (mute, page hidden), the win clip never starts,
@@ -1495,8 +1737,8 @@ const CLUB = {
       Math.max(0, game.winEarliest - performance.now()));
   }
 
-  function celebrate(a, b, pipIndex) {
-    [a, b].forEach((card) => {
+  function celebrate(cards, pipIndex) {
+    cards.forEach((card) => {
       if (card.lift) card.lift.cancel();
       card.el.classList.add('found');
       if (!reducedMotion.matches) {
@@ -1506,7 +1748,7 @@ const CLUB = {
       }
     });
     sound.sfx('match');
-    flyToPip(a, pipIndex);
+    flyToPip(cards[0], pipIndex);
   }
 
   function flyToPip(card, index) {
@@ -1563,6 +1805,124 @@ const CLUB = {
       flyer.remove();
       fill();
     };
+  }
+
+  /* ---------- quiz: who is this? ---------- */
+
+  const quiz = { order: [], at: 0, cards: [], answer: null, geo: null, next: 0, shownAt: 0 };
+
+  function quizLayout() {
+    const rect = picksEl.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const cs = getComputedStyle(picksEl);
+    const gx = parseFloat(cs.columnGap) || 0;
+    const gy = parseFloat(cs.rowGap) || 0;
+    // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
+    const fit = [2, 4].map((cols) => {
+      const rows = CHOICES / cols;
+      const cw = (rect.width - gx * (cols - 1)) / cols;
+      const ch = (rect.height - gy * (rows - 1)) / rows;
+      return { cols, cw, ch };
+    }).reduce((a, b) => (Math.min(b.cw, b.ch) > Math.min(a.cw, a.ch) ? b : a));
+    picksEl.style.setProperty('--cols', String(fit.cols));
+    quiz.geo = applyFace(picksEl, fit.cw, fit.ch, faceMode(fit.cw, fit.ch));
+    quiz.cards.forEach((card) => face.fit(card.el, card.p, quiz.geo));
+  }
+
+  function startQuiz() {
+    reset('quiz');
+    quiz.order = shuffled(QUIZ);
+    quiz.at = 0;
+    game.pairs = QUIZ.length;
+    game.found = 0;
+    app.dataset.found = '0';
+    renderPips();
+    warmImages(QUIZ);
+    sound.prefetch(QUIZ.flatMap((p) => [clip.match(p).url, clip.name(p).url]).concat(clip.ui('who').url, clip.ui('win').url));
+    deal();
+    keepAwake();
+  }
+
+  // The asked player and three others from the quiz roster, shuffled.
+  function deal() {
+    const p = quiz.order[quiz.at];
+    const others = shuffled(QUIZ.filter((q) => q !== p)).slice(0, CHOICES - 1);
+    picksEl.textContent = '';
+    picksEl.classList.remove('solved');
+    quiz.cards = shuffled(others.concat(p)).map((q, i) => {
+      const card = { p: q, el: buildCard(q, i, null, askFace(q)), state: 'down' };
+      card.el.setAttribute('aria-label', 'שחקן');
+      picksEl.appendChild(card.el);
+      return card;
+    });
+    quiz.answer = quiz.cards.find((card) => card.p === p);
+    picksEl.dataset.answer = p.id;
+    questionEl.textContent = '';
+    questionEl.append(el('span', null, 'מי זה מספר '), el('span', 'qnum', String(p.number)), el('span', null, `, ${spoken(p)}?`));
+    quizLayout();
+    // A tap that moved on to this question must not also pick on it.
+    game.busyUntil = performance.now() + 450;
+    if (!reducedMotion.matches) {
+      const round = game.round;
+      const at = quiz.at;
+      picksEl.classList.add('dealing');
+      setTimeout(() => { if (game.round === round && quiz.at === at) picksEl.classList.remove('dealing'); }, 900);
+    }
+    setPhase('ask');
+  }
+
+  // "Who is" and the player's match clip, back to back.
+  function question() {
+    return [clip.ui('who', WHO_LINE), clip.match(quiz.answer.p)];
+  }
+
+  function pick(card) {
+    if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
+    sound.unlock();
+    if (card !== quiz.answer) {
+      card.state = 'out';
+      card.el.dataset.state = 'out';
+      card.el.classList.remove('nope');
+      card.el.classList.add('nope');
+      sound.sfx('nope');
+      return;
+    }
+    card.state = 'up';
+    card.el.dataset.state = 'up';
+    card.el.setAttribute('aria-label', card.p.name_he);
+    picksEl.classList.add('solved');
+    lift(card);
+    sound.sfx('flip');
+    game.found += 1;
+    app.dataset.found = String(game.found);
+    quiz.shownAt = performance.now();
+    const pipIndex = game.found - 1;
+    const round = game.round;
+    const at = quiz.at;
+    setTimeout(() => { if (game.round === round) celebrate([card], pipIndex); }, FLIP_MS * 0.85);
+    const lines = [clip.name(card.p)];
+    if (game.found === game.pairs) {
+      finishing(lines, round);
+      sound.say(lines);
+      return;
+    }
+    setPhase('reveal');
+    // On after the name clip, or after a fallback when the voice never ends.
+    const advance = (ms) => {
+      if (game.round !== round || quiz.at !== at || game.phase !== 'reveal') return;
+      clearTimeout(quiz.next);
+      quiz.next = setTimeout(nextQuestion, ms);
+    };
+    advance(8000);
+    sound.say(lines).then(() => advance(ADVANCE_MS));
+  }
+
+  function nextQuestion() {
+    clearTimeout(quiz.next);
+    if (game.phase !== 'reveal') return;
+    quiz.at += 1;
+    deal();
+    sound.say(question());
   }
 
   function showWin() {
@@ -1703,7 +2063,8 @@ const CLUB = {
   let wakePending = false;
 
   function inGame() {
-    return game.phase === 'idle' || game.phase === 'one' || game.phase === 'two' || game.phase === 'finishing';
+    return game.phase === 'idle' || game.phase === 'one' || game.phase === 'two' || game.phase === 'finishing'
+      || game.phase === 'ask' || game.phase === 'reveal';
   }
 
   function letSleep() {
@@ -1759,6 +2120,25 @@ const CLUB = {
     if (card) tap(card);
   });
 
+  // A tap on a quiz card picks it; once the face shows, a tap anywhere on the cards moves on.
+  function quizTap(event) {
+    if (game.phase === 'reveal') {
+      if (performance.now() - quiz.shownAt >= TAP_ADVANCE_MS) nextQuestion();
+      return;
+    }
+    const node = event.target.closest && event.target.closest('.card');
+    if (node && node.parentElement === picksEl) pick(quiz.cards[Number(node.dataset.index)]);
+  }
+
+  picksEl.addEventListener('pointerdown', (event) => { if (event.button <= 0) quizTap(event); });
+  picksEl.addEventListener('click', (event) => { if (event.detail === 0) quizTap(event); });
+
+  $('say').addEventListener('click', () => {
+    if (game.phase !== 'ask') return;
+    sound.unlock();
+    sound.say(question());
+  });
+
   // A newer service worker took over this open page, and its cache only holds the files of its own
   // roster, so a new game starts from a reloaded page rather than from this page's DATA.
   let stale = false;
@@ -1768,32 +2148,30 @@ const CLUB = {
     return stale;
   }
 
-  $('play').addEventListener('click', () => {
-    if (game.phase !== 'start' || reloadIfStale()) return;
-    sound.unlock();
-    goFullscreen();
-    hide('start');
-    newGame();
-    sound.say([clip.ui('start', START_LINE)]);
-  });
+  // Every new game starts from one of the two mode buttons: on the start screen, on the win screen
+  // and in the ↻ confirm. A quiz opens with its first question right after the start line.
+  function wireModes(ids, allowed, before) {
+    ids.forEach((id) => $(id).addEventListener('click', () => {
+      if (!allowed() || reloadIfStale()) return;
+      sound.unlock();
+      if (before) before();
+      const start = clip.ui('start', START_LINE);
+      if (id.endsWith('-quiz')) {
+        startQuiz();
+        sound.say([start].concat(question()));
+      } else {
+        newGame();
+        sound.say([start]);
+      }
+    }));
+  }
 
-  $('replay').addEventListener('click', () => {
-    if (game.phase !== 'won' || reloadIfStale()) return;
-    sound.unlock();
-    newGame();
-    sound.say([clip.ui('start', START_LINE)]);
-  });
+  wireModes(['play', 'play-quiz'], () => game.phase === 'start', () => { goFullscreen(); hide('start'); });
+  wireModes(['replay', 'replay-quiz'], () => game.phase === 'won');
+  wireModes(['yes', 'yes-quiz'], () => true, () => hide('confirm'));
 
   $('again').addEventListener('click', () => {
-    if (game.phase === 'idle' || game.phase === 'one' || game.phase === 'two') show('confirm');
-  });
-
-  $('yes').addEventListener('click', () => {
-    if (reloadIfStale()) return;
-    sound.unlock();
-    hide('confirm');
-    newGame();
-    sound.say([clip.ui('start', START_LINE)]);
+    if (inGame() && game.phase !== 'finishing') show('confirm');
   });
 
   $('no').addEventListener('click', () => hide('confirm'));
@@ -1827,20 +2205,26 @@ const CLUB = {
     document.addEventListener(type, () => sound.wake(), { capture: true, passive: true });
   });
 
-  if (window.ResizeObserver) new ResizeObserver(() => layout()).observe(board);
-  else window.addEventListener('resize', layout);
+  if (window.ResizeObserver) {
+    new ResizeObserver(() => layout()).observe(board);
+    new ResizeObserver(() => quizLayout()).observe(picksEl);
+  } else {
+    window.addEventListener('resize', layout);
+    window.addEventListener('resize', quizLayout);
+  }
   window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
 
   sound.prefetch([clip.ui('start').url]);
-  face.prepare(ALL);
+  face.prepare(QUIZ);
   buildFan();
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all(CLUB.fonts.map(([spec, sample]) => document.fonts.load(spec, sample)))
     : Promise.resolve();
   fontsReady.catch(() => {}).then(() => {
-    face.prepare(ALL);
+    face.prepare(QUIZ);
     buildFan();
     layout();
+    quizLayout();
   });
 
   /* ---------- home-screen install (parent-facing, start screen only) ---------- */

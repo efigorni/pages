@@ -3,7 +3,7 @@
     _memory-game/tools/tts/tts.sh <game> <work> check
     _memory-game/tools/tts/tts.sh <game> <work> sync
 
-check: every starter/bench player has a name and a match clip in <tts>/out with a manifest row that
+check: every starter/bench/quiz player has a name and a match clip in <tts>/out with a manifest row that
 passed the STT round-trip, and each clip is in the format spec (MP3, mono, 24 kHz, 64 kbps; -16 LUFS
 ±0.4; true peak <= -1.5 dBTP; <= 30 ms of silence before and 120 ms after). Loudness, peak and silence
 come from the QA row the clip was made in (re-measured when none matches); a second model's "no"
@@ -30,7 +30,7 @@ FORMAT = ("mp3", 24000, 1, 64000)
 
 def roster_ids(players_path: Path) -> list[str]:
     return [p["id"] for p in json.load(open(players_path, encoding="utf-8"))["players"]
-            if p.get("role") in ("starter", "bench")]
+            if p.get("role") in ("starter", "bench", "quiz")]
 
 
 def qa_rows(tts: Path, rows: dict) -> dict:

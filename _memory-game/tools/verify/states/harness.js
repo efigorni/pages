@@ -170,7 +170,8 @@ function boot(opts = {}) {
     release() { if (this.released) return Promise.resolve(); this.released = true; this.ls.forEach((fn) => fn()); return Promise.resolve(); }
   }
 
-  const ids = ['app', 'board', 'pips', 'start', 'confirm', 'win', 'fan', 'play', 'replay', 'again', 'yes', 'no', 'mute', 'confetti', 'install'];
+  const ids = ['app', 'board', 'pips', 'start', 'confirm', 'win', 'fan', 'play', 'replay', 'again', 'yes', 'no', 'mute', 'confetti', 'install',
+    'play-quiz', 'replay-quiz', 'yes-quiz', 'picks', 'question', 'say'];
   const byId = Object.fromEntries(ids.map((id) => [id, new El(id === 'board' ? 'main' : 'div', id)]));
   byId.start.classList.add('show');
   byId.confirm.inert = true;

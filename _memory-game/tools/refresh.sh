@@ -6,7 +6,7 @@
 # <work>/data/players.json is the club scraper's output (see <game>/tools/README.md). In order:
 #   1. photos      build_images.py --game (mode, fade and sheet colours from <game>/club/club.json);
 #                  look at <work>/crops.png
-#   2. pins        stops here when a starter or bench player has no pinned IPA in
+#   2. pins        stops here when a starter, bench or quiz player has no pinned IPA in
 #                  <game>/tools/tts/pronunciations.json: listen first (tts.sh g2p, ab, listen), pin, rerun
 #   3. voice       tts.sh generate --stale (only new or changed clips), check, sync into <game>/audio/
 #   4. page        build_page.py data, then assemble --check for every game
@@ -25,7 +25,7 @@ unpinned="$(python3 -I - "$work/data/players.json" "$game/tools/tts/pronunciatio
 import json, sys
 pins = json.load(open(sys.argv[2], encoding="utf-8"))["players"]
 print(" ".join(p["id"] for p in json.load(open(sys.argv[1], encoding="utf-8"))["players"]
-               if p.get("role") in ("starter", "bench") and not pins.get(p["id"], {}).get("ipa")))
+               if p.get("role") in ("starter", "bench", "quiz") and not pins.get(p["id"], {}).get("ipa")))
 PY
 )"
 if [[ -n "$unpinned" ]]; then

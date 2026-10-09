@@ -5,7 +5,8 @@
 The rule (P3 / H3): rank everyone with at least one appearance this season by appearances, then
 starts, then minutes, then the lower shirt number (`pool_rank`); the pool is the top 23. The main 11
 are the goalkeeper with the most appearances and the 10 outfield players of the pool with the most;
-the bench is the pool's other outfield players. Backup goalkeepers are never dealt. Each scraper
+the bench is the pool's other outfield players. Backup goalkeepers are never dealt; one in the pool
+may have role "quiz" (asked in the quiz only), and then the tools make his photo and clips too. Each scraper
 counts `stats` from its own site and words its own `excluded_reason`.
 """
 
@@ -68,7 +69,7 @@ def check(payload: dict) -> list[str]:
         problems.append(f"{len(dealt) - starters} bench players, fewer than 4")
     if sum(1 for p in dealt if p.get("role") == "starter" and p.get("is_gk")) != 1:
         problems.append("the main 11 has no goalkeeper (or more than one)")
-    for p in dealt:
+    for p in dealt + [p for p in payload.get("players", []) if p.get("role") == "quiz"]:
         pid = p.get("id", "?")
         if not ID_RE.match(str(pid)):
             problems.append(f"{pid!r}: not a safe id")

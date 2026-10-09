@@ -112,7 +112,7 @@ def g2p_roster(players_path: str, pron_path: str | None) -> None:
     tp = TextProcessor(target_speaker=0)
     pins = json.load(open(pron_path, encoding="utf-8"))["players"] if pron_path else {}
     for p in json.load(open(players_path, encoding="utf-8"))["players"]:
-        if p.get("role") not in ("starter", "bench"):
+        if p.get("role") not in ("starter", "bench", "quiz"):
             continue
         say = (p.get("speak_he") or hebrew.speak_text(p.get("name_he") or p["name"])).strip()
         ipa = TAG.sub("", tp.phonemize(say, lang="he")).strip()

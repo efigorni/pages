@@ -18,18 +18,21 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
                         follow it, and a light club's style sets --scheme: light for base.css.
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
-  club/roster.json      season, starters and bench; written by `data`
+  club/roster.json      season, starters, bench and quiz; written by `data`
 
 The builder writes two files per game, whole:
 
   index.html  _memory-game/page.template.html filled in: the head, the club style, base.css, the title, the
               trophy, DATA (the roster plus the clips that exist under audio/, in roster order), the club
-              script and engine.js
+              script and engine.js. The page plays two modes: memory deals the starters and bench; the
+              quiz ("who is this?") asks every player in the roster once, the quiz-only players too
   sw.js       _memory-game/sw.template.js with VERSION, ASSETS and PREFIX filled in. VERSION hashes every
               precached file and the template, so any change installs a fresh cache.
 
 `data` writes club/roster.json from players.json (one player per line), then assembles that game; --prune
-deletes photos and clips of players who are no longer in it. The name model (club.json `names`): "full"
+deletes photos and clips of players who are no longer in it. Role "quiz" in players.json (the pool's backup
+goalkeepers) puts a player in the roster's `quiz` list: asked in the quiz, never dealt in the memory game; his
+photo and clips are made and shipped like everyone else's. The name model (club.json `names`): "full"
 shows name_he on one card line; "first-last" adds the card's two tiers (first_he / last_he). speak_he, the
 text the voice reads, ships whenever it differs from name_he (and always with "first-last").
 `assemble` writes every game's index.html and sw.js, or the named games'. `--check` writes nothing and fails
@@ -38,7 +41,7 @@ doesn't (every file there is precached), or if the fonts and CREDITS.md disagree
 an @font-face, the declared families are the ones credited under Fonts, every OFL link resolves and every
 OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left; or if the
 club sets a CSS variable nothing reads, or reads one (without a fallback) nothing defines; or if a game's
-start/win clip isn't the master in _memory-game/audio/ui/ (the engine's lines, which tools/tts/hebrew.py
+start/win/who clip isn't the master in _memory-game/audio/ui/ (the engine's lines, which tools/tts/hebrew.py
 renders). Run it before committing: the repo has no CI. `--watch`
 assembles the named games again whenever one of their sources or a shared file changes.
 `new` starts a club: it checks the id, the cache prefix and the app id first and writes nothing if one
@@ -62,16 +65,17 @@ sys.dont_write_bytecode = True  # no __pycache__ in the repo
 SHARED = Path(__file__).resolve().parents[2]
 REPO = SHARED.parent
 sys.path.insert(0, str(SHARED / "tools/tts"))
-from hebrew import START_TEXT, WIN_TEXT, speak_text, split_display_name  # noqa: E402
+from hebrew import START_TEXT, WHO_TEXT, WIN_TEXT, speak_text, split_display_name  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
-UI_CLIPS = ("start", "win")
+UI_CLIPS = ("start", "win", "who")
+ROLES = ("starter", "bench", "quiz")  # in the game; "quiz" players are asked in the quiz and never dealt
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
-              "mute", "confetti", "install")
+              "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say")
 RUNTIME_VARS = {"--i"}
 # Tel Aviv's manifest id "./" resolves to the origin root. It shipped that way and changing it would
 # break installed copies, so it is the only game allowed a root id.
@@ -154,12 +158,18 @@ def entry(p, page, model):
     return out
 
 
+def players(roster):
+    """Everyone in the game, in roster order: the starters, the bench, then the quiz-only players."""
+    return roster["starters"] + roster["bench"] + roster.get("quiz", [])
+
+
 def roster_text(roster):
     """club/roster.json: one player per line, so a roster refresh diffs per player."""
     def rows(players):
         return ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in players)
-    return (f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n'
-            f'  "starters": [\n{rows(roster["starters"])}\n  ],\n  "bench": [\n{rows(roster["bench"])}\n  ]\n}}\n')
+    lists = [k for k in ("starters", "bench", "quiz") if k != "quiz" or roster.get("quiz")]
+    body = ",\n".join(f'  "{k}": [\n{rows(roster[k])}\n  ]' for k in lists)
+    return f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n{body}\n}}\n'
 
 
 def has_roster(game):
@@ -173,7 +183,7 @@ def read_roster(game):
 def orphans(game, roster):
     """Photos and clips of players the roster doesn't have: precached, never shown or played."""
     page = REPO / game
-    ids = {p["id"] for p in roster["starters"] + roster["bench"]}
+    ids = {p["id"] for p in players(roster)}
     return sorted(f.relative_to(page).as_posix() for d, suffix in (("img", ".webp"), ("audio/name", ".mp3"),
                                                                     ("audio/match", ".mp3"))
                   for f in (page / d).glob(f"*{suffix}") if f.stem not in ids)
@@ -182,7 +192,7 @@ def orphans(game, roster):
 def data_line(game, roster):
     """The DATA script: the roster plus the clips that exist, in roster order."""
     page = REPO / game
-    ids = [p["id"] for p in roster["starters"] + roster["bench"]]
+    ids = [p["id"] for p in players(roster)]
     audio = {
         "ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()],
         "name": [i for i in ids if (page / "audio" / "name" / f"{i}.mp3").is_file()],
@@ -200,13 +210,14 @@ def write_data(players_json, game, prune):
     data = json.loads(Path(players_json).read_text(encoding="utf-8"))
     starters = [entry(p, page, model) for p in data["players"] if p.get("role") == "starter"]
     bench = [entry(p, page, model) for p in data["players"] if p.get("role") == "bench"]
+    quiz = [entry(p, page, model) for p in data["players"] if p.get("role") == "quiz"]
     if len(starters) != 11:
         fail(f"expected 11 starters, found {len(starters)}")
     if len(bench) < 4:
         fail(f"need at least 4 bench players, found {len(bench)}")
-    roster = {"season": data.get("season"), "starters": starters, "bench": bench}
+    roster = {"season": data.get("season"), "starters": starters, "bench": bench, **({"quiz": quiz} if quiz else {})}
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
-    print(f"{game}: club/roster.json: starters={len(starters)} bench={len(bench)}", flush=True)
+    print(f"{game}: club/roster.json: starters={len(starters)} bench={len(bench)} quiz={len(quiz)}", flush=True)
     for rel in orphans(game, roster):
         if prune:
             (page / rel).unlink()
@@ -239,11 +250,12 @@ def lint_credits(game):
 
 
 def check_ui_clips(game):
-    """Each game ships its own copy of the engine's start and win clips; the master is _memory-game/audio/ui/."""
+    """Each game ships its own copy of the engine's start, win and who clips; the master is _memory-game/audio/ui/."""
     engine = read(SHARED / "engine.js")
-    lines = {k: re.search(rf"const {k}_LINE = '([^']*)';", engine).group(1) for k in ("START", "WIN")}
+    texts = (("START", START_TEXT), ("WIN", WIN_TEXT), ("WHO", WHO_TEXT))
+    lines = {k: re.search(rf"const {k}_LINE = '([^']*)';", engine).group(1) for k, _ in texts}
     problems = [f"engine.js's {k}_LINE is not hebrew.py's {k}_TEXT, which the clip says"
-                for k, text in (("START", START_TEXT), ("WIN", WIN_TEXT)) if lines[k] != text]
+                for k, text in texts if lines[k] != text]
     for clip in UI_CLIPS:
         copy = REPO / game / "audio/ui" / f"{clip}.mp3"
         if not copy.is_file() or copy.read_bytes() != (SHARED / "audio/ui" / f"{clip}.mp3").read_bytes():

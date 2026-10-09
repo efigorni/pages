@@ -21,7 +21,7 @@ usage:
 <work>/data/players.json, writes <game>/img/ and the sheet <work>/crops.png.
 
 <players.json> is the scrape output; each player's `photo_file` is resolved relative to
-the JSON's directory and must stay inside it. Only role starter/bench is processed.
+the JSON's directory and must stay inside it. Only role starter/bench/quiz is processed.
 overrides.json maps a player id to {"dx": .., "dy": .., "zoom": ..}, applied after
 framing (dx/dy as fractions of the crop side, zoom > 1 = tighter). --sheet-colors takes
 three hex colours: the sheet, the tile behind each cutout, and the guide marks.
@@ -152,7 +152,7 @@ def main():
 
     entries = []
     for p in data["players"]:
-        if p.get("role") not in ("starter", "bench"):
+        if p.get("role") not in ("starter", "bench", "quiz"):
             continue
         src = (base / p["photo_file"]).resolve()
         if base not in src.parents:

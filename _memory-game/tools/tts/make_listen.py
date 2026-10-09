@@ -104,7 +104,7 @@ def main(players_path: str, pron_path: str, tts: Path) -> None:
 
     rows, n = [], 0
     for p in roster:
-        if p.get("role") not in ("starter", "bench"):
+        if p.get("role") not in ("starter", "bench", "quiz"):
             continue
         n += 1
         e = pron.get(p["id"], {})

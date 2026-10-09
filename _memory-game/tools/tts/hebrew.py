@@ -51,6 +51,8 @@ def match_text(number: int | None, name: str) -> str:
 
 START_TEXT = "יאללה, בואי נשחק!"
 WIN_TEXT = "כל הכבוד! מצאת את כל השחקנים!"
+# The quiz's question opens with this clip; the asked player's match clip follows it.
+WHO_TEXT = "מי זה?"
 
 
 _TRAILING_PARENS = re.compile(r"\(([^()]*)\)\s*$")
