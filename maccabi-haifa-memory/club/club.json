@@ -16,5 +16,12 @@
       "pedro-barzao": 0.415,
       "adam-grimberg": 0.39
     }
+  },
+  "play": {
+    "voice": {"flip": ["name"], "match": ["name", "match"], "ask": ["match"], "wrong": ["match"], "right": ["name"], "card": ["match"]},
+    "deal": {"policy": "squad", "pairs": 15},
+    "quiz": {"pool": "all"},
+    "progress": "inventory",
+    "precache": {"policy": "all"}
   }
 }

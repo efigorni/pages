@@ -9,6 +9,7 @@
   --pad: clamp(6px, 1.4vmin, 14px);
   --gap: clamp(4px, 1.1vmin, 10px);
   --hud: clamp(46px, 8vmin, 68px);
+  --tile: clamp(84px, 16vmin, 140px);
   --flip: 460ms;
   --cw: 110px;
   --ch: 130px;
@@ -353,7 +354,7 @@ circle.cut { fill: var(--big-bg); }
 .mode:active .big { transform: translateY(clamp(3px, .7vmin, 6px)); }
 .big svg { width: 48%; height: 48%; }
 
-/* the two ways to play, side by side wherever a new game starts */
+/* the three ways to play, side by side wherever a new game starts */
 .modes {
   display: flex;
   justify-content: center;
@@ -366,7 +367,49 @@ circle.cut { fill: var(--big-bg); }
   gap: clamp(6px, 1.5vmin, 12px);
 }
 
+.modes .big {
+  position: relative;
+  width: clamp(84px, 18vmin, 160px);
+  height: clamp(84px, 18vmin, 160px);
+}
+
 .modes .big svg { width: 60%; height: 60%; }
+
+/* a word game's quiz before she has learned enough: a padlock on the disc, the picture faded */
+.lock { display: none; }
+
+.mode[data-locked="true"] .big > svg { opacity: .3; }
+
+.mode[data-locked="true"] .lock {
+  position: absolute;
+  top: -6%;
+  left: -6%;
+  width: 44%;
+  height: 44%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--big-fg);
+  color: var(--big-bg);
+  box-shadow: 0 0 0 clamp(2px, .5vmin, 4px) var(--big-bg);
+}
+
+.modes .big .lock svg { width: 58%; height: 58%; }
+
+/* a tap on it: the padlock shakes its head and the two open games bounce */
+.modes.hint .mode[data-locked="true"] .lock { animation: wiggle .5s ease-in-out 2; }
+.modes.hint .mode:not([data-locked="true"]) { animation: nudge .6s cubic-bezier(.3, 1.6, .5, 1) 2; }
+
+@keyframes wiggle {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -16deg; }
+  75% { rotate: 16deg; }
+}
+
+@keyframes nudge {
+  0%, 100% { translate: 0 0; }
+  40% { translate: 0 -12%; }
+}
 
 /* for the parents: as quiet as the install pill, and drawn with its tokens */
 .mode-label {
@@ -378,6 +421,8 @@ circle.cut { fill: var(--big-bg); }
 }
 
 .big.no {
+  width: clamp(84px, 18vmin, 160px);
+  height: clamp(84px, 18vmin, 160px);
   background: var(--no-bg);
   color: var(--white);
   box-shadow: 0 clamp(5px, 1.1vmin, 9px) 0 var(--no-drop);
@@ -439,7 +484,9 @@ circle.cut { fill: var(--big-bg); }
 }
 
 .start.show .play::before { animation: halo 1.9s ease-out infinite; }
-.start.show .mode + .mode .play::before { animation-delay: .95s; }
+.start.show .mode:nth-child(2) .play::before { animation-delay: .63s; }
+.start.show .mode:nth-child(3) .play::before { animation-delay: 1.27s; }
+.start.show .mode[data-locked="true"] .play::before { animation: none; }
 
 @keyframes halo {
   0% { opacity: .85; transform: scale(1); }
@@ -475,13 +522,16 @@ circle.cut { fill: var(--big-bg); }
 
 .confirm-box {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: flex-start;
-  gap: clamp(28px, 9vmin, 96px);
+  gap: clamp(20px, 6vmin, 72px) clamp(24px, 7vmin, 80px);
 }
 
 .confirm.show .big { animation: pop-in .38s cubic-bezier(.3, 1.6, .5, 1) both; }
-.confirm.show .mode + .mode .big { animation-delay: .04s; }
-.confirm.show .big.no { animation-delay: .08s; }
+.confirm.show .mode:nth-child(2) .big { animation-delay: .04s; }
+.confirm.show .mode:nth-child(3) .big { animation-delay: .08s; }
+.confirm.show .big.no { animation-delay: .12s; }
 
 @keyframes pop-in {
   from { transform: scale(.3); opacity: 0; }
@@ -501,7 +551,8 @@ circle.cut { fill: var(--big-bg); }
 
 .win.show .trophy { animation: trophy-in .9s cubic-bezier(.3, 1.45, .5, 1) both; }
 .win.show .big { animation: pop-in .45s .55s cubic-bezier(.3, 1.6, .5, 1) both; }
-.win.show .mode + .mode .big { animation-delay: .62s; }
+.win.show .mode:nth-child(2) .big { animation-delay: .62s; }
+.win.show .mode:nth-child(3) .big { animation-delay: .69s; }
 
 @keyframes trophy-in {
   0% { opacity: 0; transform: scale(.2) rotate(-24deg); }
@@ -651,6 +702,265 @@ circle.cut { fill: var(--big-bg); }
   transition: opacity .3s ease;
 }
 
+/* ---------- flash cards: the shelf of every item, then one card, big ---------- */
+
+.cards {
+  grid-area: board;
+  display: none;
+  min-width: 0;
+  min-height: 0;
+  gap: calc(var(--gap) * 1.5);
+  grid-template: "prompt" auto "shelf" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+.app[data-mode="cards"] .cards { display: grid; }
+.app[data-mode="cards"] .board { display: none; }
+
+.shelf-bar { justify-content: space-between; }
+
+/* to the first one she hasn't seen: a play button wearing the new-dot the tiles wear */
+.next-new {
+  position: relative;
+  width: calc(var(--hud) * 1.3);
+  height: calc(var(--hud) * 1.3);
+}
+
+.next-new svg { width: 50%; height: 50%; translate: 6% 0; }
+
+.new-dot {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  width: 28%;
+  height: 28%;
+  border-radius: 50%;
+  background: var(--new-dot, #ff5a4e);
+  box-shadow: 0 0 0 clamp(2px, .45vmin, 4px) #fff;
+}
+
+.next-new[data-done="true"] .new-dot { display: none; }
+
+.shelf-count {
+  display: flex;
+  align-items: center;
+  gap: .3em;
+  margin: 0;
+  color: var(--white);
+  font-weight: 700;
+  font-size: clamp(20px, 3.6vmin, 32px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.shelf-count svg { width: 1.1em; height: 1.1em; color: var(--accent); }
+
+.shelf {
+  grid-area: shelf;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--tile), 1fr));
+  align-content: start;
+  gap: calc(var(--gap) * 1.8);
+  min-height: 0;
+  /* room for the marks, which overhang each tile's corner */
+  padding: calc(var(--tile) * .12) calc(var(--tile) * .1) calc(var(--tile) * .2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: calc(var(--tile) * .14);
+  background:
+    radial-gradient(80% 70% at 50% 42%, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 72%),
+    var(--surface);
+  box-shadow: inset 0 0 0 1px var(--edge);
+  transition: transform .12s ease;
+}
+
+.tile:active { transform: scale(.94); }
+
+.pic {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  transition: opacity .3s ease, filter .3s ease;
+}
+
+/* a player's cutout fills the tile; a word game's picture sits inside it (--tile-img) */
+.pic img {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--tile-img, 100%);
+  height: var(--tile-img, 100%);
+  object-fit: contain;
+}
+
+/* the mark at the corner: a tick on a learned one, a dot on one still new, which is dimmed */
+.tile::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--mark) * -.3);
+  left: calc(var(--mark) * -.3);
+  width: var(--mark);
+  height: var(--mark);
+  border-radius: 50%;
+  --mark: calc(var(--tile) * .3);
+}
+
+.tile[data-learned="true"]::after {
+  background: var(--learned, #22a95f) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-8.5' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 74% no-repeat;
+  box-shadow: 0 0 0 max(2px, calc(var(--mark) * .08)) #fff, 0 2px 6px rgba(0, 0, 0, .3);
+}
+
+.tile[data-learned="false"] .pic { opacity: .45; filter: saturate(.3); }
+
+.tile[data-learned="false"]::after {
+  --mark: calc(var(--tile) * .19);
+  background: var(--new-dot, #ff5a4e);
+  box-shadow: 0 0 0 max(2px, calc(var(--mark) * .12)) #fff;
+}
+
+.tile.fresh::after { animation: pop-in .45s .15s cubic-bezier(.3, 1.6, .5, 1) both; }
+
+/* a squad's tile carries the shirt number, the quiz's chip */
+.chip {
+  position: absolute;
+  z-index: 1;
+  right: 6%;
+  bottom: 6%;
+  min-width: 1.5em;
+  padding: .08em .25em 0;
+  border-radius: .3em;
+  background: var(--big-bg);
+  color: var(--big-fg);
+  direction: ltr;
+  text-align: center;
+  font-weight: 700;
+  font-size: calc(var(--tile) * .2);
+  line-height: 1;
+}
+
+.flash { background: var(--scrim-flash, var(--scrim-confirm)); }
+
+.flash-stage {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  gap: clamp(10px, 2.6vmin, 26px);
+  padding-top: calc(var(--hud) + var(--gap));
+}
+
+.flash-slot {
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  --short: min(var(--cw), var(--ch));
+  --r: calc(var(--short) * .06);
+}
+
+.flash-slot .card {
+  width: var(--cw);
+  height: var(--ch);
+  cursor: pointer;
+}
+
+.flash.show .flash-slot .card { animation: deal 420ms cubic-bezier(.25, 1.35, .5, 1) both; }
+
+.flash-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 6vmin, 64px);
+}
+
+.flash-nav .big {
+  width: clamp(68px, 13vmin, 116px);
+  height: clamp(68px, 13vmin, 116px);
+}
+
+.flash-nav .say { width: clamp(60px, 11vmin, 96px); height: clamp(60px, 11vmin, 96px); }
+
+/* "previous" points the other way: in Hebrew the next card is to the left */
+#prev svg { transform: scaleX(-1); }
+
+.close {
+  position: absolute;
+  top: max(var(--pad), env(safe-area-inset-top));
+  left: max(var(--pad), env(safe-area-inset-left));
+}
+
+/* ---------- a word game's progress: "learned X / N" on every screen ---------- */
+
+.progress { display: none; }
+
+[data-progress="bar"] { --bar: clamp(30px, 4.8vmin, 42px); }
+
+[data-progress="bar"] .app {
+  padding-bottom: calc(max(var(--pad), env(safe-area-inset-bottom)) + var(--bar) + var(--gap));
+}
+
+[data-progress="bar"] .overlay { padding-bottom: calc(var(--pad) + var(--bar) + var(--gap)); }
+
+[data-progress="bar"] .progress {
+  position: fixed;
+  z-index: 12;
+  bottom: max(var(--pad), env(safe-area-inset-bottom));
+  left: 50%;
+  width: min(640px, calc(100% - var(--pad) * 2));
+  height: var(--bar);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--bar) * .28);
+  padding: 0 calc(var(--bar) * .45) 0 calc(var(--bar) * .2);
+  border-radius: 999px;
+  background: var(--bar-bg, rgba(255, 255, 255, .12));
+  color: var(--white);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.progress-star {
+  flex: none;
+  width: calc(var(--bar) * .74);
+  height: calc(var(--bar) * .74);
+  color: var(--bar-star, var(--accent));
+}
+
+.progress-track {
+  flex: 1 1 auto;
+  height: 40%;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--bar-track, rgba(255, 255, 255, .16));
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--done, 0) * 100%);
+  border-radius: inherit;
+  background: var(--bar-fill, var(--accent));
+  transition: width .6s cubic-bezier(.3, 1.2, .5, 1);
+}
+
+.progress-count {
+  flex: none;
+  font-weight: 700;
+  font-size: calc(var(--bar) * .5);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress.gained .progress-star { animation: pip-pop .5s cubic-bezier(.3, 1.7, .5, 1); }
+
 @media (prefers-reduced-motion: reduce) {
   .card-inner { transition-duration: 1ms; }
   .board.dealing .card,
@@ -663,9 +973,16 @@ circle.cut { fill: var(--big-bg); }
   .start.show .play::before,
   .confirm.show .big,
   .win.show .trophy,
-  .win.show .big { animation: none; }
+  .win.show .big,
+  .modes.hint .mode,
+  .modes.hint .lock,
+  .tile.fresh::after,
+  .flash.show .flash-slot .card,
+  .progress.gained .progress-star { animation: none; }
   .picks .card[data-state="out"],
   .picks .card[data-state="out"] .front,
-  .picks.solved .card { transition: none; }
+  .picks.solved .card,
+  .pic,
+  .progress-fill { transition: none; }
   .picks .card[data-state="out"] .card-inner { transition-delay: 0s; }
 }

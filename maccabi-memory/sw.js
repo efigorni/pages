@@ -1,6 +1,6 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
-// VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
-const VERSION = 'maccabi-memory-34f442fe92d1';
+// VERSION (a hash of every file it ships), ASSETS, PREFIX and RUNTIME: edit the template, not a sw.js.
+const VERSION = 'maccabi-memory-bbd88c21d4b6';
 const ASSETS = [
   './',
   'index.html',
@@ -90,6 +90,11 @@ const ASSETS = [
 // only ever deletes caches carrying its own prefix.
 const PREFIX = 'maccabi-memory-';
 
+// A game that precaches only its core (club.json play.precache "core": the page and its first words)
+// keeps every other picture and clip it fetches here, across versions. Its name hashes those files,
+// so it is replaced only when one of them changes. Empty when everything is precached.
+const RUNTIME = '';
+
 const NAV_TIMEOUT_MS = 3000;
 
 // Offline play needs every file, so one failed download fails the whole install (addAll stores
@@ -105,15 +110,16 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((key) => key.startsWith(PREFIX) && key !== VERSION).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(keys.filter((key) => key.startsWith(PREFIX) && key !== VERSION && key !== RUNTIME)
+        .map((key) => caches.delete(key))))
       .then(() => self.clients.claim()),
   );
 });
 
-function store(request, response) {
+function store(name, request, response) {
   if (!response || response.status !== 200 || response.type !== 'basic') return Promise.resolve();
   const copy = response.clone();
-  return caches.open(VERSION).then((cache) => cache.put(request, copy)).catch(() => {});
+  return caches.open(name).then((cache) => cache.put(request, copy)).catch(() => {});
 }
 
 function cached(request) {
@@ -147,14 +153,22 @@ function ranged(request, response) {
   });
 }
 
-function fetchAndStore(event, request) {
+function fetchAndStore(event, request, name = VERSION) {
   let saved = Promise.resolve();
-  const network = fetch(request).then((response) => {
-    saved = store(request, response);
-    return response;
+  // A clip the runtime cache keeps is fetched whole even when <audio> asks for a range, so the copy
+  // kept is the whole file; the range is cut from it.
+  const whole = name === RUNTIME && request.headers.has('range') ? new Request(request.url) : request;
+  const network = fetch(whole).then((response) => {
+    saved = store(name, whole, response);
+    return whole === request ? response : ranged(request, response.clone());
   });
   event.waitUntil(network.then(() => saved, () => {}));
   return network;
+}
+
+// The pictures and clips a core-precached game keeps as they come (RUNTIME).
+function kept(url) {
+  return !!RUNTIME && /\/(img|audio)\//.test(new URL(url).pathname);
 }
 
 self.addEventListener('fetch', (event) => {
@@ -162,10 +176,13 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
 
   if (request.mode !== 'navigate') {
-    // VERSION hashes every precached file and a new version downloads them all again, so a hit in
-    // this version's cache is current and needs no trip to the network.
+    // VERSION hashes every file the game ships and a new version downloads its core again, so a hit in
+    // this version's cache, or in the runtime cache its name vouches for, is current and needs no trip
+    // to the network.
+    const runtime = kept(request.url);
     event.respondWith(caches.open(VERSION).then((cache) => cache.match(request))
-      .then((hit) => (hit ? ranged(request, hit) : fetchAndStore(event, request))));
+      .then((hit) => hit || (runtime ? caches.open(RUNTIME).then((cache) => cache.match(request)) : undefined))
+      .then((hit) => (hit ? ranged(request, hit) : fetchAndStore(event, request, runtime ? RUNTIME : VERSION))));
     return;
   }
 

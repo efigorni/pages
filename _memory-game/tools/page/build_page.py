@@ -77,9 +77,18 @@ CONFIG = "club/club.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
 UI_CLIPS = tuple(UI_TEXTS)
+# What a game teaches (club.json `kind`): a squad's players, or words. Each records its own kinds of clip,
+# under audio/<kind>/<id>.mp3, and its quiz asks its own question (the quiz buttons' label).
+KINDS = {"squad": ("name", "match"), "words": ("en", "he")}
+ASK = {"squad": "מי זה?", "words": "מה זה?"}
+# The moments the voice script (club.json play.voice) gives clips to: memory's flip and match, the quiz's
+# question, wrong pick and right pick, and a flash card.
+MOMENTS = ("flip", "match", "ask", "wrong", "right", "card")
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
-              "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say")
+              "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say",
+              "play-cards", "replay-cards", "yes-cards", "cards", "shelf", "shelf-count", "next-new", "flash",
+              "flash-slot", "prev", "next", "hear", "close", "progress", "progress-count")
 RUNTIME_VARS = {"--i"}
 # Where GitHub Pages publishes the games. A link preview needs absolute URLs; the verify tools read it here too.
 SITE = "https://efigorni.github.io/pages/"
@@ -128,6 +137,58 @@ def games(names=None):
     return [n.rstrip("/") for n in names] if names else found
 
 
+def config(game):
+    return json.loads(read(REPO / game / CONFIG))
+
+
+def kind_of(game):
+    kind = config(game).get("kind", "squad")
+    if kind not in KINDS:
+        fail(f"{game}/{CONFIG}: kind must be one of {', '.join(KINDS)}, not {kind!r}")
+    return kind
+
+
+def play_of(game):
+    """club.json `play`, checked: the voice script and the deal, quiz, progress and precache policies
+    (README, "Play config"). The engine reads it from DATA; the precache policy is the builder's too."""
+    kind, play = kind_of(game), config(game).get("play")
+    where = f"{game}/{CONFIG} play"
+    if not isinstance(play, dict):
+        fail(f"{where}: missing")
+    voice = play.get("voice")
+    if not isinstance(voice, dict) or set(voice) != set(MOMENTS):
+        fail(f"{where}.voice: one list of clips per moment: {', '.join(MOMENTS)}")
+    for moment, clips in voice.items():
+        if not clips or any(c not in KINDS[kind] for c in clips):
+            fail(f"{where}.voice.{moment}: a list of {' / '.join(KINDS[kind])} (a {kind} game's clips), not {clips!r}")
+    deal, quiz, precache = play.get("deal") or {}, play.get("quiz") or {}, play.get("precache") or {}
+    if deal.get("pairs") != 15:
+        fail(f"{where}.deal.pairs: 15 (the board is 5 x 6)")
+    policies = {"squad": kind == "squad",
+                "new-first": isinstance(deal.get("new"), int) and 0 < deal.get("new", 0) <= deal["pairs"]}
+    if not policies.get(deal.get("policy")):
+        fail(f"{where}.deal: policy \"squad\" (a squad's game) or \"new-first\" with 0 < new <= pairs")
+    if quiz.get("pool") == "learned":
+        if not (isinstance(quiz.get("unlock"), int) and quiz["unlock"] >= 4 and isinstance(quiz.get("size"), int)
+                and quiz["size"] >= 1):
+            fail(f"{where}.quiz: pool \"learned\" wants unlock >= 4 (the four cards) and size >= 1")
+    elif quiz.get("pool") != "all":
+        fail(f"{where}.quiz.pool: \"all\" or \"learned\"")
+    if play.get("progress") not in ("inventory", "bar"):
+        fail(f"{where}.progress: \"inventory\" (the shelf's marks only) or \"bar\" (on every screen)")
+    if precache.get("policy") == "core":
+        if not (isinstance(precache.get("items"), int) and precache["items"] >= deal["pairs"]):
+            fail(f"{where}.precache: policy \"core\" wants items >= deal.pairs, so the first game plays offline")
+    elif precache.get("policy") != "all":
+        fail(f"{where}.precache.policy: \"all\" or \"core\"")
+    return play
+
+
+def items_of(roster):
+    """The roster's items in teaching order: the words, or the players."""
+    return roster["words"] if "words" in roster else roster["players"]
+
+
 def entry(p, page, model):
     pid = p["id"]
     if not ID_RE.match(pid):
@@ -169,10 +230,33 @@ def entry(p, page, model):
     return out
 
 
+def word_entry(w, page):
+    wid = w.get("id", "")
+    if not ID_RE.match(wid):
+        fail(f"unsafe word id: {wid!r}")
+    out = {"id": wid}
+    for key in ("en", "he", "he_niqqud", "theme"):
+        text = clean(w.get(key))
+        if any(ch in text for ch in "<>&\"`"):
+            fail(f"{wid}: unexpected characters in {key}: {text!r}")
+        if text:
+            out[key] = text
+    if not out.get("en") or not out.get("he"):
+        fail(f"{wid}: a word needs en and he")
+    missing = [rel for rel in (f"img/{wid}.webp", *(f"audio/{k}/{wid}.mp3" for k in KINDS["words"]))
+               if not (page / rel).is_file()]
+    if missing:
+        fail(f"{wid}: missing {', '.join(missing)} (copy the pictures and clips in first)")
+    out["img"] = f"img/{wid}.webp"
+    return out
+
+
 def roster_text(roster):
-    """club/roster.json: one player per line, so a roster refresh diffs per player."""
-    rows = ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in roster["players"])
-    return f'{{\n  "season": {json.dumps(roster["season"], ensure_ascii=False)},\n  "players": [\n{rows}\n  ]\n}}\n'
+    """club/roster.json: one item per line, so a refresh diffs per player or word."""
+    key = "words" if "words" in roster else "players"
+    head = "".join(f"  {json.dumps(k)}: {json.dumps(v, ensure_ascii=False)},\n" for k, v in roster.items() if k != key)
+    rows = ",\n".join("    " + json.dumps(p, ensure_ascii=False, separators=(", ", ": ")) for p in roster[key])
+    return f'{{\n{head}  "{key}": [\n{rows}\n  ]\n}}\n'
 
 
 def has_roster(game):
@@ -184,30 +268,46 @@ def read_roster(game):
 
 
 def orphans(game, roster):
-    """Photos and clips of players the roster doesn't have: precached, never shown or played."""
+    """Pictures and clips of items the roster doesn't have: shipped, never shown or played."""
     page = REPO / game
-    ids = {p["id"] for p in roster["players"]}
-    return sorted(f.relative_to(page).as_posix() for d, suffix in (("img", ".webp"), ("audio/name", ".mp3"),
-                                                                    ("audio/match", ".mp3"))
+    ids = {p["id"] for p in items_of(roster)}
+    dirs = [("img", ".webp")] + [(f"audio/{kind}", ".mp3") for kind in KINDS[kind_of(game)]]
+    return sorted(f.relative_to(page).as_posix() for d, suffix in dirs
                   for f in (page / d).glob(f"*{suffix}") if f.stem not in ids)
 
 
 def data_line(game, roster):
-    """The DATA script: the roster plus the clips that exist, in roster order."""
+    """The DATA script: the roster, the clips that exist (per kind, in roster order), the game's folder (the
+    key of what she has learned) and its play config."""
     page = REPO / game
-    ids = [p["id"] for p in roster["players"]]
-    audio = {
-        "ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()],
-        "name": [i for i in ids if (page / "audio" / "name" / f"{i}.mp3").is_file()],
-        "match": [i for i in ids if (page / "audio" / "match" / f"{i}.mp3").is_file()],
-    }
-    payload = {**roster, "audio": audio}
+    ids = [p["id"] for p in items_of(roster)]
+    audio = {"ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()]}
+    for kind in KINDS[kind_of(game)]:
+        audio[kind] = [i for i in ids if (page / "audio" / kind / f"{i}.mp3").is_file()]
+    payload = {**roster, "audio": audio, "game": game, "play": play_of(game)}
     return "const DATA = " + json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";"
 
 
-def write_data(players_json, game, prune):
+def write_words(words_json, game):
+    """A word game's club/roster.json from words.json (a list, or {"words": [...]}), in teaching order (`rank`
+    when the list has one): id, en, he, he_niqqud when given, theme and the picture. Every word needs its
+    picture and both clips."""
     page = REPO / game
-    model = json.loads(read(page / CONFIG)).get("names")
+    data = json.loads(Path(words_json).read_text(encoding="utf-8"))
+    words = data["words"] if isinstance(data, dict) else data
+    ids = [w.get("id") for w in words]
+    if len(set(ids)) != len(ids):
+        fail(f"{words_json}: duplicate ids: {sorted({i for i in ids if ids.count(i) > 1})}")
+    ordered = sorted(words, key=lambda w: w.get("rank", 0)) if all("rank" in w for w in words) else words
+    roster = {"words": [word_entry(w, page) for w in ordered]}
+    (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
+    print(f"{game}: club/roster.json: {len(roster['words'])} words", flush=True)
+    return roster
+
+
+def write_players(players_json, game):
+    page = REPO / game
+    model = config(game).get("names")
     if model not in ("full", "first-last"):
         fail(f"{game}/{CONFIG}: names must be \"full\" or \"first-last\", not {model!r}")
     data = json.loads(Path(players_json).read_text(encoding="utf-8"))
@@ -219,6 +319,15 @@ def write_data(players_json, game, prune):
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
     counts = " ".join(f"{role}={sum(p['role'] == role for p in shipped)}" for role in SHIPPED)
     print(f"{game}: club/roster.json: {counts}", flush=True)
+    return roster
+
+
+def write_data(players_json, game, prune):
+    page = REPO / game
+    if kind_of(game) == "words":
+        roster = write_words(players_json, game)
+    else:
+        roster = write_players(players_json, game)
     for rel in orphans(game, roster):
         if prune:
             (page / rel).unlink()
@@ -226,7 +335,8 @@ def write_data(players_json, game, prune):
 
 
 def lint_credits(game):
-    """The fonts the club style declares vs the files it ships vs what CREDITS.md credits."""
+    """The fonts the club style declares vs the files it ships vs what CREDITS.md credits; a squad's Voice
+    section is the shared one, a word game's credits its pictures and voices."""
     page = REPO / game
     style = read(page / "club/style.css")
     credits = read(page / "CREDITS.md")
@@ -237,7 +347,13 @@ def lint_credits(game):
     fonts_md = credits.split("## Fonts", 1)[-1].split("\n## ", 1)[0]
     credited = set(re.findall(r"^- \*\*([^*]+)\*\*", fonts_md, re.M))
     licences = set(re.findall(r"\((fonts/OFL-[^)]+)\)", credits))
-    voice = read(SHARED / "new/CREDITS.md").split("## Voice", 1)[1]
+    if kind_of(game) == "words":
+        sections = {s.split("\n", 1)[0].strip() for s in credits.split("\n## ")[1:]}
+        voice = [f"CREDITS.md has no {s} section" for s in ("Pictures", "Voice") if s not in sections]
+    else:
+        shared = read(SHARED / "new/CREDITS.md").split("## Voice", 1)[1]
+        voice = ["CREDITS.md's Voice section differs from _memory-game/new/CREDITS.md's"
+                 for _ in [1] if credits.split("## Voice", 1)[-1] != shared]
     return ([f"CREDITS.md: a TODO is left" for _ in [1] if "TODO" in credits]
             + [f"{f} is shipped but no @font-face uses it" for f in sorted(shipped - srcs)]
             + [f"an @font-face uses {f}, which isn't shipped" for f in sorted(srcs - shipped)]
@@ -246,8 +362,7 @@ def lint_credits(game):
             + [f"CREDITS.md links {f}, which doesn't exist" for f in sorted(licences) if not (page / f).is_file()]
             + [f"CREDITS.md doesn't link fonts/{f.name}" for f in sorted((page / "fonts").glob("OFL-*.txt"))
                if f"fonts/{f.name}" not in licences]
-            + ["CREDITS.md's Voice section differs from _memory-game/new/CREDITS.md's"
-               for _ in [1] if credits.split("## Voice", 1)[-1] != voice])
+            + voice)
 
 
 def check_ui_clips(game):
@@ -305,22 +420,25 @@ def manifest(game):
 
 
 def render(game):
-    man, config = manifest(game), json.loads(read(REPO / game / CONFIG))
+    man, cfg = manifest(game), config(game)
     base = source(SHARED / "base.css", "</style")
     style = source(REPO / game / "club/style.css", "</style")
-    scheme = config.get("scheme", "dark")
+    scheme = cfg.get("scheme", "dark")
     if scheme not in ("dark", "light"):
         fail(f"{game}/{CONFIG}: scheme must be \"dark\" or \"light\", not {scheme!r}")
     said = re.search(r"--scheme:\s*([\w-]+)", style)
     if (said.group(1) if said else "dark") != scheme:
         fail(f"{game}: club.json's scheme is {scheme} but club/style.css sets --scheme: {said.group(1) if said else '(nothing)'}")
+    # A word game says what it is in its own link preview (club.json `og`); a squad's uses the shared line.
+    og = {"description": OG_DESCRIPTION, "alt": f"{man['name']}: שלושה שחקנים על קלפי המשחק", **cfg.get("og", {})}
     slots = {
         "scheme": scheme, "status_bar": "black-translucent" if scheme == "dark" else "default",
         "theme_color": html.escape(man["theme_color"]), "short_name": html.escape(man["short_name"]),
         "name": html.escape(man["name"]), "style": style, "base": base,
         "url": html.escape(f"{SITE}{game}/"), "og_image": html.escape(f"{SITE}{game}/{OG_IMAGE}"),
-        "og_description": html.escape(OG_DESCRIPTION), "og_alt": html.escape(f"{man['name']}: שלושה שחקנים על קלפי המשחק"),
-        "title": title_html(man["name"], config.get("title", "plain")), "trophy": trophy_svg(config["trophy"]),
+        "og_description": html.escape(og["description"]), "og_alt": html.escape(og["alt"]),
+        "title": title_html(man["name"], cfg.get("title", "plain")), "trophy": trophy_svg(cfg["trophy"]),
+        "progress": "bar" if play_of(game)["progress"] == "bar" else "off", "ask": ASK[kind_of(game)],
         "data": data_line(game, read_roster(game)), "club": source(REPO / game / "club/club.js", "</script"),
         "engine": source(SHARED / "engine.js", "</script"),
     }
@@ -401,6 +519,16 @@ def assemble(game, check):
 
     files = sorted(f for d in PRECACHE_DIRS if (page / d).is_dir()
                    for f in (page / d).rglob("*") if f.is_file() and f.suffix in PRECACHE_SUFFIXES)
+    # play.precache "core": the page, fonts, icons, the start/win clips and the first `items` items' pictures
+    # and clips; the worker keeps every other picture and clip as the page fetches it (RUNTIME).
+    precache = play_of(game)["precache"]
+    if precache["policy"] == "core":
+        core = {p["id"] for p in items_of(read_roster(game))[:precache["items"]]}
+        later = [f for f in files if f.parts[len(page.parts)] in ("img", "audio") and f.parent.name != "ui"
+                 and f.stem not in core]
+        files = [f for f in files if f not in later]
+    else:
+        later = []
     assets = ["./", "index.html", "manifest.webmanifest", *(f.relative_to(page).as_posix() for f in files)]
     digest = hashlib.sha256()
     for rel in assets[1:]:
@@ -409,15 +537,22 @@ def assemble(game, check):
             fail(f"{game}: precache entry {rel} does not exist")
         digest.update(rel.encode())
         digest.update(html_.encode() if rel == "index.html" else path.read_bytes())
+    kept = hashlib.sha256()
+    for f in later:
+        kept.update(f.relative_to(page).as_posix().encode())
+        kept.update(f.read_bytes())
+    digest.update(kept.digest() if later else b"")
     digest.update(b"sw.template.js")
     digest.update(template.encode())
     version = f"{prefix}{digest.hexdigest()[:12]}"
+    runtime = f"{prefix}runtime-{kept.hexdigest()[:12]}" if later else ""
 
     new_sw = template
     for pattern, value, flags in (
             (r"^const VERSION = .*;$", f"const VERSION = '{version}';", re.M),
             (r"^const ASSETS = .*?;$", "const ASSETS = " + json.dumps(assets, indent=2).replace('"', "'") + ";", re.M | re.S),
-            (r"^const PREFIX = .*;$", f"const PREFIX = '{prefix}';", re.M)):
+            (r"^const PREFIX = .*;$", f"const PREFIX = '{prefix}';", re.M),
+            (r"^const RUNTIME = .*;$", f"const RUNTIME = '{runtime}';", re.M)):
         new_sw, n = re.subn(pattern, lambda m, v=value: v, new_sw, count=1, flags=flags)
         if n != 1:
             fail(f"_memory-game/sw.template.js is missing its {pattern.split()[1]} line")
@@ -436,7 +571,8 @@ def assemble(game, check):
     sw.write_text(new_sw, encoding="utf-8")
     total = sum(f.stat().st_size for f in files) + len(html_.encode())
     print(f"{game}: {len(assets)} precached, {total / 1024:.0f} KB, version {version}"
-          f"{'' if stale else ' (unchanged)'}", flush=True)
+          + (f"; {len(later)} more kept as they come, {sum(f.stat().st_size for f in later) / 1024:.0f} KB" if later else "")
+          + f"{'' if stale else ' (unchanged)'}", flush=True)
     return True
 
 
@@ -445,11 +581,11 @@ def listing(all_games):
     for game in all_games:
         sw = REPO / game / "sw.js"
         version = re.search(r"^const VERSION = '([^']*)';$", sw.read_text(encoding="utf-8"), flags=re.M) if sw.is_file() else None
-        names = json.loads(read(REPO / game / CONFIG)).get("names")
+        cfg = config(game)
         installable = (REPO / game / "manifest.webmanifest").is_file()
         out.append({"id": game, "prefix": f"{game}-", "version": version and version.group(1),
                     "app_id": app_id(game).removeprefix("https://origin.invalid") if installable else None,
-                    "names": names})
+                    "kind": cfg.get("kind", "squad"), "names": cfg.get("names")})
     return out
 
 

@@ -1,15 +1,15 @@
 // A game's link-preview image, <game>/og.jpg: 1200x630, JPEG, at most 300 KB, what WhatsApp and the like
 // show when the game's link is shared. It is the game's own start screen at that size, its background and
-// title in the club's fonts and colours, with three starters' card faces under the title in place of the
-// fan and the mode buttons. So the club's look is drawn by its own page, never again here. The page runs
+// title in the club's fonts and colours, with three card faces under the title in place of the fan and the
+// mode buttons: three starters, or three of a word game's first words (the engine's POSTER, which the start
+// screen's fan shows too). So the game's look is drawn by its own page, never again here. The page runs
 // from the repo through a route (no server, no service worker), and its engine is opened up the way the
-// state-machine harness does it, so the cards are built by the engine's buildCard and sized by the club's
-// face.
+// state-machine harness does it, so the cards are built by the engine's buildCard and sized by the face.
 //
 //   _memory-game/tools/og/render_og.sh [<game>...]      (sets up the verify harness's pinned Playwright)
 //   node og.js <repo> <game> [--players <id>,<id>,<id>]
-// Without --players, the three starters come from a shuffle seeded by the game's id: the same three until
-// the starters change.
+// Without --players, the three come from a shuffle seeded by the game's id: the same three until the
+// starters (or the first words) change.
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
@@ -25,7 +25,7 @@ const ORIGIN = 'http://og.invalid/';
 // The poster: the title over three cards fanned out a little, side by side so no face, number or name is
 // covered, the middle one a little bigger.
 const POSTER_CSS = `
-  .start .modes, .install, .fan { display: none; }
+  .start .modes, .install, .fan, .progress { display: none; }
   .start-stage { grid-template-areas: "title" "cards"; row-gap: var(--og-gap); }
   .og-cards { grid-area: cards; display: flex; align-items: center; gap: calc(var(--cw) * .07); }
   .og-cards .card { flex: none; width: var(--cw); height: var(--ch); }
@@ -43,7 +43,7 @@ function opened(html) {
   const start = html.indexOf('<script id="engine">');
   const cut = html.lastIndexOf('})();', html.indexOf('</script>', start));
   if (start < 0 || cut < start) throw new Error(`${GAME}/index.html has no engine script to open`);
-  return `${html.slice(0, cut)}window.__og = { buildCard, applyFace, face, STARTERS };\n${html.slice(cut)}`;
+  return `${html.slice(0, cut)}window.__og = { buildCard, applyFace, face, POSTER };\n${html.slice(cut)}`;
 }
 
 function seeded(text) {
@@ -70,7 +70,7 @@ function pick(ids) {
 
 // In the page: the title's height decides how big the three cards can be.
 function poster(ids) {
-  const { buildCard, applyFace, face, STARTERS } = window.__og;
+  const { buildCard, applyFace, face, POSTER } = window.__og;
   const stage = document.querySelector('.start-stage');
   const gap = 22;
   const pad = 30;
@@ -82,7 +82,7 @@ function poster(ids) {
   cards.className = 'og-cards';
   const geo = applyFace(cards, cw, cw * 1.28, 'band');
   ids.forEach((id, i) => {
-    const p = STARTERS.find((q) => q.id === id);
+    const p = POSTER.find((q) => q.id === id);
     const card = buildCard(p, i, 'span');
     card.dataset.state = 'up';
     cards.appendChild(card);
@@ -113,11 +113,11 @@ function poster(ids) {
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto(`${ORIGIN}${GAME}/`, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
-  const starters = await page.evaluate(() => window.__og.STARTERS.map((p) => [p.id, p.name_he]));
-  const names = new Map(starters);
-  const ids = pick(starters.map(([id]) => id));
+  const pool = await page.evaluate(() => window.__og.POSTER.map((p) => [p.id, p.name_he || p.en]));
+  const names = new Map(pool);
+  const ids = pick(pool.map(([id]) => id));
   if (ids.length !== 3 || !ids.every((id) => names.has(id))) {
-    throw new Error(`${GAME}: --players wants three starters' ids, not ${ids.join(',')}`);
+    throw new Error(`${GAME}: --players wants three ids of the start screen's pool (the starters, or the first words), not ${ids.join(',')}`);
   }
   await page.addStyleTag({ content: POSTER_CSS });
   const cw = await page.evaluate(poster, ids);

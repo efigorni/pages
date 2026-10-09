@@ -12,5 +12,12 @@
     "mode": "auto",
     "fade": 0,
     "sheet_colors": "020f24,061e3f,f8d734"
+  },
+  "play": {
+    "voice": {"flip": ["name"], "match": ["name", "match"], "ask": ["match"], "wrong": ["match"], "right": ["name"], "card": ["match"]},
+    "deal": {"policy": "squad", "pairs": 15},
+    "quiz": {"pool": "all"},
+    "progress": "inventory",
+    "precache": {"policy": "all"}
   }
 }

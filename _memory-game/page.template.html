@@ -37,7 +37,7 @@
 <style id="base">
 {{base}}</style>
 </head>
-<body>
+<body data-progress="{{progress}}">
 <svg class="sprite" aria-hidden="true">
   <symbol id="i-memory" viewBox="0 0 48 48">
     <path fill-rule="evenodd" fill="currentColor" transform="translate(12.5 24) rotate(-5)" d="M-6.5-14H6.5A3 3 0 0 1 9.5-11V11A3 3 0 0 1 6.5 14H-6.5A3 3 0 0 1-9.5 11V-11A3 3 0 0 1-6.5-14ZM0-6.5 1.6-2.2 6.2-2 2.6.85 3.8 5.3 0 2.75-3.8 5.3-2.6.85-6.2-2-1.6-2.2Z"/>
@@ -48,6 +48,29 @@
     <path d="M4 46.5C4 36.5 12.5 31 24 31S44 36.5 44 46.5Z" fill="currentColor"/>
     <path class="cut" d="M20.1 12.6A4 4 0 1 1 26.9 15.2C25.2 16.4 24 17.3 24 19.6" fill="none" stroke-width="3.2" stroke-linecap="round"/>
     <circle class="cut" cx="24" cy="24" r="1.9"/>
+  </symbol>
+  <symbol id="i-cards" viewBox="0 0 48 48">
+    <rect x="25.5" y="4.5" width="18" height="18" rx="4" fill="currentColor"/>
+    <rect x="4.5" y="4.5" width="18" height="18" rx="4" fill="currentColor"/>
+    <rect x="25.5" y="25.5" width="18" height="18" rx="4" fill="currentColor"/>
+    <rect x="6" y="27" width="15" height="15" rx="2.6" fill="none" stroke="currentColor" stroke-width="3"/>
+    <path class="cut" d="M29.6 13.9l3.4 3.3 6.4-7M8.6 13.9l3.4 3.3 6.4-7M29.6 34.9l3.4 3.3 6.4-7" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24">
+    <path d="M7.5 10.5V8a4.5 4.5 0 0 1 9 0v2.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+    <rect x="4.5" y="10" width="15" height="11.5" rx="2.6" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24">
+    <path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-play" viewBox="0 0 24 24">
+    <path d="M8 5.2v13.6a1 1 0 0 0 1.5.86l10.8-6.8a1 1 0 0 0 0-1.72L9.5 4.34A1 1 0 0 0 8 5.2Z" fill="currentColor"/>
+  </symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24">
+    <path d="M19.5 12H6M11.5 5.5 5 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-star" viewBox="0 0 24 24">
+    <path d="M12 2.6l2.75 5.95 6.5.73-4.83 4.4 1.35 6.4L12 16.8l-5.77 3.28 1.35-6.4-4.83-4.4 6.5-.73Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
   </symbol>
 </svg>
 <div class="app" id="app" data-phase="start" data-mode="memory" data-found="0">
@@ -64,12 +87,17 @@
   <main class="board" id="board"></main>
   <section class="quiz" id="quiz">
     <div class="prompt">
-      <button class="big say" id="say" type="button" aria-label="לשמוע שוב">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
+      <button class="big say" id="say" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-speaker"/></svg></button>
       <p class="question" id="question" aria-live="polite"></p>
     </div>
     <div class="picks" id="picks"></div>
+  </section>
+  <section class="cards" id="cards">
+    <div class="prompt shelf-bar">
+      <button class="big say next-new" id="next-new" type="button" aria-label="לכרטיס החדש הבא"><svg aria-hidden="true"><use href="#i-play"/></svg><span class="new-dot" aria-hidden="true"></span></button>
+      <p class="shelf-count"><svg aria-hidden="true"><use href="#i-star"/></svg><span id="shelf-count" dir="ltr"></span></p>
+    </div>
+    <div class="shelf" id="shelf"></div>
   </section>
 </div>
 
@@ -79,7 +107,8 @@
     <div class="fan" id="fan" data-face="band" aria-hidden="true"></div>
     <div class="modes">
       <button class="mode" id="play" type="button" aria-label="משחק זיכרון"><span class="big play"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
-      <button class="mode" id="play-quiz" type="button" aria-label="חידון: מי זה?"><span class="big play"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+      <button class="mode" id="play-quiz" type="button" aria-label="חידון: {{ask}}"><span class="big play"><svg aria-hidden="true"><use href="#i-quiz"/></svg><span class="lock" aria-hidden="true"><svg><use href="#i-lock"/></svg></span></span><span class="mode-label">{{ask}}</span></button>
+      <button class="mode" id="play-cards" type="button" aria-label="כרטיסיות"><span class="big play"><svg aria-hidden="true"><use href="#i-cards"/></svg></span><span class="mode-label">כרטיסיות</span></button>
     </div>
   </div>
   <button class="install" id="install" type="button" hidden>
@@ -92,7 +121,8 @@
   <div class="confirm-box">
     <div class="modes">
       <button class="mode" id="yes" type="button" aria-label="משחק זיכרון חדש"><span class="big"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
-      <button class="mode" id="yes-quiz" type="button" aria-label="חידון חדש: מי זה?"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+      <button class="mode" id="yes-quiz" type="button" aria-label="חידון חדש: {{ask}}"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg><span class="lock" aria-hidden="true"><svg><use href="#i-lock"/></svg></span></span><span class="mode-label">{{ask}}</span></button>
+      <button class="mode" id="yes-cards" type="button" aria-label="כרטיסיות"><span class="big"><svg aria-hidden="true"><use href="#i-cards"/></svg></span><span class="mode-label">כרטיסיות</span></button>
     </div>
     <button class="big no" id="no" type="button" aria-label="לא, להמשיך לשחק">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
@@ -106,10 +136,31 @@
 {{trophy}}    </svg>
     <div class="modes">
       <button class="mode" id="replay" type="button" aria-label="משחק זיכרון חדש"><span class="big"><svg aria-hidden="true"><use href="#i-memory"/></svg></span><span class="mode-label">זיכרון</span></button>
-      <button class="mode" id="replay-quiz" type="button" aria-label="חידון חדש: מי זה?"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg></span><span class="mode-label">מי זה?</span></button>
+      <button class="mode" id="replay-quiz" type="button" aria-label="חידון חדש: {{ask}}"><span class="big"><svg aria-hidden="true"><use href="#i-quiz"/></svg><span class="lock" aria-hidden="true"><svg><use href="#i-lock"/></svg></span></span><span class="mode-label">{{ask}}</span></button>
+      <button class="mode" id="replay-cards" type="button" aria-label="כרטיסיות"><span class="big"><svg aria-hidden="true"><use href="#i-cards"/></svg></span><span class="mode-label">כרטיסיות</span></button>
     </div>
   </div>
 </section>
+
+<section class="overlay flash" id="flash" inert>
+  <div class="flash-stage">
+    <div class="flash-slot" id="flash-slot" data-face="band"></div>
+    <div class="flash-nav">
+      <button class="big" id="prev" type="button" aria-label="הכרטיס הקודם"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <button class="big say" id="hear" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-speaker"/></svg></button>
+      <button class="big" id="next" type="button" aria-label="הכרטיס הבא"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+  </div>
+  <button class="icon-btn close" id="close" type="button" aria-label="חזרה לכל הכרטיסים">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>
+  </button>
+</section>
+
+<div class="progress" id="progress" role="progressbar" aria-label="מה שכבר למדת" aria-valuemin="0" aria-valuenow="0">
+  <svg class="progress-star" aria-hidden="true"><use href="#i-star"/></svg>
+  <span class="progress-track"><span class="progress-fill"></span></span>
+  <span class="progress-count" id="progress-count" dir="ltr"></span>
+</div>
 
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 
