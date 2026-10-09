@@ -15,7 +15,9 @@ import sys
 from pathlib import Path
 
 OUT = Path(sys.argv[1])
-NOISE = ("Service Worker registration blocked by Playwright", "Banner not shown")
+# Playwright's own notices, and Chrome's hint about the confetti pixel check drive.js polls (confettiClear).
+NOISE = ("Service Worker registration blocked by Playwright", "Banner not shown",
+         "Multiple readback operations using getImageData")
 
 
 def load(path):

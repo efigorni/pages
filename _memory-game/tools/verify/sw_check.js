@@ -152,7 +152,7 @@ function audit(log) {
   await sleep(600);
   R.offline.quiz = await page.evaluate((id) => {
     const clips = window.__log.filter((e) => e.type === 'buf-start' || e.type === 'html-play').map((e) => e.url);
-    const imgs = [...document.querySelectorAll('#picks img')];
+    const imgs = [...document.querySelectorAll('#picks .ask img')];
     return { answer: id, clips, imgs: [imgs.length, imgs.filter((x) => x.complete && x.naturalWidth > 0).length] };
   }, answer);
   R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips.slice(-2)) === JSON.stringify(['audio/ui/who.mp3', `audio/match/${answer}.mp3`])
