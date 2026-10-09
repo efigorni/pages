@@ -272,7 +272,7 @@ async function steps(context, page, R) {
   R.offline.unmetPictures = failed.filter((u) => u.startsWith('failed ') && unmet(u)).length;
   R.http.push(...failed.filter((u) => !(u.startsWith('failed ') && unmet(u))));
   if (R.offline.unmetPictures) {
-    R.console = R.console.filter((m, i) => i < consoleAt2 || !m.includes('Failed to load resource: net::ERR_INTERNET_DISCONNECTED'));
+    R.console = R.console.filter((m, i) => i < consoleAt2 || !/Failed to load resource: net::ERR_(FAILED|INTERNET_DISCONNECTED)/.test(m));
   }
   await context.setOffline(false);
 }

@@ -356,7 +356,8 @@ async function quizFlow(page, vp, dir, res) {
   const played = (from, url) => until(page, ([k, u, kinds]) => window.__log.slice(k)
     .some((e) => kinds.includes(e.type) && e.url === u), 10000, [from, url, CLIP_EVENTS]);
   await ready(page);
-  if (await page.evaluate(() => !!(window.DATA && DATA.play && DATA.play.quiz.pool === 'learned'))) {
+  // DATA is the page's global const, not a window property.
+  if (await page.evaluate(() => typeof DATA !== 'undefined' && !!DATA.play && DATA.play.quiz.pool === 'learned')) {
     await page.evaluate((n) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(DATA.words.slice(0, n).map((w) => w.id))),
       LEARNED_START);
     await page.reload({ waitUntil: 'load' });
@@ -536,7 +537,7 @@ async function run(browser, game, vpName, mode, reduced) {
   const t0 = Date.now();
   try {
     await page.goto(`${baseUrl}${game}/`, { waitUntil: 'load' });
-    res.voice = await page.evaluate(() => (window.DATA && DATA.play ? DATA.play.voice : null));
+    res.voice = await page.evaluate(() => (typeof DATA !== 'undefined' && DATA.play ? DATA.play.voice : null));
     if (mode === 'shots') await shotsFlow(page, vp, dir, reduced, res);
     else if (mode === 'quiz') await quizFlow(page, vp, dir, res);
     else await audioFlow(page, vp, dir, res);
