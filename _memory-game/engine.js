@@ -1034,11 +1034,14 @@
     });
   }
 
+  // The shelf opens where the new ones begin.
   function openShelf() {
     reset('cards', 0);
     buildShelf();
     setPhase('browse');
     keepAwake();
+    const tile = shelf.tiles.get(ITEMS[nextNew()].id);
+    if (tile.scrollIntoView) tile.scrollIntoView({ block: 'center' });
   }
 
   // The flash card's size: as tall as its slot allows, a card's proportions, clear of the screen's sides.

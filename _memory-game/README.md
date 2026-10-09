@@ -7,10 +7,10 @@ it as an orphan.
 
 | File | What it is |
 |---|---|
-| `engine.js` | The game, in two modes: memory (deal, flips) and the quiz (who is this?); audio, overlays, confetti, wake lock, install, service-worker registration, and the face kit a club's card face is drawn with |
+| `engine.js` | The game, in three modes: memory (deal, flips), the quiz (who is this? / what is this?) and flash cards (the shelf of every item, one card big); what she has learned, audio, overlays, confetti, wake lock, install, service-worker registration, and the face kit a card face is drawn with |
 | `base.css` | Every style the games share; colours and fonts come from each club's tokens |
-| `page.template.html` | The page with slots, filled per game: head, club style, base, title, trophy, DATA, club script, engine; the two mode icons |
-| `sw.template.js` | The service worker; each game's `sw.js` is this file with `VERSION`, `ASSETS` and `PREFIX` filled in |
+| `page.template.html` | The page with slots, filled per game: head, club style, base, title, trophy, DATA, club script, engine; the mode icons |
+| `sw.template.js` | The service worker; each game's `sw.js` is this file with `VERSION`, `ASSETS`, `PREFIX` and `RUNTIME` filled in |
 | `audio/ui/` | The start and win clips (the engine's own lines); every game ships a copy |
 | `new/` | The templates `build_page.py new` fills: `CREDITS.md`, the club's `tools/README.md` |
 | `tools/page/build_page.py` | `new`, `data`, `assemble [--check] [--watch]`, `list [--json]` (below) |
@@ -20,7 +20,7 @@ it as an orphan.
 | `tools/scrape/` | The scraper kit: `common.py` (fetcher, ids, atomic write, photo facts), `roster.py` (the squad rule and a players.json check), `transfermarkt.py`, `contact_sheet.py` |
 | `tools/fonts/add_font.py` | Fetches a Google Fonts family's Hebrew and Latin subsets and its OFL into a game |
 | `tools/icons/` | `render_icons.sh --game <game>` renders a game's PWA icons from its two SVGs |
-| `tools/og/` | `render_og.sh [<game>...]` renders each game's link-preview image, `og.jpg`: its own start screen at 1200×630 with three starters' card faces (`og.js`, on the harness's Playwright) |
+| `tools/og/` | `render_og.sh [<game>...]` renders each game's link-preview image, `og.jpg`: its own start screen at 1200×630 with three card faces, starters or first words (`og.js`, on the harness's Playwright) |
 | `tools/verify/` | `verify.sh`: the browser checks every change runs (below) |
 
 ## How a game is built
@@ -31,10 +31,10 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 | Source | What it holds |
 |---|---|
 | `<game>/manifest.webmanifest` | The club's identity: name, short name, colours, id. The head and the title come from it. Never written by a tool after `new` |
-| `<game>/club/club.json` | The name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`) |
+| `<game>/club/club.json` | What it teaches (`kind`: `squad`, the default, or `words`), its script (`play`, below), the name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`), a word game's link-preview text (`og`) |
 | `<game>/club/style.css` | Hand-written: fonts, colour tokens, card back, card face, title |
 | `<game>/club/club.js` | Hand-written: `CLUB = { confetti, fonts, face(kit) }` |
-| `<game>/club/roster.json` | The players with their roles (starter, bench, backup: quiz only), written by `build_page.py data` |
+| `<game>/club/roster.json` | The players with their roles (starter, bench, backup: quiz only), or a word game's words in teaching order; written by `build_page.py data` |
 | `_memory-game/*` | The engine, the base styles and the two templates |
 
 The head also carries the link preview that WhatsApp and the like show (Open Graph and Twitter tags): the
@@ -42,8 +42,8 @@ manifest name, one shared description, and absolute URLs under `SITE` in `build_
 site's address is written. The image is the game's `og.jpg`, at its root, outside the precached folders, so
 a device never downloads it.
 
-Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the two modes side by side.
-Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
+Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the three modes side by side:
+memory, the quiz and flash cards. Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
 "מי זה מספר N, <name>?" in text, his match clip out loud, four photo-only cards. A wrong pick teaches too:
 a soft sound, then that card turns to its face (grey, smaller, marked ✗, out of play) and plays that
 player's match clip; her next pick or the replay button cuts it off. The right one turns to the club's
@@ -52,8 +52,32 @@ card face, says the name and moves on. The squad rule
 in the quiz, never dealt. Every tool that images, voices, checks, syncs or prunes takes `roster.SHIPPED`
 (starter, bench, backup), so a refresh keeps them.
 
+Flash cards show the shelf: a tile per item in teaching order, the learned ones in full colour with a tick,
+the others dimmed with a dot, and a button to the next new one. A tile opens its card big (the club's face),
+which says its line, counts as learned, and pages with ← →. What she has learned (a match in memory, or a
+flash card) is kept on the device per game, in `localStorage` under `<game>:learned` (the games share one
+origin); when storage is blocked it lasts the visit.
+
+### Play config
+
+`club.json` `play` is the game's script; the builder checks it and puts it in DATA:
+
+| Key | Squad (the football games) | Words (`english-words`) |
+|---|---|---|
+| `voice` | flip `name`; match `name`, `match`; ask `match`; wrong `match`; right `name`; card `match` | flip `en`; match `en`, `he`; ask `en`; wrong and right `en`, `he`; card `en`, `he` |
+| `deal` | `squad`: the starters, the rest of the 15 pairs from the bench | `new-first`: up to `new` (8) unlearned words in teaching order, the rest a random review of learned ones, more new ones while few are learned |
+| `quiz` | `all`: every player once | `learned`: up to `size` (15) random learned words, locked below `unlock` (4) learned; the three others are learned words |
+| `progress` | `inventory`: the marks on the shelf only | `bar`: "learned X / N" on every screen |
+| `precache` | `all`: every file, strictly | `core` with `items` (30): the page, fonts, icons, start/win and the first 30 words strictly; every other picture and clip in `RUNTIME` |
+
+A clip kind is a folder, `audio/<kind>/<id>.mp3`: a squad records `name` and `match`, a word game `en` and `he`
+(`KINDS` in `build_page.py`). With `precache` `core`, the worker keeps every other picture and clip it fetches
+in its runtime cache, whose name hashes those files, so it outlives a new version unless one of them
+changed; online, the page fetches ahead what the next game needs (every learned word and the next new
+ones), so a learned word and the next deal play offline.
+
 Scripts run in the order data, club, engine. `CLUB.face(kit)` returns the card face's four hooks:
-`prepare(players)`, `apply(style, cw, ch, mode)`, `build(p)` (its front must keep `.photo > img`, where a
+`prepare(items)`, `apply(style, cw, ch, mode)`, `build(p)` (its front must keep `.photo > img`, where a
 match flight starts) and `fit(cardEl, p, geo)`. The kit has `el`, `textEm`, `words`, `bestSplit`,
 `photoFront`, `splits`, `fitLines`, `renderName`, `setVars` and `digitEm`. The club style defines the tokens
 `base.css` reads (`--font`, `--accent`, `--surface`, `--back-line`, `--edge`, `--found`, ...); a light
