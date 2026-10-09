@@ -1,6 +1,6 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
 // VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
-const VERSION = 'hapoel-tlv-memory-38b259213991';
+const VERSION = 'hapoel-tlv-memory-f7b9e01a1181';
 const ASSETS = [
   './',
   'index.html',
@@ -65,6 +65,7 @@ const ASSETS = [
   'img/andrian-kraev.webp',
   'img/assaf-tzur.webp',
   'img/chico-alves.webp',
+  'img/club/paint.webp',
   'img/daniel-dappa.webp',
   'img/doron-leidner.webp',
   'img/douglas-owusu.webp',
