@@ -21,7 +21,7 @@ it as an orphan.
 | `tools/fonts/add_font.py` | Fetches a Google Fonts family's Hebrew and Latin subsets and its OFL into a game |
 | `tools/icons/` | `render_icons.sh --game <game>` renders a game's PWA icons from its two SVGs |
 | `tools/og/` | `render_og.sh [<game>...]` renders each game's link-preview image, `og.jpg`: its own start screen at 1200×630 with three card faces, starters or first words (`og.js`, on the harness's Playwright) |
-| `tools/verify/` | `verify.sh`: the browser checks every change runs (below) |
+| `tools/verify/` | `verify.sh`: `sanity`, the gate every change runs, and the thorough `full` (below) |
 
 ## How a game is built
 
@@ -119,8 +119,9 @@ python3 -I _memory-game/tools/page/build_page.py assemble <game> --watch   # whi
    squad rule, the players.json check), writes `<work>/data/players.json`.
 4. **Refresh**: `_memory-game/tools/refresh.sh <game> <work>` (below), which ends with the link preview
    (look at `<game>/og.jpg`), and render the icons: `bash _memory-game/tools/icons/render_icons.sh --game <game>`.
-5. **Test and commit**: `verify.sh local --out <dir> <game>`, then `git add` with explicit paths. Fill in
-   the TODOs of `CREDITS.md` and `tools/README.md` first: `--check` fails while one is left.
+5. **Test and commit**: `verify.sh sanity <game>`, and look at its design in `verify.sh local <game>`'s
+   seeded screenshots at both sizes; then `git add` with explicit paths. Fill in the TODOs of
+   `CREDITS.md` and `tools/README.md` first: `--check` fails while one is left.
 
 ## Refresh a club
 
@@ -149,15 +150,38 @@ lives in `~/.cache/memory-game-tts`, which belongs to no club: `tools/tts/setup.
 ## Test
 
 ```sh
-_memory-game/tools/verify/verify.sh local --out <dir outside the repo> [<game>...]
+_memory-game/tools/verify/verify.sh sanity [<game>...]   # the gate for every PR: all the games in about a minute
+_memory-game/tools/verify/verify.sh live [<game>...]     # after a merge: the deployed games
+_memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-wide behaviour refactor, or on request
 ```
 
-P9 for the named games (default: all): `assemble --check`; seeded start, mid and win screenshots at
-600×960 and 960×600; one audio playthrough (the right clip on every flip); a whole quiz at both sizes (every
-player once, a wrong pick, the clips in order, question/wrong/reveal/end screenshots); the worker online,
-offline (memory and quiz) and installable, and the link preview (its tags, and `og.jpg` as served); the
-state machine. `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and
-audio-identical, `verify.sh upgrade <old-ref> <new-ref>` simulates the GitHub Pages upgrade under
-`/pages/`, online then offline, and `verify.sh live` checks the deployed game after a merge. To look at a
-game by hand, serve the repo with `python3 -I _memory-game/tools/verify/serve.py 8765 .` (the stock
-`http.server` resets connections while a worker precaches ~80 files).
+**`sanity` is the default gate**: run it before every commit and on every PR. It checks the named games
+(default: all) at once, in parallel and headless at 600×960 touch:
+- static: `assemble --check` (with the builder's lints) and the format of every shipped clip
+  (`clips.py format`: the format `tts.sh check` enforces, without the work directory and its STT);
+- per game, no console error and no 404; the worker controls the page and `installability` is `[]`;
+- memory: three flips say their names and their matches the match clip;
+- the quiz's first question: a wrong pick turns over and says who it is, the right one says the name;
+- offline: a reload with the network off shows the photos, plays cached clips and asks a quiz question;
+- a quick upgrade from `origin/main` (`--from <ref>`), online then offline, for the games that exist there.
+
+Each failure names what broke: the URL, the console line, the clips it heard. `live` (`sanity --live`)
+checks the deployed games after a merge: it waits until GitHub Pages serves the new `sw.js`, compares every
+precached file with the repo, then runs the same browser checks on the live site.
+
+**`full` is only for a deliberate refactor of the engine's behaviour across every game, or when asked**
+(about an hour): `local`, then `compare` and `upgrade` from `origin/main`. Each also runs alone:
+- `verify.sh local [<game>...]`, P9: `assemble --check`; seeded start, mid and win screenshots at 600×960
+  and 960×600; one audio playthrough (the right clip on every flip); a whole quiz at both sizes (every
+  player once, a wrong pick, the clips in order, question/wrong/reveal/end screenshots); the worker online,
+  offline (memory and quiz) and installable, and the link preview (its tags, and `og.jpg` as served); the
+  state machine;
+- `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and audio-identical;
+- `verify.sh upgrade <old-ref> <new-ref>` simulates the GitHub Pages upgrade under `/pages/` with whole
+  games, online then offline.
+
+Outputs go to `--out <dir>` (default: one folder per checkout under `$TMPDIR`; never inside the repo).
+`MEMORY_GAME_VERIFY_PORTS=8801-8804` pins the test servers' ports when several runs share a machine
+(`sanity` takes one more than the games it upgrades). To look at a game by hand, serve the repo with
+`python3 -I _memory-game/tools/verify/serve.py 8765 .` (the stock `http.server` resets connections while
+a worker precaches ~80 files).
