@@ -58,22 +58,17 @@ the icon is Andika Bold's outline.
 
 ## Voice
 
-English: Kokoro-82M (Apache-2.0), voice `af_heart` (`af_bella` for “six”). Hebrew: BlueTTS (MIT) with LibriTTS-R speaker 1088
+English: Kokoro-82M (Apache-2.0), voice `am_michael`. Hebrew: BlueTTS (MIT) with LibriTTS-R speaker 1088
 (CC BY 4.0).
 
 - **English words** ([`audio/en/`](audio/en/)): synthesized locally with **Kokoro-82M**
-  (<https://huggingface.co/hexgrad/Kokoro-82M>, Apache License 2.0), voice **`af_heart`** (American
-  English, female), part of the same Apache-2.0 release; the one word “six” is in the release's
-  **`af_bella`** voice (American English, female), since `af_heart` kept saying it as “sex”. The model
-  ran as ONNX through **kokoro-onnx**
+  (<https://huggingface.co/hexgrad/Kokoro-82M>, Apache License 2.0), voice **`am_michael`** (American
+  English, male), part of the same Apache-2.0 release. The model ran as ONNX through **kokoro-onnx**
   (<https://github.com/thewh1teagle/kokoro-onnx>, MIT License) with its v1.0 model files
   (`kokoro-v1.0.onnx`, `voices-v1.0.bin`). Pronunciations come from the US lexicon of **misaki**
   (<https://github.com/hexgrad/misaki>, Apache License 2.0), the G2P Kokoro was trained with, and
   **eSpeak NG** (GPL-3.0, used as a build-time tool only) for words the lexicon lacks. The clips are new
   synthetic speech; no code or data of these projects ships with the game.
-- Two English clips, [`audio/en/cook.mp3`](audio/en/cook.mp3) and [`audio/en/up.mp3`](audio/en/up.mp3), were
-  generated with **ElevenLabs** (<https://elevenlabs.io>; model `eleven_multilingual_v2`, premade voice “Bella”),
-  because Kokoro's reads of those two words were rejected by ear.
 - **Hebrew words** ([`audio/he/`](audio/he/)) and the start and win lines ([`audio/ui/`](audio/ui/)):
   synthesized locally with **BlueTTS 2.5** (<https://github.com/maxmelichov/BlueTTS>, MIT License).
 - The `noa` voice is speaker 1088 of the **LibriTTS-R** corpus
