@@ -8,11 +8,16 @@ no speech fallback), the quiz at both sizes (every player once, four distinct ca
 turns over to that player's number and name and says his match clip until the right pick cuts it off,
 the clips in order, the reveal moving on by itself), the worker (controls the page, flips online,
 installability [], an offline reload plays the memory game with every photo and the quiz with its
-clips, every quiz player's photo and clips cached) and the state machine. Exits 1 if any game fails.
+clips, every quiz player's photo and clips cached, the link preview's tags and og.jpg as served) and the
+state machine. Exits 1 if any game fails.
 """
 import json
 import sys
 from pathlib import Path
+
+sys.dont_write_bytecode = True  # no __pycache__ in the repo
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "page"))
+from build_page import OG_IMAGE, OG_MAX_KB, SITE  # noqa: E402
 
 OUT = Path(sys.argv[1])
 # Playwright's own notices, and Chrome's hint about the confetti pixel check drive.js polls (confettiClear).
@@ -76,6 +81,23 @@ def quiz_checks(r):
     }
 
 
+def og_checks(r):
+    """The head's link-preview tags (absolute, under SITE) and the image they name, as the server serves it."""
+    og = r.get("og") or {}
+    tags, img = og.get("tags") or {}, og.get("image") or {}
+    want = {"og:type": "website", "og:locale": "he_IL", "og:url": f"{SITE}{r['game']}/",
+            "og:image": f"{SITE}{r['game']}/{OG_IMAGE}", "og:image:type": "image/jpeg",
+            "twitter:card": "summary_large_image"}
+    return {
+        f"link preview tags (og:image {tags.get('og:image')})": all(tags.get(k) == v for k, v in want.items())
+        and all(tags.get(k) for k in ("og:title", "og:description", "og:image:alt")),
+        f"{OG_IMAGE} served: {img.get('width')}x{img.get('height')} {img.get('type')}, {(img.get('bytes') or 0) // 1024} KB, "
+        f"the size the tags give":
+            img.get("status") == 200 and img.get("type") == "image/jpeg" and 0 < img.get("bytes", 0) <= OG_MAX_KB * 1024
+            and [str(img.get("width")), str(img.get("height"))] == [tags.get("og:image:width"), tags.get("og:image:height")],
+    }
+
+
 def sw_checks(r):
     if r is None:
         return {"ran": False}
@@ -91,6 +113,7 @@ def sw_checks(r):
         f"offline quiz: start + match, {(r['offline'].get('quiz') or {}).get('imgs')} photos": bool((r["offline"].get("quiz") or {}).get("ok")),
         f"cached: every quiz player's photo and clips ({(r['offline'].get('quizCache') or {}).get('checked')})":
             (r["offline"].get("quizCache") or {}).get("missing") == [],
+        **og_checks(r),
         "no 404, clean console": not r["http"] and not console_clean(r["console"]),
     }
 

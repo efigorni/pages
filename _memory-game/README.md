@@ -20,6 +20,7 @@ it as an orphan.
 | `tools/scrape/` | The scraper kit: `common.py` (fetcher, ids, atomic write, photo facts), `roster.py` (the squad rule and a players.json check), `transfermarkt.py`, `contact_sheet.py` |
 | `tools/fonts/add_font.py` | Fetches a Google Fonts family's Hebrew and Latin subsets and its OFL into a game |
 | `tools/icons/` | `render_icons.sh --game <game>` renders a game's PWA icons from its two SVGs |
+| `tools/og/` | `render_og.sh [<game>...]` renders each game's link-preview image, `og.jpg`: its own start screen at 1200×630 with three starters' card faces (`og.js`, on the harness's Playwright) |
 | `tools/verify/` | `verify.sh`: the browser checks every change runs (below) |
 
 ## How a game is built
@@ -35,6 +36,11 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 | `<game>/club/club.js` | Hand-written: `CLUB = { confetti, fonts, face(kit) }` |
 | `<game>/club/roster.json` | Starters, bench and backups (quiz only), written by `build_page.py data` |
 | `_memory-game/*` | The engine, the base styles and the two templates |
+
+The head also carries the link preview that WhatsApp and the like show (Open Graph and Twitter tags): the
+manifest name, one shared description, and absolute URLs under `SITE` in `build_page.py`, the one place the
+site's address is written. The image is the game's `og.jpg`, at its root, outside the precached folders, so
+a device never downloads it.
 
 Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the two modes side by side.
 Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
@@ -62,7 +68,7 @@ python3 -I _memory-game/tools/page/build_page.py assemble <game> --watch   # whi
 - Never edit `index.html` or `sw.js` by hand: the next `assemble` overwrites them, and `--check` fails
   until it does. The repo has no CI, so run `--check` before every commit. It also fails when a photo or
   clip has no roster entry, the fonts and `CREDITS.md` disagree, a club CSS variable is set but never read,
-  or a start/win clip isn't the master.
+  a start/win clip isn't the master, or `og.jpg` is missing, not a JPEG or over 300 KB.
 - `VERSION` hashes every precached file and the template. Any change to a page, a photo, a clip, a font or
   an icon gives a new cache, and that is what makes installed copies pick it up (one full re-download).
 - A shared change changes every game: assemble, commit and verify all of them.
@@ -87,8 +93,8 @@ python3 -I _memory-game/tools/page/build_page.py assemble <game> --watch   # whi
    data in a scratch folder outside the repo: `build_page.py assemble <game> --watch --repo <scratch>`.
 3. **Scrape**: the club's scraper in `<game>/tools/scrape/`, built on `tools/scrape/` (fetcher, ids, the
    squad rule, the players.json check), writes `<work>/data/players.json`.
-4. **Refresh**: `_memory-game/tools/refresh.sh <game> <work>` (below), and render the icons:
-   `bash _memory-game/tools/icons/render_icons.sh --game <game>`.
+4. **Refresh**: `_memory-game/tools/refresh.sh <game> <work>` (below), which ends with the link preview
+   (look at `<game>/og.jpg`), and render the icons: `bash _memory-game/tools/icons/render_icons.sh --game <game>`.
 5. **Test and commit**: `verify.sh local --out <dir> <game>`, then `git add` with explicit paths. Fill in
    the TODOs of `CREDITS.md` and `tools/README.md` first: `--check` fails while one is left.
 
@@ -107,7 +113,9 @@ Downloads are untrusted data: keep them in a work directory outside the repo (`<
      then pin the IPA in `<game>/tools/tts/pronunciations.json` (its schema is in `tools/tts/generate.py`);
    - voice: `tts.sh generate --stale` renders only new or changed clips, `check` tests every clip (STT,
      loudness, format) and `sync` copies them into the game and removes leavers;
-   - page: `build_page.py data`, then `assemble --check`.
+   - page: `build_page.py data`, the link preview (`tools/og/render_og.sh`; look at `<game>/og.jpg`), then
+     `assemble --check`. WhatsApp keeps a link's old preview for a while: a link shared again may need a
+     query such as `?v=2` to show the new one.
 3. **Test** (below) and commit with explicit paths.
 
 The voice is BlueTTS 2.5 with the `noa` voice and an ivrit.ai Whisper round-trip per clip. Its install
@@ -123,7 +131,8 @@ _memory-game/tools/verify/verify.sh local --out <dir outside the repo> [<game>..
 P9 for the named games (default: all): `assemble --check`; seeded start, mid and win screenshots at
 600×960 and 960×600; one audio playthrough (the right clip on every flip); a whole quiz at both sizes (every
 player once, a wrong pick, the clips in order, question/wrong/reveal/end screenshots); the worker online,
-offline (memory and quiz) and installable; the state machine. `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and
+offline (memory and quiz) and installable, and the link preview (its tags, and `og.jpg` as served); the
+state machine. `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and
 audio-identical, `verify.sh upgrade <old-ref> <new-ref>` simulates the GitHub Pages upgrade under
 `/pages/`, online then offline, and `verify.sh live` checks the deployed game after a merge. To look at a
 game by hand, serve the repo with `python3 -I _memory-game/tools/verify/serve.py 8765 .` (the stock

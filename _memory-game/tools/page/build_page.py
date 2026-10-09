@@ -25,7 +25,9 @@ The builder writes two files per game, whole:
   index.html  _memory-game/page.template.html filled in: the head, the club style, base.css, the title, the
               trophy, DATA (the roster plus the clips that exist under audio/, in roster order), the club
               script and engine.js. The page plays two modes: memory deals the starters and bench; the
-              quiz ("who is this?") asks every player in the roster once, the backups too
+              quiz ("who is this?") asks every player in the roster once, the backups too. The head carries
+              the link preview (Open Graph): the manifest name, OG_DESCRIPTION and the absolute URLs, under
+              SITE, of the game and of its og.jpg, which tools/og/render_og.sh renders and nothing precaches
   sw.js       _memory-game/sw.template.js with VERSION, ASSETS and PREFIX filled in. VERSION hashes every
               precached file and the template, so any change installs a fresh cache.
 
@@ -42,7 +44,8 @@ an @font-face, the declared families are the ones credited under Fonts, every OF
 OFL file is linked, the Voice section is _memory-game/new/CREDITS.md's, and no TODO is left; or if the
 club sets a CSS variable nothing reads, or reads one (without a fallback) nothing defines; or if a game's
 start/win clip isn't the master in _memory-game/audio/ui/ (the engine's lines, which tools/tts/hebrew.py
-renders). Run it before committing: the repo has no CI. `--watch`
+renders); or if its og.jpg is missing, not a JPEG or over OG_MAX_KB. Run it before committing: the repo
+has no CI. `--watch`
 assembles the named games again whenever one of their sources or a shared file changes.
 `new` starts a club: it checks the id, the cache prefix and the app id first and writes nothing if one
 clashes; then it writes the manifest (from --like's, with the new name, colours and id), copies --like's
@@ -78,6 +81,13 @@ UI_CLIPS = ("start", "win")
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say")
 RUNTIME_VARS = {"--i"}
+# Where GitHub Pages publishes the games. A link preview needs absolute URLs; the verify tools read it here too.
+SITE = "https://efigorni.github.io/pages/"
+# The link preview's image, at the game's root (tools/og/render_og.sh renders it). Outside PRECACHE_DIRS, so
+# a device never downloads it: only the crawlers of WhatsApp and the like do.
+OG_IMAGE = "og.jpg"
+OG_MAX_KB = 300
+OG_DESCRIPTION = "משחק זיכרון וחידון שחקנים — לומדים פרצופים, מספרים ושמות"
 # Tel Aviv's manifest id "./" resolves to the origin root. It shipped that way and changing it would
 # break installed copies, so it is the only game allowed a root id.
 ROOT_ID_GAMES = {"maccabi-memory"}
@@ -262,6 +272,16 @@ def check_ui_clips(game):
     return problems
 
 
+def check_og(game):
+    """The link preview's image the head points at: a JPEG small enough for WhatsApp to show."""
+    path = REPO / game / OG_IMAGE
+    if not path.is_file():
+        return [f"{OG_IMAGE} is missing (render it: _memory-game/tools/og/render_og.sh {game})"]
+    data = path.read_bytes()
+    return ([f"{OG_IMAGE} is not a JPEG" for _ in [1] if data[:3] != b"\xff\xd8\xff"]
+            + [f"{OG_IMAGE} is {len(data) // 1024} KB, over {OG_MAX_KB} KB" for _ in [1] if len(data) > OG_MAX_KB * 1024])
+
+
 def source(path, closer):
     """A shared or club source spliced into the page: it must not close its own element early."""
     text = read(path)
@@ -303,6 +323,8 @@ def render(game):
         "scheme": scheme, "status_bar": "black-translucent" if scheme == "dark" else "default",
         "theme_color": html.escape(man["theme_color"]), "short_name": html.escape(man["short_name"]),
         "name": html.escape(man["name"]), "style": style, "base": base,
+        "url": html.escape(f"{SITE}{game}/"), "og_image": html.escape(f"{SITE}{game}/{OG_IMAGE}"),
+        "og_description": html.escape(OG_DESCRIPTION), "og_alt": html.escape(f"{man['name']}: שלושה שחקנים על קלפי המשחק"),
         "title": title_html(man["name"], config.get("title", "plain")), "trophy": trophy_svg(config["trophy"]),
         "data": data_line(game, read_roster(game)), "club": source(REPO / game / "club/club.js", "</script"),
         "engine": source(SHARED / "engine.js", "</script"),
@@ -402,7 +424,7 @@ def assemble(game, check):
     strays = orphans(game, read_roster(game))
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
-    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game)
+    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game)
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:
@@ -473,7 +495,7 @@ tools/README.md with TODOs). Next:
   1. design: club/style.css, club/club.js and club/club.json (title, trophy, images), the icon SVGs, the fonts
      (and CREDITS.md); try it with stand-in data in a scratch folder: build_page.py assemble {game} --watch --repo <scratch>
   2. the club's scraper in {game}/tools/scrape/ writes <work>/data/players.json
-  3. _memory-game/tools/refresh.sh {game} <work>: photos, voice, then the page
+  3. _memory-game/tools/refresh.sh {game} <work>: photos, voice, the page, then the link preview (look at {game}/og.jpg)
   4. bash _memory-game/tools/icons/render_icons.sh --game {game}
   5. _memory-game/tools/verify/verify.sh local --out <dir> {game}, then commit with explicit paths""", flush=True)
 

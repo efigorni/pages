@@ -1,6 +1,7 @@
 // One game with its service worker on, in a fresh persistent profile at 600x960 touch: wait for the
-// worker to control the page, play a few flips online, read installability over CDP, then go
-// offline, reload and play again, then start the quiz offline and check its files are all cached.
+// worker to control the page, play a few flips online, read the link preview's tags and fetch og.jpg,
+// read installability over CDP, then go offline, reload and play again, then start the quiz offline
+// and check its files are all cached.
 //
 //   node sw_check.js <base-url> <game> <out-dir> [<want-version>]
 //   e.g. node sw_check.js http://127.0.0.1:8781/ hapoel-tlv-memory /tmp/v/local
@@ -112,6 +113,16 @@ function audit(log) {
   let at = await page.evaluate(() => window.__log.length);
   const g1 = await flips(page, 3);
   R.online.audio = { ...g1, ...audit((await page.evaluate(() => window.__log)).slice(at)) };
+  // The link preview: the head's Open Graph tags, and the image they point at as this server serves it.
+  R.og = await page.evaluate(async () => {
+    const tags = Object.fromEntries([...document.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]')]
+      .map((m) => [m.getAttribute('property') || m.getAttribute('name'), m.getAttribute('content')]));
+    const r = await fetch('og.jpg', { cache: 'no-store' });
+    const blob = await r.blob();
+    const img = r.ok ? await createImageBitmap(blob).catch(() => null) : null;
+    return { tags, image: { status: r.status, type: r.headers.get('content-type'), bytes: blob.size,
+      width: img && img.width, height: img && img.height } };
+  });
   const cdp = await context.newCDPSession(page);
   R.installability = (await cdp.send('Page.getInstallabilityErrors')).installabilityErrors;
   const manifest = await cdp.send('Page.getAppManifest');

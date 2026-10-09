@@ -22,11 +22,11 @@
 # ~/.cache/memory-game-verify), never into the repo; Chromium comes from Playwright's own cache.
 set -euo pipefail
 
-PLAYWRIGHT_VERSION=1.64.0
 PILLOW_VERSION=12.3.0
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REPO="$(git -C "$HERE" rev-parse --show-toplevel)"
-LIVE_BASE="https://efigorni.github.io/pages/"
+# shellcheck source=playwright.sh
+source "$HERE/playwright.sh"
 SERVERS=()
 trap 'for p in "${SERVERS[@]+"${SERVERS[@]}"}"; do kill "$p" 2>/dev/null || true; done' EXIT
 
@@ -48,20 +48,6 @@ case "$cmd" in local|compare|upgrade|live) ;; *) sed -n '2,23p' "$0"; exit 2 ;; 
 [[ -n "$OUT" ]] || die "--out <dir> is required"
 case "$OUT/" in "$REPO"/*) die "--out must be outside the repo ($REPO)" ;; esac
 mkdir -p "$OUT"
-
-setup_playwright() {
-  local home="${MEMORY_GAME_VERIFY_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}/memory-game-verify}" have=""
-  if [[ -f "$home/node_modules/playwright/package.json" ]]; then
-    have="$(node -p "require(process.argv[1]).version" "$home/node_modules/playwright/package.json")"
-  fi
-  if [[ "$have" != "$PLAYWRIGHT_VERSION" ]]; then
-    echo "verify: installing playwright@$PLAYWRIGHT_VERSION into $home"
-    mkdir -p "$home"
-    npm install --prefix "$home" --no-audit --no-fund --loglevel=error "playwright@$PLAYWRIGHT_VERSION"
-  fi
-  "$home/node_modules/.bin/playwright" install chromium >/dev/null
-  export NODE_PATH="$home/node_modules"
-}
 
 # tree_of <ref>: a directory holding that commit's files (the working tree for ".").
 tree_of() {
@@ -164,6 +150,8 @@ case "$cmd" in
   live)
     pick_games "$REPO" "${ARGS[@]+"${ARGS[@]}"}"
     setup_playwright
+    LIVE_BASE="$(python3 -I -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(build_page.SITE)' \
+      "$REPO/_memory-game/tools/page")"
     mkdir -p "$OUT/live"
     status=0
     all=()
