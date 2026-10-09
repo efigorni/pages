@@ -1026,8 +1026,9 @@
       tile.dataset.learned = String(learned.has(p.id));
       tile.setAttribute('aria-label', MODEL.label(p));
       const pic = el('span', 'pic');
-      const img = photoImg(p);
-      img.loading = 'lazy';
+      // lazy before src: a picture loads when its tile scrolls near
+      const img = Object.assign(el('img'), { loading: 'lazy', decoding: 'async', alt: '', draggable: false });
+      img.src = p.img;
       // Offline, a picture that was never fetched shows the tile alone, not a broken image.
       img.addEventListener('error', () => { img.hidden = true; });
       pic.appendChild(img);
