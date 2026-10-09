@@ -285,6 +285,8 @@ def data_line(game, roster):
     for kind in KINDS[kind_of(game)]:
         audio[kind] = [i for i in ids if (page / "audio" / kind / f"{i}.mp3").is_file()]
     payload = {**roster, "audio": audio, "game": game, "play": play_of(game)}
+    if config(game).get("lines"):  # the engine's lines this game says in its own words (check_ui_clips)
+        payload["lines"] = config(game)["lines"]
     return "const DATA = " + json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";"
 
 
@@ -369,9 +371,11 @@ def lint_credits(game):
 
 
 def check_ui_clips(game):
-    """Each game ships its own copy of the engine's start and win clips; the master is _memory-game/audio/ui/."""
+    """Each game ships its own copy of the engine's start and win clips; the master is _memory-game/audio/ui/.
+    A line the game says in its own words (club.json `lines`, e.g. a word game's win) is its own clip instead."""
     engine = read(SHARED / "engine.js")
-    problems = []
+    own = config(game).get("lines", {})
+    problems = [f"club.json lines.{key}: the engine has no {key} line ({', '.join(UI_CLIPS)})" for key in own if key not in UI_CLIPS]
     for key, text in UI_TEXTS.items():
         line = re.search(rf"const {key.upper()}_LINE = '([^']*)';", engine)
         if not line:
@@ -380,7 +384,10 @@ def check_ui_clips(game):
             problems.append(f"engine.js's {key.upper()}_LINE is not hebrew.py's UI_TEXTS[{key!r}], which the clip says")
     for clip in UI_CLIPS:
         copy = REPO / game / "audio/ui" / f"{clip}.mp3"
-        if not copy.is_file() or copy.read_bytes() != (SHARED / "audio/ui" / f"{clip}.mp3").read_bytes():
+        if clip in own:
+            if not copy.is_file():
+                problems.append(f"audio/ui/{clip}.mp3 is missing: club.json lines.{clip} ({own[clip]!r}) is the game's own")
+        elif not copy.is_file() or copy.read_bytes() != (SHARED / "audio/ui" / f"{clip}.mp3").read_bytes():
             problems.append(f"audio/ui/{clip}.mp3 is not _memory-game/audio/ui/{clip}.mp3")
     return problems
 

@@ -563,6 +563,19 @@ async function playToLastPair(h) {
       check('W6 storage that refuses a write keeps the game going, learned for this visit', k.T.learned.has(b.p.id)
         && k.byId['progress-count'].textContent === `2 / ${N}`);
     }
+    // W7 the win in the game's own words (club.json lines), when it has them
+    if (h.T.DATA.lines && h.T.DATA.lines.win) {
+      const k = boot({ noClips: true });
+      await start(k);
+      const last = await playToLastPair(k);
+      await k.advance(4000);
+      k.synth.spoken.length = 0;
+      await k.down(last[0]);
+      await k.down(last[1]);
+      for (let i = 0; i < 300 && k.phase() !== 'won'; i++) await k.advance(50);
+      check('W7 the win says the game\'s own line', k.phase() === 'won' && k.synth.spoken.some((s) => s.text === k.T.DATA.lines.win),
+        JSON.stringify(k.synth.spoken.map((s) => s.text)));
+    }
   }
 
   const failed = results.filter((r) => !r.ok).length;

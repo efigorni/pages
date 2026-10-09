@@ -24,6 +24,9 @@
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
+  // The engine's own lines, which a game may say in its own words (club.json `lines`, with its own clip):
+  // what the speech fallback says when the clip can't play.
+  const UI_LINES = { start: START_LINE, win: WIN_LINE, ...DATA.lines };
 
   const $ = (id) => document.getElementById(id);
   const app = $('app');
@@ -792,7 +795,7 @@
     const round = game.round;
     game.winEarliest = performance.now() + 1500;
     const finish = () => { if (game.round === round) showWin(); };
-    const win = clip.ui('win', WIN_LINE);
+    const win = clip.ui('win', UI_LINES.win);
     win.onstart = () => setTimeout(finish, Math.max(0, game.winEarliest - performance.now()));
     lines.push(win);
     game.winFallback = setTimeout(finish, sound.muted ? 1500 : 9000);
@@ -1373,7 +1376,7 @@
       if (reloadIfStale()) return;
       sound.unlock();
       if (before) before();
-      const start = clip.ui('start', START_LINE);
+      const start = clip.ui('start', UI_LINES.start);
       if (id.endsWith('-quiz')) {
         startQuiz();
         sound.say([start].concat(question()));
