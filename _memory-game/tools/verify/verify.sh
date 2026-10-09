@@ -5,10 +5,11 @@
 #       The PR gate: every game at once, in parallel, headless, at 600x960 touch, in about a minute.
 #       assemble --check (the builder's lints) and the format of every shipped clip; per game, no
 #       console error and no 404; the worker controls the page, three flips and matches say their
-#       clips, installability []; an offline reload shows the photos, plays cached clips and asks a
-#       quiz question; the quiz's first question with a wrong and a right pick and their clips; a
-#       quick upgrade from <ref> (default origin/main), online then offline, for the games there.
-#       Serves the working tree, or --tree <dir>.
+#       clips, installability []; an offline reload keeps what she learned, shows the pictures, plays
+#       cached clips, asks a quiz question and opens the next new flash card; the quiz's first
+#       question with a wrong and a right pick and their clips; the state machine (the new-first
+#       deal, the learned-only quiz, flash cards); a quick upgrade from <ref> (default origin/main),
+#       online then offline, for the games there. Serves the working tree, or --tree <dir>.
 #   verify.sh live    [<game>...]        (or: sanity --live)
 #       After a merge: every deployed precached file, then sanity's browser checks on the live site.
 #   verify.sh full    [--from <ref>] [<game>...]
@@ -212,6 +213,7 @@ case "$cmd" in
         take_port
         job "upgrade-$g" node "$HERE/sim.js" "$dir/upgrade/$g" "$old" "$root" "$PORT" --quick "$g"
       done
+      for g in "${GAMES[@]}"; do job "states-$g" node "$HERE/states/scenarios.js" "$root/$g/index.html"; done
     fi
     job quiz node "$HERE/drive.js" "$dir" "$base" --games "$(csv "${GAMES[@]}")" --vps tab-portrait --modes quiz --questions 1
     for g in "${GAMES[@]}"; do
@@ -219,7 +221,7 @@ case "$cmd" in
       if ((LIVE)); then want="$(sed -n "s/^const VERSION = '\(.*\)';$/\1/p" "$REPO/$g/sw.js")"; fi
       job "worker-$g" node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
     done
-    say "running: the worker per game, the quiz${UPGRADED[0]:+, the upgrade from $FROM per game on it}"
+    say "running: the worker per game, the quiz$(((LIVE)) || echo ", the state machine")${UPGRADED[0]:+, the upgrade from $FROM per game on it}"
     finish
     rep=(--sanity)
     if ((${#UPGRADED[@]})); then rep+=(--upgraded "$(csv "${UPGRADED[@]}")" --from "$FROM"); fi

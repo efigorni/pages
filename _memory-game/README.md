@@ -160,9 +160,14 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
 - static: `assemble --check` (with the builder's lints) and the format of every shipped clip
   (`clips.py format`: the format `tts.sh check` enforces, without the work directory and its STT);
 - per game, no console error and no 404; the worker controls the page and `installability` is `[]`;
-- memory: three flips say their names and their matches the match clip;
-- the quiz's first question: a wrong pick turns over and says who it is, the right one says the name;
-- offline: a reload with the network off shows the photos, plays cached clips and asks a quiz question;
+- memory: three flips say their clip and their matches the second (the game's voice script);
+- the quiz's first question: a wrong pick turns over and says its line, the right one says its own (a
+  word game starts with 25 words learned, so its quiz is open and its deal reaches past the precached core);
+- offline: a reload with the network off keeps what she learned, shows the pictures, plays cached clips,
+  asks a quiz question and opens the next new flash card, which turns up, speaks and counts as learned;
+- the state machine (`states/scenarios.js`): a squad's suites, the flash cards and the whole-roster quiz;
+  a word game's new-first deal, the quiz locked below 4 and asking only learned words, the voice script,
+  a flash card counting as learned and moving the bar, and what she learned surviving a reload;
 - a quick upgrade from `origin/main` (`--from <ref>`), online then offline, for the games that exist there.
 
 Each failure names what broke: the URL, the console line, the clips it heard. `live` (`sanity --live`)

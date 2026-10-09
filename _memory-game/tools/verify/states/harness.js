@@ -1,7 +1,8 @@
 // Runs a game page's data, club and engine scripts in a vm with a minimal fake DOM, fake timers,
 // fake speechSynthesis, fake Web Audio and fake Wake Lock, so state-machine and audio paths can be
 // exercised deterministically. Usage: HARNESS_HTML=<game>/index.html, then require('./harness').boot({...}).
-// boot({ clips: true }) pretends every clip ships; boot({ noClips: true }) that none does (speech only).
+// boot({ clips: true }) pretends every clip ships; boot({ noClips: true }) that none does (speech only);
+// boot({ storage: [[key, value]] }) starts with that localStorage (what she has learned, a reload later).
 const fs = require('fs');
 const vm = require('vm');
 
@@ -96,7 +97,7 @@ function boot(opts = {}) {
   // speechSynthesis
   const synth = {
     speaking: false, pending: false, spoken: [], cancels: 0, current: null,
-    getVoices: () => (opts.noHebrewVoice ? [{ lang: 'en-US', name: 'X' }] : [{ lang: 'he-IL', name: 'Carmit' }]),
+    getVoices: () => (opts.noHebrewVoice ? [{ lang: 'en-US', name: 'X' }] : [{ lang: 'he-IL', name: 'Carmit' }, { lang: 'en-US', name: 'Samantha' }]),
     addEventListener() {},
     speak(u) {
       this.spoken.push({ text: u.text, at: clock.now });
@@ -226,11 +227,13 @@ function boot(opts = {}) {
   let data = dataSrc;
   if (opts.clips || opts.noClips) {
     const d = JSON.parse(data.match(/const DATA = (\{.*\});/)[1]);
-    const all = opts.noClips ? [] : d.players.map((p) => p.id);
-    d.audio = { ui: opts.noClips ? [] : ['start', 'win'], name: all, match: all };
+    const all = opts.noClips ? [] : (d.words || d.players).map((p) => p.id);
+    // every clip kind the game records (a squad's name and match, a word game's en and he)
+    d.audio = Object.fromEntries(Object.keys(d.audio).map((kind) => [kind, kind === 'ui' ? (opts.noClips ? [] : ['start', 'win']) : all]));
     data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
   }
-  const exportLine = 'globalThis.__t = { DATA, game, quiz, tap, newGame, sound, clip, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
+  const exportLine = 'globalThis.__t = { DATA, ITEMS, PLAY, game, quiz, shelf, learned, tap, newGame, dealPicks, startQuiz, sound, clip, voice, '
+    + 'hebrewNumber, get wakeLock() { return wakeLock; } };\n';
   const cut = main.lastIndexOf('})();');
   const patched = main.slice(0, cut) + exportLine + main.slice(cut);
   vm.createContext(g);
@@ -243,6 +246,7 @@ function boot(opts = {}) {
     click: async (id) => { byId[id].dispatch('click', { detail: 1 }); await flush(); },
     down: async (card) => { byId.board.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },
     pick: async (card) => { byId.picks.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },
+    tile: async (index) => { byId.shelf.dispatch('click', { target: byId.shelf.children[index], detail: 1 }); await flush(); },
     cards: () => T.game.cards,
     phase: () => T.game.phase,
     pairOf: (card) => T.game.cards.find((c) => c !== card && c.p.id === card.p.id),

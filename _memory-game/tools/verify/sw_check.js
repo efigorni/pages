@@ -1,7 +1,10 @@
 // One game with its service worker on, in a fresh persistent profile at 600x960 touch: wait for the
 // worker to control the page, play a few flips online, read the link preview's tags and fetch og.jpg,
-// read installability over CDP, then go offline, reload and play again, then start the quiz offline
-// from the ↻ confirm and check its files are all cached.
+// read installability over CDP, then go offline, reload (what she learned is still learned) and play
+// again, then start the quiz offline from the ↻ confirm and check its files are all cached, then open
+// the next new flash card. The clips are the game's voice script (DATA.play.voice). A word game starts
+// with its first LEARNED_START words learned: its quiz is open, and its deal reaches past the words the
+// worker precaches, so the offline game plays words the worker kept as they came.
 //
 //   node sw_check.js <base-url> <game> <out-dir> [<want-version>]
 //   e.g. node sw_check.js http://127.0.0.1:8781/ hapoel-tlv-memory /tmp/v/local
@@ -17,6 +20,10 @@ const OUT = path.resolve(OUT_ARG);
 const INSTR = fs.readFileSync(path.join(__dirname, 'instr.js'), 'utf8');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const say = (...a) => console.log(`[sw ${GAME}]`, ...a);
+const LEARNED_START = 25;
+// The clips a moment of the voice script says for an item (an older tree has no script: a squad's).
+const SQUAD_VOICE = { flip: ['name'], match: ['name', 'match'], ask: ['match'], wrong: ['match'], right: ['name'], card: ['match'] };
+const clipsOf = (voice, id, moment) => (voice || SQUAD_VOICE)[moment].map((kind) => `audio/${kind}/${id}.mp3`);
 
 async function until(page, fn, timeout, arg) {
   const t0 = Date.now();
@@ -69,7 +76,8 @@ async function flips(page, count) {
   return { found: await page.evaluate(() => document.getElementById('app').dataset.found), ids: P.map((p) => p.id) };
 }
 
-function audit(log) {
+// A flip says the match line's first clip (a name, a word in English), a match then its second.
+function audit(log, voice) {
   const marks = log.map((e, i) => ({ ...e, i })).filter((e) => e.type === 'mark');
   const starts = log.map((e, i) => ({ ...e, i })).filter((e) => e.type === 'buf-start' || e.type === 'html-play');
   let ok = 0;
@@ -79,8 +87,9 @@ function audit(log) {
     const [what, id] = m.label.split(' ');
     const next = marks[j + 1] ? marks[j + 1].i : Infinity;
     const clips = starts.filter((s) => s.i > m.i && s.i < next).map((s) => s.url);
-    if (clips[0] === `audio/name/${id}.mp3`) ok++; else bad.push({ mark: m.label, clips });
-    if (what === 'match' && clips[1] === `audio/match/${id}.mp3`) follow++;
+    const [first, second] = clipsOf(voice, id, 'match');
+    if (clips[0] === first) ok++; else bad.push({ mark: m.label, clips });
+    if (what === 'match' && clips[1] === second) follow++;
   });
   return { rightNameClip: ok, of: marks.length, bad, matchFollows: follow, matches: marks.filter((m) => m.label.startsWith('match')).length,
     start: starts.filter((s) => s.url === 'audio/ui/start.mp3').length, speech: log.filter((e) => e.type === 'speech').length,
@@ -137,14 +146,29 @@ async function controlled(page, want) {
   return false;
 }
 
+// What she has learned (the page's learned store) and the progress bar's count.
+function learnedNow() {
+  const ids = JSON.parse(localStorage.getItem(`${DATA.game}:learned`) || '[]');
+  const count = document.getElementById('progress-count');
+  return { ids, bar: count ? count.textContent : null, of: (DATA.words || DATA.players).length };
+}
+
 async function steps(context, page, R) {
   await page.goto(`${BASE}${GAME}/`, { waitUntil: 'load' });
+  const info = await page.evaluate(() => ({ voice: DATA.play ? DATA.play.voice : null,
+    learnedPool: !!(DATA.play && DATA.play.quiz.pool === 'learned') }));
+  R.voice = info.voice;
+  if (info.learnedPool) {
+    await page.evaluate((n) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(DATA.words.slice(0, n).map((w) => w.id))),
+      LEARNED_START);
+    await page.reload({ waitUntil: 'load' });
+  }
   R.controlled = await controlled(page, WANT || '');
   R.online = { state: await state(page) };
   await play(page);
   let at = await page.evaluate(() => window.__log.length);
   const g1 = await flips(page, 3);
-  R.online.audio = { ...g1, ...audit((await page.evaluate(() => window.__log)).slice(at)) };
+  R.online.audio = { ...g1, ...audit((await page.evaluate(() => window.__log)).slice(at), R.voice) };
   // The link preview: the head's Open Graph tags, and the image they point at as this server serves it.
   R.og = await page.evaluate(async () => {
     const tags = Object.fromEntries([...document.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]')]
@@ -169,31 +193,38 @@ async function steps(context, page, R) {
   await sleep(300);
   R.console = R.console.filter((m, i) => i < consoleAt || !m.includes('net::ERR_FAILED'));
   R.http = R.http.filter((h) => !h.includes('/probe-'));
+  const learnedBefore = await page.evaluate(learnedNow);
   await page.reload({ waitUntil: 'load' });
   await sleep(2000);
   R.offline = { state: await state(page) };
+  // What she learned online (the matches, a word game's start) is still learned after the reload.
+  R.offline.learned = { before: learnedBefore, after: await page.evaluate(learnedNow) };
   await play(page);
   at = await page.evaluate(() => window.__log.length);
   const g2 = await flips(page, 3);
-  R.offline.audio = { ...g2, ...audit((await page.evaluate(() => window.__log)).slice(at)) };
+  R.offline.audio = { ...g2, ...audit((await page.evaluate(() => window.__log)).slice(at), R.voice) };
   R.offline.imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline.png`) });
-  // The quiz offline: every quiz player's photo and clips (the backups' too) are in the cache, and the
-  // offline page, from its ↻ confirm, asks the first question with them.
+  // The quiz offline: every item it can ask has its picture and clips in the cache (a squad's every
+  // player, the backups too; a word game's learned words), and the offline page, from its ↻ confirm,
+  // asks the first question with them.
   R.offline.quizCache = await page.evaluate(async () => {
-    const ids = DATA.players.map((p) => p.id);
-    const urls = [].concat(...ids.map((id) => [`img/${id}.webp`, `audio/name/${id}.mp3`, `audio/match/${id}.mp3`]));
+    const learned = JSON.parse(localStorage.getItem(`${DATA.game}:learned`) || '[]');
+    const items = DATA.words ? DATA.words.filter((w) => learned.includes(w.id)) : DATA.players;
+    const kinds = Object.keys(DATA.audio).filter((k) => k !== 'ui');
+    const urls = [].concat(...items.map((p) => [`img/${p.id}.webp`, ...kinds.map((k) => `audio/${k}/${p.id}.mp3`)]));
     const missing = [];
     for (const u of urls) if (!(await caches.match(new URL(u, location.href).href))) missing.push(u);
-    return { checked: urls.length, missing, backups: DATA.players.filter((p) => p.role === 'backup').map((p) => p.id) };
+    return { checked: urls.length, missing, backups: (DATA.players || []).filter((p) => p.role === 'backup').map((p) => p.id) };
   });
   await page.tap('#again');
   const quizAt = await page.evaluate(() => window.__log.length);
   await page.tap('#yes-quiz');
   const answer = await page.evaluate(() => document.getElementById('picks').dataset.answer);
   // Only what played after the tap: the asked player may be one the memory game just matched.
-  const heard = await until(page, ([id, at]) => window.__log.slice(at).some((e) => (e.type === 'buf-start' || e.type === 'html-play')
-    && e.url === `audio/match/${id}.mp3`), 15000, [answer, quizAt]);
+  const asked = clipsOf(R.voice, answer, 'ask');
+  const heard = await until(page, ([url, at]) => window.__log.slice(at).some((e) => (e.type === 'buf-start' || e.type === 'html-play')
+    && e.url === url), 15000, [asked.slice(-1)[0], quizAt]);
   await sleep(600);
   R.offline.quiz = await page.evaluate(([id, at]) => {
     const clips = window.__log.slice(at).filter((e) => e.type === 'buf-start' || e.type === 'html-play').map((e) => e.url);
@@ -203,8 +234,33 @@ async function steps(context, page, R) {
       .map((e) => [e.t, e.type, e.url || e.state || e.msg || e.label || ''].join(' '));
     return { answer: id, clips, imgs: [imgs.length, imgs.filter((x) => x.complete && x.naturalWidth > 0).length], events };
   }, [answer, quizAt]);
-  R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips) === JSON.stringify(['audio/ui/start.mp3', `audio/match/${answer}.mp3`])
+  R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips) === JSON.stringify(['audio/ui/start.mp3', ...asked])
     && R.offline.quiz.imgs[0] === 4 && R.offline.quiz.imgs[1] === 4;
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-quiz.png`) });
+  // Flash cards offline, from the ↻ confirm: the next new one turns up, says its line and is learned.
+  await page.tap('#again');
+  await page.tap('#yes-cards');
+  await sleep(600);
+  const cardAt = await page.evaluate(() => window.__log.length);
+  const before = await page.evaluate(learnedNow);
+  await page.tap('#next-new');
+  const id = await page.evaluate(() => document.querySelector('#flash-slot .card').dataset.id);
+  const line = clipsOf(R.voice, id, 'card');
+  const said = await until(page, ([url, at]) => window.__log.slice(at).some((e) => (e.type === 'buf-start' || e.type === 'html-play')
+    && e.url === url), 15000, [line.slice(-1)[0], cardAt]);
+  await sleep(400);
+  R.offline.card = await page.evaluate(([cardId, at]) => {
+    const card = document.querySelector('#flash-slot .card');
+    const img = card.querySelector('.photo img');
+    const tile = [...document.querySelectorAll('#shelf .tile')].find((t) => (DATA.words || DATA.players)[Number(t.dataset.index)].id === cardId);
+    return { id: cardId, state: card.dataset.state, phase: document.getElementById('app').dataset.phase,
+      picture: !!img && img.complete && img.naturalWidth > 0, tile: tile && tile.dataset.learned,
+      clips: window.__log.slice(at).filter((e) => e.type === 'buf-start' || e.type === 'html-play').map((e) => e.url) };
+  }, [id, cardAt]);
+  R.offline.card.learned = { before, after: await page.evaluate(learnedNow) };
+  R.offline.card.ok = said && R.offline.card.state === 'up' && R.offline.card.phase === 'card' && R.offline.card.picture
+    && R.offline.card.tile === 'true' && JSON.stringify(R.offline.card.clips) === JSON.stringify(line)
+    && !before.ids.includes(id) && R.offline.card.learned.after.ids.includes(id);
+  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-card.png`) });
   await context.setOffline(false);
 }

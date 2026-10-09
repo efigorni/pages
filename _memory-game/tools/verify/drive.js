@@ -6,9 +6,10 @@
 // <base-url> serves a tree whose root holds the game folders (e.g. http://127.0.0.1:8767/). Service
 // workers are blocked, so two runs differ only by the page code. `shots` takes start, focus, install,
 // mid, confirm and win screenshots, the DOM and the computed HUD styles; `audio` plays a whole game
-// and logs every clip; `quiz` plays a whole quiz (a wrong pick that turns over and says who it is,
-// every player once, the end) with question, wrong, reveal and end screenshots and every clip logged;
-// --questions N stops it after the Nth right pick (the sanity check plays one).
+// and logs every clip; `quiz` plays a whole quiz (a wrong pick that turns over and says its line,
+// every player once or a word game's learned words, the end) with question, wrong, reveal and end
+// screenshots and every clip logged; --questions N stops it after the Nth right pick (the sanity check
+// plays one). The clips expected are the game's voice script (DATA.play.voice).
 // Output: <out-dir>/<game>/<vp>[-rm]-<mode>/{*.png,result.json}
 const fs = require('fs');
 const path = require('path');
@@ -162,7 +163,7 @@ async function styles(page) {
 // text lies inside the card.
 async function fanNames(page) {
   return page.evaluate(() => [...document.querySelectorAll('#fan .card')].filter((c) => c.dataset.state === 'up').map((card) => {
-    const name = card.querySelector('.name');
+    const name = card.querySelector('.name, .words');
     if (!name) return { name: null };
     const box = card.getBoundingClientRect();
     const walker = document.createTreeWalker(name, NodeFilter.SHOW_TEXT);
@@ -336,9 +337,18 @@ function wrongCard(i) {
   };
 }
 
+// The clips a moment of the game's voice script says for an item (`voice`: DATA.play.voice; an older
+// tree has none, and says a squad's).
+const SQUAD_VOICE = { flip: ['name'], match: ['name', 'match'], ask: ['match'], wrong: ['match'], right: ['name'], card: ['match'] };
+const clipsOf = (voice, id, moment) => (voice || SQUAD_VOICE)[moment].map((kind) => `audio/${kind}/${id}.mp3`);
+
+// A word game asks only learned words (club.json play.quiz.pool "learned"), so its quiz starts with
+// the first LEARNED_START words learned.
+const LEARNED_START = 25;
+
 // The quiz, played to the end at this viewport: on the first question a wrong pick (it turns over
-// and says that player's match clip, which the right pick then cuts off), then the right one; every
-// question waits for its match clip to start before the pick; the first three reveals move on by
+// and says that item's line, which the right pick then cuts off), then the right one; every question
+// waits for its question clip to start before the pick; the first three reveals move on by
 // themselves, the others on a tap.
 async function quizFlow(page, vp, dir, res) {
   const snap = snapper(page, dir);
@@ -346,16 +356,29 @@ async function quizFlow(page, vp, dir, res) {
   const played = (from, url) => until(page, ([k, u, kinds]) => window.__log.slice(k)
     .some((e) => kinds.includes(e.type) && e.url === u), 10000, [from, url, CLIP_EVENTS]);
   await ready(page);
-  // `compare` drives older trees too, whose roster still came in starters/bench/backup lists.
-  const players = await page.evaluate(() => (DATA.players || DATA.starters.concat(DATA.bench, DATA.backup || []))
-    .map((p) => ({ id: p.id, number: String(p.number), name: p.name_he })));
-  res.pool = players.map((p) => p.id);
-  const faces = Object.fromEntries(players.map((p) => [p.id, p]));
-  const asking = QUESTIONS > 0 ? Math.min(QUESTIONS, res.pool.length) : res.pool.length;
+  if (await page.evaluate(() => !!(window.DATA && DATA.play && DATA.play.quiz.pool === 'learned'))) {
+    await page.evaluate((n) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(DATA.words.slice(0, n).map((w) => w.id))),
+      LEARNED_START);
+    await page.reload({ waitUntil: 'load' });
+    await ready(page);
+  }
+  // `compare` drives older trees too, whose roster still came in starters/bench/backup lists. A word
+  // game's quiz picks from what she has learned.
+  const items = await page.evaluate(() => {
+    const learned = JSON.parse(localStorage.getItem(`${DATA.game}:learned`) || '[]');
+    const all = DATA.words || DATA.players || DATA.starters.concat(DATA.bench, DATA.backup || []);
+    return all.filter((p) => !DATA.words || learned.includes(p.id))
+      .map((p) => ({ id: p.id, number: p.number == null ? '' : String(p.number), name: p.name_he || p.en }));
+  });
+  res.pool = items.map((p) => p.id);
+  const faces = Object.fromEntries(items.map((p) => [p.id, p]));
   res.questions = [];
   let from = await logLen();
   await mark(page, 'start');
   await tapSel(page, vp, '#play-quiz');
+  // a word game asks up to play.quiz.size of its learned words: one pip each
+  res.total = await page.evaluate(() => document.querySelectorAll('#pips .pip').length);
+  const asking = QUESTIONS > 0 ? Math.min(QUESTIONS, res.total) : res.total;
   for (let n = 0; n < asking; n++) {
     const q = { n, asked: await until(page, () => document.getElementById('app').dataset.phase === 'ask', 10000) };
     Object.assign(q, await page.evaluate(() => ({
@@ -364,7 +387,7 @@ async function quizFlow(page, vp, dir, res) {
       text: document.getElementById('question').textContent,
     })));
     res.questions.push(q);
-    q.heard = await played(from, `audio/match/${q.id}.mp3`);
+    q.heard = await played(from, clipsOf(res.voice, q.id, 'ask')[0]);
     // The question's clip starts with the deal, and a pick in its first 450 ms is ignored (a tap that
     // moved on must not also pick).
     await sleep(500);
@@ -377,7 +400,8 @@ async function quizFlow(page, vp, dir, res) {
       await mark(page, `wrong ${wrongId}`);
       const wrongAt = Date.now();
       await tapCard(page, vp, wrong, '#picks');
-      const said = await played(from, `audio/match/${wrongId}.mp3`);
+      // its line's last clip has started, so the right pick below cuts that one off
+      const said = await played(from, clipsOf(res.voice, wrongId, 'wrong').slice(-1)[0]);
       const saidMs = Date.now() - wrongAt;
       await sleep(Math.max(0, 1150 - (Date.now() - wrongAt))); // the turn and the ✗ settle
       q.wrong = { id: wrongId, said, saidMs, ...await page.evaluate(wrongCard, wrong) };
@@ -389,7 +413,7 @@ async function quizFlow(page, vp, dir, res) {
     await mark(page, `right ${q.id}`);
     const pickedAt = Date.now();
     await tapCard(page, vp, q.cards.indexOf(q.id), '#picks');
-    q.named = await played(from, `audio/name/${q.id}.mp3`);
+    q.named = await played(from, clipsOf(res.voice, q.id, 'right')[0]);
     q.revealed = await page.evaluate(() => document.getElementById('app').dataset.phase);
     if (n === 0) {
       await sleep(1100);
@@ -408,49 +432,56 @@ async function quizFlow(page, vp, dir, res) {
     }
   }
   res.found = await page.evaluate(() => document.getElementById('app').dataset.found);
-  if (asking < res.pool.length) return;
+  if (asking < res.total) return;
   res.won = await until(page, () => document.getElementById('app').dataset.phase === 'won', 15000);
   await settle(page);
   await snap('quiz-end');
 }
 
-// The quiz's clips, in order: start, then per question the asked player's match clip alone, the
-// wrong player's match clip after a wrong pick, the name on the right pick; then win. The right pick
-// cuts off the wrong player's clip. A quiz stopped early (--questions) has no win, and the next
-// question may already have started when the log is read.
+// The quiz's clips, in order (the game's voice script): start, then per question its question clips
+// (a squad's match clip alone, a word's English), a wrong pick's line, the right pick's line; then win.
+// The right pick cuts off the wrong one's line. A quiz stopped early (--questions) has no win, and the
+// next question may already have started when the log is read.
 function analyseQuiz(res) {
   const log = res.log || [];
   const qs = res.questions || [];
   const pool = res.pool || [];
-  const whole = qs.length === pool.length;
+  const total = res.total || pool.length;
+  const whole = qs.length === total;
   const asked = qs.map((q) => q.id);
-  const expected = ['audio/ui/start.mp3'].concat(...qs.map((q) => [`audio/match/${q.id}.mp3`]
-    .concat(q.wrong ? [`audio/match/${q.wrong.id}.mp3`] : [], [`audio/name/${q.id}.mp3`])), whole ? ['audio/ui/win.mp3'] : []);
+  const said = (id, moment) => clipsOf(res.voice, id, moment);
+  const expected = ['audio/ui/start.mp3'].concat(...qs.map((q) => said(q.id, 'ask')
+    .concat(q.wrong ? said(q.wrong.id, 'wrong') : [], said(q.id, 'right'))), whole ? ['audio/ui/win.mp3'] : []);
   const all = log.filter((e) => CLIP_EVENTS.includes(e.type)).map((e) => e.url);
   const sequence = whole ? all : all.slice(0, expected.length);
   const windows = markWindows(log, CLIP_EVENTS.concat('buf-stop', 'html-pause'));
   const wrongs = windows.map((w, j) => ({ ...w, next: windows[j + 1] })).filter((w) => w.label.startsWith('wrong'));
   const started = (events) => events.filter((e) => CLIP_EVENTS.includes(e.type)).map((e) => e.url);
-  const said = (w) => `audio/match/${w.label.split(' ')[1]}.mp3`;
+  const line = (w) => said(w.label.split(' ')[1], 'wrong');
   return {
     sequence,
     sequenceOk: JSON.stringify(sequence) === JSON.stringify(expected),
     firstMismatch: expected.findIndex((u, i) => sequence[i] !== u),
-    everyPlayerOnce: asked.length === pool.length && new Set(asked).size === pool.length && pool.every((id) => asked.includes(id)),
-    fourDistinct: qs.every((q) => q.cards.length === 4 && new Set(q.cards).size === 4 && q.cards.includes(q.id)),
-    // Between a wrong pick and the next mark: exactly that player's match clip.
-    wrongTeaches: wrongs.length > 0 && wrongs.every((w) => JSON.stringify(started(w.events)) === JSON.stringify([said(w)])),
-    // The next mark, the right pick, stops that clip before the name starts.
+    // A squad's quiz asks every player once; a word game's asks `total` of its learned words, each once.
+    everyPlayerOnce: asked.length === total && new Set(asked).size === total && asked.every((id) => pool.includes(id))
+      && (total < pool.length || pool.every((id) => asked.includes(id))),
+    fourDistinct: qs.every((q) => q.cards.length === 4 && new Set(q.cards).size === 4 && q.cards.includes(q.id)
+      && q.cards.every((id) => pool.includes(id))),
+    // Between a wrong pick and the next mark: exactly that one's line.
+    wrongTeaches: wrongs.length > 0 && wrongs.every((w) => JSON.stringify(started(w.events)) === JSON.stringify(line(w))),
+    // The next mark, the right pick, stops its last clip before the right pick's line starts.
     wrongCut: wrongs.length > 0 && wrongs.every((w) => {
       const events = w.next ? w.next.events : [];
-      const stop = events.findIndex((e) => (e.type === 'buf-stop' || e.type === 'html-pause') && e.url === said(w));
+      const stop = events.findIndex((e) => (e.type === 'buf-stop' || e.type === 'html-pause') && e.url === line(w).slice(-1)[0]);
       const name = events.findIndex((e) => CLIP_EVENTS.includes(e.type));
       return stop >= 0 && (name < 0 || stop < name);
     }),
   };
 }
 
-function analyse(log) {
+// A memory game's flips: each says the voice script's flip clip first, and a match follows it with its
+// second clip (a squad's match clip, a word's Hebrew).
+function analyse(log, voice) {
   const windows = markWindows(log, ['buf-start']);
   const urls = (w) => w.events.map((e) => e.url);
   const flipsOk = [];
@@ -459,9 +490,11 @@ function analyse(log) {
     const [what, id] = w.label.split(' ');
     if (!['flip', 'hurry', 'match'].includes(what)) return;
     const clips = urls(w);
-    if (clips[0] === `audio/name/${id}.mp3`) flipsOk.push(w.label); else bad.push({ mark: w.label, clips });
-    if (what === 'match' && clips.length > 1 && clips[1] !== `audio/match/${id}.mp3` && clips[1] !== 'audio/ui/win.mp3') bad.push({ mark: w.label, clips, why: 'second clip' });
+    const [first, second] = clipsOf(voice, id, 'match');
+    if (clips[0] === first) flipsOk.push(w.label); else bad.push({ mark: w.label, clips });
+    if (what === 'match' && clips.length > 1 && clips[1] !== second && clips[1] !== 'audio/ui/win.mp3') bad.push({ mark: w.label, clips, why: 'second clip' });
   });
+  const follows = (m) => m.clips[1] === clipsOf(voice, m.id, 'match')[1];
   const matchFollow = windows.filter((w) => w.label.startsWith('match')).map((w) => ({ id: w.label.split(' ')[1], clips: urls(w) }));
   const starts = log.filter((e) => e.type === 'buf-start').map((e) => e.url);
   return {
@@ -469,7 +502,7 @@ function analyse(log) {
     badFlips: bad,
     starts,
     stops: log.filter((e) => e.type === 'buf-stop').map((e) => e.url),
-    matchesWithFollow: matchFollow.filter((m) => m.clips[1] === `audio/match/${m.id}.mp3`).length,
+    matchesWithFollow: matchFollow.filter(follows).length,
     matches: matchFollow.length,
     startClip: starts.filter((u) => u === 'audio/ui/start.mp3').length,
     winClip: starts.filter((u) => u === 'audio/ui/win.mp3').length,
@@ -503,6 +536,7 @@ async function run(browser, game, vpName, mode, reduced) {
   const t0 = Date.now();
   try {
     await page.goto(`${baseUrl}${game}/`, { waitUntil: 'load' });
+    res.voice = await page.evaluate(() => (window.DATA && DATA.play ? DATA.play.voice : null));
     if (mode === 'shots') await shotsFlow(page, vp, dir, reduced, res);
     else if (mode === 'quiz') await quizFlow(page, vp, dir, res);
     else await audioFlow(page, vp, dir, res);
@@ -510,13 +544,13 @@ async function run(browser, game, vpName, mode, reduced) {
     res.failure = String(e && e.stack || e);
   }
   res.log = await page.evaluate(() => window.__log).catch(() => []);
-  res.analysis = analyse(res.log);
+  res.analysis = analyse(res.log, res.voice);
   if (mode === 'quiz') res.quiz = analyseQuiz(res);
   res.ms = Date.now() - t0;
   fs.writeFileSync(path.join(dir, 'result.json'), JSON.stringify(res, null, 1));
   await context.close();
   const detail = res.quiz
-    ? `asked=${(res.questions || []).length}/${(res.pool || []).length} once=${res.quiz.everyPlayerOnce} clips=${res.quiz.sequenceOk} wrongTeaches=${res.quiz.wrongTeaches} wrongCut=${res.quiz.wrongCut}`
+    ? `asked=${(res.questions || []).length}/${res.total} once=${res.quiz.everyPlayerOnce} clips=${res.quiz.sequenceOk} wrongTeaches=${res.quiz.wrongTeaches} wrongCut=${res.quiz.wrongCut}`
     : `flips=${res.analysis.effectiveFlips} bad=${res.analysis.badFlips.length} follow=${res.analysis.matchesWithFollow}/${res.analysis.matches}`;
   console.log(`[${label}] ${game} ${name}: ${res.failure ? 'FAIL ' + res.failure.split('\n')[0] : 'ok'} won=${res.won} `
     + `${detail} errors=${res.analysis.errors.length} http=${res.http.length} ${res.ms} ms`);
