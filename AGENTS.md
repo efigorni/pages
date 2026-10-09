@@ -15,7 +15,7 @@ Whenever you create, import, rename, or delete an HTML page:
 
 #### Unlisted pages
 Kept private on purpose, at the owner's request: each stays out of `index.html` and the catalog below, and carries `<meta name="robots" content="noindex, nofollow">`.
-- **Every memory game** is unlisted: any folder at the root with a `club/club.json` (`python3 -I _memory-game/tools/page/build_page.py list` names them): a football club's memory game for a young child, at `/pages/<folder>/`. Never add one to `index.html` or the catalog, never remove its `noindex`, and never delete one, or `_memory-game/`, as an orphan. A new club needs no edit here.
+- **Every memory game** is unlisted: any folder at the root with a `club/club.json` (`python3 -I _memory-game/tools/page/build_page.py list` names them): a memory game for a young child, a football club's or the English words one (`english-words/`), at `/pages/<folder>/`. Never add one to `index.html` or the catalog, never remove its `noindex`, and never delete one, or `_memory-game/`, as an orphan. A new club needs no edit here.
 
 Every memory game is built from `_memory-game/`, which is not a page. A game's `index.html` and `sw.js` are generated whole from its `club/` sources and `_memory-game/`: edit those (or refresh the roster) and run `python3 -I _memory-game/tools/page/build_page.py assemble`, never the generated files. A shared change changes every game, so commit and verify all of them. Adding or refreshing a club: see `_memory-game/README.md`.
 

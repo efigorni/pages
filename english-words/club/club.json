@@ -1,0 +1,30 @@
+{
+  "kind": "words",
+  "title": "tiers",
+  "scheme": "light",
+  "trophy": {
+    "cup": "#ffc532",
+    "stem": "#f0a812",
+    "star": "#2f6fe4",
+    "shine": "#fff",
+    "shine_opacity": ".7",
+    "shade": "#e39a06"
+  },
+  "og": {
+    "description": "משחק זיכרון, חידון וכרטיסיות: המילים הראשונות באנגלית, עם תמונה וקול",
+    "alt": "מילים באנגלית: שלוש מילים על קלפי המשחק"
+  },
+  "leave_out": {
+    "birthday": "its picture, a birthday cake, reads as \"cake\", so the picture quiz couldn't tell them apart"
+  },
+  "lines": {
+    "win": "כל הכבוד! מצאת את כל המילים!"
+  },
+  "play": {
+    "voice": {"flip": ["en"], "match": ["en", "he"], "ask": ["en"], "wrong": ["en", "he"], "right": ["en", "he"], "card": ["en", "he"]},
+    "deal": {"policy": "new-first", "pairs": 15, "new": 8},
+    "quiz": {"pool": "learned", "unlock": 4, "size": 15, "apart": [["girl", "boy"]]},
+    "progress": "bar",
+    "precache": {"policy": "core", "items": 30}
+  }
+}

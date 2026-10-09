@@ -7,10 +7,10 @@ it as an orphan.
 
 | File | What it is |
 |---|---|
-| `engine.js` | The game, in two modes: memory (deal, flips) and the quiz (who is this?); audio, overlays, confetti, wake lock, install, service-worker registration, and the face kit a club's card face is drawn with |
+| `engine.js` | The game, in three modes: memory (deal, flips), the quiz (who is this? / what is this?) and flash cards (the shelf of every item, one card big); what she has learned, audio, overlays, confetti, wake lock, install, service-worker registration, and the face kit a card face is drawn with |
 | `base.css` | Every style the games share; colours and fonts come from each club's tokens |
-| `page.template.html` | The page with slots, filled per game: head, club style, base, title, trophy, DATA, club script, engine; the two mode icons |
-| `sw.template.js` | The service worker; each game's `sw.js` is this file with `VERSION`, `ASSETS` and `PREFIX` filled in |
+| `page.template.html` | The page with slots, filled per game: head, club style, base, title, trophy, DATA, club script, engine; the mode icons |
+| `sw.template.js` | The service worker; each game's `sw.js` is this file with `VERSION`, `ASSETS`, `PREFIX` and `RUNTIME` filled in |
 | `audio/ui/` | The start and win clips (the engine's own lines); every game ships a copy |
 | `new/` | The templates `build_page.py new` fills: `CREDITS.md`, the club's `tools/README.md` |
 | `tools/page/build_page.py` | `new`, `data`, `assemble [--check] [--watch]`, `list [--json]` (below) |
@@ -20,7 +20,7 @@ it as an orphan.
 | `tools/scrape/` | The scraper kit: `common.py` (fetcher, ids, atomic write, photo facts), `roster.py` (the squad rule and a players.json check), `transfermarkt.py`, `contact_sheet.py` |
 | `tools/fonts/add_font.py` | Fetches a Google Fonts family's Hebrew and Latin subsets and its OFL into a game |
 | `tools/icons/` | `render_icons.sh --game <game>` renders a game's PWA icons from its two SVGs |
-| `tools/og/` | `render_og.sh [<game>...]` renders each game's link-preview image, `og.jpg`: its own start screen at 1200×630 with three starters' card faces (`og.js`, on the harness's Playwright) |
+| `tools/og/` | `render_og.sh [<game>...]` renders each game's link-preview image, `og.jpg`: its own start screen at 1200×630 with three card faces, starters or first words (`og.js`, on the harness's Playwright) |
 | `tools/verify/` | `verify.sh`: `sanity`, the gate every change runs, and the thorough `full` (below) |
 
 ## How a game is built
@@ -31,10 +31,10 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 | Source | What it holds |
 |---|---|
 | `<game>/manifest.webmanifest` | The club's identity: name, short name, colours, id. The head and the title come from it. Never written by a tool after `new` |
-| `<game>/club/club.json` | The name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`) |
+| `<game>/club/club.json` | What it teaches (`kind`: `squad`, the default, or `words`), its script (`play`, below), the name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`), a word game's link-preview text (`og`), the words it leaves out (`leave_out`) and the engine lines it says in its own words (`lines`: a word game's win; its `audio/ui/` clip is then its own, not the master) |
 | `<game>/club/style.css` | Hand-written: fonts, colour tokens, card back, card face, title |
 | `<game>/club/club.js` | Hand-written: `CLUB = { confetti, fonts, face(kit) }` |
-| `<game>/club/roster.json` | The players with their roles (starter, bench, backup: quiz only), written by `build_page.py data` |
+| `<game>/club/roster.json` | The players with their roles (starter, bench, backup: quiz only), or a word game's words in teaching order; written by `build_page.py data` |
 | `_memory-game/*` | The engine, the base styles and the two templates |
 
 The head also carries the link preview that WhatsApp and the like show (Open Graph and Twitter tags): the
@@ -42,8 +42,8 @@ manifest name, one shared description, and absolute URLs under `SITE` in `build_
 site's address is written. The image is the game's `og.jpg`, at its root, outside the precached folders, so
 a device never downloads it.
 
-Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the two modes side by side.
-Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
+Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the three modes side by side:
+memory, the quiz and flash cards. Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
 "מי זה מספר N, <name>?" in text, his match clip out loud, four photo-only cards. A wrong pick teaches too:
 a soft sound, then that card turns to its face (grey, smaller, marked ✗, out of play) and plays that
 player's match clip; her next pick or the replay button cuts it off. The right one turns to the club's
@@ -52,8 +52,34 @@ card face, says the name and moves on. The squad rule
 in the quiz, never dealt. Every tool that images, voices, checks, syncs or prunes takes `roster.SHIPPED`
 (starter, bench, backup), so a refresh keeps them.
 
+Flash cards show the shelf: a tile per item in teaching order, the learned ones in full colour with a tick,
+the others dimmed with a dot, and a button to the next new one. A tile opens its card big (the club's face),
+which says its line, counts as learned, and pages with ← →. What she has learned (a match in memory, or a
+flash card) is kept on the device per game, in `localStorage` under `<game>:learned` (the games share one
+origin); when storage is blocked it lasts the visit.
+
+### Play config
+
+`club.json` `play` is the game's script; the builder checks it and puts it in DATA. A squad's is `SQUAD_PLAY` in
+`build_page.py` unless its `play` overrides a key; a word game writes its own:
+
+| Key | Squad (the football games) | Words (`english-words`) |
+|---|---|---|
+| `voice` | flip `name`; match `name`, `match`; ask `match`; wrong `match`; right `name`; card `match` | flip `en`; match `en`, `he`; ask `en`; wrong and right `en`, `he`; card `en`, `he` |
+| `deal` | `squad`: the starters, the rest of the 15 pairs from the bench | `new-first`: up to `new` (8) unlearned words in teaching order, the rest a random review of learned ones, more new ones while few are learned |
+| `quiz` | `all`: every player once | `learned`: up to `size` (15) random learned words, locked below `unlock` (4) learned; the three others are learned words, never one `apart` pairs with the asked one (girl, boy) |
+| `progress` | `inventory`: the marks on the shelf only | `bar`: "learned X / N" on every screen |
+| `precache` | `all`: every file, strictly | `core` with `items` (30): the page, fonts, icons, start/win and the first 30 words strictly; every other picture and clip in `RUNTIME` |
+
+A clip kind is a folder, `audio/<kind>/<id>.mp3`: a squad records `name` and `match`, a word game `en` and `he`
+(`KINDS` in `build_page.py`). With `precache` `core`, the worker keeps every other picture and clip it fetches
+in its runtime cache, each copy keyed by the file's content hash (`RUNTIME_FILES` in `sw.js`), so a new version
+evicts only the files that changed (`verify.sh runtime` proves it); online, the page fetches ahead what the
+next game needs (every learned word and the new ones after the current deal), so a learned word and the next
+deal play offline. A flash card counts as learned once its line has played and it has been on screen 2.5 s.
+
 Scripts run in the order data, club, engine. `CLUB.face(kit)` returns the card face's four hooks:
-`prepare(players)`, `apply(style, cw, ch, mode)`, `build(p)` (its front must keep `.photo > img`, where a
+`prepare(items)`, `apply(style, cw, ch, mode)`, `build(p)` (its front must keep `.photo > img`, where a
 match flight starts) and `fit(cardEl, p, geo)`. The kit has `el`, `textEm`, `words`, `bestSplit`,
 `photoFront`, `splits`, `fitLines`, `renderName`, `setVars` and `digitEm`. The club style defines the tokens
 `base.css` reads (`--font`, `--accent`, `--surface`, `--back-line`, `--edge`, `--found`, ...); a light
@@ -69,14 +95,18 @@ python3 -I _memory-game/tools/page/build_page.py assemble <game> --watch   # whi
   until it does. The repo has no CI, so run `--check` before every commit. It also fails when a photo or
   clip has no roster entry, the fonts and `CREDITS.md` disagree, a club CSS variable is set but never read,
   a start/win clip isn't the master, or `og.jpg` is missing, not a JPEG or over 300 KB.
-- `VERSION` hashes every precached file and the template. Any change to a page, a photo, a clip, a font or
-  an icon gives a new cache, and that is what makes installed copies pick it up (one full re-download).
+- `VERSION` hashes every file a game ships and the template. Any change to a page, a photo, a clip, a font
+  or an icon gives a new cache, and that is what makes installed copies pick it up (one re-download of
+  what is precached).
 - A shared change changes every game: assemble, commit and verify all of them.
 - The builder refuses a cache prefix that isn't the folder name, a prefix another game's starts with, and
   a manifest `id` that resolves to the origin root or to another game's app (Tel Aviv's `"./"` is
   grandfathered: changing it would break installed copies).
 
 ## Add a club
+
+(The word game, `english-words`, is not a club: its words, pictures and clips and how to refresh them are
+in [`english-words/tools/README.md`](../english-words/tools/README.md).)
 
 1. **Start it from the closest club**, which also checks the id, the cache prefix and the app id first:
 
@@ -136,9 +166,14 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
 - static: `assemble --check` (with the builder's lints) and the format of every shipped clip
   (`clips.py format`: the format `tts.sh check` enforces, without the work directory and its STT);
 - per game, no console error and no 404; the worker controls the page and `installability` is `[]`;
-- memory: three flips say their names and their matches the match clip;
-- the quiz's first question: a wrong pick turns over and says who it is, the right one says the name;
-- offline: a reload with the network off shows the photos, plays cached clips and asks a quiz question;
+- memory: three flips say their clip and their matches the second (the game's voice script);
+- the quiz's first question: a wrong pick turns over and says its line, the right one says its own (a
+  word game starts with 25 words learned, so its quiz is open and its deal reaches past the precached core);
+- offline: a reload with the network off keeps what she learned, shows the pictures, plays cached clips,
+  asks a quiz question and opens the next new flash card, which turns up, speaks and counts as learned;
+- the state machine (`states/scenarios.js`): a squad's suites, the flash cards and the whole-roster quiz;
+  a word game's new-first deal, the quiz locked below 4 and asking only learned words, the voice script,
+  a flash card counting as learned and moving the bar, and what she learned surviving a reload;
 - a quick upgrade from `origin/main` (`--from <ref>`), online then offline, for the games that exist there.
 
 Each failure names what broke: the URL, the console line, the clips it heard. `live` (`sanity --live`)
@@ -154,7 +189,9 @@ precached file with the repo, then runs the same browser checks on the live site
   state machine;
 - `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and audio-identical;
 - `verify.sh upgrade <old-ref> <new-ref>` simulates the GitHub Pages upgrade under `/pages/` with whole
-  games, online then offline.
+  games, online then offline;
+- `verify.sh runtime [<game>...]`, for a game that keeps files at runtime: one kept file changes and the new
+  worker evicts only its copy.
 
 Outputs go to `--out <dir>` (default: one folder per checkout under `$TMPDIR`; never inside the repo).
 `MEMORY_GAME_VERIFY_PORTS=8801-8804` pins the test servers' ports when several runs share a machine

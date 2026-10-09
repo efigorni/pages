@@ -1,0 +1,234 @@
+/* Andika, made for children who are learning to read (one-storey a and g): the English words */
+@font-face {
+  font-family: Andika;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/andika-700-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Fredoka, round and friendly, with niqqud: the Hebrew and the title */
+@font-face {
+  font-family: Fredoka;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(fonts/fredoka-400-700-hebrew.woff2) format("woff2");
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: Fredoka;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(fonts/fredoka-400-700-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* A picture-word card deck on a sky-blue table: white cardstock faces with a solid edge, crayon-blue backs,
+   and the crayon box's colours for what they mean here (green learned, red new, yellow progress). */
+:root {
+  --sky: #d6ebff;
+  --sky-deep: #b3d8ff;
+  --paper: #ffffff;
+  --ink: #1d2d5a;
+  --ink-soft: #55668f;
+  --crayon: #2f6fe4;
+  --crayon-deep: #2155bd;
+  --sun: #ffc532;
+  --leaf: #22a95f;
+  --berry: #ff5a4e;
+  /* read by the shared base styles; this board is light, so their "white" is the ink */
+  --scheme: light;
+  --font: Fredoka, "Arial Hebrew", system-ui, sans-serif;
+  --white: var(--ink);
+  --accent: var(--sun);
+  --surface: var(--paper);
+  --pip-ring: rgba(47, 111, 228, .3);
+  --pip-bg: rgba(255, 255, 255, .6);
+  --hud-btn-bg: rgba(255, 255, 255, .78);
+  --hud-btn-muted: rgba(29, 45, 90, .4);
+  --install-line: rgba(29, 45, 90, .2);
+  --install-fg: rgba(29, 45, 90, .82);
+  --app-bg: radial-gradient(120% 80% at 50% 0%, #e9f5ff 0%, rgba(233, 245, 255, 0) 60%), linear-gradient(var(--sky), var(--sky-deep));
+  --burst: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cdefs%3E%3Cpath id='r' d='M0-49 3.2-37 0-31-3.2-37Z'/%3E%3Ccircle id='d' cy='-40' r='2.6'/%3E%3C/defs%3E%3Cg fill='%23ffc532'%3E%3Cuse href='%23r'/%3E%3Cuse href='%23r' transform='rotate(45)'/%3E%3Cuse href='%23r' transform='rotate(90)'/%3E%3Cuse href='%23r' transform='rotate(135)'/%3E%3Cuse href='%23r' transform='rotate(180)'/%3E%3Cuse href='%23r' transform='rotate(225)'/%3E%3Cuse href='%23r' transform='rotate(270)'/%3E%3Cuse href='%23r' transform='rotate(315)'/%3E%3C/g%3E%3Cg fill='%232f6fe4'%3E%3Cuse href='%23d' transform='rotate(22.5)'/%3E%3Cuse href='%23d' transform='rotate(67.5)'/%3E%3Cuse href='%23d' transform='rotate(112.5)'/%3E%3Cuse href='%23d' transform='rotate(157.5)'/%3E%3Cuse href='%23d' transform='rotate(202.5)'/%3E%3Cuse href='%23d' transform='rotate(247.5)'/%3E%3Cuse href='%23d' transform='rotate(292.5)'/%3E%3Cuse href='%23d' transform='rotate(337.5)'/%3E%3C/g%3E%3C/svg%3E");
+  --big-bg: var(--paper);
+  --big-fg: var(--crayon);
+  --big-drop: #92b9ec;
+  --no-bg: #e9f2ff;
+  --no-drop: #9fbde6;
+  --start-bg: radial-gradient(75% 55% at 50% 36%, rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, 0) 72%), linear-gradient(#dff0ff, var(--sky-deep));
+  --halo: var(--paper);
+  --scrim-install: rgba(255, 255, 255, .6);
+  --scrim-confirm: rgba(214, 235, 255, .9);
+  --scrim-win: rgba(214, 235, 255, .72);
+  --scrim-flash: rgba(29, 45, 90, .62);
+  /* the frames base.css draws: the back's inset line, the front's hairline, the found frame */
+  --back-line: max(1.5px, calc(var(--short) * .018)) solid rgba(255, 255, 255, .7);
+  --edge: rgba(29, 45, 90, .14);
+  --found: var(--sun);
+  --found-w: max(3px, calc(var(--short) * .05));
+  /* every picture sits on a soft mid-tone disc, so a white or a yellow one reads on the white card */
+  --disc: radial-gradient(circle at 50% 36%, #dceafc 0%, #bcd4f3 64%, #a9c6ee 100%);
+  /* the shelf's marks and pictures, and the progress bar */
+  --new-dot: var(--berry);
+  --learned: var(--leaf);
+  --tile-img: 62%;
+  --bar-bg: rgba(255, 255, 255, .86);
+  --bar-track: rgba(47, 111, 228, .14);
+  --bar-fill: linear-gradient(90deg, #ffd85c, var(--sun));
+  --bar-star: var(--sun);
+}
+
+/* card back: crayon blue with chalk dots, and a speech bubble saying something in three colours */
+.back {
+  background-color: var(--crayon);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -60 120 120'%3E%3Cpath d='M-38-34h76a16 16 0 0 1 16 16v30a16 16 0 0 1-16 16H-2l-20 18 3-18h-19a16 16 0 0 1-16-16v-30a16 16 0 0 1 16-16z' fill='%23fff'/%3E%3Ccircle cx='-22' cy='-3' r='8.5' fill='%23ff5a4e'/%3E%3Ccircle cx='0' cy='-3' r='8.5' fill='%23ffc532'/%3E%3Ccircle cx='22' cy='-3' r='8.5' fill='%2322a95f'/%3E%3C/svg%3E"),
+    radial-gradient(circle, rgba(255, 255, 255, .2) 0 22%, rgba(255, 255, 255, 0) 24%),
+    linear-gradient(160deg, #3d7cf0, var(--crayon-deep));
+  background-repeat: no-repeat, repeat, no-repeat;
+  background-position: center, 0 0, 0 0;
+  background-size: min(calc(var(--short) * .7), calc(var(--cw) * .62)) auto, calc(var(--short) * .2) calc(var(--short) * .2), cover;
+}
+
+/* card face: the picture big on white cardstock, the English word under it, the Hebrew small */
+.front {
+  display: grid;
+  background: var(--paper);
+}
+
+[data-face="band"] .front,
+[data-face="stack"] .front {
+  grid-template: "photo" var(--pic-h) "words" minmax(0, 1fr) / minmax(0, 1fr);
+}
+
+[data-face="side"] .front {
+  grid-template: "words photo" minmax(0, 1fr) / minmax(0, 1fr) var(--pic-w);
+}
+
+.photo {
+  grid-area: photo;
+  position: relative;
+  min-height: 0;
+  --disc-d: min(calc(min(var(--pic-w), var(--pic-h)) * .9), 320px);
+}
+
+/* the picture sits whole on its disc, never bigger than 1.25 times its own pixels */
+.photo::before,
+.app .ask::before,
+.pic::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--disc-d);
+  height: var(--disc-d);
+  border-radius: 50%;
+  background: var(--disc);
+}
+
+.photo img {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: calc(var(--disc-d) * .78);
+  height: calc(var(--disc-d) * .78);
+  object-fit: contain;
+}
+
+.words {
+  grid-area: words;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--wpad) * .25);
+  padding: 0 var(--wpad) var(--wpad);
+}
+
+[data-face="side"] .words { padding: var(--wpad) 0 var(--wpad) var(--wpad); }
+
+.en {
+  font-family: Andika, "Arial Rounded MT Bold", sans-serif;
+  font-weight: 700;
+  font-size: calc(var(--en-fs) * var(--en-fit, 1));
+  line-height: 1.02;
+  color: var(--ink);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.en > span { display: block; }
+
+.he {
+  font-family: Fredoka, "Arial Hebrew", sans-serif;
+  font-weight: 600;
+  font-size: calc(var(--he-fs) * var(--he-fit, 1));
+  line-height: 1.3;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* the quiz asks with the picture alone, whole and centred on its disc, and the English word in the
+   question */
+.app .ask { --disc-d: min(calc(min(var(--cw), var(--ch)) * .86), 320px); }
+
+.app .ask img {
+  inset: 0;
+  margin: auto;
+  width: calc(var(--disc-d) * .78);
+  height: calc(var(--disc-d) * .78);
+  object-fit: contain;
+  transform: none;
+}
+
+.pic { --disc-d: 88%; }
+
+.qword {
+  font-family: Andika, "Arial Rounded MT Bold", sans-serif;
+  font-size: 1.45em;
+  line-height: 1;
+  color: var(--crayon-deep);
+}
+
+/* a picture in a pip or in flight is a whole object on its disc, not a face to zoom into */
+body .pip img,
+body .flyer img {
+  object-fit: contain;
+  transform: scale(.74);
+  transform-origin: 50% 50%;
+}
+
+.pips .pip.full,
+body .flyer { background: var(--disc); }
+
+/* the title: "מילים" small over "באנגלית", with an ABC sticker */
+.title {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  font-family: Fredoka, "Arial Hebrew", sans-serif;
+  font-weight: 700;
+  line-height: .95;
+  color: var(--ink);
+  text-align: center;
+}
+
+.title-small { font-size: clamp(30px, 7vmin, 66px); color: var(--ink-soft); }
+.title-big { font-size: clamp(54px, 13.5vmin, 128px); color: var(--crayon-deep); }
+
+.title::after {
+  content: "ABC";
+  position: absolute;
+  top: -.1em;
+  left: -.4em;
+  padding: .12em .32em .06em;
+  border-radius: .3em;
+  background: var(--sun);
+  color: var(--ink);
+  font: 700 clamp(18px, 4vmin, 38px)/1 Andika, sans-serif;
+  letter-spacing: .04em;
+  rotate: -12deg;
+  box-shadow: 0 .12em 0 #e3a10b;
+}

@@ -3,23 +3,32 @@
 (() => {
   'use strict';
 
-  // The quiz asks every player once, in roster order: the starters, the bench and the backups (the
-  // pool's other goalkeepers, whom the memory game never deals).
-  const QUIZ = DATA.players;
-  const STARTERS = QUIZ.filter((p) => p.role === 'starter');
-  const BENCH = QUIZ.filter((p) => p.role === 'bench');
+  // What the game teaches, in teaching order: a squad's players (the starters, the bench and the
+  // backups, the pool's other goalkeepers whom memory never deals) or a list of words. PLAY is the
+  // game's own script, from club.json `play`: what each moment says, how memory deals, what the quiz
+  // asks, the progress bar and what the worker keeps offline (README, "Play config").
+  const ITEMS = DATA.words || DATA.players;
+  const PLAY = DATA.play;
+  const STARTERS = ITEMS.filter((p) => p.role === 'starter');
+  const BENCH = ITEMS.filter((p) => p.role === 'bench');
   const ALL = STARTERS.concat(BENCH);
+  // Whom the start screen's fan (and the link preview) shows: a starter, or one of the first words.
+  const POSTER = STARTERS.length ? STARTERS : DATA.words ? ITEMS.slice(0, PLAY.deal.pairs) : ALL;
   const CHOICES = 4;
   const ADVANCE_MS = 1500;
   const TAP_ADVANCE_MS = 700;
   // A wrong pick's clip waits for the soft sound and for the card to turn over (base.css: .3 s + flip).
   const NOPE_SAY_MS = 650;
-  const PAIRS = 15;
   const FLIP_MS = 460;
+  // A flash card counts as learned once its line has played and it has been on screen this long.
+  const SEEN_MS = 2500;
   const MISMATCH_MS = 2200;
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
+  // The engine's own lines, which a game may say in its own words (club.json `lines`, with its own clip):
+  // what the speech fallback says when the clip can't play.
+  const UI_LINES = { start: START_LINE, win: WIN_LINE, ...DATA.lines };
 
   const $ = (id) => document.getElementById(id);
   const app = $('app');
@@ -27,8 +36,11 @@
   const pipsEl = $('pips');
   const picksEl = $('picks');
   const questionEl = $('question');
+  const shelfEl = $('shelf');
+  const slotEl = $('flash-slot');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const landscapeQuery = matchMedia('(orientation: landscape)');
+  const canFetch = location.protocol === 'http:' || location.protocol === 'https:';
 
   function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -65,29 +77,48 @@
 
   /* ---------- clips ---------- */
 
-  const AUDIO = DATA.audio || {};
-  const recorded = {
-    ui: new Set(AUDIO.ui || []),
-    name: new Set(AUDIO.name || []),
-    match: new Set(AUDIO.match || []),
-  };
+  // DATA.audio lists, per kind, the ids whose clip ships under audio/<kind>/.
+  const recorded = Object.fromEntries(Object.entries(DATA.audio || {}).map(([kind, ids]) => [kind, new Set(ids)]));
+  const ships = (kind, id) => !!recorded[kind] && recorded[kind].has(id);
 
   // The card shows name_he; the voice says speak_he when the roster has one (a trailing nickname in
   // parentheses), else name_he.
   const spoken = (p) => p.speak_he || p.name_he;
-  const clip = {
-    name: (p) => ({ url: recorded.name.has(p.id) ? `audio/name/${p.id}.mp3` : null, text: spoken(p) }),
-    match: (p) => ({
-      url: recorded.match.has(p.id) ? `audio/match/${p.id}.mp3` : null,
-      text: `מספר ${hebrewNumber(p.number)}, ${spoken(p)}!`,
-    }),
-    ui: (key, text) => ({ url: recorded.ui.has(key) ? `audio/ui/${key}.mp3` : null, text }),
+  // Every kind of clip a game records, with what the speech fallback says instead: a player's name and
+  // his "number N, <name>!", a word in English and in Hebrew.
+  const LINES = {
+    name: (p) => ({ text: spoken(p) }),
+    match: (p) => ({ text: `מספר ${hebrewNumber(p.number)}, ${spoken(p)}!` }),
+    en: (p) => ({ text: p.en, lang: 'en' }),
+    he: (p) => ({ text: p.he }),
+  };
+  const clip = Object.fromEntries(Object.entries(LINES).map(([kind, line]) => [kind,
+    (p) => ({ url: ships(kind, p.id) ? `audio/${kind}/${p.id}.mp3` : null, ...line(p) })]));
+  clip.ui = (key, text) => ({ url: ships('ui', key) ? `audio/ui/${key}.mp3` : null, text });
+
+  // The game's voice script (PLAY.voice): the clips each moment says, in order. flip and match are
+  // memory's, ask, wrong and right the quiz's, card a flash card's.
+  const voice = (moment, p) => PLAY.voice[moment].map((kind) => clip[kind](p));
+  // The files of the clips those moments say, each once.
+  const clipUrls = (p, moments) => [...new Set(moments.flatMap((m) => PLAY.voice[m]))].map((kind) => clip[kind](p).url);
+
+  // How the engine names an item: a player by his name, a word in English and Hebrew. A squad's quiz
+  // asks "who is number N, <name>?"; a word game's asks with the English word alone.
+  const MODEL = DATA.words ? {
+    noun: 'תמונה',
+    label: (p) => `${p.en}, ${p.he}`,
+    question: (p) => [Object.assign(el('span', 'qword', p.en), { lang: 'en', dir: 'ltr' })],
+    chip: () => null,
+  } : {
+    noun: 'שחקן',
+    label: (p) => p.name_he,
+    question: (p) => [el('span', null, 'מי זה מספר '), el('span', 'qnum', String(p.number)), el('span', null, `, ${spoken(p)}?`)],
+    chip: (p) => String(p.number),
   };
 
-  /* ---------- audio: Web Audio buffers → HTMLAudio → speechSynthesis (he-IL) ---------- */
+  /* ---------- audio: Web Audio buffers → HTMLAudio → speechSynthesis (he-IL, en-US) ---------- */
 
   const sound = (() => {
-    const canFetch = location.protocol === 'http:' || location.protocol === 'https:';
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     const synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
     const raw = new Map();
@@ -100,13 +131,17 @@
     let muted = false;
     let token = 0;
     let stopCurrent = null;
-    let hebrewVoice = null;
+    // The speech fallback's voice per language: a line is Hebrew unless it says `lang: 'en'`.
+    let voices = { he: null, en: null };
     let lastCancel = 0;
 
     function pickVoice() {
       if (!synth) return;
-      const voices = synth.getVoices();
-      hebrewVoice = voices.find((v) => /^(he|iw)([-_]|$)/i.test(v.lang)) || null;
+      const all = synth.getVoices();
+      voices = {
+        he: all.find((v) => /^(he|iw)([-_]|$)/i.test(v.lang)) || null,
+        en: all.find((v) => /^en[-_]US/i.test(v.lang)) || all.find((v) => /^en([-_]|$)/i.test(v.lang)) || null,
+      };
     }
     if (synth) {
       pickVoice();
@@ -192,7 +227,7 @@
         }
       }
       wake();
-      if (!hebrewVoice) pickVoice();
+      if (!voices.he || !voices.en) pickVoice();
     }
 
     function halt() {
@@ -206,9 +241,12 @@
       }
     }
 
-    function speak(text, my) {
+    function speak(item, my) {
+      const { text } = item;
+      const english = item.lang === 'en';
+      const v = english ? voices.en : voices.he;
       return new Promise((done) => {
-        if (!synth || !hebrewVoice || !text || muted || my !== token) return done();
+        if (!synth || !v || !text || muted || my !== token) return done();
         let over = false;
         let guard = 0;
         const finish = () => {
@@ -219,9 +257,9 @@
           done();
         };
         const utter = new SpeechSynthesisUtterance(text);
-        utter.voice = hebrewVoice;
-        utter.lang = hebrewVoice.lang;
-        utter.rate = 0.92;
+        utter.voice = v;
+        utter.lang = v.lang;
+        utter.rate = english ? 0.8 : 0.92;
         utter.onend = finish;
         utter.onerror = finish;
         stopCurrent = finish;
@@ -248,7 +286,7 @@
           audio.removeEventListener('error', onError);
           if (stopCurrent === stop) stopCurrent = null;
           if (ok || my !== token) done();
-          else speak(item.text, my).then(done);
+          else speak(item, my).then(done);
         };
         const onEnded = () => finish(true);
         const onError = () => finish(false);
@@ -289,7 +327,7 @@
       if (muted || my !== token) return Promise.resolve();
       // { wait: ms } is a beat of silence; a newer say() or halt() during it drops the rest.
       if (item.wait) return new Promise((done) => setTimeout(done, item.wait));
-      if (!item.url) return speak(item.text, my);
+      if (!item.url) return speak(item, my);
       // A suspended or interrupted context would swallow the clip and never fire 'ended'.
       if (canFetch && running()) return viaBuffer(item, my);
       return viaElement(item, my);
@@ -330,6 +368,10 @@
       } else if (kind === 'nope') {
         tone('sine', 330, 262, t, 0.16, 0.4);
         tone('sine', 262, 220, t + 0.15, 0.24, 0.34);
+      } else if (kind === 'hint') {
+        // a locked button: two soft steps up, "over there"
+        tone('sine', 523.25, 587.33, t, 0.13, 0.3);
+        tone('sine', 659.25, 783.99, t + 0.14, 0.2, 0.26);
       } else if (kind === 'win') {
         const notes = [523.25, 659.25, 783.99, 1046.5];
         notes.forEach((f, i) => tone('triangle', f, f, t + i * 0.12, 0.28, 0.55));
@@ -497,6 +539,69 @@
     return side;
   }
 
+  /* ---------- what she has learned: a match in memory, or a flash card she looked at ---------- */
+
+  // Kept per game on this device. The games share one origin, so the key carries the game's folder;
+  // private mode or blocked storage keeps it for this visit only.
+  const learned = (() => {
+    const key = `${DATA.game}:learned`;
+    let store = null;
+    try { store = window.localStorage; } catch (e) { /* storage blocked */ }
+    let saved = [];
+    try { saved = JSON.parse((store && store.getItem(key)) || '[]'); } catch (e) { /* unreadable */ }
+    const ids = new Set(Array.isArray(saved) ? saved.filter((id) => typeof id === 'string') : []);
+    return {
+      has: (id) => ids.has(id),
+      // true when it is new
+      add(id) {
+        if (ids.has(id)) return false;
+        ids.add(id);
+        try { if (store) store.setItem(key, JSON.stringify([...ids])); } catch (e) { /* full or blocked */ }
+        return true;
+      },
+      // the game's learned items, in teaching order (an id from an older list counts no more)
+      items: () => ITEMS.filter((p) => ids.has(p.id)),
+    };
+  })();
+
+  const progressEl = $('progress');
+  const QUIZ_BUTTONS = ['play-quiz', 'yes-quiz', 'replay-quiz'];
+
+  // A word game asks only what she has learned, so its quiz waits for PLAY.quiz.unlock words.
+  function quizLocked() {
+    return PLAY.quiz.pool === 'learned' && learned.items().length < PLAY.quiz.unlock;
+  }
+
+  // "learned X / N": the bar a word game shows on every screen (PLAY.progress "bar"), the shelf's count,
+  // and the quiz buttons' lock.
+  function syncLearned() {
+    const done = learned.items().length;
+    const count = `${done} / ${ITEMS.length}`;
+    $('progress-count').textContent = count;
+    $('shelf-count').textContent = count;
+    progressEl.style.setProperty('--done', String(ITEMS.length ? done / ITEMS.length : 0));
+    progressEl.setAttribute('aria-valuenow', String(done));
+    progressEl.setAttribute('aria-valuemax', String(ITEMS.length));
+    $('next-new').dataset.done = String(done === ITEMS.length);
+    const locked = String(quizLocked());
+    QUIZ_BUTTONS.forEach((id) => {
+      $(id).dataset.locked = locked;
+      $(id).setAttribute('aria-disabled', locked);
+    });
+  }
+
+  function markLearned(p) {
+    if (!learned.add(p.id)) return;
+    syncLearned();
+    const tile = shelf.tiles.get(p.id);
+    if (tile) tile.dataset.learned = 'true';
+    if (!reducedMotion.matches && PLAY.progress === 'bar') {
+      progressEl.classList.remove('gained');
+      void progressEl.offsetWidth; // restart the pop
+      progressEl.classList.add('gained');
+    }
+  }
+
   /* ---------- game state ---------- */
 
   const game = {
@@ -521,7 +626,7 @@
   function setCard(card, state) {
     card.state = state;
     card.el.dataset.state = state;
-    card.el.setAttribute('aria-label', state === 'down' ? 'קלף' : card.p.name_he);
+    card.el.setAttribute('aria-label', state === 'down' ? 'קלף' : MODEL.label(card.p));
   }
 
   // A grid's cell for the [cols, rows] shape that shows the faces biggest, from the grid's own box
@@ -566,6 +671,8 @@
     game.flights.clear();
     confetti.stop();
     OVERLAYS.forEach(hide);
+    shelf.card = null;
+    slotEl.textContent = '';
     app.dataset.mode = mode;
     game.total = total;
     game.found = 0;
@@ -574,9 +681,19 @@
     for (let i = 0; i < total; i++) pipsEl.appendChild(el('span', 'pip'));
   }
 
+  // The items memory deals (PLAY.deal): a squad's starters and a random few of the bench; a word game's
+  // next new words in teaching order (at most `new` of them) and a random review of learned ones, with
+  // more new words while too few are learned.
+  function dealPicks() {
+    const { policy, pairs } = PLAY.deal;
+    if (policy === 'squad') return STARTERS.concat(shuffled(BENCH).slice(0, Math.max(0, pairs - STARTERS.length)));
+    const fresh = ITEMS.filter((p) => !learned.has(p.id));
+    const review = shuffled(learned.items()).slice(0, pairs - Math.min(PLAY.deal.new, fresh.length));
+    return fresh.slice(0, pairs - review.length).concat(review);
+  }
+
   function newGame() {
-    const benchPicks = shuffled(BENCH).slice(0, Math.max(0, PAIRS - STARTERS.length));
-    const picks = STARTERS.concat(benchPicks);
+    const picks = dealPicks();
     const deck = shuffled(picks.concat(picks));
 
     reset('memory', picks.length);
@@ -589,7 +706,9 @@
     });
     layout();
     warmImages(picks);
-    sound.prefetch(picks.flatMap((p) => [clip.name(p).url, clip.match(p).url]).concat(clip.ui('win').url));
+    sound.prefetch(picks.flatMap((p) => clipUrls(p, ['flip', 'match'])).concat(clip.ui('win').url));
+    ahead.dealt = picks; // offline, the 'online' event fetches what comes after them
+    fetchAhead(upcoming(picks));
 
     if (!reducedMotion.matches) {
       const round = game.round;
@@ -646,14 +765,14 @@
 
     if (game.up.length === 1) {
       setPhase('one');
-      sound.say([clip.name(card.p)]);
+      sound.say(voice('flip', card.p));
       return;
     }
 
     const [a, b] = game.up;
     if (a.p.id !== b.p.id) {
       setPhase('two');
-      sound.say([clip.name(card.p)]);
+      sound.say(voice('flip', card.p));
       game.flipBack = setTimeout(() => {
         game.up.forEach((c) => setCard(c, 'down'));
         game.up = [];
@@ -665,7 +784,8 @@
     game.up = [];
     setCard(a, 'matched');
     setCard(b, 'matched');
-    const lines = [clip.name(card.p), clip.match(card.p)];
+    markLearned(card.p);
+    const lines = voice('match', card.p);
     if (scored([a, b])) finishing(lines);
     else setPhase('idle');
     sound.say(lines);
@@ -678,7 +798,7 @@
     const round = game.round;
     game.winEarliest = performance.now() + 1500;
     const finish = () => { if (game.round === round) showWin(); };
-    const win = clip.ui('win', WIN_LINE);
+    const win = clip.ui('win', UI_LINES.win);
     win.onstart = () => setTimeout(finish, Math.max(0, game.winEarliest - performance.now()));
     lines.push(win);
     game.winFallback = setTimeout(finish, sound.muted ? 1500 : 9000);
@@ -776,36 +896,51 @@
     fitCards(picksEl, quiz.cards, c);
   }
 
+  // The questions (PLAY.quiz): a squad's every player once, the backups too; a word game's up to `size`
+  // random learned words.
   function startQuiz() {
-    reset('quiz', QUIZ.length);
-    quiz.order = shuffled(QUIZ);
+    quiz.order = PLAY.quiz.pool === 'learned' ? shuffled(learned.items()).slice(0, PLAY.quiz.size) : shuffled(ITEMS);
+    reset('quiz', quiz.order.length);
     quiz.at = 0;
-    warmImages(QUIZ);
+    warmImages(quiz.order);
     deal();
-    // The first question's clips first: its match line, the other three cards' (a wrong pick says one)
-    // and its name; then everyone's, in question order.
-    const first = [quiz.answer].concat(quiz.cards.filter((card) => card !== quiz.answer)).map((card) => card.p);
-    sound.prefetch(first.map((p) => clip.match(p).url).concat(clip.name(first[0]).url,
-      quiz.order.flatMap((p) => [clip.match(p).url, clip.name(p).url]), clip.ui('win').url));
+    // The first question's clips first: its question, the other three cards' (a wrong pick says them)
+    // and its answer's; then everyone's, in question order.
+    const [p, ...others] = [quiz.answer].concat(quiz.cards.filter((card) => card !== quiz.answer)).map((card) => card.p);
+    sound.prefetch(clipUrls(p, ['ask']).concat(others.flatMap((q) => clipUrls(q, ['wrong'])), clipUrls(p, ['right']),
+      quiz.order.flatMap((q) => clipUrls(q, ['ask', 'right'])), clip.ui('win').url));
     keepAwake();
   }
 
-  // The asked player and three others from the quiz roster, shuffled.
+  // Three others to pick from: a squad's whole roster; a word game's learned words (while fewer than
+  // four are learned, the next words in teaching order fill in). Never one PLAY.quiz.apart pairs with the
+  // asked one: two pictures that look alike at a glance.
+  function distractors(p) {
+    const fits = (q) => q !== p && !(PLAY.quiz.apart || []).some((pair) => pair.includes(p.id) && pair.includes(q.id));
+    let pool = ITEMS.filter(fits);
+    if (PLAY.quiz.pool === 'learned') {
+      const known = learned.items().filter(fits);
+      pool = known.length >= CHOICES - 1 ? known : known.concat(pool.filter((q) => !learned.has(q.id)).slice(0, CHOICES));
+    }
+    return shuffled(pool).slice(0, CHOICES - 1);
+  }
+
+  // The asked item and three others, shuffled.
   function deal() {
     const p = quiz.order[quiz.at];
-    const others = shuffled(QUIZ.filter((q) => q !== p)).slice(0, CHOICES - 1);
+    const others = distractors(p);
     picksEl.textContent = '';
     picksEl.classList.remove('solved');
     quiz.cards = shuffled(others.concat(p)).map((q, i) => {
       const card = { p: q, el: buildCard(q, i, null, askFace(q)), state: 'down' };
-      card.el.setAttribute('aria-label', 'שחקן');
+      card.el.setAttribute('aria-label', MODEL.noun);
       picksEl.appendChild(card.el);
       return card;
     });
     quiz.answer = quiz.cards.find((card) => card.p === p);
     picksEl.dataset.answer = p.id;
     questionEl.textContent = '';
-    questionEl.append(el('span', null, 'מי זה מספר '), el('span', 'qnum', String(p.number)), el('span', null, `, ${spoken(p)}?`));
+    questionEl.append(...MODEL.question(p));
     quizLayout();
     // A tap that moved on to this question must not also pick on it.
     game.busyUntil = performance.now() + 450;
@@ -818,32 +953,32 @@
     setPhase('ask');
   }
 
-  // The question out loud is the asked player's match clip: "number N, <name>!".
+  // The question out loud (PLAY.voice.ask): a player's "number N, <name>!", a word in English alone.
   function question() {
-    return [clip.match(quiz.answer.p)];
+    return voice('ask', quiz.answer.p);
   }
 
   function pick(card) {
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
     if (card !== quiz.answer) {
-      // Not him, and she learns who it is: the soft sound and a shake, then the card turns over (greyed
-      // and marked, out of play) and says his number and name. Her next pick or #say cuts that off.
+      // Not this one, and she learns what it is: the soft sound and a shake, then the card turns over
+      // (greyed and marked, out of play) and says its line. Her next pick or #say cuts that off.
       turn(card, 'out', 'nope');
-      sound.say([{ wait: NOPE_SAY_MS }, clip.match(card.p)]);
+      sound.say([{ wait: NOPE_SAY_MS }].concat(voice('wrong', card.p)));
       return;
     }
     turn(card, 'up');
     picksEl.classList.add('solved');
     quiz.shownAt = performance.now();
-    const lines = [clip.name(card.p)];
+    const lines = voice('right', card.p);
     if (scored([card])) {
       finishing(lines);
       sound.say(lines);
       return;
     }
     setPhase('reveal');
-    // On after the name clip, or after a fallback when the voice never ends.
+    // On after the answer's clips, or after a fallback when the voice never ends.
     const round = game.round;
     const at = quiz.at;
     advance(8000);
@@ -879,9 +1014,157 @@
     }
   }
 
+  /* ---------- flash cards: every item on a shelf, then one at a time, big ---------- */
+
+  const shelf = { tiles: new Map(), at: 0, card: null, last: null };
+
+  // A tile per item in teaching order, built on the first visit: learned ones in full colour with a
+  // tick, the others dimmed with a dot (base.css, data-learned).
+  function buildShelf() {
+    if (shelf.tiles.size) return;
+    ITEMS.forEach((p, i) => {
+      const tile = el('button', 'tile');
+      tile.type = 'button';
+      tile.dataset.index = String(i);
+      tile.dataset.learned = String(learned.has(p.id));
+      tile.setAttribute('aria-label', MODEL.label(p));
+      const pic = el('span', 'pic');
+      // lazy before src: a picture loads when its tile scrolls near
+      const img = Object.assign(el('img'), { loading: 'lazy', decoding: 'async', alt: '', draggable: false });
+      img.src = p.img;
+      // Offline, a picture that was never fetched shows the tile alone, not a broken image.
+      img.addEventListener('error', () => { img.hidden = true; });
+      pic.appendChild(img);
+      tile.appendChild(pic);
+      const chip = MODEL.chip(p);
+      if (chip) tile.appendChild(el('span', 'chip', chip));
+      shelfEl.appendChild(tile);
+      shelf.tiles.set(p.id, tile);
+    });
+  }
+
+  // The shelf opens where the new ones begin.
+  function openShelf() {
+    reset('cards', 0);
+    buildShelf();
+    setPhase('browse');
+    keepAwake();
+    const tile = shelf.tiles.get(ITEMS[nextNew()].id);
+    if (tile.scrollIntoView) tile.scrollIntoView({ block: 'center' });
+  }
+
+  // The flash card's size: as tall as its slot allows, a card's proportions, clear of the screen's sides.
+  function flashLayout() {
+    if (!shelf.card) return;
+    const rect = slotEl.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const ch = Math.min(rect.height, (rect.width * 0.86) / 0.78);
+    const cw = ch * 0.78;
+    face.fit(shelf.card.el, shelf.card.p, applyFace(slotEl, cw, ch, faceMode(cw, ch)));
+  }
+
+  // One item, big: the card turns over and says its line (PLAY.voice.card); it counts as learned once the
+  // line has played and it has been on screen SEEN_MS (a muted page or a failed clip too), never when she
+  // pages on first. The next card's picture and clips come in meanwhile, so "next" shows at once.
+  function showCard(index) {
+    const n = ITEMS.length;
+    shelf.at = ((index % n) + n) % n;
+    const p = ITEMS[shelf.at];
+    const card = buildCard(p, 0, 'span');
+    slotEl.textContent = '';
+    slotEl.appendChild(card);
+    shelf.card = { p, el: card };
+    if (!isShown('flash')) show('flash');
+    flashLayout();
+    setPhase('card');
+    const round = game.round;
+    setTimeout(() => {
+      if (game.round !== round || !shelf.card || shelf.card.el !== card) return;
+      card.dataset.state = 'up';
+      sound.sfx('flip');
+    }, reducedMotion.matches ? 0 : 120);
+    const shown = performance.now();
+    sound.say(voice('card', p)).then(() => setTimeout(() => {
+      if (shelf.card && shelf.card.el === card) markLearned(p);
+    }, Math.max(0, SEEN_MS - (performance.now() - shown))));
+    const after = ITEMS[(shelf.at + 1) % n];
+    warmImages([after]);
+    sound.prefetch(clipUrls(after, ['card']));
+  }
+
+  // Back on the shelf, the last card's tile is in view and its mark pops.
+  function closeCard() {
+    if (game.phase !== 'card') return;
+    sound.halt();
+    hide('flash');
+    const tile = shelf.tiles.get(shelf.card.p.id);
+    shelf.card = null;
+    slotEl.textContent = '';
+    setPhase('browse');
+    if (!tile) return;
+    if (tile.scrollIntoView) tile.scrollIntoView({ block: 'nearest' });
+    if (shelf.last) shelf.last.classList.remove('fresh');
+    tile.classList.add('fresh');
+    shelf.last = tile;
+  }
+
+  function nextNew() {
+    const i = ITEMS.findIndex((p) => !learned.has(p.id));
+    return i < 0 ? 0 : i;
+  }
+
+  /* ---------- a game that precaches only its first items keeps the rest as they come ---------- */
+
+  // PLAY.precache "core" (a word game): the worker precaches the page and the first items, and keeps
+  // every other picture and clip the page fetches. Online, the page fetches ahead what the next game
+  // needs, so it plays offline too: every learned item (memory's review, the quiz) and the next new ones.
+  const ahead = { queue: [], busy: 0, seen: new Set(), dealt: [] };
+
+  // The next deal's new items: those after the ones dealt now, as if she learns them all.
+  function upcoming(dealt = []) {
+    return ITEMS.filter((p) => !learned.has(p.id) && !dealt.includes(p)).slice(0, PLAY.deal.pairs);
+  }
+
+  function fetchAhead(items) {
+    const sw = navigator.serviceWorker;
+    if (PLAY.precache.policy !== 'core' || !canFetch || !window.caches || !sw || !sw.controller) return;
+    if (navigator.onLine === false) return; // the 'online' event starts it again
+    items.forEach((p) => [p.img].concat(clipUrls(p, Object.keys(PLAY.voice))).forEach((url) => {
+      if (url && !ahead.seen.has(url)) {
+        ahead.seen.add(url);
+        ahead.queue.push(url);
+      }
+    }));
+    pump();
+  }
+
+  // Three at a time, after the page's own requests; one that fails (offline) is tried again later.
+  function pump() {
+    while (ahead.busy < 3 && ahead.queue.length) {
+      const url = ahead.queue.shift();
+      ahead.busy += 1;
+      // any copy of it, whatever hash the worker keys it by
+      caches.match(new URL(url, location.href).href, { ignoreSearch: true })
+        .then((hit) => hit || fetch(url).then((r) => {
+          if (!r.ok) throw new Error(String(r.status));
+          return r.blob();
+        }))
+        .catch(() => ahead.seen.delete(url))
+        .then(() => {
+          ahead.busy -= 1;
+          pump();
+        });
+    }
+  }
+
+  // Every learned item and the new ones after the current deal.
+  function fetchAllAhead() {
+    fetchAhead(learned.items().concat(upcoming(ahead.dealt)));
+  }
+
   /* ---------- overlays ---------- */
 
-  const OVERLAYS = ['start', 'confirm', 'win'];
+  const OVERLAYS = ['start', 'confirm', 'win', 'flash'];
 
   function isShown(id) {
     return $(id).classList.contains('show');
@@ -991,7 +1274,7 @@
     const cw = Math.max(84, Math.min(230, short * (landscape ? 0.36 : 0.34), window.innerHeight * (landscape ? 0.42 : 0.24)));
     const ch = cw * 1.28;
     const geo = applyFace(fan, cw, ch, 'band');
-    const pool = STARTERS.length ? STARTERS : ALL;
+    const pool = POSTER;
     if (!pool.length) return;
     fanStar = fanStar || pool[Math.floor(Math.random() * pool.length)];
     const star = fanStar;
@@ -1080,17 +1363,38 @@
     return stale;
   }
 
-  // Every new game starts from one of the two mode buttons: on the start screen, on the win screen
+  // A locked quiz button points at the other two: its padlock wiggles, theirs bounce (base.css .hint).
+  let hintTimer = 0;
+  function hintLocked() {
+    const { body } = document;
+    sound.unlock();
+    sound.sfx('hint');
+    body.classList.remove('hint');
+    void body.offsetWidth; // restart the animation
+    body.classList.add('hint');
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(() => body.classList.remove('hint'), 1700);
+  }
+
+  // Every new game starts from one of the three mode buttons: on the start screen, on the win screen
   // and in the ↻ confirm. A quiz opens with its first question right after the start line.
   function wireModes(ids, allowed, before) {
     ids.forEach((id) => $(id).addEventListener('click', () => {
-      if (!allowed() || reloadIfStale()) return;
+      if (!allowed()) return;
+      if (id.endsWith('-quiz') && quizLocked()) {
+        hintLocked();
+        return;
+      }
+      if (reloadIfStale()) return;
       sound.unlock();
       if (before) before();
-      const start = clip.ui('start', START_LINE);
+      const start = clip.ui('start', UI_LINES.start);
       if (id.endsWith('-quiz')) {
         startQuiz();
         sound.say([start].concat(question()));
+      } else if (id.endsWith('-cards')) {
+        openShelf();
+        sound.say([start]);
       } else {
         newGame();
         sound.say([start]);
@@ -1098,9 +1402,29 @@
     }));
   }
 
-  wireModes(['play', 'play-quiz'], () => game.phase === 'start', goFullscreen);
-  wireModes(['replay', 'replay-quiz'], () => game.phase === 'won');
-  wireModes(['yes', 'yes-quiz'], () => true);
+  wireModes(['play', 'play-quiz', 'play-cards'], () => game.phase === 'start', goFullscreen);
+  wireModes(['replay', 'replay-quiz', 'replay-cards'], () => game.phase === 'won');
+  wireModes(['yes', 'yes-quiz', 'yes-cards'], () => true);
+
+  // The shelf scrolls under a finger, so a tile opens on a click (a tap), never on the touch that starts
+  // a scroll.
+  shelfEl.addEventListener('click', (event) => {
+    const tile = event.target.closest && event.target.closest('.tile');
+    if (game.phase !== 'browse' || !tile) return;
+    sound.unlock();
+    showCard(Number(tile.dataset.index));
+  });
+  $('next-new').addEventListener('click', () => {
+    if (game.phase !== 'browse') return;
+    sound.unlock();
+    showCard(nextNew());
+  });
+  $('next').addEventListener('click', () => { if (game.phase === 'card') showCard(shelf.at + 1); });
+  $('prev').addEventListener('click', () => { if (game.phase === 'card') showCard(shelf.at - 1); });
+  const hear = () => { if (game.phase === 'card') sound.say(voice('card', shelf.card.p)); };
+  $('hear').addEventListener('click', hear);
+  slotEl.addEventListener('click', hear);
+  $('close').addEventListener('click', closeCard);
 
   // A quiz reveal waits under the confirm: "no" picks it up again, a mode button starts afresh.
   $('again').addEventListener('click', () => {
@@ -1145,20 +1469,21 @@
     document.addEventListener(type, () => sound.wake(), { capture: true, passive: true });
   });
 
-  // Only the shown grid has a box; the other's layout returns at once.
-  const relayout = () => { layout(); quizLayout(); };
-  if (window.ResizeObserver) [board, picksEl].forEach((grid) => new ResizeObserver(relayout).observe(grid));
+  // Only the shown grid has a box; the others' layouts return at once.
+  const relayout = () => { layout(); quizLayout(); flashLayout(); };
+  if (window.ResizeObserver) [board, picksEl, slotEl].forEach((grid) => new ResizeObserver(relayout).observe(grid));
   else window.addEventListener('resize', relayout);
   window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
 
+  syncLearned();
   sound.prefetch([clip.ui('start').url]);
-  face.prepare(QUIZ);
+  face.prepare(ITEMS);
   buildFan();
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all(CLUB.fonts.map(([spec, sample]) => document.fonts.load(spec, sample)))
     : Promise.resolve();
   fontsReady.catch(() => {}).then(() => {
-    face.prepare(QUIZ);
+    face.prepare(ITEMS);
     buildFan();
     relayout();
   });
@@ -1197,5 +1522,13 @@
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     });
+    // What the worker keeps besides its core, fetched once the page is in and the worker is in charge.
+    // A new worker may have replaced kept files: what this page fetched before proves nothing now.
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      ahead.seen.clear();
+      setTimeout(fetchAllAhead, 1500);
+    });
+    window.addEventListener('load', () => setTimeout(fetchAllAhead, 3000));
+    window.addEventListener('online', fetchAllAhead);
   }
 })();

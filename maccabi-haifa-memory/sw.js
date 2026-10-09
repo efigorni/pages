@@ -1,6 +1,7 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
-// VERSION (a hash of every precached file), ASSETS and PREFIX: edit the template, not a sw.js.
-const VERSION = 'maccabi-haifa-memory-959eb7dc073b';
+// VERSION (a hash of every file it ships), ASSETS, PREFIX, RUNTIME and RUNTIME_FILES: edit the template,
+// not a sw.js.
+const VERSION = 'maccabi-haifa-memory-c8d3992d59f6';
 const ASSETS = [
   './',
   'index.html',
@@ -89,6 +90,15 @@ const ASSETS = [
 // only ever deletes caches carrying its own prefix.
 const PREFIX = 'maccabi-haifa-memory-';
 
+// A game that precaches only its core (club.json play.precache "core": the page and its first words)
+// keeps every other picture and clip it fetches in RUNTIME, across versions. RUNTIME_FILES holds each
+// such file's content hash, and a kept copy is stored under its path plus that hash: a changed file is a
+// new key, and activate drops only the copies whose hash is no longer current. Empty when everything is
+// precached.
+const RUNTIME = '';
+const RUNTIME_FILES = {};
+const SCOPE = new URL('./', self.location).pathname;
+
 const NAV_TIMEOUT_MS = 3000;
 
 // Offline play needs every file, so one failed download fails the whole install (addAll stores
@@ -104,15 +114,25 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((key) => key.startsWith(PREFIX) && key !== VERSION).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(keys.filter((key) => key.startsWith(PREFIX) && key !== VERSION && key !== RUNTIME)
+        .map((key) => caches.delete(key))))
+      .then(() => RUNTIME && caches.open(RUNTIME).then((cache) => cache.keys().then((kept) => Promise.all(kept
+        .filter((req) => keptKey(req.url) !== req.url).map((req) => cache.delete(req))))))
       .then(() => self.clients.claim()),
   );
 });
 
-function store(request, response) {
+// The key a kept file is stored under: its path and its current hash; null for a file RUNTIME doesn't keep.
+function keptKey(url) {
+  const { pathname } = new URL(url);
+  const hash = RUNTIME && pathname.startsWith(SCOPE) && RUNTIME_FILES[pathname.slice(SCOPE.length)];
+  return hash ? `${self.location.origin}${pathname}?h=${hash}` : null;
+}
+
+function store(name, request, response) {
   if (!response || response.status !== 200 || response.type !== 'basic') return Promise.resolve();
   const copy = response.clone();
-  return caches.open(VERSION).then((cache) => cache.put(request, copy)).catch(() => {});
+  return caches.open(name).then((cache) => cache.put(request, copy)).catch(() => {});
 }
 
 function cached(request) {
@@ -146,11 +166,14 @@ function ranged(request, response) {
   });
 }
 
-function fetchAndStore(event, request) {
+function fetchAndStore(event, request, key) {
   let saved = Promise.resolve();
-  const network = fetch(request).then((response) => {
-    saved = store(request, response);
-    return response;
+  // A clip the runtime cache keeps (`key`) is fetched whole even when <audio> asks for a range, so the
+  // copy kept is the whole file; the range is cut from it, from a good answer only.
+  const whole = key && request.headers.has('range') ? new Request(request.url) : request;
+  const network = fetch(whole).then((response) => {
+    saved = key ? store(RUNTIME, key, response) : store(VERSION, whole, response);
+    return whole === request || !response.ok ? response : ranged(request, response.clone());
   });
   event.waitUntil(network.then(() => saved, () => {}));
   return network;
@@ -161,10 +184,13 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
 
   if (request.mode !== 'navigate') {
-    // VERSION hashes every precached file and a new version downloads them all again, so a hit in
-    // this version's cache is current and needs no trip to the network.
+    // VERSION hashes every file the game ships and a new version downloads its core again, so a hit in
+    // this version's cache, or a kept copy under its current hash, is current and needs no trip to the
+    // network.
+    const key = keptKey(request.url);
     event.respondWith(caches.open(VERSION).then((cache) => cache.match(request))
-      .then((hit) => (hit ? ranged(request, hit) : fetchAndStore(event, request))));
+      .then((hit) => hit || (key ? caches.open(RUNTIME).then((cache) => cache.match(key)) : undefined))
+      .then((hit) => (hit ? ranged(request, hit) : fetchAndStore(event, request, key))));
     return;
   }
 

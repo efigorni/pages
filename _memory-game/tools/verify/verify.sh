@@ -5,10 +5,11 @@
 #       The PR gate: every game at once, in parallel, headless, at 600x960 touch, in about a minute.
 #       assemble --check (the builder's lints) and the format of every shipped clip; per game, no
 #       console error and no 404; the worker controls the page, three flips and matches say their
-#       clips, installability []; an offline reload shows the photos, plays cached clips and asks a
-#       quiz question; the quiz's first question with a wrong and a right pick and their clips; a
-#       quick upgrade from <ref> (default origin/main), online then offline, for the games there.
-#       Serves the working tree, or --tree <dir>.
+#       clips, installability []; an offline reload keeps what she learned, shows the pictures, plays
+#       cached clips, asks a quiz question and opens the next new flash card; the quiz's first
+#       question with a wrong and a right pick and their clips; the state machine (the new-first
+#       deal, the learned-only quiz, flash cards); a quick upgrade from <ref> (default origin/main),
+#       online then offline, for the games there. Serves the working tree, or --tree <dir>.
 #   verify.sh live    [<game>...]        (or: sanity --live)
 #       After a merge: every deployed precached file, then sanity's browser checks on the live site.
 #   verify.sh full    [--from <ref>] [<game>...]
@@ -25,6 +26,9 @@
 #   verify.sh upgrade <old-ref> <new-ref> [<game>...]
 #       The GitHub Pages upgrade under /pages/ (sim.js): the old version installed, the new one
 #       taking over online, then offline.
+#   verify.sh runtime [<game>...]
+#       For a game that keeps files at runtime (play.precache "core"): one kept file changes, the new
+#       worker takes over, and only that file's copy is evicted (runtime_check.js).
 #
 # <game> defaults to every game (`build_page.py list`); <ref> is a commit, or `.` for the working
 # tree. --out <dir> (default: one folder per checkout under $TMPDIR) must be outside the repo: it gets
@@ -59,7 +63,7 @@ while (($#)); do
     *) ARGS+=("$1"); shift ;;
   esac
 done
-case "$cmd" in sanity|live|full|local|compare|upgrade) ;; *) usage; exit 2 ;; esac
+case "$cmd" in sanity|live|full|local|compare|upgrade|runtime) ;; *) usage; exit 2 ;; esac
 if [[ "$cmd" == live ]]; then cmd=sanity LIVE=1; fi
 OUT="$(abspath "${OUT:-${TMPDIR:-/tmp}/memory-game-verify-$(printf '%s' "$REPO" | cksum | cut -d' ' -f1)}")"
 case "$OUT/" in "$REPO"/*) die "--out must be outside the repo ($REPO)" ;; esac
@@ -212,6 +216,7 @@ case "$cmd" in
         take_port
         job "upgrade-$g" node "$HERE/sim.js" "$dir/upgrade/$g" "$old" "$root" "$PORT" --quick "$g"
       done
+      for g in "${GAMES[@]}"; do job "states-$g" node "$HERE/states/scenarios.js" "$root/$g/index.html"; done
     fi
     job quiz node "$HERE/drive.js" "$dir" "$base" --games "$(csv "${GAMES[@]}")" --vps tab-portrait --modes quiz --questions 1
     for g in "${GAMES[@]}"; do
@@ -219,7 +224,7 @@ case "$cmd" in
       if ((LIVE)); then want="$(sed -n "s/^const VERSION = '\(.*\)';$/\1/p" "$REPO/$g/sw.js")"; fi
       job "worker-$g" node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
     done
-    say "running: the worker per game, the quiz${UPGRADED[0]:+, the upgrade from $FROM per game on it}"
+    say "running: the worker per game, the quiz$(((LIVE)) || echo ", the state machine")${UPGRADED[0]:+, the upgrade from $FROM per game on it}"
     finish
     rep=(--sanity)
     if ((${#UPGRADED[@]})); then rep+=(--upgraded "$(csv "${UPGRADED[@]}")" --from "$FROM"); fi
@@ -278,6 +283,17 @@ case "$cmd" in
     drive "$b" "http://127.0.0.1:$PORT/" "$(csv "${GAMES[@]}")"
     uv run --quiet --with "pillow==$PILLOW_VERSION" python -I "$HERE/compare.py" "$a" "$b" --diffs "$OUT/compare/diffs" \
       | tee "$OUT/compare/compare.txt"
+    ;;
+  runtime)
+    pick_games "$REPO" "${ARGS[@]+"${ARGS[@]}"}"
+    setup_playwright
+    status=0
+    for g in "${GAMES[@]}"; do
+      if ! grep -q "^const RUNTIME = '..*';" "$REPO/$g/sw.js"; then continue; fi
+      take_port
+      node "$HERE/runtime_check.js" "$OUT/runtime/$g" "$REPO" "$g" "$PORT" || status=1
+    done
+    exit "$status"
     ;;
   upgrade)
     ((${#ARGS[@]} >= 2)) || die "upgrade needs two refs"
