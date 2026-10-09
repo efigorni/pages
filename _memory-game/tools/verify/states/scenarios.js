@@ -30,6 +30,11 @@ async function playToLastPair(h) {
 (async () => {
   // A squad's game (players with roles) or a word game: each has its own suites.
   const SQUAD = !boot({ noClips: true }).T.DATA.words;
+  // The engine's own suites run for every game; a word game's quiz opens with four learned words, so a
+  // suite that plays it starts with six.
+  const probe = boot({ noClips: true }).T;
+  const QUIZ_STORAGE = probe.PLAY.quiz.pool === 'learned'
+    ? [[`${probe.DATA.game}:learned`, JSON.stringify(probe.ITEMS.slice(0, 6).map((p) => p.id))]] : [];
   // ---------- S1 boot + deal ----------
   if (SQUAD) {
     const h = boot({ noClips: true });
@@ -127,7 +132,7 @@ async function playToLastPair(h) {
   }
 
   // ---------- S10 mute during finishing ----------
-  if (SQUAD) {
+  {
     const h = boot();
     await start(h);
     const last = await playToLastPair(h);
@@ -142,7 +147,7 @@ async function playToLastPair(h) {
   }
 
   // ---------- S14 restart mid-mismatch ----------
-  if (SQUAD) {
+  {
     const h = boot();
     await start(h);
     const a = h.cards()[0];
@@ -207,7 +212,7 @@ async function playToLastPair(h) {
   }
 
   // ---------- S12 decode() re-entrancy for a clip that was never prefetched ----------
-  if (SQUAD) {
+  {
     const served = new Set(['audio/name/zz.mp3']);
     const h = boot({ webAudio: true, served });
     await start(h);
@@ -343,8 +348,8 @@ async function playToLastPair(h) {
   }
 
   // ---------- QC2, QC3: a quiz reveal waits under the ↻ confirm and on a hidden page ----------
-  if (SQUAD) {
-    const h = boot({ noClips: true });
+  {
+    const h = boot({ noClips: true, storage: QUIZ_STORAGE });
     const { quiz } = h.T;
     await h.click('play-quiz');
     await h.advance(3000);
@@ -395,8 +400,8 @@ async function playToLastPair(h) {
       && h.byId.shelf.children.length === ITEMS.length && h.byId.shelf.children.every((t) => t.dataset.learned === 'false'));
     let from = h.log.length;
     await h.tile(5);
-    await h.advance(200);
-    check("F1 a tile opens that player's card, turned up; it counts as learned and its tile is ticked",
+    await h.advance(3000);
+    check("F1 a tile opens that player's card, turned up; once its line has played it counts as learned and its tile is ticked",
       h.phase() === 'card' && shelf.card.p === ITEMS[5] && shelf.card.el.dataset.state === 'up' && learned.has(ITEMS[5].id)
       && h.byId.shelf.children[5].dataset.learned === 'true' && h.byId['shelf-count'].textContent === `1 / ${ITEMS.length}`);
     check("F1 the card says the player's match clip (PLAY.voice.card)",
@@ -411,7 +416,8 @@ async function playToLastPair(h) {
     await h.click('prev');
     check('F1 ← and → page through the shelf in order and wrap around', next === ITEMS[1] && shelf.card.p === ITEMS[ITEMS.length - 1]);
     const saved = JSON.parse(h.store.get(key(h)));
-    check('F2 what she learned is stored under the game\'s own key', subset([ITEMS[5].id, ITEMS[0].id], saved), JSON.stringify(saved));
+    check('F2 what she learned is stored under the game\'s own key; a card paged past at once is not learned',
+      subset([ITEMS[5].id], saved) && !saved.includes(ITEMS[0].id) && !saved.includes(ITEMS[1].id), JSON.stringify(saved));
 
     const k = boot({ noClips: true, storage: [[key(h), JSON.stringify(ids(ITEMS.slice(0, 3)))]] });
     await k.click('play-quiz');
@@ -542,9 +548,17 @@ async function playToLastPair(h) {
       await k.click('close');
       await k.click('next-new');
       check('W4 then the next-new button opens the second word', k.T.shelf.card.p.id === ITEMS[1].id);
+      await k.advance(4000);
+      await k.click('next');
+      await k.advance(300);
+      const paged = !k.T.learned.has(ITEMS[2].id);
+      await k.click('next');
+      await k.advance(4000);
+      check('W4 a card paged past before its line ends is not learned; one left to speak is', paged
+        && !k.T.learned.has(ITEMS[2].id) && k.T.learned.has(ITEMS[3].id));
       const again = boot({ noClips: true, storage: [...k.store] });
-      check('W5 after a reload both are still learned, and the bar says "2 / N"', again.T.learned.has(ITEMS[0].id)
-        && again.T.learned.has(ITEMS[1].id) && again.byId['progress-count'].textContent === `2 / ${N}`);
+      check('W5 after a reload they are still learned, and the bar says "3 / N"', again.T.learned.has(ITEMS[0].id)
+        && again.T.learned.has(ITEMS[1].id) && again.T.learned.has(ITEMS[3].id) && again.byId['progress-count'].textContent === `3 / ${N}`);
     }
     {
       const k = boot({ noClips: true });

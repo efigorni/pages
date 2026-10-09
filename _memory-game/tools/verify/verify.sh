@@ -26,6 +26,9 @@
 #   verify.sh upgrade <old-ref> <new-ref> [<game>...]
 #       The GitHub Pages upgrade under /pages/ (sim.js): the old version installed, the new one
 #       taking over online, then offline.
+#   verify.sh runtime [<game>...]
+#       For a game that keeps files at runtime (play.precache "core"): one kept file changes, the new
+#       worker takes over, and only that file's copy is evicted (runtime_check.js).
 #
 # <game> defaults to every game (`build_page.py list`); <ref> is a commit, or `.` for the working
 # tree. --out <dir> (default: one folder per checkout under $TMPDIR) must be outside the repo: it gets
@@ -60,7 +63,7 @@ while (($#)); do
     *) ARGS+=("$1"); shift ;;
   esac
 done
-case "$cmd" in sanity|live|full|local|compare|upgrade) ;; *) usage; exit 2 ;; esac
+case "$cmd" in sanity|live|full|local|compare|upgrade|runtime) ;; *) usage; exit 2 ;; esac
 if [[ "$cmd" == live ]]; then cmd=sanity LIVE=1; fi
 OUT="$(abspath "${OUT:-${TMPDIR:-/tmp}/memory-game-verify-$(printf '%s' "$REPO" | cksum | cut -d' ' -f1)}")"
 case "$OUT/" in "$REPO"/*) die "--out must be outside the repo ($REPO)" ;; esac
@@ -280,6 +283,17 @@ case "$cmd" in
     drive "$b" "http://127.0.0.1:$PORT/" "$(csv "${GAMES[@]}")"
     uv run --quiet --with "pillow==$PILLOW_VERSION" python -I "$HERE/compare.py" "$a" "$b" --diffs "$OUT/compare/diffs" \
       | tee "$OUT/compare/compare.txt"
+    ;;
+  runtime)
+    pick_games "$REPO" "${ARGS[@]+"${ARGS[@]}"}"
+    setup_playwright
+    status=0
+    for g in "${GAMES[@]}"; do
+      if ! grep -q "^const RUNTIME = '..*';" "$REPO/$g/sw.js"; then continue; fi
+      take_port
+      node "$HERE/runtime_check.js" "$OUT/runtime/$g" "$REPO" "$g" "$PORT" || status=1
+    done
+    exit "$status"
     ;;
   upgrade)
     ((${#ARGS[@]} >= 2)) || die "upgrade needs two refs"

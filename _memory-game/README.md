@@ -60,7 +60,8 @@ origin); when storage is blocked it lasts the visit.
 
 ### Play config
 
-`club.json` `play` is the game's script; the builder checks it and puts it in DATA:
+`club.json` `play` is the game's script; the builder checks it and puts it in DATA. A squad's is `SQUAD_PLAY` in
+`build_page.py` unless its `play` overrides a key; a word game writes its own:
 
 | Key | Squad (the football games) | Words (`english-words`) |
 |---|---|---|
@@ -72,9 +73,10 @@ origin); when storage is blocked it lasts the visit.
 
 A clip kind is a folder, `audio/<kind>/<id>.mp3`: a squad records `name` and `match`, a word game `en` and `he`
 (`KINDS` in `build_page.py`). With `precache` `core`, the worker keeps every other picture and clip it fetches
-in its runtime cache, whose name hashes those files, so it outlives a new version unless one of them
-changed; online, the page fetches ahead what the next game needs (every learned word and the next new
-ones), so a learned word and the next deal play offline.
+in its runtime cache, each copy keyed by the file's content hash (`RUNTIME_FILES` in `sw.js`), so a new version
+evicts only the files that changed (`verify.sh runtime` proves it); online, the page fetches ahead what the
+next game needs (every learned word and the new ones after the current deal), so a learned word and the next
+deal play offline. A flash card counts as learned once its line has played and it has been on screen 2.5 s.
 
 Scripts run in the order data, club, engine. `CLUB.face(kit)` returns the card face's four hooks:
 `prepare(items)`, `apply(style, cw, ch, mode)`, `build(p)` (its front must keep `.photo > img`, where a
@@ -187,7 +189,9 @@ precached file with the repo, then runs the same browser checks on the live site
   state machine;
 - `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and audio-identical;
 - `verify.sh upgrade <old-ref> <new-ref>` simulates the GitHub Pages upgrade under `/pages/` with whole
-  games, online then offline.
+  games, online then offline;
+- `verify.sh runtime [<game>...]`, for a game that keeps files at runtime: one kept file changes and the new
+  worker evicts only its copy.
 
 Outputs go to `--out <dir>` (default: one folder per checkout under `$TMPDIR`; never inside the repo).
 `MEMORY_GAME_VERIFY_PORTS=8801-8804` pins the test servers' ports when several runs share a machine

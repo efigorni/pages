@@ -20,10 +20,7 @@ const OUT = path.resolve(OUT_ARG);
 const INSTR = fs.readFileSync(path.join(__dirname, 'instr.js'), 'utf8');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const say = (...a) => console.log(`[sw ${GAME}]`, ...a);
-const LEARNED_START = 25;
-// The clips a moment of the voice script says for an item (an older tree has no script: a squad's).
-const SQUAD_VOICE = { flip: ['name'], match: ['name', 'match'], ask: ['match'], wrong: ['match'], right: ['name'], card: ['match'] };
-const clipsOf = (voice, id, moment) => (voice || SQUAD_VOICE)[moment].map((kind) => `audio/${kind}/${id}.mp3`);
+const { clipsOf, LEARNED_START } = require('./voice');
 
 async function until(page, fn, timeout, arg) {
   const t0 = Date.now();
@@ -108,7 +105,12 @@ function audit(log, voice) {
   await context.addInitScript(INSTR);
   const R = { base: BASE, game: GAME, at: new Date().toISOString(), console: [], http: [] };
   const page = context.pages()[0] || await context.newPage();
-  page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') R.console.push(`${m.type()}: ${m.text()}`); });
+  // A failed resource's line carries its URL, so an expected one (an unmet word's picture offline) can be told apart.
+  page.on('console', (m) => {
+    if (m.type() !== 'error' && m.type() !== 'warning') return;
+    const at = /^Failed to load resource/.test(m.text()) && m.location() ? m.location().url : '';
+    R.console.push(`${m.type()}: ${m.text()}${at ? ` (${at})` : ''}`);
+  });
   page.on('pageerror', (e) => R.console.push(`pageerror: ${e.message}`));
   page.on('response', (r) => { if (r.status() >= 400) R.http.push(`${r.status()} ${r.url()}`); });
   page.on('requestfailed', (r) => R.http.push(`failed ${r.url()} ${r.failure() && r.failure().errorText}`));
@@ -214,7 +216,8 @@ async function steps(context, page, R) {
     const kinds = Object.keys(DATA.audio).filter((k) => k !== 'ui');
     const urls = [].concat(...items.map((p) => [`img/${p.id}.webp`, ...kinds.map((k) => `audio/${k}/${p.id}.mp3`)]));
     const missing = [];
-    for (const u of urls) if (!(await caches.match(new URL(u, location.href).href))) missing.push(u);
+    // a kept file's copy is keyed by its path plus a hash
+    for (const u of urls) if (!(await caches.match(new URL(u, location.href).href, { ignoreSearch: true }))) missing.push(u);
     return { checked: urls.length, missing, backups: (DATA.players || []).filter((p) => p.role === 'backup').map((p) => p.id) };
   });
   await page.tap('#again');
@@ -252,7 +255,8 @@ async function steps(context, page, R) {
   const line = clipsOf(R.voice, id, 'card');
   const said = await until(page, ([url, at]) => window.__log.slice(at).some((e) => (e.type === 'buf-start' || e.type === 'html-play')
     && e.url === url), 15000, [line.slice(-1)[0], cardAt]);
-  await sleep(400);
+  // It counts as learned once its line has played and it has been on screen 2.5 s.
+  await until(page, (cardId) => JSON.parse(localStorage.getItem(`${DATA.game}:learned`) || '[]').includes(cardId), 8000, id);
   R.offline.card = await page.evaluate(([cardId, at]) => {
     const card = document.querySelector('#flash-slot .card');
     const img = card.querySelector('.photo img');
@@ -271,8 +275,6 @@ async function steps(context, page, R) {
   const failed = R.http.splice(httpAt);
   R.offline.unmetPictures = failed.filter((u) => u.startsWith('failed ') && unmet(u)).length;
   R.http.push(...failed.filter((u) => !(u.startsWith('failed ') && unmet(u))));
-  if (R.offline.unmetPictures) {
-    R.console = R.console.filter((m, i) => i < consoleAt2 || !/Failed to load resource: net::ERR_(FAILED|INTERNET_DISCONNECTED)/.test(m));
-  }
+  R.console = R.console.filter((m, i) => i < consoleAt2 || !(/Failed to load resource/.test(m) && unmet(m)));
   await context.setOffline(false);
 }

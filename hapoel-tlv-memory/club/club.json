@@ -15,12 +15,5 @@
     "sheet_colors": "6d052a,ffffff,ff009d",
     "shoulder_share": 0.75,
     "shoulder_from": 0.3
-  },
-  "play": {
-    "voice": {"flip": ["name"], "match": ["name", "match"], "ask": ["match"], "wrong": ["match"], "right": ["name"], "card": ["match"]},
-    "deal": {"policy": "squad", "pairs": 15},
-    "quiz": {"pool": "all"},
-    "progress": "inventory",
-    "precache": {"policy": "all"}
   }
 }

@@ -81,6 +81,12 @@ UI_CLIPS = tuple(UI_TEXTS)
 # under audio/<kind>/<id>.mp3, and its quiz asks its own question (the quiz buttons' label).
 KINDS = {"squad": ("name", "match"), "words": ("en", "he")}
 ASK = {"squad": "מי זה?", "words": "מה זה?"}
+# A squad's script when its club.json says nothing else (club.json `play` overrides keys of it); a word game
+# writes its own.
+SQUAD_PLAY = {"voice": {"flip": ["name"], "match": ["name", "match"], "ask": ["match"], "wrong": ["match"],
+                        "right": ["name"], "card": ["match"]},
+              "deal": {"policy": "squad", "pairs": 15}, "quiz": {"pool": "all"}, "progress": "inventory",
+              "precache": {"policy": "all"}}
 # The moments the voice script (club.json play.voice) gives clips to: memory's flip and match, the quiz's
 # question, wrong pick and right pick, and a flash card.
 MOMENTS = ("flip", "match", "ask", "wrong", "right", "card")
@@ -152,6 +158,8 @@ def play_of(game):
     """club.json `play`, checked: the voice script and the deal, quiz, progress and precache policies
     (README, "Play config"). The engine reads it from DATA; the precache policy is the builder's too."""
     kind, play = kind_of(game), config(game).get("play")
+    if kind == "squad":
+        play = {**SQUAD_PLAY, **(play or {})}
     where = f"{game}/{CONFIG} play"
     if not isinstance(play, dict):
         fail(f"{where}: missing")
@@ -396,6 +404,14 @@ def check_ui_clips(game):
     return problems
 
 
+def check_apart(game):
+    """play.quiz.apart names words of this game: on the roster, not left out."""
+    ids = {p["id"] for p in items_of(read_roster(game))}
+    left = config(game).get("leave_out", {})
+    return [f"club.json play.quiz.apart: {i} is {'left out' if i in left else 'not on the roster'}"
+            for pair in play_of(game)["quiz"].get("apart", []) for i in pair if i not in ids]
+
+
 def check_og(game):
     """The link preview's image the head points at: a JPEG small enough for WhatsApp to show."""
     path = REPO / game / OG_IMAGE
@@ -551,22 +567,22 @@ def assemble(game, check):
             fail(f"{game}: precache entry {rel} does not exist")
         digest.update(rel.encode())
         digest.update(html_.encode() if rel == "index.html" else path.read_bytes())
-    kept = hashlib.sha256()
-    for f in later:
-        kept.update(f.relative_to(page).as_posix().encode())
-        kept.update(f.read_bytes())
-    digest.update(kept.digest() if later else b"")
+    # Each kept file's content hash: the worker keys its copy by it (sw.template.js RUNTIME_FILES).
+    kept = {f.relative_to(page).as_posix(): hashlib.sha256(f.read_bytes()).hexdigest()[:12] for f in later}
+    digest.update(json.dumps(kept, sort_keys=True).encode() if kept else b"")
     digest.update(b"sw.template.js")
     digest.update(template.encode())
     version = f"{prefix}{digest.hexdigest()[:12]}"
-    runtime = f"{prefix}runtime-{kept.hexdigest()[:12]}" if later else ""
+    runtime = f"{prefix}runtime" if kept else ""
 
     new_sw = template
     for pattern, value, flags in (
             (r"^const VERSION = .*;$", f"const VERSION = '{version}';", re.M),
             (r"^const ASSETS = .*?;$", "const ASSETS = " + json.dumps(assets, indent=2).replace('"', "'") + ";", re.M | re.S),
             (r"^const PREFIX = .*;$", f"const PREFIX = '{prefix}';", re.M),
-            (r"^const RUNTIME = .*;$", f"const RUNTIME = '{runtime}';", re.M)):
+            (r"^const RUNTIME = .*;$", f"const RUNTIME = '{runtime}';", re.M),
+            (r"^const RUNTIME_FILES = .*?;$", "const RUNTIME_FILES = " + (json.dumps(kept, indent=0, sort_keys=True)
+             .replace('"', "'") if kept else "{}") + ";", re.M | re.S)):
         new_sw, n = re.subn(pattern, lambda m, v=value: v, new_sw, count=1, flags=flags)
         if n != 1:
             fail(f"_memory-game/sw.template.js is missing its {pattern.split()[1]} line")
@@ -575,7 +591,7 @@ def assemble(game, check):
     strays = orphans(game, read_roster(game))
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
-    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game)
+    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game) + check_apart(game)
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:

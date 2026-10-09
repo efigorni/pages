@@ -337,14 +337,9 @@ function wrongCard(i) {
   };
 }
 
-// The clips a moment of the game's voice script says for an item (`voice`: DATA.play.voice; an older
-// tree has none, and says a squad's).
-const SQUAD_VOICE = { flip: ['name'], match: ['name', 'match'], ask: ['match'], wrong: ['match'], right: ['name'], card: ['match'] };
-const clipsOf = (voice, id, moment) => (voice || SQUAD_VOICE)[moment].map((kind) => `audio/${kind}/${id}.mp3`);
-
 // A word game asks only learned words (club.json play.quiz.pool "learned"), so its quiz starts with
 // the first LEARNED_START words learned.
-const LEARNED_START = 25;
+const { clipsOf, LEARNED_START } = require('./voice');
 
 // The quiz, played to the end at this viewport: on the first question a wrong pick (it turns over
 // and says that item's line, which the right pick then cuts off), then the right one; every question

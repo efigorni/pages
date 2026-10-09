@@ -1412,6 +1412,8 @@ const CLUB = {
   // A wrong pick's clip waits for the soft sound and for the card to turn over (base.css: .3 s + flip).
   const NOPE_SAY_MS = 650;
   const FLIP_MS = 460;
+  // A flash card counts as learned once its line has played and it has been on screen this long.
+  const SEEN_MS = 2500;
   const MISMATCH_MS = 2200;
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
@@ -2097,6 +2099,7 @@ const CLUB = {
     layout();
     warmImages(picks);
     sound.prefetch(picks.flatMap((p) => clipUrls(p, ['flip', 'match'])).concat(clip.ui('win').url));
+    ahead.dealt = picks; // offline, the 'online' event fetches what comes after them
     fetchAhead(upcoming(picks));
 
     if (!reducedMotion.matches) {
@@ -2452,8 +2455,9 @@ const CLUB = {
     face.fit(shelf.card.el, shelf.card.p, applyFace(slotEl, cw, ch, faceMode(cw, ch)));
   }
 
-  // One item, big: the card turns over, says its line (PLAY.voice.card) and counts as learned. The next
-  // card's picture and clips come in meanwhile, so "next" shows at once.
+  // One item, big: the card turns over and says its line (PLAY.voice.card); it counts as learned once the
+  // line has played and it has been on screen SEEN_MS (a muted page or a failed clip too), never when she
+  // pages on first. The next card's picture and clips come in meanwhile, so "next" shows at once.
   function showCard(index) {
     const n = ITEMS.length;
     shelf.at = ((index % n) + n) % n;
@@ -2471,8 +2475,10 @@ const CLUB = {
       card.dataset.state = 'up';
       sound.sfx('flip');
     }, reducedMotion.matches ? 0 : 120);
-    markLearned(p);
-    sound.say(voice('card', p));
+    const shown = performance.now();
+    sound.say(voice('card', p)).then(() => setTimeout(() => {
+      if (shelf.card && shelf.card.el === card) markLearned(p);
+    }, Math.max(0, SEEN_MS - (performance.now() - shown))));
     const after = ITEMS[(shelf.at + 1) % n];
     warmImages([after]);
     sound.prefetch(clipUrls(after, ['card']));
@@ -2504,7 +2510,7 @@ const CLUB = {
   // PLAY.precache "core" (a word game): the worker precaches the page and the first items, and keeps
   // every other picture and clip the page fetches. Online, the page fetches ahead what the next game
   // needs, so it plays offline too: every learned item (memory's review, the quiz) and the next new ones.
-  const ahead = { queue: [], busy: 0, seen: new Set() };
+  const ahead = { queue: [], busy: 0, seen: new Set(), dealt: [] };
 
   // The next deal's new items: those after the ones dealt now, as if she learns them all.
   function upcoming(dealt = []) {
@@ -2529,7 +2535,8 @@ const CLUB = {
     while (ahead.busy < 3 && ahead.queue.length) {
       const url = ahead.queue.shift();
       ahead.busy += 1;
-      caches.match(new URL(url, location.href).href)
+      // any copy of it, whatever hash the worker keys it by
+      caches.match(new URL(url, location.href).href, { ignoreSearch: true })
         .then((hit) => hit || fetch(url).then((r) => {
           if (!r.ok) throw new Error(String(r.status));
           return r.blob();
@@ -2542,8 +2549,9 @@ const CLUB = {
     }
   }
 
+  // Every learned item and the new ones after the current deal.
   function fetchAllAhead() {
-    fetchAhead(learned.items().concat(upcoming()));
+    fetchAhead(learned.items().concat(upcoming(ahead.dealt)));
   }
 
   /* ---------- overlays ---------- */
@@ -2907,7 +2915,11 @@ const CLUB = {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     });
     // What the worker keeps besides its core, fetched once the page is in and the worker is in charge.
-    navigator.serviceWorker.addEventListener('controllerchange', () => setTimeout(fetchAllAhead, 1500));
+    // A new worker may have replaced kept files: what this page fetched before proves nothing now.
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      ahead.seen.clear();
+      setTimeout(fetchAllAhead, 1500);
+    });
     window.addEventListener('load', () => setTimeout(fetchAllAhead, 3000));
     window.addEventListener('online', fetchAllAhead);
   }
