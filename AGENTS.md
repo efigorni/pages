@@ -17,7 +17,11 @@ Whenever you create, import, rename, or delete an HTML page:
 Kept private on purpose, at the owner's request: each stays out of `index.html` and the catalog below, and carries `<meta name="robots" content="noindex, nofollow">`.
 - **Every memory game** is unlisted: any folder at the root with a `club/club.json` (`python3 -I _memory-game/tools/page/build_page.py list` names them): a football club's memory game for a young child, at `/pages/<folder>/`. Never add one to `index.html` or the catalog, never remove its `noindex`, and never delete one, or `_memory-game/`, as an orphan. A new club needs no edit here.
 
-Every memory game is built from `_memory-game/`, which is not a page. A game's `index.html` and `sw.js` are generated whole from its `club/` sources and `_memory-game/`: edit those (or refresh the roster) and run `python3 -I _memory-game/tools/page/build_page.py assemble`, never the generated files. A shared change changes every game, so commit and verify all of them (`_memory-game/tools/verify/verify.sh`); run `assemble --check` before committing. Adding or refreshing a club: see `_memory-game/README.md`.
+Every memory game is built from `_memory-game/`, which is not a page. A game's `index.html` and `sw.js` are generated whole from its `club/` sources and `_memory-game/`: edit those (or refresh the roster) and run `python3 -I _memory-game/tools/page/build_page.py assemble`, never the generated files. A shared change changes every game, so commit and verify all of them. Adding or refreshing a club: see `_memory-game/README.md`.
+
+Testing the memory games (`_memory-game/tools/verify/verify.sh`, details in `_memory-game/README.md`):
+- **`verify.sh sanity` is the default gate** for every commit and PR: every game in parallel in about a minute (it includes `assemble --check`). After a merge, `verify.sh live`.
+- **`verify.sh full`** (about an hour) only when the engine's behaviour is deliberately refactored across every game, or when asked.
 
 ### 2. Card Design Standard in `index.html`
 Each card in `index.html` must follow the aesthetic established by `gibush.html`:

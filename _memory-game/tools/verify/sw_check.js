@@ -6,7 +6,8 @@
 //   node sw_check.js <base-url> <game> <out-dir> [<want-version>]
 //   e.g. node sw_check.js http://127.0.0.1:8781/ hapoel-tlv-memory /tmp/v/local
 //        node sw_check.js https://efigorni.github.io/pages/ hapoel-tlv-memory /tmp/v/live hapoel-tlv-memory-abc123
-// Writes <out-dir>/sw-<game>.json and <out-dir>/sw-<game>-offline.png.
+// Writes <out-dir>/sw-<game>.json (with `failure` and what it had found, if a step threw) and
+// <out-dir>/sw-<game>-offline.png. Exits 1 if a step threw.
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
@@ -102,12 +103,43 @@ function audit(log) {
   page.on('pageerror', (e) => R.console.push(`pageerror: ${e.message}`));
   page.on('response', (r) => { if (r.status() >= 400) R.http.push(`${r.status()} ${r.url()}`); });
   page.on('requestfailed', (r) => R.http.push(`failed ${r.url()} ${r.failure() && r.failure().errorText}`));
+  try {
+    await steps(context, page, R);
+  } catch (e) {
+    R.failure = String(e && e.message || e).split('\n')[0];
+  }
+  R.console = R.console.filter((m) => !m.includes('Banner not shown'));
+  fs.writeFileSync(path.join(OUT, `sw-${GAME}.json`), JSON.stringify(R, null, 1));
+  say(JSON.stringify({ failure: R.failure, controlled: R.controlled, installability: R.installability, manifestErrors: R.manifestErrors,
+    appId: R.appId, online: R.online && R.online.audio, offlineProbe: R.offlineProbe,
+    offline: R.offline && { controlled: R.offline.state && R.offline.state.controlled, imgs: R.offline.imgs, audio: R.offline.audio },
+    console: R.console, http: R.http }));
+  await context.close();
+  fs.rmSync(profile, { recursive: true, force: true });
+  process.exit(R.failure ? 1 : 0);
+})().catch((e) => { console.error(e); process.exit(1); });
+
+// Waits up to 2 minutes for the worker (of version `want`, if given) to control the page; gives up after
+// 20 s if the page has registered no worker at all (it threw before registering, or the install failed).
+async function controlled(page, want) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < 120000) {
+    const s = await page.evaluate(async (v) => {
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) return 'none';
+      if (!reg.active || reg.active.state !== 'activated' || !navigator.serviceWorker.controller) return 'pending';
+      return !v || (await caches.keys()).includes(v) ? 'yes' : 'pending';
+    }, want).catch(() => 'pending');
+    if (s === 'yes') return true;
+    if (s === 'none' && Date.now() - t0 > 20000) return false;
+    await sleep(500);
+  }
+  return false;
+}
+
+async function steps(context, page, R) {
   await page.goto(`${BASE}${GAME}/`, { waitUntil: 'load' });
-  R.controlled = await until(page, async (v) => {
-    const reg = await navigator.serviceWorker.getRegistration();
-    if (!reg || !reg.active || reg.active.state !== 'activated' || !navigator.serviceWorker.controller) return false;
-    return !v || (await caches.keys()).includes(v);
-  }, 120000, WANT || '');
+  R.controlled = await controlled(page, WANT || '');
   R.online = { state: await state(page) };
   await play(page);
   let at = await page.evaluate(() => window.__log.length);
@@ -156,24 +188,23 @@ function audit(log) {
     return { checked: urls.length, missing, backups: DATA.players.filter((p) => p.role === 'backup').map((p) => p.id) };
   });
   await page.tap('#again');
+  const quizAt = await page.evaluate(() => window.__log.length);
   await page.tap('#yes-quiz');
   const answer = await page.evaluate(() => document.getElementById('picks').dataset.answer);
-  const heard = await until(page, (id) => window.__log.some((e) => (e.type === 'buf-start' || e.type === 'html-play') && e.url === `audio/match/${id}.mp3`), 15000, answer);
+  // Only what played after the tap: the asked player may be one the memory game just matched.
+  const heard = await until(page, ([id, at]) => window.__log.slice(at).some((e) => (e.type === 'buf-start' || e.type === 'html-play')
+    && e.url === `audio/match/${id}.mp3`), 15000, [answer, quizAt]);
   await sleep(600);
-  R.offline.quiz = await page.evaluate((id) => {
-    const clips = window.__log.filter((e) => e.type === 'buf-start' || e.type === 'html-play').map((e) => e.url);
+  R.offline.quiz = await page.evaluate(([id, at]) => {
+    const clips = window.__log.slice(at).filter((e) => e.type === 'buf-start' || e.type === 'html-play').map((e) => e.url);
     const imgs = [...document.querySelectorAll('#picks .ask img')];
-    return { answer: id, clips, imgs: [imgs.length, imgs.filter((x) => x.complete && x.naturalWidth > 0).length] };
-  }, answer);
-  R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips.slice(-2)) === JSON.stringify(['audio/ui/start.mp3', `audio/match/${answer}.mp3`])
+    // What the page did from the tap on: the clue when the question's clip never starts.
+    const events = window.__log.slice(at).filter((e) => e.type !== 'fetch' || e.status !== 200).slice(0, 80)
+      .map((e) => [e.t, e.type, e.url || e.state || e.msg || e.label || ''].join(' '));
+    return { answer: id, clips, imgs: [imgs.length, imgs.filter((x) => x.complete && x.naturalWidth > 0).length], events };
+  }, [answer, quizAt]);
+  R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips) === JSON.stringify(['audio/ui/start.mp3', `audio/match/${answer}.mp3`])
     && R.offline.quiz.imgs[0] === 4 && R.offline.quiz.imgs[1] === 4;
   await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-quiz.png`) });
   await context.setOffline(false);
-  R.console = R.console.filter((m) => !m.includes('Banner not shown'));
-  fs.writeFileSync(path.join(OUT, `sw-${GAME}.json`), JSON.stringify(R, null, 1));
-  say(JSON.stringify({ controlled: R.controlled, installability: R.installability, manifestErrors: R.manifestErrors, appId: R.appId,
-    online: R.online.audio, offlineProbe: R.offlineProbe, offline: { controlled: R.offline.state.controlled, imgs: R.offline.imgs, audio: R.offline.audio },
-    console: R.console, http: R.http }));
-  await context.close();
-  fs.rmSync(profile, { recursive: true, force: true });
-})().catch((e) => { console.error(e); process.exit(1); });
+}

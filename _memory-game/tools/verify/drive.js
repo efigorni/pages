@@ -1,13 +1,14 @@
 // Seeded, instrumented playthroughs of the memory games, for P9 and for before/after comparison.
 //
 //   node drive.js <out-dir> <base-url> --games a,b [--vps tab-portrait,...] [--modes shots,audio,quiz]
-//                 [--reduced both|on|off] [--seed N] [--jobs N]
+//                 [--reduced both|on|off] [--seed N] [--jobs N] [--questions N]
 //
 // <base-url> serves a tree whose root holds the game folders (e.g. http://127.0.0.1:8767/). Service
 // workers are blocked, so two runs differ only by the page code. `shots` takes start, focus, install,
 // mid, confirm and win screenshots, the DOM and the computed HUD styles; `audio` plays a whole game
 // and logs every clip; `quiz` plays a whole quiz (a wrong pick that turns over and says who it is,
-// every player once, the end) with question, wrong, reveal and end screenshots and every clip logged.
+// every player once, the end) with question, wrong, reveal and end screenshots and every clip logged;
+// --questions N stops it after the Nth right pick (the sanity check plays one).
 // Output: <out-dir>/<game>/<vp>[-rm]-<mode>/{*.png,result.json}
 const fs = require('fs');
 const path = require('path');
@@ -24,6 +25,7 @@ const MODES = opt('modes', 'shots').split(',');
 const REDUCED = opt('reduced', 'off');
 const SEED = Number(opt('seed', '20261008'));
 const JOBS = Number(opt('jobs', '4'));
+const QUESTIONS = Number(opt('questions', '0'));
 const INSTR = fs.readFileSync(path.join(__dirname, 'instr.js'), 'utf8');
 if (!GAMES.length || !baseUrl) {
   console.error('usage: node drive.js <out-dir> <base-url> --games a,b [...]');
@@ -349,11 +351,12 @@ async function quizFlow(page, vp, dir, res) {
     .map((p) => ({ id: p.id, number: String(p.number), name: p.name_he })));
   res.pool = players.map((p) => p.id);
   const faces = Object.fromEntries(players.map((p) => [p.id, p]));
+  const asking = QUESTIONS > 0 ? Math.min(QUESTIONS, res.pool.length) : res.pool.length;
   res.questions = [];
   let from = await logLen();
   await mark(page, 'start');
   await tapSel(page, vp, '#play-quiz');
-  for (let n = 0; n < res.pool.length; n++) {
+  for (let n = 0; n < asking; n++) {
     const q = { n, asked: await until(page, () => document.getElementById('app').dataset.phase === 'ask', 10000) };
     Object.assign(q, await page.evaluate(() => ({
       id: document.getElementById('picks').dataset.answer,
@@ -393,7 +396,7 @@ async function quizFlow(page, vp, dir, res) {
       await settle(page);
       await snap('quiz-reveal');
     }
-    if (n === res.pool.length - 1) break;
+    if (n === asking - 1) break;
     from = await logLen();
     if (n < 3) {
       q.auto = await until(page, (id) => document.getElementById('picks').dataset.answer !== id, 12000, q.id);
@@ -405,6 +408,7 @@ async function quizFlow(page, vp, dir, res) {
     }
   }
   res.found = await page.evaluate(() => document.getElementById('app').dataset.found);
+  if (asking < res.pool.length) return;
   res.won = await until(page, () => document.getElementById('app').dataset.phase === 'won', 15000);
   await settle(page);
   await snap('quiz-end');
@@ -412,15 +416,18 @@ async function quizFlow(page, vp, dir, res) {
 
 // The quiz's clips, in order: start, then per question the asked player's match clip alone, the
 // wrong player's match clip after a wrong pick, the name on the right pick; then win. The right pick
-// cuts off the wrong player's clip.
+// cuts off the wrong player's clip. A quiz stopped early (--questions) has no win, and the next
+// question may already have started when the log is read.
 function analyseQuiz(res) {
   const log = res.log || [];
   const qs = res.questions || [];
+  const pool = res.pool || [];
+  const whole = qs.length === pool.length;
   const asked = qs.map((q) => q.id);
   const expected = ['audio/ui/start.mp3'].concat(...qs.map((q) => [`audio/match/${q.id}.mp3`]
-    .concat(q.wrong ? [`audio/match/${q.wrong.id}.mp3`] : [], [`audio/name/${q.id}.mp3`])), 'audio/ui/win.mp3');
-  const sequence = log.filter((e) => CLIP_EVENTS.includes(e.type)).map((e) => e.url);
-  const pool = res.pool || [];
+    .concat(q.wrong ? [`audio/match/${q.wrong.id}.mp3`] : [], [`audio/name/${q.id}.mp3`])), whole ? ['audio/ui/win.mp3'] : []);
+  const all = log.filter((e) => CLIP_EVENTS.includes(e.type)).map((e) => e.url);
+  const sequence = whole ? all : all.slice(0, expected.length);
   const windows = markWindows(log, CLIP_EVENTS.concat('buf-stop', 'html-pause'));
   const wrongs = windows.map((w, j) => ({ ...w, next: windows[j + 1] })).filter((w) => w.label.startsWith('wrong'));
   const started = (events) => events.filter((e) => CLIP_EVENTS.includes(e.type)).map((e) => e.url);
