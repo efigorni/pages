@@ -607,6 +607,28 @@ circle.cut { fill: var(--big-bg); }
 .say:active { transform: translateY(clamp(2px, .5vmin, 4px)); }
 .say svg { width: 56%; height: 56%; }
 
+/* "hear it again" (the quiz's question, a flash card's line): a speech bubble with a play mark, never a
+   second speaker, which is the mute button's look; the drop follows the bubble's tail */
+.bubble {
+  position: relative;
+  border-radius: 32%;
+  box-shadow: none;
+  filter: drop-shadow(0 clamp(3px, .6vmin, 5px) 0 var(--big-drop));
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  right: 12%;
+  bottom: -17%;
+  width: 30%;
+  height: 27%;
+  background: inherit;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.bubble svg { width: 50%; height: 50%; translate: 6% 0; }
+
 .question {
   min-width: 0;
   margin: 0;
@@ -798,7 +820,9 @@ circle.cut { fill: var(--big-bg); }
   object-fit: contain;
 }
 
-/* the mark at the corner: a tick on a learned one, a dot on one still new, which is dimmed */
+/* the mark at the corner: on an item she has met, a tick whose colour says how well she knows it (her
+   first-try quiz answers, the engine's data-level): grey, then light and medium green, then the full
+   green of a learned one; on one still new, a dot, and the tile dimmed */
 .tile::after {
   content: "";
   position: absolute;
@@ -811,8 +835,13 @@ circle.cut { fill: var(--big-bg); }
   --mark: calc(var(--tile) * .3);
 }
 
+.tile { --tick: var(--learned, #22a95f); }
+.tile[data-level="0"] { --tick: #a2acb8; }
+.tile[data-level="1"] { --tick: #9fdab6; }
+.tile[data-level="2"] { --tick: #5ec48c; }
+
 .tile[data-learned="true"]::after {
-  background: var(--learned, #22a95f) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-8.5' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 74% no-repeat;
+  background: var(--tick) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-8.5' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 74% no-repeat;
   box-shadow: 0 0 0 max(2px, calc(var(--mark) * .08)) #fff, 0 2px 6px rgba(0, 0, 0, .3);
 }
 

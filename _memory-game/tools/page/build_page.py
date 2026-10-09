@@ -19,6 +19,8 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
   club/roster.json      season and players (roles starter, bench, backup, in that order); written by `data`
+  club/avoid.json       a word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it;
+                        checked against the roster, and each word's list (with play.quiz.apart) is its `avoid`
 
 The builder writes two files per game, whole:
 
@@ -74,6 +76,8 @@ from roster import SHIPPED, check as check_players  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
+# A word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it from CMUdict.
+AVOID = "club/avoid.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
 UI_CLIPS = tuple(UI_TEXTS)
@@ -90,6 +94,26 @@ SQUAD_PLAY = {"voice": {"flip": ["name"], "match": ["name", "match"], "ask": ["m
 # The moments the voice script (club.json play.voice) gives clips to: memory's flip and match, the quiz's
 # question, wrong pick and right pick, and a flash card.
 MOMENTS = ("flip", "match", "ask", "wrong", "right", "card")
+# How a word game's quiz picks its questions and how every game scores an answer (engine.js LEARN, whose
+# defaults are round 2's simulation's): play.quiz may set any of these.
+LEARN_KEYS = {
+    "size": ("questions per quiz, >= 1", lambda v, q: _int(v) and v >= 1),
+    "master": ("first-pick successes that make an item fully learned, >= 1", lambda v, q: _int(v) and v >= 1),
+    "newMin": ("never-asked words per quiz, at least, >= 0", lambda v, q: _int(v) and v >= 0),
+    "newMax": ("never-asked words per quiz, at most, >= newMin", lambda v, q: _int(v) and v >= q.get("newMin", 1)),
+    "sureMin": ("fully learned words per quiz, >= 0", lambda v, q: _int(v) and v >= 0),
+    "growth": ("a learning level's wait multiplier, >= 1", lambda v, q: _num(v) and v >= 1),
+    "jitter": ("the random spread on the overdue order, >= 0", lambda v, q: _num(v) and v >= 0),
+    "decrement": ("\"none\", \"demote\" or \"dec\"", lambda v, q: v in ("none", "demote", "dec")),
+}
+
+
+def _int(v):
+    return isinstance(v, int) and not isinstance(v, bool)
+
+
+def _num(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say",
@@ -182,6 +206,9 @@ def play_of(game):
             fail(f"{where}.quiz: pool \"learned\" wants unlock >= 4 (the four cards) and size >= 1")
     elif quiz.get("pool") != "all":
         fail(f"{where}.quiz.pool: \"all\" or \"learned\"")
+    for key, (want, ok) in LEARN_KEYS.items():
+        if key in quiz and not ok(quiz[key], quiz):
+            fail(f"{where}.quiz.{key}: {want}, not {quiz[key]!r}")
     apart = quiz.get("apart", [])
     if not (isinstance(apart, list) and all(isinstance(p, list) and len(p) == 2 and all(isinstance(i, str) for i in p)
                                             for p in apart)):
@@ -288,10 +315,34 @@ def orphans(game, roster):
                   for f in (page / d).glob(f"*{suffix}") if f.stem not in ids)
 
 
+def sound_alikes(game):
+    """A word game's club/avoid.json, {id: {other id: why}}, or None when it has none."""
+    path = REPO / game / AVOID
+    if not path.is_file():
+        return None
+    data = json.loads(read(path))
+    if not (isinstance(data, dict) and all(isinstance(v, dict) for v in data.values())):
+        fail(f"{game}/{AVOID}: {{id: {{other id: why}}}}, one line per word (tools/words/neighbours.py writes it)")
+    return data
+
+
+def avoid_of(game):
+    """What a word game's quiz never offers as a wrong answer to each word: its sound-alikes (club/avoid.json)
+    and its look-alike pictures (club.json play.quiz.apart). {id: sorted ids}, for the words that have any."""
+    avoid = {wid: set(others) for wid, others in (sound_alikes(game) or {}).items()}
+    for a, b in play_of(game)["quiz"].get("apart", []):
+        avoid.setdefault(a, set()).add(b)
+        avoid.setdefault(b, set()).add(a)
+    return {wid: sorted(others) for wid, others in avoid.items() if others}
+
+
 def data_line(game, roster):
-    """The DATA script: the roster, the clips that exist (per kind, in roster order), the game's folder (the
-    key of what she has learned) and its play config."""
+    """The DATA script: the roster (a word game's words with their `avoid`), the clips that exist (per kind,
+    in roster order), the game's folder (the key of what she knows) and its play config."""
     page = REPO / game
+    if "words" in roster:
+        avoid = avoid_of(game)
+        roster = {**roster, "words": [{**w, "avoid": avoid[w["id"]]} if w["id"] in avoid else w for w in roster["words"]]}
     ids = [p["id"] for p in items_of(roster)]
     audio = {"ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()]}
     for kind in KINDS[kind_of(game)]:
@@ -405,11 +456,29 @@ def check_ui_clips(game):
 
 
 def check_apart(game):
-    """play.quiz.apart names words of this game: on the roster, not left out."""
+    """play.quiz.apart names words of this game: on the roster, not left out. A word game's club/avoid.json is
+    its roster's: a line per word and no other, ids on the roster, never the word itself, every pair both ways."""
     ids = {p["id"] for p in items_of(read_roster(game))}
     left = config(game).get("leave_out", {})
-    return [f"club.json play.quiz.apart: {i} is {'left out' if i in left else 'not on the roster'}"
-            for pair in play_of(game)["quiz"].get("apart", []) for i in pair if i not in ids]
+    where = lambda i: "left out" if i in left else "not on the roster"  # noqa: E731
+    problems = [f"club.json play.quiz.apart: {i} is {where(i)}"
+                for pair in play_of(game)["quiz"].get("apart", []) for i in pair if i not in ids]
+    if kind_of(game) != "words":
+        return problems
+    alike = sound_alikes(game)
+    if alike is None:
+        return problems + [f"{AVOID} is missing (uv run --with cmudict==1.1.3 python -I "
+                           f"_memory-game/tools/words/neighbours.py {game})"]
+    stale = [f"{i} has no line" for i in sorted(ids - set(alike))] + [f"{i} is {where(i)}" for i in sorted(set(alike) - ids)]
+    if stale:
+        more = f" and {len(stale) - 5} more" if len(stale) > 5 else ""
+        problems.append(f"{AVOID} is not this roster's (run tools/words/neighbours.py again): {', '.join(stale[:5])}{more}")
+    for wid, others in alike.items():
+        problems += [f"{AVOID}: {wid}'s {o} is {where(o)}" for o in others if o not in ids]
+        problems += [f"{AVOID}: {wid} avoids itself" for o in others if o == wid]
+        problems += [f"{AVOID}: {wid} avoids {o}, but not the other way round" for o in others
+                     if o in alike and wid not in alike[o]]
+    return problems
 
 
 def check_og(game):

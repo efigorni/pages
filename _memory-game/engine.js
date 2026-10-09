@@ -20,9 +20,26 @@
   // A wrong pick's clip waits for the soft sound and for the card to turn over (base.css: .3 s + flip).
   const NOPE_SAY_MS = 650;
   const FLIP_MS = 460;
-  // A flash card counts as learned once its line has played and it has been on screen this long.
+  // A flash card counts as met once its line has played and it has been on screen this long.
   const SEEN_MS = 2500;
   const MISMATCH_MS = 2200;
+  // A face-up card in memory says its whole line again when tapped, unless it turned up this recently (a
+  // double tap). Two cards that don't match wait for that line, and HOLD_MS more, before they turn back,
+  // but never longer than HOLD_MAX_MS past their own time, in case the clip never says it has ended.
+  const DOUBLE_TAP_MS = 500;
+  const HOLD_MS = 400;
+  const HOLD_MAX_MS = 8000;
+  // How a word game's quiz picks its questions, and how every game scores an answer: the policy round 2's
+  // simulation chose (P4, "hybrid"), with its constants, which PLAY.quiz may set (README, "Play config"):
+  //   size       questions per quiz (fewer while she has met fewer words);
+  //   master     first-pick successes that make an item fully learned (the full green tick);
+  //   newMin/Max never-asked words per quiz: at least newMin while there are any, at most newMax;
+  //   sureMin    fully learned words per quiz, the "sure success" questions;
+  //   growth     a learning word's wait between asks, in quizzes, grows this much per level;
+  //   jitter     a random spread on the overdue order, so two quizzes in a row differ;
+  //   decrement  a first-pick miss: 'demote' sends a fully learned item back to master - 1, 'dec' takes
+  //              one off any score, 'none' never takes one back.
+  const LEARN = { size: 10, master: 3, newMin: 1, newMax: 4, sureMin: 3, growth: 2, jitter: 0.5, decrement: 'demote', ...PLAY.quiz };
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
@@ -539,43 +556,190 @@
     return side;
   }
 
-  /* ---------- what she has learned: a match in memory, or a flash card she looked at ---------- */
+  /* ---------- what she knows: the items she has met, and how well (her first-try quiz answers) ---------- */
 
-  // Kept per game on this device. The games share one origin, so the key carries the game's folder;
-  // private mode or blocked storage keeps it for this visit only.
-  const learned = (() => {
-    const key = `${DATA.game}:learned`;
+  // Per item: `encountered`, she has met it (a match in memory, a flash card she looked at, or a quiz
+  // question); `firstTry`, the quiz questions she answered with her first pick, the only success there is
+  // (a match, a flash card or a right pick after a wrong one count for nothing); `misses`, the questions
+  // whose first pick was wrong; `lastAsked`, the quiz that last asked it, on the quiz clock `session`
+  // (one tick per quiz started; no `lastAsked`: never asked). Kept per game on this device, in
+  // `<game>:stats` as { session, items } (the games share one origin, so the key carries the game's
+  // folder). `<game>:learned`, the list of the items met, is what older pages kept: it is read at every
+  // start, so nothing they wrote is lost (each such item met, never asked), and kept in step, so they still
+  // find it. Private mode or blocked storage keeps it all for this visit only.
+  const stats = (() => {
+    const key = `${DATA.game}:stats`;
+    const legacy = `${DATA.game}:learned`;
     let store = null;
     try { store = window.localStorage; } catch (e) { /* storage blocked */ }
-    let saved = [];
-    try { saved = JSON.parse((store && store.getItem(key)) || '[]'); } catch (e) { /* unreadable */ }
-    const ids = new Set(Array.isArray(saved) ? saved.filter((id) => typeof id === 'string') : []);
+    const load = (k) => {
+      try { return JSON.parse((store && store.getItem(k)) || 'null'); } catch (e) { return null; }
+    };
+    const count = (n) => (Number.isInteger(n) && n > 0 ? n : 0);
+    const items = Object.create(null);
+    let session = 0;
+    const entry = (id) => items[id] || (items[id] = { encountered: false, firstTry: 0, misses: 0 });
+    const saved = load(key);
+    if (saved && typeof saved === 'object' && saved.items && typeof saved.items === 'object') {
+      session = count(saved.session);
+      Object.entries(saved.items).forEach(([id, s]) => {
+        if (!s || typeof s !== 'object') return;
+        Object.assign(entry(id), { encountered: s.encountered === true, firstTry: count(s.firstTry), misses: count(s.misses) });
+        if (Number.isInteger(s.lastAsked) && s.lastAsked >= 0) items[id].lastAsked = s.lastAsked;
+      });
+    }
+    const met = load(legacy);
+    if (Array.isArray(met)) met.forEach((id) => { if (typeof id === 'string') entry(id).encountered = true; });
+    function save() {
+      if (!store) return;
+      try {
+        store.setItem(key, JSON.stringify({ session, items }));
+        store.setItem(legacy, JSON.stringify(Object.keys(items).filter((id) => items[id].encountered)));
+      } catch (e) { /* full or blocked */ }
+    }
     return {
-      has: (id) => ids.has(id),
-      // true when it is new
-      add(id) {
-        if (ids.has(id)) return false;
-        ids.add(id);
-        try { if (store) store.setItem(key, JSON.stringify([...ids])); } catch (e) { /* full or blocked */ }
+      met: (id) => !!items[id] && items[id].encountered,
+      // true when she meets it now
+      meet(id) {
+        if (entry(id).encountered) return false;
+        items[id].encountered = true;
+        save();
         return true;
       },
-      // the game's learned items, in teaching order (an id from an older list counts no more)
-      items: () => ITEMS.filter((p) => ids.has(p.id)),
+      // a question's first pick, in the quiz `asked` on the quiz clock
+      answered(id, right, asked) {
+        updateStats(items, id, right, asked, LEARN);
+        save();
+      },
+      // a quiz starts: its tick of the quiz clock
+      tick() {
+        session += 1;
+        save();
+        return session - 1;
+      },
+      firstTry: (id) => (items[id] ? items[id].firstTry : 0),
+      // every item's entry, by id, for pickQuiz
+      all: () => items,
+      // the items she has met, in teaching order (an id that left the game counts no more, but is kept)
+      items: () => ITEMS.filter((p) => items[p.id] && items[p.id].encountered),
     };
   })();
+
+  // How well she knows an item she has met, as the shelf's tick shows it: 0, no first-pick success yet (a
+  // grey tick), then 1 and 2 (light and medium green), 3 once it is fully learned (the full green).
+  function level(id) {
+    const n = stats.firstTry(id);
+    if (n >= LEARN.master) return 3;
+    return n ? 1 + Math.floor(((n - 1) * 2) / (LEARN.master - 1)) : 0;
+  }
+
+  /* ---------- a word game's quiz: which words it asks (round 2's simulation, policy P4) ---------- */
+
+  // The questions of one quiz, in asking order: ids of the `items` (teaching order; {id} objects) whose
+  // `entries[id].encountered` is set, in three groups:
+  //   new       never asked yet, in teaching order (the longest waiting first);
+  //   learning  asked before, still under `master`, the most overdue first: a level's wait between asks
+  //             grows `growth` times per level, so the shakiest words come back soonest;
+  //   sure      fully learned, the longest unasked first: the "sure success" questions.
+  // A quiz takes `sureMin` sure words and `newMin` new ones when there are that many, learning words the
+  // rest; a group too small for its share passes the slots on: to new words (up to `newMax`), then to sure
+  // ones, then to any left. A sure word opens the quiz and another closes it. `o.now` is the quiz clock and
+  // `rng` the random source, so the same inputs give the same quiz (the harness checks it against the
+  // simulation's own module).
+  function pickQuiz(items, entries, o, rng) {
+    const now = Number.isFinite(o.now) ? o.now : 0;
+    const fresh = [];
+    const learning = [];
+    const sure = [];
+    items.forEach((item, order) => {
+      const id = item !== null && typeof item === 'object' ? item.id : item;
+      const entry = entries ? entries[id] : null;
+      if (!entry || !entry.encountered) return;
+      const lvl = levelOf(entry, o.master);
+      const asked = Number.isFinite(entry.lastAsked);
+      // never asked counts as asked one quiz before the first: overdue at any level
+      const gap = asked ? Math.max(0, now - entry.lastAsked) : now + 1;
+      const spread = 1 + o.jitter * rng();
+      if (lvl >= o.master) sure.push({ id, key: (gap + 1) * spread });
+      else if (!asked && lvl === 0) fresh.push({ id, key: -order });
+      else learning.push({ id, key: ((gap + 1) / Math.pow(o.growth, lvl)) * spread });
+    });
+    const byKey = (a, b) => b.key - a.key;
+    fresh.sort(byKey);
+    learning.sort(byKey);
+    sure.sort(byKey);
+    const groups = { fresh, learning, sure };
+    const count = { fresh: 0, learning: 0, sure: 0 };
+    let left = Math.min(o.size, fresh.length + learning.length + sure.length);
+    const take = (group, k) => {
+      const got = Math.max(0, Math.min(k, groups[group].length - count[group], left));
+      count[group] += got;
+      left -= got;
+    };
+    take('sure', o.sureMin);
+    take('fresh', o.newMin);
+    take('learning', left);
+    take('fresh', o.newMax - count.fresh);
+    take('sure', left);
+    take('fresh', left);
+    const sureIds = sure.slice(0, count.sure).map((e) => e.id);
+    const middle = shuffledBy(fresh.slice(0, count.fresh).concat(learning.slice(0, count.learning)).map((e) => e.id)
+      .concat(sureIds.slice(2)), rng);
+    if (sureIds.length >= 1) middle.unshift(sureIds[0]);
+    if (sureIds.length >= 2) middle.push(sureIds[1]);
+    return middle;
+  }
+
+  // An entry's level: its first-pick successes, capped at `master`.
+  function levelOf(entry, master) {
+    const n = entry && Number.isFinite(entry.firstTry) ? Math.floor(entry.firstTry) : 0;
+    return Math.max(0, Math.min(n, master));
+  }
+
+  function shuffledBy(list, rng) {
+    const a = list.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // One answered question, in every game: she has met the item; a first-pick success adds one to
+  // `firstTry` (capped at `master` when a miss can take it back), a miss adds to `misses` and follows
+  // `decrement`. `now` is the quiz that asked it.
+  function updateStats(entries, id, right, now, o) {
+    const prev = entries[id] || {};
+    const entry = {
+      encountered: true,
+      firstTry: Number.isFinite(prev.firstTry) ? Math.max(0, Math.floor(prev.firstTry)) : 0,
+      misses: Number.isFinite(prev.misses) ? prev.misses : 0,
+      lastAsked: now,
+    };
+    if (right) {
+      entry.firstTry += 1;
+      if (o.decrement !== 'none') entry.firstTry = Math.min(entry.firstTry, o.master);
+    } else {
+      entry.misses += 1;
+      if (o.decrement === 'dec') entry.firstTry = Math.max(0, Math.min(entry.firstTry, o.master) - 1);
+      else if (o.decrement === 'demote' && entry.firstTry >= o.master) entry.firstTry = o.master - 1;
+    }
+    entries[id] = { ...prev, ...entry };
+    return entries[id];
+  }
 
   const progressEl = $('progress');
   const QUIZ_BUTTONS = ['play-quiz', 'yes-quiz', 'replay-quiz'];
 
-  // A word game asks only what she has learned, so its quiz waits for PLAY.quiz.unlock words.
+  // A word game asks only what she has met, so its quiz waits for PLAY.quiz.unlock words.
   function quizLocked() {
-    return PLAY.quiz.pool === 'learned' && learned.items().length < PLAY.quiz.unlock;
+    return PLAY.quiz.pool === 'learned' && stats.items().length < PLAY.quiz.unlock;
   }
 
-  // "learned X / N": the bar a word game shows on every screen (PLAY.progress "bar"), the shelf's count,
+  // "met X / N": the bar a word game shows on every screen (PLAY.progress "bar"), the shelf's count,
   // and the quiz buttons' lock.
   function syncLearned() {
-    const done = learned.items().length;
+    const done = stats.items().length;
     const count = `${done} / ${ITEMS.length}`;
     $('progress-count').textContent = count;
     $('shelf-count').textContent = count;
@@ -590,11 +754,19 @@
     });
   }
 
-  function markLearned(p) {
-    if (!learned.add(p.id)) return;
-    syncLearned();
+  // A shelf tile's mark: dimmed with a new-dot until she has met the item, then a tick at its level.
+  function markTile(p) {
     const tile = shelf.tiles.get(p.id);
-    if (tile) tile.dataset.learned = 'true';
+    if (!tile) return;
+    tile.dataset.learned = String(stats.met(p.id));
+    tile.dataset.level = String(level(p.id));
+  }
+
+  // She has met an item (a match, a flash card, a quiz question): the count, its tile and the bar's star.
+  function meet(p) {
+    if (!stats.meet(p.id)) return;
+    syncLearned();
+    markTile(p);
     if (!reducedMotion.matches && PLAY.progress === 'bar') {
       progressEl.classList.remove('gained');
       void progressEl.offsetWidth; // restart the pop
@@ -612,6 +784,9 @@
     up: [],
     found: 0,
     flipBack: 0,
+    flipBackAt: 0,
+    // bumped whenever the cards up change, so a face-up line that ends later holds only its own pair
+    hold: 0,
     winFallback: 0,
     winEarliest: 0,
     busyUntil: 0,
@@ -664,6 +839,7 @@
   // What every new game, of either mode, starts from: `total` finds to win, one pip each.
   function reset(mode, total) {
     clearTimeout(game.flipBack);
+    game.hold += 1;
     clearTimeout(game.winFallback);
     clearTimeout(quiz.next);
     game.round += 1;
@@ -687,8 +863,8 @@
   function dealPicks() {
     const { policy, pairs } = PLAY.deal;
     if (policy === 'squad') return STARTERS.concat(shuffled(BENCH).slice(0, Math.max(0, pairs - STARTERS.length)));
-    const fresh = ITEMS.filter((p) => !learned.has(p.id));
-    const review = shuffled(learned.items()).slice(0, pairs - Math.min(PLAY.deal.new, fresh.length));
+    const fresh = ITEMS.filter((p) => !stats.met(p.id));
+    const review = shuffled(stats.items()).slice(0, pairs - Math.min(PLAY.deal.new, fresh.length));
     return fresh.slice(0, pairs - review.length).concat(review);
   }
 
@@ -751,16 +927,22 @@
 
   function tap(card) {
     if (game.phase !== 'idle' && game.phase !== 'one' && game.phase !== 'two') return;
-    if (card.state !== 'down' || performance.now() < game.busyUntil) return;
+    if (card.state !== 'down') {
+      hearAgain(card);
+      return;
+    }
+    if (performance.now() < game.busyUntil) return;
     sound.unlock();
 
     if (game.up.length === 2) {
       clearTimeout(game.flipBack);
+      game.hold += 1;
       game.up.forEach((c) => setCard(c, 'down'));
       game.up = [];
     }
 
     turn(card, 'up');
+    card.upAt = performance.now();
     game.up.push(card);
 
     if (game.up.length === 1) {
@@ -773,22 +955,48 @@
     if (a.p.id !== b.p.id) {
       setPhase('two');
       sound.say(voice('flip', card.p));
-      game.flipBack = setTimeout(() => {
-        game.up.forEach((c) => setCard(c, 'down'));
-        game.up = [];
-        setPhase('idle');
-      }, MISMATCH_MS);
+      game.hold += 1;
+      game.flipBackAt = performance.now() + MISMATCH_MS;
+      game.flipBack = setTimeout(turnBack, MISMATCH_MS);
       return;
     }
 
     game.up = [];
     setCard(a, 'matched');
     setCard(b, 'matched');
-    markLearned(card.p);
+    meet(card.p);
     const lines = voice('match', card.p);
     if (scored([a, b])) finishing(lines);
     else setPhase('idle');
     sound.say(lines);
+  }
+
+  // The two cards that didn't match turn face down again.
+  function turnBack() {
+    game.hold += 1;
+    game.up.forEach((c) => setCard(c, 'down'));
+    game.up = [];
+    setPhase('idle');
+  }
+
+  // A face-up card, one she has just turned up or a pair she found, says its whole line again (a flash
+  // card's, PLAY.voice.card: a player's "number N, <name>!", a word in English then Hebrew) and changes
+  // nothing else: two that didn't match wait for that line to end, and HOLD_MS more, before they turn
+  // back. A tap on a card that turned up DOUBLE_TAP_MS ago or less is the same tap twice: it says nothing.
+  function hearAgain(card) {
+    if (performance.now() - card.upAt < DOUBLE_TAP_MS) return;
+    sound.unlock();
+    lift(card);
+    const saying = sound.say(voice('card', card.p));
+    if (game.phase !== 'two') return;
+    clearTimeout(game.flipBack);
+    const hold = ++game.hold;
+    game.flipBack = setTimeout(turnBack, Math.max(0, game.flipBackAt - performance.now()) + HOLD_MAX_MS);
+    saying.then(() => {
+      if (game.hold !== hold || game.phase !== 'two') return;
+      clearTimeout(game.flipBack);
+      game.flipBack = setTimeout(turnBack, Math.max(HOLD_MS, game.flipBackAt - performance.now()));
+    });
   }
 
   // The last find of either mode: the win clip follows `lines`, and the win screen comes when it
@@ -886,7 +1094,10 @@
 
   /* ---------- quiz: who is this? ---------- */
 
-  const quiz = { order: [], at: 0, cards: [], answer: null, next: 0, shownAt: 0 };
+  // `first`: no pick yet on this question, so the next one is her first pick, the one that counts;
+  // `session`: this quiz's tick of the quiz clock.
+  const quiz = { order: [], at: 0, cards: [], answer: null, first: false, session: 0, next: 0, shownAt: 0 };
+  const BY_ID = new Map(ITEMS.map((p) => [p.id, p]));
 
   // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
   function quizLayout() {
@@ -896,10 +1107,13 @@
     fitCards(picksEl, quiz.cards, c);
   }
 
-  // The questions (PLAY.quiz): a squad's every player once, the backups too; a word game's up to `size`
-  // random learned words.
+  // The questions (PLAY.quiz): a squad's every player once, the backups too; a word game's `size` of the
+  // words she has met, picked by pickQuiz.
   function startQuiz() {
-    quiz.order = PLAY.quiz.pool === 'learned' ? shuffled(learned.items()).slice(0, PLAY.quiz.size) : shuffled(ITEMS);
+    quiz.session = stats.tick();
+    quiz.order = PLAY.quiz.pool === 'learned'
+      ? pickQuiz(ITEMS, stats.all(), { ...LEARN, now: quiz.session }, Math.random).map((id) => BY_ID.get(id))
+      : shuffled(ITEMS);
     reset('quiz', quiz.order.length);
     quiz.at = 0;
     warmImages(quiz.order);
@@ -912,15 +1126,16 @@
     keepAwake();
   }
 
-  // Three others to pick from: a squad's whole roster; a word game's learned words (while fewer than
-  // four are learned, the next words in teaching order fill in). Never one PLAY.quiz.apart pairs with the
-  // asked one: two pictures that look alike at a glance.
+  // Three others to pick from: a squad's whole roster; a word game's words she has met (while fewer than
+  // three of them fit, the next words in teaching order fill in). Never one the asked item avoids (DATA,
+  // its `avoid`: a word that sounds like it, or a picture that looks like it, club.json play.quiz.apart).
   function distractors(p) {
-    const fits = (q) => q !== p && !(PLAY.quiz.apart || []).some((pair) => pair.includes(p.id) && pair.includes(q.id));
+    const avoid = new Set(p.avoid || []);
+    const fits = (q) => q !== p && !avoid.has(q.id);
     let pool = ITEMS.filter(fits);
     if (PLAY.quiz.pool === 'learned') {
-      const known = learned.items().filter(fits);
-      pool = known.length >= CHOICES - 1 ? known : known.concat(pool.filter((q) => !learned.has(q.id)).slice(0, CHOICES));
+      const known = stats.items().filter(fits);
+      pool = known.length >= CHOICES - 1 ? known : known.concat(pool.filter((q) => !stats.met(q.id)).slice(0, CHOICES));
     }
     return shuffled(pool).slice(0, CHOICES - 1);
   }
@@ -938,6 +1153,7 @@
       return card;
     });
     quiz.answer = quiz.cards.find((card) => card.p === p);
+    quiz.first = true;
     picksEl.dataset.answer = p.id;
     questionEl.textContent = '';
     questionEl.append(...MODEL.question(p));
@@ -961,6 +1177,14 @@
   function pick(card) {
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
+    if (quiz.first) {
+      // Her first pick is the one that counts: right, a success; wrong, a miss. Either way she has met it.
+      quiz.first = false;
+      const p = quiz.answer.p;
+      meet(p);
+      stats.answered(p.id, card === quiz.answer, quiz.session);
+      markTile(p);
+    }
     if (card !== quiz.answer) {
       // Not this one, and she learns what it is: the soft sound and a shake, then the card turns over
       // (greyed and marked, out of play) and says its line. Her next pick or #say cuts that off.
@@ -1018,15 +1242,14 @@
 
   const shelf = { tiles: new Map(), at: 0, card: null, last: null };
 
-  // A tile per item in teaching order, built on the first visit: learned ones in full colour with a
-  // tick, the others dimmed with a dot (base.css, data-learned).
+  // A tile per item in teaching order, built on the first visit: the ones she has met in full colour with
+  // a tick at their level, the others dimmed with a dot (base.css, data-learned and data-level).
   function buildShelf() {
     if (shelf.tiles.size) return;
     ITEMS.forEach((p, i) => {
       const tile = el('button', 'tile');
       tile.type = 'button';
       tile.dataset.index = String(i);
-      tile.dataset.learned = String(learned.has(p.id));
       tile.setAttribute('aria-label', MODEL.label(p));
       const pic = el('span', 'pic');
       // lazy before src: a picture loads when its tile scrolls near
@@ -1040,6 +1263,7 @@
       if (chip) tile.appendChild(el('span', 'chip', chip));
       shelfEl.appendChild(tile);
       shelf.tiles.set(p.id, tile);
+      markTile(p);
     });
   }
 
@@ -1063,9 +1287,10 @@
     face.fit(shelf.card.el, shelf.card.p, applyFace(slotEl, cw, ch, faceMode(cw, ch)));
   }
 
-  // One item, big: the card turns over and says its line (PLAY.voice.card); it counts as learned once the
-  // line has played and it has been on screen SEEN_MS (a muted page or a failed clip too), never when she
-  // pages on first. The next card's picture and clips come in meanwhile, so "next" shows at once.
+  // One item, big: the card turns over and says its line (PLAY.voice.card); she has met it once the line
+  // has played and it has been on screen SEEN_MS (a muted page or a failed clip too), never when she pages
+  // on first. A flash card is never a success: only a quiz question's first pick is. The next card's
+  // picture and clips come in meanwhile, so "next" shows at once.
   function showCard(index) {
     const n = ITEMS.length;
     shelf.at = ((index % n) + n) % n;
@@ -1085,7 +1310,7 @@
     }, reducedMotion.matches ? 0 : 120);
     const shown = performance.now();
     sound.say(voice('card', p)).then(() => setTimeout(() => {
-      if (shelf.card && shelf.card.el === card) markLearned(p);
+      if (shelf.card && shelf.card.el === card) meet(p);
     }, Math.max(0, SEEN_MS - (performance.now() - shown))));
     const after = ITEMS[(shelf.at + 1) % n];
     warmImages([after]);
@@ -1109,7 +1334,7 @@
   }
 
   function nextNew() {
-    const i = ITEMS.findIndex((p) => !learned.has(p.id));
+    const i = ITEMS.findIndex((p) => !stats.met(p.id));
     return i < 0 ? 0 : i;
   }
 
@@ -1122,7 +1347,7 @@
 
   // The next deal's new items: those after the ones dealt now, as if she learns them all.
   function upcoming(dealt = []) {
-    return ITEMS.filter((p) => !learned.has(p.id) && !dealt.includes(p)).slice(0, PLAY.deal.pairs);
+    return ITEMS.filter((p) => !stats.met(p.id) && !dealt.includes(p)).slice(0, PLAY.deal.pairs);
   }
 
   function fetchAhead(items) {
@@ -1159,7 +1384,7 @@
 
   // Every learned item and the new ones after the current deal.
   function fetchAllAhead() {
-    fetchAhead(learned.items().concat(upcoming(ahead.dealt)));
+    fetchAhead(stats.items().concat(upcoming(ahead.dealt)));
   }
 
   /* ---------- overlays ---------- */

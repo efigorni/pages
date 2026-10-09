@@ -232,8 +232,8 @@ function boot(opts = {}) {
     d.audio = Object.fromEntries(Object.keys(d.audio).map((kind) => [kind, kind === 'ui' ? (opts.noClips ? [] : ['start', 'win']) : all]));
     data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
   }
-  const exportLine = 'globalThis.__t = { DATA, ITEMS, PLAY, game, quiz, shelf, learned, tap, newGame, dealPicks, startQuiz, sound, clip, voice, '
-    + 'hebrewNumber, get wakeLock() { return wakeLock; } };\n';
+  const exportLine = 'globalThis.__t = { DATA, ITEMS, PLAY, game, quiz, shelf, stats, level, LEARN, pickQuiz, updateStats, tap, newGame, '
+    + 'dealPicks, startQuiz, sound, clip, voice, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
   const cut = main.lastIndexOf('})();');
   const patched = main.slice(0, cut) + exportLine + main.slice(cut);
   vm.createContext(g);

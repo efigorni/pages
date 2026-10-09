@@ -9,6 +9,7 @@ precache).
 | Here | What it is |
 |---|---|
 | `page/icons/` | The two icon SVGs (`render_icons.sh --game english-words`): the card back's speech bubble with "Aa" in Andika Bold, its outlines taken from the font with fontTools |
+| `../club/avoid.json` | Per word, the words that sound like it (CMUdict), which the quiz never offers against it: `_memory-game/tools/words/neighbours.py` writes it, the builder checks it |
 
 ## Where the words, pictures and clips come from
 
@@ -32,7 +33,10 @@ They were made in the work directory of the round that built the game, `~/Docume
 2. `python3 -I _memory-game/tools/page/build_page.py data <words.json> english-words --prune` writes
    `club/roster.json` in rank order and assembles the page; it fails on a word without its picture or a
    clip, and `--prune` removes the files of words that left the list.
-3. `_memory-game/tools/og/render_og.sh english-words` (look at `og.jpg`), then
+3. The sound-alikes of the new list: `uv run --quiet --with cmudict==1.1.3 python -I
+   _memory-game/tools/words/neighbours.py english-words` (`club/avoid.json`; `assemble --check` fails until
+   it matches the roster), then `python3 -I _memory-game/tools/page/build_page.py assemble english-words`.
+4. `_memory-game/tools/og/render_og.sh english-words` (look at `og.jpg`), then
    `_memory-game/tools/verify/verify.sh sanity english-words`, and commit with explicit paths.
 
 The first 30 words are precached; the worker keeps every other word's picture and clips as they come

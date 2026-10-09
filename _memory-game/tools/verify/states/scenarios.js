@@ -394,7 +394,7 @@ async function playToLastPair(h) {
   // ---------- F1-F3 a squad's flash cards; its quiz stays the whole roster whatever she has learned ----------
   if (SQUAD) {
     const h = withClips();
-    const { ITEMS, shelf, learned } = h.T;
+    const { ITEMS, shelf, stats } = h.T;
     await h.click('play-cards');
     check('F1 flash cards: the shelf holds every player, none learned yet', h.phase() === 'browse'
       && h.byId.shelf.children.length === ITEMS.length && h.byId.shelf.children.every((t) => t.dataset.learned === 'false'));
@@ -402,7 +402,7 @@ async function playToLastPair(h) {
     await h.tile(5);
     await h.advance(3000);
     check("F1 a tile opens that player's card, turned up; once its line has played it counts as learned and its tile is ticked",
-      h.phase() === 'card' && shelf.card.p === ITEMS[5] && shelf.card.el.dataset.state === 'up' && learned.has(ITEMS[5].id)
+      h.phase() === 'card' && shelf.card.p === ITEMS[5] && shelf.card.el.dataset.state === 'up' && stats.met(ITEMS[5].id)
       && h.byId.shelf.children[5].dataset.learned === 'true' && h.byId['shelf-count'].textContent === `1 / ${ITEMS.length}`);
     check("F1 the card says the player's match clip (PLAY.voice.card)",
       JSON.stringify(started(h, from)) === JSON.stringify([`audio/match/${ITEMS[5].id}.mp3`]), JSON.stringify(started(h, from)));
@@ -542,7 +542,7 @@ async function playToLastPair(h) {
       check('W4 the next-new button opens the first word; its card says English then Hebrew',
         k.T.shelf.card.p.id === ITEMS[0].id && JSON.stringify(started(k, from)) === JSON.stringify([`audio/en/${ITEMS[0].id}.mp3`, `audio/he/${ITEMS[0].id}.mp3`]),
         JSON.stringify(started(k, from)));
-      check('W4 seeing it counts as learned: its tile is ticked and the bar says "1 / N"', k.T.learned.has(ITEMS[0].id)
+      check('W4 seeing it counts as learned: its tile is ticked and the bar says "1 / N"', k.T.stats.met(ITEMS[0].id)
         && k.byId.shelf.children[0].dataset.learned === 'true' && k.byId['progress-count'].textContent === `1 / ${N}`
         && Number(k.byId.progress.style.props['--done']) === 1 / N);
       await k.click('close');
@@ -551,14 +551,14 @@ async function playToLastPair(h) {
       await k.advance(4000);
       await k.click('next');
       await k.advance(300);
-      const paged = !k.T.learned.has(ITEMS[2].id);
+      const paged = !k.T.stats.met(ITEMS[2].id);
       await k.click('next');
       await k.advance(4000);
       check('W4 a card paged past before its line ends is not learned; one left to speak is', paged
-        && !k.T.learned.has(ITEMS[2].id) && k.T.learned.has(ITEMS[3].id));
+        && !k.T.stats.met(ITEMS[2].id) && k.T.stats.met(ITEMS[3].id));
       const again = boot({ noClips: true, storage: [...k.store] });
-      check('W5 after a reload they are still learned, and the bar says "3 / N"', again.T.learned.has(ITEMS[0].id)
-        && again.T.learned.has(ITEMS[1].id) && again.T.learned.has(ITEMS[3].id) && again.byId['progress-count'].textContent === `3 / ${N}`);
+      check('W5 after a reload they are still learned, and the bar says "3 / N"', again.T.stats.met(ITEMS[0].id)
+        && again.T.stats.met(ITEMS[1].id) && again.T.stats.met(ITEMS[3].id) && again.byId['progress-count'].textContent === `3 / ${N}`);
     }
     {
       const k = boot({ noClips: true });
@@ -568,13 +568,13 @@ async function playToLastPair(h) {
       await k.down(a);
       await k.down(k.pairOf(a));
       const again = boot({ noClips: true, storage: [...k.store] });
-      check('W5 a match in memory is learned, and still is after a reload', again.T.learned.has(a.p.id)
+      check('W5 a match in memory is learned, and still is after a reload', again.T.stats.met(a.p.id)
         && again.byId['progress-count'].textContent === `1 / ${N}`);
       k.g.localStorage.setItem = () => { throw new Error('QuotaExceededError'); };
       const b = k.firstDown();
       await k.down(b);
       await k.down(k.pairOf(b));
-      check('W6 storage that refuses a write keeps the game going, learned for this visit', k.T.learned.has(b.p.id)
+      check('W6 storage that refuses a write keeps the game going, learned for this visit', k.T.stats.met(b.p.id)
         && k.byId['progress-count'].textContent === `2 / ${N}`);
     }
     // W8 two pictures that look alike (PLAY.quiz.apart) are never offered against each other
@@ -611,6 +611,301 @@ async function playToLastPair(h) {
       check('W7 the win says the game\'s own line', k.phase() === 'won' && k.synth.spoken.some((s) => s.text === k.T.DATA.lines.win),
         JSON.stringify(k.synth.spoken.map((s) => s.text)));
     }
+  }
+
+  // ---------- H1-H6 a face-up card in memory says its whole line again (PLAY.voice.card), changing nothing ----------
+  {
+    // the fake Web Audio's clip lengths (harness.js)
+    const ms = (url) => (url.includes('/match/') ? 2500 : url.includes('/ui/') ? 2000 : 1200);
+    const line = (h, p) => h.T.PLAY.voice.card.map((kind) => `audio/${kind}/${p.id}.mp3`);
+    const flipLine = (h, p) => h.T.PLAY.voice.flip.map((kind) => `audio/${kind}/${p.id}.mp3`);
+    const snapshot = (h) => JSON.stringify({ phase: h.phase(), up: h.T.game.up.map((c) => c.el.dataset.index),
+      found: h.T.game.found, states: h.cards().map((c) => c.state) });
+    const k = withClips();
+    await start(k);
+    const a = k.firstDown();
+    let from = k.log.length;
+    await k.down(a);
+    await k.down(a);
+    await k.advance(1500);
+    check('H1 a second tap on a card that has just turned up is one tap: only its flip line, nothing changes',
+      JSON.stringify(started(k, from)) === JSON.stringify(flipLine(k, a.p)) && a.state === 'up' && k.phase() === 'one',
+      JSON.stringify(started(k, from)));
+    let before = snapshot(k);
+    from = k.log.length;
+    await k.down(a);
+    await k.advance(4000);
+    check("H2 a tap on the card she turned up says its whole line again (a flash card's), and changes nothing",
+      JSON.stringify(started(k, from)) === JSON.stringify(line(k, a.p)) && snapshot(k) === before, JSON.stringify(started(k, from)));
+    const b = k.firstDown((c) => c.p.id !== a.p.id);
+    await k.down(b);
+    const t0 = k.clock.now;
+    await k.advance(1000);
+    from = k.log.length;
+    await k.down(a);
+    const end = 1000 + line(k, a.p).map(ms).reduce((x, y) => x + y, 0);
+    await k.advance(1250);
+    const pastOwnTime = a.state === 'up' && b.state === 'up' && k.phase() === 'two';
+    await k.advance(t0 + end + 390 - k.clock.now);
+    const held = a.state === 'up' && b.state === 'up' && k.phase() === 'two';
+    await k.advance(20);
+    check('H3 tapped while two cards wait to turn back: its line plays, and they turn back 0.4 s after it ends, not at 2.2 s',
+      JSON.stringify(started(k, from)) === JSON.stringify(line(k, a.p)) && pastOwnTime && held
+      && a.state === 'down' && b.state === 'down' && k.phase() === 'idle', `line ends ${end} ms after the mismatch`);
+    // a found pair
+    await k.down(a);
+    await k.down(k.pairOf(a));
+    await k.advance(4000);
+    before = snapshot(k);
+    from = k.log.length;
+    await k.down(k.pairOf(a));
+    await k.advance(4000);
+    check('H4 a tap on a pair she found says its line, and it stays found', a.state === 'matched'
+      && JSON.stringify(started(k, from)) === JSON.stringify(line(k, a.p)) && snapshot(k) === before, JSON.stringify(started(k, from)));
+    // a held pair she moves on from: the line that ends later holds nothing
+    const c = k.firstDown();
+    const d = k.firstDown((x) => x.p.id !== c.p.id);
+    await k.down(c);
+    await k.down(d);
+    await k.advance(1000);
+    await k.down(c);
+    await k.advance(200);
+    const e = k.firstDown((x) => x !== c && x !== d);
+    await k.down(e);
+    await k.advance(6000);
+    check('H5 a new flip while a line holds two cards: they turn back at once, and the new card stays up after',
+      c.state === 'down' && d.state === 'down' && e.state === 'up' && k.phase() === 'one' && k.T.game.up.length === 1);
+    // muted: nothing to wait for, so they turn back on time, never sooner
+    const m = boot({ noClips: true });
+    await start(m);
+    await m.click('mute');
+    const f = m.firstDown();
+    const g = m.firstDown((x) => x.p.id !== f.p.id);
+    await m.down(f);
+    await m.down(g);
+    const t1 = m.clock.now;
+    await m.advance(600);
+    await m.down(f);
+    await m.advance(t1 + 2199 - m.clock.now);
+    const onTime = f.state === 'up' && g.state === 'up';
+    await m.advance(2);
+    check('H6 muted, a tap on a waiting card keeps their 2.2 s: no sooner, no later', onTime && f.state === 'down' && g.state === 'down');
+  }
+
+  // ---------- M1-M6 what she knows: met, first-try quiz answers, the shelf's levels ----------
+  {
+    const probe = boot({ noClips: true });
+    const statsKey = `${probe.T.DATA.game}:stats`;
+    const legacyKey = key(probe);
+    const six = ids(probe.T.ITEMS.slice(0, 6));
+    const k = boot({ noClips: true, storage: [[legacyKey, JSON.stringify(six)]] });
+    const carried = six.every((id) => k.T.stats.met(id) && k.T.stats.firstTry(id) === 0 && k.T.level(id) === 0)
+      && JSON.stringify(ids(k.T.stats.items())) === JSON.stringify(six);
+    await start(k);
+    const fresh = k.cards().find((x) => !six.includes(x.p.id));
+    await k.down(fresh);
+    await k.down(k.pairOf(fresh));
+    const saved = (JSON.parse(k.store.get(statsKey) || '{}').items) || {};
+    const legacy = JSON.parse(k.store.get(legacyKey) || '[]');
+    const again = boot({ noClips: true, storage: [...k.store] });
+    check("M1 an older page's list of what she met carries over whole: each met, never asked, no first-try answer; the "
+      + 'next write keeps every one in the new store and the old list, and a reload reads them back', carried
+      && six.concat(fresh.p.id).every((id) => saved[id] && saved[id].encountered === true && saved[id].firstTry === 0
+        && !('lastAsked' in saved[id]) && legacy.includes(id))
+      && again.T.stats.items().length === 7 && again.T.stats.firstTry(fresh.p.id) === 0, JSON.stringify(saved));
+    const both = boot({ noClips: true, storage: [[legacyKey, JSON.stringify(six.slice(0, 2))],
+      [statsKey, JSON.stringify({ session: 6, items: { [six[0]]: { encountered: true, firstTry: 2, misses: 1, lastAsked: 5 } } })]] });
+    const junk = boot({ noClips: true, storage: [[legacyKey, JSON.stringify(six.slice(0, 1))], [statsKey, '{not json']] });
+    check('M1 the old list and the new store together: an item an older page added since is met, a level is kept; '
+      + 'an unreadable store still keeps the old list', both.T.stats.met(six[1]) && both.T.stats.firstTry(six[0]) === 2
+      && both.T.level(six[0]) === 2 && junk.T.stats.met(six[0]) && junk.T.stats.items().length === 1);
+
+    // M2/M3 only a quiz question's first pick, when right, is a success
+    const q = boot({ noClips: true, storage: [[legacyKey, JSON.stringify(six)]] });
+    const { stats, quiz } = q.T;
+    await q.click('play-cards');
+    await q.click('again');
+    await q.click('yes-quiz');
+    await q.advance(3000);
+    const first = quiz.answer.p;
+    await q.pick(quiz.answer);
+    const tile = q.T.shelf.tiles.get(first.id);
+    const saved1 = JSON.parse(q.store.get(statsKey));
+    const right = stats.firstTry(first.id) === 1 && stats.met(first.id) && tile.dataset.level === String(q.T.level(first.id))
+      && saved1.items[first.id].lastAsked === quiz.session && saved1.session === quiz.session + 1;
+    await q.advance(8000);
+    const second = quiz.answer.p;
+    const wrong = quiz.cards.find((x) => x !== quiz.answer);
+    const wrongBefore = JSON.stringify(JSON.parse(q.store.get(statsKey)).items[wrong.p.id] || null);
+    await q.pick(wrong);
+    await q.advance(1500);
+    await q.pick(quiz.answer);
+    const after = JSON.parse(q.store.get(statsKey)).items;
+    check('M2 a right first pick is a success (firstTry 1, asked in this quiz, its shelf tile at its level); a wrong first '
+      + 'pick is a miss, and the right pick after it counts nothing; the wrong card\'s item is untouched', right
+      && second !== first && after[second.id].firstTry === 0 && after[second.id].misses === 1
+      && JSON.stringify(after[wrong.p.id] || null) === wrongBefore, JSON.stringify({ first: after[first.id], second: after[second.id] }));
+    const w = boot({ noClips: true });
+    await start(w);
+    const pair = w.firstDown();
+    await w.down(pair);
+    await w.down(w.pairOf(pair));
+    await w.click('again');
+    await w.click('yes-cards');
+    await w.click('next-new');
+    await w.advance(4000);
+    const card = w.T.shelf.card.p;
+    check('M3 a match and a flash card only meet an item: no first-try success', w.T.stats.met(pair.p.id) && w.T.stats.met(card.id)
+      && w.T.stats.firstTry(pair.p.id) === 0 && w.T.stats.firstTry(card.id) === 0);
+
+    // M4 the shelf's tick by level: grey (0), light green (1), medium (2), full green (3, fully learned)
+    const tries = [0, 1, 2, 3, 7];
+    const store = Object.fromEntries(probe.T.ITEMS.slice(0, 5).map((p, i) => [p.id, { encountered: true, firstTry: tries[i], misses: 0, lastAsked: 1 }]));
+    store[probe.T.ITEMS[5].id] = { encountered: false, firstTry: 0, misses: 2, lastAsked: 1 };
+    const s = boot({ noClips: true, storage: [[statsKey, JSON.stringify({ session: 2, items: store })]] });
+    await s.click('play-cards');
+    const tiles = s.byId.shelf.children;
+    check('M4 the shelf: a tick per level for what she met (0, 1, 2, then 3 from 3 first tries on), dimmed and new for the rest',
+      JSON.stringify(tiles.slice(0, 5).map((t) => [t.dataset.learned, t.dataset.level]))
+        === JSON.stringify([['true', '0'], ['true', '1'], ['true', '2'], ['true', '3'], ['true', '3']])
+      && tiles[5].dataset.learned === 'false' && tiles.slice(6).every((t) => t.dataset.learned === 'false'),
+      JSON.stringify(tiles.slice(0, 6).map((t) => [t.dataset.learned, t.dataset.level])));
+  }
+
+  // ---------- A1 a word game's quiz never offers a word that sounds like the one it asks ----------
+  if (!SQUAD) {
+    const byId = Object.fromEntries(probe.ITEMS.map((p) => [p.id, p]));
+    const pairs = [['hat', 'cat'], ['house', 'horse'], ['bear', 'pear'], ['cake', 'snake'], ['bed', 'red']];
+    const listed = pairs.every(([a, b]) => byId[a] && byId[b] && (byId[a].avoid || []).includes(b) && (byId[b].avoid || []).includes(a));
+    const words = pairs.flat();
+    const k = boot({ noClips: true, storage: [[`${probe.DATA.game}:learned`, JSON.stringify(words)]] });
+    let asked = 0;
+    let broken = 0;
+    let together = 0;
+    for (let round = 0; round < 15; round++) {
+      await k.click('yes-quiz');
+      for (let i = 0; i < 12 && k.phase() === 'ask'; i++) {
+        const p = k.T.quiz.answer.p;
+        const cards = k.T.quiz.cards.map((x) => x.p.id);
+        asked += 1;
+        broken += cards.some((id) => (p.avoid || []).includes(id));
+        together += pairs.some(([a, b]) => cards.includes(a) && cards.includes(b) && [a, b].includes(p.id));
+        await k.advance(500);
+        await k.pick(k.T.quiz.answer);
+        await k.advance(800);
+        if (k.phase() === 'reveal') await k.pick(k.T.quiz.cards[0]);
+        await k.advance(50);
+      }
+    }
+    check('A1 hat/cat, house/horse, bear/pear, cake/snake and bed/red avoid each other (DATA), and no question offers a word '
+      + 'its asked word avoids', listed && asked >= 100 && broken === 0 && together === 0, `${asked} questions, ${broken} with an avoided word`);
+  }
+
+  // ---------- P1-P4 a word game's quiz picks its words as round 2's simulation does ----------
+  if (!SQUAD) {
+    // The simulation's recommended constants (quiz-selection-sim.md) and its seeded random source (mulberry32).
+    const SIM = { size: 10, master: 3, newMin: 1, newMax: 4, sureMin: 3, growth: 2, jitter: 0.5, decrement: 'demote' };
+    const seeded = (seed) => {
+      let s = seed >>> 0;
+      return () => {
+        s = (s + 0x6d2b79f5) >>> 0;
+        let t = Math.imul(s ^ (s >>> 15), 1 | s);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    };
+    // ids w0.. in teaching order: groups of [count, firstTry, lastAsked (a value, k => value, or none: never asked)]
+    const snap = (groups, extra = 0) => {
+      const items = [];
+      const stats = {};
+      let i = 0;
+      for (const [count, firstTry, lastAsked] of groups) {
+        for (let k = 0; k < count; k++, i++) {
+          items.push(`w${i}`);
+          stats[`w${i}`] = { encountered: true, firstTry };
+          if (lastAsked !== undefined) stats[`w${i}`].lastAsked = typeof lastAsked === 'function' ? lastAsked(k) : lastAsked;
+        }
+      }
+      for (let k = 0; k < extra; k++, i++) items.push(`w${i}`);
+      return { items, stats };
+    };
+    const { pickQuiz, updateStats, LEARN } = probe;
+    check("P1 the word game's quiz constants are the simulation's recommendation (size 10, master 3, new 1-4, sure 3, demote)",
+      Object.keys(SIM).every((k) => LEARN[k] === SIM[k]), JSON.stringify(Object.fromEntries(Object.keys(SIM).map((k) => [k, LEARN[k]]))));
+    // What sim/selection.js (round 2's simulation) returns for the same inputs and seeds, recorded from it.
+    const A = snap([[30, 0], [20, 1, (k) => 90 - k], [20, 2, (k) => 80 - 2 * k], [40, 3, (k) => 50 + k]], 10);
+    const wantA = {
+      1: ['w72', 'w48', 'w69', 'w68', 'w64', 'w66', 'w71', 'w49', 'w0', 'w74'],
+      2: ['w71', 'w49', 'w48', 'w67', 'w70', 'w47', 'w0', 'w69', 'w46', 'w72'],
+      3: ['w76', 'w49', 'w48', 'w45', 'w71', 'w47', 'w68', 'w66', 'w0', 'w74'],
+    };
+    const B = snap([[6, 0]], 5);
+    const C = snap([[12, 0]]);
+    const rng = seeded(42);
+    const seq = [];
+    for (let now = 0; now < 6; now++) {
+      const ids = pickQuiz(C.items, C.stats, { ...SIM, now }, rng);
+      ids.forEach((id, j) => updateStats(C.stats, id, (j + now) % 3 !== 0, now, SIM));
+      seq.push(ids.join(' '));
+    }
+    const wantSeq = ['w5 w8 w9 w0 w6 w4 w3 w1 w2 w7', 'w9 w7 w6 w0 w2 w1 w10 w5 w3 w4', 'w3 w8 w6 w1 w5 w7 w10 w0 w11 w2',
+      'w2 w10 w5 w11 w0 w4 w8 w9 w3 w7', 'w4 w1 w5 w10 w8 w11 w0 w3 w6 w9', 'w0 w10 w8 w2 w5 w11 w4 w6 w7 w3'];
+    const wantTries = [3, 3, 3, 3, 3, 2, 2, 3, 3, 3, 2, 2];
+    check('P2 the same quizzes as the simulation\'s own module, to the word: three seeded picks, a small pool, and six quizzes '
+      + 'in a row with their answers scored (demote)',
+      [1, 2, 3].every((seed) => JSON.stringify(pickQuiz(A.items, A.stats, { ...SIM, now: 100 }, seeded(seed))) === JSON.stringify(wantA[seed]))
+      && pickQuiz(B.items, B.stats, { ...SIM, now: 0 }, seeded(9)).join(' ') === 'w3 w2 w5 w0 w4 w1'
+      && JSON.stringify(seq) === JSON.stringify(wantSeq) && C.items.every((id, i) => C.stats[id].firstTry === wantTries[i]),
+      JSON.stringify(seq));
+    // The group shares over many seeded quizzes: the simulation's own check, then Adam's extremes from its report.
+    const shares = (s, draws, seed) => {
+      const r = seeded(seed);
+      const n = { fresh: 0, learning: 0, sure: 0, noFresh: 0 };
+      for (let d = 0; d < draws; d++) {
+        const ids = pickQuiz(s.items, s.stats, { ...SIM, now: 100 }, r);
+        let fresh = 0;
+        ids.forEach((id) => {
+          const e = s.stats[id];
+          const kind = e.firstTry >= SIM.master ? 'sure' : !Number.isFinite(e.lastAsked) && e.firstTry === 0 ? 'fresh' : 'learning';
+          n[kind] += 1;
+          fresh += kind === 'fresh';
+        });
+        n.noFresh += fresh === 0;
+      }
+      return [n.fresh / draws, n.learning / draws, n.sure / draws, n.noFresh];
+    };
+    const cases = [
+      ['the simulation\'s check', snap([[100, 0], [60, 1, (k) => 40 + (k % 50)], [60, 2, (k) => 40 + (k % 50)], [120, 3, (k) => k % 90]]), [1, 6, 3]],
+      ['16 new + 300 sure', snap([[300, 3, (k) => 99 - (k % 60)], [16, 0]]), [4, 0, 6]],
+      ['8 new, 4 + 4 learning + 300 sure', snap([[300, 3, (k) => 99 - (k % 60)], [8, 0], [4, 1, 97], [4, 2, 95]]), [1, 6, 3]],
+      ['2 new + 300 sure', snap([[300, 3, (k) => 99 - (k % 60)], [2, 0]]), [2, 0, 8]],
+      ['47 new, 100 learning, 200 sure', snap([[200, 3, (k) => k % 99], [100, 1, (k) => 90 + (k % 10)], [47, 0]]), [1, 6, 3]],
+    ];
+    const got = cases.map(([name, s, want], i) => [name, shares(s, i === 0 ? 2000 : 500, 2026 + i), want]);
+    check('P3 the group shares over seeded quizzes match the simulation: new / learning / sure per quiz, and never a quiz '
+      + 'without a new word while one waits', got.every(([, [f, l, s, none], want]) => f === want[0] && l === want[1] && s === want[2]
+      && none === 0), JSON.stringify(got.map(([name, g]) => `${name}: ${g.slice(0, 3).join('/')}`)));
+    // The page itself: what it stored is what its quiz asks
+    const items = {};
+    probe.ITEMS.slice(0, 12).forEach((p, i) => {
+      items[p.id] = i < 4 ? { encountered: true, firstTry: 3, misses: 0, lastAsked: i }
+        : i < 8 ? { encountered: true, firstTry: 1, misses: 1, lastAsked: 4 } : { encountered: true, firstTry: 0, misses: 0 };
+    });
+    const k = boot({ noClips: true, storage: [[`${probe.DATA.game}:stats`, JSON.stringify({ session: 5, items })]] });
+    await k.click('play-quiz');
+    const order = k.T.quiz.order.map((p) => items[p.id]);
+    const sure = (e) => e.firstTry >= 3;
+    const firstId = k.T.quiz.order[0].id;
+    await k.advance(500);
+    await k.pick(k.T.quiz.cards.find((x) => x !== k.T.quiz.answer));
+    await k.advance(1500);
+    await k.pick(k.T.quiz.answer);
+    const saved = JSON.parse(k.store.get(`${probe.DATA.game}:stats`));
+    check('P4 the quiz asks 10 of what she has met, a sure word first and last, a new one among them; the quiz clock ticks, '
+      + 'and a sure word missed on the first pick goes back to practice (firstTry 2, asked in quiz 5)',
+      order.length === 10 && sure(order[0]) && sure(order[9]) && order.some((e) => !('lastAsked' in e)) && k.T.quiz.session === 5
+      && saved.session === 6 && saved.items[firstId].firstTry === 2 && saved.items[firstId].misses === 1 && saved.items[firstId].lastAsked === 5,
+      JSON.stringify(saved.items[firstId]));
   }
 
   const failed = results.filter((r) => !r.ok).length;

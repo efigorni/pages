@@ -341,6 +341,25 @@ function wrongCard(i) {
 // the first LEARNED_START words learned.
 const { clipsOf, LEARNED_START } = require('./voice');
 
+// The HUD on a quiz question: the mute button beside ↻ (both at the HUD's end), far from the question's
+// hear-it-again button, which is a speech bubble, not a circle, and never draws the mute's speaker.
+function hudLayout() {
+  const box = (id) => {
+    const r = document.getElementById(id).getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2, size: Math.max(r.width, r.height) };
+  };
+  const [mute, again, say] = ['mute', 'again', 'say'].map(box);
+  const apart = (a, b) => Math.round(Math.hypot(a.x - b.x, a.y - b.y));
+  const flat = (node) => (node ? node.innerHTML.replace(/\s+/g, '') : '');
+  const use = document.querySelector('#say use');
+  const icon = use && document.querySelector(use.getAttribute('href'));
+  return {
+    muteToAgain: apart(mute, again), muteToSay: apart(mute, say), size: again.size, saySize: say.size,
+    sayRadius: getComputedStyle(document.getElementById('say')).borderRadius,
+    sayIsSpeaker: !icon || flat(icon) === flat(document.querySelector('#mute .i-on')),
+  };
+}
+
 // The quiz, played to the end at this viewport: on the first question a wrong pick (it turns over
 // and says that item's line, which the right pick then cuts off), then the right one; every question
 // waits for its question clip to start before the pick; the first three reveals move on by
@@ -389,6 +408,7 @@ async function quizFlow(page, vp, dir, res) {
     await sleep(500);
     if (n === 0) {
       await waitImages(page);
+      q.hud = await page.evaluate(hudLayout).catch(() => null);
       await snap('quiz-question');
       const wrong = q.cards.findIndex((id) => id !== q.id);
       const wrongId = q.cards[wrong];

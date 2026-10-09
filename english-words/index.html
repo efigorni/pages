@@ -878,6 +878,28 @@ circle.cut { fill: var(--big-bg); }
 .say:active { transform: translateY(clamp(2px, .5vmin, 4px)); }
 .say svg { width: 56%; height: 56%; }
 
+/* "hear it again" (the quiz's question, a flash card's line): a speech bubble with a play mark, never a
+   second speaker, which is the mute button's look; the drop follows the bubble's tail */
+.bubble {
+  position: relative;
+  border-radius: 32%;
+  box-shadow: none;
+  filter: drop-shadow(0 clamp(3px, .6vmin, 5px) 0 var(--big-drop));
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  right: 12%;
+  bottom: -17%;
+  width: 30%;
+  height: 27%;
+  background: inherit;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.bubble svg { width: 50%; height: 50%; translate: 6% 0; }
+
 .question {
   min-width: 0;
   margin: 0;
@@ -1069,7 +1091,9 @@ circle.cut { fill: var(--big-bg); }
   object-fit: contain;
 }
 
-/* the mark at the corner: a tick on a learned one, a dot on one still new, which is dimmed */
+/* the mark at the corner: on an item she has met, a tick whose colour says how well she knows it (her
+   first-try quiz answers, the engine's data-level): grey, then light and medium green, then the full
+   green of a learned one; on one still new, a dot, and the tile dimmed */
 .tile::after {
   content: "";
   position: absolute;
@@ -1082,8 +1106,13 @@ circle.cut { fill: var(--big-bg); }
   --mark: calc(var(--tile) * .3);
 }
 
+.tile { --tick: var(--learned, #22a95f); }
+.tile[data-level="0"] { --tick: #a2acb8; }
+.tile[data-level="1"] { --tick: #9fdab6; }
+.tile[data-level="2"] { --tick: #5ec48c; }
+
 .tile[data-learned="true"]::after {
-  background: var(--learned, #22a95f) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-8.5' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 74% no-repeat;
+  background: var(--tick) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-8.5' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 74% no-repeat;
   box-shadow: 0 0 0 max(2px, calc(var(--mark) * .08)) #fff, 0 2px 6px rgba(0, 0, 0, .3);
 }
 
@@ -1279,9 +1308,6 @@ circle.cut { fill: var(--big-bg); }
     <path d="M7.5 10.5V8a4.5 4.5 0 0 1 9 0v2.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
     <rect x="4.5" y="10" width="15" height="11.5" rx="2.6" fill="currentColor"/>
   </symbol>
-  <symbol id="i-speaker" viewBox="0 0 24 24">
-    <path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-  </symbol>
   <symbol id="i-play" viewBox="0 0 24 24">
     <path d="M8 5.2v13.6a1 1 0 0 0 1.5.86l10.8-6.8a1 1 0 0 0 0-1.72L9.5 4.34A1 1 0 0 0 8 5.2Z" fill="currentColor"/>
   </symbol>
@@ -1294,11 +1320,11 @@ circle.cut { fill: var(--big-bg); }
 </svg>
 <div class="app" id="app" data-phase="start" data-mode="memory" data-found="0">
   <header class="hud">
+    <div class="pips" id="pips" aria-hidden="true"></div>
     <button class="icon-btn" id="mute" type="button" aria-label="קול" aria-pressed="false">
       <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       <svg class="i-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
-    <div class="pips" id="pips" aria-hidden="true"></div>
     <button class="icon-btn" id="again" type="button" aria-label="משחק חדש">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 1 1 17.3 5.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M18.8 2.6v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
@@ -1306,7 +1332,7 @@ circle.cut { fill: var(--big-bg); }
   <main class="board" id="board"></main>
   <section class="quiz" id="quiz">
     <div class="prompt">
-      <button class="big say" id="say" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-speaker"/></svg></button>
+      <button class="big say bubble" id="say" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-play"/></svg></button>
       <p class="question" id="question" aria-live="polite"></p>
     </div>
     <div class="picks" id="picks"></div>
@@ -1373,7 +1399,7 @@ circle.cut { fill: var(--big-bg); }
     <div class="flash-slot" id="flash-slot" data-face="band"></div>
     <div class="flash-nav">
       <button class="big" id="prev" type="button" aria-label="הכרטיס הקודם"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
-      <button class="big say" id="hear" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-speaker"/></svg></button>
+      <button class="big say bubble" id="hear" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-play"/></svg></button>
       <button class="big" id="next" type="button" aria-label="הכרטיס הבא"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
     </div>
   </div>
@@ -1391,7 +1417,7 @@ circle.cut { fill: var(--big-bg); }
 <canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
 
 <script id="data">
-const DATA = {"words":[{"id":"dog","en":"dog","he":"כלב","he_niqqud":"כֶּלֶב","theme":"animals","img":"img/dog.webp"},{"id":"cat","en":"cat","he":"חתול","he_niqqud":"חָתוּל","theme":"animals","img":"img/cat.webp"},{"id":"apple","en":"apple","he":"תפוח","he_niqqud":"תַּפּוּחַ","theme":"food","img":"img/apple.webp"},{"id":"ball","en":"ball","he":"כדור","he_niqqud":"כַּדּוּר","theme":"toys","img":"img/ball.webp"},{"id":"sun","en":"sun","he":"שמש","he_niqqud":"שֶׁמֶשׁ","theme":"nature","img":"img/sun.webp"},{"id":"car","en":"car","he":"מכונית","he_niqqud":"מְכוֹנִית","theme":"transport","img":"img/car.webp"},{"id":"banana","en":"banana","he":"בננה","he_niqqud":"בָּנָנָה","theme":"food","img":"img/banana.webp"},{"id":"fish","en":"fish","he":"דג","he_niqqud":"דָּג","theme":"animals","img":"img/fish.webp"},{"id":"house","en":"house","he":"בית","he_niqqud":"בַּיִת","theme":"home","img":"img/house.webp"},{"id":"baby","en":"baby","he":"תינוק","he_niqqud":"תִּינוֹק","theme":"family","img":"img/baby.webp"},{"id":"red","en":"red","he":"אדום","he_niqqud":"אָדוֹם","theme":"colors","img":"img/red.webp"},{"id":"one","en":"one","he":"אחת","he_niqqud":"אַחַת","theme":"numbers","img":"img/one.webp"},{"id":"bird","en":"bird","he":"ציפור","he_niqqud":"צִיפּוֹר","theme":"animals","img":"img/bird.webp"},{"id":"eye","en":"eye","he":"עין","he_niqqud":"עַיִן","theme":"body","img":"img/eye.webp"},{"id":"ice-cream","en":"ice cream","he":"גלידה","he_niqqud":"גְּלִידָה","theme":"food","img":"img/ice-cream.webp"},{"id":"bus","en":"bus","he":"אוטובוס","he_niqqud":"אוֹטוֹבּוּס","theme":"transport","img":"img/bus.webp"},{"id":"egg","en":"egg","he":"ביצה","he_niqqud":"בֵּיצָה","theme":"food","img":"img/egg.webp"},{"id":"tree","en":"tree","he":"עץ","he_niqqud":"עֵץ","theme":"nature","img":"img/tree.webp"},{"id":"hand","en":"hand","he":"יד","he_niqqud":"יָד","theme":"body","img":"img/hand.webp"},{"id":"two","en":"two","he":"שתיים","he_niqqud":"שְׁתַּיִים","theme":"numbers","img":"img/two.webp"},{"id":"blue","en":"blue","he":"כחול","he_niqqud":"כָּחוֹל","theme":"colors","img":"img/blue.webp"},{"id":"horse","en":"horse","he":"סוס","he_niqqud":"סוּס","theme":"animals","img":"img/horse.webp"},{"id":"hat","en":"hat","he":"כובע","he_niqqud":"כּוֹבַע","theme":"clothes","img":"img/hat.webp"},{"id":"mom","en":"mom","he":"אמא","he_niqqud":"אִמָּא","theme":"family","img":"img/mom.webp"},{"id":"dad","en":"dad","he":"אבא","he_niqqud":"אַבָּא","theme":"family","img":"img/dad.webp"},{"id":"moon","en":"moon","he":"ירח","he_niqqud":"יָרֵחַ","theme":"nature","img":"img/moon.webp"},{"id":"cake","en":"cake","he":"עוגה","he_niqqud":"עוּגָה","theme":"food","img":"img/cake.webp"},{"id":"shoe","en":"shoe","he":"נעל","he_niqqud":"נַעַל","theme":"clothes","img":"img/shoe.webp"},{"id":"train","en":"train","he":"רכבת","he_niqqud":"רַכֶּבֶת","theme":"transport","img":"img/train.webp"},{"id":"nose","en":"nose","he":"אף","he_niqqud":"אַף","theme":"body","img":"img/nose.webp"},{"id":"three","en":"three","he":"שלוש","he_niqqud":"שָׁלוֹשׁ","theme":"numbers","img":"img/three.webp"},{"id":"yellow","en":"yellow","he":"צהוב","he_niqqud":"צָהוֹב","theme":"colors","img":"img/yellow.webp"},{"id":"elephant","en":"elephant","he":"פיל","he_niqqud":"פִּיל","theme":"animals","img":"img/elephant.webp"},{"id":"bed","en":"bed","he":"מיטה","he_niqqud":"מִיטָּה","theme":"home","img":"img/bed.webp"},{"id":"flower","en":"flower","he":"פרח","he_niqqud":"פֶּרַח","theme":"nature","img":"img/flower.webp"},{"id":"milk","en":"milk","he":"חלב","he_niqqud":"חָלָב","theme":"food","img":"img/milk.webp"},{"id":"airplane","en":"airplane","he":"מטוס","he_niqqud":"מָטוֹס","theme":"transport","img":"img/airplane.webp"},{"id":"ear","en":"ear","he":"אוזן","he_niqqud":"אוֹזֶן","theme":"body","img":"img/ear.webp"},{"id":"happy","en":"happy","he":"שמח","he_niqqud":"שָׂמֵחַ","theme":"feelings","img":"img/happy.webp"},{"id":"star","en":"star","he":"כוכב","he_niqqud":"כּוֹכָב","theme":"nature","img":"img/star.webp"},{"id":"green","en":"green","he":"ירוק","he_niqqud":"יָרוֹק","theme":"colors","img":"img/green.webp"},{"id":"four","en":"four","he":"ארבע","he_niqqud":"אַרְבַּע","theme":"numbers","img":"img/four.webp"},{"id":"cow","en":"cow","he":"פרה","he_niqqud":"פָּרָה","theme":"animals","img":"img/cow.webp"},{"id":"book","en":"book","he":"ספר","he_niqqud":"סֵפֶר","theme":"school","img":"img/book.webp"},{"id":"bread","en":"bread","he":"לחם","he_niqqud":"לֶחֶם","theme":"food","img":"img/bread.webp"},{"id":"boat","en":"boat","he":"סירה","he_niqqud":"סִירָה","theme":"transport","img":"img/boat.webp"},{"id":"mouth","en":"mouth","he":"פה","he_niqqud":"פֶּה","theme":"body","img":"img/mouth.webp"},{"id":"girl","en":"girl","he":"ילדה","he_niqqud":"יַלְדָּה","theme":"family","img":"img/girl.webp"},{"id":"boy","en":"boy","he":"ילד","he_niqqud":"יֶלֶד","theme":"family","img":"img/boy.webp"},{"id":"teddy-bear","en":"teddy bear","he":"דובי","he_niqqud":"דּוּבִּי","theme":"toys","img":"img/teddy-bear.webp"},{"id":"run","en":"run","he":"לרוץ","he_niqqud":"לָרוּץ","theme":"actions","img":"img/run.webp"},{"id":"sad","en":"sad","he":"עצוב","he_niqqud":"עָצוּב","theme":"feelings","img":"img/sad.webp"},{"id":"five","en":"five","he":"חמש","he_niqqud":"חָמֵשׁ","theme":"numbers","img":"img/five.webp"},{"id":"strawberry","en":"strawberry","he":"תות","he_niqqud":"תּוּת","theme":"food","img":"img/strawberry.webp"},{"id":"monkey","en":"monkey","he":"קוף","he_niqqud":"קוֹף","theme":"animals","img":"img/monkey.webp"},{"id":"balloon","en":"balloon","he":"בלון","he_niqqud":"בָּלוֹן","theme":"toys","img":"img/balloon.webp"},{"id":"rain","en":"rain","he":"גשם","he_niqqud":"גֶּשֶׁם","theme":"nature","img":"img/rain.webp"},{"id":"sleep","en":"sleep","he":"לישון","he_niqqud":"לִישׁוֹן","theme":"actions","img":"img/sleep.webp"},{"id":"pizza","en":"pizza","he":"פיצה","he_niqqud":"פִּיצָה","theme":"food","img":"img/pizza.webp"},{"id":"duck","en":"duck","he":"ברווז","he_niqqud":"בַּרְווָז","theme":"animals","img":"img/duck.webp"},{"id":"bike","en":"bike","he":"אופניים","he_niqqud":"אוֹפַנַּיִים","theme":"transport","img":"img/bike.webp"},{"id":"foot","en":"foot","he":"כף רגל","he_niqqud":"כַּף רֶגֶל","theme":"body","img":"img/foot.webp"},{"id":"gift","en":"gift","he":"מתנה","he_niqqud":"מַתָּנָה","theme":"toys","img":"img/gift.webp"},{"id":"lion","en":"lion","he":"אריה","he_niqqud":"אַרְיֵה","theme":"animals","img":"img/lion.webp"},{"id":"water","en":"water","he":"מים","he_niqqud":"מַיִם","theme":"food","img":"img/water.webp"},{"id":"chair","en":"chair","he":"כיסא","he_niqqud":"כִּיסֵּא","theme":"home","img":"img/chair.webp"},{"id":"swim","en":"swim","he":"לשחות","he_niqqud":"לִשְׂחוֹת","theme":"actions","img":"img/swim.webp"},{"id":"rainbow","en":"rainbow","he":"קשת","he_niqqud":"קֶשֶׁת","theme":"nature","img":"img/rainbow.webp"},{"id":"socks","en":"socks","he":"גרביים","he_niqqud":"גַּרְבַּיִים","theme":"clothes","img":"img/socks.webp"},{"id":"orange","en":"orange","he":"כתום","he_niqqud":"כָּתוֹם","theme":"colors","img":"img/orange.webp"},{"id":"six","en":"six","he":"שש","he_niqqud":"שֵׁשׁ","theme":"numbers","img":"img/six.webp"},{"id":"rabbit","en":"rabbit","he":"ארנב","he_niqqud":"אַרְנָב","theme":"animals","img":"img/rabbit.webp"},{"id":"cookie","en":"cookie","he":"עוגייה","he_niqqud":"עוּגִייָּה","theme":"food","img":"img/cookie.webp"},{"id":"door","en":"door","he":"דלת","he_niqqud":"דֶּלֶת","theme":"home","img":"img/door.webp"},{"id":"dress","en":"dress","he":"שמלה","he_niqqud":"שִׂמְלָה","theme":"clothes","img":"img/dress.webp"},{"id":"walk","en":"walk","he":"ללכת","he_niqqud":"לָלֶכֶת","theme":"actions","img":"img/walk.webp"},{"id":"grandma","en":"grandma","he":"סבתא","he_niqqud":"סַבְתָּא","theme":"family","img":"img/grandma.webp"},{"id":"grandpa","en":"grandpa","he":"סבא","he_niqqud":"סַבָּא","theme":"family","img":"img/grandpa.webp"},{"id":"pen","en":"pen","he":"עט","he_niqqud":"עֵט","theme":"school","img":"img/pen.webp"},{"id":"pencil","en":"pencil","he":"עיפרון","he_niqqud":"עִיפָּרוֹן","theme":"school","img":"img/pencil.webp"},{"id":"bear","en":"bear","he":"דוב","he_niqqud":"דּוֹב","theme":"animals","img":"img/bear.webp"},{"id":"seven","en":"seven","he":"שבע","he_niqqud":"שֶׁבַע","theme":"numbers","img":"img/seven.webp"},{"id":"pink","en":"pink","he":"ורוד","he_niqqud":"וָרוֹד","theme":"colors","img":"img/pink.webp"},{"id":"tooth","en":"tooth","he":"שן","he_niqqud":"שֵׁן","theme":"body","img":"img/tooth.webp"},{"id":"truck","en":"truck","he":"משאית","he_niqqud":"מַשָּׂאִית","theme":"transport","img":"img/truck.webp"},{"id":"t-shirt","en":"T-shirt","he":"חולצה","he_niqqud":"חוּלְצָה","theme":"clothes","img":"img/t-shirt.webp"},{"id":"carrot","en":"carrot","he":"גזר","he_niqqud":"גֶּזֶר","theme":"food","img":"img/carrot.webp"},{"id":"frog","en":"frog","he":"צפרדע","he_niqqud":"צְפַרְדֵּעַ","theme":"animals","img":"img/frog.webp"},{"id":"cloud","en":"cloud","he":"ענן","he_niqqud":"עָנָן","theme":"nature","img":"img/cloud.webp"},{"id":"purple","en":"purple","he":"סגול","he_niqqud":"סָגוֹל","theme":"colors","img":"img/purple.webp"},{"id":"eight","en":"eight","he":"שמונה","he_niqqud":"שְׁמוֹנֶה","theme":"numbers","img":"img/eight.webp"},{"id":"bag","en":"bag","he":"תיק","he_niqqud":"תִּיק","theme":"school","img":"img/bag.webp"},{"id":"cry","en":"cry","he":"לבכות","he_niqqud":"לִבְכּוֹת","theme":"actions","img":"img/cry.webp"},{"id":"laugh","en":"laugh","he":"לצחוק","he_niqqud":"לִצְחוֹק","theme":"actions","img":"img/laugh.webp"},{"id":"dinosaur","en":"dinosaur","he":"דינוזאור","he_niqqud":"דִּינוֹזָאוּר","theme":"animals","img":"img/dinosaur.webp"},{"id":"butterfly","en":"butterfly","he":"פרפר","he_niqqud":"פַּרְפַּר","theme":"animals","img":"img/butterfly.webp"},{"id":"grapes","en":"grapes","he":"ענבים","he_niqqud":"עֲנָבִים","theme":"food","img":"img/grapes.webp"},{"id":"kite","en":"kite","he":"עפיפון","he_niqqud":"עֲפִיפוֹן","theme":"toys","img":"img/kite.webp"},{"id":"nine","en":"nine","he":"תשע","he_niqqud":"תֵּשַׁע","theme":"numbers","img":"img/nine.webp"},{"id":"brown","en":"brown","he":"חום","he_niqqud":"חוּם","theme":"colors","img":"img/brown.webp"},{"id":"ten","en":"ten","he":"עשר","he_niqqud":"עֶשֶׂר","theme":"numbers","img":"img/ten.webp"},{"id":"black","en":"black","he":"שחור","he_niqqud":"שָׁחוֹר","theme":"colors","img":"img/black.webp"},{"id":"white","en":"white","he":"לבן","he_niqqud":"לָבָן","theme":"colors","img":"img/white.webp"},{"id":"gray","en":"gray","he":"אפור","he_niqqud":"אָפוֹר","theme":"colors","img":"img/gray.webp"},{"id":"pig","en":"pig","he":"חזיר","he_niqqud":"חֲזִיר","theme":"animals","img":"img/pig.webp"},{"id":"cheese","en":"cheese","he":"גבינה","he_niqqud":"גְּבִינָה","theme":"food","img":"img/cheese.webp"},{"id":"leg","en":"leg","he":"רגל","he_niqqud":"רֶגֶל","theme":"body","img":"img/leg.webp"},{"id":"man","en":"man","he":"איש","he_niqqud":"אִישׁ","theme":"family","img":"img/man.webp"},{"id":"coat","en":"coat","he":"מעיל","he_niqqud":"מְעִיל","theme":"clothes","img":"img/coat.webp"},{"id":"window","en":"window","he":"חלון","he_niqqud":"חַלּוֹן","theme":"home","img":"img/window.webp"},{"id":"notebook","en":"notebook","he":"מחברת","he_niqqud":"מַחְבֶּרֶת","theme":"school","img":"img/notebook.webp"},{"id":"snow","en":"snow","he":"שלג","he_niqqud":"שֶׁלֶג","theme":"nature","img":"img/snow.webp"},{"id":"ship","en":"ship","he":"ספינה","he_niqqud":"סְפִינָה","theme":"transport","img":"img/ship.webp"},{"id":"robot","en":"robot","he":"רובוט","he_niqqud":"רוֹבּוֹט","theme":"toys","img":"img/robot.webp"},{"id":"climb","en":"climb","he":"לטפס","he_niqqud":"לְטַפֵּס","theme":"actions","img":"img/climb.webp"},{"id":"angry","en":"angry","he":"כועס","he_niqqud":"כּוֹעֵס","theme":"feelings","img":"img/angry.webp"},{"id":"hello","en":"hello","he":"שלום","he_niqqud":"שָׁלוֹם","theme":"greetings","img":"img/hello.webp"},{"id":"doctor","en":"doctor","he":"רופא","he_niqqud":"רוֹפֵא","theme":"jobs","img":"img/doctor.webp"},{"id":"school","en":"school","he":"בית ספר","he_niqqud":"בֵּית סֵפֶר","theme":"places","img":"img/school.webp"},{"id":"sheep","en":"sheep","he":"כבשה","he_niqqud":"כִּבְשָׂה","theme":"animals","img":"img/sheep.webp"},{"id":"candy","en":"candy","he":"סוכרייה","he_niqqud":"סוּכָּרִייָּה","theme":"food","img":"img/candy.webp"},{"id":"finger","en":"finger","he":"אצבע","he_niqqud":"אֶצְבַּע","theme":"body","img":"img/finger.webp"},{"id":"woman","en":"woman","he":"אישה","he_niqqud":"אִישָּׁה","theme":"family","img":"img/woman.webp"},{"id":"jeans","en":"jeans","he":"ג׳ינס","he_niqqud":"גִ׳ינְס","theme":"clothes","img":"img/jeans.webp"},{"id":"clock","en":"clock","he":"שעון","he_niqqud":"שָׁעוֹן","theme":"home","img":"img/clock.webp"},{"id":"scissors","en":"scissors","he":"מספריים","he_niqqud":"מִסְפָּרַיִים","theme":"school","img":"img/scissors.webp"},{"id":"fire","en":"fire","he":"אש","he_niqqud":"אֵשׁ","theme":"nature","img":"img/fire.webp"},{"id":"motorbike","en":"motorbike","he":"אופנוע","he_niqqud":"אוֹפַנּוֹעַ","theme":"transport","img":"img/motorbike.webp"},{"id":"alien","en":"alien","he":"חייזר","he_niqqud":"חַייְזָר","theme":"toys","img":"img/alien.webp"},{"id":"dance","en":"dance","he":"לרקוד","he_niqqud":"לִרְקוֹד","theme":"actions","img":"img/dance.webp"},{"id":"tired","en":"tired","he":"עייף","he_niqqud":"עָייֵף","theme":"feelings","img":"img/tired.webp"},{"id":"teacher","en":"teacher","he":"מורה","he_niqqud":"מוֹרָה","theme":"jobs","img":"img/teacher.webp"},{"id":"castle","en":"castle","he":"טירה","he_niqqud":"טִירָה","theme":"places","img":"img/castle.webp"},{"id":"chicken","en":"chicken","he":"תרנגולת","he_niqqud":"תַּרְנְגוֹלֶת","theme":"animals","img":"img/chicken.webp"},{"id":"chocolate","en":"chocolate","he":"שוקולד","he_niqqud":"שׁוֹקוֹלָד","theme":"food","img":"img/chocolate.webp"},{"id":"glasses","en":"glasses","he":"משקפיים","he_niqqud":"מִשְׁקָפַיִים","theme":"clothes","img":"img/glasses.webp"},{"id":"phone","en":"phone","he":"טלפון","he_niqqud":"טֶלֶפוֹן","theme":"home","img":"img/phone.webp"},{"id":"crayon","en":"crayon","he":"צבע","he_niqqud":"צֶבַע","theme":"school","img":"img/crayon.webp"},{"id":"sea","en":"sea","he":"ים","he_niqqud":"יָם","theme":"nature","img":"img/sea.webp"},{"id":"helicopter","en":"helicopter","he":"מסוק","he_niqqud":"מַסּוֹק","theme":"transport","img":"img/helicopter.webp"},{"id":"puzzle","en":"puzzle","he":"פאזל","he_niqqud":"פָּאזֶל","theme":"toys","img":"img/puzzle.webp"},{"id":"sing","en":"sing","he":"לשיר","he_niqqud":"לָשִׁיר","theme":"actions","img":"img/sing.webp"},{"id":"sick","en":"sick","he":"חולה","he_niqqud":"חוֹלֶה","theme":"feelings","img":"img/sick.webp"},{"id":"police-officer","en":"police officer","he":"שוטר","he_niqqud":"שׁוֹטֵר","theme":"jobs","img":"img/police-officer.webp"},{"id":"tent","en":"tent","he":"אוהל","he_niqqud":"אוֹהֶל","theme":"places","img":"img/tent.webp"},{"id":"mouse","en":"mouse","he":"עכבר","he_niqqud":"עַכְבָּר","theme":"animals","img":"img/mouse.webp"},{"id":"burger","en":"burger","he":"המבורגר","he_niqqud":"הַמְבּוּרְגֶּר","theme":"food","img":"img/burger.webp"},{"id":"shorts","en":"shorts","he":"מכנסיים קצרים","he_niqqud":"מִכְנָסַיִים קְצָרִים","theme":"clothes","img":"img/shorts.webp"},{"id":"tv","en":"TV","he":"טלוויזיה","he_niqqud":"טֶלֶווִיזְיָה","theme":"home","img":"img/tv.webp"},{"id":"ruler","en":"ruler","he":"סרגל","he_niqqud":"סַרְגֵּל","theme":"school","img":"img/ruler.webp"},{"id":"leaf","en":"leaf","he":"עלה","he_niqqud":"עָלֶה","theme":"nature","img":"img/leaf.webp"},{"id":"taxi","en":"taxi","he":"מונית","he_niqqud":"מוֹנִית","theme":"transport","img":"img/taxi.webp"},{"id":"drum","en":"drum","he":"תוף","he_niqqud":"תּוֹף","theme":"toys","img":"img/drum.webp"},{"id":"write","en":"write","he":"לכתוב","he_niqqud":"לִכְתּוֹב","theme":"actions","img":"img/write.webp"},{"id":"hot","en":"hot","he":"חם","he_niqqud":"חַם","theme":"feelings","img":"img/hot.webp"},{"id":"firefighter","en":"firefighter","he":"כבאי","he_niqqud":"כַּבַּאי","theme":"jobs","img":"img/firefighter.webp"},{"id":"snake","en":"snake","he":"נחש","he_niqqud":"נָחָשׁ","theme":"animals","img":"img/snake.webp"},{"id":"fries","en":"fries","he":"צ׳יפס","he_niqqud":"צִ׳יפְּס","theme":"food","img":"img/fries.webp"},{"id":"boot","en":"boot","he":"מגף","he_niqqud":"מַגָּף","theme":"clothes","img":"img/boot.webp"},{"id":"computer","en":"computer","he":"מחשב","he_niqqud":"מַחְשֵׁב","theme":"home","img":"img/computer.webp"},{"id":"mountain","en":"mountain","he":"הר","he_niqqud":"הַר","theme":"nature","img":"img/mountain.webp"},{"id":"ambulance","en":"ambulance","he":"אמבולנס","he_niqqud":"אַמְבּוּלַנְס","theme":"transport","img":"img/ambulance.webp"},{"id":"guitar","en":"guitar","he":"גיטרה","he_niqqud":"גִּיטָרָה","theme":"toys","img":"img/guitar.webp"},{"id":"draw","en":"draw","he":"לצייר","he_niqqud":"לְצַייֵּר","theme":"actions","img":"img/draw.webp"},{"id":"cold","en":"cold","he":"קר","he_niqqud":"קַר","theme":"feelings","img":"img/cold.webp"},{"id":"clown","en":"clown","he":"ליצן","he_niqqud":"לֵיצָן","theme":"jobs","img":"img/clown.webp"},{"id":"bee","en":"bee","he":"דבורה","he_niqqud":"דְּבוֹרָה","theme":"animals","img":"img/bee.webp"},{"id":"juice","en":"juice","he":"מיץ","he_niqqud":"מִיץ","theme":"food","img":"img/juice.webp"},{"id":"key","en":"key","he":"מפתח","he_niqqud":"מַפְתֵּחַ","theme":"home","img":"img/key.webp"},{"id":"tractor","en":"tractor","he":"טרקטור","he_niqqud":"טְרַקְטוֹר","theme":"transport","img":"img/tractor.webp"},{"id":"football","en":"football","he":"כדורגל","he_niqqud":"כַּדּוּרֶגֶל","theme":"toys","img":"img/football.webp"},{"id":"clap","en":"clap","he":"למחוא כפיים","he_niqqud":"לִמְחוֹא כַּפַּיִים","theme":"actions","img":"img/clap.webp"},{"id":"tiger","en":"tiger","he":"נמר","he_niqqud":"נָמֵר","theme":"animals","img":"img/tiger.webp"},{"id":"watermelon","en":"watermelon","he":"אבטיח","he_niqqud":"אֲבַטִּיחַ","theme":"food","img":"img/watermelon.webp"},{"id":"spoon","en":"spoon","he":"כפית","he_niqqud":"כַּפִּית","theme":"home","img":"img/spoon.webp"},{"id":"fire-truck","en":"fire truck","he":"כבאית","he_niqqud":"כַּבָּאִית","theme":"transport","img":"img/fire-truck.webp"},{"id":"basketball","en":"basketball","he":"כדורסל","he_niqqud":"כַּדּוּרְסַל","theme":"toys","img":"img/basketball.webp"},{"id":"kiss","en":"kiss","he":"נשיקה","he_niqqud":"נְשִׁיקָה","theme":"actions","img":"img/kiss.webp"},{"id":"zebra","en":"zebra","he":"זברה","he_niqqud":"זֶבְּרָה","theme":"animals","img":"img/zebra.webp"},{"id":"pear","en":"pear","he":"אגס","he_niqqud":"אַגָּס","theme":"food","img":"img/pear.webp"},{"id":"plate","en":"plate","he":"צלחת","he_niqqud":"צַלַּחַת","theme":"home","img":"img/plate.webp"},{"id":"rocket","en":"rocket","he":"חללית","he_niqqud":"חֲלָלִית","theme":"transport","img":"img/rocket.webp"},{"id":"giraffe","en":"giraffe","he":"ג׳ירפה","he_niqqud":"גִ׳ירָפָה","theme":"animals","img":"img/giraffe.webp"},{"id":"lemon","en":"lemon","he":"לימון","he_niqqud":"לִימוֹן","theme":"food","img":"img/lemon.webp"},{"id":"bottle","en":"bottle","he":"בקבוק","he_niqqud":"בַּקְבּוּק","theme":"home","img":"img/bottle.webp"},{"id":"snowman","en":"snowman","he":"איש שלג","he_niqqud":"אִישׁ שֶׁלֶג","theme":"toys","img":"img/snowman.webp"},{"id":"penguin","en":"penguin","he":"פינגווין","he_niqqud":"פִּינְגְּווִין","theme":"animals","img":"img/penguin.webp"},{"id":"tomato","en":"tomato","he":"עגבנייה","he_niqqud":"עַגְבָנִייָּה","theme":"food","img":"img/tomato.webp"},{"id":"box","en":"box","he":"קופסה","he_niqqud":"קוּפְסָה","theme":"home","img":"img/box.webp"},{"id":"dolphin","en":"dolphin","he":"דולפין","he_niqqud":"דּוֹלְפִין","theme":"animals","img":"img/dolphin.webp"},{"id":"potato","en":"potato","he":"תפוח אדמה","he_niqqud":"תַּפּוּחַ אֲדָמָה","theme":"food","img":"img/potato.webp"},{"id":"picture","en":"picture","he":"תמונה","he_niqqud":"תְּמוּנָה","theme":"home","img":"img/picture.webp"},{"id":"panda","en":"panda","he":"פנדה","he_niqqud":"פַּנְדָּה","theme":"animals","img":"img/panda.webp"},{"id":"rice","en":"rice","he":"אורז","he_niqqud":"אוֹרֶז","theme":"food","img":"img/rice.webp"},{"id":"whale","en":"whale","he":"לווייתן","he_niqqud":"לִווְייָתָן","theme":"animals","img":"img/whale.webp"},{"id":"pasta","en":"pasta","he":"פסטה","he_niqqud":"פַּסְטָה","theme":"food","img":"img/pasta.webp"},{"id":"turtle","en":"turtle","he":"צב","he_niqqud":"צָב","theme":"animals","img":"img/turtle.webp"},{"id":"honey","en":"honey","he":"דבש","he_niqqud":"דְּבַשׁ","theme":"food","img":"img/honey.webp"},{"id":"camel","en":"camel","he":"גמל","he_niqqud":"גָּמָל","theme":"animals","img":"img/camel.webp"},{"id":"sandwich","en":"sandwich","he":"כריך","he_niqqud":"כָּרִיךְ","theme":"food","img":"img/sandwich.webp"},{"id":"octopus","en":"octopus","he":"תמנון","he_niqqud":"תְּמָנוּן","theme":"animals","img":"img/octopus.webp"},{"id":"salad","en":"salad","he":"סלט","he_niqqud":"סָלָט","theme":"food","img":"img/salad.webp"},{"id":"shark","en":"shark","he":"כריש","he_niqqud":"כָּרִישׁ","theme":"animals","img":"img/shark.webp"},{"id":"pineapple","en":"pineapple","he":"אננס","he_niqqud":"אֲנָנָס","theme":"food","img":"img/pineapple.webp"},{"id":"crocodile","en":"crocodile","he":"תנין","he_niqqud":"תַּנִּין","theme":"animals","img":"img/crocodile.webp"},{"id":"mango","en":"mango","he":"מנגו","he_niqqud":"מַנְגּוֹ","theme":"food","img":"img/mango.webp"},{"id":"zero","en":"zero","he":"אפס","he_niqqud":"אֶפֶס","theme":"numbers","img":"img/zero.webp"},{"id":"scarf","en":"scarf","he":"צעיף","he_niqqud":"צָעִיף","theme":"clothes","img":"img/scarf.webp"},{"id":"knife","en":"knife","he":"סכין","he_niqqud":"סַכִּין","theme":"home","img":"img/knife.webp"},{"id":"paper","en":"paper","he":"נייר","he_niqqud":"נְייָר","theme":"school","img":"img/paper.webp"},{"id":"storm","en":"storm","he":"סערה","he_niqqud":"סְעָרָה","theme":"nature","img":"img/storm.webp"},{"id":"road","en":"road","he":"כביש","he_niqqud":"כְּבִישׁ","theme":"transport","img":"img/road.webp"},{"id":"doll","en":"doll","he":"בובה","he_niqqud":"בּוּבָּה","theme":"toys","img":"img/doll.webp"},{"id":"ride","en":"ride","he":"לרכוב","he_niqqud":"לִרְכּוֹב","theme":"actions","img":"img/ride.webp"},{"id":"afraid","en":"afraid","he":"מפחד","he_niqqud":"מְפַחֵד","theme":"feelings","img":"img/afraid.webp"},{"id":"yes","en":"yes","he":"כן","he_niqqud":"כֵּן","theme":"greetings","img":"img/yes.webp"},{"id":"pilot","en":"pilot","he":"טייס","he_niqqud":"טַייָּס","theme":"jobs","img":"img/pilot.webp"},{"id":"hospital","en":"hospital","he":"בית חולים","he_niqqud":"בֵּית חוֹלִים","theme":"places","img":"img/hospital.webp"},{"id":"circle","en":"circle","he":"עיגול","he_niqqud":"עִיגּוּל","theme":"shapes","img":"img/circle.webp"},{"id":"donkey","en":"donkey","he":"חמור","he_niqqud":"חֲמוֹר","theme":"animals","img":"img/donkey.webp"},{"id":"kiwi","en":"kiwi","he":"קיווי","he_niqqud":"קִיווִי","theme":"food","img":"img/kiwi.webp"},{"id":"swimsuit","en":"swimsuit","he":"בגד ים","he_niqqud":"בֶּגֶד יָם","theme":"clothes","img":"img/swimsuit.webp"},{"id":"bowl","en":"bowl","he":"קערה","he_niqqud":"קְעָרָה","theme":"home","img":"img/bowl.webp"},{"id":"island","en":"island","he":"אי","he_niqqud":"אִי","theme":"nature","img":"img/island.webp"},{"id":"wheel","en":"wheel","he":"גלגל","he_niqqud":"גַּלְגַּל","theme":"transport","img":"img/wheel.webp"},{"id":"tennis","en":"tennis","he":"טניס","he_niqqud":"טֶנִיס","theme":"toys","img":"img/tennis.webp"},{"id":"think","en":"think","he":"לחשוב","he_niqqud":"לַחְשׁוֹב","theme":"actions","img":"img/think.webp"},{"id":"surprised","en":"surprised","he":"מופתע","he_niqqud":"מוּפְתָּע","theme":"feelings","img":"img/surprised.webp"},{"id":"no","en":"no","he":"לא","he_niqqud":"לֹא","theme":"greetings","img":"img/no.webp"},{"id":"cook","en":"cook","he":"טבח","he_niqqud":"טַבָּח","theme":"jobs","img":"img/cook.webp"},{"id":"shopping","en":"shopping","he":"קניות","he_niqqud":"קְנִיּוֹת","theme":"places","img":"img/shopping.webp"},{"id":"square","en":"square","he":"ריבוע","he_niqqud":"רִיבּוּעַ","theme":"shapes","img":"img/square.webp"},{"id":"goat","en":"goat","he":"עז","he_niqqud":"עֵז","theme":"animals","img":"img/goat.webp"},{"id":"coconut","en":"coconut","he":"קוקוס","he_niqqud":"קוֹקוֹס","theme":"food","img":"img/coconut.webp"},{"id":"gloves","en":"gloves","he":"כפפות","he_niqqud":"כְּפָפוֹת","theme":"clothes","img":"img/gloves.webp"},{"id":"radio","en":"radio","he":"רדיו","he_niqqud":"רַדְיוֹ","theme":"home","img":"img/radio.webp"},{"id":"rock","en":"rock","he":"אבן","he_niqqud":"אֶבֶן","theme":"nature","img":"img/rock.webp"},{"id":"suitcase","en":"suitcase","he":"מזוודה","he_niqqud":"מִזְווָדָה","theme":"transport","img":"img/suitcase.webp"},{"id":"table-tennis","en":"table tennis","he":"פינג פונג","he_niqqud":"פִּינְג פּוֹנְג","theme":"toys","img":"img/table-tennis.webp"},{"id":"stop","en":"stop","he":"עצור","he_niqqud":"עֲצוֹר","theme":"actions","img":"img/stop.webp"},{"id":"cool","en":"cool","he":"מגניב","he_niqqud":"מַגְנִיב","theme":"feelings","img":"img/cool.webp"},{"id":"ok","en":"OK","he":"בסדר","he_niqqud":"בְּסֵדֶר","theme":"greetings","img":"img/ok.webp"},{"id":"farmer","en":"farmer","he":"חקלאי","he_niqqud":"חַקְלַאי","theme":"jobs","img":"img/farmer.webp"},{"id":"beach","en":"beach","he":"חוף ים","he_niqqud":"חוֹף יָם","theme":"places","img":"img/beach.webp"},{"id":"up","en":"up","he":"למעלה","he_niqqud":"לְמַעְלָה","theme":"shapes","img":"img/up.webp"},{"id":"hippo","en":"hippo","he":"היפופוטם","he_niqqud":"הִיפּוֹפּוֹטָם","theme":"animals","img":"img/hippo.webp"},{"id":"butter","en":"butter","he":"חמאה","he_niqqud":"חֶמְאָה","theme":"food","img":"img/butter.webp"},{"id":"ring","en":"ring","he":"טבעת","he_niqqud":"טַבַּעַת","theme":"clothes","img":"img/ring.webp"},{"id":"camera","en":"camera","he":"מצלמה","he_niqqud":"מַצְלֵמָה","theme":"home","img":"img/camera.webp"},{"id":"shell","en":"shell","he":"צדף","he_niqqud":"צֶדֶף","theme":"nature","img":"img/shell.webp"},{"id":"map","en":"map","he":"מפה","he_niqqud":"מַפָּה","theme":"transport","img":"img/map.webp"},{"id":"skateboard","en":"skateboard","he":"סקייטבורד","he_niqqud":"סְקֵייטְבּוֹרְד","theme":"toys","img":"img/skateboard.webp"},{"id":"quiet","en":"quiet","he":"שקט","he_niqqud":"שֶׁקֶט","theme":"feelings","img":"img/quiet.webp"},{"id":"astronaut","en":"astronaut","he":"אסטרונאוט","he_niqqud":"אַסְטְרוֹנָאוּט","theme":"jobs","img":"img/astronaut.webp"},{"id":"circus","en":"circus","he":"קרקס","he_niqqud":"קִרְקָס","theme":"places","img":"img/circus.webp"},{"id":"down","en":"down","he":"למטה","he_niqqud":"לְמַטָּה","theme":"shapes","img":"img/down.webp"},{"id":"jellyfish","en":"jellyfish","he":"מדוזה","he_niqqud":"מֵדוּזָה","theme":"animals","img":"img/jellyfish.webp"},{"id":"salt","en":"salt","he":"מלח","he_niqqud":"מֶלַח","theme":"food","img":"img/salt.webp"},{"id":"watch","en":"watch","he":"שעון יד","he_niqqud":"שְׁעוֹן יָד","theme":"clothes","img":"img/watch.webp"},{"id":"mirror","en":"mirror","he":"מראה","he_niqqud":"מַרְאָה","theme":"home","img":"img/mirror.webp"},{"id":"ice","en":"ice","he":"קרח","he_niqqud":"קֶרַח","theme":"nature","img":"img/ice.webp"},{"id":"roller-skates","en":"roller skates","he":"גלגיליות","he_niqqud":"גַּלְגִּילִיּוֹת","theme":"toys","img":"img/roller-skates.webp"},{"id":"love","en":"love","he":"לאהוב","he_niqqud":"לֶאֱהוֹב","theme":"feelings","img":"img/love.webp"},{"id":"king","en":"king","he":"מלך","he_niqqud":"מֶלֶךְ","theme":"jobs","img":"img/king.webp"},{"id":"lizard","en":"lizard","he":"לטאה","he_niqqud":"לְטָאָה","theme":"animals","img":"img/lizard.webp"},{"id":"onion","en":"onion","he":"בצל","he_niqqud":"בָּצָל","theme":"food","img":"img/onion.webp"},{"id":"umbrella","en":"umbrella","he":"מטרייה","he_niqqud":"מִטְרִייָּה","theme":"clothes","img":"img/umbrella.webp"},{"id":"sofa","en":"sofa","he":"ספה","he_niqqud":"סַפָּה","theme":"home","img":"img/sofa.webp"},{"id":"plant","en":"plant","he":"עציץ","he_niqqud":"עָצִיץ","theme":"nature","img":"img/plant.webp"},{"id":"piano","en":"piano","he":"פסנתר","he_niqqud":"פְּסַנְתֵּר","theme":"toys","img":"img/piano.webp"},{"id":"polar-bear","en":"polar bear","he":"דוב קוטב","he_niqqud":"דּוֹב קוֹטֶב","theme":"animals","img":"img/polar-bear.webp"},{"id":"garlic","en":"garlic","he":"שום","he_niqqud":"שׁוּם","theme":"food","img":"img/garlic.webp"},{"id":"crown","en":"crown","he":"כתר","he_niqqud":"כֶּתֶר","theme":"clothes","img":"img/crown.webp"},{"id":"bath","en":"bath","he":"אמבטיה","he_niqqud":"אַמְבַּטְיָה","theme":"home","img":"img/bath.webp"},{"id":"planet","en":"planet","he":"כוכב לכת","he_niqqud":"כּוֹכַב לֶכֶת","theme":"nature","img":"img/planet.webp"},{"id":"violin","en":"violin","he":"כינור","he_niqqud":"כִּינּוֹר","theme":"toys","img":"img/violin.webp"},{"id":"spider","en":"spider","he":"עכביש","he_niqqud":"עַכָּבִישׁ","theme":"animals","img":"img/spider.webp"},{"id":"peas","en":"peas","he":"אפונה","he_niqqud":"אֲפוּנָה","theme":"food","img":"img/peas.webp"},{"id":"shower","en":"shower","he":"מקלחת","he_niqqud":"מִקְלַחַת","theme":"home","img":"img/shower.webp"},{"id":"desert","en":"desert","he":"מדבר","he_niqqud":"מִדְבָּר","theme":"nature","img":"img/desert.webp"},{"id":"music","en":"music","he":"מוזיקה","he_niqqud":"מוּזִיקָה","theme":"toys","img":"img/music.webp"},{"id":"bat","en":"bat","he":"עטלף","he_niqqud":"עֲטַלֵּף","theme":"animals","img":"img/bat.webp"},{"id":"beans","en":"beans","he":"שעועית","he_niqqud":"שְׁעוּעִית","theme":"food","img":"img/beans.webp"},{"id":"toilet","en":"toilet","he":"אסלה","he_niqqud":"אַסְלָה","theme":"home","img":"img/toilet.webp"},{"id":"earth","en":"Earth","he":"כדור הארץ","he_niqqud":"כַּדּוּר הָאָרֶץ","theme":"nature","img":"img/earth.webp"},{"id":"party","en":"party","he":"מסיבה","he_niqqud":"מְסִיבָּה","theme":"toys","img":"img/party.webp"},{"id":"kangaroo","en":"kangaroo","he":"קנגורו","he_niqqud":"קֶנְגּוּרוּ","theme":"animals","img":"img/kangaroo.webp"},{"id":"pie","en":"pie","he":"פאי","he_niqqud":"פַּאי","theme":"food","img":"img/pie.webp"},{"id":"soap","en":"soap","he":"סבון","he_niqqud":"סַבּוֹן","theme":"home","img":"img/soap.webp"},{"id":"goal","en":"goal","he":"שער","he_niqqud":"שַׁעַר","theme":"toys","img":"img/goal.webp"},{"id":"parrot","en":"parrot","he":"תוכי","he_niqqud":"תּוּכִּי","theme":"animals","img":"img/parrot.webp"},{"id":"pancakes","en":"pancakes","he":"פנקייק","he_niqqud":"פַּנְקֵייק","theme":"food","img":"img/pancakes.webp"},{"id":"toothbrush","en":"toothbrush","he":"מברשת שיניים","he_niqqud":"מִבְרֶשֶׁת שִׁינַּיִים","theme":"home","img":"img/toothbrush.webp"},{"id":"snail","en":"snail","he":"חילזון","he_niqqud":"חִילָּזוֹן","theme":"animals","img":"img/snail.webp"},{"id":"coffee","en":"coffee","he":"קפה","he_niqqud":"קָפֶה","theme":"food","img":"img/coffee.webp"},{"id":"money","en":"money","he":"כסף","he_niqqud":"כֶּסֶף","theme":"home","img":"img/money.webp"},{"id":"fly","en":"fly","he":"זבוב","he_niqqud":"זְבוּב","theme":"animals","img":"img/fly.webp"},{"id":"olives","en":"olives","he":"זיתים","he_niqqud":"זֵיתִים","theme":"food","img":"img/olives.webp"},{"id":"letter","en":"letter","he":"מכתב","he_niqqud":"מִכְתָּב","theme":"home","img":"img/letter.webp"},{"id":"swan","en":"swan","he":"ברבור","he_niqqud":"בַּרְבּוּר","theme":"animals","img":"img/swan.webp"},{"id":"pepper","en":"pepper","he":"פלפל","he_niqqud":"פִּלְפֵּל","theme":"food","img":"img/pepper.webp"},{"id":"medicine","en":"medicine","he":"תרופה","he_niqqud":"תְּרוּפָה","theme":"home","img":"img/medicine.webp"},{"id":"eagle","en":"eagle","he":"נשר","he_niqqud":"נֶשֶׁר","theme":"animals","img":"img/eagle.webp"},{"id":"sausage","en":"sausage","he":"נקניקייה","he_niqqud":"נַקְנִיקִייָּה","theme":"food","img":"img/sausage.webp"},{"id":"bandage","en":"bandage","he":"פלסטר","he_niqqud":"פְּלַסְטֶר","theme":"home","img":"img/bandage.webp"},{"id":"nest","en":"nest","he":"קן","he_niqqud":"קֵן","theme":"animals","img":"img/nest.webp"},{"id":"meat","en":"meat","he":"בשר","he_niqqud":"בָּשָׂר","theme":"food","img":"img/meat.webp"},{"id":"flashlight","en":"flashlight","he":"פנס","he_niqqud":"פָּנָס","theme":"home","img":"img/flashlight.webp"},{"id":"wing","en":"wing","he":"כנף","he_niqqud":"כָּנָף","theme":"animals","img":"img/wing.webp"},{"id":"flag","en":"flag","he":"דגל","he_niqqud":"דֶּגֶל","theme":"home","img":"img/flag.webp"},{"id":"beetle","en":"beetle","he":"חיפושית","he_niqqud":"חִיפּוּשִׁית","theme":"animals","img":"img/beetle.webp"},{"id":"beard","en":"beard","he":"זקן","he_niqqud":"זָקָן","theme":"body","img":"img/beard.webp"},{"id":"plus","en":"plus","he":"פלוס","he_niqqud":"פְּלוּס","theme":"numbers","img":"img/plus.webp"},{"id":"helmet","en":"helmet","he":"קסדה","he_niqqud":"קַסְדָּה","theme":"clothes","img":"img/helmet.webp"},{"id":"comb","en":"comb","he":"מסרק","he_niqqud":"מַסְרֵק","theme":"home","img":"img/comb.webp"},{"id":"folder","en":"folder","he":"תיקייה","he_niqqud":"תִּיקִייָּה","theme":"school","img":"img/folder.webp"},{"id":"night","en":"night","he":"לילה","he_niqqud":"לַיְלָה","theme":"nature","img":"img/night.webp"},{"id":"ticket","en":"ticket","he":"כרטיס","he_niqqud":"כַּרְטִיס","theme":"transport","img":"img/ticket.webp"},{"id":"ice-skates","en":"ice skates","he":"מחליקיים","he_niqqud":"מַחְלִיקַיִים","theme":"toys","img":"img/ice-skates.webp"},{"id":"talk","en":"talk","he":"לדבר","he_niqqud":"לְדַבֵּר","theme":"actions","img":"img/talk.webp"},{"id":"crazy","en":"crazy","he":"משוגע","he_niqqud":"מְשׁוּגָּע","theme":"feelings","img":"img/crazy.webp"},{"id":"good","en":"good","he":"טוב","he_niqqud":"טוֹב","theme":"greetings","img":"img/good.webp"},{"id":"building","en":"building","he":"בניין","he_niqqud":"בִּנְייָן","theme":"places","img":"img/building.webp"},{"id":"left","en":"left","he":"שמאל","he_niqqud":"שְׂמֹאל","theme":"shapes","img":"img/left.webp"},{"id":"keyboard","en":"keyboard","he":"מקלדת","he_niqqud":"מִקְלֶדֶת","theme":"home","img":"img/keyboard.webp"},{"id":"brush","en":"brush","he":"מכחול","he_niqqud":"מִכְחוֹל","theme":"school","img":"img/brush.webp"},{"id":"hole","en":"hole","he":"חור","he_niqqud":"חוֹר","theme":"nature","img":"img/hole.webp"},{"id":"ski","en":"ski","he":"סקי","he_niqqud":"סְקִי","theme":"toys","img":"img/ski.webp"},{"id":"hurt","en":"hurt","he":"כואב","he_niqqud":"כּוֹאֵב","theme":"feelings","img":"img/hurt.webp"},{"id":"bad","en":"bad","he":"רע","he_niqqud":"רַע","theme":"greetings","img":"img/bad.webp"},{"id":"factory","en":"factory","he":"מפעל","he_niqqud":"מִפְעָל","theme":"places","img":"img/factory.webp"},{"id":"right","en":"right","he":"ימין","he_niqqud":"יָמִין","theme":"shapes","img":"img/right.webp"},{"id":"newspaper","en":"newspaper","he":"עיתון","he_niqqud":"עִיתּוֹן","theme":"home","img":"img/newspaper.webp"},{"id":"sled","en":"sled","he":"מזחלת","he_niqqud":"מִזְחֶלֶת","theme":"toys","img":"img/sled.webp"},{"id":"stadium","en":"stadium","he":"אצטדיון","he_niqqud":"אִצְטַדְיוֹן","theme":"places","img":"img/stadium.webp"},{"id":"calendar","en":"calendar","he":"לוח שנה","he_niqqud":"לוּחַ שָׁנָה","theme":"home","img":"img/calendar.webp"},{"id":"fishing","en":"fishing","he":"דיג","he_niqqud":"דַּיִג","theme":"toys","img":"img/fishing.webp"},{"id":"bridge","en":"bridge","he":"גשר","he_niqqud":"גֶּשֶׁר","theme":"places","img":"img/bridge.webp"},{"id":"bin","en":"bin","he":"פח","he_niqqud":"פַּח","theme":"home","img":"img/bin.webp"},{"id":"chess","en":"chess","he":"שחמט","he_niqqud":"שַׁחְמָט","theme":"toys","img":"img/chess.webp"},{"id":"fan","en":"fan","he":"מניפה","he_niqqud":"מְנִיפָה","theme":"home","img":"img/fan.webp"},{"id":"prize","en":"prize","he":"פרס","he_niqqud":"פְּרָס","theme":"toys","img":"img/prize.webp"},{"id":"sign","en":"sign","he":"שלט","he_niqqud":"שֶׁלֶט","theme":"home","img":"img/sign.webp"},{"id":"elevator","en":"elevator","he":"מעלית","he_niqqud":"מַעֲלִית","theme":"home","img":"img/elevator.webp"},{"id":"wool","en":"wool","he":"צמר","he_niqqud":"צֶמֶר","theme":"home","img":"img/wool.webp"},{"id":"chopsticks","en":"chopsticks","he":"מקלות אכילה","he_niqqud":"מַקְלוֹת אֲכִילָה","theme":"home","img":"img/chopsticks.webp"},{"id":"idea","en":"idea","he":"רעיון","he_niqqud":"רַעְיוֹן","theme":"home","img":"img/idea.webp"}],"audio":{"ui":["start","win"],"en":["dog","cat","apple","ball","sun","car","banana","fish","house","baby","red","one","bird","eye","ice-cream","bus","egg","tree","hand","two","blue","horse","hat","mom","dad","moon","cake","shoe","train","nose","three","yellow","elephant","bed","flower","milk","airplane","ear","happy","star","green","four","cow","book","bread","boat","mouth","girl","boy","teddy-bear","run","sad","five","strawberry","monkey","balloon","rain","sleep","pizza","duck","bike","foot","gift","lion","water","chair","swim","rainbow","socks","orange","six","rabbit","cookie","door","dress","walk","grandma","grandpa","pen","pencil","bear","seven","pink","tooth","truck","t-shirt","carrot","frog","cloud","purple","eight","bag","cry","laugh","dinosaur","butterfly","grapes","kite","nine","brown","ten","black","white","gray","pig","cheese","leg","man","coat","window","notebook","snow","ship","robot","climb","angry","hello","doctor","school","sheep","candy","finger","woman","jeans","clock","scissors","fire","motorbike","alien","dance","tired","teacher","castle","chicken","chocolate","glasses","phone","crayon","sea","helicopter","puzzle","sing","sick","police-officer","tent","mouse","burger","shorts","tv","ruler","leaf","taxi","drum","write","hot","firefighter","snake","fries","boot","computer","mountain","ambulance","guitar","draw","cold","clown","bee","juice","key","tractor","football","clap","tiger","watermelon","spoon","fire-truck","basketball","kiss","zebra","pear","plate","rocket","giraffe","lemon","bottle","snowman","penguin","tomato","box","dolphin","potato","picture","panda","rice","whale","pasta","turtle","honey","camel","sandwich","octopus","salad","shark","pineapple","crocodile","mango","zero","scarf","knife","paper","storm","road","doll","ride","afraid","yes","pilot","hospital","circle","donkey","kiwi","swimsuit","bowl","island","wheel","tennis","think","surprised","no","cook","shopping","square","goat","coconut","gloves","radio","rock","suitcase","table-tennis","stop","cool","ok","farmer","beach","up","hippo","butter","ring","camera","shell","map","skateboard","quiet","astronaut","circus","down","jellyfish","salt","watch","mirror","ice","roller-skates","love","king","lizard","onion","umbrella","sofa","plant","piano","polar-bear","garlic","crown","bath","planet","violin","spider","peas","shower","desert","music","bat","beans","toilet","earth","party","kangaroo","pie","soap","goal","parrot","pancakes","toothbrush","snail","coffee","money","fly","olives","letter","swan","pepper","medicine","eagle","sausage","bandage","nest","meat","flashlight","wing","flag","beetle","beard","plus","helmet","comb","folder","night","ticket","ice-skates","talk","crazy","good","building","left","keyboard","brush","hole","ski","hurt","bad","factory","right","newspaper","sled","stadium","calendar","fishing","bridge","bin","chess","fan","prize","sign","elevator","wool","chopsticks","idea"],"he":["dog","cat","apple","ball","sun","car","banana","fish","house","baby","red","one","bird","eye","ice-cream","bus","egg","tree","hand","two","blue","horse","hat","mom","dad","moon","cake","shoe","train","nose","three","yellow","elephant","bed","flower","milk","airplane","ear","happy","star","green","four","cow","book","bread","boat","mouth","girl","boy","teddy-bear","run","sad","five","strawberry","monkey","balloon","rain","sleep","pizza","duck","bike","foot","gift","lion","water","chair","swim","rainbow","socks","orange","six","rabbit","cookie","door","dress","walk","grandma","grandpa","pen","pencil","bear","seven","pink","tooth","truck","t-shirt","carrot","frog","cloud","purple","eight","bag","cry","laugh","dinosaur","butterfly","grapes","kite","nine","brown","ten","black","white","gray","pig","cheese","leg","man","coat","window","notebook","snow","ship","robot","climb","angry","hello","doctor","school","sheep","candy","finger","woman","jeans","clock","scissors","fire","motorbike","alien","dance","tired","teacher","castle","chicken","chocolate","glasses","phone","crayon","sea","helicopter","puzzle","sing","sick","police-officer","tent","mouse","burger","shorts","tv","ruler","leaf","taxi","drum","write","hot","firefighter","snake","fries","boot","computer","mountain","ambulance","guitar","draw","cold","clown","bee","juice","key","tractor","football","clap","tiger","watermelon","spoon","fire-truck","basketball","kiss","zebra","pear","plate","rocket","giraffe","lemon","bottle","snowman","penguin","tomato","box","dolphin","potato","picture","panda","rice","whale","pasta","turtle","honey","camel","sandwich","octopus","salad","shark","pineapple","crocodile","mango","zero","scarf","knife","paper","storm","road","doll","ride","afraid","yes","pilot","hospital","circle","donkey","kiwi","swimsuit","bowl","island","wheel","tennis","think","surprised","no","cook","shopping","square","goat","coconut","gloves","radio","rock","suitcase","table-tennis","stop","cool","ok","farmer","beach","up","hippo","butter","ring","camera","shell","map","skateboard","quiet","astronaut","circus","down","jellyfish","salt","watch","mirror","ice","roller-skates","love","king","lizard","onion","umbrella","sofa","plant","piano","polar-bear","garlic","crown","bath","planet","violin","spider","peas","shower","desert","music","bat","beans","toilet","earth","party","kangaroo","pie","soap","goal","parrot","pancakes","toothbrush","snail","coffee","money","fly","olives","letter","swan","pepper","medicine","eagle","sausage","bandage","nest","meat","flashlight","wing","flag","beetle","beard","plus","helmet","comb","folder","night","ticket","ice-skates","talk","crazy","good","building","left","keyboard","brush","hole","ski","hurt","bad","factory","right","newspaper","sled","stadium","calendar","fishing","bridge","bin","chess","fan","prize","sign","elevator","wool","chopsticks","idea"]},"game":"english-words","play":{"voice":{"flip":["en"],"match":["en","he"],"ask":["en"],"wrong":["en","he"],"right":["en","he"],"card":["en","he"]},"deal":{"policy":"new-first","pairs":15,"new":8},"quiz":{"pool":"learned","unlock":4,"size":15,"apart":[["girl","boy"]]},"progress":"bar","precache":{"policy":"core","items":30}},"lines":{"win":"כל הכבוד! מצאת את כל המילים!"}};
+const DATA = {"words":[{"id":"dog","en":"dog","he":"כלב","he_niqqud":"כֶּלֶב","theme":"animals","img":"img/dog.webp","avoid":["doctor","donkey","door","frog"]},{"id":"cat","en":"cat","he":"חתול","he_niqqud":"חָתוּל","theme":"animals","img":"img/cat.webp","avoid":["bat","camel","camera","candy","carrot","castle","coat","hat","kite"]},{"id":"apple","en":"apple","he":"תפוח","he_niqqud":"תַּפּוּחַ","theme":"food","img":"img/apple.webp","avoid":["ambulance","angry","astronaut"]},{"id":"ball","en":"ball","he":"כדור","he_niqqud":"כַּדּוּר","theme":"toys","img":"img/ball.webp","avoid":["bowl","doll"]},{"id":"sun","en":"sun","he":"שמש","he_niqqud":"שֶׁמֶשׁ","theme":"nature","img":"img/sun.webp","avoid":["one","run","sign","swan"]},{"id":"car","en":"car","he":"מכונית","he_niqqud":"מְכוֹנִית","theme":"transport","img":"img/car.webp","avoid":["coffee","cow","door","four","guitar","key","star"]},{"id":"banana","en":"banana","he":"בננה","he_niqqud":"בָּנָנָה","theme":"food","img":"img/banana.webp","avoid":["piano"]},{"id":"fish","en":"fish","he":"דג","he_niqqud":"דָּג","theme":"animals","img":"img/fish.webp","avoid":["finger","fishing"]},{"id":"house","en":"house","he":"בית","he_niqqud":"בַּיִת","theme":"home","img":"img/house.webp","avoid":["horse","mouse"]},{"id":"baby","en":"baby","he":"תינוק","he_niqqud":"תִּינוֹק","theme":"family","img":"img/baby.webp"},{"id":"red","en":"red","he":"אדום","he_niqqud":"אָדוֹם","theme":"colors","img":"img/red.webp","avoid":["bad","bed","bread","dad","ride","road","sad","sled"]},{"id":"one","en":"one","he":"אחת","he_niqqud":"אַחַת","theme":"numbers","img":"img/one.webp","avoid":["run","sun","swan"]},{"id":"bird","en":"bird","he":"ציפור","he_niqqud":"צִיפּוֹר","theme":"animals","img":"img/bird.webp","avoid":["bad","beard","bed","burger"]},{"id":"eye","en":"eye","he":"עין","he_niqqud":"עַיִן","theme":"body","img":"img/eye.webp","avoid":["cry","ear","fly","ice","ice-cream","ice-skates","island","pie"]},{"id":"ice-cream","en":"ice cream","he":"גלידה","he_niqqud":"גְּלִידָה","theme":"food","img":"img/ice-cream.webp","avoid":["eye","ice","ice-skates","island","swim"]},{"id":"bus","en":"bus","he":"אוטובוס","he_niqqud":"אוֹטוֹבּוּס","theme":"transport","img":"img/bus.webp","avoid":["butter","plus"]},{"id":"egg","en":"egg","he":"ביצה","he_niqqud":"בֵּיצָה","theme":"food","img":"img/egg.webp","avoid":["airplane","bag","flag","leg"]},{"id":"tree","en":"tree","he":"עץ","he_niqqud":"עֵץ","theme":"nature","img":"img/tree.webp","avoid":["bee","key","sea","ski","three","tv"]},{"id":"hand","en":"hand","he":"יד","he_niqqud":"יָד","theme":"body","img":"img/hand.webp","avoid":["happy","hat"]},{"id":"two","en":"two","he":"שתיים","he_niqqud":"שְׁתַּיִים","theme":"numbers","img":"img/two.webp","avoid":["blue","kangaroo","shoe","tooth","toothbrush"]},{"id":"blue","en":"blue","he":"כחול","he_niqqud":"כָּחוֹל","theme":"colors","img":"img/blue.webp","avoid":["kangaroo","shoe","two"]},{"id":"horse","en":"horse","he":"סוס","he_niqqud":"סוּס","theme":"animals","img":"img/horse.webp","avoid":["house"]},{"id":"hat","en":"hat","he":"כובע","he_niqqud":"כּוֹבַע","theme":"clothes","img":"img/hat.webp","avoid":["bat","cat","hand","happy","hot","hurt"]},{"id":"mom","en":"mom","he":"אמא","he_niqqud":"אִמָּא","theme":"family","img":"img/mom.webp","avoid":["drum"]},{"id":"dad","en":"dad","he":"אבא","he_niqqud":"אַבָּא","theme":"family","img":"img/dad.webp","avoid":["bad","bed","bread","dance","red","sad","sled"]},{"id":"moon","en":"moon","he":"ירח","he_niqqud":"יָרֵחַ","theme":"nature","img":"img/moon.webp","avoid":["balloon","man","spoon"]},{"id":"cake","en":"cake","he":"עוגה","he_niqqud":"עוּגָה","theme":"food","img":"img/cake.webp","avoid":["cook","snake"]},{"id":"shoe","en":"shoe","he":"נעל","he_niqqud":"נַעַל","theme":"clothes","img":"img/shoe.webp","avoid":["blue","kangaroo","two"]},{"id":"train","en":"train","he":"רכבת","he_niqqud":"רַכֶּבֶת","theme":"transport","img":"img/train.webp","avoid":["rain"]},{"id":"nose","en":"nose","he":"אף","he_niqqud":"אַף","theme":"body","img":"img/nose.webp","avoid":["no","notebook"]},{"id":"three","en":"three","he":"שלוש","he_niqqud":"שָׁלוֹשׁ","theme":"numbers","img":"img/three.webp","avoid":["bee","key","sea","ski","tree","tv"]},{"id":"yellow","en":"yellow","he":"צהוב","he_niqqud":"צָהוֹב","theme":"colors","img":"img/yellow.webp","avoid":["hello","yes"]},{"id":"elephant","en":"elephant","he":"פיל","he_niqqud":"פִּיל","theme":"animals","img":"img/elephant.webp","avoid":["airplane","elevator"]},{"id":"bed","en":"bed","he":"מיטה","he_niqqud":"מִיטָּה","theme":"home","img":"img/bed.webp","avoid":["bad","bear","beard","bird","bread","dad","red","sad","sled"]},{"id":"flower","en":"flower","he":"פרח","he_niqqud":"פֶּרַח","theme":"nature","img":"img/flower.webp","avoid":["shower"]},{"id":"milk","en":"milk","he":"חלב","he_niqqud":"חָלָב","theme":"food","img":"img/milk.webp","avoid":["mirror"]},{"id":"airplane","en":"airplane","he":"מטוס","he_niqqud":"מָטוֹס","theme":"transport","img":"img/airplane.webp","avoid":["egg","elephant"]},{"id":"ear","en":"ear","he":"אוזן","he_niqqud":"אוֹזֶן","theme":"body","img":"img/ear.webp","avoid":["eagle","eye"]},{"id":"happy","en":"happy","he":"שמח","he_niqqud":"שָׂמֵחַ","theme":"feelings","img":"img/happy.webp","avoid":["hand","hat"]},{"id":"star","en":"star","he":"כוכב","he_niqqud":"כּוֹכָב","theme":"nature","img":"img/star.webp","avoid":["car","door","four","guitar","stop"]},{"id":"green","en":"green","he":"ירוק","he_niqqud":"יָרוֹק","theme":"colors","img":"img/green.webp","avoid":["bin","violin"]},{"id":"four","en":"four","he":"ארבע","he_niqqud":"אַרְבַּע","theme":"numbers","img":"img/four.webp","avoid":["car","door","fire","guitar","star"]},{"id":"cow","en":"cow","he":"פרה","he_niqqud":"פָּרָה","theme":"animals","img":"img/cow.webp","avoid":["car","key"]},{"id":"book","en":"book","he":"ספר","he_niqqud":"סֵפֶר","theme":"school","img":"img/book.webp","avoid":["bike","cook"]},{"id":"bread","en":"bread","he":"לחם","he_niqqud":"לֶחֶם","theme":"food","img":"img/bread.webp","avoid":["bad","bed","dad","red","sad","sled"]},{"id":"boat","en":"boat","he":"סירה","he_niqqud":"סִירָה","theme":"transport","img":"img/boat.webp","avoid":["bat","boot","bowl","coat","goat"]},{"id":"mouth","en":"mouth","he":"פה","he_niqqud":"פֶּה","theme":"body","img":"img/mouth.webp","avoid":["mountain","mouse"]},{"id":"girl","en":"girl","he":"ילדה","he_niqqud":"יַלְדָּה","theme":"family","img":"img/girl.webp","avoid":["boy","goal"]},{"id":"boy","en":"boy","he":"ילד","he_niqqud":"יֶלֶד","theme":"family","img":"img/boy.webp","avoid":["bear","bee","girl"]},{"id":"teddy-bear","en":"teddy bear","he":"דובי","he_niqqud":"דּוּבִּי","theme":"toys","img":"img/teddy-bear.webp","avoid":["bear","chair","pear","polar-bear","square","tennis","tv"]},{"id":"run","en":"run","he":"לרוץ","he_niqqud":"לָרוּץ","theme":"actions","img":"img/run.webp","avoid":["one","rain","sun","swan"]},{"id":"sad","en":"sad","he":"עצוב","he_niqqud":"עָצוּב","theme":"feelings","img":"img/sad.webp","avoid":["bad","bed","bread","dad","red","salad","sandwich","sled"]},{"id":"five","en":"five","he":"חמש","he_niqqud":"חָמֵשׁ","theme":"numbers","img":"img/five.webp","avoid":["fire","fire-truck"]},{"id":"strawberry","en":"strawberry","he":"תות","he_niqqud":"תּוּת","theme":"food","img":"img/strawberry.webp"},{"id":"monkey","en":"monkey","he":"קוף","he_niqqud":"קוֹף","theme":"animals","img":"img/monkey.webp","avoid":["donkey","money"]},{"id":"balloon","en":"balloon","he":"בלון","he_niqqud":"בָּלוֹן","theme":"toys","img":"img/balloon.webp","avoid":["moon","spoon"]},{"id":"rain","en":"rain","he":"גשם","he_niqqud":"גֶּשֶׁם","theme":"nature","img":"img/rain.webp","avoid":["rainbow","run","train"]},{"id":"sleep","en":"sleep","he":"לישון","he_niqqud":"לִישׁוֹן","theme":"actions","img":"img/sleep.webp","avoid":["sheep","ship"]},{"id":"pizza","en":"pizza","he":"פיצה","he_niqqud":"פִּיצָה","theme":"food","img":"img/pizza.webp","avoid":["peas"]},{"id":"duck","en":"duck","he":"ברווז","he_niqqud":"בַּרְווָז","theme":"animals","img":"img/duck.webp","avoid":["clock","fire-truck","rock","talk","truck","walk"]},{"id":"bike","en":"bike","he":"אופניים","he_niqqud":"אוֹפַנַּיִים","theme":"transport","img":"img/bike.webp","avoid":["book"]},{"id":"foot","en":"foot","he":"כף רגל","he_niqqud":"כַּף רֶגֶל","theme":"body","img":"img/foot.webp","avoid":["boot","football"]},{"id":"gift","en":"gift","he":"מתנה","he_niqqud":"מַתָּנָה","theme":"toys","img":"img/gift.webp"},{"id":"lion","en":"lion","he":"אריה","he_niqqud":"אַרְיֵה","theme":"animals","img":"img/lion.webp"},{"id":"water","en":"water","he":"מים","he_niqqud":"מַיִם","theme":"food","img":"img/water.webp","avoid":["butter","walk","watch"]},{"id":"chair","en":"chair","he":"כיסא","he_niqqud":"כִּיסֵּא","theme":"home","img":"img/chair.webp","avoid":["bear","chess","pear","polar-bear","square","teddy-bear"]},{"id":"swim","en":"swim","he":"לשחות","he_niqqud":"לִשְׂחוֹת","theme":"actions","img":"img/swim.webp","avoid":["ice-cream","swimsuit"]},{"id":"rainbow","en":"rainbow","he":"קשת","he_niqqud":"קֶשֶׁת","theme":"nature","img":"img/rainbow.webp","avoid":["radio","rain"]},{"id":"socks","en":"socks","he":"גרביים","he_niqqud":"גַּרְבַּיִים","theme":"clothes","img":"img/socks.webp","avoid":["box","six"]},{"id":"orange","en":"orange","he":"כתום","he_niqqud":"כָּתוֹם","theme":"colors","img":"img/orange.webp"},{"id":"six","en":"six","he":"שש","he_niqqud":"שֵׁשׁ","theme":"numbers","img":"img/six.webp","avoid":["scissors","sick","sing","socks"]},{"id":"rabbit","en":"rabbit","he":"ארנב","he_niqqud":"אַרְנָב","theme":"animals","img":"img/rabbit.webp","avoid":["robot"]},{"id":"cookie","en":"cookie","he":"עוגייה","he_niqqud":"עוּגִייָּה","theme":"food","img":"img/cookie.webp","avoid":["cook"]},{"id":"door","en":"door","he":"דלת","he_niqqud":"דֶּלֶת","theme":"home","img":"img/door.webp","avoid":["car","doctor","dog","donkey","four","guitar","star"]},{"id":"dress","en":"dress","he":"שמלה","he_niqqud":"שִׂמְלָה","theme":"clothes","img":"img/dress.webp","avoid":["chess","yes"]},{"id":"walk","en":"walk","he":"ללכת","he_niqqud":"לָלֶכֶת","theme":"actions","img":"img/walk.webp","avoid":["clock","duck","fire-truck","rock","talk","truck","watch","water"]},{"id":"grandma","en":"grandma","he":"סבתא","he_niqqud":"סַבְתָּא","theme":"family","img":"img/grandma.webp","avoid":["grandpa"]},{"id":"grandpa","en":"grandpa","he":"סבא","he_niqqud":"סַבָּא","theme":"family","img":"img/grandpa.webp","avoid":["grandma"]},{"id":"pen","en":"pen","he":"עט","he_niqqud":"עֵט","theme":"school","img":"img/pen.webp","avoid":["fan","man","parrot","pear","pencil","penguin","pepper","ten"]},{"id":"pencil","en":"pencil","he":"עיפרון","he_niqqud":"עִיפָּרוֹן","theme":"school","img":"img/pencil.webp","avoid":["parrot","pear","pen","penguin","pepper"]},{"id":"bear","en":"bear","he":"דוב","he_niqqud":"דּוֹב","theme":"animals","img":"img/bear.webp","avoid":["bed","bee","boy","chair","pear","polar-bear","square","teddy-bear"]},{"id":"seven","en":"seven","he":"שבע","he_niqqud":"שֶׁבַע","theme":"numbers","img":"img/seven.webp"},{"id":"pink","en":"pink","he":"ורוד","he_niqqud":"וָרוֹד","theme":"colors","img":"img/pink.webp","avoid":["picture","pig","think"]},{"id":"tooth","en":"tooth","he":"שן","he_niqqud":"שֵׁן","theme":"body","img":"img/tooth.webp","avoid":["toothbrush","two"]},{"id":"truck","en":"truck","he":"משאית","he_niqqud":"מַשָּׂאִית","theme":"transport","img":"img/truck.webp","avoid":["clock","duck","fire-truck","rock","talk","walk"]},{"id":"t-shirt","en":"T-shirt","he":"חולצה","he_niqqud":"חוּלְצָה","theme":"clothes","img":"img/t-shirt.webp","avoid":["desert","hurt","teacher","tv"]},{"id":"carrot","en":"carrot","he":"גזר","he_niqqud":"גֶּזֶר","theme":"food","img":"img/carrot.webp","avoid":["calendar","camel","camera","candy","castle","cat","kangaroo","parrot"]},{"id":"frog","en":"frog","he":"צפרדע","he_niqqud":"צְפַרְדֵּעַ","theme":"animals","img":"img/frog.webp","avoid":["dog"]},{"id":"cloud","en":"cloud","he":"ענן","he_niqqud":"עָנָן","theme":"nature","img":"img/cloud.webp","avoid":["clown"]},{"id":"purple","en":"purple","he":"סגול","he_niqqud":"סָגוֹל","theme":"colors","img":"img/purple.webp"},{"id":"eight","en":"eight","he":"שמונה","he_niqqud":"שְׁמוֹנֶה","theme":"numbers","img":"img/eight.webp","avoid":["plate"]},{"id":"bag","en":"bag","he":"תיק","he_niqqud":"תִּיק","theme":"school","img":"img/bag.webp","avoid":["bad","bandage","bat","bath","egg","flag","leg"]},{"id":"cry","en":"cry","he":"לבכות","he_niqqud":"לִבְכּוֹת","theme":"actions","img":"img/cry.webp","avoid":["eye","fly","pie"]},{"id":"laugh","en":"laugh","he":"לצחוק","he_niqqud":"לִצְחוֹק","theme":"actions","img":"img/laugh.webp","avoid":["giraffe","leaf"]},{"id":"dinosaur","en":"dinosaur","he":"דינוזאור","he_niqqud":"דִּינוֹזָאוּר","theme":"animals","img":"img/dinosaur.webp"},{"id":"butterfly","en":"butterfly","he":"פרפר","he_niqqud":"פַּרְפַּר","theme":"animals","img":"img/butterfly.webp","avoid":["butter"]},{"id":"grapes","en":"grapes","he":"ענבים","he_niqqud":"עֲנָבִים","theme":"food","img":"img/grapes.webp","avoid":["gray"]},{"id":"kite","en":"kite","he":"עפיפון","he_niqqud":"עֲפִיפוֹן","theme":"toys","img":"img/kite.webp","avoid":["cat","coat","night","right","white","write"]},{"id":"nine","en":"nine","he":"תשע","he_niqqud":"תֵּשַׁע","theme":"numbers","img":"img/nine.webp","avoid":["knife","night","sign"]},{"id":"brown","en":"brown","he":"חום","he_niqqud":"חוּם","theme":"colors","img":"img/brown.webp","avoid":["clown","crown","down"]},{"id":"ten","en":"ten","he":"עשר","he_niqqud":"עֶשֶׂר","theme":"numbers","img":"img/ten.webp","avoid":["fan","man","pen","tennis","tent"]},{"id":"black","en":"black","he":"שחור","he_niqqud":"שָׁחוֹר","theme":"colors","img":"img/black.webp"},{"id":"white","en":"white","he":"לבן","he_niqqud":"לָבָן","theme":"colors","img":"img/white.webp","avoid":["kite","night","right","write"]},{"id":"gray","en":"gray","he":"אפור","he_niqqud":"אָפוֹר","theme":"colors","img":"img/gray.webp","avoid":["grapes","ok"]},{"id":"pig","en":"pig","he":"חזיר","he_niqqud":"חֲזִיר","theme":"animals","img":"img/pig.webp","avoid":["picture","pink"]},{"id":"cheese","en":"cheese","he":"גבינה","he_niqqud":"גְּבִינָה","theme":"food","img":"img/cheese.webp","avoid":["peas"]},{"id":"leg","en":"leg","he":"רגל","he_niqqud":"רֶגֶל","theme":"body","img":"img/leg.webp","avoid":["bag","egg","flag","left","lemon","letter"]},{"id":"man","en":"man","he":"איש","he_niqqud":"אִישׁ","theme":"family","img":"img/man.webp","avoid":["fan","mango","map","moon","pen","ten"]},{"id":"coat","en":"coat","he":"מעיל","he_niqqud":"מְעִיל","theme":"clothes","img":"img/coat.webp","avoid":["boat","cat","cold","comb","goat","kite"]},{"id":"window","en":"window","he":"חלון","he_niqqud":"חַלּוֹן","theme":"home","img":"img/window.webp","avoid":["wing"]},{"id":"notebook","en":"notebook","he":"מחברת","he_niqqud":"מַחְבֶּרֶת","theme":"school","img":"img/notebook.webp","avoid":["no","nose"]},{"id":"snow","en":"snow","he":"שלג","he_niqqud":"שֶׁלֶג","theme":"nature","img":"img/snow.webp","avoid":["hello","no","snowman"]},{"id":"ship","en":"ship","he":"ספינה","he_niqqud":"סְפִינָה","theme":"transport","img":"img/ship.webp","avoid":["sheep","sleep"]},{"id":"robot","en":"robot","he":"רובוט","he_niqqud":"רוֹבּוֹט","theme":"toys","img":"img/robot.webp","avoid":["rabbit","road","roller-skates"]},{"id":"climb","en":"climb","he":"לטפס","he_niqqud":"לְטַפֵּס","theme":"actions","img":"img/climb.webp"},{"id":"angry","en":"angry","he":"כועס","he_niqqud":"כּוֹעֵס","theme":"feelings","img":"img/angry.webp","avoid":["ambulance","apple","astronaut"]},{"id":"hello","en":"hello","he":"שלום","he_niqqud":"שָׁלוֹם","theme":"greetings","img":"img/hello.webp","avoid":["no","snow","yellow"]},{"id":"doctor","en":"doctor","he":"רופא","he_niqqud":"רוֹפֵא","theme":"jobs","img":"img/doctor.webp","avoid":["dog","doll","dolphin","donkey","door"]},{"id":"school","en":"school","he":"בית ספר","he_niqqud":"בֵּית סֵפֶר","theme":"places","img":"img/school.webp","avoid":["cool","wool"]},{"id":"sheep","en":"sheep","he":"כבשה","he_niqqud":"כִּבְשָׂה","theme":"animals","img":"img/sheep.webp","avoid":["ship","sleep"]},{"id":"candy","en":"candy","he":"סוכרייה","he_niqqud":"סוּכָּרִייָּה","theme":"food","img":"img/candy.webp","avoid":["calendar","camel","camera","carrot","castle","cat","kangaroo"]},{"id":"finger","en":"finger","he":"אצבע","he_niqqud":"אֶצְבַּע","theme":"body","img":"img/finger.webp","avoid":["fish","fishing"]},{"id":"woman","en":"woman","he":"אישה","he_niqqud":"אִישָּׁה","theme":"family","img":"img/woman.webp","avoid":["wool"]},{"id":"jeans","en":"jeans","he":"ג׳ינס","he_niqqud":"גִ׳ינְס","theme":"clothes","img":"img/jeans.webp","avoid":["beans"]},{"id":"clock","en":"clock","he":"שעון","he_niqqud":"שָׁעוֹן","theme":"home","img":"img/clock.webp","avoid":["duck","fire-truck","rock","talk","truck","walk"]},{"id":"scissors","en":"scissors","he":"מספריים","he_niqqud":"מִסְפָּרַיִים","theme":"school","img":"img/scissors.webp","avoid":["sick","sing","six"]},{"id":"fire","en":"fire","he":"אש","he_niqqud":"אֵשׁ","theme":"nature","img":"img/fire.webp","avoid":["fire-truck","firefighter","five","four"]},{"id":"motorbike","en":"motorbike","he":"אופנוע","he_niqqud":"אוֹפַנּוֹעַ","theme":"transport","img":"img/motorbike.webp"},{"id":"alien","en":"alien","he":"חייזר","he_niqqud":"חַייְזָר","theme":"toys","img":"img/alien.webp"},{"id":"dance","en":"dance","he":"לרקוד","he_niqqud":"לִרְקוֹד","theme":"actions","img":"img/dance.webp","avoid":["dad"]},{"id":"tired","en":"tired","he":"עייף","he_niqqud":"עָייֵף","theme":"feelings","img":"img/tired.webp","avoid":["tiger"]},{"id":"teacher","en":"teacher","he":"מורה","he_niqqud":"מוֹרָה","theme":"jobs","img":"img/teacher.webp","avoid":["t-shirt","tv"]},{"id":"castle","en":"castle","he":"טירה","he_niqqud":"טִירָה","theme":"places","img":"img/castle.webp","avoid":["calendar","camel","camera","candy","carrot","cat","kangaroo"]},{"id":"chicken","en":"chicken","he":"תרנגולת","he_niqqud":"תַּרְנְגוֹלֶת","theme":"animals","img":"img/chicken.webp"},{"id":"chocolate","en":"chocolate","he":"שוקולד","he_niqqud":"שׁוֹקוֹלָד","theme":"food","img":"img/chocolate.webp"},{"id":"glasses","en":"glasses","he":"משקפיים","he_niqqud":"מִשְׁקָפַיִים","theme":"clothes","img":"img/glasses.webp"},{"id":"phone","en":"phone","he":"טלפון","he_niqqud":"טֶלֶפוֹן","theme":"home","img":"img/phone.webp","avoid":["fan","folder"]},{"id":"crayon","en":"crayon","he":"צבע","he_niqqud":"צֶבַע","theme":"school","img":"img/crayon.webp","avoid":["crazy"]},{"id":"sea","en":"sea","he":"ים","he_niqqud":"יָם","theme":"nature","img":"img/sea.webp","avoid":["bee","key","ski","three","tree","tv"]},{"id":"helicopter","en":"helicopter","he":"מסוק","he_niqqud":"מַסּוֹק","theme":"transport","img":"img/helicopter.webp"},{"id":"puzzle","en":"puzzle","he":"פאזל","he_niqqud":"פָּאזֶל","theme":"toys","img":"img/puzzle.webp"},{"id":"sing","en":"sing","he":"לשיר","he_niqqud":"לָשִׁיר","theme":"actions","img":"img/sing.webp","avoid":["king","ring","scissors","sick","six","wing"]},{"id":"sick","en":"sick","he":"חולה","he_niqqud":"חוֹלֶה","theme":"feelings","img":"img/sick.webp","avoid":["scissors","sing","six"]},{"id":"police-officer","en":"police officer","he":"שוטר","he_niqqud":"שׁוֹטֵר","theme":"jobs","img":"img/police-officer.webp"},{"id":"tent","en":"tent","he":"אוהל","he_niqqud":"אוֹהֶל","theme":"places","img":"img/tent.webp","avoid":["plant","ten","tennis"]},{"id":"mouse","en":"mouse","he":"עכבר","he_niqqud":"עַכְבָּר","theme":"animals","img":"img/mouse.webp","avoid":["house","mountain","mouth"]},{"id":"burger","en":"burger","he":"המבורגר","he_niqqud":"הַמְבּוּרְגֶּר","theme":"food","img":"img/burger.webp","avoid":["bird"]},{"id":"shorts","en":"shorts","he":"מכנסיים קצרים","he_niqqud":"מִכְנָסַיִים קְצָרִים","theme":"clothes","img":"img/shorts.webp"},{"id":"tv","en":"TV","he":"טלוויזיה","he_niqqud":"טֶלֶווִיזְיָה","theme":"home","img":"img/tv.webp","avoid":["bee","key","sea","ski","t-shirt","teacher","teddy-bear","three","tree"]},{"id":"ruler","en":"ruler","he":"סרגל","he_niqqud":"סַרְגֵּל","theme":"school","img":"img/ruler.webp"},{"id":"leaf","en":"leaf","he":"עלה","he_niqqud":"עָלֶה","theme":"nature","img":"img/leaf.webp","avoid":["laugh"]},{"id":"taxi","en":"taxi","he":"מונית","he_niqqud":"מוֹנִית","theme":"transport","img":"img/taxi.webp"},{"id":"drum","en":"drum","he":"תוף","he_niqqud":"תּוֹף","theme":"toys","img":"img/drum.webp","avoid":["mom"]},{"id":"write","en":"write","he":"לכתוב","he_niqqud":"לִכְתּוֹב","theme":"actions","img":"img/write.webp","avoid":["kite","night","rice","ride","right","white"]},{"id":"hot","en":"hot","he":"חם","he_niqqud":"חַם","theme":"feelings","img":"img/hot.webp","avoid":["hat","hurt"]},{"id":"firefighter","en":"firefighter","he":"כבאי","he_niqqud":"כַּבַּאי","theme":"jobs","img":"img/firefighter.webp","avoid":["fire","fire-truck"]},{"id":"snake","en":"snake","he":"נחש","he_niqqud":"נָחָשׁ","theme":"animals","img":"img/snake.webp","avoid":["cake","snail"]},{"id":"fries","en":"fries","he":"צ׳יפס","he_niqqud":"צִ׳יפְּס","theme":"food","img":"img/fries.webp","avoid":["prize"]},{"id":"boot","en":"boot","he":"מגף","he_niqqud":"מַגָּף","theme":"clothes","img":"img/boot.webp","avoid":["bat","boat","foot"]},{"id":"computer","en":"computer","he":"מחשב","he_niqqud":"מַחְשֵׁב","theme":"home","img":"img/computer.webp"},{"id":"mountain","en":"mountain","he":"הר","he_niqqud":"הַר","theme":"nature","img":"img/mountain.webp","avoid":["mouse","mouth"]},{"id":"ambulance","en":"ambulance","he":"אמבולנס","he_niqqud":"אַמְבּוּלַנְס","theme":"transport","img":"img/ambulance.webp","avoid":["angry","apple","astronaut"]},{"id":"guitar","en":"guitar","he":"גיטרה","he_niqqud":"גִּיטָרָה","theme":"toys","img":"img/guitar.webp","avoid":["car","door","four","star"]},{"id":"draw","en":"draw","he":"לצייר","he_niqqud":"לְצַייֵּר","theme":"actions","img":"img/draw.webp"},{"id":"cold","en":"cold","he":"קר","he_niqqud":"קַר","theme":"feelings","img":"img/cold.webp","avoid":["coat","comb"]},{"id":"clown","en":"clown","he":"ליצן","he_niqqud":"לֵיצָן","theme":"jobs","img":"img/clown.webp","avoid":["brown","cloud","crown","down"]},{"id":"bee","en":"bee","he":"דבורה","he_niqqud":"דְּבוֹרָה","theme":"animals","img":"img/bee.webp","avoid":["beach","beans","bear","beetle","boy","key","sea","ski","three","tree","tv"]},{"id":"juice","en":"juice","he":"מיץ","he_niqqud":"מִיץ","theme":"food","img":"img/juice.webp"},{"id":"key","en":"key","he":"מפתח","he_niqqud":"מַפְתֵּחַ","theme":"home","img":"img/key.webp","avoid":["bee","car","cow","keyboard","kiwi","sea","ski","three","tree","tv"]},{"id":"tractor","en":"tractor","he":"טרקטור","he_niqqud":"טְרַקְטוֹר","theme":"transport","img":"img/tractor.webp"},{"id":"football","en":"football","he":"כדורגל","he_niqqud":"כַּדּוּרֶגֶל","theme":"toys","img":"img/football.webp","avoid":["foot"]},{"id":"clap","en":"clap","he":"למחוא כפיים","he_niqqud":"לִמְחוֹא כַּפַּיִים","theme":"actions","img":"img/clap.webp","avoid":["map"]},{"id":"tiger","en":"tiger","he":"נמר","he_niqqud":"נָמֵר","theme":"animals","img":"img/tiger.webp","avoid":["tired"]},{"id":"watermelon","en":"watermelon","he":"אבטיח","he_niqqud":"אֲבַטִּיחַ","theme":"food","img":"img/watermelon.webp"},{"id":"spoon","en":"spoon","he":"כפית","he_niqqud":"כַּפִּית","theme":"home","img":"img/spoon.webp","avoid":["balloon","moon"]},{"id":"fire-truck","en":"fire truck","he":"כבאית","he_niqqud":"כַּבָּאִית","theme":"transport","img":"img/fire-truck.webp","avoid":["clock","duck","fire","firefighter","five","rock","talk","truck","walk"]},{"id":"basketball","en":"basketball","he":"כדורסל","he_niqqud":"כַּדּוּרְסַל","theme":"toys","img":"img/basketball.webp","avoid":["bandage"]},{"id":"kiss","en":"kiss","he":"נשיקה","he_niqqud":"נְשִׁיקָה","theme":"actions","img":"img/kiss.webp","avoid":["king"]},{"id":"zebra","en":"zebra","he":"זברה","he_niqqud":"זֶבְּרָה","theme":"animals","img":"img/zebra.webp","avoid":["zero"]},{"id":"pear","en":"pear","he":"אגס","he_niqqud":"אַגָּס","theme":"food","img":"img/pear.webp","avoid":["bear","chair","parrot","pen","pencil","penguin","pepper","pie","polar-bear","square","teddy-bear"]},{"id":"plate","en":"plate","he":"צלחת","he_niqqud":"צַלַּחַת","theme":"home","img":"img/plate.webp","avoid":["eight"]},{"id":"rocket","en":"rocket","he":"חללית","he_niqqud":"חֲלָלִית","theme":"transport","img":"img/rocket.webp","avoid":["rock"]},{"id":"giraffe","en":"giraffe","he":"ג׳ירפה","he_niqqud":"גִ׳ירָפָה","theme":"animals","img":"img/giraffe.webp","avoid":["laugh"]},{"id":"lemon","en":"lemon","he":"לימון","he_niqqud":"לִימוֹן","theme":"food","img":"img/lemon.webp","avoid":["left","leg","letter"]},{"id":"bottle","en":"bottle","he":"בקבוק","he_niqqud":"בַּקְבּוּק","theme":"home","img":"img/bottle.webp","avoid":["beetle","box"]},{"id":"snowman","en":"snowman","he":"איש שלג","he_niqqud":"אִישׁ שֶׁלֶג","theme":"toys","img":"img/snowman.webp","avoid":["snow"]},{"id":"penguin","en":"penguin","he":"פינגווין","he_niqqud":"פִּינְגְּווִין","theme":"animals","img":"img/penguin.webp","avoid":["parrot","pear","pen","pencil","pepper"]},{"id":"tomato","en":"tomato","he":"עגבנייה","he_niqqud":"עַגְבָנִייָּה","theme":"food","img":"img/tomato.webp","avoid":["potato"]},{"id":"box","en":"box","he":"קופסה","he_niqqud":"קוּפְסָה","theme":"home","img":"img/box.webp","avoid":["bottle","socks"]},{"id":"dolphin","en":"dolphin","he":"דולפין","he_niqqud":"דּוֹלְפִין","theme":"animals","img":"img/dolphin.webp","avoid":["doctor","doll","donkey"]},{"id":"potato","en":"potato","he":"תפוח אדמה","he_niqqud":"תַּפּוּחַ אֲדָמָה","theme":"food","img":"img/potato.webp","avoid":["tomato"]},{"id":"picture","en":"picture","he":"תמונה","he_niqqud":"תְּמוּנָה","theme":"home","img":"img/picture.webp","avoid":["pig","pink"]},{"id":"panda","en":"panda","he":"פנדה","he_niqqud":"פַּנְדָּה","theme":"animals","img":"img/panda.webp","avoid":["pancakes"]},{"id":"rice","en":"rice","he":"אורז","he_niqqud":"אוֹרֶז","theme":"food","img":"img/rice.webp","avoid":["ice","ride","right","write"]},{"id":"whale","en":"whale","he":"לווייתן","he_niqqud":"לִווְייָתָן","theme":"animals","img":"img/whale.webp","avoid":["snail","wheel","wool"]},{"id":"pasta","en":"pasta","he":"פסטה","he_niqqud":"פַּסְטָה","theme":"food","img":"img/pasta.webp","avoid":["party"]},{"id":"turtle","en":"turtle","he":"צב","he_niqqud":"צָב","theme":"animals","img":"img/turtle.webp"},{"id":"honey","en":"honey","he":"דבש","he_niqqud":"דְּבַשׁ","theme":"food","img":"img/honey.webp","avoid":["money"]},{"id":"camel","en":"camel","he":"גמל","he_niqqud":"גָּמָל","theme":"animals","img":"img/camel.webp","avoid":["calendar","camera","candy","carrot","castle","cat","kangaroo"]},{"id":"sandwich","en":"sandwich","he":"כריך","he_niqqud":"כָּרִיךְ","theme":"food","img":"img/sandwich.webp","avoid":["sad","salad"]},{"id":"octopus","en":"octopus","he":"תמנון","he_niqqud":"תְּמָנוּן","theme":"animals","img":"img/octopus.webp","avoid":["olives"]},{"id":"salad","en":"salad","he":"סלט","he_niqqud":"סָלָט","theme":"food","img":"img/salad.webp","avoid":["sad","sandwich"]},{"id":"shark","en":"shark","he":"כריש","he_niqqud":"כָּרִישׁ","theme":"animals","img":"img/shark.webp","avoid":["shopping"]},{"id":"pineapple","en":"pineapple","he":"אננס","he_niqqud":"אֲנָנָס","theme":"food","img":"img/pineapple.webp","avoid":["pilot"]},{"id":"crocodile","en":"crocodile","he":"תנין","he_niqqud":"תַּנִּין","theme":"animals","img":"img/crocodile.webp"},{"id":"mango","en":"mango","he":"מנגו","he_niqqud":"מַנְגּוֹ","theme":"food","img":"img/mango.webp","avoid":["man","map"]},{"id":"zero","en":"zero","he":"אפס","he_niqqud":"אֶפֶס","theme":"numbers","img":"img/zero.webp","avoid":["zebra"]},{"id":"scarf","en":"scarf","he":"צעיף","he_niqqud":"צָעִיף","theme":"clothes","img":"img/scarf.webp"},{"id":"knife","en":"knife","he":"סכין","he_niqqud":"סַכִּין","theme":"home","img":"img/knife.webp","avoid":["night","nine"]},{"id":"paper","en":"paper","he":"נייר","he_niqqud":"נְייָר","theme":"school","img":"img/paper.webp","avoid":["pepper"]},{"id":"storm","en":"storm","he":"סערה","he_niqqud":"סְעָרָה","theme":"nature","img":"img/storm.webp"},{"id":"road","en":"road","he":"כביש","he_niqqud":"כְּבִישׁ","theme":"transport","img":"img/road.webp","avoid":["red","ride","robot"]},{"id":"doll","en":"doll","he":"בובה","he_niqqud":"בּוּבָּה","theme":"toys","img":"img/doll.webp","avoid":["ball","doctor","dolphin","donkey"]},{"id":"ride","en":"ride","he":"לרכוב","he_niqqud":"לִרְכּוֹב","theme":"actions","img":"img/ride.webp","avoid":["red","rice","right","road","write"]},{"id":"afraid","en":"afraid","he":"מפחד","he_niqqud":"מְפַחֵד","theme":"feelings","img":"img/afraid.webp"},{"id":"yes","en":"yes","he":"כן","he_niqqud":"כֵּן","theme":"greetings","img":"img/yes.webp","avoid":["chess","dress","yellow"]},{"id":"pilot","en":"pilot","he":"טייס","he_niqqud":"טַייָּס","theme":"jobs","img":"img/pilot.webp","avoid":["pie","pineapple"]},{"id":"hospital","en":"hospital","he":"בית חולים","he_niqqud":"בֵּית חוֹלִים","theme":"places","img":"img/hospital.webp"},{"id":"circle","en":"circle","he":"עיגול","he_niqqud":"עִיגּוּל","theme":"shapes","img":"img/circle.webp","avoid":["circus"]},{"id":"donkey","en":"donkey","he":"חמור","he_niqqud":"חֲמוֹר","theme":"animals","img":"img/donkey.webp","avoid":["doctor","dog","doll","dolphin","door","monkey"]},{"id":"kiwi","en":"kiwi","he":"קיווי","he_niqqud":"קִיווִי","theme":"food","img":"img/kiwi.webp","avoid":["key","keyboard"]},{"id":"swimsuit","en":"swimsuit","he":"בגד ים","he_niqqud":"בֶּגֶד יָם","theme":"clothes","img":"img/swimsuit.webp","avoid":["swim"]},{"id":"bowl","en":"bowl","he":"קערה","he_niqqud":"קְעָרָה","theme":"home","img":"img/bowl.webp","avoid":["ball","boat","goal","hole"]},{"id":"island","en":"island","he":"אי","he_niqqud":"אִי","theme":"nature","img":"img/island.webp","avoid":["eye","ice","ice-cream","ice-skates"]},{"id":"wheel","en":"wheel","he":"גלגל","he_niqqud":"גַּלְגַּל","theme":"transport","img":"img/wheel.webp","avoid":["whale","wool"]},{"id":"tennis","en":"tennis","he":"טניס","he_niqqud":"טֶנִיס","theme":"toys","img":"img/tennis.webp","avoid":["table-tennis","teddy-bear","ten","tent"]},{"id":"think","en":"think","he":"לחשוב","he_niqqud":"לַחְשׁוֹב","theme":"actions","img":"img/think.webp","avoid":["pink"]},{"id":"surprised","en":"surprised","he":"מופתע","he_niqqud":"מוּפְתָּע","theme":"feelings","img":"img/surprised.webp"},{"id":"no","en":"no","he":"לא","he_niqqud":"לֹא","theme":"greetings","img":"img/no.webp","avoid":["hello","nose","notebook","snow"]},{"id":"cook","en":"cook","he":"טבח","he_niqqud":"טַבָּח","theme":"jobs","img":"img/cook.webp","avoid":["book","cake","cookie"]},{"id":"shopping","en":"shopping","he":"קניות","he_niqqud":"קְנִיּוֹת","theme":"places","img":"img/shopping.webp","avoid":["shark"]},{"id":"square","en":"square","he":"ריבוע","he_niqqud":"רִיבּוּעַ","theme":"shapes","img":"img/square.webp","avoid":["bear","chair","pear","polar-bear","teddy-bear"]},{"id":"goat","en":"goat","he":"עז","he_niqqud":"עֵז","theme":"animals","img":"img/goat.webp","avoid":["boat","coat","goal"]},{"id":"coconut","en":"coconut","he":"קוקוס","he_niqqud":"קוֹקוֹס","theme":"food","img":"img/coconut.webp"},{"id":"gloves","en":"gloves","he":"כפפות","he_niqqud":"כְּפָפוֹת","theme":"clothes","img":"img/gloves.webp"},{"id":"radio","en":"radio","he":"רדיו","he_niqqud":"רַדְיוֹ","theme":"home","img":"img/radio.webp","avoid":["rainbow"]},{"id":"rock","en":"rock","he":"אבן","he_niqqud":"אֶבֶן","theme":"nature","img":"img/rock.webp","avoid":["clock","duck","fire-truck","rocket","talk","truck","walk"]},{"id":"suitcase","en":"suitcase","he":"מזוודה","he_niqqud":"מִזְווָדָה","theme":"transport","img":"img/suitcase.webp"},{"id":"table-tennis","en":"table tennis","he":"פינג פונג","he_niqqud":"פִּינְג פּוֹנְג","theme":"toys","img":"img/table-tennis.webp","avoid":["tennis"]},{"id":"stop","en":"stop","he":"עצור","he_niqqud":"עֲצוֹר","theme":"actions","img":"img/stop.webp","avoid":["star","up"]},{"id":"cool","en":"cool","he":"מגניב","he_niqqud":"מַגְנִיב","theme":"feelings","img":"img/cool.webp","avoid":["school","wool"]},{"id":"ok","en":"OK","he":"בסדר","he_niqqud":"בְּסֵדֶר","theme":"greetings","img":"img/ok.webp","avoid":["gray"]},{"id":"farmer","en":"farmer","he":"חקלאי","he_niqqud":"חַקְלַאי","theme":"jobs","img":"img/farmer.webp"},{"id":"beach","en":"beach","he":"חוף ים","he_niqqud":"חוֹף יָם","theme":"places","img":"img/beach.webp","avoid":["beans","bee","beetle"]},{"id":"up","en":"up","he":"למעלה","he_niqqud":"לְמַעְלָה","theme":"shapes","img":"img/up.webp","avoid":["onion","stop"]},{"id":"hippo","en":"hippo","he":"היפופוטם","he_niqqud":"הִיפּוֹפּוֹטָם","theme":"animals","img":"img/hippo.webp"},{"id":"butter","en":"butter","he":"חמאה","he_niqqud":"חֶמְאָה","theme":"food","img":"img/butter.webp","avoid":["bus","butterfly","water"]},{"id":"ring","en":"ring","he":"טבעת","he_niqqud":"טַבַּעַת","theme":"clothes","img":"img/ring.webp","avoid":["king","sing","wing"]},{"id":"camera","en":"camera","he":"מצלמה","he_niqqud":"מַצְלֵמָה","theme":"home","img":"img/camera.webp","avoid":["calendar","camel","candy","carrot","castle","cat","kangaroo"]},{"id":"shell","en":"shell","he":"צדף","he_niqqud":"צֶדֶף","theme":"nature","img":"img/shell.webp"},{"id":"map","en":"map","he":"מפה","he_niqqud":"מַפָּה","theme":"transport","img":"img/map.webp","avoid":["clap","man","mango"]},{"id":"skateboard","en":"skateboard","he":"סקייטבורד","he_niqqud":"סְקֵייטְבּוֹרְד","theme":"toys","img":"img/skateboard.webp"},{"id":"quiet","en":"quiet","he":"שקט","he_niqqud":"שֶׁקֶט","theme":"feelings","img":"img/quiet.webp"},{"id":"astronaut","en":"astronaut","he":"אסטרונאוט","he_niqqud":"אַסְטְרוֹנָאוּט","theme":"jobs","img":"img/astronaut.webp","avoid":["ambulance","angry","apple"]},{"id":"circus","en":"circus","he":"קרקס","he_niqqud":"קִרְקָס","theme":"places","img":"img/circus.webp","avoid":["circle"]},{"id":"down","en":"down","he":"למטה","he_niqqud":"לְמַטָּה","theme":"shapes","img":"img/down.webp","avoid":["brown","clown","crown"]},{"id":"jellyfish","en":"jellyfish","he":"מדוזה","he_niqqud":"מֵדוּזָה","theme":"animals","img":"img/jellyfish.webp"},{"id":"salt","en":"salt","he":"מלח","he_niqqud":"מֶלַח","theme":"food","img":"img/salt.webp","avoid":["sausage"]},{"id":"watch","en":"watch","he":"שעון יד","he_niqqud":"שְׁעוֹן יָד","theme":"clothes","img":"img/watch.webp","avoid":["walk","water"]},{"id":"mirror","en":"mirror","he":"מראה","he_niqqud":"מַרְאָה","theme":"home","img":"img/mirror.webp","avoid":["milk"]},{"id":"ice","en":"ice","he":"קרח","he_niqqud":"קֶרַח","theme":"nature","img":"img/ice.webp","avoid":["eye","ice-cream","ice-skates","island","rice"]},{"id":"roller-skates","en":"roller skates","he":"גלגיליות","he_niqqud":"גַּלְגִּילִיּוֹת","theme":"toys","img":"img/roller-skates.webp","avoid":["ice-skates","robot"]},{"id":"love","en":"love","he":"לאהוב","he_niqqud":"לֶאֱהוֹב","theme":"feelings","img":"img/love.webp"},{"id":"king","en":"king","he":"מלך","he_niqqud":"מֶלֶךְ","theme":"jobs","img":"img/king.webp","avoid":["kiss","ring","sing","wing"]},{"id":"lizard","en":"lizard","he":"לטאה","he_niqqud":"לְטָאָה","theme":"animals","img":"img/lizard.webp"},{"id":"onion","en":"onion","he":"בצל","he_niqqud":"בָּצָל","theme":"food","img":"img/onion.webp","avoid":["umbrella","up"]},{"id":"umbrella","en":"umbrella","he":"מטרייה","he_niqqud":"מִטְרִייָּה","theme":"clothes","img":"img/umbrella.webp","avoid":["onion"]},{"id":"sofa","en":"sofa","he":"ספה","he_niqqud":"סַפָּה","theme":"home","img":"img/sofa.webp","avoid":["soap"]},{"id":"plant","en":"plant","he":"עציץ","he_niqqud":"עָצִיץ","theme":"nature","img":"img/plant.webp","avoid":["planet","tent"]},{"id":"piano","en":"piano","he":"פסנתר","he_niqqud":"פְּסַנְתֵּר","theme":"toys","img":"img/piano.webp","avoid":["banana"]},{"id":"polar-bear","en":"polar bear","he":"דוב קוטב","he_niqqud":"דּוֹב קוֹטֶב","theme":"animals","img":"img/polar-bear.webp","avoid":["bear","chair","pear","square","teddy-bear"]},{"id":"garlic","en":"garlic","he":"שום","he_niqqud":"שׁוּם","theme":"food","img":"img/garlic.webp"},{"id":"crown","en":"crown","he":"כתר","he_niqqud":"כֶּתֶר","theme":"clothes","img":"img/crown.webp","avoid":["brown","clown","down"]},{"id":"bath","en":"bath","he":"אמבטיה","he_niqqud":"אַמְבַּטְיָה","theme":"home","img":"img/bath.webp","avoid":["bad","bag","bandage","bat"]},{"id":"planet","en":"planet","he":"כוכב לכת","he_niqqud":"כּוֹכַב לֶכֶת","theme":"nature","img":"img/planet.webp","avoid":["plant"]},{"id":"violin","en":"violin","he":"כינור","he_niqqud":"כִּינּוֹר","theme":"toys","img":"img/violin.webp","avoid":["bin","green"]},{"id":"spider","en":"spider","he":"עכביש","he_niqqud":"עַכָּבִישׁ","theme":"animals","img":"img/spider.webp"},{"id":"peas","en":"peas","he":"אפונה","he_niqqud":"אֲפוּנָה","theme":"food","img":"img/peas.webp","avoid":["cheese","pizza"]},{"id":"shower","en":"shower","he":"מקלחת","he_niqqud":"מִקְלַחַת","theme":"home","img":"img/shower.webp","avoid":["flower"]},{"id":"desert","en":"desert","he":"מדבר","he_niqqud":"מִדְבָּר","theme":"nature","img":"img/desert.webp","avoid":["hurt","t-shirt"]},{"id":"music","en":"music","he":"מוזיקה","he_niqqud":"מוּזִיקָה","theme":"toys","img":"img/music.webp"},{"id":"bat","en":"bat","he":"עטלף","he_niqqud":"עֲטַלֵּף","theme":"animals","img":"img/bat.webp","avoid":["bad","bag","bandage","bath","boat","boot","cat","hat"]},{"id":"beans","en":"beans","he":"שעועית","he_niqqud":"שְׁעוּעִית","theme":"food","img":"img/beans.webp","avoid":["beach","bee","beetle","jeans"]},{"id":"toilet","en":"toilet","he":"אסלה","he_niqqud":"אַסְלָה","theme":"home","img":"img/toilet.webp"},{"id":"earth","en":"Earth","he":"כדור הארץ","he_niqqud":"כַּדּוּר הָאָרֶץ","theme":"nature","img":"img/earth.webp"},{"id":"party","en":"party","he":"מסיבה","he_niqqud":"מְסִיבָּה","theme":"toys","img":"img/party.webp","avoid":["pasta"]},{"id":"kangaroo","en":"kangaroo","he":"קנגורו","he_niqqud":"קֶנְגּוּרוּ","theme":"animals","img":"img/kangaroo.webp","avoid":["blue","calendar","camel","camera","candy","carrot","castle","shoe","two"]},{"id":"pie","en":"pie","he":"פאי","he_niqqud":"פַּאי","theme":"food","img":"img/pie.webp","avoid":["cry","eye","fly","pear","pilot"]},{"id":"soap","en":"soap","he":"סבון","he_niqqud":"סַבּוֹן","theme":"home","img":"img/soap.webp","avoid":["sofa"]},{"id":"goal","en":"goal","he":"שער","he_niqqud":"שַׁעַר","theme":"toys","img":"img/goal.webp","avoid":["bowl","girl","goat","hole"]},{"id":"parrot","en":"parrot","he":"תוכי","he_niqqud":"תּוּכִּי","theme":"animals","img":"img/parrot.webp","avoid":["carrot","pear","pen","pencil","penguin","pepper"]},{"id":"pancakes","en":"pancakes","he":"פנקייק","he_niqqud":"פַּנְקֵייק","theme":"food","img":"img/pancakes.webp","avoid":["panda"]},{"id":"toothbrush","en":"toothbrush","he":"מברשת שיניים","he_niqqud":"מִבְרֶשֶׁת שִׁינַּיִים","theme":"home","img":"img/toothbrush.webp","avoid":["tooth","two"]},{"id":"snail","en":"snail","he":"חילזון","he_niqqud":"חִילָּזוֹן","theme":"animals","img":"img/snail.webp","avoid":["snake","whale"]},{"id":"coffee","en":"coffee","he":"קפה","he_niqqud":"קָפֶה","theme":"food","img":"img/coffee.webp","avoid":["car"]},{"id":"money","en":"money","he":"כסף","he_niqqud":"כֶּסֶף","theme":"home","img":"img/money.webp","avoid":["honey","monkey"]},{"id":"fly","en":"fly","he":"זבוב","he_niqqud":"זְבוּב","theme":"animals","img":"img/fly.webp","avoid":["cry","eye","pie"]},{"id":"olives","en":"olives","he":"זיתים","he_niqqud":"זֵיתִים","theme":"food","img":"img/olives.webp","avoid":["octopus"]},{"id":"letter","en":"letter","he":"מכתב","he_niqqud":"מִכְתָּב","theme":"home","img":"img/letter.webp","avoid":["left","leg","lemon"]},{"id":"swan","en":"swan","he":"ברבור","he_niqqud":"בַּרְבּוּר","theme":"animals","img":"img/swan.webp","avoid":["one","run","sun"]},{"id":"pepper","en":"pepper","he":"פלפל","he_niqqud":"פִּלְפֵּל","theme":"food","img":"img/pepper.webp","avoid":["paper","parrot","pear","pen","pencil","penguin"]},{"id":"medicine","en":"medicine","he":"תרופה","he_niqqud":"תְּרוּפָה","theme":"home","img":"img/medicine.webp"},{"id":"eagle","en":"eagle","he":"נשר","he_niqqud":"נֶשֶׁר","theme":"animals","img":"img/eagle.webp","avoid":["ear"]},{"id":"sausage","en":"sausage","he":"נקניקייה","he_niqqud":"נַקְנִיקִייָּה","theme":"food","img":"img/sausage.webp","avoid":["salt"]},{"id":"bandage","en":"bandage","he":"פלסטר","he_niqqud":"פְּלַסְטֶר","theme":"home","img":"img/bandage.webp","avoid":["bad","bag","basketball","bat","bath"]},{"id":"nest","en":"nest","he":"קן","he_niqqud":"קֵן","theme":"animals","img":"img/nest.webp"},{"id":"meat","en":"meat","he":"בשר","he_niqqud":"בָּשָׂר","theme":"food","img":"img/meat.webp"},{"id":"flashlight","en":"flashlight","he":"פנס","he_niqqud":"פָּנָס","theme":"home","img":"img/flashlight.webp","avoid":["flag"]},{"id":"wing","en":"wing","he":"כנף","he_niqqud":"כָּנָף","theme":"animals","img":"img/wing.webp","avoid":["king","ring","sing","window"]},{"id":"flag","en":"flag","he":"דגל","he_niqqud":"דֶּגֶל","theme":"home","img":"img/flag.webp","avoid":["bag","egg","flashlight","leg"]},{"id":"beetle","en":"beetle","he":"חיפושית","he_niqqud":"חִיפּוּשִׁית","theme":"animals","img":"img/beetle.webp","avoid":["beach","beans","bee","bottle"]},{"id":"beard","en":"beard","he":"זקן","he_niqqud":"זָקָן","theme":"body","img":"img/beard.webp","avoid":["bad","bed","bin","bird","building"]},{"id":"plus","en":"plus","he":"פלוס","he_niqqud":"פְּלוּס","theme":"numbers","img":"img/plus.webp","avoid":["bus"]},{"id":"helmet","en":"helmet","he":"קסדה","he_niqqud":"קַסְדָּה","theme":"clothes","img":"img/helmet.webp"},{"id":"comb","en":"comb","he":"מסרק","he_niqqud":"מַסְרֵק","theme":"home","img":"img/comb.webp","avoid":["coat","cold"]},{"id":"folder","en":"folder","he":"תיקייה","he_niqqud":"תִּיקִייָּה","theme":"school","img":"img/folder.webp","avoid":["phone"]},{"id":"night","en":"night","he":"לילה","he_niqqud":"לַיְלָה","theme":"nature","img":"img/night.webp","avoid":["kite","knife","nine","right","white","write"]},{"id":"ticket","en":"ticket","he":"כרטיס","he_niqqud":"כַּרְטִיס","theme":"transport","img":"img/ticket.webp"},{"id":"ice-skates","en":"ice skates","he":"מחליקיים","he_niqqud":"מַחְלִיקַיִים","theme":"toys","img":"img/ice-skates.webp","avoid":["eye","ice","ice-cream","island","roller-skates"]},{"id":"talk","en":"talk","he":"לדבר","he_niqqud":"לְדַבֵּר","theme":"actions","img":"img/talk.webp","avoid":["clock","duck","fire-truck","rock","truck","walk"]},{"id":"crazy","en":"crazy","he":"משוגע","he_niqqud":"מְשׁוּגָּע","theme":"feelings","img":"img/crazy.webp","avoid":["crayon"]},{"id":"good","en":"good","he":"טוב","he_niqqud":"טוֹב","theme":"greetings","img":"img/good.webp"},{"id":"building","en":"building","he":"בניין","he_niqqud":"בִּנְייָן","theme":"places","img":"img/building.webp","avoid":["beard","bin"]},{"id":"left","en":"left","he":"שמאל","he_niqqud":"שְׂמֹאל","theme":"shapes","img":"img/left.webp","avoid":["leg","lemon","letter"]},{"id":"keyboard","en":"keyboard","he":"מקלדת","he_niqqud":"מִקְלֶדֶת","theme":"home","img":"img/keyboard.webp","avoid":["key","kiwi"]},{"id":"brush","en":"brush","he":"מכחול","he_niqqud":"מִכְחוֹל","theme":"school","img":"img/brush.webp"},{"id":"hole","en":"hole","he":"חור","he_niqqud":"חוֹר","theme":"nature","img":"img/hole.webp","avoid":["bowl","goal"]},{"id":"ski","en":"ski","he":"סקי","he_niqqud":"סְקִי","theme":"toys","img":"img/ski.webp","avoid":["bee","key","sea","three","tree","tv"]},{"id":"hurt","en":"hurt","he":"כואב","he_niqqud":"כּוֹאֵב","theme":"feelings","img":"img/hurt.webp","avoid":["desert","hat","hot","t-shirt"]},{"id":"bad","en":"bad","he":"רע","he_niqqud":"רַע","theme":"greetings","img":"img/bad.webp","avoid":["bag","bandage","bat","bath","beard","bed","bird","bread","dad","red","sad","sled"]},{"id":"factory","en":"factory","he":"מפעל","he_niqqud":"מִפְעָל","theme":"places","img":"img/factory.webp"},{"id":"right","en":"right","he":"ימין","he_niqqud":"יָמִין","theme":"shapes","img":"img/right.webp","avoid":["kite","night","rice","ride","white","write"]},{"id":"newspaper","en":"newspaper","he":"עיתון","he_niqqud":"עִיתּוֹן","theme":"home","img":"img/newspaper.webp"},{"id":"sled","en":"sled","he":"מזחלת","he_niqqud":"מִזְחֶלֶת","theme":"toys","img":"img/sled.webp","avoid":["bad","bed","bread","dad","red","sad"]},{"id":"stadium","en":"stadium","he":"אצטדיון","he_niqqud":"אִצְטַדְיוֹן","theme":"places","img":"img/stadium.webp"},{"id":"calendar","en":"calendar","he":"לוח שנה","he_niqqud":"לוּחַ שָׁנָה","theme":"home","img":"img/calendar.webp","avoid":["camel","camera","candy","carrot","castle","kangaroo"]},{"id":"fishing","en":"fishing","he":"דיג","he_niqqud":"דַּיִג","theme":"toys","img":"img/fishing.webp","avoid":["finger","fish"]},{"id":"bridge","en":"bridge","he":"גשר","he_niqqud":"גֶּשֶׁר","theme":"places","img":"img/bridge.webp"},{"id":"bin","en":"bin","he":"פח","he_niqqud":"פַּח","theme":"home","img":"img/bin.webp","avoid":["beard","building","green","violin"]},{"id":"chess","en":"chess","he":"שחמט","he_niqqud":"שַׁחְמָט","theme":"toys","img":"img/chess.webp","avoid":["chair","dress","yes"]},{"id":"fan","en":"fan","he":"מניפה","he_niqqud":"מְנִיפָה","theme":"home","img":"img/fan.webp","avoid":["man","pen","phone","ten"]},{"id":"prize","en":"prize","he":"פרס","he_niqqud":"פְּרָס","theme":"toys","img":"img/prize.webp","avoid":["fries"]},{"id":"sign","en":"sign","he":"שלט","he_niqqud":"שֶׁלֶט","theme":"home","img":"img/sign.webp","avoid":["nine","sun"]},{"id":"elevator","en":"elevator","he":"מעלית","he_niqqud":"מַעֲלִית","theme":"home","img":"img/elevator.webp","avoid":["elephant"]},{"id":"wool","en":"wool","he":"צמר","he_niqqud":"צֶמֶר","theme":"home","img":"img/wool.webp","avoid":["cool","school","whale","wheel","woman"]},{"id":"chopsticks","en":"chopsticks","he":"מקלות אכילה","he_niqqud":"מַקְלוֹת אֲכִילָה","theme":"home","img":"img/chopsticks.webp"},{"id":"idea","en":"idea","he":"רעיון","he_niqqud":"רַעְיוֹן","theme":"home","img":"img/idea.webp"}],"audio":{"ui":["start","win"],"en":["dog","cat","apple","ball","sun","car","banana","fish","house","baby","red","one","bird","eye","ice-cream","bus","egg","tree","hand","two","blue","horse","hat","mom","dad","moon","cake","shoe","train","nose","three","yellow","elephant","bed","flower","milk","airplane","ear","happy","star","green","four","cow","book","bread","boat","mouth","girl","boy","teddy-bear","run","sad","five","strawberry","monkey","balloon","rain","sleep","pizza","duck","bike","foot","gift","lion","water","chair","swim","rainbow","socks","orange","six","rabbit","cookie","door","dress","walk","grandma","grandpa","pen","pencil","bear","seven","pink","tooth","truck","t-shirt","carrot","frog","cloud","purple","eight","bag","cry","laugh","dinosaur","butterfly","grapes","kite","nine","brown","ten","black","white","gray","pig","cheese","leg","man","coat","window","notebook","snow","ship","robot","climb","angry","hello","doctor","school","sheep","candy","finger","woman","jeans","clock","scissors","fire","motorbike","alien","dance","tired","teacher","castle","chicken","chocolate","glasses","phone","crayon","sea","helicopter","puzzle","sing","sick","police-officer","tent","mouse","burger","shorts","tv","ruler","leaf","taxi","drum","write","hot","firefighter","snake","fries","boot","computer","mountain","ambulance","guitar","draw","cold","clown","bee","juice","key","tractor","football","clap","tiger","watermelon","spoon","fire-truck","basketball","kiss","zebra","pear","plate","rocket","giraffe","lemon","bottle","snowman","penguin","tomato","box","dolphin","potato","picture","panda","rice","whale","pasta","turtle","honey","camel","sandwich","octopus","salad","shark","pineapple","crocodile","mango","zero","scarf","knife","paper","storm","road","doll","ride","afraid","yes","pilot","hospital","circle","donkey","kiwi","swimsuit","bowl","island","wheel","tennis","think","surprised","no","cook","shopping","square","goat","coconut","gloves","radio","rock","suitcase","table-tennis","stop","cool","ok","farmer","beach","up","hippo","butter","ring","camera","shell","map","skateboard","quiet","astronaut","circus","down","jellyfish","salt","watch","mirror","ice","roller-skates","love","king","lizard","onion","umbrella","sofa","plant","piano","polar-bear","garlic","crown","bath","planet","violin","spider","peas","shower","desert","music","bat","beans","toilet","earth","party","kangaroo","pie","soap","goal","parrot","pancakes","toothbrush","snail","coffee","money","fly","olives","letter","swan","pepper","medicine","eagle","sausage","bandage","nest","meat","flashlight","wing","flag","beetle","beard","plus","helmet","comb","folder","night","ticket","ice-skates","talk","crazy","good","building","left","keyboard","brush","hole","ski","hurt","bad","factory","right","newspaper","sled","stadium","calendar","fishing","bridge","bin","chess","fan","prize","sign","elevator","wool","chopsticks","idea"],"he":["dog","cat","apple","ball","sun","car","banana","fish","house","baby","red","one","bird","eye","ice-cream","bus","egg","tree","hand","two","blue","horse","hat","mom","dad","moon","cake","shoe","train","nose","three","yellow","elephant","bed","flower","milk","airplane","ear","happy","star","green","four","cow","book","bread","boat","mouth","girl","boy","teddy-bear","run","sad","five","strawberry","monkey","balloon","rain","sleep","pizza","duck","bike","foot","gift","lion","water","chair","swim","rainbow","socks","orange","six","rabbit","cookie","door","dress","walk","grandma","grandpa","pen","pencil","bear","seven","pink","tooth","truck","t-shirt","carrot","frog","cloud","purple","eight","bag","cry","laugh","dinosaur","butterfly","grapes","kite","nine","brown","ten","black","white","gray","pig","cheese","leg","man","coat","window","notebook","snow","ship","robot","climb","angry","hello","doctor","school","sheep","candy","finger","woman","jeans","clock","scissors","fire","motorbike","alien","dance","tired","teacher","castle","chicken","chocolate","glasses","phone","crayon","sea","helicopter","puzzle","sing","sick","police-officer","tent","mouse","burger","shorts","tv","ruler","leaf","taxi","drum","write","hot","firefighter","snake","fries","boot","computer","mountain","ambulance","guitar","draw","cold","clown","bee","juice","key","tractor","football","clap","tiger","watermelon","spoon","fire-truck","basketball","kiss","zebra","pear","plate","rocket","giraffe","lemon","bottle","snowman","penguin","tomato","box","dolphin","potato","picture","panda","rice","whale","pasta","turtle","honey","camel","sandwich","octopus","salad","shark","pineapple","crocodile","mango","zero","scarf","knife","paper","storm","road","doll","ride","afraid","yes","pilot","hospital","circle","donkey","kiwi","swimsuit","bowl","island","wheel","tennis","think","surprised","no","cook","shopping","square","goat","coconut","gloves","radio","rock","suitcase","table-tennis","stop","cool","ok","farmer","beach","up","hippo","butter","ring","camera","shell","map","skateboard","quiet","astronaut","circus","down","jellyfish","salt","watch","mirror","ice","roller-skates","love","king","lizard","onion","umbrella","sofa","plant","piano","polar-bear","garlic","crown","bath","planet","violin","spider","peas","shower","desert","music","bat","beans","toilet","earth","party","kangaroo","pie","soap","goal","parrot","pancakes","toothbrush","snail","coffee","money","fly","olives","letter","swan","pepper","medicine","eagle","sausage","bandage","nest","meat","flashlight","wing","flag","beetle","beard","plus","helmet","comb","folder","night","ticket","ice-skates","talk","crazy","good","building","left","keyboard","brush","hole","ski","hurt","bad","factory","right","newspaper","sled","stadium","calendar","fishing","bridge","bin","chess","fan","prize","sign","elevator","wool","chopsticks","idea"]},"game":"english-words","play":{"voice":{"flip":["en"],"match":["en","he"],"ask":["en"],"wrong":["en","he"],"right":["en","he"],"card":["en","he"]},"deal":{"policy":"new-first","pairs":15,"new":8},"quiz":{"pool":"learned","unlock":4,"size":10,"master":3,"newMin":1,"newMax":4,"sureMin":3,"growth":2,"jitter":0.5,"decrement":"demote","apart":[["girl","boy"]]},"progress":"bar","precache":{"policy":"core","items":30}},"lines":{"win":"כל הכבוד! מצאת את כל המילים!"}};
 </script>
 <script id="club">
 const CLUB = {
@@ -1497,9 +1523,26 @@ const CLUB = {
   // A wrong pick's clip waits for the soft sound and for the card to turn over (base.css: .3 s + flip).
   const NOPE_SAY_MS = 650;
   const FLIP_MS = 460;
-  // A flash card counts as learned once its line has played and it has been on screen this long.
+  // A flash card counts as met once its line has played and it has been on screen this long.
   const SEEN_MS = 2500;
   const MISMATCH_MS = 2200;
+  // A face-up card in memory says its whole line again when tapped, unless it turned up this recently (a
+  // double tap). Two cards that don't match wait for that line, and HOLD_MS more, before they turn back,
+  // but never longer than HOLD_MAX_MS past their own time, in case the clip never says it has ended.
+  const DOUBLE_TAP_MS = 500;
+  const HOLD_MS = 400;
+  const HOLD_MAX_MS = 8000;
+  // How a word game's quiz picks its questions, and how every game scores an answer: the policy round 2's
+  // simulation chose (P4, "hybrid"), with its constants, which PLAY.quiz may set (README, "Play config"):
+  //   size       questions per quiz (fewer while she has met fewer words);
+  //   master     first-pick successes that make an item fully learned (the full green tick);
+  //   newMin/Max never-asked words per quiz: at least newMin while there are any, at most newMax;
+  //   sureMin    fully learned words per quiz, the "sure success" questions;
+  //   growth     a learning word's wait between asks, in quizzes, grows this much per level;
+  //   jitter     a random spread on the overdue order, so two quizzes in a row differ;
+  //   decrement  a first-pick miss: 'demote' sends a fully learned item back to master - 1, 'dec' takes
+  //              one off any score, 'none' never takes one back.
+  const LEARN = { size: 10, master: 3, newMin: 1, newMax: 4, sureMin: 3, growth: 2, jitter: 0.5, decrement: 'demote', ...PLAY.quiz };
   const DEAL_STAGGER_MS = 16;
   const START_LINE = 'יאללה, בואי נשחק!';
   const WIN_LINE = 'כל הכבוד! מצאת את כל השחקנים!';
@@ -2016,43 +2059,190 @@ const CLUB = {
     return side;
   }
 
-  /* ---------- what she has learned: a match in memory, or a flash card she looked at ---------- */
+  /* ---------- what she knows: the items she has met, and how well (her first-try quiz answers) ---------- */
 
-  // Kept per game on this device. The games share one origin, so the key carries the game's folder;
-  // private mode or blocked storage keeps it for this visit only.
-  const learned = (() => {
-    const key = `${DATA.game}:learned`;
+  // Per item: `encountered`, she has met it (a match in memory, a flash card she looked at, or a quiz
+  // question); `firstTry`, the quiz questions she answered with her first pick, the only success there is
+  // (a match, a flash card or a right pick after a wrong one count for nothing); `misses`, the questions
+  // whose first pick was wrong; `lastAsked`, the quiz that last asked it, on the quiz clock `session`
+  // (one tick per quiz started; no `lastAsked`: never asked). Kept per game on this device, in
+  // `<game>:stats` as { session, items } (the games share one origin, so the key carries the game's
+  // folder). `<game>:learned`, the list of the items met, is what older pages kept: it is read at every
+  // start, so nothing they wrote is lost (each such item met, never asked), and kept in step, so they still
+  // find it. Private mode or blocked storage keeps it all for this visit only.
+  const stats = (() => {
+    const key = `${DATA.game}:stats`;
+    const legacy = `${DATA.game}:learned`;
     let store = null;
     try { store = window.localStorage; } catch (e) { /* storage blocked */ }
-    let saved = [];
-    try { saved = JSON.parse((store && store.getItem(key)) || '[]'); } catch (e) { /* unreadable */ }
-    const ids = new Set(Array.isArray(saved) ? saved.filter((id) => typeof id === 'string') : []);
+    const load = (k) => {
+      try { return JSON.parse((store && store.getItem(k)) || 'null'); } catch (e) { return null; }
+    };
+    const count = (n) => (Number.isInteger(n) && n > 0 ? n : 0);
+    const items = Object.create(null);
+    let session = 0;
+    const entry = (id) => items[id] || (items[id] = { encountered: false, firstTry: 0, misses: 0 });
+    const saved = load(key);
+    if (saved && typeof saved === 'object' && saved.items && typeof saved.items === 'object') {
+      session = count(saved.session);
+      Object.entries(saved.items).forEach(([id, s]) => {
+        if (!s || typeof s !== 'object') return;
+        Object.assign(entry(id), { encountered: s.encountered === true, firstTry: count(s.firstTry), misses: count(s.misses) });
+        if (Number.isInteger(s.lastAsked) && s.lastAsked >= 0) items[id].lastAsked = s.lastAsked;
+      });
+    }
+    const met = load(legacy);
+    if (Array.isArray(met)) met.forEach((id) => { if (typeof id === 'string') entry(id).encountered = true; });
+    function save() {
+      if (!store) return;
+      try {
+        store.setItem(key, JSON.stringify({ session, items }));
+        store.setItem(legacy, JSON.stringify(Object.keys(items).filter((id) => items[id].encountered)));
+      } catch (e) { /* full or blocked */ }
+    }
     return {
-      has: (id) => ids.has(id),
-      // true when it is new
-      add(id) {
-        if (ids.has(id)) return false;
-        ids.add(id);
-        try { if (store) store.setItem(key, JSON.stringify([...ids])); } catch (e) { /* full or blocked */ }
+      met: (id) => !!items[id] && items[id].encountered,
+      // true when she meets it now
+      meet(id) {
+        if (entry(id).encountered) return false;
+        items[id].encountered = true;
+        save();
         return true;
       },
-      // the game's learned items, in teaching order (an id from an older list counts no more)
-      items: () => ITEMS.filter((p) => ids.has(p.id)),
+      // a question's first pick, in the quiz `asked` on the quiz clock
+      answered(id, right, asked) {
+        updateStats(items, id, right, asked, LEARN);
+        save();
+      },
+      // a quiz starts: its tick of the quiz clock
+      tick() {
+        session += 1;
+        save();
+        return session - 1;
+      },
+      firstTry: (id) => (items[id] ? items[id].firstTry : 0),
+      // every item's entry, by id, for pickQuiz
+      all: () => items,
+      // the items she has met, in teaching order (an id that left the game counts no more, but is kept)
+      items: () => ITEMS.filter((p) => items[p.id] && items[p.id].encountered),
     };
   })();
+
+  // How well she knows an item she has met, as the shelf's tick shows it: 0, no first-pick success yet (a
+  // grey tick), then 1 and 2 (light and medium green), 3 once it is fully learned (the full green).
+  function level(id) {
+    const n = stats.firstTry(id);
+    if (n >= LEARN.master) return 3;
+    return n ? 1 + Math.floor(((n - 1) * 2) / (LEARN.master - 1)) : 0;
+  }
+
+  /* ---------- a word game's quiz: which words it asks (round 2's simulation, policy P4) ---------- */
+
+  // The questions of one quiz, in asking order: ids of the `items` (teaching order; {id} objects) whose
+  // `entries[id].encountered` is set, in three groups:
+  //   new       never asked yet, in teaching order (the longest waiting first);
+  //   learning  asked before, still under `master`, the most overdue first: a level's wait between asks
+  //             grows `growth` times per level, so the shakiest words come back soonest;
+  //   sure      fully learned, the longest unasked first: the "sure success" questions.
+  // A quiz takes `sureMin` sure words and `newMin` new ones when there are that many, learning words the
+  // rest; a group too small for its share passes the slots on: to new words (up to `newMax`), then to sure
+  // ones, then to any left. A sure word opens the quiz and another closes it. `o.now` is the quiz clock and
+  // `rng` the random source, so the same inputs give the same quiz (the harness checks it against the
+  // simulation's own module).
+  function pickQuiz(items, entries, o, rng) {
+    const now = Number.isFinite(o.now) ? o.now : 0;
+    const fresh = [];
+    const learning = [];
+    const sure = [];
+    items.forEach((item, order) => {
+      const id = item !== null && typeof item === 'object' ? item.id : item;
+      const entry = entries ? entries[id] : null;
+      if (!entry || !entry.encountered) return;
+      const lvl = levelOf(entry, o.master);
+      const asked = Number.isFinite(entry.lastAsked);
+      // never asked counts as asked one quiz before the first: overdue at any level
+      const gap = asked ? Math.max(0, now - entry.lastAsked) : now + 1;
+      const spread = 1 + o.jitter * rng();
+      if (lvl >= o.master) sure.push({ id, key: (gap + 1) * spread });
+      else if (!asked && lvl === 0) fresh.push({ id, key: -order });
+      else learning.push({ id, key: ((gap + 1) / Math.pow(o.growth, lvl)) * spread });
+    });
+    const byKey = (a, b) => b.key - a.key;
+    fresh.sort(byKey);
+    learning.sort(byKey);
+    sure.sort(byKey);
+    const groups = { fresh, learning, sure };
+    const count = { fresh: 0, learning: 0, sure: 0 };
+    let left = Math.min(o.size, fresh.length + learning.length + sure.length);
+    const take = (group, k) => {
+      const got = Math.max(0, Math.min(k, groups[group].length - count[group], left));
+      count[group] += got;
+      left -= got;
+    };
+    take('sure', o.sureMin);
+    take('fresh', o.newMin);
+    take('learning', left);
+    take('fresh', o.newMax - count.fresh);
+    take('sure', left);
+    take('fresh', left);
+    const sureIds = sure.slice(0, count.sure).map((e) => e.id);
+    const middle = shuffledBy(fresh.slice(0, count.fresh).concat(learning.slice(0, count.learning)).map((e) => e.id)
+      .concat(sureIds.slice(2)), rng);
+    if (sureIds.length >= 1) middle.unshift(sureIds[0]);
+    if (sureIds.length >= 2) middle.push(sureIds[1]);
+    return middle;
+  }
+
+  // An entry's level: its first-pick successes, capped at `master`.
+  function levelOf(entry, master) {
+    const n = entry && Number.isFinite(entry.firstTry) ? Math.floor(entry.firstTry) : 0;
+    return Math.max(0, Math.min(n, master));
+  }
+
+  function shuffledBy(list, rng) {
+    const a = list.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // One answered question, in every game: she has met the item; a first-pick success adds one to
+  // `firstTry` (capped at `master` when a miss can take it back), a miss adds to `misses` and follows
+  // `decrement`. `now` is the quiz that asked it.
+  function updateStats(entries, id, right, now, o) {
+    const prev = entries[id] || {};
+    const entry = {
+      encountered: true,
+      firstTry: Number.isFinite(prev.firstTry) ? Math.max(0, Math.floor(prev.firstTry)) : 0,
+      misses: Number.isFinite(prev.misses) ? prev.misses : 0,
+      lastAsked: now,
+    };
+    if (right) {
+      entry.firstTry += 1;
+      if (o.decrement !== 'none') entry.firstTry = Math.min(entry.firstTry, o.master);
+    } else {
+      entry.misses += 1;
+      if (o.decrement === 'dec') entry.firstTry = Math.max(0, Math.min(entry.firstTry, o.master) - 1);
+      else if (o.decrement === 'demote' && entry.firstTry >= o.master) entry.firstTry = o.master - 1;
+    }
+    entries[id] = { ...prev, ...entry };
+    return entries[id];
+  }
 
   const progressEl = $('progress');
   const QUIZ_BUTTONS = ['play-quiz', 'yes-quiz', 'replay-quiz'];
 
-  // A word game asks only what she has learned, so its quiz waits for PLAY.quiz.unlock words.
+  // A word game asks only what she has met, so its quiz waits for PLAY.quiz.unlock words.
   function quizLocked() {
-    return PLAY.quiz.pool === 'learned' && learned.items().length < PLAY.quiz.unlock;
+    return PLAY.quiz.pool === 'learned' && stats.items().length < PLAY.quiz.unlock;
   }
 
-  // "learned X / N": the bar a word game shows on every screen (PLAY.progress "bar"), the shelf's count,
+  // "met X / N": the bar a word game shows on every screen (PLAY.progress "bar"), the shelf's count,
   // and the quiz buttons' lock.
   function syncLearned() {
-    const done = learned.items().length;
+    const done = stats.items().length;
     const count = `${done} / ${ITEMS.length}`;
     $('progress-count').textContent = count;
     $('shelf-count').textContent = count;
@@ -2067,11 +2257,19 @@ const CLUB = {
     });
   }
 
-  function markLearned(p) {
-    if (!learned.add(p.id)) return;
-    syncLearned();
+  // A shelf tile's mark: dimmed with a new-dot until she has met the item, then a tick at its level.
+  function markTile(p) {
     const tile = shelf.tiles.get(p.id);
-    if (tile) tile.dataset.learned = 'true';
+    if (!tile) return;
+    tile.dataset.learned = String(stats.met(p.id));
+    tile.dataset.level = String(level(p.id));
+  }
+
+  // She has met an item (a match, a flash card, a quiz question): the count, its tile and the bar's star.
+  function meet(p) {
+    if (!stats.meet(p.id)) return;
+    syncLearned();
+    markTile(p);
     if (!reducedMotion.matches && PLAY.progress === 'bar') {
       progressEl.classList.remove('gained');
       void progressEl.offsetWidth; // restart the pop
@@ -2089,6 +2287,9 @@ const CLUB = {
     up: [],
     found: 0,
     flipBack: 0,
+    flipBackAt: 0,
+    // bumped whenever the cards up change, so a face-up line that ends later holds only its own pair
+    hold: 0,
     winFallback: 0,
     winEarliest: 0,
     busyUntil: 0,
@@ -2141,6 +2342,7 @@ const CLUB = {
   // What every new game, of either mode, starts from: `total` finds to win, one pip each.
   function reset(mode, total) {
     clearTimeout(game.flipBack);
+    game.hold += 1;
     clearTimeout(game.winFallback);
     clearTimeout(quiz.next);
     game.round += 1;
@@ -2164,8 +2366,8 @@ const CLUB = {
   function dealPicks() {
     const { policy, pairs } = PLAY.deal;
     if (policy === 'squad') return STARTERS.concat(shuffled(BENCH).slice(0, Math.max(0, pairs - STARTERS.length)));
-    const fresh = ITEMS.filter((p) => !learned.has(p.id));
-    const review = shuffled(learned.items()).slice(0, pairs - Math.min(PLAY.deal.new, fresh.length));
+    const fresh = ITEMS.filter((p) => !stats.met(p.id));
+    const review = shuffled(stats.items()).slice(0, pairs - Math.min(PLAY.deal.new, fresh.length));
     return fresh.slice(0, pairs - review.length).concat(review);
   }
 
@@ -2228,16 +2430,22 @@ const CLUB = {
 
   function tap(card) {
     if (game.phase !== 'idle' && game.phase !== 'one' && game.phase !== 'two') return;
-    if (card.state !== 'down' || performance.now() < game.busyUntil) return;
+    if (card.state !== 'down') {
+      hearAgain(card);
+      return;
+    }
+    if (performance.now() < game.busyUntil) return;
     sound.unlock();
 
     if (game.up.length === 2) {
       clearTimeout(game.flipBack);
+      game.hold += 1;
       game.up.forEach((c) => setCard(c, 'down'));
       game.up = [];
     }
 
     turn(card, 'up');
+    card.upAt = performance.now();
     game.up.push(card);
 
     if (game.up.length === 1) {
@@ -2250,22 +2458,48 @@ const CLUB = {
     if (a.p.id !== b.p.id) {
       setPhase('two');
       sound.say(voice('flip', card.p));
-      game.flipBack = setTimeout(() => {
-        game.up.forEach((c) => setCard(c, 'down'));
-        game.up = [];
-        setPhase('idle');
-      }, MISMATCH_MS);
+      game.hold += 1;
+      game.flipBackAt = performance.now() + MISMATCH_MS;
+      game.flipBack = setTimeout(turnBack, MISMATCH_MS);
       return;
     }
 
     game.up = [];
     setCard(a, 'matched');
     setCard(b, 'matched');
-    markLearned(card.p);
+    meet(card.p);
     const lines = voice('match', card.p);
     if (scored([a, b])) finishing(lines);
     else setPhase('idle');
     sound.say(lines);
+  }
+
+  // The two cards that didn't match turn face down again.
+  function turnBack() {
+    game.hold += 1;
+    game.up.forEach((c) => setCard(c, 'down'));
+    game.up = [];
+    setPhase('idle');
+  }
+
+  // A face-up card, one she has just turned up or a pair she found, says its whole line again (a flash
+  // card's, PLAY.voice.card: a player's "number N, <name>!", a word in English then Hebrew) and changes
+  // nothing else: two that didn't match wait for that line to end, and HOLD_MS more, before they turn
+  // back. A tap on a card that turned up DOUBLE_TAP_MS ago or less is the same tap twice: it says nothing.
+  function hearAgain(card) {
+    if (performance.now() - card.upAt < DOUBLE_TAP_MS) return;
+    sound.unlock();
+    lift(card);
+    const saying = sound.say(voice('card', card.p));
+    if (game.phase !== 'two') return;
+    clearTimeout(game.flipBack);
+    const hold = ++game.hold;
+    game.flipBack = setTimeout(turnBack, Math.max(0, game.flipBackAt - performance.now()) + HOLD_MAX_MS);
+    saying.then(() => {
+      if (game.hold !== hold || game.phase !== 'two') return;
+      clearTimeout(game.flipBack);
+      game.flipBack = setTimeout(turnBack, Math.max(HOLD_MS, game.flipBackAt - performance.now()));
+    });
   }
 
   // The last find of either mode: the win clip follows `lines`, and the win screen comes when it
@@ -2363,7 +2597,10 @@ const CLUB = {
 
   /* ---------- quiz: who is this? ---------- */
 
-  const quiz = { order: [], at: 0, cards: [], answer: null, next: 0, shownAt: 0 };
+  // `first`: no pick yet on this question, so the next one is her first pick, the one that counts;
+  // `session`: this quiz's tick of the quiz clock.
+  const quiz = { order: [], at: 0, cards: [], answer: null, first: false, session: 0, next: 0, shownAt: 0 };
+  const BY_ID = new Map(ITEMS.map((p) => [p.id, p]));
 
   // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
   function quizLayout() {
@@ -2373,10 +2610,13 @@ const CLUB = {
     fitCards(picksEl, quiz.cards, c);
   }
 
-  // The questions (PLAY.quiz): a squad's every player once, the backups too; a word game's up to `size`
-  // random learned words.
+  // The questions (PLAY.quiz): a squad's every player once, the backups too; a word game's `size` of the
+  // words she has met, picked by pickQuiz.
   function startQuiz() {
-    quiz.order = PLAY.quiz.pool === 'learned' ? shuffled(learned.items()).slice(0, PLAY.quiz.size) : shuffled(ITEMS);
+    quiz.session = stats.tick();
+    quiz.order = PLAY.quiz.pool === 'learned'
+      ? pickQuiz(ITEMS, stats.all(), { ...LEARN, now: quiz.session }, Math.random).map((id) => BY_ID.get(id))
+      : shuffled(ITEMS);
     reset('quiz', quiz.order.length);
     quiz.at = 0;
     warmImages(quiz.order);
@@ -2389,15 +2629,16 @@ const CLUB = {
     keepAwake();
   }
 
-  // Three others to pick from: a squad's whole roster; a word game's learned words (while fewer than
-  // four are learned, the next words in teaching order fill in). Never one PLAY.quiz.apart pairs with the
-  // asked one: two pictures that look alike at a glance.
+  // Three others to pick from: a squad's whole roster; a word game's words she has met (while fewer than
+  // three of them fit, the next words in teaching order fill in). Never one the asked item avoids (DATA,
+  // its `avoid`: a word that sounds like it, or a picture that looks like it, club.json play.quiz.apart).
   function distractors(p) {
-    const fits = (q) => q !== p && !(PLAY.quiz.apart || []).some((pair) => pair.includes(p.id) && pair.includes(q.id));
+    const avoid = new Set(p.avoid || []);
+    const fits = (q) => q !== p && !avoid.has(q.id);
     let pool = ITEMS.filter(fits);
     if (PLAY.quiz.pool === 'learned') {
-      const known = learned.items().filter(fits);
-      pool = known.length >= CHOICES - 1 ? known : known.concat(pool.filter((q) => !learned.has(q.id)).slice(0, CHOICES));
+      const known = stats.items().filter(fits);
+      pool = known.length >= CHOICES - 1 ? known : known.concat(pool.filter((q) => !stats.met(q.id)).slice(0, CHOICES));
     }
     return shuffled(pool).slice(0, CHOICES - 1);
   }
@@ -2415,6 +2656,7 @@ const CLUB = {
       return card;
     });
     quiz.answer = quiz.cards.find((card) => card.p === p);
+    quiz.first = true;
     picksEl.dataset.answer = p.id;
     questionEl.textContent = '';
     questionEl.append(...MODEL.question(p));
@@ -2438,6 +2680,14 @@ const CLUB = {
   function pick(card) {
     if (game.phase !== 'ask' || card.state !== 'down' || performance.now() < game.busyUntil) return;
     sound.unlock();
+    if (quiz.first) {
+      // Her first pick is the one that counts: right, a success; wrong, a miss. Either way she has met it.
+      quiz.first = false;
+      const p = quiz.answer.p;
+      meet(p);
+      stats.answered(p.id, card === quiz.answer, quiz.session);
+      markTile(p);
+    }
     if (card !== quiz.answer) {
       // Not this one, and she learns what it is: the soft sound and a shake, then the card turns over
       // (greyed and marked, out of play) and says its line. Her next pick or #say cuts that off.
@@ -2495,15 +2745,14 @@ const CLUB = {
 
   const shelf = { tiles: new Map(), at: 0, card: null, last: null };
 
-  // A tile per item in teaching order, built on the first visit: learned ones in full colour with a
-  // tick, the others dimmed with a dot (base.css, data-learned).
+  // A tile per item in teaching order, built on the first visit: the ones she has met in full colour with
+  // a tick at their level, the others dimmed with a dot (base.css, data-learned and data-level).
   function buildShelf() {
     if (shelf.tiles.size) return;
     ITEMS.forEach((p, i) => {
       const tile = el('button', 'tile');
       tile.type = 'button';
       tile.dataset.index = String(i);
-      tile.dataset.learned = String(learned.has(p.id));
       tile.setAttribute('aria-label', MODEL.label(p));
       const pic = el('span', 'pic');
       // lazy before src: a picture loads when its tile scrolls near
@@ -2517,6 +2766,7 @@ const CLUB = {
       if (chip) tile.appendChild(el('span', 'chip', chip));
       shelfEl.appendChild(tile);
       shelf.tiles.set(p.id, tile);
+      markTile(p);
     });
   }
 
@@ -2540,9 +2790,10 @@ const CLUB = {
     face.fit(shelf.card.el, shelf.card.p, applyFace(slotEl, cw, ch, faceMode(cw, ch)));
   }
 
-  // One item, big: the card turns over and says its line (PLAY.voice.card); it counts as learned once the
-  // line has played and it has been on screen SEEN_MS (a muted page or a failed clip too), never when she
-  // pages on first. The next card's picture and clips come in meanwhile, so "next" shows at once.
+  // One item, big: the card turns over and says its line (PLAY.voice.card); she has met it once the line
+  // has played and it has been on screen SEEN_MS (a muted page or a failed clip too), never when she pages
+  // on first. A flash card is never a success: only a quiz question's first pick is. The next card's
+  // picture and clips come in meanwhile, so "next" shows at once.
   function showCard(index) {
     const n = ITEMS.length;
     shelf.at = ((index % n) + n) % n;
@@ -2562,7 +2813,7 @@ const CLUB = {
     }, reducedMotion.matches ? 0 : 120);
     const shown = performance.now();
     sound.say(voice('card', p)).then(() => setTimeout(() => {
-      if (shelf.card && shelf.card.el === card) markLearned(p);
+      if (shelf.card && shelf.card.el === card) meet(p);
     }, Math.max(0, SEEN_MS - (performance.now() - shown))));
     const after = ITEMS[(shelf.at + 1) % n];
     warmImages([after]);
@@ -2586,7 +2837,7 @@ const CLUB = {
   }
 
   function nextNew() {
-    const i = ITEMS.findIndex((p) => !learned.has(p.id));
+    const i = ITEMS.findIndex((p) => !stats.met(p.id));
     return i < 0 ? 0 : i;
   }
 
@@ -2599,7 +2850,7 @@ const CLUB = {
 
   // The next deal's new items: those after the ones dealt now, as if she learns them all.
   function upcoming(dealt = []) {
-    return ITEMS.filter((p) => !learned.has(p.id) && !dealt.includes(p)).slice(0, PLAY.deal.pairs);
+    return ITEMS.filter((p) => !stats.met(p.id) && !dealt.includes(p)).slice(0, PLAY.deal.pairs);
   }
 
   function fetchAhead(items) {
@@ -2636,7 +2887,7 @@ const CLUB = {
 
   // Every learned item and the new ones after the current deal.
   function fetchAllAhead() {
-    fetchAhead(learned.items().concat(upcoming(ahead.dealt)));
+    fetchAhead(stats.items().concat(upcoming(ahead.dealt)));
   }
 
   /* ---------- overlays ---------- */

@@ -18,6 +18,7 @@ it as an orphan.
 | `tools/images/` | `build_images.py` crops the cutout photos; `framing.py` is the alpha-outline framing the scrapers use too |
 | `tools/tts/` | The voice clips: `tts.sh` is the entry point; `setup.sh` the engine install |
 | `tools/scrape/` | The scraper kit: `common.py` (fetcher, ids, atomic write, photo facts), `roster.py` (the squad rule and a players.json check), `transfermarkt.py`, `contact_sheet.py` |
+| `tools/words/` | `neighbours.py` writes a word game's `club/avoid.json`, the words that sound alike (CMUdict), which its quiz never offers against each other |
 | `tools/fonts/add_font.py` | Fetches a Google Fonts family's Hebrew and Latin subsets and its OFL into a game |
 | `tools/icons/` | `render_icons.sh --game <game>` renders a game's PWA icons from its two SVGs |
 | `tools/og/` | `render_og.sh [<game>...]` renders each game's link-preview image, `og.jpg`: its own start screen at 1200×630 with three card faces, starters or first words (`og.js`, on the harness's Playwright) |
@@ -43,20 +44,34 @@ site's address is written. The image is the game's `og.jpg`, at its root, outsid
 a device never downloads it.
 
 Every place a game starts (the start screen, the win screen, the ↻ confirm) offers the three modes side by side:
-memory, the quiz and flash cards. Memory deals the 11 starters and 4 of the bench. The quiz asks every roster player once in random order:
+memory, the quiz and flash cards. The HUD has the pips, then the mute button beside ↻ at its end (top left
+in portrait, bottom right in landscape), away from the quiz's hear-it-again button, a speech bubble with a
+play mark (a flash card's is the same). Memory deals the 11 starters and 4 of the bench; a tap on a face-up card (one she
+has just turned up, or a pair she found) says its whole line again, a flash card's, and changes nothing,
+except that two cards that don't match wait for it, and 0.4 s more, before they turn back (a second tap
+within 0.5 s of a card turning up is one tap too many, and says nothing). The quiz asks every roster player once in random order:
 "מי זה מספר N, <name>?" in text, his match clip out loud, four photo-only cards. A wrong pick teaches too:
 a soft sound, then that card turns to its face (grey, smaller, marked ✗, out of play) and plays that
 player's match clip; her next pick or the replay button cuts it off. The right one turns to the club's
-card face, says the name and moves on. The squad rule
+card face, says the name and moves on. Her first pick on each question is the one that counts (below). The squad rule
 (`tools/scrape/roster.py`) gives the pool's backup goalkeepers role `backup`: in the roster's `players`, asked
 in the quiz, never dealt. Every tool that images, voices, checks, syncs or prunes takes `roster.SHIPPED`
 (starter, bench, backup), so a refresh keeps them.
 
-Flash cards show the shelf: a tile per item in teaching order, the learned ones in full colour with a tick,
-the others dimmed with a dot, and a button to the next new one. A tile opens its card big (the club's face),
-which says its line, counts as learned, and pages with ← →. What she has learned (a match in memory, or a
-flash card) is kept on the device per game, in `localStorage` under `<game>:learned` (the games share one
-origin); when storage is blocked it lasts the visit.
+Flash cards show the shelf: a tile per item in teaching order, the ones she has met in full colour with a
+tick, the others dimmed with a dot, and a button to the next new one. The tick's colour is how well she
+knows it: grey, then light and medium green, then the full green of a fully learned one (`master`, 3,
+first-pick successes in the quiz). A tile opens its card big (the club's face), which says its line,
+counts as met, and pages with ← →.
+
+What she knows is kept on the device per game, in `localStorage` under `<game>:stats` (the games share one
+origin), as `{ session, items }`: `session` is the quiz clock (one tick per quiz started) and, per item,
+`encountered` (a match in memory, a flash card, or a quiz question), `firstTry` (the questions she answered
+with her first pick, the only success: a match, a flash card or a right pick after a wrong one never count),
+`misses` (wrong first picks) and `lastAsked` (the quiz that last asked it; none: never asked). A first-pick
+miss on a fully learned item sends it back to `master - 1` (`decrement` "demote"). The older
+`<game>:learned`, the list of what she met, is read at every start (nothing an older page wrote is lost: each
+item met, never asked) and kept in step. When storage is blocked it lasts the visit.
 
 ### Play config
 
@@ -65,11 +80,26 @@ origin); when storage is blocked it lasts the visit.
 
 | Key | Squad (the football games) | Words (`english-words`) |
 |---|---|---|
-| `voice` | flip `name`; match `name`, `match`; ask `match`; wrong `match`; right `name`; card `match` | flip `en`; match `en`, `he`; ask `en`; wrong and right `en`, `he`; card `en`, `he` |
+| `voice` | flip `name`; match `name`, `match`; ask `match`; wrong `match`; right `name`; card `match` (a flash card, and a face-up card tapped in memory) | flip `en`; match `en`, `he`; ask `en`; wrong and right `en`, `he`; card `en`, `he` |
 | `deal` | `squad`: the starters, the rest of the 15 pairs from the bench | `new-first`: up to `new` (8) unlearned words in teaching order, the rest a random review of learned ones, more new ones while few are learned |
-| `quiz` | `all`: every player once | `learned`: up to `size` (15) random learned words, locked below `unlock` (4) learned; the three others are learned words, never one `apart` pairs with the asked one (girl, boy) |
+| `quiz` | `all`: every player once | `learned`: `size` (10) of the words she has met (below), locked below `unlock` (4) met; the three others are words she has met, never one the asked word avoids: a sound-alike (`club/avoid.json`) or a look-alike picture (`apart`: girl, boy) |
 | `progress` | `inventory`: the marks on the shelf only | `bar`: "learned X / N" on every screen |
 | `precache` | `all`: every file, strictly | `core` with `items` (30): the page, fonts, icons, start/win and the first 30 words strictly; every other picture and clip in `RUNTIME` |
+
+A word game's quiz picks its words by the policy round 2's simulation chose (`pickQuiz` in `engine.js`, policy
+P4 "hybrid"): of the words she has met, `newMin` (1) never asked yet, in teaching order, `sureMin` (3) fully
+learned ones, the longest unasked first, and learning ones for the rest, the most overdue first (a level waits
+`growth` (2) times longer than the one below, with a `jitter` (0.5) spread); a group too small passes its slots
+on (new words up to `newMax`, 4); a sure word opens the quiz and another closes it. `master` (3) first-pick
+successes make a word fully learned. These constants are `engine.js` `LEARN`'s defaults, which `play.quiz`
+may set (the English game sets them all; the builder checks them); a squad's quiz still asks every player,
+but its answers keep the same score for the shelf's ticks.
+
+A word game's `club/avoid.json` lists, per word, the words that sound like it (rhymes, one sound apart, the same
+start, or one vowel apart as a Hebrew-speaking child hears them), which `tools/words/neighbours.py` writes from
+CMUdict: `uv run --quiet --with cmudict==1.1.3 python -I _memory-game/tools/words/neighbours.py <game>`. The
+builder checks it is the roster's (a line per word, each pair both ways) and puts each word's `avoid` (with
+its `apart` partners) in DATA.
 
 A clip kind is a folder, `audio/<kind>/<id>.mp3`: a squad records `name` and `match`, a word game `en` and `he`
 (`KINDS` in `build_page.py`). With `precache` `core`, the worker keeps every other picture and clip it fetches
@@ -171,9 +201,14 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
   word game starts with 25 words learned, so its quiz is open and its deal reaches past the precached core);
 - offline: a reload with the network off keeps what she learned, shows the pictures, plays cached clips,
   asks a quiz question and opens the next new flash card, which turns up, speaks and counts as learned;
+- the quiz's HUD: the mute button beside ↻, away from the hear-it-again bubble (no speaker, no circle);
 - the state machine (`states/scenarios.js`): a squad's suites, the flash cards and the whole-roster quiz;
   a word game's new-first deal, the quiz locked below 4 and asking only learned words, the voice script,
-  a flash card counting as learned and moving the bar, and what she learned surviving a reload;
+  a flash card counting as learned and moving the bar, and what she learned surviving a reload; for every
+  game, a face-up card's line and the pair it holds (H1–H6), what she knows (M1–M4: the older list carried
+  over, first-try answers from the quiz only, the shelf's levels); a word game's sound-alikes never offered
+  together (A1), and its quiz's picks (P1–P4: the simulation's constants, the same quizzes as its own module
+  for the same seeds, the group shares, the quiz clock and the demotion);
 - a quick upgrade from `origin/main` (`--from <ref>`), online then offline, for the games that exist there.
 
 Each failure names what broke: the URL, the console line, the clips it heard. `live` (`sanity --live`)
