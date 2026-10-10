@@ -27,6 +27,7 @@ const BASE = `http://localhost:${PORT}/pages/`;
 const PROFILE = path.join(OUT, 'profile');
 const LOG = path.join(OUT, 'server.log');
 const INSTR = fs.readFileSync(path.join(__dirname, 'instr.js'), 'utf8');
+const { clipsOf } = require('./voice');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const say = (...a) => console.log('[sim]', ...a);
 if (!GAMES.length || !PORT) {
@@ -40,10 +41,17 @@ function point(tree) {
   say(`pages -> ${tree}`);
 }
 
+// A worker's cache: its VERSION and precache size, and the runtime cache a game that precaches only its
+// core keeps across versions (empty for the others).
 function swInfo(tree, game) {
   const src = fs.readFileSync(path.join(TREES[tree], game, 'sw.js'), 'utf8');
-  return { version: src.match(/^const VERSION = '([^']+)';$/m)[1], assets: (src.match(/^ {2}'/gm) || []).length };
+  const runtime = src.match(/^const RUNTIME = '([^']*)';$/m);
+  return { version: src.match(/^const VERSION = '([^']+)';$/m)[1], assets: (src.match(/^ {2}'/gm) || []).length,
+    runtime: runtime ? runtime[1] : '' };
 }
+
+// The page's voice script (DATA.play.voice; an older page has none and says a squad's).
+const voiceOf = (page) => page.evaluate(() => (typeof DATA !== 'undefined' && DATA.play ? DATA.play.voice : null));
 
 let server = null;
 function startServer() {
@@ -163,7 +171,9 @@ async function twoPairs(page) {
   return { deck: P.map((p) => p.id) };
 }
 
-function audit(log) {
+// Each flip says the voice script's flip clip first; a match follows it with the match line's second clip
+// (a squad's match clip, a word's Hebrew).
+function audit(log, voice) {
   const marks = log.map((e, i) => ({ ...e, i })).filter((e) => e.type === 'mark');
   const starts = log.map((e, i) => ({ ...e, i })).filter((e) => e.type === 'buf-start' || e.type === 'html-play');
   let flips = 0;
@@ -174,9 +184,10 @@ function audit(log) {
     if (!['flip', 'hurry', 'match'].includes(what)) return;
     const next = marks[j + 1] ? marks[j + 1].i : Infinity;
     const clips = starts.filter((s) => s.i > m.i && s.i < next).map((s) => s.url);
-    if (clips[0] === `audio/name/${id}.mp3`) flips++; else bad.push({ mark: m.label, clips });
-    if (what === 'match' && clips[1] === `audio/match/${id}.mp3`) follows++;
-    if (what === 'match' && clips[1] && clips[1] !== `audio/match/${id}.mp3` && clips[1] !== 'audio/ui/win.mp3') {
+    const second = clipsOf(voice, id, 'match')[1];
+    if (clips[0] === clipsOf(voice, id, 'flip')[0]) flips++; else bad.push({ mark: m.label, clips });
+    if (what === 'match' && clips[1] === second) follows++;
+    if (what === 'match' && clips[1] && clips[1] !== second && clips[1] !== 'audio/ui/win.mp3') {
       bad.push({ mark: m.label, clips, why: 'second clip' });
     }
   });
@@ -238,20 +249,21 @@ const gameOk = (g) => (QUICK ? g.flips > 0 && g.follows > 0 : g.won) && !g.bad.l
     const v = await waitVersion(page, game, 'new');
     const st = await state(page);
     const reloadedOnPlay = await play(page);
+    const voice = await voiceOf(page);
     const markAt = await page.evaluate(() => window.__log.length);
     const g1 = QUICK ? await twoPairs(page) : await fullGame(page);
     const log = (await page.evaluate(() => window.__log)).slice(markAt);
-    const ranges = await page.evaluate(async (id) => {
+    const ranges = await page.evaluate(async (url) => {
       const out = {};
       for (const r of ['bytes=0-', 'bytes=100-199']) {
-        const res = await fetch(`audio/name/${id}.mp3`, { headers: { Range: r } });
+        const res = await fetch(url, { headers: { Range: r } });
         const body = await res.arrayBuffer();
         out[r] = { status: res.status, contentRange: res.headers.get('content-range'), length: body.byteLength };
       }
-      const whole = await fetch(`audio/name/${id}.mp3`);
+      const whole = await fetch(url);
       out.whole = { status: whole.status, length: (await whole.arrayBuffer()).byteLength };
       return out;
-    }, g1.deck[0]);
+    }, clipsOf(voice, g1.deck[0], 'flip')[0]);
     let fb = [];
     if (!QUICK) {
       const fallbackMark = await page.evaluate(async () => {
@@ -272,14 +284,16 @@ const gameOk = (g) => (QUICK ? g.flips > 0 && g.follows > 0 : g.won) && !g.bad.l
     const n = ranges.whole.length;
     const r = {
       installed: v, cachesBefore: before.caches, cachesAfter: st.caches, reloadedOnPlay,
-      game: { won: g1.won, ...audit(log) }, ranges,
+      game: { won: g1.won, ...audit(log, voice) }, ranges,
       fallback: { html: fb.filter((e) => e.type === 'html-play').length, htmlErrors: fb.filter((e) => e.type === 'html-error').length,
         speech: fb.filter((e) => e.type === 'speech').length },
       installability,
     };
+    // the runtime cache stays: the new worker evicts only the kept files that changed (verify.sh runtime)
+    const runtime = swInfo('new', game).runtime;
     r.checks = {
       newWorker: v.ok,
-      oldCacheGone: JSON.stringify(own(st.caches, game)) === JSON.stringify([v.version]),
+      oldCacheGone: JSON.stringify(own(st.caches, game).filter((k) => k !== runtime)) === JSON.stringify([v.version]),
       otherGamesUntouched: JSON.stringify(others(before.caches, game)) === JSON.stringify(others(st.caches, game)),
       game: gameOk(r.game),
       ranges: ranges['bytes=0-'].status === 206 && ranges['bytes=0-'].contentRange === `bytes 0-${n - 1}/${n}`
@@ -307,13 +321,14 @@ const gameOk = (g) => (QUICK ? g.flips > 0 && g.follows > 0 : g.won) && !g.bad.l
     await page.reload({ waitUntil: 'load' });
     await sleep(1500);
     await play(page);
+    const voice = await voiceOf(page);
     const markAt = await page.evaluate(() => window.__log.length);
     const g1 = QUICK ? await twoPairs(page) : await fullGame(page);
     await page.screenshot({ path: path.join(OUT, `${game}-offline-${QUICK ? 'play' : 'win'}.png`) });
     const log = (await page.evaluate(() => window.__log)).slice(markAt);
     const imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
     const st = await state(page);
-    const r = { won: g1.won, imgs, ...audit(log), state: st };
+    const r = { won: g1.won, imgs, ...audit(log, voice), state: st };
     r.checks = { controlled: st.controlled, game: gameOk(r), imgs: imgs[0] > 0 && imgs[0] === imgs[1] };
     R[`${game}:offline`] = r;
     say(game, 'offline', JSON.stringify(r.checks));

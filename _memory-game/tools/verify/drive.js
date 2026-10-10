@@ -341,6 +341,25 @@ function wrongCard(i) {
 // the first LEARNED_START words learned.
 const { clipsOf, LEARNED_START } = require('./voice');
 
+// The HUD on a quiz question: the mute button beside ↻ (both at the HUD's end), far from the question's
+// hear-it-again button, which is a speech bubble, not a circle, and never draws the mute's speaker.
+function hudLayout() {
+  const box = (id) => {
+    const r = document.getElementById(id).getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2, size: Math.max(r.width, r.height) };
+  };
+  const [mute, again, say] = ['mute', 'again', 'say'].map(box);
+  const apart = (a, b) => Math.round(Math.hypot(a.x - b.x, a.y - b.y));
+  const flat = (node) => (node ? node.innerHTML.replace(/\s+/g, '') : '');
+  const use = document.querySelector('#say use');
+  const icon = use && document.querySelector(use.getAttribute('href'));
+  return {
+    muteToAgain: apart(mute, again), muteToSay: apart(mute, say), size: again.size, saySize: say.size,
+    sayRadius: getComputedStyle(document.getElementById('say')).borderRadius,
+    sayIsSpeaker: !icon || flat(icon) === flat(document.querySelector('#mute .i-on')),
+  };
+}
+
 // The quiz, played to the end at this viewport: on the first question a wrong pick (it turns over
 // and says that item's line, which the right pick then cuts off), then the right one; every question
 // waits for its question clip to start before the pick; the first three reveals move on by
@@ -389,6 +408,7 @@ async function quizFlow(page, vp, dir, res) {
     await sleep(500);
     if (n === 0) {
       await waitImages(page);
+      q.hud = await page.evaluate(hudLayout).catch(() => null);
       await snap('quiz-question');
       const wrong = q.cards.findIndex((id) => id !== q.id);
       const wrongId = q.cards[wrong];
@@ -409,7 +429,9 @@ async function quizFlow(page, vp, dir, res) {
     await mark(page, `right ${q.id}`);
     const pickedAt = Date.now();
     await tapCard(page, vp, q.cards.indexOf(q.id), '#picks');
-    q.named = await played(from, clipsOf(res.voice, q.id, 'right')[0]);
+    // its line's last clip has started (a word's Hebrew after its English), so a tap that moves on cuts no
+    // clip of it short of starting
+    q.named = await played(from, clipsOf(res.voice, q.id, 'right').slice(-1)[0]);
     q.revealed = await page.evaluate(() => document.getElementById('app').dataset.phase);
     if (n === 0) {
       await sleep(1100);

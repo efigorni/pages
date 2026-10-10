@@ -19,6 +19,9 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
   club/roster.json      season and players (roles starter, bench, backup, in that order); written by `data`
+  club/avoid.json       a word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it;
+                        checked against the roster, and each word's list (with play.quiz.apart) is its `avoid`
+  tools/tts/en_pins.json  a word game's English voice pins; a `take` picked by ear must stay the shipped clip
 
 The builder writes two files per game, whole:
 
@@ -74,6 +77,10 @@ from roster import SHIPPED, check as check_players  # noqa: E402
 
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONFIG = "club/club.json"
+# A word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it from CMUdict.
+AVOID = "club/avoid.json"
+# A word game's English voice pins; a pin's `take` is a clip picked by ear, with the shipped file's sha256.
+EN_PINS = "tools/tts/en_pins.json"
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
 UI_CLIPS = tuple(UI_TEXTS)
@@ -87,9 +94,24 @@ SQUAD_PLAY = {"voice": {"flip": ["name"], "match": ["name", "match"], "ask": ["m
                         "right": ["name"], "card": ["match"]},
               "deal": {"policy": "squad", "pairs": 15}, "quiz": {"pool": "all"}, "progress": "inventory",
               "precache": {"policy": "all"}}
+# A squad's quiz offers three others drawn at random from the whole roster (engine.js distractors), so the
+# builder fails a squad that asks to keep anyone apart (pure_random).
+PURE_RANDOM = "football quizzes are pure random; apart/avoid is for word games only"
 # The moments the voice script (club.json play.voice) gives clips to: memory's flip and match, the quiz's
 # question, wrong pick and right pick, and a flash card.
 MOMENTS = ("flip", "match", "ask", "wrong", "right", "card")
+# How a word game's quiz picks its questions and how every game scores an answer (engine.js LEARN, whose
+# defaults are round 2's simulation's): play.quiz may set any of these.
+LEARN_KEYS = {
+    "size": ("questions per quiz, >= 1", lambda v: _int(v) and v >= 1),
+    "master": ("first-pick successes that make an item fully learned, >= 1", lambda v: _int(v) and v >= 1),
+    "newMin": ("never-asked words per quiz, at least, >= 0", lambda v: _int(v) and v >= 0),
+    "newMax": ("never-asked words per quiz, at most, >= 0", lambda v: _int(v) and v >= 0),
+    "sureMin": ("fully learned words per quiz, >= 0", lambda v: _int(v) and v >= 0),
+    "growth": ("a learning level's wait multiplier, >= 1", lambda v: _num(v) and v >= 1),
+    "jitter": ("the random spread on the overdue order, >= 0", lambda v: _num(v) and v >= 0),
+    "decrement": ("\"none\", \"demote\" or \"dec\"", lambda v: v in ("none", "demote", "dec")),
+}
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say",
@@ -119,6 +141,22 @@ TROPHY = (
     'stroke-linecap="round"/>',
 )
 SHADE = '<path d="M82 18v20c0 9-4 17-10 22" fill="none" stroke="{shade}" stroke-width="3" stroke-linecap="round"/>'
+
+
+def _int(v):
+    return isinstance(v, int) and not isinstance(v, bool)
+
+
+def _num(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
+def engine_learn():
+    """engine.js LEARN's defaults, {key: value}: what a play.quiz that leaves a key out gets."""
+    line = re.search(r"const LEARN = \{(.*?)\.\.\.PLAY\.quiz \};", read(SHARED / "engine.js"))
+    if not line:
+        fail("_memory-game/engine.js has no `const LEARN = { ..., ...PLAY.quiz };` line")
+    return {k: json.loads(v.replace("'", '"')) for k, v in re.findall(r"(\w+): ([^,]+),", line.group(1))}
 
 
 def fail(msg):
@@ -159,6 +197,7 @@ def play_of(game):
     (README, "Play config"). The engine reads it from DATA; the precache policy is the builder's too."""
     kind, play = kind_of(game), config(game).get("play")
     if kind == "squad":
+        pure_random(game)
         play = {**SQUAD_PLAY, **(play or {})}
     where = f"{game}/{CONFIG} play"
     if not isinstance(play, dict):
@@ -182,6 +221,13 @@ def play_of(game):
             fail(f"{where}.quiz: pool \"learned\" wants unlock >= 4 (the four cards) and size >= 1")
     elif quiz.get("pool") != "all":
         fail(f"{where}.quiz.pool: \"all\" or \"learned\"")
+    for key, (want, ok) in LEARN_KEYS.items():
+        if key in quiz and not ok(quiz[key]):
+            fail(f"{where}.quiz.{key}: {want}, not {quiz[key]!r}")
+    learn = {**engine_learn(), **quiz}
+    if learn["newMin"] > learn["newMax"]:
+        fail(f"{where}.quiz: newMin ({learn['newMin']}) over newMax ({learn['newMax']}; engine.js LEARN's default "
+             "when play.quiz leaves it out)")
     apart = quiz.get("apart", [])
     if not (isinstance(apart, list) and all(isinstance(p, list) and len(p) == 2 and all(isinstance(i, str) for i in p)
                                             for p in apart)):
@@ -288,10 +334,59 @@ def orphans(game, roster):
                   for f in (page / d).glob(f"*{suffix}") if f.stem not in ids)
 
 
+def sound_alikes(game):
+    """A word game's club/avoid.json, {id: {other id: why}}, or None when it has none."""
+    path = REPO / game / AVOID
+    if not path.is_file():
+        return None
+    data = json.loads(read(path))
+    if not (isinstance(data, dict) and all(isinstance(v, dict) for v in data.values())):
+        fail(f"{game}/{AVOID}: {{id: {{other id: why}}}}, one line per word (tools/words/neighbours.py writes it)")
+    return data
+
+
+def avoid_of(game):
+    """What a word game's quiz never offers as a wrong answer to each word: its sound-alikes (club/avoid.json)
+    and its look-alike pictures (club.json play.quiz.apart). {id: sorted ids}, for the words that have any."""
+    avoid = {wid: set(others) for wid, others in (sound_alikes(game) or {}).items()}
+    for a, b in play_of(game)["quiz"].get("apart", []):
+        avoid.setdefault(a, set()).add(b)
+        avoid.setdefault(b, set()).add(a)
+    return {wid: sorted(others) for wid, others in avoid.items() if others}
+
+
+def pure_random(game, roster=None):
+    """A squad's quiz keeps no one apart: fail one with an `apart` or `avoid` key anywhere in club.json, a
+    club/avoid.json, or (given its roster) a player with an `avoid`."""
+    def keys(node, at):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                here = f"{at}.{k}" if at else k
+                if k in ("apart", "avoid"):
+                    yield f"{game}/{CONFIG} {here}"
+                yield from keys(v, here)
+        elif isinstance(node, list):
+            for i, v in enumerate(node):
+                yield from keys(v, f"{at}[{i}]")
+    found = list(keys(config(game), ""))
+    if (REPO / game / AVOID).is_file():
+        found.append(f"{game}/{AVOID}")
+    found += [f"{game}/club/roster.json: {p.get('id')}'s avoid" for p in (roster or {}).get("players", [])
+              if "avoid" in p]
+    if found:
+        fail(f"{', '.join(found)}: {PURE_RANDOM}")
+
+
 def data_line(game, roster):
-    """The DATA script: the roster, the clips that exist (per kind, in roster order), the game's folder (the
-    key of what she has learned) and its play config."""
+    """The DATA script: the roster (a word game's words with their `avoid`; a squad's players never have one),
+    the clips that exist (per kind, in roster order), the game's folder (the key of what she knows) and its
+    play config."""
     page = REPO / game
+    if kind_of(game) == "words":
+        avoid = avoid_of(game)
+        roster = {**roster, "words": [{**w, "avoid": avoid[w["id"]]} if w["id"] in avoid else w for w in roster["words"]]}
+    else:
+        pure_random(game, roster)
     ids = [p["id"] for p in items_of(roster)]
     audio = {"ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()]}
     for kind in KINDS[kind_of(game)]:
@@ -405,11 +500,55 @@ def check_ui_clips(game):
 
 
 def check_apart(game):
-    """play.quiz.apart names words of this game: on the roster, not left out."""
+    """play.quiz.apart names words of this game: on the roster, not left out. A word game's club/avoid.json is
+    its roster's: a line per word and no other, ids on the roster, never the word itself, every pair both ways."""
     ids = {p["id"] for p in items_of(read_roster(game))}
     left = config(game).get("leave_out", {})
-    return [f"club.json play.quiz.apart: {i} is {'left out' if i in left else 'not on the roster'}"
-            for pair in play_of(game)["quiz"].get("apart", []) for i in pair if i not in ids]
+    where = lambda i: "left out" if i in left else "not on the roster"  # noqa: E731
+    problems = [f"club.json play.quiz.apart: {i} is {where(i)}"
+                for pair in play_of(game)["quiz"].get("apart", []) for i in pair if i not in ids]
+    if kind_of(game) != "words":
+        return problems
+    alike = sound_alikes(game)
+    if alike is None:
+        return problems + [f"{AVOID} is missing (uv run --with cmudict==1.1.3 python -I "
+                           f"_memory-game/tools/words/neighbours.py {game})"]
+    stale = [f"{i} has no line" for i in sorted(ids - set(alike))] + [f"{i} is {where(i)}" for i in sorted(set(alike) - ids)]
+    if stale:
+        more = f" and {len(stale) - 5} more" if len(stale) > 5 else ""
+        problems.append(f"{AVOID} is not this roster's (run tools/words/neighbours.py again): {', '.join(stale[:5])}{more}")
+    for wid, others in alike.items():
+        problems += [f"{AVOID}: {wid}'s {o} is {where(o)}" for o in others if o not in ids]
+        problems += [f"{AVOID}: {wid} avoids itself" for o in others if o == wid]
+        problems += [f"{AVOID}: {wid} avoids {o}, but not the other way round" for o in others
+                     if o in alike and wid not in alike[o]]
+    return problems
+
+
+def check_takes(game):
+    """A word game's English clips picked by ear (tools/tts/en_pins.json `take`) are the files it ships, so a
+    refresh never replaces one with a default render; every pin names a word on the roster."""
+    path = REPO / game / EN_PINS
+    if not path.is_file():
+        return []
+    ids = {p["id"] for p in items_of(read_roster(game))}
+    problems = []
+    for wid, pin in json.loads(read(path)).get("words", {}).items():
+        if wid not in ids:
+            problems.append(f"{EN_PINS}: {wid} is not on the roster")
+            continue
+        if "take" not in pin:
+            continue
+        want = str((pin["take"] or {}).get("sha256") or "")
+        if not re.fullmatch(r"[0-9a-f]{16,64}", want):
+            problems.append(f"{EN_PINS}: {wid}'s take needs its file's sha256, 16 to 64 lowercase hex characters, "
+                            f"not {want!r}")
+            continue
+        clip = REPO / game / "audio/en" / f"{wid}.mp3"
+        if not (clip.is_file() and hashlib.sha256(clip.read_bytes()).hexdigest()[:len(want)] == want):
+            problems.append(f"audio/en/{wid}.mp3 is not the take picked by ear ({EN_PINS}): put that file back, "
+                            "or pick a new take by ear and update its pin")
+    return problems
 
 
 def check_og(game):
@@ -591,7 +730,8 @@ def assemble(game, check):
     strays = orphans(game, read_roster(game))
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
-    lint = lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game) + check_apart(game)
+    lint = (lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game) + check_apart(game)
+            + check_takes(game))
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:

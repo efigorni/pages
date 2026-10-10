@@ -87,6 +87,11 @@ def quiz_checks(r, whole=True):
             q.get("everyPlayerOnce"))
     else:
         checks[f"asks {one.get('id')} with its question clip"] = bool(one.get("asked")) and bool(one.get("heard"))
+    hud = one.get("hud") or {}
+    checks[f"the mute button beside ↻ ({hud.get('muteToAgain')} px), away from the hear-it-again bubble "
+           f"({hud.get('muteToSay')} px), which is no speaker and no circle ({hud.get('sayRadius')})"] = (
+        bool(hud) and hud["muteToAgain"] <= hud["size"] * 1.5 and hud["muteToSay"] >= hud["saySize"] * 2.5
+        and not hud["sayIsSpeaker"] and hud["sayRadius"] != "50%")
     checks.update({
         "4 distinct cards from the pool, the answer among them": bool(q.get("fourDistinct")),
         f"wrong pick turns to {wrong.get('id')}'s face, says its line, stays on the question":

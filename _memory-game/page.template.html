@@ -60,9 +60,6 @@
     <path d="M7.5 10.5V8a4.5 4.5 0 0 1 9 0v2.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
     <rect x="4.5" y="10" width="15" height="11.5" rx="2.6" fill="currentColor"/>
   </symbol>
-  <symbol id="i-speaker" viewBox="0 0 24 24">
-    <path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-  </symbol>
   <symbol id="i-play" viewBox="0 0 24 24">
     <path d="M8 5.2v13.6a1 1 0 0 0 1.5.86l10.8-6.8a1 1 0 0 0 0-1.72L9.5 4.34A1 1 0 0 0 8 5.2Z" fill="currentColor"/>
   </symbol>
@@ -75,11 +72,11 @@
 </svg>
 <div class="app" id="app" data-phase="start" data-mode="memory" data-found="0">
   <header class="hud">
+    <div class="pips" id="pips" aria-hidden="true"></div>
     <button class="icon-btn" id="mute" type="button" aria-label="קול" aria-pressed="false">
       <svg class="i-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       <svg class="i-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.2h3.8L12 5.1v13.8l-4.7-4.1H3.5z" fill="currentColor"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
-    <div class="pips" id="pips" aria-hidden="true"></div>
     <button class="icon-btn" id="again" type="button" aria-label="משחק חדש">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5A8 8 0 1 1 17.3 5.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M18.8 2.6v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
@@ -87,7 +84,7 @@
   <main class="board" id="board"></main>
   <section class="quiz" id="quiz">
     <div class="prompt">
-      <button class="big say" id="say" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-speaker"/></svg></button>
+      <button class="big say bubble" id="say" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-play"/></svg></button>
       <p class="question" id="question" aria-live="polite"></p>
     </div>
     <div class="picks" id="picks"></div>
@@ -147,7 +144,7 @@
     <div class="flash-slot" id="flash-slot" data-face="band"></div>
     <div class="flash-nav">
       <button class="big" id="prev" type="button" aria-label="הכרטיס הקודם"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
-      <button class="big say" id="hear" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-speaker"/></svg></button>
+      <button class="big say bubble" id="hear" type="button" aria-label="לשמוע שוב"><svg aria-hidden="true"><use href="#i-play"/></svg></button>
       <button class="big" id="next" type="button" aria-label="הכרטיס הבא"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
     </div>
   </div>

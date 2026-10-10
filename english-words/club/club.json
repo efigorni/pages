@@ -23,7 +23,7 @@
   "play": {
     "voice": {"flip": ["en"], "match": ["en", "he"], "ask": ["en"], "wrong": ["en", "he"], "right": ["en", "he"], "card": ["en", "he"]},
     "deal": {"policy": "new-first", "pairs": 15, "new": 8},
-    "quiz": {"pool": "learned", "unlock": 4, "size": 15, "apart": [["girl", "boy"]]},
+    "quiz": {"pool": "learned", "unlock": 4, "size": 10, "master": 3, "newMin": 1, "newMax": 4, "sureMin": 3, "growth": 2, "jitter": 0.5, "decrement": "demote", "apart": [["girl", "boy"]]},
     "progress": "bar",
     "precache": {"policy": "core", "items": 30}
   }
