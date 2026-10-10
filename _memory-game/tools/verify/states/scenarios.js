@@ -816,43 +816,99 @@ async function playToLastPair(h) {
       + 'its asked word avoids', listed && asked >= 100 && broken === 0 && together === 0, `${asked} questions, ${broken} with an avoided word`);
   }
 
-  // ---------- A2 a squad's look-alike pair (club.json play.quiz.apart) never shares a question ----------
-  // No club sets one, so the game is built again in a scratch folder with a pair, through build_page.py: this
-  // checks the builder's DATA (each player's `avoid`) as well as the quiz.
+  // ---------- A2 a squad's quiz is pure random: no one kept apart ----------
+  // Football keeps no look-alikes apart: its DATA has no `avoid` and its play config no `apart`, the builder
+  // fails a squad that sets one, and the engine's squad branch draws the three others from the whole roster,
+  // uniformly at random, whatever DATA says (an `avoid` put in a scratch copy here) and whatever she has met.
   if (SQUAD) {
     const os = require('os');
     const path = require('path');
     const fs = require('fs');
-    const { execFileSync } = require('child_process');
+    const { spawnSync } = require('child_process');
+    const { seededRng } = require('./selection.ref.js');
     const page = path.resolve(process.argv[2]);
     const game = path.basename(path.dirname(page));
+    const html = fs.readFileSync(page, 'utf8');
+    const raw = html.match(/<script id="data">([\s\S]*?)<\/script>/)[1];
+    check('A2 football DATA: no player has an avoid and play.quiz has no apart',
+      probe.ITEMS.every((p) => !('avoid' in p)) && !('apart' in probe.PLAY.quiz) && !/"(avoid|apart)"/.test(raw));
+    const [a, b] = probe.ITEMS.filter((p) => p.role === 'starter').slice(0, 2).map((p) => p.id);
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'memory-game-apart-'));
+    // This page with its DATA changed by edit(data), in the scratch folder.
+    const variant = (name, edit) => {
+      const data = JSON.parse(raw.match(/const DATA = (\{.*\});/)[1]);
+      edit(data);
+      const file = path.join(tmp, `${name}.html`);
+      fs.writeFileSync(file, html.replace(raw, () => raw.replace(/const DATA = \{.*\};/, () => `const DATA = ${JSON.stringify(data)};`)));
+      return file;
+    };
+    const pair = (data) => data.players.forEach((p) => { if (p.id === a) p.avoid = [b]; if (p.id === b) p.avoid = [a]; });
     try {
       fs.cpSync(path.dirname(page), path.join(tmp, game), { recursive: true });
       const config = path.join(tmp, game, 'club/club.json');
       const cfg = JSON.parse(fs.readFileSync(config, 'utf8'));
-      const [a, b] = probe.ITEMS.filter((p) => p.role === 'starter').slice(0, 2).map((p) => p.id);
       fs.writeFileSync(config, JSON.stringify({ ...cfg, play: { ...cfg.play, quiz: { pool: 'all', apart: [[a, b]] } } }));
-      execFileSync('python3', ['-I', path.join(__dirname, '../../page/build_page.py'), 'assemble', '--repo', tmp, game], { stdio: 'pipe' });
-      const k = boot({ noClips: true, html: path.join(tmp, game, 'index.html') });
-      const byId = Object.fromEntries(k.T.ITEMS.map((p) => [p.id, p]));
-      const wired = (byId[a].avoid || []).includes(b) && (byId[b].avoid || []).includes(a);
-      let asked = 0;
-      let together = 0;
-      for (let round = 0; round < 4; round++) {
-        await k.click(round ? 'yes-quiz' : 'play-quiz');
-        for (let i = 0; i < 40 && k.phase() === 'ask'; i++) {
-          const cards = k.T.quiz.cards.map((c) => c.p.id);
-          if ([a, b].includes(k.T.quiz.answer.p.id)) { asked += 1; together += cards.includes(a) && cards.includes(b); }
-          await k.advance(500);
-          await k.pick(k.T.quiz.answer);
-          await k.advance(800);
-          if (k.phase() === 'reveal') await k.pick(k.T.quiz.cards[0]);
-          await k.advance(50);
+      const built = spawnSync('python3', ['-I', path.join(__dirname, '../../page/build_page.py'), 'assemble', '--repo', tmp, game], { encoding: 'utf8' });
+      check(`A2 the builder fails a squad with play.quiz.apart (${a}, ${b}): football quizzes are pure random`,
+        built.status !== 0 && built.stderr.includes('football quizzes are pure random; apart/avoid is for word games only'),
+        (built.stderr || '').trim().split('\n').pop());
+
+      // Every player's three others are the plain draw: the first three of the rest of the roster shuffled with
+      // the same random numbers, though DATA pairs a and b, the quiz is set to "learned" and she has met two.
+      const draw = (list, rng) => {
+        const x = list.slice();
+        for (let i = x.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [x[i], x[j]] = [x[j], x[i]]; }
+        return x.slice(0, 3);
+      };
+      const two = { session: 3, items: Object.fromEntries([a, b].map((id) => [id, { encountered: true, firstTry: 1, misses: 0, lastAsked: 1 }])) };
+      let rng = seededRng(1);
+      const d = boot({ noClips: true, random: () => rng(), storage: [[`${probe.DATA.game}:stats`, JSON.stringify(two)]],
+        html: variant('learned', (data) => { pair(data); data.play.quiz = { ...data.play.quiz, pool: 'learned', unlock: 4, size: 10 }; }) });
+      let draws = 0;
+      let plain = 0;
+      let both = 0;
+      for (let seed = 1; seed <= 40; seed++) {
+        for (const p of d.T.ITEMS) {
+          rng = seededRng(seed);
+          const got = d.T.distractors(p).map((q) => q.id);
+          const want = draw(d.T.ITEMS.filter((q) => q !== p), seededRng(seed)).map((q) => q.id);
+          draws += 1;
+          plain += JSON.stringify(got) === JSON.stringify(want);
+          both += (p.id === a && got.includes(b)) || (p.id === b && got.includes(a));
         }
       }
-      check(`A2 a squad's look-alike pair (play.quiz.apart: ${a}, ${b}) reaches both players' avoid in DATA and never shares a question`,
-        wired && asked >= 8 && together === 0, `${asked} questions asked one of them, ${together} offered both`);
+      check(`A2 a squad's three others are the plain random draw from the whole roster, though ${a} and ${b} avoid each `
+        + 'other in DATA and the quiz says "learned"; and they share questions', plain === draws && both > 0,
+      `${plain} / ${draws} plain draws, ${both} with the pair together`);
+
+      // A seeded quiz deals the same questions and cards with that pair in DATA as without, until the pair shares one.
+      const play = async (file) => {
+        let seq = seededRng(7);
+        const k = boot({ noClips: true, random: () => seq(), ...(file ? { html: file } : {}) });
+        seq = seededRng(7);
+        const seen = [];
+        let together = 0;
+        for (let round = 0; round < 30 && !together; round++) {
+          await k.click(round ? 'yes-quiz' : 'play-quiz');
+          for (let i = 0; i < 60 && k.phase() === 'ask'; i++) {
+            const asked = k.T.quiz.answer.p.id;
+            const cards = k.T.quiz.cards.map((c) => c.p.id);
+            seen.push(`${asked}:${cards.join(',')}`);
+            together += [a, b].includes(asked) && cards.includes(a) && cards.includes(b);
+            await k.advance(500);
+            await k.pick(k.T.quiz.answer);
+            await k.advance(800);
+            if (k.phase() === 'reveal') await k.pick(k.T.quiz.cards[0]);
+            await k.advance(50);
+          }
+        }
+        return { seen, together };
+      };
+      const without = await play(null);
+      const withPair = await play(variant('avoid', pair));
+      check(`A2 a seeded football quiz deals the same cards with ${a} and ${b} avoiding each other in DATA as without, `
+        + 'and puts them in one question', withPair.together > 0 && JSON.stringify(withPair.seen) === JSON.stringify(without.seen),
+      `${withPair.seen.length} questions, ${withPair.together} with the pair together`);
     } finally {
       fs.rmSync(tmp, { recursive: true, force: true });
     }

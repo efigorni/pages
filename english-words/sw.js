@@ -1,7 +1,7 @@
 // build_page.py assemble writes each game's sw.js from _memory-game/sw.template.js, filling in
 // VERSION (a hash of every file it ships), ASSETS, PREFIX, RUNTIME and RUNTIME_FILES: edit the template,
 // not a sw.js.
-const VERSION = 'english-words-3685cf3bf01c';
+const VERSION = 'english-words-fcf6865ff247';
 const ASSETS = [
   './',
   'index.html',

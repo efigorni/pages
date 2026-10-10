@@ -94,6 +94,9 @@ SQUAD_PLAY = {"voice": {"flip": ["name"], "match": ["name", "match"], "ask": ["m
                         "right": ["name"], "card": ["match"]},
               "deal": {"policy": "squad", "pairs": 15}, "quiz": {"pool": "all"}, "progress": "inventory",
               "precache": {"policy": "all"}}
+# A squad's quiz offers three others drawn at random from the whole roster (engine.js distractors), so the
+# builder fails a squad that asks to keep anyone apart (pure_random).
+PURE_RANDOM = "football quizzes are pure random; apart/avoid is for word games only"
 # The moments the voice script (club.json play.voice) gives clips to: memory's flip and match, the quiz's
 # question, wrong pick and right pick, and a flash card.
 MOMENTS = ("flip", "match", "ask", "wrong", "right", "card")
@@ -194,6 +197,7 @@ def play_of(game):
     (README, "Play config"). The engine reads it from DATA; the precache policy is the builder's too."""
     kind, play = kind_of(game), config(game).get("play")
     if kind == "squad":
+        pure_random(game)
         play = {**SQUAD_PLAY, **(play or {})}
     where = f"{game}/{CONFIG} play"
     if not isinstance(play, dict):
@@ -342,9 +346,8 @@ def sound_alikes(game):
 
 
 def avoid_of(game):
-    """What a game's quiz never offers as a wrong answer to each item: a word game's sound-alikes
-    (club/avoid.json) and any game's look-alike pictures (club.json play.quiz.apart). {id: sorted ids}, for the
-    items that have any."""
+    """What a word game's quiz never offers as a wrong answer to each word: its sound-alikes (club/avoid.json)
+    and its look-alike pictures (club.json play.quiz.apart). {id: sorted ids}, for the words that have any."""
     avoid = {wid: set(others) for wid, others in (sound_alikes(game) or {}).items()}
     for a, b in play_of(game)["quiz"].get("apart", []):
         avoid.setdefault(a, set()).add(b)
@@ -352,14 +355,38 @@ def avoid_of(game):
     return {wid: sorted(others) for wid, others in avoid.items() if others}
 
 
+def pure_random(game, roster=None):
+    """A squad's quiz keeps no one apart: fail one with an `apart` or `avoid` key anywhere in club.json, a
+    club/avoid.json, or (given its roster) a player with an `avoid`."""
+    def keys(node, at):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                here = f"{at}.{k}" if at else k
+                if k in ("apart", "avoid"):
+                    yield f"{game}/{CONFIG} {here}"
+                yield from keys(v, here)
+        elif isinstance(node, list):
+            for i, v in enumerate(node):
+                yield from keys(v, f"{at}[{i}]")
+    found = list(keys(config(game), ""))
+    if (REPO / game / AVOID).is_file():
+        found.append(f"{game}/{AVOID}")
+    found += [f"{game}/club/roster.json: {p.get('id')}'s avoid" for p in (roster or {}).get("players", [])
+              if "avoid" in p]
+    if found:
+        fail(f"{', '.join(found)}: {PURE_RANDOM}")
+
+
 def data_line(game, roster):
-    """The DATA script: the roster (each item with its `avoid`, when it has one), the clips that exist (per
-    kind, in roster order), the game's folder (the key of what she knows) and its play config."""
+    """The DATA script: the roster (a word game's words with their `avoid`; a squad's players never have one),
+    the clips that exist (per kind, in roster order), the game's folder (the key of what she knows) and its
+    play config."""
     page = REPO / game
-    avoid = avoid_of(game)
-    if avoid:
-        key = "words" if "words" in roster else "players"
-        roster = {**roster, key: [{**p, "avoid": avoid[p["id"]]} if p["id"] in avoid else p for p in roster[key]]}
+    if kind_of(game) == "words":
+        avoid = avoid_of(game)
+        roster = {**roster, "words": [{**w, "avoid": avoid[w["id"]]} if w["id"] in avoid else w for w in roster["words"]]}
+    else:
+        pure_random(game, roster)
     ids = [p["id"] for p in items_of(roster)]
     audio = {"ui": [k for k in UI_CLIPS if (page / "audio" / "ui" / f"{k}.mp3").is_file()]}
     for kind in KINDS[kind_of(game)]:

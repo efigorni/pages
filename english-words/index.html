@@ -2624,10 +2624,13 @@ const CLUB = {
     keepAwake();
   }
 
-  // Three others to pick from: a squad's whole roster; a word game's words she has met (while fewer than
-  // three of them fit, the next words in teaching order fill in). Never one the asked item avoids (DATA,
-  // its `avoid`: a word that sounds like it, or a picture that looks like it, club.json play.quiz.apart).
+  // Three others to pick from. A squad's: any three of the rest of its whole roster, uniformly at random;
+  // football's quiz is pure random, so its branch never reads `avoid` or what she has met (the builder
+  // fails a squad's apart or avoid). A word game's: words she has met (while fewer than three of them fit,
+  // the next words in teaching order fill in), never one the asked word avoids (DATA, its `avoid`: a word
+  // that sounds like it, or a picture that looks like it, club.json play.quiz.apart).
   function distractors(p) {
+    if (!DATA.words) return shuffled(ITEMS.filter((q) => q !== p)).slice(0, CHOICES - 1);
     const avoid = new Set(p.avoid || []);
     const fits = (q) => q !== p && !avoid.has(q.id);
     let pool = ITEMS.filter(fits);

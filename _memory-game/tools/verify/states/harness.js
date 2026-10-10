@@ -3,7 +3,8 @@
 // exercised deterministically. Usage: HARNESS_HTML=<game>/index.html, then require('./harness').boot({...}).
 // boot({ clips: true }) pretends every clip ships; boot({ noClips: true }) that none does (speech only);
 // boot({ storage: [[key, value]] }) starts with that localStorage (what she has learned, a reload later);
-// boot({ html: <path> }) runs another page than HARNESS_HTML (a game built in a scratch folder).
+// boot({ html: <path> }) runs another page than HARNESS_HTML (a game built in a scratch folder);
+// boot({ random: fn }) gives the page fn as Math.random (a seeded source, for repeatable deals and quizzes).
 const fs = require('fs');
 const vm = require('vm');
 
@@ -217,7 +218,7 @@ function boot(opts = {}) {
     innerHeight: opts.landscape ? 600 : 960,
     addEventListener(t, fn) { (winListeners[t] = winListeners[t] || []).push(fn); },
     Promise,
-    Math,
+    Math: opts.random ? Object.create(Math, { random: { value: opts.random } }) : Math,
     Map,
     Set,
   };
@@ -235,7 +236,7 @@ function boot(opts = {}) {
     data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
   }
   const exportLine = 'globalThis.__t = { DATA, ITEMS, PLAY, game, quiz, shelf, stats, level, LEARN, pickQuiz, updateStats, tap, newGame, '
-    + 'dealPicks, startQuiz, sound, clip, voice, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
+    + 'dealPicks, startQuiz, distractors, sound, clip, voice, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
   const cut = main.lastIndexOf('})();');
   const patched = main.slice(0, cut) + exportLine + main.slice(cut);
   vm.createContext(g);

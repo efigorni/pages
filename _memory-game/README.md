@@ -83,7 +83,7 @@ item met, never asked) and kept in step. When storage is blocked it lasts the vi
 |---|---|---|
 | `voice` | flip `name`; match `name`, `match`; ask `match`; wrong `match`; right `name`; card `match` (a flash card, and a face-up card tapped in memory) | flip `en`; match `en`, `he`; ask `en`; wrong and right `en`, `he`; card `en`, `he` |
 | `deal` | `squad`: the starters, the rest of the 15 pairs from the bench | `new-first`: up to `new` (8) unlearned words in teaching order, the rest a random review of learned ones, more new ones while few are learned |
-| `quiz` | `all`: every player once | `learned`: `size` (10) of the words she has met (below), locked below `unlock` (4) met; the three others are words she has met, never one the asked word avoids: a sound-alike (`club/avoid.json`) or a look-alike picture (`apart`: girl, boy) |
+| `quiz` | `all`: every player once; the three others are any three of the squad, at random (football keeps no one apart: the builder fails a squad with an `apart` or `avoid`) | `learned`: `size` (10) of the words she has met (below), locked below `unlock` (4) met; the three others are words she has met, never one the asked word avoids: a sound-alike (`club/avoid.json`) or a look-alike picture (`apart`: girl, boy) |
 | `progress` | `inventory`: the marks on the shelf only | `bar`: "learned X / N" on every screen |
 | `precache` | `all`: every file, strictly | `core` with `items` (30): the page, fonts, icons, start/win and the first 30 words strictly; every other picture and clip in `RUNTIME` |
 
