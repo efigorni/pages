@@ -9,7 +9,7 @@ met, the progress bar, the core precache).
 | Here | What it is |
 |---|---|
 | `page/icons/` | The two icon SVGs (`render_icons.sh --game english-words`): the card back's speech bubble with "Aa" in Andika Bold, its outlines taken from the font with fontTools |
-| `../club/avoid.json` | Per word, the words that sound like it (CMUdict), which the quiz never offers against it: `_memory-game/tools/words/neighbours.py` writes it, the builder checks it |
+| `../club/avoid.json` | Per word, the words most confusing to hear against it (CMUdict; the rule is in `neighbours.py`), which the quiz never offers against it: `_memory-game/tools/words/neighbours.py` writes it, the builder checks it |
 | `tts/en_pins.json` | The English voice's pins: how a word is rendered (`phonemes`), and the takes picked by ear (`take`), which the builder keeps as shipped (below) |
 
 ## Where the words, pictures and clips come from

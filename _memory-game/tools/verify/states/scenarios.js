@@ -790,8 +790,12 @@ async function playToLastPair(h) {
   // ---------- A1 a word game's quiz never offers a word that sounds like the one it asks ----------
   if (!SQUAD) {
     const byId = Object.fromEntries(probe.ITEMS.map((p) => [p.id, p]));
-    const pairs = [['hat', 'cat'], ['house', 'horse'], ['bear', 'pear'], ['cake', 'snake'], ['bed', 'red']];
-    const listed = pairs.every(([a, b]) => byId[a] && byId[b] && (byId[a].avoid || []).includes(b) && (byId[b].avoid || []).includes(a));
+    // Adam's cases (tools/words/neighbours.py KEEP_APART and ALLOWED): these pairs avoid each other, these don't.
+    const pairs = [['ball', 'doll'], ['cat', 'hat'], ['house', 'horse'], ['bed', 'red'], ['bear', 'pear'], ['sun', 'run']];
+    const allowed = [['cake', 'snake'], ['cat', 'camel']].filter(([a, b]) => byId[a] && byId[b]);
+    const avoids = (a, b) => (byId[a].avoid || []).includes(b) || (byId[b].avoid || []).includes(a);
+    const listed = pairs.every(([a, b]) => byId[a] && byId[b] && (byId[a].avoid || []).includes(b) && (byId[b].avoid || []).includes(a))
+      && allowed.length > 0 && allowed.every(([a, b]) => !avoids(a, b));
     const words = pairs.flat();
     const k = boot({ noClips: true, storage: [[`${probe.DATA.game}:learned`, JSON.stringify(words)]] });
     let asked = 0;
@@ -812,8 +816,9 @@ async function playToLastPair(h) {
         await k.advance(50);
       }
     }
-    check('A1 hat/cat, house/horse, bear/pear, cake/snake and bed/red avoid each other (DATA), and no question offers a word '
-      + 'its asked word avoids', listed && asked >= 100 && broken === 0 && together === 0, `${asked} questions, ${broken} with an avoided word`);
+    check(`A1 ${pairs.map((p) => p.join('/')).join(', ')} avoid each other (DATA), ${allowed.map((p) => p.join('/')).join(' and ')} `
+      + "don't, and no question offers a word its asked word avoids", listed && asked >= 100 && broken === 0 && together === 0,
+    `${asked} questions, ${broken} with an avoided word`);
   }
 
   // ---------- A2 a squad's quiz is pure random: no one kept apart ----------

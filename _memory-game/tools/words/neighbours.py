@@ -8,15 +8,18 @@ build_page.py checks it (every word on the roster has its line, every id is on i
 puts each word's list in DATA as its `avoid`, with club.json play.quiz.apart's look-alike pictures, and the
 engine never deals an avoided word as one of the other three cards. Run it after every change to the words.
 
-Two words sound alike (the pronunciations of CMUdict, every variant of every word in a multi-word name)
-when:
-  rhyme     they end alike from their last stressed vowel on, the vowels as a Hebrew-speaking child
-            hears them: five (ship and sheep, bed and bad, cot and cut are one each) ("cat" "hat",
-            "cake" "snake", "father" "mother");
-  one sound one sound added, dropped or changed makes one the other ("bed" "red", "bear" "pear");
-  start     the same sounds up to a stressed first vowel, a syllable apart at most ("pen" "pencil");
-  vowel     as she hears them (five vowels, no r after a vowel), only one vowel tells them apart
-            ("house" "horse").
+Only the most confusing pairs are kept apart. The pronunciations (CMUdict, every variant of every word in a
+multi-word name) are taken as an American voice says them: stress aside, a vowel and the r after it one
+sound (bear: B EHR, horse: HH AOR S; an r before a vowel starts the next syllable, as in carrot), and AO
+as AA (the cot-caught merger: ball is B AA L, like doll). Two words with as many syllables are kept apart
+when
+  first sound   only their first sound differs, a consonant against a consonant ("ball" "doll", "cat"
+                "hat", "bed" "red", "bear" "pear", "sun" "run");
+  last sound    only their last sound differs, a consonant against a consonant ("bad" "bag");
+  vowel         one syllable each, only the vowel differs ("house" "horse", "hat" "hot", "cat" "kite");
+  same sound    nothing differs ("right" "write").
+"cake" "snake" (a sound added) and "cat" "camel" (a syllable added) are not. Every run checks these cases
+(KEEP_APART, ALLOWED) before it writes.
 Every early quiz still has three others to offer: with the first 4 to 50 words met, no word of the
 English game runs out of them.
 """
@@ -30,9 +33,10 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 REPO = Path(__file__).resolve().parents[3]
 VOWELS = {"AA", "AE", "AH", "AO", "AW", "AY", "EH", "ER", "EY", "IH", "IY", "OW", "OY", "UH", "UW"}
-# The vowels a Hebrew speaker hears as one: Hebrew has five.
-HEARD = {"IH": "IY", "AE": "EH", "AA": "AH", "AO": "AH", "UH": "UW"}
 VARIANTS = 3  # pronunciations per word kept from CMUdict
+# Adam's cases: pairs the rule must keep apart, and pairs it must allow.
+KEEP_APART = (("ball", "doll"), ("cat", "hat"), ("house", "horse"), ("bed", "red"), ("bear", "pear"), ("sun", "run"))
+ALLOWED = (("cake", "snake"), ("cat", "camel"))
 
 
 def fail(msg):
@@ -53,79 +57,52 @@ def bare(pron):
     return tuple(re.sub(r"\d", "", ph) for ph in pron)
 
 
-def five(pron):
-    """The phonemes with the vowels she hears: five."""
-    return tuple(HEARD.get(ph, ph) for ph in bare(pron))
-
-
 def heard(pron):
-    """As she hears them: five vowels, and no r after a vowel."""
+    """The sounds as the American voice says them: stress aside, a vowel and an r after it (not one before a
+    vowel) one sound, and AO as AA, though AOR stays AOR."""
+    ph = bare(pron)
     out = []
-    for ph in five(pron):
-        if not (ph == "R" and out and out[-1] in VOWELS):
-            out.append(ph)
-    return tuple(out)
+    for i, p in enumerate(ph):
+        if p == "R" and out and out[-1] in VOWELS and (i + 1 == len(ph) or ph[i + 1] not in VOWELS):
+            out[-1] += "R"
+        else:
+            out.append(p)
+    return tuple("AA" if p == "AO" else p for p in out)
 
 
-def syllables(pron):
-    return sum(ph[-1].isdigit() for ph in pron)
-
-
-def rhyme(pron):
-    """From the last primary-stressed vowel (else the last stressed one, else the last vowel) to the end."""
-    for marks in ("1", "12", "012"):
-        at = [i for i, ph in enumerate(pron) if ph[-1] in marks]
-        if at:
-            return five(pron[at[-1]:])
-    return None
-
-
-def start(pron):
-    """The onset and the first vowel, when that vowel is stressed."""
-    for i, ph in enumerate(pron):
-        if ph[-1].isdigit():
-            return bare(pron[:i + 1]) if ph[-1] in "12" else None
-    return None
-
-
-def distance(a, b):
-    row = list(range(len(b) + 1))
-    for i, x in enumerate(a, 1):
-        prev, row[0] = row[0], i
-        for j, y in enumerate(b, 1):
-            prev, row[j] = row[j], min(row[j] + 1, row[j - 1] + 1, prev + (x != y))
-    return row[-1]
-
-
-def vowel_only(a, b):
-    """Same length, and they differ in one vowel at most."""
-    if len(a) != len(b):
-        return False
-    diff = [(x, y) for x, y in zip(a, b) if x != y]
-    return len(diff) <= 1 and all(x in VOWELS and y in VOWELS for x, y in diff)
+def vowel(sound):
+    return sound in VOWELS or sound[:-1] in VOWELS
 
 
 def alike(pa, pb):
-    """Why two pronunciations sound alike, or None."""
-    if rhyme(pa) and rhyme(pa) == rhyme(pb):
-        return "rhyme"
-    if distance(bare(pa), bare(pb)) <= 1:
-        return "one sound"
-    if start(pa) and start(pa) == start(pb) and abs(syllables(pa) - syllables(pb)) <= 1:
-        return "start"
-    if vowel_only(heard(pa), heard(pb)):
+    """Why two pronunciations are among the most confusing (module docstring), or None."""
+    a, b = heard(pa), heard(pb)
+    va, vb = [i for i, s in enumerate(a) if vowel(s)], [i for i, s in enumerate(b) if vowel(s)]
+    if len(va) != len(vb):
+        return None
+    if a == b:
+        return "same sound"
+    diff = [i for i, (x, y) in enumerate(zip(a, b)) if x != y] if len(a) == len(b) else []
+    if len(diff) == 1 and diff[0] in (0, len(a) - 1) and not vowel(a[diff[0]]) and not vowel(b[diff[0]]):
+        return "first sound" if diff[0] == 0 else "last sound"
+    if len(va) == 1 and a[:va[0]] == b[:vb[0]] and a[va[0] + 1:] == b[vb[0] + 1:]:
         return "vowel"
     return None
+
+
+def why(prons_a, prons_b):
+    """Why two words are kept apart (any pronunciation of each), or None."""
+    return next(filter(None, (alike(pa, pb) for pa in prons_a for pb in prons_b)), None)
 
 
 def neighbours(words, cmu):
     prons = {w["id"]: pronunciations(w["en"], cmu) for w in words}
     out = {w["id"]: {} for w in words}
     for a, b in itertools.combinations([w["id"] for w in words], 2):
-        why = next(filter(None, (alike(pa, pb) for pa in prons[a] for pb in prons[b])), None)
-        if why:
-            out[a][b] = why
-            out[b][a] = why
+        reason = why(prons[a], prons[b])
+        if reason:
+            out[a][b] = reason
+            out[b][a] = reason
     return out
 
 
@@ -142,18 +119,24 @@ def main():
     args = ap.parse_args()
     import cmudict  # noqa: PLC0415 (uv run --with cmudict==1.1.3)
 
+    cmu = cmudict.dict()
+    wrong = [f"{a}/{b} {'must be kept apart' if keep else 'must be allowed'}"
+             for keep, pairs in ((True, KEEP_APART), (False, ALLOWED)) for a, b in pairs
+             if bool(why(pronunciations(a, cmu), pronunciations(b, cmu))) != keep]
+    if wrong:
+        fail(f"the rule breaks Adam's cases: {'; '.join(wrong)}")
     page = REPO / args.game
     roster = json.loads((page / "club/roster.json").read_text(encoding="utf-8"))
     words = roster.get("words")
     if not words:
         fail(f"{args.game} is not a word game (its roster has no words)")
-    avoid = neighbours(words, cmudict.dict())
+    avoid = neighbours(words, cmu)
     (page / "club/avoid.json").write_text(text(avoid, [w["id"] for w in words]), encoding="utf-8")
     counts = sorted(len(v) for v in avoid.values())
     whys = {}
     for v in avoid.values():
-        for why in v.values():
-            whys[why] = whys.get(why, 0) + 1
+        for reason in v.values():
+            whys[reason] = whys.get(reason, 0) + 1
     print(f"{args.game}/club/avoid.json: {len(words)} words, {sum(counts) // 2} pairs "
           f"({', '.join(f'{k} {v // 2}' for k, v in sorted(whys.items()))}); per word: median "
           f"{counts[len(counts) // 2]}, max {counts[-1]}, none {counts.count(0)}", flush=True)

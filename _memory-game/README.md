@@ -96,9 +96,10 @@ successes make a word fully learned. These constants are `engine.js` `LEARN`'s d
 may set (the English game sets them all; the builder checks them); a squad's quiz still asks every player,
 but its answers keep the same score for the shelf's ticks.
 
-A word game's `club/avoid.json` lists, per word, the words that sound like it (rhymes, one sound apart, the same
-start, or one vowel apart as a Hebrew-speaking child hears them), which `tools/words/neighbours.py` writes from
-CMUdict: `uv run --quiet --with cmudict==1.1.3 python -I _memory-game/tools/words/neighbours.py <game>`. The
+A word game's `club/avoid.json` lists, per word, only the words most confusing to hear against it: as many
+syllables, and only the first or last consonant apart (ball/doll, cat/hat, bear/pear), or one syllable each
+with only the vowel apart (house/horse, hat/hot), as an American voice says them (the rule is in its
+docstring). `tools/words/neighbours.py` writes it from CMUdict: `uv run --quiet --with cmudict==1.1.3 python -I _memory-game/tools/words/neighbours.py <game>`. The
 builder checks it is the roster's (a line per word, each pair both ways) and puts each word's `avoid` (with
 its `apart` partners) in DATA.
 
@@ -210,7 +211,7 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
   a flash card counting as learned and moving the bar, and what she learned surviving a reload; for every
   game, a face-up card's line and the pair it holds (H1–H6), what she knows (M1–M4: the older list carried
   over, first-try answers from the quiz only, the shelf's levels); a word game's sound-alikes never offered
-  together (A1), and its quiz's picks (P1–P4: the simulation's constants, the same quizzes as its own module
+  together (A1); a squad's quiz pure random (A2); and a word game's quiz's picks (P1–P4: the simulation's constants, the same quizzes as its own module
   for the same seeds, the group shares, the quiz clock and the demotion);
 - a quick upgrade from `origin/main` (`--from <ref>`), online then offline, for the games that exist there.
 
