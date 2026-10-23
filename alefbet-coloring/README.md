@@ -52,3 +52,47 @@ them normalized into `art/`, and removes the ones no word names. `glyphs` rewrit
 from the font (only needed if the font or its weight changes):
 `uv run --quiet --with fonttools==4.60.1 --with brotli==1.1.0 python -I alefbet-coloring/tools/build.py glyphs`.
 Before committing, `python3 -I alefbet-coloring/tools/build.py assemble --check` (the repo has no CI).
+
+## Choosing words with the picker
+
+[`picker/index.html`](picker/index.html) is a local tool for choosing a letter's words, never linked from
+the site (it is `noindex`). It is hand-written, not built: `build.py` doesn't touch `picker/`.
+
+1. Open the file straight from disk (`open alefbet-coloring/picker/index.html`, or add `?l=bet` for a
+   letter). It needs the internet only for the OpenMoji drawings.
+2. Each candidate word is a card: **✓ אהבתי** keeps the word, **★ בדף** makes it one of the page's default
+   words (and keeps it), the small drawings under the big one choose its drawing when there are several,
+   and **✎** adds a note. Badges show whether the word is in `src/words.json` today (בדף היום / נוספת היום)
+   and its sources. The bar on top counts the choices and filters the cards. Choices are kept per letter in
+   that browser; **התחלה מחדש** clears them.
+3. **ייצוא** shows the choice as JSON; **העתקה** copies it. Paste it to Claude, who updates
+   `src/words.json` from it. `picked` follows the candidates' order, `default` is ★, and `dropped_current`
+   lists today's words left unpicked:
+
+   ```json
+   {"letter": "ב", "picked": [{"w": "בַּיִת", "art": "openmoji:1F3E0", "default": true, "note": ""}],
+    "dropped_current": ["בִּנְייָן"]}
+   ```
+
+A letter is offered once it has `picker/candidates/<letter-name>.js` (alef bet gimel dalet he vav zayin het
+tet yod kaf lamed mem nun samekh ayin pe tsadi qof resh shin tav); the page finds it on its own:
+
+```js
+PICKER.load({
+  "letter": "ב",
+  "name": "בֵּית",
+  "candidates": [
+    {"w": "בַּיִת", "art": ["openmoji:1F3E0", "openmoji:1F3E1"], "src": ["moe-acq", "en-roster"],
+     "current": "default", "note": "optional, one line"}
+  ]
+});
+```
+
+- `w`: the word with niqqud, spelled as in `src/words.json` (full spelling with vowels).
+- `art`: its drawing options, the suggested one first: `openmoji:<hexcode>`, `custom:<name>` (from
+  `art-src/`), or `draft:<name>`, a proposed drawing of our own in `picker/drafts/<name>.svg`, drawn like
+  the ones in `art-src/` and named `<letter-name>-<english-word>`.
+- `src`: the keys of the sources it is in (as in `src/words.json`), `[]` when none.
+- `current`: `"default"` or `"extra"` when the word is in `src/words.json` today (that role), else `null`.
+
+A file with mistakes lists them at the top of the page, and a drawing that doesn't load shows its reference.
