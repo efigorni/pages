@@ -16,9 +16,10 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
   font's strokes overlap). A letter that looks too large or small gets `"scale"` in `src/words.json`, a
   factor on that size: ו 1.2 (a thin bar), י 0.6 (fitted to the box it fills 126 mm and reads as a "0") and
   ק 1.15 (its descender shrinks its body when fitted).
-- **The words:** the first 8 in `src/words.json` by default (all 6 for ה and ו); the panel adds or removes
-  words (3 to 12). Each is a drawing with 1.2 mm lines and its word under it in Fredoka with niqqud, the
-  first letter bold.
+- **The words:** the first 8 in `src/words.json` by default (all 6 for ה and ו). A letter that sets
+  `"picks"` defaults to that many instead: ב has 10, chosen by hand. The panel adds or removes words
+  (3 to 12). Each is a drawing with 1.2 mm lines and its word under it in Fredoka with niqqud, the first
+  letter bold.
 - **The credit** at the foot: "Drawings: OpenMoji, CC BY-SA 4.0", or "Drawings: OpenMoji and own, CC BY-SA
   4.0" when one of our own drawings (`art-src/`) is on the sheet.
 - **The layout** is random from a seed (ערבוב picks a new one):
@@ -29,15 +30,34 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
      way, until they can't grow without touching (5 mm between drawings, 7 mm around the letter).
   3. Each then moves to where it is farthest from its neighbours and grows on its own into the room left,
      up to 1.25 times. Every drawing is turned by up to 7° and is up to 14% larger or smaller than the rest.
+
+  When the layout can't fit every drawing (now and then, with 12 words), the next seeds are tried in turn,
+  up to 20, until one fits them all (one always has, in thousands of sheets tried); failing that, the one
+  that leaves out the fewest is kept. The address keeps the chosen seed, and the same seed gives the same
+  sheet.
+- **The class pack** (the panel's **דפים לכיתה**, beside **דף אחד**) prints a page for every child at once:
+  how many pages (1 to 60, 30 by default) and how many words on each (3 to 12, 8 by default, never more
+  than the chips picked), in one orientation. Here a chip means its word may come up, and entering the
+  mode picks them all.
+  - The words are dealt like cards: shuffled into a deck and dealt page by page, with a fresh shuffle
+    whenever the deck runs out, so every word comes up as often as any other, give or take one. A word
+    already on the page is skipped and comes up later, so no page has a word twice.
+  - Each page gets its own seed, 7919 after the page before, so no two pages come out the same, and is
+    laid out and drawn exactly as a single sheet.
+  - Everything comes from the pack's seed: the same settings deal the same pack, and ערבוב deals a new one.
+  - The stage shows every page small, numbered. Printing gives one A4 sheet per page, in order, each with
+    its number ("3/30") beside the credit line.
 - **The address keeps the page:** `#l=ב&o=portrait&s=1&w=0.1.2.3.4.5.6.7` (letter, orientation, seed, the
-  words by index), so a link opens, and prints, the same sheet.
+  words by index), so a link opens, and prints, the same sheet. A pack's address,
+  `#l=ב&o=portrait&m=pack&n=30&k=8&p=1&w=0.1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18` (mode, pages,
+  words on each, the pack's seed, the words it deals from), rebuilds and prints the same pack.
 
 ## Adding a letter
 
 1. In [`src/words.json`](src/words.json), give the letter its `words`: 10 to 16 concrete, picturable words
-   a young child knows, the default 8 first. Each word has its niqqud (full spelling with vowels, as the
-   english-words game writes it), its drawing, and the sources it is in (`sources` lists them; see
-   [`CREDITS.md`](CREDITS.md)). Following the Ministry's curriculum, the default words start with as many
+   a young child knows (ב, chosen by hand, has 19), the default 8 first (or set `"picks"`, 3 to 12, for
+   another default count). Each word has its niqqud (full spelling with vowels, as the english-words game
+   writes it), its drawing, and the sources it is in (`sources` lists them; see [`CREDITS.md`](CREDITS.md)). Following the Ministry's curriculum, the default words start with as many
    different vowels as the letter has good words for, and one opens with a cluster (שְׁ, בְּ…) where one
    exists. Words of the Ministry's documents and of the english-words game come first.
 2. Each word needs a drawing that reads as that word in black lines alone:

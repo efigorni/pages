@@ -9,7 +9,8 @@ The sources, all hand-owned except the two files `art` and `glyphs` write:
 
   src/words.json     per letter its name (with niqqud) and its words: the word with niqqud, its drawing
                      ("openmoji:<hexcode>" or "custom:<name>") and where the word comes from (keys of
-                     `sources`). The first DEFAULT_PICKS words are the page's default picks.
+                     `sources`). The first DEFAULT_PICKS words are the page's default picks, or
+                     the first "picks" words for a letter that sets its own count.
   src/page.html      the page: style, controls and the layout script, with the {{…}} slots assemble fills
   art-src/<name>.svg a hand-drawn drawing for "custom:<name>", in OpenMoji's line style (72×72, stroke 2)
   art/*.svg          every drawing words.json names, normalized: written by `art`
@@ -49,11 +50,14 @@ OPENMOJI = "17.0.0"
 OPENMOJI_URL = "https://cdn.jsdelivr.net/npm/openmoji@{version}/black/svg/{hexcode}.svg"
 CACHE = Path.home() / ".cache/alefbet-coloring" / f"openmoji-{OPENMOJI}"
 DEFAULT_PICKS = 8
+PER_SHEET = range(3, 13)  # words on a sheet, as the page allows (its PER_SHEET)
 LETTER_WEIGHT = 700
 
 SVG_NS = "http://www.w3.org/2000/svg"
 SHAPES = {"path", "line", "polyline", "polygon", "rect", "circle", "ellipse"}
-GEOMETRY = {"d", "points", "x", "y", "width", "height", "rx", "ry", "cx", "cy", "r", "x1", "y1", "x2", "y2"}
+# A normalized shape lists these in this fixed order, so `art` writes the same file every run. It is the
+# order the own drawings' files have; a few older OpenMoji files differ until `art --force` rewrites them.
+GEOMETRY = ("d", "points", "y2", "x1", "x2", "y1", "r", "x", "y", "height", "width", "cx", "rx", "ry", "cy")
 INHERITED = {"fill": "#000", "stroke": "none", "stroke-width": "1", "stroke-linecap": "butt",
              "stroke-linejoin": "miter", "fill-rule": "nonzero", "paint-order": "normal"}
 IGNORED = {"id", "class", "stroke-miterlimit", "data-name"}
@@ -271,10 +275,14 @@ def assemble():
     for letter, entry in words["letters"].items():
         if letter not in letters:
             sys.exit(f"{letter}: no outline in src/letters.json; run `build.py glyphs`")
+        picks = entry.get("picks")
+        if picks is not None and (type(picks) is not int or picks not in PER_SHEET
+                                  or picks > len(entry.get("words", []))):
+            sys.exit(f"{letter}: \"picks\" is {picks!r}: a whole number from 3 to 12, at most its number of words")
         data["letters"][letter] = {
             "name": entry["name"],
             "glyph": letters[letter],
-            **({"scale": entry["scale"]} if "scale" in entry else {}),
+            **{key: entry[key] for key in ("scale", "picks") if key in entry},
             "words": [{"w": w["w"], "art": art_file(w["art"]).stem, "src": w.get("src", [])}
                       for w in entry.get("words", [])],
         }

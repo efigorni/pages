@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="6 20 66 60" data-from="custom:bet-pool">
+  <path d="M16,28 H56 L66,60 H6 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M18.6,31 H53.4 L61.6,57.2 H10.4 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M19.5,41 q2.75,-2.2 5.5,0 t5.5,0 t5.5,0 t5.5,0 t5.5,0 t5.5,0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M16,50 q2.5,-2.2 5,0 t5,0 t5,0 t5,0 t5,0 t5,0 t5,0 t5,0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M43,38 V23.5 Q43,20 46,20 Q49,20 49,23.5 V26" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M51,38 V23.5 Q51,20 54,20 Q57,20 57,23.5 V26" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M43,30 H51 M43,35 H51" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>
