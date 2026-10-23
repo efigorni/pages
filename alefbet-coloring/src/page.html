@@ -98,9 +98,9 @@
     }
     .letters button:hover:not(:disabled) { border-color: var(--berry); transform: translateY(-1px); }
     .letters button[aria-pressed="true"] { background: var(--ink); color: #fff; }
-    .letters button:disabled { color: #c9c1b8; cursor: not-allowed; }
+    .letters button:disabled, .step button:disabled { color: #c9c1b8; cursor: not-allowed; }
 
-    .seg {
+    .seg, .step {
       display: inline-flex;
       background: var(--ground);
       border-radius: 99px;
@@ -114,7 +114,7 @@
       font-weight: 700;
       color: var(--ink-2);
     }
-    .seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
+    .seg button[aria-pressed="true"], .step button:hover:not(:disabled) { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
     .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
     .btn {
@@ -157,14 +157,7 @@
 
     /* The class pack's numbers: typed, or a step at a time */
     .nums { display: flex; flex-wrap: wrap; gap: 14px 22px; }
-    .step {
-      display: inline-flex;
-      align-items: center;
-      background: var(--ground);
-      border-radius: 99px;
-      padding: 3px;
-      gap: 2px;
-    }
+    .step { align-items: center; }
     .step button {
       width: 34px;
       height: 34px;
@@ -174,8 +167,6 @@
       line-height: 1;
       color: var(--ink-2);
     }
-    .step button:hover:not(:disabled) { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
-    .step button:disabled { color: #c9c1b8; cursor: not-allowed; }
     .step input {
       width: 46px;
       border: 0;
@@ -257,8 +248,7 @@
       /* the class pack: one A4 sheet a page, in order, and nothing else */
       .is-pack .stage { overflow: visible; }
       .pack { display: block; }
-      .pack figure { break-after: page; }
-      .pack figure:last-child { break-after: auto; }
+      .pack figure:not(:last-child) { break-after: page; }
       .pack .slot { aspect-ratio: auto; box-shadow: none; border-radius: 0; }
       .pack figcaption { display: none; }
     }
@@ -292,7 +282,7 @@
           <h2><label for="pages">מספר דפים</label></h2>
           <div class="step">
             <button data-d="-1" aria-label="פחות דפים">−</button>
-            <input id="pages" type="number" inputmode="numeric" min="1" max="60" value="30">
+            <input id="pages" type="number" inputmode="numeric">
             <button data-d="1" aria-label="יותר דפים">+</button>
           </div>
         </div>
@@ -300,7 +290,7 @@
           <h2><label for="per-page">מילים בכל דף</label></h2>
           <div class="step">
             <button data-d="-1" aria-label="פחות מילים">−</button>
-            <input id="per-page" type="number" inputmode="numeric" min="3" max="12" value="8">
+            <input id="per-page" type="number" inputmode="numeric">
             <button data-d="1" aria-label="יותר מילים">+</button>
           </div>
         </div>
@@ -313,7 +303,7 @@
             <button data-v="portrait" aria-pressed="true">לאורך</button>
             <button data-v="landscape" aria-pressed="false">לרוחב</button>
           </div>
-          <button class="btn" id="shuffle" title="סידור אחר של הציורים בדף">
+          <button class="btn" id="shuffle">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
             ערבוב
           </button>
@@ -324,7 +314,7 @@
         <h2><span class="only-single">מילים בדף</span><span class="only-pack">מילים לדפים</span> <small id="count"></small></h2>
         <div class="words" id="words"></div>
         <p class="hint only-single">לחיצה על מילה מוסיפה אותה לדף או מורידה אותה.</p>
-        <p class="hint only-pack">כל מילה מסומנת עשויה להופיע בדפים: כל דף מקבל <span id="per-hint">8</span> מהן באקראי, וכל אחת מופיעה בערך אותו מספר פעמים.</p>
+        <p class="hint only-pack">כל מילה מסומנת עשויה להופיע בדפים: כל דף מקבל <span id="per-hint"></span> מהן באקראי, וכל אחת מופיעה בערך אותו מספר פעמים.</p>
       </div>
 
       <button class="btn primary" id="print">
@@ -377,10 +367,12 @@
       portrait: { w: 210, h: 297, head: 22, letter: [110, 126] },
       landscape: { w: 297, h: 210, head: 20, letter: [112, 118] },
     };
+    // Words on a sheet, in either mode.
+    const PER_SHEET = { min: 3, max: 12 };
     // A class pack: how many pages, and how many words on each (never more than the chips picked).
     const PACK = {
       pages: { min: 1, max: 60, init: 30 },
-      perPage: { min: 3, max: 12, init: 8 },
+      perPage: { ...PER_SHEET, init: 8 },
     };
     const MARKS = /^(.[\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7]*)(.*)$/su;
 
@@ -655,12 +647,16 @@
       };
     }
 
-    // A sheet never loses a drawing: when the layout leaves one out (now and then, with 12 words), the
-    // next seeds are tried in turn. The same seed still gives the same sheet.
+    // A sheet doesn't lose a drawing: when the layout leaves one out (now and then, with 12 words), the next
+    // 20 seeds are tried in turn, and the first that fits them all is kept (if none does, the one that leaves
+    // out the fewest). The same seed still gives the same sheet.
     function layoutAll(letter, words, orient, seed) {
-      let plan = layout(letter, words, orient, seed);
-      for (let s = seed + 1; plan.missing && s <= seed + 20; s++) plan = layout(letter, words, orient, s);
-      return plan;
+      let best = layout(letter, words, orient, seed);
+      for (let k = 1; best.missing && k <= 20; k++) {
+        const plan = layout(letter, words, orient, seed + k);
+        if (plan.missing < best.missing) best = plan;
+      }
+      return best;
     }
 
     // ---------- Drawing ----------
@@ -714,14 +710,18 @@
       return a;
     }
 
+    // Words on each page of a pack: as many as asked, but no more than the pool holds.
+    const wordsPerPage = (perPage, pool) => Math.min(perPage, pool.length);
+
     // Deals the pack's words, from the pool (word indices): shuffled into a deck and dealt perPage cards
     // a page, with a fresh shuffle whenever the deck runs out, so every word comes up as often as any
     // other, give or take one. A card whose word is already on the page is skipped: it swaps with the
-    // next card that isn't, and comes up later. Each page also gets its own layout seed, and all of it
-    // comes from the one seed, so the same settings deal the same pack.
+    // next card that isn't, and comes up later. Each page also gets its own layout seed, 7919 after the
+    // page before (more than layoutAll's 20 retries), so no two pages come out the same. All of it comes
+    // from the one seed, so the same settings deal the same pack.
     function dealPack(pool, pages, perPage, seed) {
       const rand = mulberry32(seed);
-      const per = Math.min(perPage, pool.length);
+      const per = wordsPerPage(perPage, pool);
       let deck = [], next = 0;
       const out = [];
       for (let n = 0; n < pages; n++) {
@@ -733,57 +733,65 @@
           [deck[next], deck[j]] = [deck[j], deck[next]];
           words.push(deck[next++]);
         }
-        out.push({ words: words.sort((a, b) => a - b), seed: 1 + Math.floor(rand() * 99999) });
+        out.push({ words: words.sort((a, b) => a - b), seed: seed + n * 7919 });
       }
       return out;
     }
 
-    // A pack's sheet carries its page number, "3/30", beside the credit line.
-    const numbered = (markup, label) =>
-      markup.replace(/(<text class="credit"[^>]*>[^<]*)<\/text>/, `$1<tspan dx="3">${label}</tspan></text>`);
-
     // ---------- State ----------
     const lettersWithWords = ORDER.split("").filter((l) => DATA.letters[l] && DATA.letters[l].words.length);
-    const state = {
-      letter: lettersWithWords[0], orient: "portrait", seed: 1, picks: null,
-      // the class pack: the words it deals from (the chips, in that mode), its pages, words on each, its seed
-      mode: "single", pool: null, pages: PACK.pages.init, perPage: PACK.perPage.init, packSeed: 1,
-    };
+    // The sheet: its letter, orientation, seed and words (picks). The class pack: the words it deals from
+    // (pool: the chips, in that mode), its pages, words on each, and its seed. setLetter() fills in the rest.
+    const state = { orient: "portrait", mode: "single", pages: PACK.pages.init, perPage: PACK.perPage.init };
+    const chips = () => (state.mode === "pack" ? "pool" : "picks");  // what the word chips edit
 
+    const allWords = (letter) => DATA.letters[letter].words.map((_, i) => i);
     // A letter's default words: its first "picks" words when it sets its own count, else the first 8.
     function defaultPicks(letter) {
-      const L = DATA.letters[letter];
-      return L.words.slice(0, L.picks || DATA.defaultPicks).map((_, i) => i);
+      return allWords(letter).slice(0, DATA.letters[letter].picks || DATA.defaultPicks);
     }
-    const allWords = (letter) => DATA.letters[letter].words.map((_, i) => i);
+    // A new letter starts over: its default words (every word, for a pack) and seed 1 in both modes.
+    function setLetter(letter) {
+      Object.assign(state, { letter, picks: defaultPicks(letter), seed: 1, pool: allWords(letter), packSeed: 1 });
+    }
+    setLetter(lettersWithWords[0]);
+
+    // The pack's numbers, from the address or the panel: a positive number, kept within its range.
+    function setCount(key, value) {
+      if (value > 0) state[key] = clamp(value, PACK[key].min, PACK[key].max);
+    }
+
+    // A seed from the address: a positive whole number, small enough that the next seeds stay exact; else null.
+    function seedFrom(value) {
+      const seed = parseInt(value, 10);
+      return Number.isSafeInteger(seed) && seed > 0 ? seed : null;
+    }
 
     function readHash() {
       const q = new URLSearchParams(location.hash.slice(1));
-      const letter = q.get("l"), before = state.letter;
-      if (letter && lettersWithWords.includes(letter)) state.letter = letter;
+      const letter = q.get("l");
+      if (lettersWithWords.includes(letter) && letter !== state.letter) setLetter(letter);
       if (q.get("o") === "landscape" || q.get("o") === "portrait") state.orient = q.get("o");
-      const seed = parseInt(q.get("s"), 10);
-      if (seed > 0) state.seed = seed;
-      const n = DATA.letters[state.letter].words.length;
-      const picks = (q.get("w") || "").split(".").map((v) => parseInt(v, 10)).filter((i) => i >= 0 && i < n);
+      state.seed = seedFrom(q.get("s")) || state.seed;
       state.mode = q.get("m") === "pack" ? "pack" : "single";
-      if (state.mode === "single") {
-        state.picks = picks.length ? [...new Set(picks)] : defaultPicks(state.letter);
-        return;
-      }
-      // A pack's address: its words in w, then m=pack, n=<pages>, k=<words on each> and p=<its seed>.
-      state.pool = picks.length ? [...new Set(picks)] : allWords(state.letter);
-      if (!state.picks || state.letter !== before) state.picks = defaultPicks(state.letter);
-      const pages = parseInt(q.get("n"), 10), perPage = parseInt(q.get("k"), 10), packSeed = parseInt(q.get("p"), 10);
-      if (pages > 0) state.pages = clamp(pages, PACK.pages.min, PACK.pages.max);
-      if (perPage > 0) state.perPage = clamp(perPage, PACK.perPage.min, PACK.perPage.max);
-      if (packSeed > 0) state.packSeed = packSeed;
+      const pack = state.mode === "pack", n = DATA.letters[state.letter].words.length;
+      const words = [...new Set((q.get("w") || "").split(".").map((v) => parseInt(v, 10)).filter((i) => i >= 0 && i < n))];
+      // w: a sheet's 3 to 12 words, or the 3 or more a pack deals from; any other count gets the defaults
+      const fits = words.length >= PER_SHEET.min && (pack || words.length <= PER_SHEET.max);
+      state[chips()] = fits ? words : (pack ? allWords : defaultPicks)(state.letter);
+      if (!pack) return;
+      // A pack's address also has n=<pages>, k=<words on each> and p=<its seed>.
+      setCount("pages", parseInt(q.get("n"), 10));
+      setCount("perPage", parseInt(q.get("k"), 10));
+      state.packSeed = seedFrom(q.get("p")) || state.packSeed;
     }
 
     function writeHash() {
-      const q = new URLSearchParams(state.mode === "pack"
-        ? { l: state.letter, o: state.orient, m: "pack", n: state.pages, k: state.perPage, p: state.packSeed, w: state.pool.join(".") }
-        : { l: state.letter, o: state.orient, s: state.seed, w: state.picks.join(".") });
+      const q = new URLSearchParams({
+        l: state.letter, o: state.orient,
+        ...(state.mode === "pack" ? { m: "pack", n: state.pages, k: state.perPage, p: state.packSeed } : { s: state.seed }),
+        w: state[chips()].join("."),
+      });
       history.replaceState(null, "", "#" + q.toString());
     }
 
@@ -798,7 +806,7 @@
 
     function renderWords() {
       const words = DATA.letters[state.letter].words;
-      const on = state.mode === "pack" ? state.pool : state.picks;
+      const on = state[chips()];
       $("#words").innerHTML = words.map((w, i) => {
         const [x0, y0, x1, y1] = DATA.art[w.art];
         const pad = 3;
@@ -809,25 +817,26 @@
       $("#count").textContent = `${on.length} מתוך ${words.length}`;
     }
 
-    function syncOrient() {
-      for (const b of document.querySelectorAll("#orient button")) b.setAttribute("aria-pressed", String(b.dataset.v === state.orient));
+    // A segmented control (#orient, #mode) shows its value as the pressed button.
+    function syncSeg(sel, value) {
+      for (const b of document.querySelectorAll(`${sel} button`)) b.setAttribute("aria-pressed", String(b.dataset.v === value));
     }
 
     // The panel in each mode: the switch, the pack's numbers, and what the chips mean (CSS shows which).
     function syncMode() {
       const pack = state.mode === "pack";
-      for (const b of document.querySelectorAll("#mode button")) b.setAttribute("aria-pressed", String(b.dataset.v === state.mode));
+      syncSeg("#mode", state.mode);
       $(".app").classList.toggle("is-pack", pack);
       $("#shuffle").title = pack ? "הגרלה חדשה של כל הדפים" : "סידור אחר של הציורים בדף";
       if (!pack) return;
-      const per = Math.min(state.perPage, state.pool.length);
+      const per = wordsPerPage(state.perPage, state.pool);
       const fields = [
         ["#pages", state.pages, PACK.pages.min, PACK.pages.max],
-        ["#per-page", per, PACK.perPage.min, Math.min(PACK.perPage.max, state.pool.length)],
+        ["#per-page", per, PACK.perPage.min, wordsPerPage(PACK.perPage.max, state.pool)],
       ];
       for (const [sel, v, lo, hi] of fields) {
         const input = $(sel);
-        input.value = v;
+        Object.assign(input, { value: v, min: lo, max: hi });
         input.parentElement.querySelector('[data-d="-1"]').disabled = v <= lo;
         input.parentElement.querySelector('[data-d="1"]').disabled = v >= hi;
       }
@@ -848,65 +857,68 @@
       svg.style.height = `${Math.floor(P.h * s)}px`;
     }
 
-    let packRun = 0;            // the pack on the stage: drawing anything newer stops it
+    let packTimer = 0;          // the pack still filling in: drawing anything newer cancels it
     let finishPack = () => {};  // draws the rest of its pages at once (before printing)
+    let packSheets = new Map(); // the pack's sheets, unnumbered, by what they show: the next pack reuses them
 
     function render() {
-      packRun++;
-      if (state.mode === "pack") return renderPack();
-      const L = DATA.letters[state.letter];
+      clearTimeout(packTimer);
+      finishPack = () => {};
+      const pack = state.mode === "pack", L = DATA.letters[state.letter], P = PAGES[state.orient];
+      const paper = $("#paper");
+      paper.style.setProperty("--pw", `${P.w}mm`);
+      paper.style.setProperty("--ph", `${P.h}mm`);
+      $("#page-size").textContent = `@page { size: A4 ${state.orient}; margin: 0; }`;
+      document.title = `${pack ? "דפי צביעה לכיתה" : "דף צביעה"}: האות ${L.name.replace(/[\u0591-\u05C7]/g, "")}`;
+      writeHash();
+      if (pack) return renderPack(paper, L);
       const words = state.picks.slice().sort((a, b) => a - b).map((i) => L.words[i]);
       const plan = layoutAll(state.letter, words, state.orient, state.seed);
-      const paper = $("#paper");
-      const P = PAGES[state.orient];
-      paper.style.setProperty("--pw", `${P.w}mm`);
-      paper.style.setProperty("--ph", `${P.h}mm`);
       paper.innerHTML = sheetMarkup(state.letter, plan);
-      $("#page-size").textContent = `@page { size: A4 ${state.orient}; margin: 0; }`;
-      document.title = `דף צביעה: האות ${L.name.replace(/[\u0591-\u05C7]/g, "")}`;
       if (plan.missing) console.warn(`${plan.missing} drawing(s) did not fit on the page`);
       fitSheet();
-      writeHash();
     }
 
-    // Every page of the pack, each laid out and drawn as a single sheet is, then numbered.
-    function renderPack() {
-      const run = packRun, { letter, orient } = state;
-      const L = DATA.letters[letter], P = PAGES[orient];
+    // Every page of the pack, each laid out and drawn as a single sheet is, with its number ("3/30") right
+    // after the credit line's text.
+    function renderPack(paper, L) {
+      const { letter, orient } = state;
       const pages = dealPack(state.pool.slice().sort((a, b) => a - b), state.pages, state.perPage, state.packSeed);
-      const paper = $("#paper");
-      paper.style.setProperty("--pw", `${P.w}mm`);
-      paper.style.setProperty("--ph", `${P.h}mm`);
       paper.innerHTML = `<div class="pack" data-o="${orient}">`
         + pages.map((_, i) => `<figure><div class="slot"></div><figcaption>${i + 1}</figcaption></figure>`).join("")
         + "</div>";
-      $("#page-size").textContent = `@page { size: A4 ${orient}; margin: 0; }`;
-      document.title = `דפי צביעה לכיתה: האות ${L.name.replace(/[\u0591-\u05C7]/g, "")}`;
-      writeHash();
-
       const slots = paper.querySelectorAll(".slot");
+      // A pack with more or fewer pages keeps the pages it shares with this one (the same words and seed),
+      // so stepping the page count only lays out the new pages.
+      const known = packSheets;
+      packSheets = new Map();
       let next = 0;
       const draw = () => {
-        const i = next++, page = pages[i];
-        const plan = layoutAll(letter, page.words.map((w) => L.words[w]), orient, page.seed);
-        if (plan.missing) console.error(`page ${i + 1}/${pages.length}: ${plan.missing} drawing(s) did not fit`);
-        slots[i].innerHTML = numbered(sheetMarkup(letter, plan), `${i + 1}/${pages.length}`);
+        const i = next++, page = pages[i], key = `${letter}|${orient}|${page.seed}|${page.words}`;
+        let sheet = known.get(key);
+        if (!sheet) {
+          const plan = layoutAll(letter, page.words.map((w) => L.words[w]), orient, page.seed);
+          if (plan.missing) console.error(`page ${i + 1}/${pages.length}: ${plan.missing} drawing(s) did not fit`);
+          sheet = sheetMarkup(letter, plan);
+        }
+        packSheets.set(key, sheet);
+        slots[i].innerHTML = sheet;
+        slots[i].querySelector(".credit").insertAdjacentHTML("beforeend", `<tspan dx="3">${i + 1}/${pages.length}</tspan>`);
       };
       // A few pages at a time, so the panel stays responsive while a large pack fills in.
       const more = () => {
-        if (run !== packRun) return;
         const until = performance.now() + 12;
         while (next < pages.length && performance.now() < until) draw();
-        if (next < pages.length) setTimeout(more, 0);
+        if (next < pages.length) packTimer = setTimeout(more, 0);
       };
-      finishPack = () => { while (run === packRun && next < pages.length) draw(); };
+      finishPack = () => { while (next < pages.length) draw(); };
       more();
     }
 
     function refreshAll() {
       renderLetters();
       renderWords();
-      syncOrient();
+      syncSeg("#orient", state.orient);
       syncMode();
       render();
     }
@@ -914,62 +926,52 @@
     $("#letters").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-l]");
       if (!b || b.disabled || b.dataset.l === state.letter) return;
-      state.letter = b.dataset.l;
-      state.picks = defaultPicks(state.letter);
-      state.seed = 1;
-      state.pool = allWords(state.letter);
-      state.packSeed = 1;
+      setLetter(b.dataset.l);
       refreshAll();
     });
-    $("#mode").addEventListener("click", (e) => {
-      const b = e.target.closest("button[data-v]");
-      if (!b || state.mode === b.dataset.v) return;
-      state.mode = b.dataset.v;
+    // A segmented control's click: its new value into the state, then what follows from it.
+    function onSeg(sel, key, then) {
+      $(sel).addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-v]");
+        if (!b || state[key] === b.dataset.v) return;
+        state[key] = b.dataset.v;
+        then();
+      });
+    }
+    onSeg("#mode", "mode", () => {
       if (state.mode === "pack") state.pool = allWords(state.letter);  // entering it, every word may come up
       refreshAll();
     });
+    onSeg("#orient", "orient", () => {
+      syncSeg("#orient", state.orient);
+      render();
+    });
     // The pack's numbers, typed or a step at a time.
-    function setPack(input, value) {
+    function setPack(input, step = 0) {
       const key = input.id === "pages" ? "pages" : "perPage", before = state[key];
-      if (value > 0) state[key] = clamp(value, PACK[key].min, PACK[key].max);
+      setCount(key, parseInt(input.value, 10) + step);
       syncMode();
       if (state[key] !== before) render();
     }
     $("#pack").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-d]");
-      if (!b) return;
-      const input = b.parentElement.querySelector("input");
-      setPack(input, Number(input.value) + Number(b.dataset.d));
+      if (b) setPack(b.parentElement.querySelector("input"), Number(b.dataset.d));
     });
-    $("#pack").addEventListener("change", (e) => setPack(e.target, parseInt(e.target.value, 10)));
+    $("#pack").addEventListener("change", (e) => setPack(e.target));
     $("#words").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-i]");
       if (!b) return;
-      const i = Number(b.dataset.i);
-      if (state.mode === "pack") {
-        // A chip in the pack says whether its word may come up: any number of them, at least 3.
-        if (state.pool.includes(i)) {
-          if (state.pool.length <= PACK.perPage.min) return;
-          state.pool = state.pool.filter((p) => p !== i);
-        } else {
-          state.pool = [...state.pool, i];
-        }
-      } else if (state.picks.includes(i)) {
-        if (state.picks.length <= 3) return;
-        state.picks = state.picks.filter((p) => p !== i);
+      // A sheet's words: 3 to 12. A pack's chips say which words may come up: any number from 3.
+      const i = Number(b.dataset.i), key = chips(), on = state[key];
+      if (on.includes(i)) {
+        if (on.length <= PER_SHEET.min) return;
+        state[key] = on.filter((p) => p !== i);
       } else {
-        if (state.picks.length >= 12) return;
-        state.picks = [...state.picks, i];
+        if (key === "picks" && on.length >= PER_SHEET.max) return;
+        state[key] = [...on, i];
       }
       renderWords();
       syncMode();
-      render();
-    });
-    $("#orient").addEventListener("click", (e) => {
-      const b = e.target.closest("button[data-v]");
-      if (!b || state.orient === b.dataset.v) return;
-      state.orient = b.dataset.v;
-      syncOrient();
       render();
     });
     $("#shuffle").addEventListener("click", () => {

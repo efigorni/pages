@@ -31,8 +31,10 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
   3. Each then moves to where it is farthest from its neighbours and grows on its own into the room left,
      up to 1.25 times. Every drawing is turned by up to 7° and is up to 14% larger or smaller than the rest.
 
-  A sheet never loses a drawing: when the layout can't fit them all (now and then, with 12 words), the
-  next seeds are tried in turn. The address keeps the chosen seed, and the same seed gives the same sheet.
+  When the layout can't fit every drawing (now and then, with 12 words), the next seeds are tried in turn,
+  up to 20, until one fits them all (one always has, in thousands of sheets tried); failing that, the one
+  that leaves out the fewest is kept. The address keeps the chosen seed, and the same seed gives the same
+  sheet.
 - **The class pack** (the panel's **דפים לכיתה**, beside **דף אחד**) prints a page for every child at once:
   how many pages (1 to 60, 30 by default) and how many words on each (3 to 12, 8 by default, never more
   than the chips picked), in one orientation. Here a chip means its word may come up, and entering the
@@ -40,7 +42,8 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
   - The words are dealt like cards: shuffled into a deck and dealt page by page, with a fresh shuffle
     whenever the deck runs out, so every word comes up as often as any other, give or take one. A word
     already on the page is skipped and comes up later, so no page has a word twice.
-  - Each page gets its own seed and is laid out and drawn exactly as a single sheet.
+  - Each page gets its own seed, 7919 after the page before, so no two pages come out the same, and is
+    laid out and drawn exactly as a single sheet.
   - Everything comes from the pack's seed: the same settings deal the same pack, and ערבוב deals a new one.
   - The stage shows every page small, numbered. Printing gives one A4 sheet per page, in order, each with
     its number ("3/30") beside the credit line.
@@ -52,9 +55,9 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
 ## Adding a letter
 
 1. In [`src/words.json`](src/words.json), give the letter its `words`: 10 to 16 concrete, picturable words
-   a young child knows, the default 8 first (or set `"picks"` for another default count). Each word has
-   its niqqud (full spelling with vowels, as the english-words game writes it), its drawing, and the
-   sources it is in (`sources` lists them; see [`CREDITS.md`](CREDITS.md)). Following the Ministry's curriculum, the default words start with as many
+   a young child knows (ב, chosen by hand, has 19), the default 8 first (or set `"picks"`, 3 to 12, for
+   another default count). Each word has its niqqud (full spelling with vowels, as the english-words game
+   writes it), its drawing, and the sources it is in (`sources` lists them; see [`CREDITS.md`](CREDITS.md)). Following the Ministry's curriculum, the default words start with as many
    different vowels as the letter has good words for, and one opens with a cluster (שְׁ, בְּ…) where one
    exists. Words of the Ministry's documents and of the english-words game come first.
 2. Each word needs a drawing that reads as that word in black lines alone:

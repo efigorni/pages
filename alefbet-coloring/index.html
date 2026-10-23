@@ -98,9 +98,9 @@
     }
     .letters button:hover:not(:disabled) { border-color: var(--berry); transform: translateY(-1px); }
     .letters button[aria-pressed="true"] { background: var(--ink); color: #fff; }
-    .letters button:disabled { color: #c9c1b8; cursor: not-allowed; }
+    .letters button:disabled, .step button:disabled { color: #c9c1b8; cursor: not-allowed; }
 
-    .seg {
+    .seg, .step {
       display: inline-flex;
       background: var(--ground);
       border-radius: 99px;
@@ -114,7 +114,7 @@
       font-weight: 700;
       color: var(--ink-2);
     }
-    .seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
+    .seg button[aria-pressed="true"], .step button:hover:not(:disabled) { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
     .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
     .btn {
@@ -157,14 +157,7 @@
 
     /* The class pack's numbers: typed, or a step at a time */
     .nums { display: flex; flex-wrap: wrap; gap: 14px 22px; }
-    .step {
-      display: inline-flex;
-      align-items: center;
-      background: var(--ground);
-      border-radius: 99px;
-      padding: 3px;
-      gap: 2px;
-    }
+    .step { align-items: center; }
     .step button {
       width: 34px;
       height: 34px;
@@ -174,8 +167,6 @@
       line-height: 1;
       color: var(--ink-2);
     }
-    .step button:hover:not(:disabled) { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
-    .step button:disabled { color: #c9c1b8; cursor: not-allowed; }
     .step input {
       width: 46px;
       border: 0;
@@ -257,8 +248,7 @@
       /* the class pack: one A4 sheet a page, in order, and nothing else */
       .is-pack .stage { overflow: visible; }
       .pack { display: block; }
-      .pack figure { break-after: page; }
-      .pack figure:last-child { break-after: auto; }
+      .pack figure:not(:last-child) { break-after: page; }
       .pack .slot { aspect-ratio: auto; box-shadow: none; border-radius: 0; }
       .pack figcaption { display: none; }
     }
@@ -292,7 +282,7 @@
           <h2><label for="pages">מספר דפים</label></h2>
           <div class="step">
             <button data-d="-1" aria-label="פחות דפים">−</button>
-            <input id="pages" type="number" inputmode="numeric" min="1" max="60" value="30">
+            <input id="pages" type="number" inputmode="numeric">
             <button data-d="1" aria-label="יותר דפים">+</button>
           </div>
         </div>
@@ -300,7 +290,7 @@
           <h2><label for="per-page">מילים בכל דף</label></h2>
           <div class="step">
             <button data-d="-1" aria-label="פחות מילים">−</button>
-            <input id="per-page" type="number" inputmode="numeric" min="3" max="12" value="8">
+            <input id="per-page" type="number" inputmode="numeric">
             <button data-d="1" aria-label="יותר מילים">+</button>
           </div>
         </div>
@@ -313,7 +303,7 @@
             <button data-v="portrait" aria-pressed="true">לאורך</button>
             <button data-v="landscape" aria-pressed="false">לרוחב</button>
           </div>
-          <button class="btn" id="shuffle" title="סידור אחר של הציורים בדף">
+          <button class="btn" id="shuffle">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
             ערבוב
           </button>
@@ -324,7 +314,7 @@
         <h2><span class="only-single">מילים בדף</span><span class="only-pack">מילים לדפים</span> <small id="count"></small></h2>
         <div class="words" id="words"></div>
         <p class="hint only-single">לחיצה על מילה מוסיפה אותה לדף או מורידה אותה.</p>
-        <p class="hint only-pack">כל מילה מסומנת עשויה להופיע בדפים: כל דף מקבל <span id="per-hint">8</span> מהן באקראי, וכל אחת מופיעה בערך אותו מספר פעמים.</p>
+        <p class="hint only-pack">כל מילה מסומנת עשויה להופיע בדפים: כל דף מקבל <span id="per-hint"></span> מהן באקראי, וכל אחת מופיעה בערך אותו מספר פעמים.</p>
       </div>
 
       <button class="btn primary" id="print">
@@ -377,7 +367,7 @@
 <g id="a-openmoji-1F986"><path d="M47.9472,46.2123c6.9757,5.7074,0,6.3416,0,6.3416c-17.1222,1.9025-21.5613-16.488-21.5613-16.488" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M34.0168,54.4596c10.7957,2.9088,29.2906,3.308,25.3452-0.6374c-4.4391-4.4391-5.0732-6.3416-5.7074-10.1465 s-5.7074-11.4148-14.5856-13.3173c-8.8782-1.9025,0-13.9514-6.3416-19.6588s-13.9514-0.6342-13.9514,2.5366 s-3.1708,5.0732-3.1708,5.0732c-1.2683,0.6342-9.5123,3.8049,1.2683,3.8049s10.1465,2.5366,6.9757,4.4391 c0,0-10.8078,4.5851-7.8493,14.4465c3,10,17.9958,13.4564,17.9958,13.4564s-0.6342,1.2683,0,2.5366s-0.3658,1.6342-1.6342,3.5366 c-1.2683,1.9025-4.0732,0.2683-6.6099,0.9025c-1.9455,0.4864-3.1708,2.5366,0.6342,2.5366s10.7806,0,10.7806,0 s3.8049,0.6342-0.6342-3.8049c0,0,0.6342-1.2683,0.6342-1.9025s1.374-1.2683,1.0041-2.5366" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M34.6024,63.9305c1.1633,0,2.6989,0,4.1493,0c2.3257,0,4.432,0,4.432,0s3.0287,0.5048-0.5048-3.0287 c0,0,0.5048-1.0096,0.5048-1.5143s1.0937-1.0096,0.7992-2.0191" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M40.6597,56.3588c0,0-0.5048,1.0096,0,2.0191c0.5048,1.0096,0.5048,0.5048-0.5048,2.0191c-0.408,0.612-1.2252,0.8826-2.3542,1.035" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/></g>
 <g id="a-openmoji-1FAE7"><path d="M40 47.091C40.243 46.6518 40.5461 46.2506 40.8984 45.8984C41.2506 45.5461 41.6518 45.243 42.091 45" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 2)"/><path d="M48.5 25.5C48.6162 25.29 48.7612 25.0981 48.9296 24.9296C49.0981 24.7612 49.29 24.6162 49.5 24.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1.5)"/><path d="M18 21.3456C18.3888 20.6429 18.8738 20.0009 19.4374 19.4374C20.0009 18.8738 20.6429 18.3888 21.3456 18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 2)"/><path d="M25.5 39C32.9558 39 39 32.9558 39 25.5C39 18.0442 32.9558 12 25.5 12C18.0442 12 12 18.0442 12 25.5C12 32.9558 18.0442 39 25.5 39Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M52 36C56.4183 36 60 32.4183 60 28C60 23.5817 56.4183 20 52 20C47.5817 20 44 23.5817 44 28C44 32.4183 47.5817 36 52 36Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M45 60C50.5228 60 55 55.5228 55 50C55 44.4772 50.5228 40 45 40C39.4772 40 35 44.4772 35 50C35 55.5228 39.4772 60 45 60Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M45 60C50.5228 60 55 55.5228 55 50C55 44.4772 50.5228 40 45 40C39.4772 40 35 44.4772 35 50C35 55.5228 39.4772 60 45 60Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/></g>
 <g id="a-custom-bet-acorn"><path d="M36,14.5 Q36.5,9.5 40.5,6.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M17,31 C17,20.5 26,14.5 36,14.5 C46,14.5 55,20.5 55,31" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M17,31 Q36,36.5 55,31" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M20.5,33.5 C20.5,47 27.5,58.5 36,63.5 C44.5,58.5 51.5,47 51.5,33.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M36,63.5 V66.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M26,39 Q26.5,47 30.5,53" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M20.8,22.8 L30.1,32.1 M25,19.2 L38,32.2 M31.2,16.7 L46,31.5 M40.9,16.7 L54,29.8 M18,29.8 L31.1,16.7 M26,31.5 L40.8,16.7 M34,32.2 L47,19.2 M41.9,32.1 L51.2,22.8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/></g>
-<g id="a-custom-bet-biscuit"><path d="M11,19 A3.38,3.38 0 0 1 17.25,19 A3.38,3.38 0 0 1 23.5,19 A3.38,3.38 0 0 1 29.75,19 A3.38,3.38 0 0 1 36,19 A3.38,3.38 0 0 1 42.25,19 A3.38,3.38 0 0 1 48.5,19 A3.38,3.38 0 0 1 54.75,19 A3.38,3.38 0 0 1 61,19 A3.24,3.24 0 0 1 61,25 A3.24,3.24 0 0 1 61,31 A3.24,3.24 0 0 1 61,37 A3.24,3.24 0 0 1 61,43 A3.24,3.24 0 0 1 61,49 A3.24,3.24 0 0 1 61,55 A3.38,3.38 0 0 1 54.75,55 A3.38,3.38 0 0 1 48.5,55 A3.38,3.38 0 0 1 42.25,55 A3.38,3.38 0 0 1 36,55 A3.38,3.38 0 0 1 29.75,55 A3.38,3.38 0 0 1 23.5,55 A3.38,3.38 0 0 1 17.25,55 A3.38,3.38 0 0 1 11,55 A3.24,3.24 0 0 1 11,49 A3.24,3.24 0 0 1 11,43 A3.24,3.24 0 0 1 11,37 A3.24,3.24 0 0 1 11,31 A3.24,3.24 0 0 1 11,25 A3.24,3.24 0 0 1 11,19 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><rect x="16" y="24" height="26" width="40" rx="2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><circle r="1.1" cx="23" cy="31" fill="currentColor" stroke="none"/><circle r="1.1" cx="29.5" cy="31" fill="currentColor" stroke="none"/><circle r="1.1" cx="36" cy="31" fill="currentColor" stroke="none"/><circle r="1.1" cx="42.5" cy="31" fill="currentColor" stroke="none"/><circle r="1.1" cx="49" cy="31" fill="currentColor" stroke="none"/><circle r="1.1" cx="23" cy="37" fill="currentColor" stroke="none"/><circle r="1.1" cx="29.5" cy="37" fill="currentColor" stroke="none"/><circle r="1.1" cx="36" cy="37" fill="currentColor" stroke="none"/><circle r="1.1" cx="42.5" cy="37" fill="currentColor" stroke="none"/><circle r="1.1" cx="49" cy="37" fill="currentColor" stroke="none"/><circle r="1.1" cx="23" cy="43" fill="currentColor" stroke="none"/><circle r="1.1" cx="29.5" cy="43" fill="currentColor" stroke="none"/><circle r="1.1" cx="36" cy="43" fill="currentColor" stroke="none"/><circle r="1.1" cx="42.5" cy="43" fill="currentColor" stroke="none"/><circle r="1.1" cx="49" cy="43" fill="currentColor" stroke="none"/></g>
+<g id="a-custom-bet-biscuit"><path d="M11,19 A3.38,3.38 0 0 1 17.25,19 A3.38,3.38 0 0 1 23.5,19 A3.38,3.38 0 0 1 29.75,19 A3.38,3.38 0 0 1 36,19 A3.38,3.38 0 0 1 42.25,19 A3.38,3.38 0 0 1 48.5,19 A3.38,3.38 0 0 1 54.75,19 A3.38,3.38 0 0 1 61,19 A3.24,3.24 0 0 1 61,25 A3.24,3.24 0 0 1 61,31 A3.24,3.24 0 0 1 61,37 A3.24,3.24 0 0 1 61,43 A3.24,3.24 0 0 1 61,49 A3.24,3.24 0 0 1 61,55 A3.38,3.38 0 0 1 54.75,55 A3.38,3.38 0 0 1 48.5,55 A3.38,3.38 0 0 1 42.25,55 A3.38,3.38 0 0 1 36,55 A3.38,3.38 0 0 1 29.75,55 A3.38,3.38 0 0 1 23.5,55 A3.38,3.38 0 0 1 17.25,55 A3.38,3.38 0 0 1 11,55 A3.24,3.24 0 0 1 11,49 A3.24,3.24 0 0 1 11,43 A3.24,3.24 0 0 1 11,37 A3.24,3.24 0 0 1 11,31 A3.24,3.24 0 0 1 11,25 A3.24,3.24 0 0 1 11,19 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><rect x="16" y="24" height="26" width="40" rx="2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M23,31 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M29.5,31 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M36,31 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M42.5,31 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M49,31 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M23,37 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M29.5,37 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M36,37 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M42.5,37 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M49,37 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M23,43 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M29.5,43 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M36,43 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M42.5,43 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M49,43 h0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/></g>
 <g id="a-openmoji-1FA83"><path d="M48.4022,40.8228c-1.7382-4.9513-3.41-9.6347-3.8074-10.4437a8.6038,8.6038,0,0,0-8.2664-4.94c-1.7794-.0078-4.6533-.0018-7.78.0107" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/><path d="M25.6211,25.4632c-5.4429.0268-10.8706.0656-12.1543.08-2.1544.0241-3.5618-1.5206-3.1534-3.5158a6.14,6.14,0,0,1,.4354-1.0723,3.2263,3.2263,0,0,1,2.322-1.2948c8.4613-1.4536,28.8507-5.0473,30.5994-5.1652a9.0219,9.0219,0,0,1,9.6663,7.654c1.4457,8.2642,4.8648,28.0768,5.1394,29.7168a2.986,2.986,0,0,1-1.301,3.2,2.85,2.85,0,0,1-4.3429-1.5744c-.2771-.7445-1.8107-5.18-3.4878-9.9791" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/><line y2="22.0557" x1="19.203" x2="17.5922" y1="25.4998" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><line y2="22.0303" x1="25.6211" x2="24.0103" y1="25.4744" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><line y2="50.4963" x1="51.5331" x2="55.2764" y1="49.83" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><line y2="44.1779" x1="49.3472" x2="53.0906" y1="43.5116" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/></g>
 <g id="a-openmoji-1F966"><path d="M26.7232,45.3139 c-0.4196,0.0478-0.8461,0.0723-1.278,0.0723c-6.125,0-11.0961-4.9423-11.0961-11.0385c0-3.6552,1.7871-6.8941,4.5366-8.9045 c0.8801-0.6435,1.4456-1.6121,1.7114-2.6694c1.7341-6.898,8.0083-12.003,15.4732-12.003c7.5784,0,13.9358,5.2744,15.5442,12.3414 c0.2335,1.0259,0.8381,1.9071,1.6744,2.5454c2.634,2.0103,4.3295,5.1681,4.3295,8.7285c0,6.0769-4.9519,11-11.0577,11 c-0.161,0-0.3212-0.0034-0.4805-0.0101" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/><path d="M26.7232,45.3139 c-0.4196,0.0478-0.8461,0.0723-1.278,0.0723c-6.125,0-11.0961-4.9423-11.0961-11.0385c0-3.6552,1.7871-6.8941,4.5366-8.9045 c0.8801-0.6435,1.4456-1.6121,1.7114-2.6694c1.7341-6.898,8.0083-12.003,15.4732-12.003c7.5784,0,13.9358,5.2744,15.5442,12.3414 c0.2335,1.0259,0.8381,1.9071,1.6744,2.5454c2.634,2.0103,4.3295,5.1681,4.3295,8.7285c0,6.0769-4.9519,11-11.0577,11 c-0.161,0-0.3212-0.0034-0.4805-0.0101" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/><path d="M46.0798,45.3862c0,0-0.2019,0-0.5481-0.0288c-0.0096,0-0.0288,0-0.0385,0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M27.176,45.2804c-0.7692,0.1058-1.2885,0.1058-1.2885,0.1058" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M25.8875,45.3862c0,0,5.7692,0,7.6923-3.8462" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M43.1952,48.2708 c0,0-0.9615,1.9231-0.9615,4.8077v2.0979v3.6313c0,1.0842-0.8789,1.9631-1.9631,1.9631h-1.883h-3.8462h-1.883 c-1.0842,0-1.9631-0.8789-1.9631-1.9631v-3.6313v-2.0979c0-2.8846-0.9615-4.8077-0.9615-4.8077" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/><path d="M46.0798,45.3862c0,0-5.7692,0-7.6923-3.8462" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M26.7232,45.3139 c-0.4196,0.0478-0.8461,0.0723-1.278,0.0723c-6.125,0-11.0961-4.9423-11.0961-11.0385c0-3.6552,1.7871-6.8941,4.5366-8.9045 c0.8801-0.6435,1.4456-1.6121,1.7114-2.6694c1.7341-6.898,8.0083-12.003,15.4732-12.003c7.5784,0,13.9358,5.2744,15.5442,12.3414 c0.2335,1.0259,0.8381,1.9071,1.6744,2.5454c2.634,2.0103,4.3295,5.1681,4.3295,8.7285c0,6.0769-4.9519,11-11.0577,11 c-0.161,0-0.3212-0.0034-0.4805-0.0101" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/><path d="M46.0798,45.3862c0,0-0.2019,0-0.5481-0.0288c-0.0096,0-0.0288,0-0.0385,0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M27.176,45.2804c-0.7692,0.1058-1.2885,0.1058-1.2885,0.1058" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/></g>
 <g id="a-openmoji-1F9C5"><path d="M34.4166,14.6311l4.3043-6.1339a20.0263,20.0263,0,0,0-1.22,2.2393c-2.7869,6.1037,2.1232,6.3747,2.1232,6.3747C51.1091,18.61,59.9359,27.59,59.9359,38.4438c0,11.9029-10.615,21.5522-23.7093,21.5522S12.5173,50.3467,12.5173,38.4438c0-8.2317,5.0767-15.3855,12.5394-19.0154a24.8313,24.8313,0,0,1,3.0884-1.2525q.1238-.0406.2481-.08.1619-.0515.3249-.1009a25.4857,25.4857,0,0,1,3.2831-.7619" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M35.9929,60.2041l-5.797,2.59Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><polyline points="40.931 62.794 35.993 60.204 35.993 62.794" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M32.3755,53.4552c-2.33-2.343-3.9821-8.237-3.9821-15.1375,0-5.8044,1.1693-10.8967,2.9272-13.7624" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M23.7259,49.8921c-1.7551-1.7652-3-6.2059-3-11.4048,0-4.3732.881-8.21,2.2054-10.3689" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M49.28,49.8921c1.7551-1.7652,3-6.2059,3-11.4048,0-4.3732-.8811-8.21-2.2055-10.3689" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/><path d="M39.2155,53.4552c2.33-2.343,3.9822-8.237,3.9822-15.1375,0-5.8044-1.1693-10.8967-2.9273-13.7624" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/></g>
@@ -651,10 +641,12 @@
       portrait: { w: 210, h: 297, head: 22, letter: [110, 126] },
       landscape: { w: 297, h: 210, head: 20, letter: [112, 118] },
     };
+    // Words on a sheet, in either mode.
+    const PER_SHEET = { min: 3, max: 12 };
     // A class pack: how many pages, and how many words on each (never more than the chips picked).
     const PACK = {
       pages: { min: 1, max: 60, init: 30 },
-      perPage: { min: 3, max: 12, init: 8 },
+      perPage: { ...PER_SHEET, init: 8 },
     };
     const MARKS = /^(.[\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7]*)(.*)$/su;
 
@@ -929,12 +921,16 @@
       };
     }
 
-    // A sheet never loses a drawing: when the layout leaves one out (now and then, with 12 words), the
-    // next seeds are tried in turn. The same seed still gives the same sheet.
+    // A sheet doesn't lose a drawing: when the layout leaves one out (now and then, with 12 words), the next
+    // 20 seeds are tried in turn, and the first that fits them all is kept (if none does, the one that leaves
+    // out the fewest). The same seed still gives the same sheet.
     function layoutAll(letter, words, orient, seed) {
-      let plan = layout(letter, words, orient, seed);
-      for (let s = seed + 1; plan.missing && s <= seed + 20; s++) plan = layout(letter, words, orient, s);
-      return plan;
+      let best = layout(letter, words, orient, seed);
+      for (let k = 1; best.missing && k <= 20; k++) {
+        const plan = layout(letter, words, orient, seed + k);
+        if (plan.missing < best.missing) best = plan;
+      }
+      return best;
     }
 
     // ---------- Drawing ----------
@@ -988,14 +984,18 @@
       return a;
     }
 
+    // Words on each page of a pack: as many as asked, but no more than the pool holds.
+    const wordsPerPage = (perPage, pool) => Math.min(perPage, pool.length);
+
     // Deals the pack's words, from the pool (word indices): shuffled into a deck and dealt perPage cards
     // a page, with a fresh shuffle whenever the deck runs out, so every word comes up as often as any
     // other, give or take one. A card whose word is already on the page is skipped: it swaps with the
-    // next card that isn't, and comes up later. Each page also gets its own layout seed, and all of it
-    // comes from the one seed, so the same settings deal the same pack.
+    // next card that isn't, and comes up later. Each page also gets its own layout seed, 7919 after the
+    // page before (more than layoutAll's 20 retries), so no two pages come out the same. All of it comes
+    // from the one seed, so the same settings deal the same pack.
     function dealPack(pool, pages, perPage, seed) {
       const rand = mulberry32(seed);
-      const per = Math.min(perPage, pool.length);
+      const per = wordsPerPage(perPage, pool);
       let deck = [], next = 0;
       const out = [];
       for (let n = 0; n < pages; n++) {
@@ -1007,57 +1007,65 @@
           [deck[next], deck[j]] = [deck[j], deck[next]];
           words.push(deck[next++]);
         }
-        out.push({ words: words.sort((a, b) => a - b), seed: 1 + Math.floor(rand() * 99999) });
+        out.push({ words: words.sort((a, b) => a - b), seed: seed + n * 7919 });
       }
       return out;
     }
 
-    // A pack's sheet carries its page number, "3/30", beside the credit line.
-    const numbered = (markup, label) =>
-      markup.replace(/(<text class="credit"[^>]*>[^<]*)<\/text>/, `$1<tspan dx="3">${label}</tspan></text>`);
-
     // ---------- State ----------
     const lettersWithWords = ORDER.split("").filter((l) => DATA.letters[l] && DATA.letters[l].words.length);
-    const state = {
-      letter: lettersWithWords[0], orient: "portrait", seed: 1, picks: null,
-      // the class pack: the words it deals from (the chips, in that mode), its pages, words on each, its seed
-      mode: "single", pool: null, pages: PACK.pages.init, perPage: PACK.perPage.init, packSeed: 1,
-    };
+    // The sheet: its letter, orientation, seed and words (picks). The class pack: the words it deals from
+    // (pool: the chips, in that mode), its pages, words on each, and its seed. setLetter() fills in the rest.
+    const state = { orient: "portrait", mode: "single", pages: PACK.pages.init, perPage: PACK.perPage.init };
+    const chips = () => (state.mode === "pack" ? "pool" : "picks");  // what the word chips edit
 
+    const allWords = (letter) => DATA.letters[letter].words.map((_, i) => i);
     // A letter's default words: its first "picks" words when it sets its own count, else the first 8.
     function defaultPicks(letter) {
-      const L = DATA.letters[letter];
-      return L.words.slice(0, L.picks || DATA.defaultPicks).map((_, i) => i);
+      return allWords(letter).slice(0, DATA.letters[letter].picks || DATA.defaultPicks);
     }
-    const allWords = (letter) => DATA.letters[letter].words.map((_, i) => i);
+    // A new letter starts over: its default words (every word, for a pack) and seed 1 in both modes.
+    function setLetter(letter) {
+      Object.assign(state, { letter, picks: defaultPicks(letter), seed: 1, pool: allWords(letter), packSeed: 1 });
+    }
+    setLetter(lettersWithWords[0]);
+
+    // The pack's numbers, from the address or the panel: a positive number, kept within its range.
+    function setCount(key, value) {
+      if (value > 0) state[key] = clamp(value, PACK[key].min, PACK[key].max);
+    }
+
+    // A seed from the address: a positive whole number, small enough that the next seeds stay exact; else null.
+    function seedFrom(value) {
+      const seed = parseInt(value, 10);
+      return Number.isSafeInteger(seed) && seed > 0 ? seed : null;
+    }
 
     function readHash() {
       const q = new URLSearchParams(location.hash.slice(1));
-      const letter = q.get("l"), before = state.letter;
-      if (letter && lettersWithWords.includes(letter)) state.letter = letter;
+      const letter = q.get("l");
+      if (lettersWithWords.includes(letter) && letter !== state.letter) setLetter(letter);
       if (q.get("o") === "landscape" || q.get("o") === "portrait") state.orient = q.get("o");
-      const seed = parseInt(q.get("s"), 10);
-      if (seed > 0) state.seed = seed;
-      const n = DATA.letters[state.letter].words.length;
-      const picks = (q.get("w") || "").split(".").map((v) => parseInt(v, 10)).filter((i) => i >= 0 && i < n);
+      state.seed = seedFrom(q.get("s")) || state.seed;
       state.mode = q.get("m") === "pack" ? "pack" : "single";
-      if (state.mode === "single") {
-        state.picks = picks.length ? [...new Set(picks)] : defaultPicks(state.letter);
-        return;
-      }
-      // A pack's address: its words in w, then m=pack, n=<pages>, k=<words on each> and p=<its seed>.
-      state.pool = picks.length ? [...new Set(picks)] : allWords(state.letter);
-      if (!state.picks || state.letter !== before) state.picks = defaultPicks(state.letter);
-      const pages = parseInt(q.get("n"), 10), perPage = parseInt(q.get("k"), 10), packSeed = parseInt(q.get("p"), 10);
-      if (pages > 0) state.pages = clamp(pages, PACK.pages.min, PACK.pages.max);
-      if (perPage > 0) state.perPage = clamp(perPage, PACK.perPage.min, PACK.perPage.max);
-      if (packSeed > 0) state.packSeed = packSeed;
+      const pack = state.mode === "pack", n = DATA.letters[state.letter].words.length;
+      const words = [...new Set((q.get("w") || "").split(".").map((v) => parseInt(v, 10)).filter((i) => i >= 0 && i < n))];
+      // w: a sheet's 3 to 12 words, or the 3 or more a pack deals from; any other count gets the defaults
+      const fits = words.length >= PER_SHEET.min && (pack || words.length <= PER_SHEET.max);
+      state[chips()] = fits ? words : (pack ? allWords : defaultPicks)(state.letter);
+      if (!pack) return;
+      // A pack's address also has n=<pages>, k=<words on each> and p=<its seed>.
+      setCount("pages", parseInt(q.get("n"), 10));
+      setCount("perPage", parseInt(q.get("k"), 10));
+      state.packSeed = seedFrom(q.get("p")) || state.packSeed;
     }
 
     function writeHash() {
-      const q = new URLSearchParams(state.mode === "pack"
-        ? { l: state.letter, o: state.orient, m: "pack", n: state.pages, k: state.perPage, p: state.packSeed, w: state.pool.join(".") }
-        : { l: state.letter, o: state.orient, s: state.seed, w: state.picks.join(".") });
+      const q = new URLSearchParams({
+        l: state.letter, o: state.orient,
+        ...(state.mode === "pack" ? { m: "pack", n: state.pages, k: state.perPage, p: state.packSeed } : { s: state.seed }),
+        w: state[chips()].join("."),
+      });
       history.replaceState(null, "", "#" + q.toString());
     }
 
@@ -1072,7 +1080,7 @@
 
     function renderWords() {
       const words = DATA.letters[state.letter].words;
-      const on = state.mode === "pack" ? state.pool : state.picks;
+      const on = state[chips()];
       $("#words").innerHTML = words.map((w, i) => {
         const [x0, y0, x1, y1] = DATA.art[w.art];
         const pad = 3;
@@ -1083,25 +1091,26 @@
       $("#count").textContent = `${on.length} מתוך ${words.length}`;
     }
 
-    function syncOrient() {
-      for (const b of document.querySelectorAll("#orient button")) b.setAttribute("aria-pressed", String(b.dataset.v === state.orient));
+    // A segmented control (#orient, #mode) shows its value as the pressed button.
+    function syncSeg(sel, value) {
+      for (const b of document.querySelectorAll(`${sel} button`)) b.setAttribute("aria-pressed", String(b.dataset.v === value));
     }
 
     // The panel in each mode: the switch, the pack's numbers, and what the chips mean (CSS shows which).
     function syncMode() {
       const pack = state.mode === "pack";
-      for (const b of document.querySelectorAll("#mode button")) b.setAttribute("aria-pressed", String(b.dataset.v === state.mode));
+      syncSeg("#mode", state.mode);
       $(".app").classList.toggle("is-pack", pack);
       $("#shuffle").title = pack ? "הגרלה חדשה של כל הדפים" : "סידור אחר של הציורים בדף";
       if (!pack) return;
-      const per = Math.min(state.perPage, state.pool.length);
+      const per = wordsPerPage(state.perPage, state.pool);
       const fields = [
         ["#pages", state.pages, PACK.pages.min, PACK.pages.max],
-        ["#per-page", per, PACK.perPage.min, Math.min(PACK.perPage.max, state.pool.length)],
+        ["#per-page", per, PACK.perPage.min, wordsPerPage(PACK.perPage.max, state.pool)],
       ];
       for (const [sel, v, lo, hi] of fields) {
         const input = $(sel);
-        input.value = v;
+        Object.assign(input, { value: v, min: lo, max: hi });
         input.parentElement.querySelector('[data-d="-1"]').disabled = v <= lo;
         input.parentElement.querySelector('[data-d="1"]').disabled = v >= hi;
       }
@@ -1122,65 +1131,68 @@
       svg.style.height = `${Math.floor(P.h * s)}px`;
     }
 
-    let packRun = 0;            // the pack on the stage: drawing anything newer stops it
+    let packTimer = 0;          // the pack still filling in: drawing anything newer cancels it
     let finishPack = () => {};  // draws the rest of its pages at once (before printing)
+    let packSheets = new Map(); // the pack's sheets, unnumbered, by what they show: the next pack reuses them
 
     function render() {
-      packRun++;
-      if (state.mode === "pack") return renderPack();
-      const L = DATA.letters[state.letter];
+      clearTimeout(packTimer);
+      finishPack = () => {};
+      const pack = state.mode === "pack", L = DATA.letters[state.letter], P = PAGES[state.orient];
+      const paper = $("#paper");
+      paper.style.setProperty("--pw", `${P.w}mm`);
+      paper.style.setProperty("--ph", `${P.h}mm`);
+      $("#page-size").textContent = `@page { size: A4 ${state.orient}; margin: 0; }`;
+      document.title = `${pack ? "דפי צביעה לכיתה" : "דף צביעה"}: האות ${L.name.replace(/[\u0591-\u05C7]/g, "")}`;
+      writeHash();
+      if (pack) return renderPack(paper, L);
       const words = state.picks.slice().sort((a, b) => a - b).map((i) => L.words[i]);
       const plan = layoutAll(state.letter, words, state.orient, state.seed);
-      const paper = $("#paper");
-      const P = PAGES[state.orient];
-      paper.style.setProperty("--pw", `${P.w}mm`);
-      paper.style.setProperty("--ph", `${P.h}mm`);
       paper.innerHTML = sheetMarkup(state.letter, plan);
-      $("#page-size").textContent = `@page { size: A4 ${state.orient}; margin: 0; }`;
-      document.title = `דף צביעה: האות ${L.name.replace(/[\u0591-\u05C7]/g, "")}`;
       if (plan.missing) console.warn(`${plan.missing} drawing(s) did not fit on the page`);
       fitSheet();
-      writeHash();
     }
 
-    // Every page of the pack, each laid out and drawn as a single sheet is, then numbered.
-    function renderPack() {
-      const run = packRun, { letter, orient } = state;
-      const L = DATA.letters[letter], P = PAGES[orient];
+    // Every page of the pack, each laid out and drawn as a single sheet is, with its number ("3/30") right
+    // after the credit line's text.
+    function renderPack(paper, L) {
+      const { letter, orient } = state;
       const pages = dealPack(state.pool.slice().sort((a, b) => a - b), state.pages, state.perPage, state.packSeed);
-      const paper = $("#paper");
-      paper.style.setProperty("--pw", `${P.w}mm`);
-      paper.style.setProperty("--ph", `${P.h}mm`);
       paper.innerHTML = `<div class="pack" data-o="${orient}">`
         + pages.map((_, i) => `<figure><div class="slot"></div><figcaption>${i + 1}</figcaption></figure>`).join("")
         + "</div>";
-      $("#page-size").textContent = `@page { size: A4 ${orient}; margin: 0; }`;
-      document.title = `דפי צביעה לכיתה: האות ${L.name.replace(/[\u0591-\u05C7]/g, "")}`;
-      writeHash();
-
       const slots = paper.querySelectorAll(".slot");
+      // A pack with more or fewer pages keeps the pages it shares with this one (the same words and seed),
+      // so stepping the page count only lays out the new pages.
+      const known = packSheets;
+      packSheets = new Map();
       let next = 0;
       const draw = () => {
-        const i = next++, page = pages[i];
-        const plan = layoutAll(letter, page.words.map((w) => L.words[w]), orient, page.seed);
-        if (plan.missing) console.error(`page ${i + 1}/${pages.length}: ${plan.missing} drawing(s) did not fit`);
-        slots[i].innerHTML = numbered(sheetMarkup(letter, plan), `${i + 1}/${pages.length}`);
+        const i = next++, page = pages[i], key = `${letter}|${orient}|${page.seed}|${page.words}`;
+        let sheet = known.get(key);
+        if (!sheet) {
+          const plan = layoutAll(letter, page.words.map((w) => L.words[w]), orient, page.seed);
+          if (plan.missing) console.error(`page ${i + 1}/${pages.length}: ${plan.missing} drawing(s) did not fit`);
+          sheet = sheetMarkup(letter, plan);
+        }
+        packSheets.set(key, sheet);
+        slots[i].innerHTML = sheet;
+        slots[i].querySelector(".credit").insertAdjacentHTML("beforeend", `<tspan dx="3">${i + 1}/${pages.length}</tspan>`);
       };
       // A few pages at a time, so the panel stays responsive while a large pack fills in.
       const more = () => {
-        if (run !== packRun) return;
         const until = performance.now() + 12;
         while (next < pages.length && performance.now() < until) draw();
-        if (next < pages.length) setTimeout(more, 0);
+        if (next < pages.length) packTimer = setTimeout(more, 0);
       };
-      finishPack = () => { while (run === packRun && next < pages.length) draw(); };
+      finishPack = () => { while (next < pages.length) draw(); };
       more();
     }
 
     function refreshAll() {
       renderLetters();
       renderWords();
-      syncOrient();
+      syncSeg("#orient", state.orient);
       syncMode();
       render();
     }
@@ -1188,62 +1200,52 @@
     $("#letters").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-l]");
       if (!b || b.disabled || b.dataset.l === state.letter) return;
-      state.letter = b.dataset.l;
-      state.picks = defaultPicks(state.letter);
-      state.seed = 1;
-      state.pool = allWords(state.letter);
-      state.packSeed = 1;
+      setLetter(b.dataset.l);
       refreshAll();
     });
-    $("#mode").addEventListener("click", (e) => {
-      const b = e.target.closest("button[data-v]");
-      if (!b || state.mode === b.dataset.v) return;
-      state.mode = b.dataset.v;
+    // A segmented control's click: its new value into the state, then what follows from it.
+    function onSeg(sel, key, then) {
+      $(sel).addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-v]");
+        if (!b || state[key] === b.dataset.v) return;
+        state[key] = b.dataset.v;
+        then();
+      });
+    }
+    onSeg("#mode", "mode", () => {
       if (state.mode === "pack") state.pool = allWords(state.letter);  // entering it, every word may come up
       refreshAll();
     });
+    onSeg("#orient", "orient", () => {
+      syncSeg("#orient", state.orient);
+      render();
+    });
     // The pack's numbers, typed or a step at a time.
-    function setPack(input, value) {
+    function setPack(input, step = 0) {
       const key = input.id === "pages" ? "pages" : "perPage", before = state[key];
-      if (value > 0) state[key] = clamp(value, PACK[key].min, PACK[key].max);
+      setCount(key, parseInt(input.value, 10) + step);
       syncMode();
       if (state[key] !== before) render();
     }
     $("#pack").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-d]");
-      if (!b) return;
-      const input = b.parentElement.querySelector("input");
-      setPack(input, Number(input.value) + Number(b.dataset.d));
+      if (b) setPack(b.parentElement.querySelector("input"), Number(b.dataset.d));
     });
-    $("#pack").addEventListener("change", (e) => setPack(e.target, parseInt(e.target.value, 10)));
+    $("#pack").addEventListener("change", (e) => setPack(e.target));
     $("#words").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-i]");
       if (!b) return;
-      const i = Number(b.dataset.i);
-      if (state.mode === "pack") {
-        // A chip in the pack says whether its word may come up: any number of them, at least 3.
-        if (state.pool.includes(i)) {
-          if (state.pool.length <= PACK.perPage.min) return;
-          state.pool = state.pool.filter((p) => p !== i);
-        } else {
-          state.pool = [...state.pool, i];
-        }
-      } else if (state.picks.includes(i)) {
-        if (state.picks.length <= 3) return;
-        state.picks = state.picks.filter((p) => p !== i);
+      // A sheet's words: 3 to 12. A pack's chips say which words may come up: any number from 3.
+      const i = Number(b.dataset.i), key = chips(), on = state[key];
+      if (on.includes(i)) {
+        if (on.length <= PER_SHEET.min) return;
+        state[key] = on.filter((p) => p !== i);
       } else {
-        if (state.picks.length >= 12) return;
-        state.picks = [...state.picks, i];
+        if (key === "picks" && on.length >= PER_SHEET.max) return;
+        state[key] = [...on, i];
       }
       renderWords();
       syncMode();
-      render();
-    });
-    $("#orient").addEventListener("click", (e) => {
-      const b = e.target.closest("button[data-v]");
-      if (!b || state.orient === b.dataset.v) return;
-      state.orient = b.dataset.v;
-      syncOrient();
       render();
     });
     $("#shuffle").addEventListener("click", () => {

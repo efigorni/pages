@@ -18,8 +18,11 @@ curriculum's rules for teaching a letter, and are taken from its documents where
     same consonant but with different vowels" (its example: שעון, שמש, שיר, שולחן), so each letter's
     default words start with as many different vowels as it has good words for;
   - finding the first consonant is easiest in words that open with a cluster (its examples: גלידה, כביש,
-    שריקה), so each letter has one where it can (for ב: בְּרוֹקוֹלִי);
+    שריקה), so each letter has one where it can (for ג: גְּלִידָה);
   - example words of its own (`moe-acq`): בית, בלון, בובה, among others.
+
+  ב's ten default words are the exception: they were chosen by hand, and its cluster words (בְּרֵיכָה,
+  בְּרוֹקוֹלִי) are among its other words.
 - **משרד החינוך: איגרת המפמ"ר, הוראת השפה העברית בכיתה א, תשפ"ו**
   (<https://meyda.education.gov.il/files/Pop/0files/ivrit_hinuch_leshoni/Yesodi/horaa.pdf>): example words
   (`moe-horaa`), such as בננה.
