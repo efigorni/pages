@@ -155,6 +155,42 @@
     .word:hover { border-color: var(--berry); }
     .hint { font-size: 13px; color: var(--ink-3); margin: 6px 0 0; }
 
+    /* The class pack's numbers: typed, or a step at a time */
+    .nums { display: flex; flex-wrap: wrap; gap: 14px 22px; }
+    .step {
+      display: inline-flex;
+      align-items: center;
+      background: var(--ground);
+      border-radius: 99px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .step button {
+      width: 34px;
+      height: 34px;
+      border-radius: 99px;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--ink-2);
+    }
+    .step button:hover:not(:disabled) { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
+    .step button:disabled { color: #c9c1b8; cursor: not-allowed; }
+    .step input {
+      width: 46px;
+      border: 0;
+      background: none;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 800;
+      text-align: center;
+      color: var(--ink);
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+    .step input::-webkit-inner-spin-button, .step input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    .app:not(.is-pack) .only-pack, .app.is-pack .only-single { display: none; }
+
     .credits { margin-top: auto; font-size: 12.5px; color: var(--ink-3); line-height: 1.55; }
     .credits a { color: var(--ink-2); }
 
@@ -178,6 +214,26 @@
       border-radius: 3px;
     }
 
+    /* The class pack: every page, small, with its number under it */
+    .is-pack .stage { display: block; overflow-y: auto; }
+    .pack {
+      --ar: 210 / 297;
+      --col: 140px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(var(--col), 1fr));
+      gap: 20px 18px;
+    }
+    .pack[data-o="landscape"] { --ar: 297 / 210; --col: 190px; }
+    .pack figure { margin: 0; }
+    .pack .slot {
+      aspect-ratio: var(--ar);
+      background: #fff;
+      border-radius: 3px;
+      box-shadow: 0 1px 3px rgba(19,16,14,.08), 0 8px 22px rgba(19,16,14,.08);
+    }
+    .paper .pack svg.sheet { width: 100%; height: 100%; box-shadow: none; }
+    .pack figcaption { margin-top: 6px; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink-3); }
+
     /* ---------- The sheet ---------- */
     .sheet text { font-family: var(--sheet); }
     .sheet .title { font-weight: 700; }
@@ -198,6 +254,13 @@
       .app { display: block; }
       .stage { position: static; height: auto; padding: 0; display: block; overflow: visible; }
       .paper svg.sheet { width: var(--pw) !important; height: var(--ph) !important; max-width: none; box-shadow: none; border-radius: 0; }
+      /* the class pack: one A4 sheet a page, in order, and nothing else */
+      .is-pack .stage { overflow: visible; }
+      .pack { display: block; }
+      .pack figure { break-after: page; }
+      .pack figure:last-child { break-after: auto; }
+      .pack .slot { aspect-ratio: auto; box-shadow: none; border-radius: 0; }
+      .pack figcaption { display: none; }
     }
   </style>
   <style id="page-size">@page { size: A4 portrait; margin: 0; }</style>
@@ -217,6 +280,33 @@
       </div>
 
       <div class="group">
+        <h2>מה מדפיסים</h2>
+        <div class="seg" id="mode" role="group" aria-label="מה מדפיסים">
+          <button data-v="single" aria-pressed="true">דף אחד</button>
+          <button data-v="pack" aria-pressed="false">דפים לכיתה</button>
+        </div>
+      </div>
+
+      <div class="group nums only-pack" id="pack">
+        <div>
+          <h2><label for="pages">מספר דפים</label></h2>
+          <div class="step">
+            <button data-d="-1" aria-label="פחות דפים">−</button>
+            <input id="pages" type="number" inputmode="numeric" min="1" max="60" value="30">
+            <button data-d="1" aria-label="יותר דפים">+</button>
+          </div>
+        </div>
+        <div>
+          <h2><label for="per-page">מילים בכל דף</label></h2>
+          <div class="step">
+            <button data-d="-1" aria-label="פחות מילים">−</button>
+            <input id="per-page" type="number" inputmode="numeric" min="3" max="12" value="8">
+            <button data-d="1" aria-label="יותר מילים">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
         <h2>הדף</h2>
         <div class="row">
           <div class="seg" id="orient" role="group" aria-label="כיוון הדף">
@@ -231,9 +321,10 @@
       </div>
 
       <div class="group">
-        <h2>מילים בדף <small id="count"></small></h2>
+        <h2><span class="only-single">מילים בדף</span><span class="only-pack">מילים לדפים</span> <small id="count"></small></h2>
         <div class="words" id="words"></div>
-        <p class="hint">לחיצה על מילה מוסיפה אותה לדף או מורידה אותה.</p>
+        <p class="hint only-single">לחיצה על מילה מוסיפה אותה לדף או מורידה אותה.</p>
+        <p class="hint only-pack">כל מילה מסומנת עשויה להופיע בדפים: כל דף מקבל <span id="per-hint">8</span> מהן באקראי, וכל אחת מופיעה בערך אותו מספר פעמים.</p>
       </div>
 
       <button class="btn primary" id="print">
@@ -285,6 +376,11 @@
     const PAGES = {
       portrait: { w: 210, h: 297, head: 22, letter: [110, 126] },
       landscape: { w: 297, h: 210, head: 20, letter: [112, 118] },
+    };
+    // A class pack: how many pages, and how many words on each (never more than the chips picked).
+    const PACK = {
+      pages: { min: 1, max: 60, init: 30 },
+      perPage: { min: 3, max: 12, init: 8 },
     };
     const MARKS = /^(.[\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7]*)(.*)$/su;
 
@@ -598,28 +694,84 @@
       return out.join("");
     }
 
+    // ---------- Class pack ----------
+    function shuffled(list, rand) {
+      const a = list.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    // Deals the pack's words, from the pool (word indices): shuffled into a deck and dealt perPage cards
+    // a page, with a fresh shuffle whenever the deck runs out, so every word comes up as often as any
+    // other, give or take one. A card whose word is already on the page is skipped: it swaps with the
+    // next card that isn't, and comes up later. Each page also gets its own layout seed, and all of it
+    // comes from the one seed, so the same settings deal the same pack.
+    function dealPack(pool, pages, perPage, seed) {
+      const rand = mulberry32(seed);
+      const per = Math.min(perPage, pool.length);
+      let deck = [], next = 0;
+      const out = [];
+      for (let n = 0; n < pages; n++) {
+        const words = [];
+        while (words.length < per) {
+          if (next === deck.length) { deck = shuffled(pool, rand); next = 0; }
+          let j = next;
+          while (words.includes(deck[j])) j++;
+          [deck[next], deck[j]] = [deck[j], deck[next]];
+          words.push(deck[next++]);
+        }
+        out.push({ words: words.sort((a, b) => a - b), seed: 1 + Math.floor(rand() * 99999) });
+      }
+      return out;
+    }
+
+    // A pack's sheet carries its page number, "3/30", beside the credit line.
+    const numbered = (markup, label) =>
+      markup.replace(/(<text class="credit"[^>]*>[^<]*)<\/text>/, `$1<tspan dx="3">${label}</tspan></text>`);
+
     // ---------- State ----------
     const lettersWithWords = ORDER.split("").filter((l) => DATA.letters[l] && DATA.letters[l].words.length);
-    const state = { letter: lettersWithWords[0], orient: "portrait", seed: 1, picks: null };
+    const state = {
+      letter: lettersWithWords[0], orient: "portrait", seed: 1, picks: null,
+      // the class pack: the words it deals from (the chips, in that mode), its pages, words on each, its seed
+      mode: "single", pool: null, pages: PACK.pages.init, perPage: PACK.perPage.init, packSeed: 1,
+    };
 
     function defaultPicks(letter) {
       return DATA.letters[letter].words.slice(0, DATA.defaultPicks).map((_, i) => i);
     }
+    const allWords = (letter) => DATA.letters[letter].words.map((_, i) => i);
 
     function readHash() {
       const q = new URLSearchParams(location.hash.slice(1));
-      const letter = q.get("l");
+      const letter = q.get("l"), before = state.letter;
       if (letter && lettersWithWords.includes(letter)) state.letter = letter;
       if (q.get("o") === "landscape" || q.get("o") === "portrait") state.orient = q.get("o");
       const seed = parseInt(q.get("s"), 10);
       if (seed > 0) state.seed = seed;
       const n = DATA.letters[state.letter].words.length;
       const picks = (q.get("w") || "").split(".").map((v) => parseInt(v, 10)).filter((i) => i >= 0 && i < n);
-      state.picks = picks.length ? [...new Set(picks)] : defaultPicks(state.letter);
+      state.mode = q.get("m") === "pack" ? "pack" : "single";
+      if (state.mode === "single") {
+        state.picks = picks.length ? [...new Set(picks)] : defaultPicks(state.letter);
+        return;
+      }
+      // A pack's address: its words in w, then m=pack, n=<pages>, k=<words on each> and p=<its seed>.
+      state.pool = picks.length ? [...new Set(picks)] : allWords(state.letter);
+      if (!state.picks || state.letter !== before) state.picks = defaultPicks(state.letter);
+      const pages = parseInt(q.get("n"), 10), perPage = parseInt(q.get("k"), 10), packSeed = parseInt(q.get("p"), 10);
+      if (pages > 0) state.pages = clamp(pages, PACK.pages.min, PACK.pages.max);
+      if (perPage > 0) state.perPage = clamp(perPage, PACK.perPage.min, PACK.perPage.max);
+      if (packSeed > 0) state.packSeed = packSeed;
     }
 
     function writeHash() {
-      const q = new URLSearchParams({ l: state.letter, o: state.orient, s: state.seed, w: state.picks.join(".") });
+      const q = new URLSearchParams(state.mode === "pack"
+        ? { l: state.letter, o: state.orient, m: "pack", n: state.pages, k: state.perPage, p: state.packSeed, w: state.pool.join(".") }
+        : { l: state.letter, o: state.orient, s: state.seed, w: state.picks.join(".") });
       history.replaceState(null, "", "#" + q.toString());
     }
 
@@ -634,22 +786,44 @@
 
     function renderWords() {
       const words = DATA.letters[state.letter].words;
+      const on = state.mode === "pack" ? state.pool : state.picks;
       $("#words").innerHTML = words.map((w, i) => {
         const [x0, y0, x1, y1] = DATA.art[w.art];
         const pad = 3;
-        return `<button class="word" data-i="${i}" aria-pressed="${state.picks.includes(i)}">`
+        return `<button class="word" data-i="${i}" aria-pressed="${on.includes(i)}">`
           + `<svg viewBox="${x0 - pad} ${y0 - pad} ${x1 - x0 + 2 * pad} ${y1 - y0 + 2 * pad}" aria-hidden="true"><use href="#a-${w.art}" style="--sw:2.6"/></svg>`
           + `${esc(w.w)}</button>`;
       }).join("");
-      $("#count").textContent = `${state.picks.length} מתוך ${words.length}`;
+      $("#count").textContent = `${on.length} מתוך ${words.length}`;
     }
 
     function syncOrient() {
       for (const b of document.querySelectorAll("#orient button")) b.setAttribute("aria-pressed", String(b.dataset.v === state.orient));
     }
 
+    // The panel in each mode: the switch, the pack's numbers, and what the chips mean (CSS shows which).
+    function syncMode() {
+      const pack = state.mode === "pack";
+      for (const b of document.querySelectorAll("#mode button")) b.setAttribute("aria-pressed", String(b.dataset.v === state.mode));
+      $(".app").classList.toggle("is-pack", pack);
+      $("#shuffle").title = pack ? "הגרלה חדשה של כל הדפים" : "סידור אחר של הציורים בדף";
+      if (!pack) return;
+      const per = Math.min(state.perPage, state.pool.length);
+      const fields = [
+        ["#pages", state.pages, PACK.pages.min, PACK.pages.max],
+        ["#per-page", per, PACK.perPage.min, Math.min(PACK.perPage.max, state.pool.length)],
+      ];
+      for (const [sel, v, lo, hi] of fields) {
+        const input = $(sel);
+        input.value = v;
+        input.parentElement.querySelector('[data-d="-1"]').disabled = v <= lo;
+        input.parentElement.querySelector('[data-d="1"]').disabled = v >= hi;
+      }
+      $("#per-hint").textContent = per;
+    }
+
     function fitSheet() {
-      const svg = $("#paper svg");
+      const svg = $("#paper > svg");  // the single sheet: a pack's pages size themselves
       if (!svg) return;
       const P = PAGES[state.orient];
       const stage = $("#stage");
@@ -662,7 +836,12 @@
       svg.style.height = `${Math.floor(P.h * s)}px`;
     }
 
+    let packRun = 0;            // the pack on the stage: drawing anything newer stops it
+    let finishPack = () => {};  // draws the rest of its pages at once (before printing)
+
     function render() {
+      packRun++;
+      if (state.mode === "pack") return renderPack();
       const L = DATA.letters[state.letter];
       const words = state.picks.slice().sort((a, b) => a - b).map((i) => L.words[i]);
       const plan = layout(state.letter, words, state.orient, state.seed);
@@ -678,10 +857,48 @@
       writeHash();
     }
 
+    // Every page of the pack, each laid out and drawn as a single sheet is, then numbered.
+    function renderPack() {
+      const run = packRun, { letter, orient } = state;
+      const L = DATA.letters[letter], P = PAGES[orient];
+      const pages = dealPack(state.pool.slice().sort((a, b) => a - b), state.pages, state.perPage, state.packSeed);
+      const paper = $("#paper");
+      paper.style.setProperty("--pw", `${P.w}mm`);
+      paper.style.setProperty("--ph", `${P.h}mm`);
+      paper.innerHTML = `<div class="pack" data-o="${orient}">`
+        + pages.map((_, i) => `<figure><div class="slot"></div><figcaption>${i + 1}</figcaption></figure>`).join("")
+        + "</div>";
+      $("#page-size").textContent = `@page { size: A4 ${orient}; margin: 0; }`;
+      document.title = `דפי צביעה לכיתה: האות ${L.name.replace(/[\u0591-\u05C7]/g, "")}`;
+      writeHash();
+
+      const slots = paper.querySelectorAll(".slot");
+      let next = 0;
+      const draw = () => {
+        const i = next++, page = pages[i], words = page.words.map((w) => L.words[w]);
+        // A page whose drawings don't all fit (now and then with 12 words on a landscape page) takes
+        // the next seed instead.
+        let plan = layout(letter, words, orient, page.seed);
+        for (let s = page.seed + 1; plan.missing && s <= page.seed + 20; s++) plan = layout(letter, words, orient, s);
+        if (plan.missing) console.error(`page ${i + 1}/${pages.length}: ${plan.missing} drawing(s) did not fit`);
+        slots[i].innerHTML = numbered(sheetMarkup(letter, plan), `${i + 1}/${pages.length}`);
+      };
+      // A few pages at a time, so the panel stays responsive while a large pack fills in.
+      const more = () => {
+        if (run !== packRun) return;
+        const until = performance.now() + 12;
+        while (next < pages.length && performance.now() < until) draw();
+        if (next < pages.length) setTimeout(more, 0);
+      };
+      finishPack = () => { while (run === packRun && next < pages.length) draw(); };
+      more();
+    }
+
     function refreshAll() {
       renderLetters();
       renderWords();
       syncOrient();
+      syncMode();
       render();
     }
 
@@ -691,13 +908,44 @@
       state.letter = b.dataset.l;
       state.picks = defaultPicks(state.letter);
       state.seed = 1;
+      state.pool = allWords(state.letter);
+      state.packSeed = 1;
       refreshAll();
     });
+    $("#mode").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-v]");
+      if (!b || state.mode === b.dataset.v) return;
+      state.mode = b.dataset.v;
+      if (state.mode === "pack") state.pool = allWords(state.letter);  // entering it, every word may come up
+      refreshAll();
+    });
+    // The pack's numbers, typed or a step at a time.
+    function setPack(input, value) {
+      const key = input.id === "pages" ? "pages" : "perPage", before = state[key];
+      if (value > 0) state[key] = clamp(value, PACK[key].min, PACK[key].max);
+      syncMode();
+      if (state[key] !== before) render();
+    }
+    $("#pack").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-d]");
+      if (!b) return;
+      const input = b.parentElement.querySelector("input");
+      setPack(input, Number(input.value) + Number(b.dataset.d));
+    });
+    $("#pack").addEventListener("change", (e) => setPack(e.target, parseInt(e.target.value, 10)));
     $("#words").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-i]");
       if (!b) return;
       const i = Number(b.dataset.i);
-      if (state.picks.includes(i)) {
+      if (state.mode === "pack") {
+        // A chip in the pack says whether its word may come up: any number of them, at least 3.
+        if (state.pool.includes(i)) {
+          if (state.pool.length <= PACK.perPage.min) return;
+          state.pool = state.pool.filter((p) => p !== i);
+        } else {
+          state.pool = [...state.pool, i];
+        }
+      } else if (state.picks.includes(i)) {
         if (state.picks.length <= 3) return;
         state.picks = state.picks.filter((p) => p !== i);
       } else {
@@ -705,6 +953,7 @@
         state.picks = [...state.picks, i];
       }
       renderWords();
+      syncMode();
       render();
     });
     $("#orient").addEventListener("click", (e) => {
@@ -715,10 +964,13 @@
       render();
     });
     $("#shuffle").addEventListener("click", () => {
-      state.seed = 1 + Math.floor(Math.random() * 99999);
+      const seed = 1 + Math.floor(Math.random() * 99999);
+      if (state.mode === "pack") state.packSeed = seed;
+      else state.seed = seed;
       render();
     });
     $("#print").addEventListener("click", () => window.print());
+    addEventListener("beforeprint", () => finishPack());
     addEventListener("resize", fitSheet);
     addEventListener("hashchange", () => { readHash(); refreshAll(); });
 
