@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="22 8 56.695 64" data-from="openmoji:231A">
+  <path d="M25,21V9c0-0.5523,0.4477-1,1-1h20 c0.5523,0,1,0.4477,1,1v12" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polyline points="35.8442,26.1875 35.8442,36.1875 44.1558,36.1875" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polyline points="47,54.9997 47,64 25,64 25,54.9997" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polyline points="25,17.0003 25,8 47,8 47,17.0003" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M53.9959,31.3691h0.6991c1.1,0,2,0.9,2,2v5.1541c0,1.1-0.9,2-2,2h-0.6992" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M48,51H24c-1.1,0-2-0.9-2-2V23c0-1.1,0.9-2,2-2h24c1.1,0,2,0.9,2,2v26C50,50.1,49.1,51,48,51z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polyline points="35.8442,26.1875 35.8442,36.1875 44.1558,36.1875" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

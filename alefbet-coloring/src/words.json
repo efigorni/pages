@@ -6,16 +6,36 @@
     "en-roster": "המילים של מִילִּים בְּאַנְגְּלִית (english-words), שנבחרו מרשימות אוצר המילים של משרד החינוך לאנגלית (Pre-Band I, Band I) ושל Cambridge Young Learners"
   },
   "letters": {
-    "א": {"name": "אָלֶף"},
+    "א": {
+      "name": "אָלֶף",
+      "words": [
+        {"w": "אַרְיֵה", "art": "openmoji:1F981", "src": ["moe-acq", "en-roster"]},
+        {"w": "אַף", "art": "openmoji:1F443", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "אוֹפַנַּיִים", "art": "openmoji:1F6B2", "src": ["moe-horaa", "en-roster"]},
+        {"w": "אֲבַטִּיחַ", "art": "openmoji:1F349", "src": ["moe-teimot", "en-roster"]},
+        {"w": "אֵשׁ", "art": "openmoji:1F525", "src": ["en-roster"]},
+        {"w": "אִישׁ שֶׁלֶג", "art": "openmoji:26C4", "src": ["en-roster"]},
+        {"w": "אוֹטוֹבּוּס", "art": "openmoji:1F68D", "src": ["en-roster"]},
+        {"w": "אַרְנָב", "art": "openmoji:1F430", "src": ["moe-teimot", "en-roster"]},
+        {"w": "אוֹזֶן", "art": "openmoji:1F442", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "אֲנָנָס", "art": "openmoji:1F34D", "src": ["en-roster"]},
+        {"w": "אַגָּס", "art": "openmoji:1F350", "src": ["en-roster"]},
+        {"w": "אוֹהֶל", "art": "openmoji:26FA", "src": ["en-roster"]},
+        {"w": "אַמְבַּטְיָה", "art": "openmoji:1F6C1", "src": ["en-roster"]},
+        {"w": "אַסְטְרוֹנָאוּט", "art": "openmoji:1F9D1-200D-1F680", "src": ["en-roster"]},
+        {"w": "אֲפוּנָה", "art": "openmoji:1FADB", "src": ["en-roster"]},
+        {"w": "אֶפְרוֹחַ", "art": "openmoji:1F423", "src": ["moe-teimot"]}
+      ]
+    },
     "ב": {
       "name": "בֵּית",
       "words": [
-        {"w": "בַּיִת", "art": "openmoji:1F3E0", "src": ["moe-acq", "moe-teimot", "en-roster"]},
-        {"w": "בָּנָנָה", "art": "openmoji:1F34C", "src": ["moe-horaa", "en-roster"]},
-        {"w": "בָּלוֹן", "art": "openmoji:1F388", "src": ["moe-acq", "en-roster"]},
+        {"w": "בַּיִת", "art": "openmoji:1F3E0", "src": ["moe-acq", "moe-horaa", "moe-teimot", "en-roster"]},
+        {"w": "בָּנָנָה", "art": "openmoji:1F34C", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "בָּלוֹן", "art": "openmoji:1F388", "src": ["moe-acq", "moe-teimot", "en-roster"]},
         {"w": "בּוּבָּה", "art": "openmoji:1FA86", "src": ["moe-acq", "moe-teimot", "en-roster"]},
-        {"w": "בַּרְווָז", "art": "openmoji:1F986", "src": ["en-roster"]},
-        {"w": "בֵּיצָה", "art": "openmoji:1F95A", "src": ["en-roster"]},
+        {"w": "בַּרְווָז", "art": "openmoji:1F986", "src": ["moe-teimot", "en-roster"]},
+        {"w": "בֵּיצָה", "art": "openmoji:1F95A", "src": ["moe-teimot", "en-roster"]},
         {"w": "בְּרוֹקוֹלִי", "art": "openmoji:1F966", "src": []},
         {"w": "בֶּגֶד יָם", "art": "openmoji:1FA71", "src": ["en-roster"]},
         {"w": "בַּקְבּוּק", "art": "openmoji:1F37C", "src": ["en-roster"]},
@@ -25,28 +45,351 @@
         {"w": "בָּרָק", "art": "openmoji:1F329", "src": []},
         {"w": "בֵּייגֶלֶה", "art": "openmoji:1F968", "src": []},
         {"w": "בִּנְייָן", "art": "openmoji:1F3E2", "src": ["en-roster"]},
-        {"w": "בֵּית סֵפֶר", "art": "openmoji:1F3EB", "src": ["moe-horaa", "en-roster"]}
+        {"w": "בֵּית סֵפֶר", "art": "openmoji:1F3EB", "src": ["moe-acq", "moe-horaa", "en-roster"]}
       ]
     },
-    "ג": {"name": "גִּימֶל"},
-    "ד": {"name": "דָּלֶת"},
-    "ה": {"name": "הֵא"},
-    "ו": {"name": "וָו"},
-    "ז": {"name": "זַיִן"},
-    "ח": {"name": "חֵית"},
-    "ט": {"name": "טֵית"},
-    "י": {"name": "יוֹד"},
-    "כ": {"name": "כַּף"},
-    "ל": {"name": "לָמֶד"},
-    "מ": {"name": "מֵם"},
-    "נ": {"name": "נוּן"},
-    "ס": {"name": "סָמֶךְ"},
-    "ע": {"name": "עַיִן"},
-    "פ": {"name": "פֵּא"},
-    "צ": {"name": "צָדִי"},
-    "ק": {"name": "קוֹף"},
-    "ר": {"name": "רֵישׁ"},
-    "ש": {"name": "שִׁין"},
-    "ת": {"name": "תָּו"}
+    "ג": {
+      "name": "גִּימֶל",
+      "words": [
+        {"w": "גְּלִידָה", "art": "openmoji:1F366", "src": ["moe-acq", "en-roster"]},
+        {"w": "גֶּשֶׁם", "art": "openmoji:1F327", "src": ["moe-teimot", "en-roster"]},
+        {"w": "גְּבִינָה", "art": "openmoji:1F9C0", "src": ["moe-acq", "en-roster"]},
+        {"w": "גֶּזֶר", "art": "openmoji:1F955", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "גָּמָל", "art": "openmoji:1F42B", "src": ["en-roster"]},
+        {"w": "גַּרְבַּיִים", "art": "openmoji:1F9E6", "src": ["moe-teimot", "en-roster"]},
+        {"w": "גִּיטָרָה", "art": "openmoji:1F3B8", "src": ["en-roster"]},
+        {"w": "גּוּפִייָּה", "art": "openmoji:1F3BD", "src": []},
+        {"w": "גַּלְגַּל", "art": "openmoji:1F6DE", "src": ["moe-acq", "en-roster"]},
+        {"w": "גַּלְגִּילִיּוֹת", "art": "openmoji:1F6FC", "src": ["en-roster"]},
+        {"w": "גּוֹרִילָּה", "art": "openmoji:1F98D", "src": ["moe-horaa"]},
+        {"w": "גָּבִיעַ", "art": "openmoji:1F3C6", "src": []}
+      ]
+    },
+    "ד": {
+      "name": "דָּלֶת",
+      "words": [
+        {"w": "דֶּלֶת", "art": "openmoji:1F6AA", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "דּוּבִּי", "art": "openmoji:1F9F8", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "דְּבַשׁ", "art": "openmoji:1F36F", "src": ["moe-acq", "en-roster"]},
+        {"w": "דָּג", "art": "openmoji:E000", "src": ["moe-teimot", "en-roster"]},
+        {"w": "דִּינוֹזָאוּר", "art": "openmoji:1F995", "src": ["en-roster"]},
+        {"w": "דּוֹלְפִין", "art": "openmoji:1F42C", "src": ["en-roster"]},
+        {"w": "דֶּגֶל", "art": "openmoji:1F3F3", "src": ["en-roster"]},
+        {"w": "דּוֹב", "art": "openmoji:1F43B", "src": ["en-roster"]},
+        {"w": "דַּחְלִיל", "art": "custom:dalet-scarecrow", "src": ["moe-acq"]},
+        {"w": "דְּלִי", "art": "openmoji:1FAA3", "src": ["moe-teimot"]},
+        {"w": "דּוּבְדְּבָן", "art": "openmoji:1F352", "src": []},
+        {"w": "דֶּקֶל", "art": "openmoji:1F334", "src": []}
+      ]
+    },
+    "ה": {
+      "name": "הֵא",
+      "words": [
+        {"w": "הַר", "art": "openmoji:1F3D4", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "הִיפּוֹפּוֹטָם", "art": "openmoji:1F99B", "src": ["en-roster"]},
+        {"w": "הַמְבּוּרְגֶּר", "art": "openmoji:1F354", "src": ["en-roster"]},
+        {"w": "הַר גַּעַשׁ", "art": "openmoji:1F30B", "src": []},
+        {"w": "הֶגֶה", "art": "custom:he-steering-wheel", "src": []},
+        {"w": "הֶלִיקוֹפְּטֶר", "art": "openmoji:1F681", "src": []}
+      ]
+    },
+    "ו": {
+      "name": "וָו",
+      "scale": 1.2,
+      "words": [
+        {"w": "וֶרֶד", "art": "openmoji:1F339", "src": ["moe-acq"]},
+        {"w": "וִילוֹן", "art": "custom:vav-curtain", "src": ["moe-teimot"]},
+        {"w": "וָפֶל", "art": "openmoji:1F9C7", "src": []},
+        {"w": "וָו", "art": "custom:vav-hook", "src": []},
+        {"w": "וֶסְט", "art": "custom:vav-vest", "src": []},
+        {"w": "וָאזָה", "art": "custom:vav-vase", "src": []}
+      ]
+    },
+    "ז": {
+      "name": "זַיִן",
+      "words": [
+        {"w": "זְבוּב", "art": "openmoji:1FAB0", "src": ["moe-acq", "en-roster"]},
+        {"w": "זֶבְּרָה", "art": "openmoji:1F993", "src": ["en-roster"]},
+        {"w": "זֵיתִים", "art": "custom:zayin-olives", "src": ["en-roster"]},
+        {"w": "זַחַל", "art": "openmoji:1F41B", "src": ["moe-teimot"]},
+        {"w": "זְכוּכִית מַגְדֶּלֶת", "art": "openmoji:1F50D", "src": ["moe-teimot"]},
+        {"w": "זִיקִּית", "art": "custom:zayin-chameleon", "src": []},
+        {"w": "זַמָּר", "art": "openmoji:1F468-200D-1F3A4", "src": []},
+        {"w": "זִיקּוּקִים", "art": "custom:zayin-fireworks", "src": []},
+        {"w": "זָקָן", "art": "openmoji:1F9D4-200D-2642-FE0F", "src": ["en-roster"]},
+        {"w": "זֵר פְּרָחִים", "art": "openmoji:1F490", "src": []}
+      ]
+    },
+    "ח": {
+      "name": "חֵית",
+      "words": [
+        {"w": "חָתוּל", "art": "openmoji:1F431", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "חִילָּזוֹן", "art": "openmoji:1F40C", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "חַלּוֹן", "art": "openmoji:1FA9F", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "חוּלְצָה", "art": "openmoji:1F455", "src": ["moe-acq", "en-roster"]},
+        {"w": "חֲמוֹר", "art": "openmoji:E001", "src": ["moe-teimot", "en-roster"]},
+        {"w": "חוֹף יָם", "art": "openmoji:1F3D6", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "חֲזִיר", "art": "openmoji:1F416", "src": ["en-roster"]},
+        {"w": "חַייְזָר", "art": "openmoji:1F47D", "src": ["en-roster"]},
+        {"w": "חִיפּוּשִׁית", "art": "openmoji:1FAB2", "src": ["moe-teimot", "en-roster"]},
+        {"w": "חֲלָלִית", "art": "openmoji:1F680", "src": ["moe-teimot", "en-roster"]},
+        {"w": "חַקְלַאי", "art": "openmoji:1F9D1-200D-1F33E", "src": ["moe-acq", "en-roster"]},
+        {"w": "חַד קֶרֶן", "art": "openmoji:1F984", "src": []},
+        {"w": "חֲנוּכִּייָּה", "art": "openmoji:1F54E", "src": []},
+        {"w": "חָצִיל", "art": "openmoji:1F346", "src": []},
+        {"w": "חֲצוֹצְרָה", "art": "openmoji:1F3BA", "src": []},
+        {"w": "חָלִיל", "art": "openmoji:1FA88", "src": []}
+      ]
+    },
+    "ט": {
+      "name": "טֵית",
+      "words": [
+        {"w": "טְרַקְטוֹר", "art": "openmoji:1F69C", "src": ["en-roster"]},
+        {"w": "טִירָה", "art": "openmoji:1F3F0", "src": ["en-roster"]},
+        {"w": "טֶלֶפוֹן", "art": "openmoji:260E", "src": ["moe-acq", "en-roster"]},
+        {"w": "טַבַּעַת", "art": "custom:tet-ring", "src": ["en-roster"]},
+        {"w": "טוּשׁ", "art": "custom:tet-marker", "src": ["moe-acq", "moe-teimot"]},
+        {"w": "טֶלֶווִיזְיָה", "art": "custom:tet-television", "src": ["en-roster"]},
+        {"w": "טַווָּס", "art": "openmoji:1F99A", "src": []},
+        {"w": "טִיפָּה", "art": "openmoji:1F4A7", "src": ["moe-teimot"]},
+        {"w": "טַבָּח", "art": "openmoji:1F9D1-200D-1F373", "src": ["en-roster"]},
+        {"w": "טֶלֶסְקוֹףּ", "art": "openmoji:1F52D", "src": []}
+      ]
+    },
+    "י": {
+      "name": "יוֹד",
+      "scale": 0.6,
+      "words": [
+        {"w": "יֶלֶד", "art": "openmoji:1F466", "src": ["moe-acq", "moe-horaa", "moe-teimot", "en-roster"]},
+        {"w": "יַלְדָּה", "art": "openmoji:1F467", "src": ["moe-acq", "moe-horaa", "moe-teimot", "en-roster"]},
+        {"w": "יָד", "art": "openmoji:1F590", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "יָרֵחַ", "art": "openmoji:1F31B", "src": ["en-roster"]},
+        {"w": "יוֹנָה", "art": "custom:yod-dove", "src": []},
+        {"w": "יַנְשׁוּף", "art": "openmoji:1F989", "src": []},
+        {"w": "יַהֲלוֹם", "art": "openmoji:1F48E", "src": []},
+        {"w": "יוֹ־יוֹ", "art": "openmoji:1FA80", "src": []},
+        {"w": "יַתּוּשׁ", "art": "openmoji:1F99F", "src": []}
+      ]
+    },
+    "כ": {
+      "name": "כַּף",
+      "words": [
+        {"w": "כֶּלֶב", "art": "openmoji:1F436", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "כַּדּוּר", "art": "openmoji:1F3C0", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "כִּיסֵּא", "art": "openmoji:1FA91", "src": ["moe-horaa", "moe-teimot", "en-roster"]},
+        {"w": "כָּרִישׁ", "art": "openmoji:1F988", "src": ["moe-horaa", "en-roster"]},
+        {"w": "כֶּתֶר", "art": "openmoji:1F451", "src": ["moe-acq", "en-roster"]},
+        {"w": "כּוֹבַע", "art": "openmoji:1F9E2", "src": ["moe-teimot", "en-roster"]},
+        {"w": "כְּפָפוֹת", "art": "openmoji:1F9E4", "src": ["en-roster"]},
+        {"w": "כִּבְשָׂה", "art": "openmoji:1F411", "src": ["moe-teimot", "en-roster"]},
+        {"w": "כָּרִיךְ", "art": "openmoji:1F96A", "src": ["moe-horaa", "en-roster"]},
+        {"w": "כּוֹס", "art": "openmoji:1F964", "src": ["moe-acq", "moe-teimot"]},
+        {"w": "כּוֹכָב", "art": "openmoji:2B50", "src": ["en-roster"]},
+        {"w": "כַּבָּאִית", "art": "openmoji:1F692", "src": ["en-roster"]},
+        {"w": "כִּינּוֹר", "art": "openmoji:1F3BB", "src": ["en-roster"]},
+        {"w": "כָּנָף", "art": "openmoji:1FABD", "src": ["moe-teimot", "en-roster"]},
+        {"w": "כַּדּוּר הָאָרֶץ", "art": "openmoji:1F30D", "src": ["en-roster"]},
+        {"w": "כֶּלֶב יָם", "art": "openmoji:1F9AD", "src": []}
+      ]
+    },
+    "ל": {
+      "name": "לָמֶד",
+      "words": [
+        {"w": "לֶחֶם", "art": "openmoji:1F35E", "src": ["moe-acq", "en-roster"]},
+        {"w": "לִימוֹן", "art": "openmoji:1F34B", "src": ["moe-acq", "en-roster"]},
+        {"w": "לָשׁוֹן", "art": "openmoji:1F445", "src": ["moe-acq", "moe-teimot"]},
+        {"w": "לְטָאָה", "art": "custom:lamed-lizard", "src": ["en-roster"]},
+        {"w": "לִווְייָתָן", "art": "custom:lamed-whale", "src": ["en-roster"]},
+        {"w": "לֵיצָן", "art": "openmoji:1F921", "src": ["en-roster"]},
+        {"w": "לוּחַ שָׁנָה", "art": "openmoji:1F4C5", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "לֵב", "art": "openmoji:2764", "src": ["moe-acq"]},
+        {"w": "לַיְלָה", "art": "openmoji:1F303", "src": ["en-roster"]},
+        {"w": "לָאמָה", "art": "openmoji:1F999", "src": []}
+      ]
+    },
+    "מ": {
+      "name": "מֵם",
+      "words": [
+        {"w": "מִטְרִייָּה", "art": "openmoji:2602", "src": ["moe-teimot", "en-roster"]},
+        {"w": "מָטוֹס", "art": "openmoji:2708", "src": ["moe-acq", "en-roster"]},
+        {"w": "מַתָּנָה", "art": "openmoji:1F381", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "מִיטָּה", "art": "openmoji:1F6CF", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "מַגְלֵשָׁה", "art": "openmoji:1F6DD", "src": ["moe-acq", "moe-horaa", "moe-teimot"]},
+        {"w": "מֵדוּזָה", "art": "openmoji:1FABC", "src": ["en-roster"]},
+        {"w": "מִסְפָּרַיִים", "art": "openmoji:2702", "src": ["moe-acq", "en-roster"]},
+        {"w": "מְכוֹנִית", "art": "openmoji:1F697", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "מַשָּׂאִית", "art": "openmoji:1F69B", "src": ["moe-acq", "en-roster"]},
+        {"w": "מַצְלֵמָה", "art": "openmoji:1F4F7", "src": ["moe-horaa", "en-roster"]},
+        {"w": "מִכְתָּב", "art": "openmoji:2709", "src": ["moe-acq", "en-roster"]},
+        {"w": "מִשְׁפָּחָה", "art": "openmoji:1F46A", "src": ["moe-acq", "moe-horaa", "moe-teimot"]},
+        {"w": "מַפְתֵּחַ", "art": "openmoji:1F511", "src": ["en-roster"]},
+        {"w": "מִשְׁקָפַיִים", "art": "openmoji:1F453", "src": ["en-roster"]},
+        {"w": "מֶלֶךְ", "art": "custom:mem-king", "src": ["moe-acq", "moe-teimot", "en-roster"]}
+      ]
+    },
+    "נ": {
+      "name": "נוּן",
+      "words": [
+        {"w": "נְמָלָה", "art": "openmoji:1F41C", "src": ["moe-acq", "moe-teimot"]},
+        {"w": "נַעַל", "art": "openmoji:1F45F", "src": ["moe-teimot", "en-roster"]},
+        {"w": "נָחָשׁ", "art": "openmoji:1F40D", "src": ["moe-teimot", "en-roster"]},
+        {"w": "נוֹצָה", "art": "openmoji:1FAB6", "src": ["moe-teimot"]},
+        {"w": "נָמֵר", "art": "openmoji:1F42F", "src": ["en-roster"]},
+        {"w": "נַקְנִיקִייָּה", "art": "openmoji:1F32D", "src": ["en-roster"]},
+        {"w": "נֵר", "art": "openmoji:1F56F", "src": []},
+        {"w": "נוּרָה", "art": "openmoji:1F4A1", "src": []},
+        {"w": "נַדְנֵדָה", "art": "custom:nun-swing", "src": ["moe-teimot"]},
+        {"w": "נְסִיכָה", "art": "openmoji:1F478", "src": []}
+      ]
+    },
+    "ס": {
+      "name": "סָמֶךְ",
+      "words": [
+        {"w": "סֵפֶר", "art": "openmoji:1F4D6", "src": ["moe-acq", "moe-horaa", "moe-teimot", "en-roster"]},
+        {"w": "סוּס", "art": "openmoji:1F40E", "src": ["moe-teimot", "en-roster"]},
+        {"w": "סַבְתָּא", "art": "openmoji:1F475", "src": ["moe-horaa", "moe-teimot", "en-roster"]},
+        {"w": "סַרְגֵּל", "art": "openmoji:1F4CF", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "סַל", "art": "openmoji:1F9FA", "src": ["moe-horaa", "moe-teimot"]},
+        {"w": "סִירָה", "art": "openmoji:26F5", "src": ["en-roster"]},
+        {"w": "סוּכָּרִייָּה", "art": "openmoji:1F36C", "src": ["en-roster"]},
+        {"w": "סְנָאִי", "art": "openmoji:1F43F", "src": []},
+        {"w": "סַבָּא", "art": "openmoji:1F474", "src": ["moe-teimot", "en-roster"]},
+        {"w": "סְפִינָה", "art": "openmoji:1F6F3", "src": ["en-roster"]},
+        {"w": "סַפָּה", "art": "openmoji:1F6CB", "src": ["en-roster"]},
+        {"w": "סַבּוֹן", "art": "openmoji:1F9FC", "src": ["en-roster"]},
+        {"w": "סְקֵייטְבּוֹרְד", "art": "openmoji:1F6F9", "src": ["en-roster"]},
+        {"w": "סוּלָּם", "art": "openmoji:1FA9C", "src": []},
+        {"w": "סַרְטָן", "art": "openmoji:1F980", "src": []},
+        {"w": "סוֹלְלָה", "art": "openmoji:1F50B", "src": []}
+      ]
+    },
+    "ע": {
+      "name": "עַיִן",
+      "words": [
+        {"w": "עֵץ", "art": "openmoji:1F332", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "עַיִן", "art": "openmoji:1F441", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "עִיפָּרוֹן", "art": "openmoji:270F", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "עָנָן", "art": "openmoji:2601", "src": ["moe-teimot", "en-roster"]},
+        {"w": "עוּגָה", "art": "openmoji:1F382", "src": ["moe-teimot", "en-roster"]},
+        {"w": "עֲפִיפוֹן", "art": "openmoji:1FA81", "src": ["moe-acq", "en-roster"]},
+        {"w": "עָלֶה", "art": "openmoji:1F341", "src": ["moe-teimot", "en-roster"]},
+        {"w": "עוֹגֶן", "art": "openmoji:2693", "src": ["moe-horaa"]},
+        {"w": "עֵט", "art": "openmoji:1F58A", "src": ["moe-acq", "en-roster"]},
+        {"w": "עֲנָבִים", "art": "openmoji:1F347", "src": ["moe-teimot", "en-roster"]},
+        {"w": "עָצִיץ", "art": "openmoji:1FAB4", "src": ["moe-teimot", "en-roster"]},
+        {"w": "עַכְבָּר", "art": "openmoji:1F401", "src": ["en-roster"]},
+        {"w": "עֵז", "art": "openmoji:1F410", "src": ["en-roster"]},
+        {"w": "עוּגִייָּה", "art": "openmoji:1F36A", "src": ["en-roster"]},
+        {"w": "עַגְבָנִייָּה", "art": "openmoji:1F345", "src": ["en-roster"]},
+        {"w": "עֲגָלָה", "art": "openmoji:1F6D2", "src": []}
+      ]
+    },
+    "פ": {
+      "name": "פֵּא",
+      "words": [
+        {"w": "פִּיל", "art": "openmoji:1F418", "src": ["moe-horaa", "en-roster"]},
+        {"w": "פָּרָה", "art": "openmoji:1F42E", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "פֶּרַח", "art": "openmoji:1F33C", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "פַּרְפַּר", "art": "openmoji:1F98B", "src": ["moe-teimot", "en-roster"]},
+        {"w": "פָּאזֶל", "art": "openmoji:1F9E9", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "פִּיצָה", "art": "openmoji:1F355", "src": ["moe-horaa", "en-roster"]},
+        {"w": "פְּלַסְטֶר", "art": "openmoji:1FA79", "src": ["en-roster"]},
+        {"w": "פּוֹפְּקוֹרְן", "art": "openmoji:1F37F", "src": []},
+        {"w": "פַּטִּישׁ", "art": "openmoji:1F528", "src": ["moe-acq"]},
+        {"w": "פִּינְגְּווִין", "art": "openmoji:1F427", "src": ["en-roster"]},
+        {"w": "פִּלְפֵּל", "art": "openmoji:1FAD1", "src": ["en-roster"]},
+        {"w": "פַּח", "art": "openmoji:1F5D1", "src": ["en-roster"]},
+        {"w": "פְּסַנְתֵּר", "art": "openmoji:1F3B9", "src": ["en-roster"]},
+        {"w": "פָּנָס", "art": "openmoji:1F526", "src": ["en-roster"]},
+        {"w": "פִּטְרִייָּה", "art": "openmoji:1F344", "src": []},
+        {"w": "פַּעֲמוֹן", "art": "openmoji:1F514", "src": ["moe-teimot"]}
+      ]
+    },
+    "צ": {
+      "name": "צָדִי",
+      "words": [
+        {"w": "צָב", "art": "openmoji:1F422", "src": ["en-roster"]},
+        {"w": "צֶבַע", "art": "openmoji:1F58D", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "צִיפּוֹר", "art": "openmoji:1F426", "src": ["moe-teimot", "en-roster"]},
+        {"w": "צְפַרְדֵּעַ", "art": "openmoji:1F438", "src": ["en-roster"]},
+        {"w": "צַלַּחַת", "art": "openmoji:1F37D", "src": ["moe-teimot", "en-roster"]},
+        {"w": "צֶמֶר", "art": "openmoji:1F9F6", "src": ["moe-teimot", "en-roster"]},
+        {"w": "צֶדֶף", "art": "openmoji:1F9AA", "src": ["en-roster"]},
+        {"w": "צוֹלֶלֶת", "art": "custom:tsadi-submarine", "src": []},
+        {"w": "צִנְצֶנֶת", "art": "openmoji:1FAD9", "src": []},
+        {"w": "צַייָּר", "art": "openmoji:1F9D1-200D-1F3A8", "src": []}
+      ]
+    },
+    "ק": {
+      "name": "קוֹף",
+      "scale": 1.15,
+      "words": [
+        {"w": "קוֹף", "art": "openmoji:1F435", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "קֶשֶׁת", "art": "openmoji:1F308", "src": ["en-roster"]},
+        {"w": "קֵן", "art": "openmoji:1FABA", "src": ["moe-teimot", "en-roster"]},
+        {"w": "קוּבִּייָּה", "art": "openmoji:1F3B2", "src": ["moe-teimot"]},
+        {"w": "קַקְטוּס", "art": "openmoji:1F335", "src": []},
+        {"w": "קֶנְגּוּרוּ", "art": "openmoji:1F998", "src": ["en-roster"]},
+        {"w": "קִיפּוֹד", "art": "openmoji:1F994", "src": []},
+        {"w": "קְרוּאָסוֹן", "art": "openmoji:1F950", "src": []},
+        {"w": "קְעָרָה", "art": "openmoji:1F963", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "קוּפְסָה", "art": "openmoji:1F4E6", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "קַסְדָּה", "art": "openmoji:E14A", "src": ["en-roster"]},
+        {"w": "קַרְנַף", "art": "openmoji:1F98F", "src": []},
+        {"w": "קוּמְקוּם", "art": "openmoji:1FAD6", "src": []},
+        {"w": "קַפְּקֵייק", "art": "openmoji:1F9C1", "src": []}
+      ]
+    },
+    "ר": {
+      "name": "רֵישׁ",
+      "words": [
+        {"w": "רַכֶּבֶת", "art": "openmoji:1F682", "src": ["moe-acq", "moe-horaa", "moe-teimot", "en-roster"]},
+        {"w": "רוֹבּוֹט", "art": "openmoji:1F916", "src": ["moe-teimot", "en-roster"]},
+        {"w": "רֶגֶל", "art": "openmoji:1F9B5", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "רִימּוֹן", "art": "openmoji:E0C4", "src": []},
+        {"w": "רַמְזוֹר", "art": "openmoji:1F6A6", "src": []},
+        {"w": "רוֹפֵא", "art": "openmoji:1F468-200D-2695-FE0F", "src": ["en-roster"]},
+        {"w": "רַדְיוֹ", "art": "openmoji:1F4FB", "src": ["en-roster"]},
+        {"w": "רַכֶּבֶל", "art": "openmoji:1F6A0", "src": []},
+        {"w": "רִיבּוּעַ", "art": "openmoji:2B1C", "src": ["en-roster"]},
+        {"w": "רַמְקוֹל", "art": "openmoji:1F4E2", "src": []}
+      ]
+    },
+    "ש": {
+      "name": "שִׁין",
+      "words": [
+        {"w": "שֶׁמֶשׁ", "art": "openmoji:2600", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "שָׁעוֹן", "art": "openmoji:23F0", "src": ["moe-acq", "en-roster"]},
+        {"w": "שׁוּלְחָן", "art": "custom:shin-table", "src": ["moe-acq", "moe-horaa", "moe-teimot"]},
+        {"w": "שׁוֹקוֹלָד", "art": "openmoji:1F36B", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "שֵׁן", "art": "openmoji:1F9B7", "src": ["en-roster"]},
+        {"w": "שַׁעַר", "art": "openmoji:1F945", "src": ["en-roster"]},
+        {"w": "שֶׁלֶג", "art": "openmoji:2744", "src": ["en-roster"]},
+        {"w": "שֶׁלֶט", "art": "openmoji:1FAA7", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "שׁוֹטֵר", "art": "openmoji:1F46E", "src": ["en-roster"]},
+        {"w": "שְׁעוֹן יָד", "art": "openmoji:231A", "src": ["en-roster"]},
+        {"w": "שׁוּם", "art": "openmoji:1F9C4", "src": ["en-roster"]},
+        {"w": "שְׁעוּעִית", "art": "openmoji:1FAD8", "src": ["en-roster"]},
+        {"w": "שַׁרְבִיט", "art": "openmoji:1FA84", "src": []},
+        {"w": "שִׁיבּוֹלֶת", "art": "openmoji:1F33E", "src": []},
+        {"w": "שִׂמְלָה", "art": "openmoji:1F457", "src": ["moe-horaa", "en-roster"]}
+      ]
+    },
+    "ת": {
+      "name": "תָּו",
+      "words": [
+        {"w": "תַּפּוּחַ", "art": "openmoji:1F34E", "src": ["moe-acq", "moe-horaa", "en-roster"]},
+        {"w": "תִּינוֹק", "art": "openmoji:1F476", "src": ["moe-teimot", "en-roster"]},
+        {"w": "תּוֹף", "art": "openmoji:1F941", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "תּוּת", "art": "openmoji:1F353", "src": ["en-roster"]},
+        {"w": "תְּמָנוּן", "art": "openmoji:1F419", "src": ["en-roster"]},
+        {"w": "תְּמוּנָה", "art": "openmoji:1F5BC", "src": ["moe-acq", "moe-horaa", "moe-teimot", "en-roster"]},
+        {"w": "תּוּכִּי", "art": "openmoji:1F99C", "src": ["en-roster"]},
+        {"w": "תַּנִּין", "art": "openmoji:1F40A", "src": ["en-roster"]},
+        {"w": "תַּרְנְגוֹל", "art": "openmoji:1F413", "src": ["moe-teimot"]},
+        {"w": "תִּיק", "art": "openmoji:1F45C", "src": ["moe-teimot", "en-roster"]},
+        {"w": "תַּפּוּז", "art": "openmoji:1F34A", "src": ["moe-acq"]}
+      ]
+    }
   }
 }

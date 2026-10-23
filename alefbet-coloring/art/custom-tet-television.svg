@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="7 3.9 65 67" data-from="custom:tet-television">
+  <rect x="7" y="25" height="36" width="58" rx="5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <rect x="12" y="30" height="26" width="38" rx="4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="3" cx="57.5" cy="36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="3" cx="57.5" cy="46" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="52.5" x1="54.5" x2="60.5" y1="52.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M30,25 A6,5 0 0 1 42,25" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="7" x1="33" x2="23" y1="20.8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="8" x1="39" x2="50" y1="20.8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="1.7" cx="22" cy="5.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="1.7" cx="51" cy="6.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="67" x1="15" x2="12" y1="61" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="67" x1="57" x2="60" y1="61" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

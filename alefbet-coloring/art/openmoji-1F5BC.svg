@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="12 12 60 60" data-from="openmoji:1F5BC">
+  <rect x="12" y="12" height="48" width="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <rect x="18" y="18" height="36" width="36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="4" cx="26" cy="30" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <rect x="18" y="18" height="36" width="36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M22,43c0.5259-1.0198,0.7275-1.9672,3-3c2.6096-1.1859,3-2,6-4c4.746-3.164,6.792-9.0278,11-9c1.7205,0.0114,5,7,8,8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

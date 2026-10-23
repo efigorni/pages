@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="12 11 60 60" data-from="openmoji:1F36F">
+  <polyline points="55,17 55,11 17,11 17,17" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M51,42c0,1.6563-1.3428,3-3,3c-1.6572,0-3-1.3437-3-3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M51,23c0,1.6567,1.3428,3,3,3c1.6563,0,3-1.3433,3-3v-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M45,31c0,2.7617-2.2383,5-5,5c-2.7607,0-5-2.2383-5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="31" x1="45" x2="45" y1="42" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="23" x1="51" x2="51" y1="42" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="17" x1="35" x2="35" y1="31" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="11" x1="33" x2="33" y1="17" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M45,60c8.2842,0,15-6.7158,15-15V22c0-2.7612-2.2383-5-5-5H17c-2.7617,0-5,2.2388-5,5v23c0,8.2842,6.7158,15,15,15H45z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

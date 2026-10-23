@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="7 7 65 65" data-from="custom:he-steering-wheel">
+  <circle r="29" cx="36" cy="36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M10.7,40 A25,25 0 0 1 61.3,40 L45.4,40.5 A9.5,9.5 0 0 0 26.6,40.5 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M10.9,43.5 A25,25 0 0 0 31.5,60.6 L32.5,47 A9.5,9.5 0 0 1 27,43.9 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M61.1,43.5 A25,25 0 0 1 40.5,60.6 L39.5,47 A9.5,9.5 0 0 0 45,43.9 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="5" cx="36" cy="38" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

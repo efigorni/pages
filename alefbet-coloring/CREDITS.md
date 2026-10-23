@@ -24,23 +24,59 @@ curriculum's rules for teaching a letter, and are taken from its documents where
   (<https://meyda.education.gov.il/files/Pop/0files/ivrit_hinuch_leshoni/Yesodi/horaa.pdf>): example words
   (`moe-horaa`), such as בננה.
 - **משרד החינוך, האגף לחינוך קדם יסודי: טעימות בעברית**
-  (<https://meyda.education.gov.il/files/PreSchool/teimot-be-ivrit.pdf>): its "מילים מהלב" basic-word lists
-  for kindergarten (`moe-teimot`), such as בית and בובה.
+  (<https://meyda.education.gov.il/files/PreSchool/teimot-be-ivrit.pdf>): its activities, songs and "מילים
+  מהלב" basic-word lists for kindergarten (`moe-teimot`), such as בית and בובה.
 - **The words of מילים באנגלית** ([`../english-words/`](../english-words/CREDITS.md)), picked from the
   Ministry's English curriculum word lists (Pre-Band I, Band I) and Cambridge's Young Learners list, with
   their Hebrew and niqqud (`en-roster`).
+
+A word's Ministry sources say where it appears, as an example or as a plain mention of the thing. Every
+word was checked against the full text of the three documents: a source is listed when the word appears in
+it as a whole word, alone, in the plural or after one prefix letter (ה ו ב ל מ ש כ), and in its own sense.
+Another word with the same letters (מצב is not צב, כלב is not לב), another sense (לשון as language) or a
+name doesn't count.
 
 The niqqud follows the english-words game: full spelling with vowels (כתיב מלא מנוקד), as in בּוּבָּה.
 
 ## Drawings
 
-Every drawing is an **OpenMoji** emoji, from its black line set, version 17.0.0
+Most drawings are **OpenMoji** emoji, from its black line set, version 17.0.0
 (<https://openmoji.org/>, <https://github.com/hfg-gmuend/openmoji>): "All emojis designed by OpenMoji –
 the open-source emoji and icon project. License: CC BY-SA 4.0"
 (<https://creativecommons.org/licenses/by-sa/4.0/>). Changes: the shapes are flattened into one group,
 every line is drawn in one printed weight, and the drawings are scaled, turned and placed on the page. The
-changed drawings in [`art/`](art/) are shared under the same license, CC BY-SA 4.0. Each printed page says
-"Drawings: OpenMoji, CC BY-SA 4.0".
+changed drawings in [`art/`](art/) are shared under the same license, CC BY-SA 4.0.
+
+### Own drawings
+
+For 19 words OpenMoji has no drawing that reads as the word in black lines alone, so we drew them, in
+OpenMoji's line style: 72×72, lines of 2 with round caps and joins, no fills but small eye dots. They are in
+[`art-src/`](art-src/) and are shared under the same license, CC BY-SA 4.0.
+
+| File | Word | Why not OpenMoji |
+|---|---|---|
+| `dalet-scarecrow.svg` | דַּחְלִיל | OpenMoji has no scarecrow |
+| `he-steering-wheel.svg` | הֶגֶה | OpenMoji has only a car wheel (1F6DE) |
+| `vav-curtain.svg` | וִילוֹן | OpenMoji has no curtain; its window (1FA9F) has none |
+| `vav-hook.svg` | וָו | its hook (1FA9D) is a fishing hook, a קֶרֶס |
+| `vav-vest.svg` | וֶסְט | its safety vest (1F9BA) reads as two panels in black lines |
+| `vav-vase.svg` | וָאזָה | OpenMoji has no vase; its amphora (1F3FA) reads as a כַּד |
+| `zayin-olives.svg` | זֵיתִים | its olive (1FAD2) is a bare oval that reads as an egg |
+| `zayin-chameleon.svg` | זִיקִּית | OpenMoji has no chameleon; its lizard (1F98E) is a לְטָאָה |
+| `zayin-fireworks.svg` | זִיקּוּקִים | its fireworks and sparkler (1F386, 1F387) have a solid stick and read as a wand |
+| `tet-ring.svg` | טַבַּעַת | its ring (1F48D) is a one-line circle with a tiny stone, with nothing to color |
+| `tet-marker.svg` | טוּשׁ | OpenMoji has no marker; its crayon and pen read as צֶבַע and עֵט |
+| `tet-television.svg` | טֶלֶווִיזְיָה | its television (1F4FA) reads as a computer monitor |
+| `yod-dove.svg` | יוֹנָה | its dove (1F54A) alone reads as a צִיפּוֹר; the olive branch makes it a dove |
+| `lamed-lizard.svg` | לְטָאָה | its lizard (1F98E) is a thin sliver that could pass for a crocodile |
+| `lamed-whale.svg` | לִווְייָתָן | its spouting whale (1F433) is less clear in print and is drawn as filled shapes, not lines; its whale (1F40B) doesn't read |
+| `mem-king.svg` | מֶלֶךְ | OpenMoji has no king; its person with a crown and prince (1FAC5, 1F934) read as a princess and a prince |
+| `nun-swing.svg` | נַדְנֵדָה | OpenMoji has no swing |
+| `tsadi-submarine.svg` | צוֹלֶלֶת | OpenMoji has no submarine |
+| `shin-table.svg` | שׁוּלְחָן | OpenMoji has no table |
+
+Each printed page says "Drawings: OpenMoji, CC BY-SA 4.0", or "Drawings: OpenMoji and own, CC BY-SA 4.0"
+when one of these is on it.
 
 ## Fonts
 

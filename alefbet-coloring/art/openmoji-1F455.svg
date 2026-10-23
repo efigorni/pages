@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="8 7.408 64 56" data-from="openmoji:1F455">
+  <polyline points="48.3057 15.2396 51.1774 16.0208 51.1774 56 20.8226 56 20.8226 16.0208 23.5126 15.1598" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polygon points="61 31.3289 51.1774 28.3289 51.1774 16.0208 64 22.0208 61 31.3289" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polygon points="11 31.3289 20.8226 28.3289 20.8226 16.0208 8 22.0208 11 31.3289" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m42.3216,12.3962l-4.5054,4.8457,3.2087,5.165c7.1583-8.8534,4.7072-11.2827,4.7072-11.2827-10.4429-8.3615-19.6909,0-19.6909,0,0,0-2.4511,2.4293,4.7072,11.2827l3.2087-5.165-4.5124-4.8532" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="0.8529" cx="35.8866" cy="21.6749" fill="currentColor" stroke="none"/>
+  <circle r="0.8529" cx="35.8866" cy="24.9416" fill="currentColor" stroke="none"/>
+  <circle r="0.8529" cx="35.8866" cy="28.2084" fill="currentColor" stroke="none"/>
+</svg>

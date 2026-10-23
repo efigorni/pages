@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="12 12 60 60" data-from="openmoji:1F54E">
+  <line y2="21.85" x1="36" x2="36" y1="50.15" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1.5)"/>
+  <line y2="50.26" x1="30.81" x2="41.19" y1="50.26" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1.5)"/>
+  <path d="m40.64 21.34a4.635 4.618 0 0 1-2.318 4 4.635 4.618 0 0 1-4.635-1e-6 4.635 4.618 0 0 1-2.318-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m44.87 21.34a8.871 8.858 0 0 1-4.435 7.671 8.871 8.858 0 0 1-8.871 0 8.871 8.858 0 0 1-4.435-7.671" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m49.11 21.34a13.11 13.09 0 0 1-6.552 11.34 13.11 13.09 0 0 1-13.11-2e-6 13.11 13.09 0 0 1-6.552-11.34" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m53.34 21.34a17.34 17.34 0 0 1-8.67 15.02 17.34 17.34 0 0 1-17.34-1e-6 17.34 17.34 0 0 1-8.67-15.02" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <rect x="12" y="12" height="48" width="48" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>
