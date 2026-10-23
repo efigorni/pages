@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="24 7 48 65.5" data-from="custom:bet-screw">
+  <ellipse cx="36" rx="12" ry="4" cy="11" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M24,11 V15.5 A12,4 0 0 0 48,15.5 V11" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M30.5,11 H41.5 M36,8.6 V13.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M31,19 V53.5 L36,65.5 L41,53.5 V19" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M29.5,24.5 L42.5,21.5 M29.5,29.5 L42.5,26.5 M29.5,34.5 L42.5,31.5 M29.5,39.5 L42.5,36.5 M29.5,44.5 L42.5,41.5 M29.5,49.5 L42.5,46.5 M31.6,55.6 L41.6,52.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

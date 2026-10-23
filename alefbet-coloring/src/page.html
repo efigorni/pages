@@ -750,8 +750,10 @@
       mode: "single", pool: null, pages: PACK.pages.init, perPage: PACK.perPage.init, packSeed: 1,
     };
 
+    // A letter's default words: its first "picks" words when it sets its own count, else the first 8.
     function defaultPicks(letter) {
-      return DATA.letters[letter].words.slice(0, DATA.defaultPicks).map((_, i) => i);
+      const L = DATA.letters[letter];
+      return L.words.slice(0, L.picks || DATA.defaultPicks).map((_, i) => i);
     }
     const allWords = (letter) => DATA.letters[letter].words.map((_, i) => i);
 

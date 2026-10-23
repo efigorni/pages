@@ -16,9 +16,10 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
   font's strokes overlap). A letter that looks too large or small gets `"scale"` in `src/words.json`, a
   factor on that size: ו 1.2 (a thin bar), י 0.6 (fitted to the box it fills 126 mm and reads as a "0") and
   ק 1.15 (its descender shrinks its body when fitted).
-- **The words:** the first 8 in `src/words.json` by default (all 6 for ה and ו); the panel adds or removes
-  words (3 to 12). Each is a drawing with 1.2 mm lines and its word under it in Fredoka with niqqud, the
-  first letter bold.
+- **The words:** the first 8 in `src/words.json` by default (all 6 for ה and ו). A letter that sets
+  `"picks"` defaults to that many instead: ב has 10, chosen by hand. The panel adds or removes words
+  (3 to 12). Each is a drawing with 1.2 mm lines and its word under it in Fredoka with niqqud, the first
+  letter bold.
 - **The credit** at the foot: "Drawings: OpenMoji, CC BY-SA 4.0", or "Drawings: OpenMoji and own, CC BY-SA
   4.0" when one of our own drawings (`art-src/`) is on the sheet.
 - **The layout** is random from a seed (ערבוב picks a new one):
@@ -45,15 +46,15 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
     its number ("3/30") beside the credit line.
 - **The address keeps the page:** `#l=ב&o=portrait&s=1&w=0.1.2.3.4.5.6.7` (letter, orientation, seed, the
   words by index), so a link opens, and prints, the same sheet. A pack's address,
-  `#l=ב&o=portrait&m=pack&n=30&k=8&p=1&w=0.1.2.3.4.5.6.7.8.9.10.11.12.13.14.15` (mode, pages, words on
-  each, the pack's seed, the words it deals from), rebuilds and prints the same pack.
+  `#l=ב&o=portrait&m=pack&n=30&k=8&p=1&w=0.1.2.3.4.5.6.7.8.9.10.11.12.13.14.15.16.17.18` (mode, pages,
+  words on each, the pack's seed, the words it deals from), rebuilds and prints the same pack.
 
 ## Adding a letter
 
 1. In [`src/words.json`](src/words.json), give the letter its `words`: 10 to 16 concrete, picturable words
-   a young child knows, the default 8 first. Each word has its niqqud (full spelling with vowels, as the
-   english-words game writes it), its drawing, and the sources it is in (`sources` lists them; see
-   [`CREDITS.md`](CREDITS.md)). Following the Ministry's curriculum, the default words start with as many
+   a young child knows, the default 8 first (or set `"picks"` for another default count). Each word has
+   its niqqud (full spelling with vowels, as the english-words game writes it), its drawing, and the
+   sources it is in (`sources` lists them; see [`CREDITS.md`](CREDITS.md)). Following the Ministry's curriculum, the default words start with as many
    different vowels as the letter has good words for, and one opens with a cluster (שְׁ, בְּ…) where one
    exists. Words of the Ministry's documents and of the english-words game come first.
 2. Each word needs a drawing that reads as that word in black lines alone:

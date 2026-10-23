@@ -9,7 +9,8 @@ The sources, all hand-owned except the two files `art` and `glyphs` write:
 
   src/words.json     per letter its name (with niqqud) and its words: the word with niqqud, its drawing
                      ("openmoji:<hexcode>" or "custom:<name>") and where the word comes from (keys of
-                     `sources`). The first DEFAULT_PICKS words are the page's default picks.
+                     `sources`). The first DEFAULT_PICKS words are the page's default picks, or
+                     the first "picks" words for a letter that sets its own count.
   src/page.html      the page: style, controls and the layout script, with the {{…}} slots assemble fills
   art-src/<name>.svg a hand-drawn drawing for "custom:<name>", in OpenMoji's line style (72×72, stroke 2)
   art/*.svg          every drawing words.json names, normalized: written by `art`
@@ -53,7 +54,8 @@ LETTER_WEIGHT = 700
 
 SVG_NS = "http://www.w3.org/2000/svg"
 SHAPES = {"path", "line", "polyline", "polygon", "rect", "circle", "ellipse"}
-GEOMETRY = {"d", "points", "x", "y", "width", "height", "rx", "ry", "cx", "cy", "r", "x1", "y1", "x2", "y2"}
+# In the order a normalized shape lists them, so `art` writes the same file every run.
+GEOMETRY = ("d", "points", "y2", "x1", "x2", "y1", "r", "x", "y", "height", "width", "cx", "rx", "ry", "cy")
 INHERITED = {"fill": "#000", "stroke": "none", "stroke-width": "1", "stroke-linecap": "butt",
              "stroke-linejoin": "miter", "fill-rule": "nonzero", "paint-order": "normal"}
 IGNORED = {"id", "class", "stroke-miterlimit", "data-name"}
@@ -275,6 +277,7 @@ def assemble():
             "name": entry["name"],
             "glyph": letters[letter],
             **({"scale": entry["scale"]} if "scale" in entry else {}),
+            **({"picks": entry["picks"]} if "picks" in entry else {}),
             "words": [{"w": w["w"], "art": art_file(w["art"]).stem, "src": w.get("src", [])}
                       for w in entry.get("words", [])],
         }

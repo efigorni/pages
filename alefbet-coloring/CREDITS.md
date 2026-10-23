@@ -49,12 +49,18 @@ changed drawings in [`art/`](art/) are shared under the same license, CC BY-SA 4
 
 ### Own drawings
 
-For 19 words OpenMoji has no drawing that reads as the word in black lines alone, so we drew them, in
+For 25 words OpenMoji has no drawing that reads as the word in black lines alone, so we drew them, in
 OpenMoji's line style: 72×72, lines of 2 with round caps and joins, no fills but small eye dots. They are in
 [`art-src/`](art-src/) and are shared under the same license, CC BY-SA 4.0.
 
 | File | Word | Why not OpenMoji |
 |---|---|---|
+| `bet-doll.svg` | בּוּבָּה | its dolls are a nesting doll (1FA86), a בַּבּוּשְׁקָה, and two Japanese festival dolls (1F38E) |
+| `bet-faucet.svg` | בֶּרֶז | its only tap is the potable-water sign (1F6B0), which prints inside a square frame |
+| `bet-pool.svg` | בְּרֵיכָה | OpenMoji has no swimming pool |
+| `bet-screw.svg` | בּוֹרֶג | a plain screw reads better than its nut and bolt (1F529) |
+| `bet-acorn.svg` | בַּלּוּט | OpenMoji has no acorn |
+| `bet-biscuit.svg` | בִּיסְקְווִיט | its cookie (1F36A) is round with chocolate chips and reads as עוּגִייָּה |
 | `dalet-scarecrow.svg` | דַּחְלִיל | OpenMoji has no scarecrow |
 | `he-steering-wheel.svg` | הֶגֶה | OpenMoji has only a car wheel (1F6DE) |
 | `vav-curtain.svg` | וִילוֹן | OpenMoji has no curtain; its window (1FA9F) has none |
