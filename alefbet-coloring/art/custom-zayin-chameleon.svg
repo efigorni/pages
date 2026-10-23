@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="6 21 68 57" data-from="custom:zayin-chameleon">
+  <path d="M24,57 C36,56 52,56.5 68,55" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M64,36 C62,30 57,25 52,21 L48,27.5 C43,21 29,20.5 23,29 C21.5,32 21.5,36.5 23.5,39.5 C32,46 48,46 58,42.5 C61,41 63.5,39 64,36 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="4.6" cx="55.5" cy="31.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="1.5" cx="56.5" cy="31.5" fill="currentColor" stroke="none"/>
+  <path d="M64,36.6 Q60.5,38.6 57,38.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M22.6,31 C14,33 6,39 6,47 C6,55 14,58.5 19,55 C23,52 22,45.5 17.5,45 C15.5,44.8 14.5,47 15.5,48.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M23,38.5 C17,40 11,43 11,47.5 C11,52 15.5,54 17.5,52 C18.6,51 18,49 15.5,48.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M47,45 L47.5,53.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M52.5,44 L52.5,53.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M44.5,57 C45,53.5 47,52.5 50,52.5 C53,52.5 55,53.5 55.5,57" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M29,43.6 L28.5,53.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M34.5,45.3 L34,53.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M26,57 C26.5,53.5 28.5,52.5 31.25,52.5 C34,52.5 36,53.5 36.5,57" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M36,22.3 C35,30 35.5,38 37.5,45.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M44.5,24.2 C43.5,31 44,37.5 45.5,44.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

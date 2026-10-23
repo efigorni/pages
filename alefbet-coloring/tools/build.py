@@ -55,7 +55,7 @@ SVG_NS = "http://www.w3.org/2000/svg"
 SHAPES = {"path", "line", "polyline", "polygon", "rect", "circle", "ellipse"}
 GEOMETRY = {"d", "points", "x", "y", "width", "height", "rx", "ry", "cx", "cy", "r", "x1", "y1", "x2", "y2"}
 INHERITED = {"fill": "#000", "stroke": "none", "stroke-width": "1", "stroke-linecap": "butt",
-             "stroke-linejoin": "miter", "fill-rule": "nonzero"}
+             "stroke-linejoin": "miter", "fill-rule": "nonzero", "paint-order": "normal"}
 IGNORED = {"id", "class", "stroke-miterlimit", "data-name"}
 BLACK = {"#000", "#000000", "black", "#1d1d1b"}
 WHITE = {"#fff", "#ffffff", "white"}
@@ -152,6 +152,8 @@ def flatten(el, inherited, transform, ref, out):
         shape["stroke-linejoin"] = here["stroke-linejoin"]
     if here["fill-rule"] != "nonzero":
         shape["fill-rule"] = here["fill-rule"]
+    if here["paint-order"] != "normal":
+        shape["paint-order"] = here["paint-order"]
     if shape["fill"] == "none" and shape["stroke"] == "none":
         return
     out.append((tag, shape))

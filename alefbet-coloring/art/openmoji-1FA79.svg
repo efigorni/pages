@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="12.119 12.619 59.881 60.381" data-from="openmoji:1FA79">
+  <line y2="44.1771" x1="43.6771" x2="14.8878" y1="15.3878" fill="currentColor" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="50.8947" x1="21.6053" x2="35.0403" y1="37.4596" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M57.1122,28.8228a9.5,9.5,0,0,0-13.435-13.435" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M28.3228,57.6122a9.5,9.5,0,0,1-13.435-13.435" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="35.5404" x1="36.9596" x2="50.3947" y1="22.1053" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="28.8228" x1="28.3229" x2="57.1122" y1="57.6122" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="0.6786" cx="19.9739" cy="44.465" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="22.6609" cy="47.152" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="25.348" cy="49.8391" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="28.035" cy="52.5261" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="17.095" cy="47.344" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="19.782" cy="50.031" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="22.469" cy="52.718" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="25.156" cy="55.405" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="46.844" cy="17.595" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="49.531" cy="20.282" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="52.218" cy="22.969" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="54.905" cy="25.656" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="43.965" cy="20.4739" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="46.652" cy="23.1609" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="49.3391" cy="25.848" fill="currentColor" stroke="none"/>
+  <circle r="0.6786" cx="52.0261" cy="28.535" fill="currentColor" stroke="none"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="13.767 16.454 57.47 54.017" data-from="openmoji:1F3B2">
+  <polyline points="35.6352,54.0172 57.4698,48.7313 57.4698,21.7647 35.6167,26.5155 13.7667,21.7647 13.7667,48.7313 35.6013,54.0172 35.6013,30.3713" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1.034)"/>
+  <polyline points="13.7667,21.7647 35.8082,16.4545 57.4698,21.7647" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1.034)"/>
+  <circle r="3" cx="21.2735" cy="32.9339" fill="currentColor" stroke="none"/>
+  <circle r="3" cx="27.2446" cy="44.3761" fill="currentColor" stroke="none"/>
+  <circle r="3" cx="41.767" cy="45.2211" fill="currentColor" stroke="none"/>
+  <circle r="3" cx="46.8274" cy="38.0668" fill="currentColor" stroke="none"/>
+  <circle r="3" cx="51.8878" cy="30.9124" fill="currentColor" stroke="none"/>
+  <ellipse cx="35.8312" rx="4" ry="1.6191" cy="21.1219" fill="currentColor" stroke="none"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="18 9 54 63" data-from="openmoji:1F6AA">
+  <rect x="18" y="9" height="54" width="36" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <ellipse cx="49" rx="2.5" ry="2.0377" cy="36.5094" fill="currentColor" stroke="none"/>
+  <path d="M49.5,41.6038h-1c-0.5523,0-1-0.4477-1-1v-6.1509c0-0.5523,0.4477-1,1-1h1c0.5523,0,1,0.4477,1,1v6.1509 C50.5,41.1561,50.0523,41.6038,49.5,41.6038z" fill="currentColor" stroke="none"/>
+  <rect x="24" y="14.0943" height="16.3019" width="24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <rect x="24" y="45.6792" height="11.2075" width="24" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>
