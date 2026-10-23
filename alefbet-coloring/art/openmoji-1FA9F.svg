@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="10.958 10.958 61 61" data-from="openmoji:1FA9F">
+  <line y2="57.1676" x1="35.9004" x2="35.9004" y1="14.7127" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1.012)"/>
+  <line y2="35.9583" x1="14.7206" x2="57.2826" y1="35.9583" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1.012)"/>
+  <line y2="61" x1="61" x2="10.9583" y1="61" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polyline points="10.958 57.168 10.958 10.958 61 10.958 61 57.168" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

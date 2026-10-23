@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="4 11.98 68 64.084" data-from="openmoji:1F48E">
+  <polygon points="56.3771,11.9798 16.3771,11.9798 4,23.3481 36,64.0837 68,23.3481" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polyline points="55.7486,23.8595 36,64.0837 36,24.3482 36,11.9798 16.2556,23.3482" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="64.0837" x1="16.2556" x2="36.0042" y1="23.8595" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="23.3482" x1="4" x2="68" y1="23.3482" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="23.3482" x1="36" x2="55.7486" y1="11.9798" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <polygon points="56.3771,11.9798 16.3771,11.9798 4,23.3481 36,64.0837 68,23.3481" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

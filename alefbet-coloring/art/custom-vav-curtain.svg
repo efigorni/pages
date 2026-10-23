@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="4.5 7.5 67.5 64" data-from="custom:vav-curtain">
+  <line y2="10" x1="9.5" x2="62.5" y1="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="2.5" cx="7" cy="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="2.5" cx="65" cy="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M12,12 L33,12 C32,22.5 25,33 20,39 C24,46 28,55 29,64 Q24.5,62 20.5,64 Q16,62 11,64 C12,55 13.5,46 13.5,39 C13.5,31 12,22 12,12 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M60,12 L39,12 C40,22.5 47,33 52,39 C48,46 44,55 43,64 Q47.5,62 51.5,64 Q56,62 61,64 C60,55 58.5,46 58.5,39 C58.5,31 60,22 60,12 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M11.5,37 Q16.5,35.5 21.5,37.5 L21.5,41.5 Q16.5,40 11.5,41.5 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M60.5,37 Q55.5,35.5 50.5,37.5 L50.5,41.5 Q55.5,40 60.5,41.5 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M19,12 C19.5,22 18,30 16,36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M26,12 C26,22 22,30 18.5,36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M53,12 C52.5,22 54,30 56,36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M46,12 C46,22 50,30 53.5,36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M16,42.5 C16.5,50 16.5,56 16,63" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M18.5,42.5 C21,50 22.5,56 23.5,63" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M56,42.5 C55.5,50 55.5,56 56,63" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M53.5,42.5 C51,50 49.5,56 48.5,63" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

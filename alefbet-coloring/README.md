@@ -13,9 +13,14 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
 - **The head:** "הָאוֹת <the letter's name>" on the right, "שֵׁם:" and a line on the left.
 - **The letter** is Fredoka Bold's outline, as large as fits 110×126 mm (portrait) or 112×118 mm
   (landscape), hollow: white, with a 1.9 mm line drawn outside it (under the fill, which hides where the
-  font's strokes overlap). A letter that looks too large or small gets `"scale"` in `src/words.json`.
-- **The words:** the first 8 in `src/words.json` by default; the panel adds or removes words (3 to 12).
-  Each is a drawing with 1.2 mm lines and its word under it in Fredoka with niqqud, the first letter bold.
+  font's strokes overlap). A letter that looks too large or small gets `"scale"` in `src/words.json`, a
+  factor on that size: ו 1.2 (a thin bar), י 0.6 (fitted to the box it fills 126 mm and reads as a "0") and
+  ק 1.15 (its descender shrinks its body when fitted).
+- **The words:** the first 8 in `src/words.json` by default (all 6 for ה and ו); the panel adds or removes
+  words (3 to 12). Each is a drawing with 1.2 mm lines and its word under it in Fredoka with niqqud, the
+  first letter bold.
+- **The credit** at the foot: "Drawings: OpenMoji, CC BY-SA 4.0", or "Drawings: OpenMoji and own, CC BY-SA
+  4.0" when one of our own drawings (`art-src/`) is on the sheet.
 - **The layout** is random from a seed (ערבוב picks a new one):
   1. On a portrait page the strips beside the letter are narrow (26–50 mm): two of the four narrowest
      drawings get one each, as large as the strip allows, so the drawings surround the letter instead of
@@ -53,7 +58,8 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
    - an OpenMoji emoji, `"art": "openmoji:<hexcode>"`: find it on <https://openmoji.org/> and look at its
      black version;
    - or a drawing of our own, `"art": "custom:<name>"`, in `art-src/<name>.svg`, in OpenMoji's line style:
-     a 72×72 `viewBox`, `stroke-width="2"`, round caps and joins, no fills.
+     a 72×72 `viewBox`, `stroke-width="2"`, round caps and joins, no fills but small eye dots. It is named
+     `<letter-name>-<english-word>` (`vav-curtain`), and [`CREDITS.md`](CREDITS.md) lists it.
 3. Build, then look at the page in both orientations and a few seeds, and print one:
 
    ```sh
@@ -62,7 +68,8 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
    ```
 
 `art` downloads the OpenMoji drawings the words name (cached in `~/.cache/alefbet-coloring/`), writes
-them normalized into `art/`, and removes the ones no word names. `glyphs` rewrites `src/letters.json`
+them normalized into `art/`, and removes the ones no word names. It normalizes our own drawings from
+`art-src/` on every run. `glyphs` rewrites `src/letters.json`
 from the font (only needed if the font or its weight changes):
 `uv run --quiet --with fonttools==4.60.1 --with brotli==1.1.0 python -I alefbet-coloring/tools/build.py glyphs`.
 Before committing, `python3 -I alefbet-coloring/tools/build.py assemble --check` (the repo has no CI).

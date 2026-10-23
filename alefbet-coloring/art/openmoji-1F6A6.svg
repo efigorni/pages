@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="25 9 47 59" data-from="openmoji:1F6A6">
+  <path d="M47,16v36c0,3.85-3.15,7-7,7h-8c-3.85,0-7-3.15-7-7V16c0-3.85,3.15-7,7-7h8C43.85,9,47,12.15,47,16z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="5" cx="36" cy="48.4723" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="5" cx="36" cy="34.4723" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="5" cx="36" cy="19.4723" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

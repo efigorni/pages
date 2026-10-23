@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="12.018 10.359 59.757 60.067" data-from="openmoji:1F941">
+  <line y2="53.4721" x1="35.8153" x2="35.8153" y1="44.728" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="53.4721" x1="23.7365" x2="23.7365" y1="44.728" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="53.4721" x1="47.894" x2="47.894" y1="44.728" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <ellipse cx="25.3401" rx="2" ry="2" cy="29.1791" transform="matrix(0.7984 -0.6021 0.6021 0.7984 -12.4611 21.141)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="10.3592" x1="38.7754" x2="50.2932" y1="19.0461" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="24.1728" x1="26.9369" x2="31.9778" y1="27.9748" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <ellipse cx="44.9438" rx="2" ry="2" cy="29.2341" transform="matrix(0.6204 -0.7843 0.7843 0.6204 -5.8665 46.3483)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="27.9934" x1="21.3373" x2="43.3752" y1="10.5619" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <rect x="12.0184" y="36.2187" height="23.8488" width="47.7389" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

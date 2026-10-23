@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="12 3.5 60 66" data-from="custom:vav-vest">
+  <path d="M27,8 L21,8 Q18.5,8 18.5,12 C18.5,25 17,32 12,36 L12,62 Q12,66 16,66 L56,66 Q60,66 60,62 L60,36 C55,32 53.5,25 53.5,12 Q53.5,8 51,8 L45,8 Q36,16 27,8 Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M27,8 L26.5,3.5 Q36,9.5 45.5,3.5 L45,8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="66" x1="36" x2="36" y1="12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <rect x="34.4" y="15" height="6" width="3.2" rx="1.2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M18.6,23 Q27.3,25.5 36,23 Q44.7,25.5 53.4,23" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M15.6,32.5 Q25.8,35 36,32.5 Q46.2,35 56.4,32.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M12,42 Q24,44.5 36,42 Q48,44.5 60,42" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M12,51.5 Q24,54 36,51.5 Q48,54 60,51.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

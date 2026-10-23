@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="5 9.5 67 63.79" data-from="openmoji:1F6F3">
+  <path d="m47.4115,49.3367c1.5483.386,3.0684.6633,4.5885.6633,5,0,7-3,15-3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m5,47c3,0,9,3,15,3,1.292,0,2.4913-.1391,3.6378-.3574" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m37.5,10.5v5h-4v-5c0-.5523.4477-1,1-1h2c.5523,0,1,.4477,1,1Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m48.9045,31h-26.809l5.9312-14.8705c.1516-.3801.5196-.6295.9288-.6295h13.089c.4092,0,.7772.2494.9288.6295l5.9312,14.8705Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m23.6377,49.6421c-1.0449-5.989-2.7008-12.806-7.6377-14.8936h39c-8.6667,3.6647-7.2222,21.9045-10.1111,24.653-2.0799,1.9789-6.4133,3.4815-8.6667,4.1686-.2743.0825-.52.1557-.7222.2199-.2022-.0642-.4479-.1374-.7222-.2199-2.2534-.6871-6.5868-2.1897-8.6667-4.1686-1.2433-1.1828-1.6839-5.2348-2.4734-9.7594" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="m55,32v2.7485H16v-2.7485c0-.5523.4477-1,1-1h37c.5523,0,1,.4477,1,1Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="32" x1="35.5" x2="35.5" y1="63.79" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="21" x1="30" x2="41" y1="21" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="26" x1="28" x2="43" y1="26" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

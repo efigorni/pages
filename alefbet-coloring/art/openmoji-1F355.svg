@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="15.494 7 56.506 56" data-from="openmoji:1F355">
+  <path d="M52.2637,19.7373c0.4765,0.4775,0.916,0.9775,1.3418,1.4854l2.9004-5.7286c-11.3252-11.3252-29.6875-11.3252-41.0118,0 l2.9004,5.7286c0.4258-0.5079,0.8653-1.0079,1.3418-1.4854C28.7197,10.7539,43.2803,10.7539,52.2637,19.7373z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M53.6055,21.2227c-0.4258-0.5079-0.8653-1.0079-1.3418-1.4854c-8.9834-8.9834-23.544-8.9834-32.5274,0 c-0.4765,0.4775-0.916,0.9775-1.3418,1.4854L36,56L53.6055,21.2227z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="5" cx="31" cy="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="3" cx="44" cy="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="3" cx="37" cy="36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

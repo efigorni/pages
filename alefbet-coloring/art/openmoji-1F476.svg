@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" data-box="17 11 55 61.5" data-from="openmoji:1F476">
+  <path d="M27,28c0,0,1-1,2-1s2,1,2,1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M41,28c0,0,1-1,2-1s2,1,2,1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M51,29.3 c3,3,4,21.7,4,29.7v2.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M17,61.5V59 c0-8,1-26.7,4-29.7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="17" x1="32" x2="31" y1="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="17" x1="36" x2="35" y1="15" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <line y2="17" x1="40" x2="41" y1="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <circle r="3" cx="36" cy="35.5" fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M32.7,35.6C31.6,35.3,31,35,31,35" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M41,35c0,0-0.5,0.3-1.5,0.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+  <path d="M44,42c8-3,7-12,7-15.8 C51,17.3,44.8,11,36,11s-15,6.3-15,15.2C21,30,20,39,28.1,42C31.8,43.4,40.2,43.3,44,42z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="stroke-width:calc(var(--sw) * 1)"/>
+</svg>

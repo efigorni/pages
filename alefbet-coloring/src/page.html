@@ -333,8 +333,8 @@
       </button>
 
       <p class="credits">
-        הציורים: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a>,
-        ברישיון <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.he" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
+        הציורים: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a>
+        וציורים משלנו בסגנונו, כולם ברישיון <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.he" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
         הגופן: Fredoka (SIL OFL). המילים נבחרו לפי תוכנית הלימודים של משרד החינוך (פרטים ב־<a href="CREDITS.md">CREDITS.md</a>).
       </p>
     </aside>
@@ -689,7 +689,9 @@
         out.push(`<text class="lbl" x="${fix(it.x)}" y="${fix(it.labelY)}" font-size="${SHEET.label}" text-anchor="middle">${labelMarkup(it.w)}</text>`);
       }
 
-      out.push(`<text class="credit" x="${P.w / 2}" y="${P.h - 5}" font-size="2.3" text-anchor="middle" direction="ltr">Drawings: OpenMoji, CC BY-SA 4.0</text>`);
+      // Our own drawings (art-src/) are shared under OpenMoji's license too; a sheet showing one says so.
+      const own = plan.items.some((it) => it.art.startsWith("custom-"));
+      out.push(`<text class="credit" x="${P.w / 2}" y="${P.h - 5}" font-size="2.3" text-anchor="middle" direction="ltr">Drawings: OpenMoji${own ? " and own" : ""}, CC BY-SA 4.0</text>`);
       out.push("</svg>");
       return out.join("");
     }
