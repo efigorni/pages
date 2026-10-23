@@ -307,7 +307,7 @@
     }
   </style>
 
-  <script id="picker-core">
+  <script>
   /* The picker's logic, apart from the page: candidates in, choices in, export out. */
   var PICKER_CORE = (() => {
     "use strict";
@@ -410,7 +410,7 @@
         + `  "dropped_current": ${list(data.dropped_current.map((w) => JSON.stringify(w)))}\n}`;
     }
 
-    return { ORDER, NAMES, SOURCES, artUrl, cleanLetter, cleanChoices, exportData, exportText };
+    return { ORDER, NAMES, artUrl, cleanLetter, cleanChoices, exportData, exportText };
   })();
   </script>
   <script>
