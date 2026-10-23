@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>דפי צביעה: אותיות ומילים</title>
+  <meta name="description" content="דפי צביעה להדפסה בגודל A4: אות גדולה במרכז הדף, ומסביבה ציורים של מילים שמתחילות בה.">
+  <link rel="icon" href="{{ICON}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+  <style>
+    /* Fredoka, round and friendly, with niqqud: everything on the sheet */
+    @font-face {
+      font-family: Fredoka;
+      font-weight: 300 700;
+      font-display: block;
+      src: url(data:font/woff2;base64,{{FONT}}) format("woff2");
+    }
+
+    :root {
+      --berry: #d16ba5; --berry-deep: #b04d88; --berry-soft: #fbeaf3;
+      --ink: #13100e; --ink-2: #4a443f; --ink-3: #847c74;
+      --paper: #ffffff; --ground: #f6f3ef; --line: #e8e2da;
+      --shadow-1: 0 1px 2px rgba(19,16,14,.04), 0 4px 14px rgba(19,16,14,.05);
+      --shadow-sheet: 0 2px 6px rgba(19,16,14,.08), 0 22px 50px rgba(19,16,14,.16);
+      --r: 18px;
+      --display: "Secular One", "Arial Hebrew", "Noto Sans Hebrew", system-ui, sans-serif;
+      --body: "Assistant", "Arial Hebrew", "Noto Sans Hebrew", system-ui, -apple-system, sans-serif;
+      --sheet: Fredoka, "Arial Hebrew", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--ground);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--berry-deep); outline-offset: 2px; border-radius: 8px; }
+
+    .app { display: grid; grid-template-columns: 360px minmax(0, 1fr); min-height: 100vh; }
+
+    /* ---------- Panel ---------- */
+    .panel {
+      background: var(--paper);
+      border-inline-end: 1px solid var(--line);
+      padding: 22px 22px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .home {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink-3);
+      text-decoration: none;
+      align-self: flex-start;
+    }
+    .home:hover { color: var(--berry-deep); }
+    .panel h1 {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.15;
+      margin: 0;
+    }
+    .panel .sub { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
+    .group h2 {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--ink-3);
+      letter-spacing: .02em;
+      margin: 0 0 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .group h2 small { font-weight: 700; font-size: 12.5px; }
+
+    .letters { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+    .letters button {
+      font-family: var(--sheet);
+      font-weight: 600;
+      font-size: 21px;
+      line-height: 1;
+      aspect-ratio: 1;
+      border-radius: 10px;
+      background: var(--ground);
+      border: 1.5px solid transparent;
+      transition: background .15s, border-color .15s, transform .12s;
+    }
+    .letters button:hover:not(:disabled) { border-color: var(--berry); transform: translateY(-1px); }
+    .letters button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+    .letters button:disabled { color: #c9c1b8; cursor: not-allowed; }
+
+    .seg {
+      display: inline-flex;
+      background: var(--ground);
+      border-radius: 99px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .seg button {
+      padding: 7px 16px;
+      border-radius: 99px;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink-2);
+    }
+    .seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 14.5px;
+      background: var(--berry-soft);
+      color: var(--berry-deep);
+      transition: background .15s, color .15s;
+    }
+    .btn:hover { background: var(--berry-deep); color: #fff; }
+    .btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .btn.primary { background: var(--ink); color: #fff; padding: 12px 20px; font-size: 16px; justify-content: center; }
+    .btn.primary:hover { background: var(--berry-deep); }
+
+    .words { display: flex; flex-wrap: wrap; gap: 6px; }
+    .word {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 11px 4px 6px;
+      border-radius: 99px;
+      border: 1.5px solid var(--line);
+      background: var(--paper);
+      font-family: var(--sheet);
+      font-weight: 500;
+      font-size: 16px;
+      color: var(--ink-3);
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .word svg { width: 26px; height: 26px; color: var(--ink-3); }
+    .word[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); background: var(--ground); }
+    .word[aria-pressed="true"] svg { color: var(--ink); }
+    .word:hover { border-color: var(--berry); }
+    .hint { font-size: 13px; color: var(--ink-3); margin: 6px 0 0; }
+
+    .credits { margin-top: auto; font-size: 12.5px; color: var(--ink-3); line-height: 1.55; }
+    .credits a { color: var(--ink-2); }
+
+    /* ---------- Stage ---------- */
+    .stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+    }
+    .paper { min-width: 0; max-width: 100%; }
+    .paper svg.sheet {
+      display: block;
+      max-width: 100%;
+      background: #fff;
+      box-shadow: var(--shadow-sheet);
+      border-radius: 3px;
+    }
+
+    /* ---------- The sheet ---------- */
+    .sheet text { font-family: var(--sheet); }
+    .sheet .title { font-weight: 700; }
+    .sheet .lbl { font-weight: 500; }
+    .sheet .lbl .f { font-weight: 700; }
+    .sheet .credit { font-family: Arial, sans-serif; fill: #a39b92; }
+
+    @media (max-width: 860px) {
+      .app { grid-template-columns: minmax(0, 1fr); align-content: start; }
+      .panel { border-inline-end: 0; border-bottom: 1px solid var(--line); padding: 18px 16px 20px; }
+      .stage { position: static; height: auto; padding: 18px 16px 40px; }
+      .credits { margin-top: 0; }
+    }
+
+    @media print {
+      html, body { background: #fff !important; margin: 0; }
+      .panel { display: none !important; }
+      .app { display: block; }
+      .stage { position: static; height: auto; padding: 0; display: block; overflow: visible; }
+      .paper svg.sheet { width: var(--pw) !important; height: var(--ph) !important; max-width: none; box-shadow: none; border-radius: 0; }
+    }
+  </style>
+  <style id="page-size">@page { size: A4 portrait; margin: 0; }</style>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel">
+      <a class="home" href="../index.html">→ לכל האפליקציות</a>
+      <div>
+        <h1>דפי צביעה: אותיות ומילים</h1>
+        <p class="sub">אות גדולה לצביעה, ומסביבה ציורים של מילים שמתחילות בה. מדפיסים בגודל A4 וצובעים.</p>
+      </div>
+
+      <div class="group">
+        <h2>אות</h2>
+        <div class="letters" id="letters" role="group" aria-label="בחירת אות"></div>
+      </div>
+
+      <div class="group">
+        <h2>הדף</h2>
+        <div class="row">
+          <div class="seg" id="orient" role="group" aria-label="כיוון הדף">
+            <button data-v="portrait" aria-pressed="true">לאורך</button>
+            <button data-v="landscape" aria-pressed="false">לרוחב</button>
+          </div>
+          <button class="btn" id="shuffle" title="סידור אחר של הציורים בדף">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+            ערבוב
+          </button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>מילים בדף <small id="count"></small></h2>
+        <div class="words" id="words"></div>
+        <p class="hint">לחיצה על מילה מוסיפה אותה לדף או מורידה אותה.</p>
+      </div>
+
+      <button class="btn primary" id="print">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg>
+        הדפסה
+      </button>
+
+      <p class="credits">
+        הציורים: <a href="https://openmoji.org/" target="_blank" rel="noopener">OpenMoji</a>,
+        ברישיון <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.he" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
+        הגופן: Fredoka (SIL OFL). המילים נבחרו לפי תוכנית הלימודים של משרד החינוך (פרטים ב־<a href="CREDITS.md">CREDITS.md</a>).
+      </p>
+    </aside>
+
+    <main class="stage" id="stage">
+      <div class="paper" id="paper"></div>
+    </main>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+{{ART_DEFS}}
+    </defs>
+  </svg>
+  <svg id="measure" width="0" height="0" style="position:absolute;visibility:hidden" aria-hidden="true"><text></text></svg>
+
+  <script>
+  (() => {
+    "use strict";
+    const DATA = {{DATA}};
+    const ORDER = "אבגדהוזחטיכלמנסעפצקרשת";
+
+    // The sheet, in millimetres.
+    const SHEET = {
+      margin: 10,          // nothing is drawn closer to the paper's edge
+      gap: 5,              // between two drawings (with their labels)
+      letterPad: 7,        // around the big letter
+      label: 7,            // the word's font size
+      labelGap: 1.6,       // between a drawing and its word
+      artLine: 1.2,        // the drawings' line weight
+      letterLine: 1.9,     // the big letter's outline
+      tilt: 7,             // a drawing turns by up to this many degrees
+      vary: 0.14,          // and is up to this much larger or smaller than the others
+      minSize: 16,         // a drawing's size (the side of a square of its area), at least
+      maxSize: 62,         // and at most
+      grow: 1.25,          // a drawing then grows on its own into free space, up to this times that
+      strip: [26, 50],     // strips this wide beside the letter get a drawing each, pinned
+    };
+    const PAGES = {
+      portrait: { w: 210, h: 297, head: 22, letter: [110, 126] },
+      landscape: { w: 297, h: 210, head: 20, letter: [112, 118] },
+    };
+    const MARKS = /^(.[\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7]*)(.*)$/su;
+
+    const $ = (sel) => document.querySelector(sel);
+    const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+    const fix = (v) => Math.round(v * 100) / 100;
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+    function mulberry32(seed) {
+      let a = seed >>> 0;
+      return () => {
+        a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    // ---------- Rectangles ----------
+    const overlaps = (a, b, gap) =>
+      a.x < b.x + b.w + gap && b.x < a.x + a.w + gap && a.y < b.y + b.h + gap && b.y < a.y + a.h + gap;
+    function distance(a, b) {
+      const dx = Math.max(0, b.x - (a.x + a.w), a.x - (b.x + b.w));
+      const dy = Math.max(0, b.y - (a.y + a.h), a.y - (b.y + b.h));
+      return Math.hypot(dx, dy);
+    }
+    const inflate = (r, d) => ({ x: r.x - d, y: r.y - d, w: r.w + 2 * d, h: r.h + 2 * d });
+
+    // ---------- Words ----------
+    function labelMarkup(word) {
+      const [, first, rest] = word.match(MARKS);
+      return `<tspan class="f">${esc(first)}</tspan>${esc(rest)}`;
+    }
+
+    const widths = new Map();
+    function labelWidth(word) {
+      if (!widths.has(word)) widths.set(word, textWidth(labelMarkup(word), SHEET.label, "lbl"));
+      return widths.get(word);
+    }
+
+    function textWidth(markup, size, cls) {
+      const svg = $("#measure");
+      svg.setAttribute("class", "sheet");
+      const text = svg.querySelector("text");
+      text.setAttribute("class", cls);
+      text.setAttribute("font-size", "100");
+      text.innerHTML = markup;
+      return (text.getComputedTextLength() * size) / 100;
+    }
+
+    // ---------- Layout ----------
+    const aspect = (art) => {
+      const [x0, y0, x1, y1] = DATA.art[art];
+      return (x1 - x0) / (y1 - y0);
+    };
+
+    // A drawing of a given size covers the area of a size×size square, in its own proportions.
+    function drawingSize(art, size) {
+      const [x0, y0, x1, y1] = DATA.art[art];
+      const aw = x1 - x0, ah = y1 - y0, ratio = Math.sqrt(aw / ah);
+      let w = size * ratio, h = size / ratio;
+      const over = Math.max(w, h) / (size * 1.3);
+      if (over > 1) { w /= over; h /= over; }
+      return { w, h, k: w / aw, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2 };
+    }
+
+    // The box a drawing and its word take: the turned drawing's bounds, then the word below it.
+    function itemBox(item, size) {
+      const d = drawingSize(item.art, size * item.vary);
+      const dw = d.w + SHEET.artLine, dh = d.h + SHEET.artLine;
+      const t = (Math.abs(item.rot) * Math.PI) / 180;
+      const rw = dw * Math.cos(t) + dh * Math.sin(t), rh = dw * Math.sin(t) + dh * Math.cos(t);
+      return { d, rh, w: Math.max(rw, item.labelW), h: rh + SHEET.labelGap + SHEET.label * 1.25 };
+    }
+
+    function layout(letter, words, orient, seed) {
+      const P = PAGES[orient], M = SHEET.margin;
+      const area = { x: M, y: M + P.head, w: P.w - 2 * M, h: P.h - 2 * M - P.head };
+      const L = DATA.letters[letter];
+      const [gx0, gy0, gx1, gy1] = L.glyph.box;
+      const scale = Math.min(P.letter[0] / (gx1 - gx0), P.letter[1] / (gy1 - gy0)) * (L.scale || 1);
+      const lw = (gx1 - gx0) * scale, lh = (gy1 - gy0) * scale;
+      const letterBox = { x: area.x + (area.w - lw) / 2, y: area.y + (area.h - lh) / 2, w: lw, h: lh };
+      const block = inflate(letterBox, SHEET.letterPad);
+
+      const rand = mulberry32(seed);
+      const items = words.map((w) => ({
+        ...w,
+        rot: (rand() * 2 - 1) * SHEET.tilt,
+        vary: 1 + (rand() * 2 - 1) * SHEET.vary,
+        labelW: labelWidth(w.w),
+      }));
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+
+      // What the drawings keep off: the letter, and any drawing pinned beside it.
+      const walls = [{ r: block, gap: 0 }];
+
+      // A letter that leaves only a narrow strip on each side (a portrait page) would push every drawing
+      // into a row above or below it. Instead two of the narrowest drawings get a strip each, as large
+      // as the strip allows, and the others go around.
+      const pinned = [];
+      const strips = [
+        { x: area.x, y: block.y, w: block.x - area.x, h: block.h },
+        { x: block.x + block.w, y: block.y, w: area.x + area.w - (block.x + block.w), h: block.h },
+      ];
+      if (items.length >= 6 && strips.every((s) => s.w >= SHEET.strip[0] && s.w <= SHEET.strip[1])) {
+        const narrow = items.slice().sort((a, b) => aspect(a.art) - aspect(b.art)).slice(0, 4);
+        for (const strip of strips) {
+          const item = narrow.splice(Math.floor(rand() * narrow.length), 1)[0];
+          let size = SHEET.maxSize, box = itemBox(item, size);
+          while (size > SHEET.minSize && (box.w > strip.w || box.h > strip.h * 0.62)) box = itemBox(item, (size *= 0.97));
+          if (box.w > strip.w) continue;
+          const r = { x: strip.x + (strip.w - box.w) / 2, y: strip.y + (strip.h - box.h) * (0.2 + 0.6 * rand()), w: box.w, h: box.h };
+          pinned.push({ item, r, size });
+          walls.push({ r, gap: SHEET.gap });
+          items.splice(items.indexOf(item), 1);
+        }
+      }
+
+      const fits = (r, self, placed) =>
+        r.x >= area.x - 1e-6 && r.y >= area.y - 1e-6 &&
+        r.x + r.w <= area.x + area.w + 1e-6 && r.y + r.h <= area.y + area.h + 1e-6 &&
+        !walls.some((w) => overlaps(r, w.r, w.gap)) && !placed.some((p) => p !== self && overlaps(r, p.r, SHEET.gap));
+      const clearance = (r, self, placed) =>
+        placed.reduce((m, p) => (p === self ? m : Math.min(m, distance(r, p.r))),
+          walls.reduce((m, w) => Math.min(m, distance(r, w.r)), Infinity));
+
+      // Each drawing goes where it is farthest from everything placed so far (best of many tries);
+      // null when one of them finds no room at this size.
+      const place = (size, keepGoing) => {
+        const placed = [];
+        for (const item of items) {
+          const box = itemBox(item, size);
+          let best = null;
+          if (box.w <= area.w && box.h <= area.h) {
+            for (let k = 0; k < 700; k++) {
+              const r = { x: area.x + rand() * (area.w - box.w), y: area.y + rand() * (area.h - box.h), w: box.w, h: box.h };
+              if (!fits(r, null, placed)) continue;
+              const score = clearance(r, null, placed);
+              if (!best || score > best.score) best = { r, score };
+            }
+          }
+          if (best) placed.push({ item, r: best.r, size });
+          else if (!keepGoing) return null;
+        }
+        return placed;
+      };
+
+      // Push apart every two drawings that overlap (and any drawing off a wall or the page), along the
+      // shorter way out, until none do; null when they can't all fit at this size.
+      const settle = (from, size) => {
+        const s = from.map((p) => {
+          const b = itemBox(p.item, size);
+          return { item: p.item, cx: p.cx, cy: p.cy, w: b.w, h: b.h };
+        });
+        if (s.some((p) => p.w > area.w || p.h > area.h)) return null;
+        const keepIn = (p) => {
+          p.cx = clamp(p.cx, area.x + p.w / 2, area.x + area.w - p.w / 2);
+          p.cy = clamp(p.cy, area.y + p.h / 2, area.y + area.h - p.h / 2);
+        };
+        for (let iter = 0; iter < 150; iter++) {
+          let worst = 0;
+          for (let i = 0; i < s.length; i++) {
+            const a = s[i];
+            for (const { r: w, gap } of walls) {
+              const wx = w.x + w.w / 2, wy = w.y + w.h / 2;
+              const lx = (a.w + w.w) / 2 + gap - Math.abs(a.cx - wx), ly = (a.h + w.h) / 2 + gap - Math.abs(a.cy - wy);
+              if (lx <= 0 || ly <= 0) continue;
+              worst = Math.max(worst, Math.min(lx, ly));
+              if (lx < ly) a.cx += Math.sign(a.cx - wx || 1) * lx;
+              else a.cy += Math.sign(a.cy - wy || 1) * ly;
+            }
+            for (let j = i + 1; j < s.length; j++) {
+              const b = s[j];
+              const px = (a.w + b.w) / 2 + SHEET.gap - Math.abs(a.cx - b.cx);
+              const py = (a.h + b.h) / 2 + SHEET.gap - Math.abs(a.cy - b.cy);
+              if (px <= 0 || py <= 0) continue;
+              worst = Math.max(worst, Math.min(px, py));
+              if (px < py) {
+                const d = (Math.sign(a.cx - b.cx || rand() - 0.5) * px) / 2;
+                a.cx += d; b.cx -= d;
+              } else {
+                const d = (Math.sign(a.cy - b.cy || rand() - 0.5) * py) / 2;
+                a.cy += d; b.cy -= d;
+              }
+            }
+          }
+          s.forEach(keepIn);
+          if (worst < 0.01) return s;
+        }
+        return null;
+      };
+
+      // Start from a spread-out placement at the smallest size, then grow them all together, pushing
+      // apart as they grow, until they can't grow any more.
+      let size = SHEET.minSize;
+      let cur = place(size, true).map((p) => ({ item: p.item, cx: p.r.x + p.r.w / 2, cy: p.r.y + p.r.h / 2 }));
+      cur = settle(cur, size) || cur;
+      while (size < SHEET.maxSize) {
+        const next = Math.min(SHEET.maxSize, size * 1.02);
+        const s = settle(cur, next);
+        if (!s) break;
+        cur = s;
+        size = next;
+      }
+      const base = size;
+      let placed = cur.map((p) => {
+        const b = itemBox(p.item, base);
+        return { item: p.item, size: base, r: { x: p.cx - b.w / 2, y: p.cy - b.h / 2, w: b.w, h: b.h } };
+      });
+
+      // Then they move apart, and each grows into the room around it, toward whichever side is free.
+      const ANCHORS = [[0.5, 0.5], [0, 0], [1, 0], [0, 1], [1, 1], [0.5, 0], [0.5, 1], [0, 0.5], [1, 0.5]];
+      const grow = () => {
+        for (let round = 0; round < 80; round++) {
+          let grew = false;
+          for (const p of placed) {
+            const size = p.size * 1.02;
+            if (size > base * SHEET.grow) continue;
+            const box = itemBox(p.item, size);
+            if (box.w > area.w || box.h > area.h) continue;
+            for (const [ax, ay] of ANCHORS) {
+              const r = {
+                x: clamp(p.r.x + (p.r.w - box.w) * ax, area.x, area.x + area.w - box.w),
+                y: clamp(p.r.y + (p.r.h - box.h) * ay, area.y, area.y + area.h - box.h),
+                w: box.w, h: box.h,
+              };
+              if (!fits(r, p, placed)) continue;
+              p.r = r; p.size = size; grew = true;
+              break;
+            }
+          }
+          if (!grew) break;
+        }
+      };
+      const spread = () => {
+        for (let round = 0; round < 30; round++) {
+          for (const p of placed) {
+            let score = clearance(p.r, p, placed);
+            for (let k = 0; k < 10; k++) {
+              const r = { ...p.r, x: p.r.x + (rand() * 2 - 1) * 3, y: p.r.y + (rand() * 2 - 1) * 3 };
+              if (!fits(r, p, placed)) continue;
+              const s = clearance(r, p, placed);
+              if (s > score) { p.r = r; score = s; }
+            }
+          }
+        }
+      };
+      spread();
+      grow();
+      spread();
+      grow();
+
+      const all = [...pinned, ...placed];
+      return {
+        page: P,
+        letter: { box: letterBox, scale, glyph: L.glyph },
+        items: all.map(({ item, r, size }) => {
+          const box = itemBox(item, size);
+          return {
+            ...item,
+            x: r.x + r.w / 2,
+            y: r.y + box.rh / 2,
+            d: box.d,
+            labelY: r.y + box.rh + SHEET.labelGap + SHEET.label * 0.9,
+          };
+        }),
+        missing: words.length - all.length,
+      };
+    }
+
+    // ---------- Drawing ----------
+    function sheetMarkup(letter, plan) {
+      const { page: P, letter: Lt } = plan;
+      const M = SHEET.margin;
+      const L = DATA.letters[letter];
+      const out = [];
+      out.push(`<svg xmlns="http://www.w3.org/2000/svg" class="sheet" direction="rtl"`
+        + ` viewBox="0 0 ${P.w} ${P.h}" width="${P.w}mm" height="${P.h}mm" role="img"`
+        + ` aria-label="דף צביעה: האות ${esc(L.name)}">`);
+      out.push(`<rect width="${P.w}" height="${P.h}" fill="#fff"/>`);
+
+      // Head: the letter's name on the right, a line for the child's name on the left.
+      const headY = M + 9;
+      out.push(`<text class="title" x="${P.w - M}" y="${headY}" font-size="9.5" text-anchor="start">הָאוֹת ${esc(L.name)}</text>`);
+      const nameMark = "שֵׁם:";
+      const nameW = textWidth(esc(nameMark), 6, "lbl");
+      const nameRight = M + 74;
+      out.push(`<text class="lbl" x="${nameRight}" y="${headY}" font-size="6" text-anchor="start">${nameMark}</text>`);
+      out.push(`<line x1="${M}" y1="${headY + 0.8}" x2="${fix(nameRight - nameW - 2)}" y2="${headY + 0.8}" stroke="#000" stroke-width="0.4" stroke-linecap="round"/>`);
+
+      // The big letter, hollow. The font draws it as overlapping strokes: painting the outline under
+      // the fill hides where they cross, and leaves the whole line outside the letter.
+      const [gx0, gy0] = Lt.glyph.box;
+      out.push(`<path d="${Lt.glyph.d}" transform="translate(${fix(Lt.box.x - gx0 * Lt.scale)} ${fix(Lt.box.y - gy0 * Lt.scale)}) scale(${Lt.scale})"`
+        + ` fill="#fff" stroke="#000" stroke-width="${fix((2 * SHEET.letterLine) / Lt.scale)}" stroke-linejoin="round" paint-order="stroke"/>`);
+
+      // The drawings and their words.
+      for (const it of plan.items) {
+        const { k, cx, cy } = it.d;
+        out.push(`<use href="#a-${it.art}" color="#000" style="--sw:${fix(SHEET.artLine / k)}"`
+          + ` transform="translate(${fix(it.x)} ${fix(it.y)}) rotate(${fix(it.rot)}) scale(${fix(k * 1000) / 1000}) translate(${fix(-cx)} ${fix(-cy)})"/>`);
+        out.push(`<text class="lbl" x="${fix(it.x)}" y="${fix(it.labelY)}" font-size="${SHEET.label}" text-anchor="middle">${labelMarkup(it.w)}</text>`);
+      }
+
+      out.push(`<text class="credit" x="${P.w / 2}" y="${P.h - 5}" font-size="2.3" text-anchor="middle" direction="ltr">Drawings: OpenMoji, CC BY-SA 4.0</text>`);
+      out.push("</svg>");
+      return out.join("");
+    }
+
+    // ---------- State ----------
+    const lettersWithWords = ORDER.split("").filter((l) => DATA.letters[l] && DATA.letters[l].words.length);
+    const state = { letter: lettersWithWords[0], orient: "portrait", seed: 1, picks: null };
+
+    function defaultPicks(letter) {
+      return DATA.letters[letter].words.slice(0, DATA.defaultPicks).map((_, i) => i);
+    }
+
+    function readHash() {
+      const q = new URLSearchParams(location.hash.slice(1));
+      const letter = q.get("l");
+      if (letter && lettersWithWords.includes(letter)) state.letter = letter;
+      if (q.get("o") === "landscape" || q.get("o") === "portrait") state.orient = q.get("o");
+      const seed = parseInt(q.get("s"), 10);
+      if (seed > 0) state.seed = seed;
+      const n = DATA.letters[state.letter].words.length;
+      const picks = (q.get("w") || "").split(".").map((v) => parseInt(v, 10)).filter((i) => i >= 0 && i < n);
+      state.picks = picks.length ? [...new Set(picks)] : defaultPicks(state.letter);
+    }
+
+    function writeHash() {
+      const q = new URLSearchParams({ l: state.letter, o: state.orient, s: state.seed, w: state.picks.join(".") });
+      history.replaceState(null, "", "#" + q.toString());
+    }
+
+    // ---------- Controls ----------
+    function renderLetters() {
+      $("#letters").innerHTML = ORDER.split("").map((l) => {
+        const on = lettersWithWords.includes(l);
+        const name = DATA.letters[l] ? DATA.letters[l].name : l;
+        return `<button data-l="${l}" aria-pressed="${l === state.letter}" ${on ? "" : "disabled"} title="${esc(name)}${on ? "" : " (בקרוב)"}">${l}</button>`;
+      }).join("");
+    }
+
+    function renderWords() {
+      const words = DATA.letters[state.letter].words;
+      $("#words").innerHTML = words.map((w, i) => {
+        const [x0, y0, x1, y1] = DATA.art[w.art];
+        const pad = 3;
+        return `<button class="word" data-i="${i}" aria-pressed="${state.picks.includes(i)}">`
+          + `<svg viewBox="${x0 - pad} ${y0 - pad} ${x1 - x0 + 2 * pad} ${y1 - y0 + 2 * pad}" aria-hidden="true"><use href="#a-${w.art}" style="--sw:2.6"/></svg>`
+          + `${esc(w.w)}</button>`;
+      }).join("");
+      $("#count").textContent = `${state.picks.length} מתוך ${words.length}`;
+    }
+
+    function syncOrient() {
+      for (const b of document.querySelectorAll("#orient button")) b.setAttribute("aria-pressed", String(b.dataset.v === state.orient));
+    }
+
+    function fitSheet() {
+      const svg = $("#paper svg");
+      if (!svg) return;
+      const P = PAGES[state.orient];
+      const stage = $("#stage");
+      const narrow = matchMedia("(max-width: 860px)").matches;
+      const cs = getComputedStyle(stage);
+      const availW = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const availH = narrow ? Infinity : stage.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      const s = Math.min(availW / P.w, availH / P.h);
+      svg.style.width = `${Math.floor(P.w * s)}px`;
+      svg.style.height = `${Math.floor(P.h * s)}px`;
+    }
+
+    function render() {
+      const L = DATA.letters[state.letter];
+      const words = state.picks.slice().sort((a, b) => a - b).map((i) => L.words[i]);
+      const plan = layout(state.letter, words, state.orient, state.seed);
+      const paper = $("#paper");
+      const P = PAGES[state.orient];
+      paper.style.setProperty("--pw", `${P.w}mm`);
+      paper.style.setProperty("--ph", `${P.h}mm`);
+      paper.innerHTML = sheetMarkup(state.letter, plan);
+      $("#page-size").textContent = `@page { size: A4 ${state.orient}; margin: 0; }`;
+      document.title = `דף צביעה: האות ${L.name.replace(/[\u0591-\u05C7]/g, "")}`;
+      if (plan.missing) console.warn(`${plan.missing} drawing(s) did not fit on the page`);
+      fitSheet();
+      writeHash();
+    }
+
+    function refreshAll() {
+      renderLetters();
+      renderWords();
+      syncOrient();
+      render();
+    }
+
+    $("#letters").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-l]");
+      if (!b || b.disabled || b.dataset.l === state.letter) return;
+      state.letter = b.dataset.l;
+      state.picks = defaultPicks(state.letter);
+      state.seed = 1;
+      refreshAll();
+    });
+    $("#words").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-i]");
+      if (!b) return;
+      const i = Number(b.dataset.i);
+      if (state.picks.includes(i)) {
+        if (state.picks.length <= 3) return;
+        state.picks = state.picks.filter((p) => p !== i);
+      } else {
+        if (state.picks.length >= 12) return;
+        state.picks = [...state.picks, i];
+      }
+      renderWords();
+      render();
+    });
+    $("#orient").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-v]");
+      if (!b || state.orient === b.dataset.v) return;
+      state.orient = b.dataset.v;
+      syncOrient();
+      render();
+    });
+    $("#shuffle").addEventListener("click", () => {
+      state.seed = 1 + Math.floor(Math.random() * 99999);
+      render();
+    });
+    $("#print").addEventListener("click", () => window.print());
+    addEventListener("resize", fitSheet);
+    addEventListener("hashchange", () => { readHash(); refreshAll(); });
+
+    readHash();
+    Promise.all([
+      document.fonts.load('500 100px Fredoka', "בָּ"),
+      document.fonts.load('700 100px Fredoka', "בָּ"),
+    ]).catch(() => {}).then(refreshAll);
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "sources": {
+    "moe-acq": "משרד החינוך, תוכנית הלימודים להוראת השפה והאוריינות בגן ובכיתות א–ב: רכישת הקריאה והכתיבה (2026), מילה שמופיעה בה כדוגמה",
+    "moe-horaa": "משרד החינוך, איגרת המפמ\"ר: הוראת השפה העברית בכיתה א, תשפ\"ו, מילה שמופיעה בה כדוגמה",
+    "moe-teimot": "משרד החינוך, האגף לחינוך קדם יסודי: טעימות בעברית, רשימות \"מילים מהלב\"",
+    "en-roster": "המילים של מִילִּים בְּאַנְגְּלִית (english-words), שנבחרו מרשימות אוצר המילים של משרד החינוך לאנגלית (Pre-Band I, Band I) ושל Cambridge Young Learners"
+  },
+  "letters": {
+    "א": {"name": "אָלֶף"},
+    "ב": {
+      "name": "בֵּית",
+      "words": [
+        {"w": "בַּיִת", "art": "openmoji:1F3E0", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "בָּנָנָה", "art": "openmoji:1F34C", "src": ["moe-horaa", "en-roster"]},
+        {"w": "בָּלוֹן", "art": "openmoji:1F388", "src": ["moe-acq", "en-roster"]},
+        {"w": "בּוּבָּה", "art": "openmoji:1FA86", "src": ["moe-acq", "moe-teimot", "en-roster"]},
+        {"w": "בַּרְווָז", "art": "openmoji:1F986", "src": ["en-roster"]},
+        {"w": "בֵּיצָה", "art": "openmoji:1F95A", "src": ["en-roster"]},
+        {"w": "בְּרוֹקוֹלִי", "art": "openmoji:1F966", "src": []},
+        {"w": "בֶּגֶד יָם", "art": "openmoji:1FA71", "src": ["en-roster"]},
+        {"w": "בַּקְבּוּק", "art": "openmoji:1F37C", "src": ["en-roster"]},
+        {"w": "בָּצָל", "art": "openmoji:1F9C5", "src": ["en-roster"]},
+        {"w": "בַּרְבּוּר", "art": "openmoji:1F9A2", "src": ["en-roster"]},
+        {"w": "בּוּעוֹת", "art": "openmoji:1FAE7", "src": []},
+        {"w": "בָּרָק", "art": "openmoji:1F329", "src": []},
+        {"w": "בֵּייגֶלֶה", "art": "openmoji:1F968", "src": []},
+        {"w": "בִּנְייָן", "art": "openmoji:1F3E2", "src": ["en-roster"]},
+        {"w": "בֵּית סֵפֶר", "art": "openmoji:1F3EB", "src": ["moe-horaa", "en-roster"]}
+      ]
+    },
+    "ג": {"name": "גִּימֶל"},
+    "ד": {"name": "דָּלֶת"},
+    "ה": {"name": "הֵא"},
+    "ו": {"name": "וָו"},
+    "ז": {"name": "זַיִן"},
+    "ח": {"name": "חֵית"},
+    "ט": {"name": "טֵית"},
+    "י": {"name": "יוֹד"},
+    "כ": {"name": "כַּף"},
+    "ל": {"name": "לָמֶד"},
+    "מ": {"name": "מֵם"},
+    "נ": {"name": "נוּן"},
+    "ס": {"name": "סָמֶךְ"},
+    "ע": {"name": "עַיִן"},
+    "פ": {"name": "פֵּא"},
+    "צ": {"name": "צָדִי"},
+    "ק": {"name": "קוֹף"},
+    "ר": {"name": "רֵישׁ"},
+    "ש": {"name": "שִׁין"},
+    "ת": {"name": "תָּו"}
+  }
+}
