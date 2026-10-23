@@ -29,6 +29,9 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
      way, until they can't grow without touching (5 mm between drawings, 7 mm around the letter).
   3. Each then moves to where it is farthest from its neighbours and grows on its own into the room left,
      up to 1.25 times. Every drawing is turned by up to 7° and is up to 14% larger or smaller than the rest.
+
+  A sheet never loses a drawing: when the layout can't fit them all (now and then, with 12 words), the
+  next seeds are tried in turn. The address keeps the chosen seed, and the same seed gives the same sheet.
 - **The class pack** (the panel's **דפים לכיתה**, beside **דף אחד**) prints a page for every child at once:
   how many pages (1 to 60, 30 by default) and how many words on each (3 to 12, 8 by default, never more
   than the chips picked), in one orientation. Here a chip means its word may come up, and entering the
@@ -36,8 +39,7 @@ shuffle the layout, print. It is built by [`tools/build.py`](tools/build.py) fro
   - The words are dealt like cards: shuffled into a deck and dealt page by page, with a fresh shuffle
     whenever the deck runs out, so every word comes up as often as any other, give or take one. A word
     already on the page is skipped and comes up later, so no page has a word twice.
-  - Each page gets its own seed and is laid out and drawn exactly as a single sheet. Now and then (12
-    words on a landscape page) a page's drawings don't all fit; that page takes the next seed.
+  - Each page gets its own seed and is laid out and drawn exactly as a single sheet.
   - Everything comes from the pack's seed: the same settings deal the same pack, and ערבוב deals a new one.
   - The stage shows every page small, numbered. Printing gives one A4 sheet per page, in order, each with
     its number ("3/30") beside the credit line.

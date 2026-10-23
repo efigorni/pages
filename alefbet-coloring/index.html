@@ -926,6 +926,14 @@
       };
     }
 
+    // A sheet never loses a drawing: when the layout leaves one out (now and then, with 12 words), the
+    // next seeds are tried in turn. The same seed still gives the same sheet.
+    function layoutAll(letter, words, orient, seed) {
+      let plan = layout(letter, words, orient, seed);
+      for (let s = seed + 1; plan.missing && s <= seed + 20; s++) plan = layout(letter, words, orient, s);
+      return plan;
+    }
+
     // ---------- Drawing ----------
     function sheetMarkup(letter, plan) {
       const { page: P, letter: Lt } = plan;
@@ -1117,7 +1125,7 @@
       if (state.mode === "pack") return renderPack();
       const L = DATA.letters[state.letter];
       const words = state.picks.slice().sort((a, b) => a - b).map((i) => L.words[i]);
-      const plan = layout(state.letter, words, state.orient, state.seed);
+      const plan = layoutAll(state.letter, words, state.orient, state.seed);
       const paper = $("#paper");
       const P = PAGES[state.orient];
       paper.style.setProperty("--pw", `${P.w}mm`);
@@ -1148,11 +1156,8 @@
       const slots = paper.querySelectorAll(".slot");
       let next = 0;
       const draw = () => {
-        const i = next++, page = pages[i], words = page.words.map((w) => L.words[w]);
-        // A page whose drawings don't all fit (now and then with 12 words on a landscape page) takes
-        // the next seed instead.
-        let plan = layout(letter, words, orient, page.seed);
-        for (let s = page.seed + 1; plan.missing && s <= page.seed + 20; s++) plan = layout(letter, words, orient, s);
+        const i = next++, page = pages[i];
+        const plan = layoutAll(letter, page.words.map((w) => L.words[w]), orient, page.seed);
         if (plan.missing) console.error(`page ${i + 1}/${pages.length}: ${plan.missing} drawing(s) did not fit`);
         slots[i].innerHTML = numbered(sheetMarkup(letter, plan), `${i + 1}/${pages.length}`);
       };
