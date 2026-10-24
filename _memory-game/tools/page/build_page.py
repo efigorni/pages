@@ -16,9 +16,13 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
                          "trophy": {"cup", "stem", "star", "shine", "shine_opacity"?, "shade"?}, "images": {...}}
                         `scheme` (default dark) is the board's: the head's color-scheme and iOS status bar
                         follow it, and a light club's style sets --scheme: light for base.css.
+                        A word game's `play.levels` ({"label", "names"}, the easiest level first) teaches by
+                        level: each word's `level` (1 = names[0]) ships, the roster goes level by level, the
+                        words up to each level fill a board, and the shelf's chips choose the pool.
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
-  club/roster.json      season and players (roles starter, bench, backup, in that order); written by `data`
+  club/roster.json      season and players (roles starter, bench, backup, in that order), or a word game's
+                        words in teaching order (level by level, then rank); written by `data`
   club/avoid.json       a word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it;
                         checked against the roster, and each word's list (with play.quiz.apart) is its `avoid`
   tools/tts/en_pins.json  a word game's English voice pins; a `take` picked by ear must stay the shipped clip
@@ -115,7 +119,7 @@ LEARN_KEYS = {
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say",
-              "play-cards", "replay-cards", "yes-cards", "cards", "shelf", "shelf-count", "next-new", "flash",
+              "play-cards", "replay-cards", "yes-cards", "cards", "shelf", "shelf-count", "levels", "next-new", "flash",
               "flash-slot", "prev", "next", "hear", "close", "progress", "progress-count")
 RUNTIME_VARS = {"--i"}
 # Where GitHub Pages publishes the games. A link preview needs absolute URLs; the verify tools read it here too.
@@ -239,7 +243,27 @@ def play_of(game):
             fail(f"{where}.precache: policy \"core\" wants items >= deal.pairs, so the first game plays offline")
     elif precache.get("policy") != "all":
         fail(f"{where}.precache.policy: \"all\" or \"core\"")
+    if "levels" in play:
+        levels_of(game, play)
     return play
+
+
+def levels_of(game, play=None):
+    """A word game's play.levels, checked, or None when it teaches every word at once: {"label": what the
+    shelf's picker says before its chips, "names": one per level, the first the easiest}. Each word then
+    has a `level`, 1 to len(names)."""
+    levels = (play or play_of(game)).get("levels")
+    if levels is None:
+        return None
+    where = f"{game}/{CONFIG} play.levels"
+    if kind_of(game) != "words":
+        fail(f"{where}: a word game's (a squad teaches its whole roster)")
+    text = lambda v: isinstance(v, str) and v.strip() and clean(v) == v and not any(ch in v for ch in "<>&\"`")  # noqa: E731
+    names = levels.get("names") if isinstance(levels, dict) else None
+    if not (isinstance(levels, dict) and set(levels) == {"label", "names"} and text(levels["label"])
+            and isinstance(names, list) and len(names) >= 2 and all(text(n) for n in names) and len(set(names)) == len(names)):
+        fail(f"{where}: {{\"label\": text, \"names\": two or more different texts, the easiest level first}}")
+    return levels
 
 
 def items_of(roster):
@@ -288,7 +312,7 @@ def entry(p, page, model):
     return out
 
 
-def word_entry(w, page):
+def word_entry(w, page, levels=None):
     wid = w.get("id", "")
     if not ID_RE.match(wid):
         fail(f"unsafe word id: {wid!r}")
@@ -301,6 +325,10 @@ def word_entry(w, page):
             out[key] = text
     if not out.get("en") or not out.get("he"):
         fail(f"{wid}: a word needs en and he")
+    if levels:
+        if not (_int(w.get("level")) and 1 <= w["level"] <= len(levels["names"])):
+            fail(f"{wid}: play.levels wants a level per word, 1 to {len(levels['names'])}, not {w.get('level')!r}")
+        out["level"] = w["level"]
     missing = [rel for rel in (f"img/{wid}.webp", *(f"audio/{k}/{wid}.mp3" for k in KINDS["words"]))
                if not (page / rel).is_file()]
     if missing:
@@ -377,12 +405,36 @@ def pure_random(game, roster=None):
         fail(f"{', '.join(found)}: {PURE_RANDOM}")
 
 
+def check_levels(game, roster):
+    """A word game's roster against its play.levels: every word has a level when the club teaches by levels
+    and none when it doesn't; the roster goes level by level (so the precached first words are the easiest
+    level's); and the pool up to each level fills a board."""
+    levels, words = levels_of(game), roster["words"]
+    where = f"{game}/club/roster.json"
+    if not levels:
+        if any("level" in w for w in words):
+            fail(f"{where}: its words have levels but {CONFIG} has no play.levels (run `build_page.py data` again)")
+        return
+    names, pairs = levels["names"], play_of(game)["deal"]["pairs"]
+    bad = [w["id"] for w in words if not (_int(w.get("level")) and 1 <= w["level"] <= len(names))]
+    if bad:
+        fail(f"{where}: play.levels wants a level per word, 1 to {len(names)}: {', '.join(bad[:5])}"
+             + (f" and {len(bad) - 5} more" if len(bad) > 5 else ""))
+    order = [w["level"] for w in words]
+    if order != sorted(order):
+        fail(f"{where}: not level by level (`build_page.py data` sorts by level, then rank)")
+    small = [f"{name} ({sum(lv <= n for lv in order)})" for n, name in enumerate(names, 1) if sum(lv <= n for lv in order) < pairs]
+    if small:
+        fail(f"{where}: up to {', '.join(small)}: fewer words than the board's {pairs} pairs")
+
+
 def data_line(game, roster):
     """The DATA script: the roster (a word game's words with their `avoid`; a squad's players never have one),
     the clips that exist (per kind, in roster order), the game's folder (the key of what she knows) and its
     play config."""
     page = REPO / game
     if kind_of(game) == "words":
+        check_levels(game, roster)
         avoid = avoid_of(game)
         roster = {**roster, "words": [{**w, "avoid": avoid[w["id"]]} if w["id"] in avoid else w for w in roster["words"]]}
     else:
@@ -399,8 +451,9 @@ def data_line(game, roster):
 
 def write_words(words_json, game):
     """A word game's club/roster.json from words.json (a list, or {"words": [...]}), in teaching order (`rank`
-    when the list has one): id, en, he, he_niqqud when given, theme and the picture. Every word needs its
-    picture and both clips. club.json `leave_out` ({id: why}) keeps a listed word out of the game."""
+    when the list has one; with play.levels, level by level, then by rank): id, en, he, he_niqqud when
+    given, theme, its level (with play.levels) and the picture. Every word needs its picture and both
+    clips. club.json `leave_out` ({id: why}) keeps a listed word out of the game."""
     page = REPO / game
     data = json.loads(Path(words_json).read_text(encoding="utf-8"))
     words = data["words"] if isinstance(data, dict) else data
@@ -410,10 +463,17 @@ def write_words(words_json, game):
     for wid, why in config(game).get("leave_out", {}).items():
         print(f"{game}: left out {wid}{'' if wid in ids else ' (not in the list)'}: {why}", flush=True)
     words = [w for w in words if w["id"] not in config(game).get("leave_out", {})]
-    ordered = sorted(words, key=lambda w: w.get("rank", 0)) if all("rank" in w for w in words) else words
-    roster = {"words": [word_entry(w, page) for w in ordered]}
+    levels = levels_of(game)
+    entries = [word_entry(w, page, levels) for w in words]
+    ranks = [w.get("rank", 0) for w in words] if all("rank" in w for w in words) else range(len(words))
+    # sorted() is stable: without ranks, the list's own order inside a level
+    roster = {"words": [e for _, _, e in sorted(zip([e.get("level", 0) for e in entries], ranks, entries),
+                                                key=lambda t: t[:2])]}
+    check_levels(game, roster)
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
-    print(f"{game}: club/roster.json: {len(roster['words'])} words", flush=True)
+    counts = "" if not levels else " (" + ", ".join(
+        f"{name} {sum(e.get('level') == n for e in entries)}" for n, name in enumerate(levels["names"], 1)) + ")"
+    print(f"{game}: club/roster.json: {len(roster['words'])} words{counts}", flush=True)
     return roster
 
 

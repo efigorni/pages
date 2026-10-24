@@ -339,7 +339,7 @@ function wrongCard(i) {
 
 // A word game asks only learned words (club.json play.quiz.pool "learned"), so its quiz starts with
 // the first LEARNED_START words learned.
-const { clipsOf, LEARNED_START } = require('./voice');
+const { clipsOf, LEARNED_START, POOL } = require('./voice');
 
 // The HUD on a quiz question: the mute button beside ↻ (both at the HUD's end), far from the question's
 // hear-it-again button, which is a speech bubble, not a circle, and never draws the mute's speaker.
@@ -371,20 +371,21 @@ async function quizFlow(page, vp, dir, res) {
     .some((e) => kinds.includes(e.type) && e.url === u), 10000, [from, url, CLIP_EVENTS]);
   await ready(page);
   // DATA is the page's global const, not a window property.
-  if (await page.evaluate(() => typeof DATA !== 'undefined' && !!DATA.play && DATA.play.quiz.pool === 'learned')) {
-    await page.evaluate((n) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(DATA.words.slice(0, n).map((w) => w.id))),
-      LEARNED_START);
+  const learnedQuiz = await page.evaluate(() => typeof DATA !== 'undefined' && !!DATA.play && DATA.play.quiz.pool === 'learned');
+  const pool = await page.evaluate(`typeof DATA === 'undefined' ? [] : ${POOL}`);
+  if (learnedQuiz) {
+    await page.evaluate((ids) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(ids)), pool.slice(0, LEARNED_START));
     await page.reload({ waitUntil: 'load' });
     await ready(page);
   }
   // `compare` drives older trees too, whose roster still came in starters/bench/backup lists. A word
   // game's quiz picks from what she has learned.
-  const items = await page.evaluate(() => {
+  const items = await page.evaluate((plays) => {
     const learned = JSON.parse(localStorage.getItem(`${DATA.game}:learned`) || '[]');
     const all = DATA.words || DATA.players || DATA.starters.concat(DATA.bench, DATA.backup || []);
-    return all.filter((p) => !DATA.words || learned.includes(p.id))
+    return all.filter((p) => !DATA.words || (learned.includes(p.id) && plays.includes(p.id)))
       .map((p) => ({ id: p.id, number: p.number == null ? '' : String(p.number), name: p.name_he || p.en }));
-  });
+  }, pool);
   res.pool = items.map((p) => p.id);
   const faces = Object.fromEntries(items.map((p) => [p.id, p]));
   res.questions = [];

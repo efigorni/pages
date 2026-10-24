@@ -4,7 +4,7 @@ A word game (`club.json` `kind: "words"`), not a club: it has no scraper and no 
 voice pins are its own (`tts/en_pins.json`, below). Everything it shares with the clubs (the engine, the
 page, the worker, the test) is in [`_memory-game/README.md`](../../_memory-game/README.md); its own script
 is `club/club.json` `play` (the English then the Hebrew, the new-first deal, the quiz of the words she has
-met, the progress bar, the core precache).
+met, the progress bar, the core precache, and the school grades, `levels`: the shelf's "עד כיתה" chips).
 
 | Here | What it is |
 |---|---|
@@ -53,10 +53,16 @@ word. The recognizer and the speech-to-text checks find suspects; a person picks
 
 ## Refresh the words
 
+Every word in `words.json` carries its school grade, `level` (1 = א׳ ... 7 = ז׳, `club.json`
+`play.levels.names`), the grade a child meets it by; the builder fails on a word without one, and on a
+grade whose words, with every easier grade's, don't fill a board (15). A grade with no words of its own
+gets no chip: it joins the chip before it ("ה׳–ו׳"). A new grade name, or a game that
+should stop teaching by grade, is a `club.json` `play.levels` change (drop the key: every word, no picker).
+
 1. Copy the pictures into `img/` and the clips into `audio/en/` and `audio/he/` (one file per word id),
    except the picked takes in `tts/en_pins.json`, which stay (above).
 2. `python3 -I _memory-game/tools/page/build_page.py data <words.json> english-words --prune` writes
-   `club/roster.json` in rank order and assembles the page; it fails on a word without its picture or a
+   `club/roster.json` grade by grade, in rank order inside a grade, and assembles the page; it fails on a word without its picture or a
    clip, and `--prune` removes the files of words that left the list.
 3. The sound-alikes of the new list: `uv run --quiet --with cmudict==1.1.3 python -I
    _memory-game/tools/words/neighbours.py english-words` (`club/avoid.json`; `assemble --check` fails until
@@ -64,7 +70,7 @@ word. The recognizer and the speech-to-text checks find suspects; a person picks
 4. `_memory-game/tools/og/render_og.sh english-words` (look at `og.jpg`), then
    `_memory-game/tools/verify/verify.sh sanity english-words`, and commit with explicit paths.
 
-The first 30 words are precached; the worker keeps every other word's picture and clips as they come
+The first 30 words, the first grade's, are precached; the worker keeps every other word's picture and clips as they come
 (`play.precache`). After a refresh an installed tablet downloads the core once more, and, if any later
 word's file changed, fetches the later words again as it meets them (online, the page fetches every
 learned word and the next new ones ahead).

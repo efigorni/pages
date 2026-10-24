@@ -7,10 +7,26 @@
   // backups, the pool's other goalkeepers whom memory never deals) or a list of words. PLAY is the
   // game's own script, from club.json `play`: what each moment says, how memory deals, what the quiz
   // asks, the progress bar and what the worker keeps offline (README, "Play config").
-  const ITEMS = DATA.words || DATA.players;
+  const ALL_ITEMS = DATA.words || DATA.players;
   const PLAY = DATA.play;
-  const STARTERS = ITEMS.filter((p) => p.role === 'starter');
-  const BENCH = ITEMS.filter((p) => p.role === 'bench');
+  // A word game may teach by levels (PLAY.levels: a school grade per word, `level`, 1 the first): it then
+  // plays the words up to the level chosen on the shelf, kept in `<game>:level`, or every word while none
+  // is chosen (or what is kept is not a level). ITEMS is that pool, and everything the game does reads it;
+  // choosing a level swaps it in place (setLevel). What she met outside it is kept, never counted.
+  const LEVELS = PLAY.levels || null;
+  const LEVEL_KEY = `${DATA.game}:level`;
+  function savedLevel() {
+    if (!LEVELS) return 0;
+    let raw = null;
+    try { raw = window.localStorage.getItem(LEVEL_KEY); } catch (e) { /* storage blocked */ }
+    const n = /^[1-9]\d*$/.test(raw || '') ? Number(raw) : 0;
+    return n <= LEVELS.names.length ? n : 0;
+  }
+  const poolOf = (n) => (n ? ALL_ITEMS.filter((p) => p.level <= n) : ALL_ITEMS);
+  let chosenLevel = savedLevel();
+  let ITEMS = poolOf(chosenLevel);
+  const STARTERS = ALL_ITEMS.filter((p) => p.role === 'starter');
+  const BENCH = ALL_ITEMS.filter((p) => p.role === 'bench');
   const ALL = STARTERS.concat(BENCH);
   // Whom the start screen's fan (and the link preview) shows: a starter, or one of the first words.
   const POSTER = STARTERS.length ? STARTERS : DATA.words ? ITEMS.slice(0, PLAY.deal.pairs) : ALL;
@@ -1091,7 +1107,7 @@
   // `session`: this quiz's time on the quiz clock; `clocked`: she has answered a question, so the clock
   // has moved on.
   const quiz = { order: [], at: 0, cards: [], answer: null, first: false, session: 0, clocked: false, next: 0, shownAt: 0 };
-  const BY_ID = new Map(ITEMS.map((p) => [p.id, p]));
+  const BY_ID = new Map(ALL_ITEMS.map((p) => [p.id, p]));
 
   // 2 x 2, or one row of 4 when that shows the faces bigger (a wide landscape screen).
   function quizLayout() {
@@ -1252,6 +1268,7 @@
       const tile = el('button', 'tile');
       tile.type = 'button';
       tile.dataset.index = String(i);
+      tile.dataset.id = p.id;
       tile.setAttribute('aria-label', MODEL.label(p));
       const pic = el('span', 'pic');
       // lazy before src: a picture loads when its tile scrolls near
@@ -1338,6 +1355,65 @@
   function nextNew() {
     const i = ITEMS.findIndex((p) => !stats.met(p.id));
     return i < 0 ? 0 : i;
+  }
+
+  /* ---------- a word game's levels: up to which one the game goes (PLAY.levels) ---------- */
+
+  // Chips under the shelf's bar, each with how many words the game plays when it goes up to its level; the
+  // pressed one is the pool's. A level that adds no words joins the chip before it, which then names the
+  // range ("ה׳–ו׳") and goes up to its last level, `n` (levels `from` to `n`). The builder checks every
+  // level's pool fills a board, so the first level has words.
+  const levelsEl = $('levels');
+  const LEVEL_CHIPS = [];
+  (LEVELS ? LEVELS.names : []).forEach((name, i) => {
+    const count = poolOf(i + 1).length;
+    const last = LEVEL_CHIPS[LEVEL_CHIPS.length - 1];
+    if (last && count === last.count) Object.assign(last, { n: i + 1, name: `${last.first}–${name}` });
+    else LEVEL_CHIPS.push({ from: i + 1, n: i + 1, first: name, name, count });
+  });
+  const levelChips = new Map();
+
+  function buildLevels() {
+    if (!LEVEL_CHIPS.length) return;
+    $('cards').dataset.levels = 'on';
+    levelsEl.hidden = false;
+    levelsEl.setAttribute('aria-label', LEVELS.label);
+    const chips = el('span', 'level-chips');
+    LEVEL_CHIPS.forEach(({ from, n, name, count }) => {
+      const chip = el('button', 'level');
+      chip.type = 'button';
+      chip.dataset.level = String(n);
+      if (from !== n) chip.dataset.range = 'true';
+      chip.setAttribute('aria-label', `${LEVELS.label} ${name}: ${count}`);
+      chip.append(el('span', 'level-name', name), el('span', 'level-count', String(count)));
+      chips.appendChild(chip);
+      levelChips.set(n, chip);
+    });
+    levelsEl.append(el('span', 'levels-label', LEVELS.label), chips);
+    syncLevels();
+  }
+
+  // The pressed chip: the one whose levels hold the chosen one; with none chosen, the top one.
+  function syncLevels() {
+    const at = LEVEL_CHIPS.find(({ from, n }) => from <= chosenLevel && chosenLevel <= n) || LEVEL_CHIPS[LEVEL_CHIPS.length - 1];
+    levelChips.forEach((chip, n) => chip.setAttribute('aria-pressed', String(!!at && n === at.n)));
+  }
+
+  // The game goes up to level n from now on, on this shelf too: its tiles, the count and the bar, and what
+  // the page fetches ahead.
+  function setLevel(n) {
+    chosenLevel = n;
+    try { window.localStorage.setItem(LEVEL_KEY, String(n)); } catch (e) { /* full or blocked: this visit only */ }
+    ITEMS = poolOf(n);
+    shelf.tiles.clear();
+    shelf.last = null;
+    shelfEl.textContent = '';
+    buildShelf();
+    syncLearned();
+    syncLevels();
+    const tile = shelf.tiles.get(ITEMS[nextNew()].id);
+    if (tile.scrollIntoView) tile.scrollIntoView({ block: 'center' });
+    fetchAllAhead();
   }
 
   /* ---------- a game that precaches only its first items keeps the rest as they come ---------- */
@@ -1641,6 +1717,11 @@
     sound.unlock();
     showCard(Number(tile.dataset.index));
   });
+  levelsEl.addEventListener('click', (event) => {
+    const chip = event.target.closest && event.target.closest('.level');
+    if (game.phase !== 'browse' || !chip) return;
+    setLevel(Number(chip.dataset.level));
+  });
   $('next-new').addEventListener('click', () => {
     if (game.phase !== 'browse') return;
     sound.unlock();
@@ -1703,14 +1784,16 @@
   window.addEventListener('resize', () => { if (game.phase === 'start') buildFan(); });
 
   syncLearned();
+  buildLevels();
   sound.prefetch([clip.ui('start').url]);
-  face.prepare(ITEMS);
+  // every item, so a card's words keep their size whatever the level
+  face.prepare(ALL_ITEMS);
   buildFan();
   const fontsReady = document.fonts && document.fonts.load
     ? Promise.all(CLUB.fonts.map(([spec, sample]) => document.fonts.load(spec, sample)))
     : Promise.resolve();
   fontsReady.catch(() => {}).then(() => {
-    face.prepare(ITEMS);
+    face.prepare(ALL_ITEMS);
     buildFan();
     relayout();
   });

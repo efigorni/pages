@@ -32,10 +32,10 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 | Source | What it holds |
 |---|---|
 | `<game>/manifest.webmanifest` | The club's identity: name, short name, colours, id. The head and the title come from it. Never written by a tool after `new` |
-| `<game>/club/club.json` | What it teaches (`kind`: `squad`, the default, or `words`), its script (`play`, below), the name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`), a word game's link-preview text (`og`), the words it leaves out (`leave_out`) and the engine lines it says in its own words (`lines`: a word game's win; its `audio/ui/` clip is then its own, not the master) |
+| `<game>/club/club.json` | What it teaches (`kind`: `squad`, the default, or `words`), its script (`play`, below, with a word game's levels, `levels`), the name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`), a word game's link-preview text (`og`), the words it leaves out (`leave_out`) and the engine lines it says in its own words (`lines`: a word game's win; its `audio/ui/` clip is then its own, not the master) |
 | `<game>/club/style.css` | Hand-written: fonts, colour tokens, card back, card face, title |
 | `<game>/club/club.js` | Hand-written: `CLUB = { confetti, fonts, face(kit) }` |
-| `<game>/club/roster.json` | The players with their roles (starter, bench, backup: quiz only), or a word game's words in teaching order; written by `build_page.py data` |
+| `<game>/club/roster.json` | The players with their roles (starter, bench, backup: quiz only), or a word game's words in teaching order (with `play.levels`, level by level, each word's `level`); written by `build_page.py data` |
 | `_memory-game/*` | The engine, the base styles and the two templates |
 
 The head also carries the link preview that WhatsApp and the like show (Open Graph and Twitter tags): the
@@ -64,6 +64,14 @@ knows it: grey, then light and medium green, then the full green of a fully lear
 first-pick successes in the quiz). A tile opens its card big (the club's face), which says its line,
 counts as met, and pages with ← →.
 
+A word game that teaches by levels (`play.levels`, below) shows, under the shelf's bar, its label ("עד
+כיתה") and a chip per level, each with how many words the game plays up to it; a level that adds no words
+joins the chip before it, which then names the range ("ה׳–ו׳") and goes up to its last level. The pressed
+chip is the game's pool: the words up to that level, or every word while none was chosen (the top chip).
+A chip swaps the pool at once, on the shelf too, and keeps it on the device; every mode, the count, the
+bar, the quiz and its other three cards, and what the page fetches ahead then use only those words. What
+she met beyond them is kept, not counted, and counts again when the pool takes it back.
+
 What she knows is kept on the device per game, in `localStorage` under `<game>:stats` (the games share one
 origin), as `{ session, items }`: `session` is the quiz clock (it moves on at a quiz's first answer, so a
 quiz left before any answer ages nothing) and, per item,
@@ -72,7 +80,9 @@ with her first pick, the only success: a match, a flash card or a right pick aft
 `misses` (wrong first picks) and `lastAsked` (the quiz that last asked it; none: never asked). A first-pick
 miss on a fully learned item sends it back to `master - 1` (`decrement` "demote"). The older
 `<game>:learned`, the list of what she met, is read at every start (nothing an older page wrote is lost: each
-item met, never asked) and kept in step. When storage is blocked it lasts the visit.
+item met, never asked) and kept in step. A word game with levels keeps the level chosen on the shelf in
+`<game>:level` (a number, 1 the first level; none, or one that isn't a level: every word). When storage is
+blocked it lasts the visit.
 
 ### Play config
 
@@ -86,6 +96,7 @@ item met, never asked) and kept in step. When storage is blocked it lasts the vi
 | `quiz` | `all`: every player once; the three others are any three of the squad, at random (football keeps no one apart: the builder fails a squad with an `apart` or `avoid`) | `learned`: `size` (10) of the words she has met (below), locked below `unlock` (4) met; the three others are words she has met, never one the asked word avoids: a sound-alike (`club/avoid.json`) or a look-alike picture (`apart`: girl, boy) |
 | `progress` | `inventory`: the marks on the shelf only | `bar`: "learned X / N" on every screen |
 | `precache` | `all`: every file, strictly | `core` with `items` (30): the page, fonts, icons, start/win and the first 30 words strictly; every other picture and clip in `RUNTIME` |
+| `levels` | none: the whole roster | `{"label": "עד כיתה", "names": ["א׳", ..., "ז׳"]}`: the school grades, the easiest first; each word has its `level` (1 = `names[0]`), the roster goes grade by grade (so the precached first words are the first grade's), and the words up to each grade fill a board (the builder checks all three); the shelf's chips choose up to which grade the game goes (above) |
 
 A word game's quiz picks its words by the policy round 2's simulation chose (`pickQuiz` in `engine.js`, policy
 P4 "hybrid"): of the words she has met, `newMin` (1) never asked yet, in teaching order, `sureMin` (3) fully
@@ -202,7 +213,8 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
 - per game, no console error and no 404; the worker controls the page and `installability` is `[]`;
 - memory: three flips say their clip and their matches the second (the game's voice script);
 - the quiz's first question: a wrong pick turns over and says its line, the right one says its own (a
-  word game starts with 25 words learned, so its quiz is open and its deal reaches past the precached core);
+  word game starts with the first 25 words it plays learned, so its quiz is open and its deal reaches past
+  the precached core);
 - offline: a reload with the network off keeps what she learned, shows the pictures, plays cached clips,
   asks a quiz question and opens the next new flash card, which turns up, speaks and counts as learned;
 - the quiz's HUD: the mute button beside ↻, away from the hear-it-again bubble (no speaker, no circle);
@@ -211,7 +223,11 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
   a flash card counting as learned and moving the bar, and what she learned surviving a reload; for every
   game, a face-up card's line and the pair it holds (H1–H6), what she knows (M1–M4: the older list carried
   over, first-try answers from the quiz only, the shelf's levels); a word game's sound-alikes never offered
-  together (A1); a squad's quiz pure random (A2); and a word game's quiz's picks (P1–P4: the simulation's constants, the same quizzes as its own module
+  together (A1); a squad's quiz pure random (A2); a word game's levels (L1–L7: the chips and their counts, a
+  level with no words joined to the chip before it, the pool of each kept level, a kept value that is no
+  level plays every word, a chip that swaps the pool and is kept across a reload, what she met beyond it
+  kept but not counted, the quiz and its cards from the pool) and a game without levels showing no picker
+  (L0); and a word game's quiz's picks (P1–P4: the simulation's constants, the same quizzes as its own module
   for the same seeds, the group shares, the quiz clock and the demotion);
 - a quick upgrade from `origin/main` (`--from <ref>`), online then offline, for the games that exist there.
 
@@ -234,6 +250,7 @@ precached file with the repo, then runs the same browser checks on the live site
 
 Outputs go to `--out <dir>` (default: one folder per checkout under `$TMPDIR`; never inside the repo).
 `MEMORY_GAME_VERIFY_PORTS=8801-8804` pins the test servers' ports when several runs share a machine
-(`sanity` takes one more than the games it upgrades). To look at a game by hand, serve the repo with
+(`sanity` takes one more than the games it upgrades). `MEMORY_GAME_VERIFY_LEVEL=<n>` runs `sw_check.js` on a word
+game with levels as if level n were chosen (the seeds, the bar and the offline cache counted on its pool). To look at a game by hand, serve the repo with
 `python3 -I _memory-game/tools/verify/serve.py 8765 .` (the stock `http.server` resets connections while
 a worker precaches ~80 files).
