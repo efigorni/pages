@@ -38,12 +38,11 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 REPO = Path(__file__).resolve().parents[3]
 VOWELS = {"AA", "AE", "AH", "AO", "AW", "AY", "EH", "ER", "EY", "IH", "IY", "OW", "OY", "UH", "UW"}
-PHONES = VOWELS | {"B", "CH", "D", "DH", "F", "G", "HH", "JH", "K", "L", "M", "N", "NG", "P", "R", "S", "SH", "T", "TH",
-                   "V", "W", "Y", "Z", "ZH"}
+CONSONANTS = {"B", "CH", "D", "DH", "F", "G", "HH", "JH", "K", "L", "M", "N", "NG", "P", "R", "S", "SH", "T", "TH",
+              "V", "W", "Y", "Z", "ZH"}
 VARIANTS = 3  # pronunciations per word kept from CMUdict
 # A game's pronunciations for the words CMUdict lacks (module docstring).
 EXTRA = "tools/words/cmudict_extra.json"
-PHONE = re.compile(r"^(?:[A-Z]{1,2})[0-2]?$")
 # Adam's cases: pairs the rule must keep apart, and pairs it must allow.
 KEEP_APART = (("ball", "doll"), ("cat", "hat"), ("house", "horse"), ("bed", "red"), ("bear", "pear"), ("sun", "run"))
 ALLOWED = (("cake", "snake"), ("cat", "camel"))
@@ -60,6 +59,11 @@ def pronunciations(text, cmu):
     if missing:
         fail(f"{text!r}: CMUdict doesn't know {', '.join(missing)}")
     return [[ph for part in combo for ph in part] for combo in itertools.product(*(cmu[p][:VARIANTS] for p in parts))]
+
+
+def cmu_phone(ph):
+    """CMUdict's form: a consonant bare, a vowel with its stress digit (0, 1 or 2)."""
+    return ph in CONSONANTS or (ph[:-1] in VOWELS and ph[-1:] in ("0", "1", "2"))
 
 
 def add_extra(cmu, path):
@@ -79,7 +83,7 @@ def add_extra(cmu, path):
             prons = pronunciations(" ".join(entry["parts"]), cmu)
         else:
             prons = [str(a).split() for a in entry["arpabet"]]
-            bad = [ph for pron in prons for ph in pron if not (PHONE.match(ph) and re.sub(r"\d", "", ph) in PHONES)]
+            bad = [ph for pron in prons for ph in pron if not cmu_phone(ph)]
             if bad or not all(prons):
                 fail(f"{where}: not CMUdict phonemes: {', '.join(bad) or '(empty)'}")
         cmu[word] = prons

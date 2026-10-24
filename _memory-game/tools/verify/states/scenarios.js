@@ -692,9 +692,13 @@ async function playToLastPair(h) {
       const again = boot({ noClips: true, storage: [...h.store] });
       const kept = again.T.ITEMS.length === pool.length && JSON.stringify(pressed(again)) === JSON.stringify([first]);
       await tapLevel(h, top);
+      const tile = h.byId.shelf.children[0];
+      await tapLevel(h, top);
+      const still = h.byId.shelf.children[0] === tile;
       check('L4 a chip on the shelf: the shelf, its count and the bar go up to that level at once, it is kept, and after a '
-        + 'reload the game still goes up to it; the top chip brings every word back', now && kept && h.T.ITEMS.length === ALL.length
-        && h.byId.shelf.children.length === ALL.length && h.store.get(LKEY) === String(top), JSON.stringify({ now, kept }));
+        + 'reload the game still goes up to it; the top chip brings every word back, and tapped again keeps the shelf as it is',
+      now && kept && still && h.T.ITEMS.length === ALL.length
+        && h.byId.shelf.children.length === ALL.length && h.store.get(LKEY) === String(top), JSON.stringify({ now, kept, still }));
     }
     {
       const low = upTo(first);

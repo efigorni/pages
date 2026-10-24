@@ -391,10 +391,11 @@ def check_pictures(game):
     pictures = json.loads(read(path))
     ids = [w["id"] for w in items_of(read_roster(game))]
     problems = [f"{PICTURES} is not this roster's (run `build_page.py data` again)" for _ in [1] if list(pictures) != ids]
-    problems += [f"{PICTURES}: {wid}'s source {p.get('source')!r} is none of {', '.join(PICTURE_CREDITS)}"
-                 for wid, p in pictures.items() if p.get("source") not in PICTURE_CREDITS]
+    sources = {wid: p.get("source") if isinstance(p, dict) else None for wid, p in pictures.items()}
+    problems += [f"{PICTURES}: {wid}'s source {src!r} is none of {', '.join(PICTURE_CREDITS)}"
+                 for wid, src in sources.items() if src not in PICTURE_CREDITS]
     credits = read(REPO / game / "CREDITS.md")
-    for src in sorted({p.get("source") for p in pictures.values()} & set(PICTURE_CREDITS)):
+    for src in sorted(set(sources.values()) & set(PICTURE_CREDITS)):
         problems += [f"CREDITS.md doesn't say {phrase!r}, which {src} pictures need" for phrase in PICTURE_CREDITS[src]
                      if phrase not in credits]
     return problems

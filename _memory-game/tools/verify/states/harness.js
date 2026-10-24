@@ -237,7 +237,8 @@ function boot(opts = {}) {
       // every clip kind the game records (a squad's name and match, a word game's en and he)
       d.audio = Object.fromEntries(Object.keys(d.audio).map((kind) => [kind, kind === 'ui' ? (opts.noClips ? [] : ['start', 'win']) : all]));
     }
-    data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
+    // a function, so a `$&` or `$'` in the data is not read as a replacement pattern
+    data = data.replace(/const DATA = \{.*\};/, () => `const DATA = ${JSON.stringify(d)};`);
   }
   const exportLine = 'globalThis.__t = { DATA, get ITEMS() { return ITEMS; }, PLAY, POSTER, game, quiz, shelf, stats, level, LEARN, '
     + 'pickQuiz, updateStats, tap, newGame, dealPicks, startQuiz, distractors, upcoming, sound, clip, voice, hebrewNumber, '

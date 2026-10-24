@@ -72,15 +72,15 @@ word. The recognizer and the speech-to-text checks find suspects; a person picks
 
 ## Refresh the words
 
-Every word in `words.json` carries its school grade, `level` (1 = א׳ ... 7 = ז׳, `club.json`
+Every word in `words.json` carries its school grade, `level` (1 = א׳ ... 12 = י״ב, `club.json`
 `play.levels.names`), the grade a child meets it by; the builder fails on a word without one, and on a
 grade whose words, with every easier grade's, don't fill a board (15). A grade with no words of its own
 gets no chip: it joins the chip before it ("ה׳–ו׳"). A new grade name, or a game that
 should stop teaching by grade, is a `club.json` `play.levels` change (drop the key: every word, no picker).
 
-0. Grade the list: `python3 -I ~/Documents/ENG-00-english-words-grades/work/curator/build_final.py` writes
-   `work/final/words.json` with every word's `level` (`grade.py`, the lowest grade any formal source
-   gives); look at its counts per grade (`work/final/counts.json`) before going on.
+0. Grade the list: `python3 -I ~/Documents/ENG-00-english-words-1000/work/curator/merge.py --audio` writes
+   `work/final/words.json` with every word's `level` (`grade_x.py`, the lowest grade any formal source
+   gives) and `validate.py` checks it; look at its counts per grade (`work/final/counts.json`) before going on.
    A word's picture is a Fluent 3D emoji, an original drawing made for the game (SVG rendered to the same
    200×200 WebP) or an ARASAAC pictogram: `words.json` says which in `picture: {"source": "fluent" | "svg" |
    "arasaac", "ref": the emoji's name, the drawing's file or the pictogram's id}` (a word with only round 1's

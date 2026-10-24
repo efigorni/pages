@@ -2909,12 +2909,21 @@ const CLUB = {
   }
 
   // The game goes up to level n from now on, on this shelf too: its tiles, the count and the bar, and what
-  // the page fetches ahead. A page a newer worker took over reloads instead, keeping the choice (reloadIfStale).
+  // the page fetches ahead. A chip whose pool is the one playing changes nothing on the shelf. A page a newer
+  // worker took over reloads instead, keeping the choice (reloadIfStale), unless storage can't keep it: then
+  // it swaps in place, for this visit.
   function setLevel(n) {
+    const pool = poolOf(n);
     chosenLevel = n;
-    try { window.localStorage.setItem(LEVEL_KEY, String(n)); } catch (e) { /* full or blocked: this visit only */ }
-    if (reloadIfStale()) return;
-    ITEMS = poolOf(n);
+    let kept = true;
+    try { window.localStorage.setItem(LEVEL_KEY, String(n)); } catch (e) { kept = false; }
+    // the pools nest, so the same size is the same pool
+    if (pool.length === ITEMS.length) {
+      syncLevels();
+      return;
+    }
+    if (kept && reloadIfStale()) return;
+    ITEMS = pool;
     rebuildShelf();
     syncLearned();
     syncLevels();

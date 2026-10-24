@@ -98,7 +98,7 @@ blocked it lasts the visit.
 | `quiz` | `all`: every player once; the three others are any three of the squad, at random (football keeps no one apart: the builder fails a squad with an `apart` or `avoid`) | `learned`: `size` (10) of the words she has met (below), locked below `unlock` (4) met; the three others are words she has met, never one the asked word avoids: a sound-alike (`club/avoid.json`) or a look-alike picture (`apart`: girl, boy) |
 | `progress` | `inventory`: the marks on the shelf only | `bar`: "learned X / N" on every screen |
 | `precache` | `all`: every file, strictly | `core` with `items` (30): the page, fonts, icons, start/win and the first 30 words strictly; every other picture and clip in `RUNTIME` |
-| `levels` | none: the whole roster | `{"label": "עד כיתה", "names": ["א׳", ..., "ז׳"]}`: the school grades, the easiest first; each word has its `level` (1 = `names[0]`), the roster goes grade by grade (so the precached first words are the first grade's), and the words up to each grade fill a board (the builder checks all three); the shelf's chips choose up to which grade the game goes (above) |
+| `levels` | none: the whole roster | `{"label": "עד כיתה", "names": ["א׳", ..., "י״ב"]}`: the school grades, the easiest first; each word has its `level` (1 = `names[0]`), the roster goes grade by grade (so the precached first words are the first grade's), and the words up to each grade fill a board (the builder checks all three); the shelf's chips choose up to which grade the game goes (above) |
 
 A word game's quiz picks its words by the policy round 2's simulation chose (`pickQuiz` in `engine.js`, policy
 P4 "hybrid"): of the words she has met, `newMin` (1) never asked yet, in teaching order, `sureMin` (3) fully
@@ -229,8 +229,8 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
   a flash card counting as learned and moving the bar, and what she learned surviving a reload; for every
   game, a face-up card's line and the pair it holds (H1–H6), what she knows (M1–M4: the older list carried
   over, first-try answers from the quiz only, the shelf's levels); a word game's sound-alikes never offered
-  together (A1); a squad's quiz pure random (A2); a word game's levels (L1–L7: the chips and their counts, a
-  level with no words joined to the chip before it, the pool of each kept level, a kept value that is no
+  together (A1); a squad's quiz pure random (A2); a word game's levels (L1–L8: the chips and their counts, a
+  level with no words, or two in a row, joined to the chip before it, the pool of each kept level, a kept value that is no
   level plays every word, a chip that swaps the pool and is kept across a reload, what she met beyond it
   kept but not counted, the quiz and its cards from the pool) and a game without levels showing no picker
   (L0); and a word game's quiz's picks (P1–P4: the simulation's constants, the same quizzes as its own module
@@ -246,7 +246,7 @@ precached file with the repo, then runs the same browser checks on the live site
 - `verify.sh local [<game>...]`, P9: `assemble --check`; seeded start, mid and win screenshots at 600×960
   and 960×600; one audio playthrough (the right clip on every flip); a whole quiz at both sizes (every
   player once, a wrong pick, the clips in order, question/wrong/reveal/end screenshots); the worker online,
-  offline (memory and quiz) and installable, and the link preview (its tags, and `og.jpg` as served); the
+  offline (memory and quiz) and installable (a word game with levels, at its first level too), and the link preview (its tags, and `og.jpg` as served); the
   state machine;
 - `verify.sh compare <ref-a> <ref-b>` checks a refactor is pixel-, DOM- and audio-identical;
 - `verify.sh upgrade <old-ref> <new-ref>` simulates the GitHub Pages upgrade under `/pages/` with whole
