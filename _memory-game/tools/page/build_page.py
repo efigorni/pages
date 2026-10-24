@@ -171,6 +171,11 @@ def clean(text):
     return " ".join(str(text or "").split())
 
 
+def unsafe(text):
+    """A character the page's HTML and DATA must never carry in a name or a word."""
+    return any(ch in text for ch in "<>&\"`")
+
+
 def read(path, hint=None):
     if not path.is_file():
         fail(f"missing {path.relative_to(REPO) if REPO in path.parents else path}" + (f" ({hint})" if hint else ""))
@@ -244,26 +249,31 @@ def play_of(game):
     elif precache.get("policy") != "all":
         fail(f"{where}.precache.policy: \"all\" or \"core\"")
     if "levels" in play:
-        levels_of(game, play)
+        check_levels_config(game, play["levels"])
     return play
 
 
-def levels_of(game, play=None):
-    """A word game's play.levels, checked, or None when it teaches every word at once: {"label": what the
-    shelf's picker says before its chips, "names": one per level, the first the easiest}. Each word then
-    has a `level`, 1 to len(names)."""
-    levels = (play or play_of(game)).get("levels")
-    if levels is None:
-        return None
+def check_levels_config(game, levels):
+    """A word game's play.levels: {"label": what the shelf's picker says before its chips, "names": one per
+    level, the first the easiest}. Each word then has a `level`, 1 to len(names)."""
     where = f"{game}/{CONFIG} play.levels"
     if kind_of(game) != "words":
         fail(f"{where}: a word game's (a squad teaches its whole roster)")
-    text = lambda v: isinstance(v, str) and v.strip() and clean(v) == v and not any(ch in v for ch in "<>&\"`")  # noqa: E731
+    text = lambda v: isinstance(v, str) and v.strip() and clean(v) == v and not unsafe(v)  # noqa: E731
     names = levels.get("names") if isinstance(levels, dict) else None
     if not (isinstance(levels, dict) and set(levels) == {"label", "names"} and text(levels["label"])
             and isinstance(names, list) and len(names) >= 2 and all(text(n) for n in names) and len(set(names)) == len(names)):
         fail(f"{where}: {{\"label\": text, \"names\": two or more different texts, the easiest level first}}")
-    return levels
+
+
+def levels_of(game):
+    """A word game's play.levels, checked, or None when it teaches every word at once."""
+    return play_of(game).get("levels")
+
+
+def level_ok(w, levels):
+    """A word's `level` is one of play.levels': 1 to len(names)."""
+    return _int(w.get("level")) and 1 <= w["level"] <= len(levels["names"])
 
 
 def items_of(roster):
@@ -292,7 +302,7 @@ def entry(p, page, model):
         first, last = split_display_name(name)
     speak = clean(p.get("speak_he")) or speak_text(name)
     for label, text in (("name_he", name), ("first_he", first), ("last_he", last), ("speak_he", speak)):
-        if any(ch in text for ch in "<>&\"`"):
+        if unsafe(text):
             fail(f"{pid}: unexpected characters in {label}: {text!r}")
     if not name or not last or not speak:
         fail(f"{pid}: empty name field")
@@ -319,14 +329,14 @@ def word_entry(w, page, levels=None):
     out = {"id": wid}
     for key in ("en", "he", "he_niqqud", "theme"):
         text = clean(w.get(key))
-        if any(ch in text for ch in "<>&\"`"):
+        if unsafe(text):
             fail(f"{wid}: unexpected characters in {key}: {text!r}")
         if text:
             out[key] = text
     if not out.get("en") or not out.get("he"):
         fail(f"{wid}: a word needs en and he")
     if levels:
-        if not (_int(w.get("level")) and 1 <= w["level"] <= len(levels["names"])):
+        if not level_ok(w, levels):
             fail(f"{wid}: play.levels wants a level per word, 1 to {len(levels['names'])}, not {w.get('level')!r}")
         out["level"] = w["level"]
     missing = [rel for rel in (f"img/{wid}.webp", *(f"audio/{k}/{wid}.mp3" for k in KINDS["words"]))
@@ -416,14 +426,15 @@ def check_levels(game, roster):
             fail(f"{where}: its words have levels but {CONFIG} has no play.levels (run `build_page.py data` again)")
         return
     names, pairs = levels["names"], play_of(game)["deal"]["pairs"]
-    bad = [w["id"] for w in words if not (_int(w.get("level")) and 1 <= w["level"] <= len(names))]
+    bad = [w["id"] for w in words if not level_ok(w, levels)]
     if bad:
         fail(f"{where}: play.levels wants a level per word, 1 to {len(names)}: {', '.join(bad[:5])}"
              + (f" and {len(bad) - 5} more" if len(bad) > 5 else ""))
     order = [w["level"] for w in words]
     if order != sorted(order):
         fail(f"{where}: not level by level (`build_page.py data` sorts by level, then rank)")
-    small = [f"{name} ({sum(lv <= n for lv in order)})" for n, name in enumerate(names, 1) if sum(lv <= n for lv in order) < pairs]
+    upto = [sum(lv <= n for lv in order) for n in range(1, len(names) + 1)]
+    small = [f"{name} ({count})" for name, count in zip(names, upto) if count < pairs]
     if small:
         fail(f"{where}: up to {', '.join(small)}: fewer words than the board's {pairs} pairs")
 
@@ -463,12 +474,11 @@ def write_words(words_json, game):
     for wid, why in config(game).get("leave_out", {}).items():
         print(f"{game}: left out {wid}{'' if wid in ids else ' (not in the list)'}: {why}", flush=True)
     words = [w for w in words if w["id"] not in config(game).get("leave_out", {})]
+    ordered = sorted(words, key=lambda w: w.get("rank", 0)) if all("rank" in w for w in words) else words
     levels = levels_of(game)
-    entries = [word_entry(w, page, levels) for w in words]
-    ranks = [w.get("rank", 0) for w in words] if all("rank" in w for w in words) else range(len(words))
-    # sorted() is stable: without ranks, the list's own order inside a level
-    roster = {"words": [e for _, _, e in sorted(zip([e.get("level", 0) for e in entries], ranks, entries),
-                                                key=lambda t: t[:2])]}
+    entries = [word_entry(w, page, levels) for w in ordered]
+    # sort() is stable: rank order inside a level
+    roster = {"words": sorted(entries, key=lambda e: e.get("level", 0))}
     check_levels(game, roster)
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
     counts = "" if not levels else " (" + ", ".join(

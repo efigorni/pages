@@ -68,8 +68,7 @@ A word game that teaches by levels (`play.levels`, below) shows, under the shelf
 כיתה") and a chip per level, each with how many words the game plays up to it; a level that adds no words
 joins the chip before it, which then names the range ("ה׳–ו׳") and goes up to its last level. A chip is a
 tap target of at least 40 × 44 px; on a narrow phone the label goes above them, and chips that still don't
-fit wrap to a second row. The pressed
-chip is the game's pool: the words up to that level, or every word while none was chosen (the top chip).
+fit wrap to a second row. The pressed chip is the game's pool: the words up to that level, or every word while none was chosen (the top chip).
 A chip swaps the pool at once, on the shelf too, and keeps it on the device; every mode, the count, the
 bar, the quiz and its other three cards, and what the page fetches ahead then use only those words. What
 she met beyond them is kept, not counted, and counts again when the pool takes it back.

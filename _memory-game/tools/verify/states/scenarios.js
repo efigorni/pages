@@ -650,7 +650,7 @@ async function playToLastPair(h) {
       h.byId.levels.dispatch('click', { target: chips(h).find((c) => c.dataset.level === String(n)), detail: 1 });
       await h.flush();
     };
-    const learnedOf = (list) => [`${probe.DATA.game}:learned`, JSON.stringify(ids(list))];
+    const learnedOf = (list) => [[`${probe.DATA.game}:learned`, JSON.stringify(ids(list))]];
     {
       const h = boot({ noClips: true });
       const counts = shown(h);
@@ -699,12 +699,12 @@ async function playToLastPair(h) {
     {
       const low = upTo(first);
       const high = topWords.slice(0, 5);
-      const h = boot({ noClips: true, storage: [...at(first), learnedOf(low.slice(0, 3).concat(high))] });
+      const h = boot({ noClips: true, storage: [...at(first), ...learnedOf(low.slice(0, 3).concat(high))] });
       const counted = h.byId['progress-count'].textContent === `3 / ${low.length}` && h.T.stats.items().length === 3;
       await h.click('play-cards');
       await h.click('next-new');
       await h.advance(8000);
-      const saved = JSON.parse(h.store.get(`${probe.DATA.game}:learned`));
+      const saved = JSON.parse(h.store.get(key(h)));
       check('L5 what she met beyond the level is kept but not counted: the bar counts the level\'s words only, and a new '
         + 'one learned keeps the others in the store', counted && h.T.shelf.card.p.id === low[3].id && subset(ids(high), saved)
         && saved.includes(low[3].id) && h.byId['progress-count'].textContent === `4 / ${low.length}`,
@@ -714,7 +714,7 @@ async function playToLastPair(h) {
       const low = upTo(first);
       const high = topWords.slice(0, 8);
       const known = ids(low.slice(0, 6));
-      const k = boot({ noClips: true, storage: [...at(first), learnedOf(low.slice(0, 6).concat(high))] });
+      const k = boot({ noClips: true, storage: [...at(first), ...learnedOf(low.slice(0, 6).concat(high))] });
       await k.click('play-quiz');
       const { quiz } = k.T;
       let cardsOk = true;

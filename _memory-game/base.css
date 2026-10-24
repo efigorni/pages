@@ -798,7 +798,9 @@ circle.cut { fill: var(--big-bg); }
 
 .levels-label {
   flex: none;
-  font: 600 clamp(13px, 2vmin, 17px)/1.15 system-ui, "Arial Hebrew", sans-serif;
+  font-weight: 600;
+  font-size: clamp(13px, 2vmin, 17px);
+  line-height: 1.15;
 }
 
 /* a phone held upright: the label above, so the chips have the whole width */

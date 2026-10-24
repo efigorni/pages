@@ -224,7 +224,8 @@ case "$cmd" in
       if ((LIVE)); then want="$(sed -n "s/^const VERSION = '\(.*\)';$/\1/p" "$REPO/$g/sw.js")"; fi
       job "worker-$g" node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
       # a word game with levels also plays its first level alone: the seeds, the bar and the cache on that pool
-      if grep -q '"levels"' "$root/$g/club/club.json"; then
+      if python3 -I -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; sys.exit(not build_page.levels_of(sys.argv[2]))' \
+          "$root/_memory-game/tools/page" "$g"; then
         job "worker-$g-level1" env MEMORY_GAME_VERIFY_LEVEL=1 node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
       fi
     done

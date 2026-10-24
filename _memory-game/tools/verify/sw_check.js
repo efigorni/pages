@@ -167,16 +167,12 @@ async function steps(context, page, R) {
   const info = await page.evaluate(() => ({ voice: DATA.play ? DATA.play.voice : null,
     learnedPool: !!(DATA.play && DATA.play.quiz.pool === 'learned') }));
   R.voice = info.voice;
-  if (LEVEL) {
-    await page.evaluate((n) => localStorage.setItem(`${DATA.game}:level`, n), LEVEL);
-    await page.reload({ waitUntil: 'load' });
-  }
+  if (LEVEL) await page.evaluate((n) => localStorage.setItem(`${DATA.game}:level`, n), LEVEL);
   const pool = await page.evaluate(POOL);
-  R.pool = pool.length;
   if (info.learnedPool) {
     await page.evaluate((ids) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(ids)), pool.slice(0, LEARNED_START));
-    await page.reload({ waitUntil: 'load' });
   }
+  if (LEVEL || info.learnedPool) await page.reload({ waitUntil: 'load' });
   R.controlled = await controlled(page, WANT || '');
   R.online = { state: await state(page) };
   await play(page);

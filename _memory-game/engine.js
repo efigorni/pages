@@ -1292,6 +1292,10 @@
     buildShelf();
     setPhase('browse');
     keepAwake();
+    scrollToNew();
+  }
+
+  function scrollToNew() {
     const tile = shelf.tiles.get(ITEMS[nextNew()].id);
     if (tile.scrollIntoView) tile.scrollIntoView({ block: 'center' });
   }
@@ -1371,7 +1375,6 @@
     if (last && count === last.count) Object.assign(last, { n: i + 1, name: `${last.first}–${name}` });
     else LEVEL_CHIPS.push({ from: i + 1, n: i + 1, first: name, name, count });
   });
-  const levelChips = new Map();
 
   function buildLevels() {
     if (!LEVEL_CHIPS.length) return;
@@ -1379,15 +1382,15 @@
     levelsEl.hidden = false;
     levelsEl.setAttribute('aria-label', LEVELS.label);
     const chips = el('span', 'level-chips');
-    LEVEL_CHIPS.forEach(({ from, n, name, count }) => {
+    LEVEL_CHIPS.forEach((c) => {
       const chip = el('button', 'level');
       chip.type = 'button';
-      chip.dataset.level = String(n);
-      if (from !== n) chip.dataset.range = 'true';
-      chip.setAttribute('aria-label', `${LEVELS.label} ${name}: ${count}`);
-      chip.append(el('span', 'level-name', name), el('span', 'level-count', String(count)));
+      chip.dataset.level = String(c.n);
+      if (c.from !== c.n) chip.dataset.range = 'true';
+      chip.setAttribute('aria-label', `${LEVELS.label} ${c.name}: ${c.count}`);
+      chip.append(el('span', 'level-name', c.name), el('span', 'level-count', String(c.count)));
       chips.appendChild(chip);
-      levelChips.set(n, chip);
+      c.el = chip;
     });
     levelsEl.append(el('span', 'levels-label', LEVELS.label), chips);
     syncLevels();
@@ -1396,7 +1399,7 @@
   // The pressed chip: the one whose levels hold the chosen one; with none chosen, the top one.
   function syncLevels() {
     const at = LEVEL_CHIPS.find(({ from, n }) => from <= chosenLevel && chosenLevel <= n) || LEVEL_CHIPS[LEVEL_CHIPS.length - 1];
-    levelChips.forEach((chip, n) => chip.setAttribute('aria-pressed', String(!!at && n === at.n)));
+    LEVEL_CHIPS.forEach((c) => c.el.setAttribute('aria-pressed', String(c === at)));
   }
 
   // The game goes up to level n from now on, on this shelf too: its tiles, the count and the bar, and what
@@ -1411,8 +1414,7 @@
     buildShelf();
     syncLearned();
     syncLevels();
-    const tile = shelf.tiles.get(ITEMS[nextNew()].id);
-    if (tile.scrollIntoView) tile.scrollIntoView({ block: 'center' });
+    scrollToNew();
     fetchAllAhead();
   }
 
