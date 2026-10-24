@@ -71,6 +71,11 @@ should stop teaching by grade, is a `club.json` `play.levels` change (drop the k
 0. Grade the list: `python3 -I ~/Documents/ENG-00-english-words-grades/work/curator/build_final.py` writes
    `work/final/words.json` with every word's `level` (`grade.py`, the lowest grade any formal source
    gives); look at its counts per grade (`work/final/counts.json`) before going on.
+   A word's picture is a Fluent 3D emoji, an original drawing made for the game (SVG rendered to the same
+   200×200 WebP) or an ARASAAC pictogram: `words.json` says which in `picture: {"source": "fluent" | "svg" |
+   "arasaac", "ref": the emoji's name, the drawing's file or the pictogram's id}` (a word with only round 1's
+   `emoji` is `fluent`). `data` writes them to `club/pictures.json`, which `CREDITS.md`'s Pictures section
+   points at; the builder fails if a source in use lacks its attribution there.
 1. Copy the pictures into `img/` and the clips into `audio/en/` and `audio/he/` (one file per word id),
    except the picked takes in `tts/en_pins.json`, which stay (above).
 2. `python3 -I _memory-game/tools/page/build_page.py data <words.json> english-words --prune` writes

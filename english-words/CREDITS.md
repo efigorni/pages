@@ -22,9 +22,20 @@ Education list; the other 143 are on Cambridge's.
   - *A2 Key and A2 Key for Schools Vocabulary List* (August 2025)
     (<https://www.cambridgeenglish.org/images/506886-a2-key-2020-vocabulary-list.pdf>), A2, the level the
     curriculum's Table 1 gives Band II Core I.
+- **Oxford University Press**: *The Oxford 3000 and The Oxford 5000 by CEFR level*, American and British
+  editions (<https://www.oxfordlearnersdictionaries.com/external/pdf/wordlists/oxford-3000-5000/American_Oxford_3000_by_CEFR_level.pdf>,
+  <https://www.oxfordlearnersdictionaries.com/external/pdf/wordlists/oxford-3000-5000/American_Oxford_5000_by_CEFR_level.pdf>,
+  and the `The_Oxford_3000_by_CEFR_level.pdf` and `The_Oxford_5000_by_CEFR_level.pdf` beside them).
+- **CEFR-J Wordlist Version 1.6** (『CEFR-J Wordlist Version 1.6』 東京外国語大学投野由紀夫研究室, Tono Laboratory,
+  Tokyo University of Foreign Studies; <https://www.cefr-j.org/data/CEFRJ_wordlist_ver1.6.zip>, downloaded
+  October 2026).
+
+A CEFR level gives the grade the curriculum's Table 1 matches it with: Pre-A1 grade 3, A1 grade 5, A2
+grade 7, B1 grade 10, B2 and above grade 12.
 
 A word's grade is the **lowest grade any of these sources gives it**: its Ministry band's grades (split
-by its Cambridge young learners' level), Starters grade 3, Movers grade 5, Flyers grade 6, A2 Key grade 7.
+by its Cambridge young learners' level), Starters grade 3, Movers grade 5, Flyers grade 6, A2 Key grade 7,
+and the CEFR levels above.
 The Ministry has no word list for grades 1–2, where English starts with the *Enjoy English* programme
 (<https://pop.education.gov.il/kindergarten/topics/english/teaching-materials/enrichment/>). A Starters word
 in one of the programme's themes (colours, numbers, animals, family, the body, clothes, food, feelings,
@@ -37,11 +48,17 @@ Only the words and their levels are used; the Hebrew, the niqqud and the teachin
 
 ## Pictures
 
-Every picture in [`img/`](img/) is a **Fluent Emoji** by Microsoft in its 3D style
-(<https://github.com/microsoft/fluentui-emoji>, commit `1ffb34c752ecf5d402f04cfb4b392c77f57c54bc`).
-People and body parts use the default (yellow) skin tone. Changes: trimmed to the drawing's edges,
-centred, resized to 200×200 px and converted to WebP with a transparent background. They are used under
-the MIT License:
+Each picture's source is listed per word in [`club/pictures.json`](club/pictures.json) (`source`, `ref`),
+which `build_page.py data` writes from the word list. A picture is admitted only when someone who is not
+told the word names it from the card alone.
+
+### Fluent Emoji (`fluent`)
+
+Most pictures in [`img/`](img/) are **Fluent Emoji** by Microsoft in its 3D style
+(<https://github.com/microsoft/fluentui-emoji>, commit `1ffb34c752ecf5d402f04cfb4b392c77f57c54bc`); `ref`
+is the emoji's name. People and body parts use the default (yellow) skin tone. Changes: trimmed to the
+drawing's edges, centred, resized to 200×200 px and converted to WebP with a transparent background. They
+are used under the MIT License:
 
 > MIT License
 >
@@ -61,6 +78,26 @@ the MIT License:
 > NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
 > DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
 > OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### Original drawings made for this game (`svg`)
+
+Where no emoji shows a word exactly, the picture is an original drawing made for this game in the same
+rounded, softly shaded style, drawn as SVG and rendered to the same 200×200 px WebP; `ref` is the drawing's
+file. These drawings are licensed under the Creative Commons Attribution 4.0 International license, CC BY
+4.0 (<https://creativecommons.org/licenses/by/4.0/>): credit "מילים באנגלית, efigorni/pages".
+
+### ARASAAC pictograms (`arasaac`)
+
+Where neither fits, the picture is an ARASAAC colour pictogram; `ref` is its ARASAAC id
+(<https://arasaac.org/pictograms/en/{ref}>). Resized to 200×200 px and converted to WebP. As ARASAAC asks:
+
+> The pictographic symbols used are the property of the Government of Aragón and have been created by
+> Sergio Palao for ARASAAC (http://www.arasaac.org), that distribute them under Creative Commons License
+> BY-NC-SA.
+
+Pictograms author: Sergio Palao. Origin: ARASAAC (http://www.arasaac.org). License: CC BY-NC-SA 4.0
+(<https://creativecommons.org/licenses/by-nc-sa/4.0/>). Owner: Government of Aragón (Spain). This game is
+free and non-commercial; the pictograms in it, as changed, are shared under the same license.
 
 ## Design
 

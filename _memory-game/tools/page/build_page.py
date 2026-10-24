@@ -25,6 +25,9 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
                         words in teaching order (level by level, then rank); written by `data`
   club/avoid.json       a word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it;
                         checked against the roster, and each word's list (with play.quiz.apart) is its `avoid`
+  club/pictures.json    a word game's picture sources, {id: {"source": fluent | svg | arasaac, "ref"}}: written by
+                        `data` from words.json (a word's `picture`, or its Fluent `emoji`), for the credits only;
+                        CREDITS.md must attribute every source in use (PICTURE_CREDITS)
   tools/tts/en_pins.json  a word game's English voice pins; a `take` picked by ear must stay the shipped clip
 
 The builder writes two files per game, whole:
@@ -68,6 +71,7 @@ import re
 import shutil
 import sys
 import time
+from collections import Counter
 from pathlib import Path
 from urllib.parse import urljoin
 
@@ -85,6 +89,15 @@ CONFIG = "club/club.json"
 AVOID = "club/avoid.json"
 # A word game's English voice pins; a pin's `take` is a clip picked by ear, with the shipped file's sha256.
 EN_PINS = "tools/tts/en_pins.json"
+# Where each of a word game's pictures comes from, {id: {"source", "ref"}}, for its credits: `data` writes it
+# from words.json (a word's `picture`, or its Fluent `emoji`); the page never reads it. Each source in use
+# needs its attribution in CREDITS.md, these phrases at least.
+PICTURES = "club/pictures.json"
+PICTURE_CREDITS = {
+    "fluent": ("Fluent Emoji", "MIT License"),
+    "svg": ("Original drawings made for this game", "CC BY 4.0"),
+    "arasaac": ("Sergio Palao", "ARASAAC", "http://www.arasaac.org", "CC BY-NC-SA", "Government of Aragón"),
+}
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
 UI_CLIPS = tuple(UI_TEXTS)
@@ -347,6 +360,46 @@ def word_entry(w, page, levels=None):
     return out
 
 
+def picture_of(w):
+    """A word's picture source for the credits: words.json `picture` {source, ref}, or, for a word with only
+    its Fluent `emoji` (round 1's format), {"source": "fluent", "ref": the emoji's name}."""
+    wid, pic = w["id"], w.get("picture")
+    if pic is None and isinstance(w.get("emoji"), dict) and w["emoji"].get("name"):
+        pic = {"source": "fluent", "ref": w["emoji"]["name"]}
+    ref = str(pic.get("ref", "")).strip() if isinstance(pic, dict) else ""
+    if not (isinstance(pic, dict) and pic.get("source") in PICTURE_CREDITS and ref and set(pic) <= {"source", "ref"}):
+        fail(f"{wid}: a word needs `picture`: {{\"source\": {' | '.join(PICTURE_CREDITS)}, \"ref\": the Fluent emoji's "
+             f"name, the drawing's file or the ARASAAC pictogram's id}}, not {pic!r}")
+    return {"source": pic["source"], "ref": ref}
+
+
+def pictures_text(pictures):
+    """club/pictures.json: one word per line, in roster order."""
+    rows = ",\n".join(f"  {json.dumps(wid)}: {json.dumps(p, ensure_ascii=False, separators=(', ', ': '))}"
+                      for wid, p in pictures.items())
+    return f"{{\n{rows}\n}}\n"
+
+
+def check_pictures(game):
+    """A word game's club/pictures.json is its roster's (a line per word, each a known source), and CREDITS.md
+    gives every source in use its attribution (PICTURE_CREDITS)."""
+    if kind_of(game) != "words":
+        return []
+    path = REPO / game / PICTURES
+    if not path.is_file():
+        return [f"{PICTURES} is missing (`build_page.py data <words.json> {game}` writes it)"]
+    pictures = json.loads(read(path))
+    ids = [w["id"] for w in items_of(read_roster(game))]
+    problems = [f"{PICTURES} is not this roster's (run `build_page.py data` again)" for _ in [1] if list(pictures) != ids]
+    problems += [f"{PICTURES}: {wid}'s source {p.get('source')!r} is none of {', '.join(PICTURE_CREDITS)}"
+                 for wid, p in pictures.items() if p.get("source") not in PICTURE_CREDITS]
+    credits = read(REPO / game / "CREDITS.md")
+    for src in sorted({p.get("source") for p in pictures.values()} & set(PICTURE_CREDITS)):
+        problems += [f"CREDITS.md doesn't say {phrase!r}, which {src} pictures need" for phrase in PICTURE_CREDITS[src]
+                     if phrase not in credits]
+    return problems
+
+
 def roster_text(roster):
     """club/roster.json: one item per line, so a refresh diffs per player or word."""
     key = "words" if "words" in roster else "players"
@@ -480,10 +533,15 @@ def write_words(words_json, game):
     # sort() is stable: rank order inside a level
     roster = {"words": sorted(entries, key=lambda e: e.get("level", 0))}
     check_levels(game, roster)
+    by_id = {w["id"]: w for w in words}
+    pictures = {e["id"]: picture_of(by_id[e["id"]]) for e in roster["words"]}
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
+    (page / PICTURES).write_text(pictures_text(pictures), encoding="utf-8")
     counts = "" if not levels else " (" + ", ".join(
         f"{name} {sum(e.get('level') == n for e in entries)}" for n, name in enumerate(levels["names"], 1)) + ")"
     print(f"{game}: club/roster.json: {len(roster['words'])} words{counts}", flush=True)
+    sources = " ".join(f"{src} {n}" for src, n in sorted(Counter(p["source"] for p in pictures.values()).items()))
+    print(f"{game}: {PICTURES}: {sources}", flush=True)
     return roster
 
 
@@ -801,7 +859,7 @@ def assemble(game, check):
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
     lint = (lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game) + check_apart(game)
-            + check_takes(game))
+            + check_takes(game) + check_pictures(game))
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:

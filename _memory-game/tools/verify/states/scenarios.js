@@ -613,7 +613,7 @@ async function playToLastPair(h) {
     }
   }
 
-  // ---------- L0-L7 a word game's levels (PLAY.levels): it plays the words up to the level chosen ----------
+  // ---------- L0-L8 a word game's levels (PLAY.levels): it plays the words up to the level chosen ----------
   if (!probe.PLAY.levels) {
     const h = boot({ noClips: true });
     check('L0 a game without levels shows no level picker and plays every item', h.byId.levels.hidden !== false
@@ -751,6 +751,21 @@ async function playToLastPair(h) {
         && got[0][1] === `${names[0]}–${second}` && got[0][2] === words.filter((w) => w.level === 1).length
         && got[got.length - 1][1].endsWith('–+') && h.store.get(LKEY) === '2' && h.T.ITEMS.length === pool.length
         && JSON.stringify(pressed(kept)) === JSON.stringify([merged[0][0]]) && kept.T.ITEMS.length === pool.length, JSON.stringify(got));
+    }
+    {
+      // the second and third levels emptied into the fourth: one chip spans three levels
+      const edit = (d) => ({ ...d, words: d.words.map((w) => (w.level === 2 || w.level === 3 ? { ...w, level: 4 } : w)) });
+      const words = edit(probe.DATA).words;
+      const merged = chipsFor(words, names);
+      const h = boot({ noClips: true, edit, storage: at(2) });
+      const got = shown(h);
+      const keptMid = JSON.stringify(pressed(h)) === JSON.stringify([3]) && h.T.ITEMS.length === words.filter((w) => w.level === 1).length;
+      await h.click('play-cards');
+      await tapLevel(h, 4);
+      check(`L8 two empty levels in a row: one chip "${names[0]}–${names[2]}" spans three levels; a kept level inside the `
+        + 'range presses it and plays its words; the next chip goes on from the fourth', JSON.stringify(got) === JSON.stringify(merged)
+        && got[0][0] === 3 && got[0][1] === `${names[0]}–${names[2]}` && got[1][1] === names[3] && keptMid
+        && h.store.get(LKEY) === '4' && h.T.ITEMS.length === words.filter((w) => w.level <= 4).length, JSON.stringify(got.slice(0, 3)));
     }
   }
 

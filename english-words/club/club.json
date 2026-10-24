@@ -26,6 +26,6 @@
     "quiz": {"pool": "learned", "unlock": 4, "size": 10, "master": 3, "newMin": 1, "newMax": 4, "sureMin": 3, "growth": 2, "jitter": 0.5, "decrement": "demote", "apart": [["girl", "boy"]]},
     "progress": "bar",
     "precache": {"policy": "core", "items": 30},
-    "levels": {"label": "עד כיתה", "names": ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ז׳"]}
+    "levels": {"label": "עד כיתה", "names": ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ז׳", "ח׳", "ט׳", "י׳", "י״א", "י״ב"]}
   }
 }

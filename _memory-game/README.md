@@ -35,6 +35,7 @@ copy upgrades the way it always did. `build_page.py` writes it whole, and `sw.js
 | `<game>/club/club.json` | What it teaches (`kind`: `squad`, the default, or `words`), its script (`play`, below, with a word game's levels, `levels`), the name model (`names`), the title style (`title`), the board's `scheme`, the trophy's paints, the photo flags (`images`), a word game's link-preview text (`og`), the words it leaves out (`leave_out`) and the engine lines it says in its own words (`lines`: a word game's win; its `audio/ui/` clip is then its own, not the master) |
 | `<game>/club/style.css` | Hand-written: fonts, colour tokens, card back, card face, title |
 | `<game>/club/club.js` | Hand-written: `CLUB = { confetti, fonts, face(kit) }` |
+| `<game>/club/pictures.json` | A word game's picture sources, `{id: {"source": "fluent" \| "svg" \| "arasaac", "ref"}}`, for its credits only (the page never reads it); written by `build_page.py data` from each word's `picture` (or its Fluent `emoji`), and `assemble --check` fails when it isn't the roster's or CREDITS.md lacks a source's attribution |
 | `<game>/club/roster.json` | The players with their roles (starter, bench, backup: quiz only), or a word game's words in teaching order (with `play.levels`, level by level, each word's `level`); written by `build_page.py data` |
 | `_memory-game/*` | The engine, the base styles and the two templates |
 
