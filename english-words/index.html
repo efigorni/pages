@@ -2986,10 +2986,11 @@ const CLUB = {
   }
 
   // The game goes up to level n from now on, on this shelf too: its tiles, the count and the bar, and what
-  // the page fetches ahead.
+  // the page fetches ahead. A page a newer worker took over reloads instead, keeping the choice (reloadIfStale).
   function setLevel(n) {
     chosenLevel = n;
     try { window.localStorage.setItem(LEVEL_KEY, String(n)); } catch (e) { /* full or blocked: this visit only */ }
+    if (reloadIfStale()) return;
     ITEMS = poolOf(n);
     shelf.tiles.clear();
     shelf.last = null;
