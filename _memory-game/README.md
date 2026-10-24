@@ -66,7 +66,9 @@ counts as met, and pages with ← →.
 
 A word game that teaches by levels (`play.levels`, below) shows, under the shelf's bar, its label ("עד
 כיתה") and a chip per level, each with how many words the game plays up to it; a level that adds no words
-joins the chip before it, which then names the range ("ה׳–ו׳") and goes up to its last level. The pressed
+joins the chip before it, which then names the range ("ה׳–ו׳") and goes up to its last level. A chip is a
+tap target of at least 40 × 44 px; on a narrow phone the label goes above them, and chips that still don't
+fit wrap to a second row. The pressed
 chip is the game's pool: the words up to that level, or every word while none was chosen (the top chip).
 A chip swaps the pool at once, on the shelf too, and keeps it on the device; every mode, the count, the
 bar, the quiz and its other three cards, and what the page fetches ahead then use only those words. What
@@ -216,7 +218,9 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
   word game starts with the first 25 words it plays learned, so its quiz is open and its deal reaches past
   the precached core);
 - offline: a reload with the network off keeps what she learned, shows the pictures, plays cached clips,
-  asks a quiz question and opens the next new flash card, which turns up, speaks and counts as learned;
+  asks a quiz question and opens the next new flash card, which turns up, speaks and counts as learned; a
+  word game with levels runs this once more at its first level (`MEMORY_GAME_VERIFY_LEVEL=1`: the seeds,
+  the bar and the cache on that pool);
 - the quiz's HUD: the mute button beside ↻, away from the hear-it-again bubble (no speaker, no circle);
 - the state machine (`states/scenarios.js`): a squad's suites, the flash cards and the whole-roster quiz;
   a word game's new-first deal, the quiz locked below 4 and asking only learned words, the voice script,
@@ -251,6 +255,6 @@ precached file with the repo, then runs the same browser checks on the live site
 Outputs go to `--out <dir>` (default: one folder per checkout under `$TMPDIR`; never inside the repo).
 `MEMORY_GAME_VERIFY_PORTS=8801-8804` pins the test servers' ports when several runs share a machine
 (`sanity` takes one more than the games it upgrades). `MEMORY_GAME_VERIFY_LEVEL=<n>` runs `sw_check.js` on a word
-game with levels as if level n were chosen (the seeds, the bar and the offline cache counted on its pool). To look at a game by hand, serve the repo with
+game with levels as if level n were chosen (outputs `sw-<game>-level<n>.*`). To look at a game by hand, serve the repo with
 `python3 -I _memory-game/tools/verify/serve.py 8765 .` (the stock `http.server` resets connections while
 a worker precaches ~80 files).

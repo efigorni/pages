@@ -982,7 +982,8 @@ circle.cut { fill: var(--big-bg); }
   min-width: 0;
   padding: clamp(4px, .8vmin, 8px);
   padding-inline-start: clamp(10px, 2.4vmin, 22px);
-  border-radius: 999px;
+  /* a pill on one row, a rounded box when the chips wrap to a second */
+  border-radius: 26px;
   background: var(--hud-btn-bg, rgba(255, 255, 255, .09));
   color: var(--white);
   font-family: system-ui, "Arial Hebrew", sans-serif;
@@ -995,15 +996,22 @@ circle.cut { fill: var(--big-bg); }
   font: 600 clamp(13px, 2vmin, 17px)/1.15 system-ui, "Arial Hebrew", sans-serif;
 }
 
+/* a phone held upright: the label above, so the chips have the whole width */
+@media (max-width: 440px) {
+  .levels { flex-direction: column; align-items: stretch; gap: 2px; padding-inline-start: clamp(4px, .8vmin, 8px); }
+  .levels-label { padding: 4px 10px 0; }
+}
+
+/* every chip a tap target of at least 40 x 44 px: too narrow a screen wraps them to a second row */
 .level-chips {
   flex: 1 1 auto;
-  display: flex;
-  gap: clamp(2px, .6vmin, 6px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  gap: 4px clamp(2px, .6vmin, 6px);
   min-width: 0;
 }
 
 .level {
-  flex: 1 1 0;
   min-width: 0;
   min-height: 44px;
   display: grid;
@@ -1018,8 +1026,8 @@ circle.cut { fill: var(--big-bg); }
 
 .level:active { transform: scale(.94); }
 
-/* a range of levels, the later ones adding no words ("ה׳–ו׳"): a wider chip */
-.level[data-range="true"] { flex-grow: 1.6; }
+/* a range of levels, the later ones adding no words ("ה׳–ו׳"): two columns */
+.level[data-range="true"] { grid-column: span 2; }
 
 .level-name { font-weight: 700; font-size: clamp(15px, 2.6vmin, 22px); line-height: 1; white-space: nowrap; }
 

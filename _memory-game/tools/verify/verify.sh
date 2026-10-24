@@ -223,6 +223,10 @@ case "$cmd" in
       want=""
       if ((LIVE)); then want="$(sed -n "s/^const VERSION = '\(.*\)';$/\1/p" "$REPO/$g/sw.js")"; fi
       job "worker-$g" node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
+      # a word game with levels also plays its first level alone: the seeds, the bar and the cache on that pool
+      if grep -q '"levels"' "$root/$g/club/club.json"; then
+        job "worker-$g-level1" env MEMORY_GAME_VERIFY_LEVEL=1 node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
+      fi
     done
     say "running: the worker per game, the quiz$(((LIVE)) || echo ", the state machine")${UPGRADED[0]:+, the upgrade from $FROM per game on it}"
     finish

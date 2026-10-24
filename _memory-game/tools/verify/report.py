@@ -196,6 +196,9 @@ values = {option("--upgraded"), ref}
 failed = []
 for game in [a for a in sys.argv[2:] if not a.startswith("--") and a not in values]:
     sections = {"worker": sw_checks(load(OUT / f"sw-{game}.json"))}
+    # a word game with levels, played up to one (sw_check.js MEMORY_GAME_VERIFY_LEVEL)
+    for path in sorted(OUT.glob(f"sw-{game}-level*.json")):
+        sections[f"worker, {path.stem.rsplit('-', 1)[1].replace('level', 'level ')}"] = sw_checks(load(path))
     states_path = OUT / f"states-{game}.txt"
     states = states_path.read_text(encoding="utf-8").strip().splitlines() if states_path.exists() else []
     failing = [s for s in states if s.startswith("FAIL")]

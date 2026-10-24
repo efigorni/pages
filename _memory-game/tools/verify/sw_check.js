@@ -7,7 +7,8 @@
 // kept): its quiz is open, and its deal reaches past the words the worker precaches, so the offline game
 // plays words the worker kept as they came.
 //
-// MEMORY_GAME_VERIFY_LEVEL=<n> plays a word game with levels up to level n (kept in `<game>:level` first).
+// MEMORY_GAME_VERIFY_LEVEL=<n> plays a word game with levels up to level n (kept in `<game>:level` first), and
+// names its outputs sw-<game>-level<n>.* (verify.sh sanity runs it at level 1 beside the plain run).
 //
 //   node sw_check.js <base-url> <game> <out-dir> [<want-version>]
 //   e.g. node sw_check.js http://127.0.0.1:8781/ hapoel-tlv-memory /tmp/v/local
@@ -21,8 +22,10 @@ const { chromium } = require('playwright');
 const [BASE, GAME, OUT_ARG, WANT] = process.argv.slice(2);
 const OUT = path.resolve(OUT_ARG);
 const INSTR = fs.readFileSync(path.join(__dirname, 'instr.js'), 'utf8');
+const LEVEL = process.env.MEMORY_GAME_VERIFY_LEVEL || '';
+const NAME = LEVEL ? `${GAME}-level${LEVEL}` : GAME;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const say = (...a) => console.log(`[sw ${GAME}]`, ...a);
+const say = (...a) => console.log(`[sw ${NAME}]`, ...a);
 const { clipsOf, LEARNED_START, POOL } = require('./voice');
 
 async function until(page, fn, timeout, arg) {
@@ -100,7 +103,7 @@ function audit(log, voice) {
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   // A persistent profile: an incognito context always reports the "in-incognito" installability error.
-  const profile = fs.mkdtempSync(path.join(OUT, `.profile-${GAME}-`));
+  const profile = fs.mkdtempSync(path.join(OUT, `.profile-${NAME}-`));
   const context = await chromium.launchPersistentContext(profile, {
     channel: 'chromium', args: ['--autoplay-policy=no-user-gesture-required'],
     viewport: { width: 600, height: 960 }, deviceScaleFactor: 1.33, isMobile: true, hasTouch: true, locale: 'he-IL',
@@ -123,7 +126,7 @@ function audit(log, voice) {
     R.failure = String(e && e.message || e).split('\n')[0];
   }
   R.console = R.console.filter((m) => !m.includes('Banner not shown'));
-  fs.writeFileSync(path.join(OUT, `sw-${GAME}.json`), JSON.stringify(R, null, 1));
+  fs.writeFileSync(path.join(OUT, `sw-${NAME}.json`), JSON.stringify(R, null, 1));
   say(JSON.stringify({ failure: R.failure, controlled: R.controlled, installability: R.installability, manifestErrors: R.manifestErrors,
     appId: R.appId, online: R.online && R.online.audio, offlineProbe: R.offlineProbe,
     offline: R.offline && { controlled: R.offline.state && R.offline.state.controlled, imgs: R.offline.imgs, audio: R.offline.audio },
@@ -164,8 +167,8 @@ async function steps(context, page, R) {
   const info = await page.evaluate(() => ({ voice: DATA.play ? DATA.play.voice : null,
     learnedPool: !!(DATA.play && DATA.play.quiz.pool === 'learned') }));
   R.voice = info.voice;
-  if (process.env.MEMORY_GAME_VERIFY_LEVEL) {
-    await page.evaluate((n) => localStorage.setItem(`${DATA.game}:level`, n), process.env.MEMORY_GAME_VERIFY_LEVEL);
+  if (LEVEL) {
+    await page.evaluate((n) => localStorage.setItem(`${DATA.game}:level`, n), LEVEL);
     await page.reload({ waitUntil: 'load' });
   }
   const pool = await page.evaluate(POOL);
@@ -215,7 +218,7 @@ async function steps(context, page, R) {
   const g2 = await flips(page, 3);
   R.offline.audio = { ...g2, ...audit((await page.evaluate(() => window.__log)).slice(at), R.voice) };
   R.offline.imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
-  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline.png`) });
+  await page.screenshot({ path: path.join(OUT, `sw-${NAME}-offline.png`) });
   // The quiz offline: every item it can ask has its picture and clips in the cache (a squad's every
   // player, the backups too; a word game's learned words that it plays), and the offline page, from its
   // ↻ confirm, asks the first question with them.
@@ -248,7 +251,7 @@ async function steps(context, page, R) {
   }, [answer, quizAt]);
   R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips) === JSON.stringify(['audio/ui/start.mp3', ...asked])
     && R.offline.quiz.imgs[0] === 4 && R.offline.quiz.imgs[1] === 4;
-  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-quiz.png`) });
+  await page.screenshot({ path: path.join(OUT, `sw-${NAME}-offline-quiz.png`) });
   // Flash cards offline, from the ↻ confirm: the next new one turns up, says its line and is learned.
   // A word game keeps only what she learned and what comes next, so offline the shelf's tiles of words
   // she hasn't met yet ask for pictures that aren't there: expected, counted apart, not a finding.
@@ -278,7 +281,7 @@ async function steps(context, page, R) {
   R.offline.card.ok = said && R.offline.card.state === 'up' && R.offline.card.phase === 'card' && R.offline.card.picture
     && R.offline.card.tile === 'true' && JSON.stringify(R.offline.card.clips) === JSON.stringify(line)
     && !before.ids.includes(id) && R.offline.card.learned.after.ids.includes(id);
-  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-card.png`) });
+  await page.screenshot({ path: path.join(OUT, `sw-${NAME}-offline-card.png`) });
   const known = new Set(R.offline.card.learned.after.ids);
   const unmet = (u) => { const m = /\/img\/([\w-]+)\.webp/.exec(u); return !!m && !known.has(m[1]); };
   const failed = R.http.splice(httpAt);
