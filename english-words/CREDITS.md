@@ -1,27 +1,34 @@
 # Credits
 
-מילים באנגלית is a private family game for learning English words, from grade 1 to grade 7.
+מילים באנגלית is a private family game for learning English words, from grade 1 to grade 12.
 
 ## Words
 
-The 384 words, their school grade (א׳ to ז׳), their order and their Hebrew come from the formal English
-lists below (where they were made is in `tools/README.md`). 241 of the words are on a Ministry of
-Education list; the other 143 are on Cambridge's.
+The 966 words, their school grade (א׳ to י״ב), their order and their Hebrew come from the formal English
+lists below (where they were made is in `tools/README.md`). 634 of the words are on a Ministry of
+Education list; of the other 332, 234 are on Cambridge's and 98 only on the CEFR-levelled lists (CEFR-J
+92, Oxford 6).
 
 - **Israel Ministry of Education, Inspectorate for English Language Education**:
   - *English Curriculum 2020* (<https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/Curriculum2020.pdf>):
     its Table 2 gives each lexical band's grades (Pre-Band I grade 3; Band I Core I grade 4 to mid 5;
-    Core II mid 5 to the end of 6; Band II Core I grade 7 to mid 8), and its Table 1 their CEFR levels.
+    Core II mid 5 to the end of 6; Band II Core I grade 7 to mid 8; Band II Core II mid 8 to 9; Band III
+    grades 10 to 12), and its Table 1 their CEFR levels.
   - *Lexical Pre-Band I & Band I, Elementary School*
     (<https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/CurriculumFilesAugust21/LexicalBand1.xlsx>).
   - *Lexical Band II, Junior High*
     (<https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/CurriculumFilesAugust21/LexicalBand2.xlsx>).
+  - *Lexical Band III, High School*
+    (<https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/CurriculumFilesAugust21/LexicalBand3.pdf>).
 - **Cambridge University Press & Assessment**:
   - *Pre A1 Starters, A1 Movers and A2 Flyers Wordlists* (2025)
     (<https://www.cambridgeenglish.org/Images/739104-starters-movers-flyers-word-list-2025.pdf>).
   - *A2 Key and A2 Key for Schools Vocabulary List* (August 2025)
     (<https://www.cambridgeenglish.org/images/506886-a2-key-2020-vocabulary-list.pdf>), A2, the level the
     curriculum's Table 1 gives Band II Core I.
+  - *B1 Preliminary and B1 Preliminary for Schools Vocabulary List* (August 2025)
+    (<https://www.cambridgeenglish.org/images/506887-b1-preliminary-vocabulary-list.pdf>), B1, Band III's
+    level.
 - **Oxford University Press**: *The Oxford 3000 and The Oxford 5000 by CEFR level*, American and British
   editions (<https://www.oxfordlearnersdictionaries.com/external/pdf/wordlists/oxford-3000-5000/American_Oxford_3000_by_CEFR_level.pdf>,
   <https://www.oxfordlearnersdictionaries.com/external/pdf/wordlists/oxford-3000-5000/American_Oxford_5000_by_CEFR_level.pdf>,
@@ -34,27 +41,29 @@ A CEFR level gives the grade the curriculum's Table 1 matches it with: Pre-A1 gr
 grade 7, B1 grade 10, B2 and above grade 12.
 
 A word's grade is the **lowest grade any of these sources gives it**: its Ministry band's grades (split
-by its Cambridge young learners' level), Starters grade 3, Movers grade 5, Flyers grade 6, A2 Key grade 7,
-and the CEFR levels above.
+by its Cambridge young learners' level; Band II Core II grade 8, Band III grade 10), Starters grade 3,
+Movers grade 5, Flyers grade 6, A2 Key grade 7, B1 Preliminary grade 10, and the CEFR levels above.
 The Ministry has no word list for grades 1–2, where English starts with the *Enjoy English* programme
 (<https://pop.education.gov.il/kindergarten/topics/english/teaching-materials/enrichment/>). A Starters word
 in one of the programme's themes (colours, numbers, animals, family, the body, clothes, food, feelings,
 transport, weather, actions) is grade 2, and grade 1 when it is also in the grades 1–2 word bank of
 *English Playbox* (<https://english-playbox.netlify.app/>, linked from the programme's site) or on Pre-Band
-I. A few early words no list places that low sit with their theme's siblings. Grade 7 holds only words
-added for it; no word is placed above the grade a source gives it.
+I. A few early words no list places that low sit with their theme's siblings. No word is placed above
+the grade a source gives it, and no source gives grades 9 or 11 a word of their own (the picker joins
+them to the grade before).
 
 Only the words and their levels are used; the Hebrew, the niqqud and the teaching order are our own.
 
 ## Pictures
 
 Each picture's source is listed per word in [`club/pictures.json`](club/pictures.json) (`source`, `ref`),
-which `build_page.py data` writes from the word list. A picture is admitted only when someone who is not
+which `build_page.py data` writes from the word list: 496 Fluent Emoji, 469 original drawings and 1
+ARASAAC pictogram. A picture is admitted only when someone who is not
 told the word names it from the card alone.
 
 ### Fluent Emoji (`fluent`)
 
-Most pictures in [`img/`](img/) are **Fluent Emoji** by Microsoft in its 3D style
+496 pictures in [`img/`](img/) are **Fluent Emoji** by Microsoft in its 3D style
 (<https://github.com/microsoft/fluentui-emoji>, commit `1ffb34c752ecf5d402f04cfb4b392c77f57c54bc`); `ref`
 is the emoji's name. People and body parts use the default (yellow) skin tone. Changes: trimmed to the
 drawing's edges, centred, resized to 200×200 px and converted to WebP with a transparent background. They
@@ -81,7 +90,7 @@ are used under the MIT License:
 
 ### Original drawings made for this game (`svg`)
 
-Where no emoji shows a word exactly, the picture is an original drawing made for this game in the same
+Where no emoji shows a word exactly (469 words), the picture is an original drawing made for this game in the same
 rounded, softly shaded style, drawn as SVG and rendered to the same 200×200 px WebP; `ref` is the drawing's
 file. These drawings are licensed under the Creative Commons Attribution 4.0 International license, CC BY
 4.0 (<https://creativecommons.org/licenses/by/4.0/>): credit "מילים באנגלית, efigorni/pages".
@@ -89,7 +98,8 @@ file. These drawings are licensed under the Creative Commons Attribution 4.0 Int
 ### ARASAAC pictograms (`arasaac`)
 
 Where neither fits, the picture is an ARASAAC colour pictogram; `ref` is its ARASAAC id
-(<https://arasaac.org/pictograms/en/{ref}>). Resized to 200×200 px and converted to WebP. As ARASAAC asks:
+(<https://arasaac.org/pictograms/en/{ref}>). One word: **student**
+([`img/student.webp`](img/student.webp)), pictogram 5900 (<https://arasaac.org/pictograms/en/5900>). Resized to 200×200 px and converted to WebP. As ARASAAC asks:
 
 > The pictographic symbols used are the property of the Government of Aragón and have been created by
 > Sergio Palao for ARASAAC (http://www.arasaac.org), that distribute them under Creative Commons License
@@ -142,3 +152,5 @@ English: Kokoro-82M (Apache-2.0), voice `am_michael`. Hebrew: BlueTTS (MIT) with
   short sentence ("I see a cat.") and cut out at Whisper's word timestamps, a few spelled out as phonemes
   (`tools/tts/en_pins.json`). A wav2vec2 phoneme recognizer (`facebook/wav2vec2-lv-60-espeak-cv-ft`,
   Apache-2.0) flagged the suspects; it too only listened.
+- 30 more English words, whose default renders the speech-to-text check didn't hear right, are the same
+  sentence cut chosen by a script, not yet by ear (`tools/tts/en_pins.json` says so in each `by`).

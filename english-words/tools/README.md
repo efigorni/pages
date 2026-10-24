@@ -14,9 +14,10 @@ met, the progress bar, the core precache, and the school grades, `levels`: the s
 
 ## Where the words, pictures and clips come from
 
-They were made in two work directories outside the repo, as downloads must be: the round that built the
-game, `~/Documents/ENG-00-english-words/`, and the round that graded it and took it to grade 7,
-`~/Documents/ENG-00-english-words-grades/`:
+They were made in three work directories outside the repo, as downloads must be: the round that built the
+game, `~/Documents/ENG-00-english-words/`; the round that graded it and took it to grade 7,
+`~/Documents/ENG-00-english-words-grades/`; and the round that took it to 966 words and grade 12,
+`~/Documents/ENG-00-english-words-1000/`:
 
 - **The words**: `data/words.json`, 348 picturable words in teaching order with their Hebrew, niqqud,
   theme and source, and the 755 excluded entries with their reasons. The game ships 347: `club.json`
@@ -31,6 +32,15 @@ game, `~/Documents/ENG-00-english-words/`, and the round that graded it and took
   one grading function (the lowest grade any source gives, `CREDITS.md`), `work/curator/build_final.py`
   merges the round-1 words with the new picks and grades them all into `work/final/`, and
   `docs/final-list.md` lists every grade, every move and every new word with its reason.
+- **The 966 words, up to grade 12**: `work/final/words.json` in the 1000 directory (967 entries, birthday
+  out; 582 new in `work/final/new-ids.txt`, `assets.tsv` their picture and clips), each with its `level`
+  (1–12) and `picture`. `work/curator/grade_x.py` is `grade.py` extended with MoE Band II Core II and
+  Band III, Cambridge B1 Preliminary, CEFR-J and Oxford 3000/5000 (`docs/vocab-ceiling.md`);
+  `work/curator/merge.py` builds `work/final/`, `validate.py` checks it, and `docs/final-1k.md` lists the
+  counts, drops, id fixes and Hebrew changes. Every picture passed a blind naming test (`docs/decisions.md`
+  X4): the original drawings' SVG sources and kit are in `work/svg/` (`STYLE.md`), the blind packs in
+  `work/blind/`; the clips are `work/tts/out/audio/` (`work/tts/STATUS.md`), its Hebrew pins
+  `work/tts/he_pins.json` (outside the repo, as round 1's).
 - **The pictures**: Fluent UI Emoji 3D at the pinned commit (`CREDITS.md`), resized to WebP into
   `assets/img/<id>.webp`.
 - **The clips**: `assets/audio/en/<id>.mp3` (Kokoro `am_michael`) and `assets/audio/he/<id>.mp3` (BlueTTS
@@ -84,7 +94,8 @@ should stop teaching by grade, is a `club.json` `play.levels` change (drop the k
    files of words that left the list.
 3. The sound-alikes of the new list: `uv run --quiet --with cmudict==1.1.3 python -I
    _memory-game/tools/words/neighbours.py english-words` (`club/avoid.json`; `assemble --check` fails until
-   it matches the roster), then `python3 -I _memory-game/tools/page/build_page.py assemble english-words`.
+   it matches the roster). A word CMUdict doesn't know fails it: give it a line in
+   `tools/words/cmudict_extra.json` (a compound's `parts`, or its `arpabet` by hand), then `python3 -I _memory-game/tools/page/build_page.py assemble english-words`.
 4. `_memory-game/tools/og/render_og.sh english-words` (look at `og.jpg`), then
    `_memory-game/tools/verify/verify.sh sanity english-words`, and commit with explicit paths.
 

@@ -112,7 +112,9 @@ but its answers keep the same score for the shelf's ticks.
 A word game's `club/avoid.json` lists, per word, only the words most confusing to hear against it: as many
 syllables, and only the first or last consonant apart (ball/doll, cat/hat, bear/pear), or one syllable each
 with only the vowel apart (house/horse, hat/hot), as an American voice says them (the rule is in its
-docstring). `tools/words/neighbours.py` writes it from CMUdict: `uv run --quiet --with cmudict==1.1.3 python -I _memory-game/tools/words/neighbours.py <game>`. The
+docstring). `tools/words/neighbours.py` writes it from CMUdict: `uv run --quiet --with cmudict==1.1.3 python -I _memory-game/tools/words/neighbours.py <game>`;
+a word CMUdict lacks takes its pronunciation from the game's own `<game>/tools/words/cmudict_extra.json`
+(a compound's `parts`, said joined, or `arpabet` by hand). The
 builder checks it is the roster's (a line per word, each pair both ways) and puts each word's `avoid` (with
 its `apart` partners) in DATA.
 

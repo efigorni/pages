@@ -22,6 +22,11 @@ when
 (KEEP_APART, ALLOWED) before it writes.
 Every early quiz still has three others to offer: with the first 4 to 50 words met, no word of the
 English game runs out of them.
+
+A word CMUdict doesn't know gets its pronunciation from the game's own <game>/tools/words/cmudict_extra.json,
+when it has one: {word: {"parts": [words CMUdict knows], "why"}} for a compound, said as its parts joined
+(earache: ear + ache), or {word: {"arpabet": ["HH UH1 D IY0", ...], "why"}} by hand. A word there that
+CMUdict knows, a part it doesn't, or a phoneme that isn't CMUdict's fails the run.
 """
 import argparse
 import itertools
@@ -33,7 +38,12 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 REPO = Path(__file__).resolve().parents[3]
 VOWELS = {"AA", "AE", "AH", "AO", "AW", "AY", "EH", "ER", "EY", "IH", "IY", "OW", "OY", "UH", "UW"}
+PHONES = VOWELS | {"B", "CH", "D", "DH", "F", "G", "HH", "JH", "K", "L", "M", "N", "NG", "P", "R", "S", "SH", "T", "TH",
+                   "V", "W", "Y", "Z", "ZH"}
 VARIANTS = 3  # pronunciations per word kept from CMUdict
+# A game's pronunciations for the words CMUdict lacks (module docstring).
+EXTRA = "tools/words/cmudict_extra.json"
+PHONE = re.compile(r"^(?:[A-Z]{1,2})[0-2]?$")
 # Adam's cases: pairs the rule must keep apart, and pairs it must allow.
 KEEP_APART = (("ball", "doll"), ("cat", "hat"), ("house", "horse"), ("bed", "red"), ("bear", "pear"), ("sun", "run"))
 ALLOWED = (("cake", "snake"), ("cat", "camel"))
@@ -50,6 +60,31 @@ def pronunciations(text, cmu):
     if missing:
         fail(f"{text!r}: CMUdict doesn't know {', '.join(missing)}")
     return [[ph for part in combo for ph in part] for combo in itertools.product(*(cmu[p][:VARIANTS] for p in parts))]
+
+
+def add_extra(cmu, path):
+    """The game's own pronunciations (EXTRA) put into cmu; the words added."""
+    if not path.is_file():
+        return []
+    extra = json.loads(path.read_text(encoding="utf-8"))
+    for word, entry in extra.items():
+        where = f"{path.name}: {word!r}"
+        if word in cmu:
+            fail(f"{where}: CMUdict already knows it; take it out")
+        if not isinstance(entry, dict) or ("parts" in entry) == ("arpabet" in entry):
+            fail(f"{where}: give \"parts\" (words CMUdict knows) or \"arpabet\" (pronunciations), and \"why\"")
+        if "parts" in entry:
+            unknown = [p for p in entry["parts"] if p not in cmu]
+            if unknown or not entry["parts"]:
+                fail(f"{where}: CMUdict doesn't know the parts {', '.join(unknown) or '(none given)'}")
+            prons = [[ph for part in combo for ph in part] for combo in itertools.product(*(cmu[p][:VARIANTS] for p in entry["parts"]))]
+        else:
+            prons = [str(a).split() for a in entry["arpabet"]]
+            bad = [ph for pron in prons for ph in pron if not (PHONE.match(ph) and re.sub(r"\d", "", ph) in PHONES)]
+            if bad or not all(prons):
+                fail(f"{where}: not CMUdict phonemes: {', '.join(bad) or '(empty)'}")
+        cmu[word] = prons
+    return list(extra)
 
 
 def bare(pron):
@@ -126,6 +161,7 @@ def main():
     if wrong:
         fail(f"the rule breaks Adam's cases: {'; '.join(wrong)}")
     page = REPO / args.game
+    added = add_extra(cmu, page / EXTRA)
     roster = json.loads((page / "club/roster.json").read_text(encoding="utf-8"))
     words = roster.get("words")
     if not words:
@@ -139,7 +175,8 @@ def main():
             whys[reason] = whys.get(reason, 0) + 1
     print(f"{args.game}/club/avoid.json: {len(words)} words, {sum(counts) // 2} pairs "
           f"({', '.join(f'{k} {v // 2}' for k, v in sorted(whys.items()))}); per word: median "
-          f"{counts[len(counts) // 2]}, max {counts[-1]}, none {counts.count(0)}", flush=True)
+          f"{counts[len(counts) // 2]}, max {counts[-1]}, none {counts.count(0)}"
+          + (f"; {len(added)} from {EXTRA}" if added else ""), flush=True)
     for wid in args.show:
         print(f"  {wid}: {avoid.get(wid, 'not a word of this game')}", flush=True)
 
