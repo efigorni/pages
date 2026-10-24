@@ -223,6 +223,12 @@ case "$cmd" in
       want=""
       if ((LIVE)); then want="$(sed -n "s/^const VERSION = '\(.*\)';$/\1/p" "$REPO/$g/sw.js")"; fi
       job "worker-$g" node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
+      # a word game with levels also plays its first level alone: the seeds, the bar and the cache on that pool
+      levels="$(python3 -I -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(int(bool(build_page.levels_of(sys.argv[2]))))' \
+        "$root/_memory-game/tools/page" "$g")" || die "$g: build_page.py could not read its play config"
+      if ((levels)); then
+        job "worker-$g-level1" env MEMORY_GAME_VERIFY_LEVEL=1 node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
+      fi
     done
     say "running: the worker per game, the quiz$(((LIVE)) || echo ", the state machine")${UPGRADED[0]:+, the upgrade from $FROM per game on it}"
     finish

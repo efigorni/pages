@@ -371,6 +371,7 @@ async function quizFlow(page, vp, dir, res) {
     .some((e) => kinds.includes(e.type) && e.url === u), 10000, [from, url, CLIP_EVENTS]);
   await ready(page);
   // DATA is the page's global const, not a window property.
+  // A fresh context keeps no level, so a word game with levels plays every word here.
   if (await page.evaluate(() => typeof DATA !== 'undefined' && !!DATA.play && DATA.play.quiz.pool === 'learned')) {
     await page.evaluate((n) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(DATA.words.slice(0, n).map((w) => w.id))),
       LEARNED_START);

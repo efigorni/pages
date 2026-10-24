@@ -4,7 +4,8 @@
 // boot({ clips: true }) pretends every clip ships; boot({ noClips: true }) that none does (speech only);
 // boot({ storage: [[key, value]] }) starts with that localStorage (what she has learned, a reload later);
 // boot({ html: <path> }) runs another page than HARNESS_HTML (a game built in a scratch folder);
-// boot({ random: fn }) gives the page fn as Math.random (a seeded source, for repeatable deals and quizzes).
+// boot({ random: fn }) gives the page fn as Math.random (a seeded source, for repeatable deals and quizzes);
+// boot({ edit: fn }) runs the page with fn(DATA) instead of its DATA (another roster or play config).
 const fs = require('fs');
 const vm = require('vm');
 
@@ -228,15 +229,19 @@ function boot(opts = {}) {
 
   const { dataSrc, main } = extractScripts(html);
   let data = dataSrc;
-  if (opts.clips || opts.noClips) {
-    const d = JSON.parse(data.match(/const DATA = (\{.*\});/)[1]);
-    const all = opts.noClips ? [] : (d.words || d.players).map((p) => p.id);
-    // every clip kind the game records (a squad's name and match, a word game's en and he)
-    d.audio = Object.fromEntries(Object.keys(d.audio).map((kind) => [kind, kind === 'ui' ? (opts.noClips ? [] : ['start', 'win']) : all]));
+  if (opts.clips || opts.noClips || opts.edit) {
+    let d = JSON.parse(data.match(/const DATA = (\{.*\});/)[1]);
+    if (opts.edit) d = opts.edit(d);
+    if (opts.clips || opts.noClips) {
+      const all = opts.noClips ? [] : (d.words || d.players).map((p) => p.id);
+      // every clip kind the game records (a squad's name and match, a word game's en and he)
+      d.audio = Object.fromEntries(Object.keys(d.audio).map((kind) => [kind, kind === 'ui' ? (opts.noClips ? [] : ['start', 'win']) : all]));
+    }
     data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
   }
-  const exportLine = 'globalThis.__t = { DATA, ITEMS, PLAY, game, quiz, shelf, stats, level, LEARN, pickQuiz, updateStats, tap, newGame, '
-    + 'dealPicks, startQuiz, distractors, sound, clip, voice, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
+  const exportLine = 'globalThis.__t = { DATA, get ITEMS() { return ITEMS; }, PLAY, POSTER, game, quiz, shelf, stats, level, LEARN, '
+    + 'pickQuiz, updateStats, tap, newGame, dealPicks, startQuiz, distractors, upcoming, sound, clip, voice, hebrewNumber, '
+    + 'get wakeLock() { return wakeLock; } };\n';
   const cut = main.lastIndexOf('})();');
   const patched = main.slice(0, cut) + exportLine + main.slice(cut);
   vm.createContext(g);

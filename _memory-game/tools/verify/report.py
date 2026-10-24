@@ -158,7 +158,8 @@ def sw_checks(r):
         f"online matches say the second clip ({on['matchFollows']}/{on['matches']})": on["matchFollows"] > 0,
         "offline reload controlled": bool(r["offline"]["state"]["controlled"]),
         f"what she learned survives the offline reload ({len(after)}, bar {bar})":
-            len(before) >= 3 and sorted(after) == sorted(before) and bar == f"{len(after)} / {(kept.get('after') or {}).get('of')}",
+            len(before) >= 3 and sorted(after) == sorted(before)
+            and bar == f"{(kept.get('after') or {}).get('counted')} / {(kept.get('after') or {}).get('of')}",
         f"offline pictures ({imgs[1]}/{imgs[0]})": imgs[0] > 0 and imgs[0] == imgs[1],
         first(f"offline flips say their clip ({off['rightNameClip']}/{off['of']})", off["bad"]):
             off["rightNameClip"] == off["of"] > 0 and not off["errors"] and not off["fetchBad"],
@@ -195,6 +196,9 @@ values = {option("--upgraded"), ref}
 failed = []
 for game in [a for a in sys.argv[2:] if not a.startswith("--") and a not in values]:
     sections = {"worker": sw_checks(load(OUT / f"sw-{game}.json"))}
+    # a word game with levels, played up to one (sw_check.js MEMORY_GAME_VERIFY_LEVEL)
+    for path in sorted(OUT.glob(f"sw-{game}-level*.json")):
+        sections[f"worker, {path.stem.rsplit('-', 1)[1].replace('level', 'level ')}"] = sw_checks(load(path))
     states_path = OUT / f"states-{game}.txt"
     states = states_path.read_text(encoding="utf-8").strip().splitlines() if states_path.exists() else []
     failing = [s for s in states if s.startswith("FAIL")]

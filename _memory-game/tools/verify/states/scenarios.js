@@ -613,6 +613,147 @@ async function playToLastPair(h) {
     }
   }
 
+  // ---------- L0-L7 a word game's levels (PLAY.levels): it plays the words up to the level chosen ----------
+  if (!probe.PLAY.levels) {
+    const h = boot({ noClips: true });
+    check('L0 a game without levels shows no level picker and plays every item', h.byId.levels.hidden !== false
+      && !h.byId.cards.dataset.levels && h.T.ITEMS === (h.T.DATA.words || h.T.DATA.players));
+  } else {
+    const LKEY = `${probe.DATA.game}:level`;
+    const ALL = probe.DATA.words;
+    const { names } = probe.PLAY.levels;
+    const upTo = (n) => ALL.filter((w) => w.level <= n);
+    // The chips the picker should show for `words` and `names`: [last level, label, words up to it]; a level
+    // that adds no words joins the chip before it, whose label becomes a range.
+    const chipsFor = (words, labels) => {
+      const out = [];
+      labels.forEach((name, i) => {
+        const count = words.filter((w) => w.level <= i + 1).length;
+        const last = out[out.length - 1];
+        if (last && last.count === count) Object.assign(last, { n: i + 1, label: `${last.first}–${name}` });
+        else out.push({ n: i + 1, first: name, label: name, count });
+      });
+      return out.map(({ n, label, count }) => [n, label, count]);
+    };
+    const want = chipsFor(ALL, names);
+    const first = want[0][0];
+    const top = want[want.length - 1][0];
+    const topWords = ALL.filter((w) => w.level === Math.max(...ALL.map((x) => x.level)));
+    // the chip a kept level n presses: the one whose levels hold it
+    const chipOf = (chips, n) => chips.find(([last], i) => n <= last && (i === 0 || n > chips[i - 1][0]))[0];
+    const at = (n) => [[LKEY, String(n)]];
+    // the picker: its label, then a chip per level that has words
+    const chips = (h) => h.byId.levels.children[1].children;
+    const pressed = (h) => chips(h).filter((c) => c.getAttribute('aria-pressed') === 'true').map((c) => Number(c.dataset.level));
+    const shown = (h) => chips(h).map((c) => [Number(c.dataset.level), c.children[0].textContent, Number(c.children[1].textContent)]);
+    const tapLevel = async (h, n) => {
+      h.byId.levels.dispatch('click', { target: chips(h).find((c) => c.dataset.level === String(n)), detail: 1 });
+      await h.flush();
+    };
+    const learnedOf = (list) => [[`${probe.DATA.game}:learned`, JSON.stringify(ids(list))]];
+    {
+      const h = boot({ noClips: true });
+      const counts = shown(h);
+      check('L1 none chosen: every word, the picker shown with a chip per level that adds words (one that adds none joins '
+        + 'the chip before it, a range), each with the words up to it, the top one pressed', h.T.ITEMS.length === ALL.length
+        && h.byId.levels.hidden === false && h.byId.cards.dataset.levels === 'on' && JSON.stringify(counts) === JSON.stringify(want)
+        && JSON.stringify(pressed(h)) === JSON.stringify([top]) && h.byId['progress-count'].textContent === `0 / ${ALL.length}`,
+      JSON.stringify(counts));
+    }
+    {
+      const bad = [];
+      for (let n = 1; n <= names.length; n++) {
+        const h = boot({ noClips: true, storage: at(n) });
+        const pool = ids(upTo(n));
+        const { T } = h;
+        const ok = JSON.stringify(ids(T.ITEMS)) === JSON.stringify(pool) && pool.length >= T.PLAY.deal.pairs
+          && h.byId['progress-count'].textContent === `0 / ${pool.length}`
+          && JSON.stringify(pressed(h)) === JSON.stringify([chipOf(want, n)])
+          && JSON.stringify(ids(T.dealPicks())) === JSON.stringify(pool.slice(0, T.PLAY.deal.pairs))
+          && subset(ids(T.POSTER), pool) && subset(ids(T.upcoming()), pool);
+        if (!ok) bad.push(n);
+      }
+      check('L2 a level chosen: the words up to it, in teaching order, at least a board\'s; the bar counts them; its chip '
+        + 'pressed; memory deals, the start screen shows and the page fetches ahead only from them', bad.length === 0, JSON.stringify(bad));
+    }
+    {
+      const odd = ['0', '-1', 'abc', '2.5', '', ' 2', String(names.length + 1), 'null'];
+      const wrong = odd.filter((v) => boot({ noClips: true, storage: [[LKEY, v]] }).T.ITEMS.length !== ALL.length);
+      check('L3 a kept level that is not one (0, too high, not a whole number) plays every word', wrong.length === 0, JSON.stringify(wrong));
+    }
+    {
+      const h = boot({ noClips: true });
+      await h.click('play-cards');
+      await tapLevel(h, first);
+      const pool = upTo(first);
+      const now = h.T.ITEMS.length === pool.length && h.store.get(LKEY) === String(first)
+        && h.byId.shelf.children.length === pool.length && h.byId['shelf-count'].textContent === `0 / ${pool.length}`
+        && JSON.stringify(pressed(h)) === JSON.stringify([first]) && h.phase() === 'browse';
+      const again = boot({ noClips: true, storage: [...h.store] });
+      const kept = again.T.ITEMS.length === pool.length && JSON.stringify(pressed(again)) === JSON.stringify([first]);
+      await tapLevel(h, top);
+      check('L4 a chip on the shelf: the shelf, its count and the bar go up to that level at once, it is kept, and after a '
+        + 'reload the game still goes up to it; the top chip brings every word back', now && kept && h.T.ITEMS.length === ALL.length
+        && h.byId.shelf.children.length === ALL.length && h.store.get(LKEY) === String(top), JSON.stringify({ now, kept }));
+    }
+    {
+      const low = upTo(first);
+      const high = topWords.slice(0, 5);
+      const h = boot({ noClips: true, storage: [...at(first), ...learnedOf(low.slice(0, 3).concat(high))] });
+      const counted = h.byId['progress-count'].textContent === `3 / ${low.length}` && h.T.stats.items().length === 3;
+      await h.click('play-cards');
+      await h.click('next-new');
+      await h.advance(8000);
+      const saved = JSON.parse(h.store.get(key(h)));
+      check('L5 what she met beyond the level is kept but not counted: the bar counts the level\'s words only, and a new '
+        + 'one learned keeps the others in the store', counted && h.T.shelf.card.p.id === low[3].id && subset(ids(high), saved)
+        && saved.includes(low[3].id) && h.byId['progress-count'].textContent === `4 / ${low.length}`,
+      JSON.stringify({ counted, bar: h.byId['progress-count'].textContent }));
+    }
+    {
+      const low = upTo(first);
+      const high = topWords.slice(0, 8);
+      const known = ids(low.slice(0, 6));
+      const k = boot({ noClips: true, storage: [...at(first), ...learnedOf(low.slice(0, 6).concat(high))] });
+      await k.click('play-quiz');
+      const { quiz } = k.T;
+      let cardsOk = true;
+      const asked = [];
+      for (let i = 0; i < 40 && k.phase() === 'ask'; i++) {
+        asked.push(quiz.answer.p.id);
+        cardsOk = cardsOk && quiz.cards.length === 4 && subset(ids(quiz.cards.map((c) => c.p)), known);
+        await k.advance(500);
+        await k.pick(quiz.answer);
+        await k.advance(800);
+        if (k.phase() === 'reveal') await k.pick(quiz.cards[0]);
+        await k.advance(50);
+      }
+      const drawn = low.slice(0, 6).every((p) => subset(ids(k.T.distractors(p)), known));
+      check('L6 the quiz asks only what she met within the level, and its other three cards are from there too',
+        asked.length === 6 && subset(asked, known) && cardsOk && drawn, JSON.stringify({ asked: asked.length, cardsOk, drawn }));
+    }
+    {
+      // the second level emptied into the third, and one more level after the last, with no words
+      const second = names[1];
+      const edit = (d) => ({ ...d, words: d.words.map((w) => (w.level === 2 ? { ...w, level: 3 } : w)),
+        play: { ...d.play, levels: { ...d.play.levels, names: names.concat('+') } } });
+      const words = edit(probe.DATA).words;
+      const labels = names.concat('+');
+      const merged = chipsFor(words, labels);
+      const h = boot({ noClips: true, edit });
+      const got = shown(h);
+      await h.click('play-cards');
+      await tapLevel(h, merged[0][0]);
+      const pool = words.filter((w) => w.level <= 2);
+      const kept = boot({ noClips: true, edit, storage: [...h.store] });
+      check(`L7 a level with no words joins the chip before it: "${names[0]}–${second}" and a range up to the empty last `
+        + 'level; the merged chip keeps its last level and plays the same words', JSON.stringify(got) === JSON.stringify(merged)
+        && got[0][1] === `${names[0]}–${second}` && got[0][2] === words.filter((w) => w.level === 1).length
+        && got[got.length - 1][1].endsWith('–+') && h.store.get(LKEY) === '2' && h.T.ITEMS.length === pool.length
+        && JSON.stringify(pressed(kept)) === JSON.stringify([merged[0][0]]) && kept.T.ITEMS.length === pool.length, JSON.stringify(got));
+    }
+  }
+
   // ---------- H1-H6 a face-up card in memory says its whole line again (PLAY.voice.card), changing nothing ----------
   {
     // the fake Web Audio's clip lengths (harness.js)
