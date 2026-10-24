@@ -14,14 +14,23 @@ met, the progress bar, the core precache, and the school grades, `levels`: the s
 
 ## Where the words, pictures and clips come from
 
-They were made in the work directory of the round that built the game, `~/Documents/ENG-00-english-words/`
-(outside the repo, as downloads must be):
+They were made in two work directories outside the repo, as downloads must be: the round that built the
+game, `~/Documents/ENG-00-english-words/`, and the round that graded it and took it to grade 7,
+`~/Documents/ENG-00-english-words-grades/`:
 
 - **The words**: `data/words.json`, 348 picturable words in teaching order with their Hebrew, niqqud,
   theme and source, and the 755 excluded entries with their reasons. The game ships 347: `club.json`
   `leave_out` keeps "birthday" out, whose picture reads as "cake". The research behind it (the
   Ministry of Education's Pre-Band I and Band I lists, complemented by Cambridge's Young Learners list)
   is `docs/words.md`. Ranks 1–104 are hand-ordered so the first deals mix themes.
+- **The grades and the words up to grade 7**: `work/final/words.json` in the grades directory, the
+  round-1 format with a `level` (1–7) on every word: 389 words, 384 shipped (birthday stays out), 37 of
+  them new (`work/final/new-ids.txt`). The formal lists, as fetched and as CSVs, are in `sources/`
+  (`moe-vocab.csv`, `yle-vocab.csv`, `a2key-vocab.csv`, `enjoy-english-playbox.csv`,
+  `proposed-grade-map.csv`), described in `docs/curriculum-sources.md`; `work/curator/grade.py` is the
+  one grading function (the lowest grade any source gives, `CREDITS.md`), `work/curator/build_final.py`
+  merges the round-1 words with the new picks and grades them all into `work/final/`, and
+  `docs/final-list.md` lists every grade, every move and every new word with its reason.
 - **The pictures**: Fluent UI Emoji 3D at the pinned commit (`CREDITS.md`), resized to WebP into
   `assets/img/<id>.webp`.
 - **The clips**: `assets/audio/en/<id>.mp3` (Kokoro `am_michael`) and `assets/audio/he/<id>.mp3` (BlueTTS
@@ -59,18 +68,22 @@ grade whose words, with every easier grade's, don't fill a board (15). A grade w
 gets no chip: it joins the chip before it ("ה׳–ו׳"). A new grade name, or a game that
 should stop teaching by grade, is a `club.json` `play.levels` change (drop the key: every word, no picker).
 
+0. Grade the list: `python3 -I ~/Documents/ENG-00-english-words-grades/work/curator/build_final.py` writes
+   `work/final/words.json` with every word's `level` (`grade.py`, the lowest grade any formal source
+   gives); look at its counts per grade (`work/final/counts.json`) before going on.
 1. Copy the pictures into `img/` and the clips into `audio/en/` and `audio/he/` (one file per word id),
    except the picked takes in `tts/en_pins.json`, which stay (above).
 2. `python3 -I _memory-game/tools/page/build_page.py data <words.json> english-words --prune` writes
-   `club/roster.json` grade by grade, in rank order inside a grade, and assembles the page; it fails on a word without its picture or a
-   clip, and `--prune` removes the files of words that left the list.
+   `club/roster.json` grade by grade, in rank order inside a grade, and assembles the page; it prints the
+   words per grade and fails on a word without its picture, a clip or a level, and `--prune` removes the
+   files of words that left the list.
 3. The sound-alikes of the new list: `uv run --quiet --with cmudict==1.1.3 python -I
    _memory-game/tools/words/neighbours.py english-words` (`club/avoid.json`; `assemble --check` fails until
    it matches the roster), then `python3 -I _memory-game/tools/page/build_page.py assemble english-words`.
 4. `_memory-game/tools/og/render_og.sh english-words` (look at `og.jpg`), then
    `_memory-game/tools/verify/verify.sh sanity english-words`, and commit with explicit paths.
 
-The first 30 words, the first grade's, are precached; the worker keeps every other word's picture and clips as they come
-(`play.precache`). After a refresh an installed tablet downloads the core once more, and, if any later
+The first 30 words, the first grade's, are precached; the worker keeps every other word's picture and
+clips as they come (`play.precache`). After a refresh an installed tablet downloads the core once more, and, if any later
 word's file changed, fetches the later words again as it meets them (online, the page fetches every
 learned word and the next new ones ahead).

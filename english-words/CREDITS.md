@@ -1,21 +1,39 @@
 # Credits
 
-מילים באנגלית is a private family game for learning first English words.
+מילים באנגלית is a private family game for learning English words, from grade 1 to grade 7.
 
 ## Words
 
-The 347 words, their order and their Hebrew come from two published lists (where they were made is in
-`tools/README.md`):
+The 384 words, their school grade (א׳ to ז׳), their order and their Hebrew come from the formal English
+lists below (where they were made is in `tools/README.md`). 241 of the words are on a Ministry of
+Education list; the other 143 are on Cambridge's.
 
-- **Israel Ministry of Education, Inspectorate for English Language Education**: English Curriculum
-  2020, *Lexical Pre-Band I & Band I, Elementary School*
-  (<https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/CurriculumFilesAugust21/LexicalBand1.xlsx>).
-  219 of the words are on its Pre-Band I, Band I Core I or Core II sheets.
-- **Cambridge Assessment English**: *Pre A1 Starters, A1 Movers and A2 Flyers word list*, for exams
-  from 2018 (<https://www.cambridgeenglish.org/pl/Images/149681-yle-flyers-word-list.pdf>). The other
-  128 words, the concrete early words a picture game needs, come from it.
+- **Israel Ministry of Education, Inspectorate for English Language Education**:
+  - *English Curriculum 2020* (<https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/Curriculum2020.pdf>):
+    its Table 2 gives each lexical band's grades (Pre-Band I grade 3; Band I Core I grade 4 to mid 5;
+    Core II mid 5 to the end of 6; Band II Core I grade 7 to mid 8), and its Table 1 their CEFR levels.
+  - *Lexical Pre-Band I & Band I, Elementary School*
+    (<https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/CurriculumFilesAugust21/LexicalBand1.xlsx>).
+  - *Lexical Band II, Junior High*
+    (<https://meyda.education.gov.il/files/Mazkirut_Pedagogit/English/CurriculumFilesAugust21/LexicalBand2.xlsx>).
+- **Cambridge University Press & Assessment**:
+  - *Pre A1 Starters, A1 Movers and A2 Flyers Wordlists* (2025)
+    (<https://www.cambridgeenglish.org/Images/739104-starters-movers-flyers-word-list-2025.pdf>).
+  - *A2 Key and A2 Key for Schools Vocabulary List* (August 2025)
+    (<https://www.cambridgeenglish.org/images/506886-a2-key-2020-vocabulary-list.pdf>), A2, the level the
+    curriculum's Table 1 gives Band II Core I.
 
-Only the words are used; the Hebrew, the niqqud and the teaching order are our own.
+A word's grade is the **lowest grade any of these sources gives it**: its Ministry band's grades (split
+by its Cambridge young learners' level), Starters grade 3, Movers grade 5, Flyers grade 6, A2 Key grade 7.
+The Ministry has no word list for grades 1–2, where English starts with the *Enjoy English* programme
+(<https://pop.education.gov.il/kindergarten/topics/english/teaching-materials/enrichment/>). A Starters word
+in one of the programme's themes (colours, numbers, animals, family, the body, clothes, food, feelings,
+transport, weather, actions) is grade 2, and grade 1 when it is also in the grades 1–2 word bank of
+*English Playbox* (<https://english-playbox.netlify.app/>, linked from the programme's site) or on Pre-Band
+I. A few early words no list places that low sit with their theme's siblings. Grade 7 holds only words
+added for it; no word is placed above the grade a source gives it.
+
+Only the words and their levels are used; the Hebrew, the niqqud and the teaching order are our own.
 
 ## Pictures
 

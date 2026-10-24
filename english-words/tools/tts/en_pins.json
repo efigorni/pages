@@ -58,6 +58,8 @@
     "hurt": {"take": {"pick": "c1", "method": "carrier", "carrier": "I see a hurt.", "input": "ˈI sˈi A hˈɜɹt.", "sha256": "2bc4fa1e101b84e7", "by": "Adam, by ear, 2026-10-10 (round 2, F1)"}},
     "chess": {"take": {"pick": "c2", "method": "carrier", "carrier": "This is a chess.", "input": "ðɪs ɪz A ʧˈɛs.", "sha256": "db896766dcfe4185", "by": "Adam, by ear, 2026-10-10 (round 2, F1)"}},
     "sign": {"phonemes": "sˈIn", "end": "", "take": {"pick": "c3", "method": "phonemes", "input": "sˈIn", "sha256": "8c5146feaa44d69f", "by": "Adam, by ear, 2026-10-10 (round 2, F1)"}},
-    "wool": {"phonemes": "wˈʊl", "end": "", "take": {"pick": "c3", "method": "phonemes", "input": "wˈʊl", "sha256": "62c53f7434ca9e3e", "by": "Adam, by ear, 2026-10-10 (round 2, F1)"}}
+    "wool": {"phonemes": "wˈʊl", "end": "", "take": {"pick": "c3", "method": "phonemes", "input": "wˈʊl", "sha256": "62c53f7434ca9e3e", "by": "Adam, by ear, 2026-10-10 (round 2, F1)"}},
+    "purse": {"phonemes": "pˈɜːɹs", "end": ".", "why": "misaki pˈɜɹs is heard «person» by both models on every default and escalated take (or «purrs», its homophone, with no final punctuation). The lengthened vowel passes both (ab purse r1 c3, p=0.32). «purrs» is its exact homophone, accepted as a variant.", "listen": "‘purse’ with a slightly long ‘ur’; check it isn't ‘person’", "stt_variants": ["purrs"]},
+    "medal": {"phonemes": "mˈɛdːᵊl", "end": ".", "stt_variants": ["metal"], "why": "In US English medal and metal are homophones (flapped d/t): every default, escalated and A/B take is heard «metal» by medium.en. The held d (ab medal r2 c8) is the only take the second model hears as «medal»; the primary still writes «metal», accepted as a homophone variant.", "listen": "‘medal’ with a held d: check a child hears medal, not metal or ‘med-dle’"}
   }
 }
