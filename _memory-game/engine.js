@@ -1286,6 +1286,14 @@
     });
   }
 
+  // The shelf again from ITEMS, a level's pool having swapped it.
+  function rebuildShelf() {
+    shelf.tiles.clear();
+    shelf.last = null;
+    shelfEl.textContent = '';
+    buildShelf();
+  }
+
   // The shelf opens where the new ones begin.
   function openShelf() {
     reset('cards', 0);
@@ -1372,8 +1380,8 @@
   (LEVELS ? LEVELS.names : []).forEach((name, i) => {
     const count = poolOf(i + 1).length;
     const last = LEVEL_CHIPS[LEVEL_CHIPS.length - 1];
-    if (last && count === last.count) Object.assign(last, { n: i + 1, name: `${last.first}–${name}` });
-    else LEVEL_CHIPS.push({ from: i + 1, n: i + 1, first: name, name, count });
+    if (last && count === last.count) Object.assign(last, { n: i + 1, name: `${LEVELS.names[last.from - 1]}–${name}` });
+    else LEVEL_CHIPS.push({ from: i + 1, n: i + 1, name, count });
   });
 
   function buildLevels() {
@@ -1409,10 +1417,7 @@
     try { window.localStorage.setItem(LEVEL_KEY, String(n)); } catch (e) { /* full or blocked: this visit only */ }
     if (reloadIfStale()) return;
     ITEMS = poolOf(n);
-    shelf.tiles.clear();
-    shelf.last = null;
-    shelfEl.textContent = '';
-    buildShelf();
+    rebuildShelf();
     syncLearned();
     syncLevels();
     scrollToNew();

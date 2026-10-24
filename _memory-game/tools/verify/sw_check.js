@@ -3,8 +3,8 @@
 // read installability over CDP, then go offline, reload (what she learned is still learned) and play
 // again, then start the quiz offline from the ↻ confirm and check its files are all cached, then open
 // the next new flash card. The clips are the game's voice script (DATA.play.voice). A word game starts
-// with the first LEARNED_START words it plays learned (voice.js POOL: with levels, those up to the level
-// kept): its quiz is open, and its deal reaches past the words the worker precaches, so the offline game
+// with the first LEARNED_START words it plays learned (with MEMORY_GAME_VERIFY_LEVEL, those up to that
+// level): its quiz is open, and its deal reaches past the words the worker precaches, so the offline game
 // plays words the worker kept as they came.
 //
 // MEMORY_GAME_VERIFY_LEVEL=<n> plays a word game with levels up to level n (kept in `<game>:level` first), and
@@ -26,7 +26,7 @@ const LEVEL = process.env.MEMORY_GAME_VERIFY_LEVEL || '';
 const NAME = LEVEL ? `${GAME}-level${LEVEL}` : GAME;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const say = (...a) => console.log(`[sw ${NAME}]`, ...a);
-const { clipsOf, LEARNED_START, POOL } = require('./voice');
+const { clipsOf, LEARNED_START } = require('./voice');
 
 async function until(page, fn, timeout, arg) {
   const t0 = Date.now();
@@ -168,7 +168,9 @@ async function steps(context, page, R) {
     learnedPool: !!(DATA.play && DATA.play.quiz.pool === 'learned') }));
   R.voice = info.voice;
   if (LEVEL) await page.evaluate((n) => localStorage.setItem(`${DATA.game}:level`, n), LEVEL);
-  const pool = await page.evaluate(POOL);
+  // The ids the page should play, in teaching order: up to LEVEL, or every item.
+  const pool = await page.evaluate((n) => (DATA.words || DATA.players).filter((p) => !n || p.level <= n).map((p) => p.id),
+    Number(LEVEL) || 0);
   if (info.learnedPool) {
     await page.evaluate((ids) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(ids)), pool.slice(0, LEARNED_START));
   }

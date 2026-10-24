@@ -219,14 +219,14 @@ case "$cmd" in
       for g in "${GAMES[@]}"; do job "states-$g" node "$HERE/states/scenarios.js" "$root/$g/index.html"; done
     fi
     job quiz node "$HERE/drive.js" "$dir" "$base" --games "$(csv "${GAMES[@]}")" --vps tab-portrait --modes quiz --questions 1
+    # the word games with levels: each also plays its first level alone (the seeds, the bar and the cache on that pool)
+    leveled=" $(python3 -I -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(" ".join(g for g in sys.argv[2:] if build_page.levels_of(g)))' \
+      "$root/_memory-game/tools/page" "${GAMES[@]}") " || die "build_page.py could not read the games' play config"
     for g in "${GAMES[@]}"; do
       want=""
       if ((LIVE)); then want="$(sed -n "s/^const VERSION = '\(.*\)';$/\1/p" "$REPO/$g/sw.js")"; fi
       job "worker-$g" node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
-      # a word game with levels also plays its first level alone: the seeds, the bar and the cache on that pool
-      levels="$(python3 -I -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(int(bool(build_page.levels_of(sys.argv[2]))))' \
-        "$root/_memory-game/tools/page" "$g")" || die "$g: build_page.py could not read its play config"
-      if ((levels)); then
+      if [[ "$leveled" == *" $g "* ]]; then
         job "worker-$g-level1" env MEMORY_GAME_VERIFY_LEVEL=1 node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
       fi
     done

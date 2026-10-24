@@ -537,8 +537,9 @@ def write_words(words_json, game):
     pictures = {e["id"]: picture_of(by_id[e["id"]]) for e in roster["words"]}
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
     (page / PICTURES).write_text(pictures_text(pictures), encoding="utf-8")
+    per_level = Counter(e.get("level") for e in entries)
     counts = "" if not levels else " (" + ", ".join(
-        f"{name} {sum(e.get('level') == n for e in entries)}" for n, name in enumerate(levels["names"], 1)) + ")"
+        f"{name} {per_level[n]}" for n, name in enumerate(levels["names"], 1)) + ")"
     print(f"{game}: club/roster.json: {len(roster['words'])} words{counts}", flush=True)
     sources = " ".join(f"{src} {n}" for src, n in sorted(Counter(p["source"] for p in pictures.values()).items()))
     print(f"{game}: {PICTURES}: {sources}", flush=True)

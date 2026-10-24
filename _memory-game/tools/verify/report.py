@@ -146,8 +146,9 @@ def sw_checks(r):
     imgs = r["offline"]["imgs"]
     cache = r["offline"].get("quizCache") or {}
     kept = r["offline"].get("learned") or {}
-    before, after = (kept.get("before") or {}).get("ids") or [], (kept.get("after") or {}).get("ids") or []
-    bar = (kept.get("after") or {}).get("bar")
+    kept_after = kept.get("after") or {}
+    before, after = (kept.get("before") or {}).get("ids") or [], kept_after.get("ids") or []
+    bar = kept_after.get("bar")
     card = r["offline"].get("card") or {}
     return {
         "worker controls the page": bool(r["controlled"]),
@@ -159,7 +160,7 @@ def sw_checks(r):
         "offline reload controlled": bool(r["offline"]["state"]["controlled"]),
         f"what she learned survives the offline reload ({len(after)}, bar {bar})":
             len(before) >= 3 and sorted(after) == sorted(before)
-            and bar == f"{(kept.get('after') or {}).get('counted')} / {(kept.get('after') or {}).get('of')}",
+            and bar == f"{kept_after.get('counted')} / {kept_after.get('of')}",
         f"offline pictures ({imgs[1]}/{imgs[0]})": imgs[0] > 0 and imgs[0] == imgs[1],
         first(f"offline flips say their clip ({off['rightNameClip']}/{off['of']})", off["bad"]):
             off["rightNameClip"] == off["of"] > 0 and not off["errors"] and not off["fetchBad"],

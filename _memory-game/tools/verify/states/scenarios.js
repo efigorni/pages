@@ -382,6 +382,8 @@ async function playToLastPair(h) {
   const key = (h) => `${h.T.DATA.game}:learned`;
   const ids = (list) => list.map((p) => p.id);
   const subset = (a, b) => a.every((x) => b.includes(x));
+  // A boot's storage with `list` met (the learned store).
+  const learnedOf = (list) => [[`${probe.DATA.game}:learned`, JSON.stringify(ids(list))]];
   // The clips a step started (the fake Web Audio's log), from `from` on.
   const started = (h, from) => h.log.slice(from).filter((l) => l.startsWith('buffer-start')).map((l) => l.split(': ')[1].split(' ')[0]);
   const withClips = (extra = {}) => {
@@ -434,7 +436,6 @@ async function playToLastPair(h) {
     const h = boot({ noClips: true });
     const { ITEMS, PLAY } = h.T;
     const N = ITEMS.length;
-    const learnedOf = (list) => [[`${h.T.DATA.game}:learned`, JSON.stringify(ids(list))]];
     const first15 = ids(ITEMS.slice(0, 15));
     check('W1 nothing learned: memory deals the first 15 words in teaching order', JSON.stringify(ids(h.T.dealPicks())) === JSON.stringify(first15));
     {
@@ -630,8 +631,8 @@ async function playToLastPair(h) {
       labels.forEach((name, i) => {
         const count = words.filter((w) => w.level <= i + 1).length;
         const last = out[out.length - 1];
-        if (last && last.count === count) Object.assign(last, { n: i + 1, label: `${last.first}–${name}` });
-        else out.push({ n: i + 1, first: name, label: name, count });
+        if (last && last.count === count) Object.assign(last, { n: i + 1, label: `${labels[last.from - 1]}–${name}` });
+        else out.push({ from: i + 1, n: i + 1, label: name, count });
       });
       return out.map(({ n, label, count }) => [n, label, count]);
     };
@@ -640,7 +641,7 @@ async function playToLastPair(h) {
     const top = want[want.length - 1][0];
     const topWords = ALL.filter((w) => w.level === Math.max(...ALL.map((x) => x.level)));
     // the chip a kept level n presses: the one whose levels hold it
-    const chipOf = (chips, n) => chips.find(([last], i) => n <= last && (i === 0 || n > chips[i - 1][0]))[0];
+    const chipOf = (chips, n) => chips.find(([last]) => n <= last)[0];
     const at = (n) => [[LKEY, String(n)]];
     // the picker: its label, then a chip per level that has words
     const chips = (h) => h.byId.levels.children[1].children;
@@ -650,7 +651,6 @@ async function playToLastPair(h) {
       h.byId.levels.dispatch('click', { target: chips(h).find((c) => c.dataset.level === String(n)), detail: 1 });
       await h.flush();
     };
-    const learnedOf = (list) => [[`${probe.DATA.game}:learned`, JSON.stringify(ids(list))]];
     {
       const h = boot({ noClips: true });
       const counts = shown(h);

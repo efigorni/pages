@@ -74,10 +74,9 @@ def add_extra(cmu, path):
         if not isinstance(entry, dict) or ("parts" in entry) == ("arpabet" in entry):
             fail(f"{where}: give \"parts\" (words CMUdict knows) or \"arpabet\" (pronunciations), and \"why\"")
         if "parts" in entry:
-            unknown = [p for p in entry["parts"] if p not in cmu]
-            if unknown or not entry["parts"]:
-                fail(f"{where}: CMUdict doesn't know the parts {', '.join(unknown) or '(none given)'}")
-            prons = [[ph for part in combo for ph in part] for combo in itertools.product(*(cmu[p][:VARIANTS] for p in entry["parts"]))]
+            if not entry["parts"]:
+                fail(f"{where}: no parts given")
+            prons = pronunciations(" ".join(entry["parts"]), cmu)
         else:
             prons = [str(a).split() for a in entry["arpabet"]]
             bad = [ph for pron in prons for ph in pron if not (PHONE.match(ph) and re.sub(r"\d", "", ph) in PHONES)]
