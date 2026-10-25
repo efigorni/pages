@@ -16,11 +16,18 @@ A game is a folder at the repo root with club/club.json. Its sources, all hand-o
                          "trophy": {"cup", "stem", "star", "shine", "shine_opacity"?, "shade"?}, "images": {...}}
                         `scheme` (default dark) is the board's: the head's color-scheme and iOS status bar
                         follow it, and a light club's style sets --scheme: light for base.css.
+                        A word game's `play.levels` ({"label", "names"}, the easiest level first) teaches by
+                        level: each word's `level` (1 = names[0]) ships, the roster goes level by level, the
+                        words up to each level fill a board, and the shelf's chips choose the pool.
   club/style.css        the club's style: fonts, tokens, card back, card face, title
   club/club.js          const CLUB = { confetti, fonts, face(kit) }
-  club/roster.json      season and players (roles starter, bench, backup, in that order); written by `data`
+  club/roster.json      season and players (roles starter, bench, backup, in that order), or a word game's
+                        words in teaching order (level by level, then rank); written by `data`
   club/avoid.json       a word game's sound-alikes, {id: {other id: why}}: tools/words/neighbours.py writes it;
                         checked against the roster, and each word's list (with play.quiz.apart) is its `avoid`
+  club/pictures.json    a word game's picture sources, {id: {"source": fluent | svg | arasaac, "ref"}}: written by
+                        `data` from words.json (a word's `picture`, or its Fluent `emoji`), for the credits only;
+                        CREDITS.md must attribute every source in use (PICTURE_CREDITS)
   tools/tts/en_pins.json  a word game's English voice pins; a `take` picked by ear must stay the shipped clip
 
 The builder writes two files per game, whole:
@@ -64,6 +71,7 @@ import re
 import shutil
 import sys
 import time
+from collections import Counter
 from pathlib import Path
 from urllib.parse import urljoin
 
@@ -81,6 +89,15 @@ CONFIG = "club/club.json"
 AVOID = "club/avoid.json"
 # A word game's English voice pins; a pin's `take` is a clip picked by ear, with the shipped file's sha256.
 EN_PINS = "tools/tts/en_pins.json"
+# Where each of a word game's pictures comes from, {id: {"source", "ref"}}, for its credits: `data` writes it
+# from words.json (a word's `picture`, or its Fluent `emoji`); the page never reads it. Each source in use
+# needs its attribution in CREDITS.md, these phrases at least.
+PICTURES = "club/pictures.json"
+PICTURE_CREDITS = {
+    "fluent": ("Fluent Emoji", "MIT License"),
+    "svg": ("Original drawings made for this game", "CC BY 4.0"),
+    "arasaac": ("Sergio Palao", "ARASAAC", "http://www.arasaac.org", "CC BY-NC-SA", "Government of Aragón"),
+}
 PRECACHE_DIRS = ("fonts", "img", "audio", "icons")
 PRECACHE_SUFFIXES = {".woff2", ".webp", ".png", ".mp3"}
 UI_CLIPS = tuple(UI_TEXTS)
@@ -115,7 +132,7 @@ LEARN_KEYS = {
 # Element ids the engine looks up, and the CSS variables base.css reads that the engine sets itself.
 ENGINE_IDS = ("app", "board", "pips", "start", "confirm", "win", "fan", "play", "replay", "again", "yes", "no",
               "mute", "confetti", "install", "play-quiz", "replay-quiz", "yes-quiz", "picks", "question", "say",
-              "play-cards", "replay-cards", "yes-cards", "cards", "shelf", "shelf-count", "next-new", "flash",
+              "play-cards", "replay-cards", "yes-cards", "cards", "shelf", "shelf-count", "levels", "next-new", "flash",
               "flash-slot", "prev", "next", "hear", "close", "progress", "progress-count")
 RUNTIME_VARS = {"--i"}
 # Where GitHub Pages publishes the games. A link preview needs absolute URLs; the verify tools read it here too.
@@ -165,6 +182,11 @@ def fail(msg):
 
 def clean(text):
     return " ".join(str(text or "").split())
+
+
+def unsafe(text):
+    """A character the page's HTML and DATA must never carry in a name or a word."""
+    return any(ch in text for ch in "<>&\"`")
 
 
 def read(path, hint=None):
@@ -239,7 +261,32 @@ def play_of(game):
             fail(f"{where}.precache: policy \"core\" wants items >= deal.pairs, so the first game plays offline")
     elif precache.get("policy") != "all":
         fail(f"{where}.precache.policy: \"all\" or \"core\"")
+    if "levels" in play:
+        check_levels_config(game, play["levels"])
     return play
+
+
+def check_levels_config(game, levels):
+    """A word game's play.levels: {"label": what the shelf's picker says before its chips, "names": one per
+    level, the first the easiest}. Each word then has a `level`, 1 to len(names)."""
+    where = f"{game}/{CONFIG} play.levels"
+    if kind_of(game) != "words":
+        fail(f"{where}: a word game's (a squad teaches its whole roster)")
+    text = lambda v: isinstance(v, str) and v.strip() and clean(v) == v and not unsafe(v)  # noqa: E731
+    names = levels.get("names") if isinstance(levels, dict) else None
+    if not (isinstance(levels, dict) and set(levels) == {"label", "names"} and text(levels["label"])
+            and isinstance(names, list) and len(names) >= 2 and all(text(n) for n in names) and len(set(names)) == len(names)):
+        fail(f"{where}: {{\"label\": text, \"names\": two or more different texts, the easiest level first}}")
+
+
+def levels_of(game):
+    """A word game's play.levels, checked, or None when it teaches every word at once."""
+    return play_of(game).get("levels")
+
+
+def level_ok(w, levels):
+    """A word's `level` is one of play.levels': 1 to len(names)."""
+    return _int(w.get("level")) and 1 <= w["level"] <= len(levels["names"])
 
 
 def items_of(roster):
@@ -268,7 +315,7 @@ def entry(p, page, model):
         first, last = split_display_name(name)
     speak = clean(p.get("speak_he")) or speak_text(name)
     for label, text in (("name_he", name), ("first_he", first), ("last_he", last), ("speak_he", speak)):
-        if any(ch in text for ch in "<>&\"`"):
+        if unsafe(text):
             fail(f"{pid}: unexpected characters in {label}: {text!r}")
     if not name or not last or not speak:
         fail(f"{pid}: empty name field")
@@ -288,25 +335,76 @@ def entry(p, page, model):
     return out
 
 
-def word_entry(w, page):
+def word_entry(w, page, levels=None):
     wid = w.get("id", "")
     if not ID_RE.match(wid):
         fail(f"unsafe word id: {wid!r}")
     out = {"id": wid}
     for key in ("en", "he", "he_niqqud", "theme"):
         text = clean(w.get(key))
-        if any(ch in text for ch in "<>&\"`"):
+        if unsafe(text):
             fail(f"{wid}: unexpected characters in {key}: {text!r}")
         if text:
             out[key] = text
     if not out.get("en") or not out.get("he"):
         fail(f"{wid}: a word needs en and he")
+    if levels:
+        if not level_ok(w, levels):
+            fail(f"{wid}: play.levels wants a level per word, 1 to {len(levels['names'])}, not {w.get('level')!r}")
+        out["level"] = w["level"]
     missing = [rel for rel in (f"img/{wid}.webp", *(f"audio/{k}/{wid}.mp3" for k in KINDS["words"]))
                if not (page / rel).is_file()]
     if missing:
         fail(f"{wid}: missing {', '.join(missing)} (copy the pictures and clips in first)")
     out["img"] = f"img/{wid}.webp"
     return out
+
+
+def picture_of(w):
+    """A word's picture source for the credits: words.json `picture` {source, ref}, or, for a word with only
+    its Fluent `emoji` (round 1's format), {"source": "fluent", "ref": the emoji's name}."""
+    wid, pic = w["id"], w.get("picture")
+    if pic is None and isinstance(w.get("emoji"), dict) and w["emoji"].get("name"):
+        pic = {"source": "fluent", "ref": w["emoji"]["name"]}
+    raw = pic.get("ref") if isinstance(pic, dict) else None
+    # a text, or an ARASAAC pictogram's number (never null, a bool or a list)
+    ref = str(raw).strip() if isinstance(raw, (str, int)) and not isinstance(raw, bool) else ""
+    if not (isinstance(pic, dict) and isinstance(pic.get("source"), str) and pic["source"] in PICTURE_CREDITS and ref
+            and set(pic) <= {"source", "ref"}):
+        fail(f"{wid}: a word needs `picture`: {{\"source\": {' | '.join(PICTURE_CREDITS)}, \"ref\": the Fluent emoji's "
+             f"name, the drawing's file or the ARASAAC pictogram's id}}, not {pic!r}")
+    return {"source": pic["source"], "ref": ref}
+
+
+def pictures_text(pictures):
+    """club/pictures.json: one word per line, in roster order."""
+    rows = ",\n".join(f"  {json.dumps(wid)}: {json.dumps(p, ensure_ascii=False, separators=(', ', ': '))}"
+                      for wid, p in pictures.items())
+    return f"{{\n{rows}\n}}\n"
+
+
+def check_pictures(game):
+    """A word game's club/pictures.json is its roster's (a line per word, each a known source), and CREDITS.md
+    gives every source in use its attribution (PICTURE_CREDITS)."""
+    if kind_of(game) != "words":
+        return []
+    path = REPO / game / PICTURES
+    if not path.is_file():
+        return [f"{PICTURES} is missing (`build_page.py data <words.json> {game}` writes it)"]
+    pictures = json.loads(read(path))
+    if not isinstance(pictures, dict):
+        return [f"{PICTURES} is not an object (run `build_page.py data` again)"]
+    ids = [w["id"] for w in items_of(read_roster(game))]
+    problems = [f"{PICTURES} is not this roster's (run `build_page.py data` again)" for _ in [1] if list(pictures) != ids]
+    sources = {wid: p.get("source") if isinstance(p, dict) and isinstance(p.get("source"), str) else None
+               for wid, p in pictures.items()}
+    problems += [f"{PICTURES}: {wid}'s source {src!r} is none of {', '.join(PICTURE_CREDITS)}"
+                 for wid, src in sources.items() if src not in PICTURE_CREDITS]
+    credits = read(REPO / game / "CREDITS.md")
+    for src in sorted(set(sources.values()) & set(PICTURE_CREDITS)):
+        problems += [f"CREDITS.md doesn't say {phrase!r}, which {src} pictures need" for phrase in PICTURE_CREDITS[src]
+                     if phrase not in credits]
+    return problems
 
 
 def roster_text(roster):
@@ -377,12 +475,37 @@ def pure_random(game, roster=None):
         fail(f"{', '.join(found)}: {PURE_RANDOM}")
 
 
+def check_levels(game, roster):
+    """A word game's roster against its play.levels: every word has a level when the club teaches by levels
+    and none when it doesn't; the roster goes level by level (so the precached first words are the easiest
+    level's); and the pool up to each level fills a board."""
+    levels, words = levels_of(game), roster["words"]
+    where = f"{game}/club/roster.json"
+    if not levels:
+        if any("level" in w for w in words):
+            fail(f"{where}: its words have levels but {CONFIG} has no play.levels (run `build_page.py data` again)")
+        return
+    names, pairs = levels["names"], play_of(game)["deal"]["pairs"]
+    bad = [w["id"] for w in words if not level_ok(w, levels)]
+    if bad:
+        fail(f"{where}: play.levels wants a level per word, 1 to {len(names)}: {', '.join(bad[:5])}"
+             + (f" and {len(bad) - 5} more" if len(bad) > 5 else ""))
+    order = [w["level"] for w in words]
+    if order != sorted(order):
+        fail(f"{where}: not level by level (`build_page.py data` sorts by level, then rank)")
+    upto = [sum(lv <= n for lv in order) for n in range(1, len(names) + 1)]
+    small = [f"{name} ({count})" for name, count in zip(names, upto) if count < pairs]
+    if small:
+        fail(f"{where}: up to {', '.join(small)}: fewer words than the board's {pairs} pairs")
+
+
 def data_line(game, roster):
     """The DATA script: the roster (a word game's words with their `avoid`; a squad's players never have one),
     the clips that exist (per kind, in roster order), the game's folder (the key of what she knows) and its
     play config."""
     page = REPO / game
     if kind_of(game) == "words":
+        check_levels(game, roster)
         avoid = avoid_of(game)
         roster = {**roster, "words": [{**w, "avoid": avoid[w["id"]]} if w["id"] in avoid else w for w in roster["words"]]}
     else:
@@ -399,8 +522,9 @@ def data_line(game, roster):
 
 def write_words(words_json, game):
     """A word game's club/roster.json from words.json (a list, or {"words": [...]}), in teaching order (`rank`
-    when the list has one): id, en, he, he_niqqud when given, theme and the picture. Every word needs its
-    picture and both clips. club.json `leave_out` ({id: why}) keeps a listed word out of the game."""
+    when the list has one; with play.levels, level by level, then by rank): id, en, he, he_niqqud when
+    given, theme, its level (with play.levels) and the picture. Every word needs its picture and both
+    clips. club.json `leave_out` ({id: why}) keeps a listed word out of the game."""
     page = REPO / game
     data = json.loads(Path(words_json).read_text(encoding="utf-8"))
     words = data["words"] if isinstance(data, dict) else data
@@ -411,9 +535,21 @@ def write_words(words_json, game):
         print(f"{game}: left out {wid}{'' if wid in ids else ' (not in the list)'}: {why}", flush=True)
     words = [w for w in words if w["id"] not in config(game).get("leave_out", {})]
     ordered = sorted(words, key=lambda w: w.get("rank", 0)) if all("rank" in w for w in words) else words
-    roster = {"words": [word_entry(w, page) for w in ordered]}
+    levels = levels_of(game)
+    entries = [word_entry(w, page, levels) for w in ordered]
+    # sort() is stable: rank order inside a level
+    roster = {"words": sorted(entries, key=lambda e: e.get("level", 0))}
+    check_levels(game, roster)
+    by_id = {w["id"]: w for w in words}
+    pictures = {e["id"]: picture_of(by_id[e["id"]]) for e in roster["words"]}
     (page / "club/roster.json").write_text(roster_text(roster), encoding="utf-8")
-    print(f"{game}: club/roster.json: {len(roster['words'])} words", flush=True)
+    (page / PICTURES).write_text(pictures_text(pictures), encoding="utf-8")
+    per_level = Counter(e.get("level") for e in entries)
+    counts = "" if not levels else " (" + ", ".join(
+        f"{name} {per_level[n]}" for n, name in enumerate(levels["names"], 1)) + ")"
+    print(f"{game}: club/roster.json: {len(roster['words'])} words{counts}", flush=True)
+    sources = " ".join(f"{src} {n}" for src, n in sorted(Counter(p["source"] for p in pictures.values()).items()))
+    print(f"{game}: {PICTURES}: {sources}", flush=True)
     return roster
 
 
@@ -731,7 +867,7 @@ def assemble(game, check):
     for rel in strays:
         print(f"{game}: {rel} is not in the roster but would be precached (data --prune removes it)", flush=True)
     lint = (lint_credits(game) + check_ui_clips(game) + lint_variables(game) + check_og(game) + check_apart(game)
-            + check_takes(game))
+            + check_takes(game) + check_pictures(game))
     for msg in lint:
         print(f"{game}: {msg}", flush=True)
     if check:

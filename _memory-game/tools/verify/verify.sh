@@ -145,6 +145,15 @@ on_ref() {
 
 csv() { local IFS=,; echo "$*"; }
 
+# leveled <root> <game...>: " the word games with levels " (space-padded, for a *" $g "* match); each also
+# plays its first level alone in sw_check.js (the seeds, the bar and the cache on that pool).
+leveled() {
+  local root="$1" games; shift
+  games="$(python3 -I -B -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(" ".join(g for g in sys.argv[2:] if build_page.levels_of(g)))' \
+    "$root/_memory-game/tools/page" "$@")" || die "build_page.py could not read the games' play config"
+  echo " $games "
+}
+
 # job <name> <command...>: a background job logging to $dir/<name>.txt. finish waits for every job,
 # saying when each ends, and fails the run on a job that exits non-zero.
 NAMES=() PIDS=()
@@ -176,6 +185,8 @@ case "$cmd" in
     dir="$OUT/$(if ((LIVE)); then echo live; else echo sanity; fi)"
     rm -rf "$dir" && mkdir -p "$dir"
     status=0 UPGRADED=()
+    # before any job starts, so a failure here leaves none running
+    levels="$(leveled "$root" "${GAMES[@]}")" || exit 2
     say "$(if ((LIVE)); then echo "the live site"; else echo "$root"; fi): ${GAMES[*]}"
     if ((!LIVE)); then
       if python3 -I "$root/_memory-game/tools/page/build_page.py" assemble --check >"$dir/assemble-check.txt" 2>&1; then
@@ -195,7 +206,7 @@ case "$cmd" in
     fi
     setup_playwright
     if ((LIVE)); then
-      base="$(python3 -I -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(build_page.SITE)' \
+      base="$(python3 -I -B -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(build_page.SITE)' \
         "$REPO/_memory-game/tools/page")"
       all=()
       while IFS= read -r g; do all+=("$g"); done < <(python3 -I "$REPO/_memory-game/tools/page/build_page.py" list)
@@ -223,6 +234,9 @@ case "$cmd" in
       want=""
       if ((LIVE)); then want="$(sed -n "s/^const VERSION = '\(.*\)';$/\1/p" "$REPO/$g/sw.js")"; fi
       job "worker-$g" node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
+      if [[ "$levels" == *" $g "* ]]; then
+        job "worker-$g-level1" env MEMORY_GAME_VERIFY_LEVEL=1 node "$HERE/sw_check.js" "$base" "$g" "$dir" ${want:+"$want"}
+      fi
     done
     say "running: the worker per game, the quiz$(((LIVE)) || echo ", the state machine")${UPGRADED[0]:+, the upgrade from $FROM per game on it}"
     finish
@@ -258,9 +272,14 @@ case "$cmd" in
     base="http://127.0.0.1:$PORT/"
     drive "$dir" "$base" "$(csv "${GAMES[@]}")"
     pids=()
+    levels="$(leveled "$root" "${GAMES[@]}")" || exit 2
     for g in "${GAMES[@]}"; do
       node "$HERE/sw_check.js" "$base" "$g" "$dir" >"$dir/sw-$g.txt" 2>&1 &
       pids+=("$!")
+      if [[ "$levels" == *" $g "* ]]; then
+        MEMORY_GAME_VERIFY_LEVEL=1 node "$HERE/sw_check.js" "$base" "$g" "$dir" >"$dir/sw-$g-level1.txt" 2>&1 &
+        pids+=("$!")
+      fi
       node "$HERE/states/scenarios.js" "$root/$g/index.html" >"$dir/states-$g.txt" 2>&1 || true
     done
     for p in "${pids[@]}"; do wait "$p" || true; done

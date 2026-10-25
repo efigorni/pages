@@ -1,0 +1,8 @@
+{
+  "earache": {"parts": ["ear", "ache"], "why": "a compound CMUdict lacks: said as its parts"},
+  "toothache": {"parts": ["tooth", "ache"], "why": "a compound CMUdict lacks: said as its parts"},
+  "noticeboard": {"parts": ["notice", "board"], "why": "a compound CMUdict lacks: said as its parts"},
+  "tracksuit": {"parts": ["track", "suit"], "why": "a compound CMUdict lacks: said as its parts"},
+  "hairdryer": {"parts": ["hair", "dryer"], "why": "a compound CMUdict lacks: said as its parts"},
+  "hoodie": {"arpabet": ["HH UH1 D IY0"], "why": "CMUdict lacks it; said like goodie (G UH1 D IY0)"}
+}

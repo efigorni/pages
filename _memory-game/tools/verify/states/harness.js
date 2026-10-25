@@ -4,7 +4,11 @@
 // boot({ clips: true }) pretends every clip ships; boot({ noClips: true }) that none does (speech only);
 // boot({ storage: [[key, value]] }) starts with that localStorage (what she has learned, a reload later);
 // boot({ html: <path> }) runs another page than HARNESS_HTML (a game built in a scratch folder);
-// boot({ random: fn }) gives the page fn as Math.random (a seeded source, for repeatable deals and quizzes).
+// boot({ random: fn }) gives the page fn as Math.random (a seeded source, for repeatable deals and quizzes);
+// boot({ edit: fn }) runs the page with fn(DATA) instead of its DATA (another roster or play config);
+// boot({ blocked: true }) makes localStorage throw (private mode, blocked site data);
+// boot({ worker: true }) runs the page under a worker, which takeOver() replaces (controllerchange); every
+// location.reload() it asks for is in `reloads`.
 const fs = require('fs');
 const vm = require('vm');
 
@@ -196,12 +200,20 @@ function boot(opts = {}) {
   };
   const store = new Map(opts.storage || []);
   const winListeners = {};
+  const swListeners = {};
+  const reloads = [];
+  const nav = opts.noWakeLock ? {} : { wakeLock: { request: async () => { const s = new Sentinel(); sentinels.push(s); log.push(`wakelock-acquire@${clock.now}`); return s; } } };
+  if (opts.worker) {
+    nav.serviceWorker = { controller: {}, register: () => Promise.resolve(), addEventListener(t, fn) { (swListeners[t] = swListeners[t] || []).push(fn); } };
+  }
+  const blocked = () => { throw new Error('SecurityError: storage blocked'); };
   const g = {
     console,
     document,
-    navigator: opts.noWakeLock ? {} : { wakeLock: { request: async () => { const s = new Sentinel(); sentinels.push(s); log.push(`wakelock-acquire@${clock.now}`); return s; } } },
-    location: { protocol: opts.protocol || 'https:', hostname: 'efigorni.github.io' },
-    localStorage: { getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)) },
+    navigator: nav,
+    location: { protocol: opts.protocol || 'https:', hostname: 'efigorni.github.io', reload: () => reloads.push(clock.now) },
+    localStorage: opts.blocked ? { getItem: blocked, setItem: blocked }
+      : { getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)) },
     matchMedia: (q) => ({ matches: q.includes('pointer: coarse') ? true : q.includes('landscape') ? !!opts.landscape : false, addEventListener() {} }),
     getComputedStyle: () => ({ columnGap: '8px', rowGap: '8px' }),
     performance: { now: () => clock.now },
@@ -228,15 +240,20 @@ function boot(opts = {}) {
 
   const { dataSrc, main } = extractScripts(html);
   let data = dataSrc;
-  if (opts.clips || opts.noClips) {
-    const d = JSON.parse(data.match(/const DATA = (\{.*\});/)[1]);
-    const all = opts.noClips ? [] : (d.words || d.players).map((p) => p.id);
-    // every clip kind the game records (a squad's name and match, a word game's en and he)
-    d.audio = Object.fromEntries(Object.keys(d.audio).map((kind) => [kind, kind === 'ui' ? (opts.noClips ? [] : ['start', 'win']) : all]));
-    data = data.replace(/const DATA = \{.*\};/, `const DATA = ${JSON.stringify(d)};`);
+  if (opts.clips || opts.noClips || opts.edit) {
+    let d = JSON.parse(data.match(/const DATA = (\{.*\});/)[1]);
+    if (opts.edit) d = opts.edit(d);
+    if (opts.clips || opts.noClips) {
+      const all = opts.noClips ? [] : (d.words || d.players).map((p) => p.id);
+      // every clip kind the game records (a squad's name and match, a word game's en and he)
+      d.audio = Object.fromEntries(Object.keys(d.audio).map((kind) => [kind, kind === 'ui' ? (opts.noClips ? [] : ['start', 'win']) : all]));
+    }
+    // a function, so a `$&` or `$'` in the data is not read as a replacement pattern
+    data = data.replace(/const DATA = \{.*\};/, () => `const DATA = ${JSON.stringify(d)};`);
   }
-  const exportLine = 'globalThis.__t = { DATA, ITEMS, PLAY, game, quiz, shelf, stats, level, LEARN, pickQuiz, updateStats, tap, newGame, '
-    + 'dealPicks, startQuiz, distractors, sound, clip, voice, hebrewNumber, get wakeLock() { return wakeLock; } };\n';
+  const exportLine = 'globalThis.__t = { DATA, get ITEMS() { return ITEMS; }, PLAY, POSTER, game, quiz, shelf, stats, level, LEARN, '
+    + 'pickQuiz, updateStats, tap, newGame, dealPicks, startQuiz, distractors, upcoming, sound, clip, voice, hebrewNumber, '
+    + 'get wakeLock() { return wakeLock; } };\n';
   const cut = main.lastIndexOf('})();');
   const patched = main.slice(0, cut) + exportLine + main.slice(cut);
   vm.createContext(g);
@@ -244,8 +261,9 @@ function boot(opts = {}) {
 
   const T = g.__t;
   const api = {
-    g, T, clock, log, synth, audioCtxs, fetches, sentinels, byId, document, fullscreenRequests, docListeners, store,
+    g, T, clock, log, synth, audioCtxs, fetches, sentinels, byId, document, fullscreenRequests, docListeners, store, reloads,
     advance, flush,
+    takeOver: async () => { (swListeners.controllerchange || []).forEach((fn) => fn({})); await flush(); },
     click: async (id) => { byId[id].dispatch('click', { detail: 1 }); await flush(); },
     down: async (card) => { byId.board.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },
     pick: async (card) => { byId.picks.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },

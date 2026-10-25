@@ -3,8 +3,12 @@
 // read installability over CDP, then go offline, reload (what she learned is still learned) and play
 // again, then start the quiz offline from the ↻ confirm and check its files are all cached, then open
 // the next new flash card. The clips are the game's voice script (DATA.play.voice). A word game starts
-// with its first LEARNED_START words learned: its quiz is open, and its deal reaches past the words the
-// worker precaches, so the offline game plays words the worker kept as they came.
+// with the first LEARNED_START words it plays learned (with MEMORY_GAME_VERIFY_LEVEL, those up to that
+// level): its quiz is open, and its deal reaches past the words the worker precaches, so the offline game
+// plays words the worker kept as they came.
+//
+// MEMORY_GAME_VERIFY_LEVEL=<n> plays a word game with levels up to level n (kept in `<game>:level` first), and
+// names its outputs sw-<game>-level<n>.* (verify.sh sanity runs it at level 1 beside the plain run).
 //
 //   node sw_check.js <base-url> <game> <out-dir> [<want-version>]
 //   e.g. node sw_check.js http://127.0.0.1:8781/ hapoel-tlv-memory /tmp/v/local
@@ -18,8 +22,10 @@ const { chromium } = require('playwright');
 const [BASE, GAME, OUT_ARG, WANT] = process.argv.slice(2);
 const OUT = path.resolve(OUT_ARG);
 const INSTR = fs.readFileSync(path.join(__dirname, 'instr.js'), 'utf8');
+const LEVEL = process.env.MEMORY_GAME_VERIFY_LEVEL || '';
+const NAME = LEVEL ? `${GAME}-level${LEVEL}` : GAME;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const say = (...a) => console.log(`[sw ${GAME}]`, ...a);
+const say = (...a) => console.log(`[sw ${NAME}]`, ...a);
 const { clipsOf, LEARNED_START } = require('./voice');
 
 async function until(page, fn, timeout, arg) {
@@ -97,7 +103,7 @@ function audit(log, voice) {
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   // A persistent profile: an incognito context always reports the "in-incognito" installability error.
-  const profile = fs.mkdtempSync(path.join(OUT, `.profile-${GAME}-`));
+  const profile = fs.mkdtempSync(path.join(OUT, `.profile-${NAME}-`));
   const context = await chromium.launchPersistentContext(profile, {
     channel: 'chromium', args: ['--autoplay-policy=no-user-gesture-required'],
     viewport: { width: 600, height: 960 }, deviceScaleFactor: 1.33, isMobile: true, hasTouch: true, locale: 'he-IL',
@@ -120,7 +126,7 @@ function audit(log, voice) {
     R.failure = String(e && e.message || e).split('\n')[0];
   }
   R.console = R.console.filter((m) => !m.includes('Banner not shown'));
-  fs.writeFileSync(path.join(OUT, `sw-${GAME}.json`), JSON.stringify(R, null, 1));
+  fs.writeFileSync(path.join(OUT, `sw-${NAME}.json`), JSON.stringify(R, null, 1));
   say(JSON.stringify({ failure: R.failure, controlled: R.controlled, installability: R.installability, manifestErrors: R.manifestErrors,
     appId: R.appId, online: R.online && R.online.audio, offlineProbe: R.offlineProbe,
     offline: R.offline && { controlled: R.offline.state && R.offline.state.controlled, imgs: R.offline.imgs, audio: R.offline.audio },
@@ -148,23 +154,29 @@ async function controlled(page, want) {
   return false;
 }
 
-// What she has learned (the page's learned store) and the progress bar's count.
-function learnedNow() {
+// What she has learned (the page's learned store, everything she met), the progress bar's count, and the
+// pool it counts: `counted` of its `of` ids, what she met beyond it kept but not counted.
+function learnedNow(pool) {
   const ids = JSON.parse(localStorage.getItem(`${DATA.game}:learned`) || '[]');
   const count = document.getElementById('progress-count');
-  return { ids, bar: count ? count.textContent : null, of: (DATA.words || DATA.players).length };
+  return { ids, bar: count ? count.textContent : null, of: pool.length, counted: ids.filter((id) => pool.includes(id)).length };
 }
 
 async function steps(context, page, R) {
   await page.goto(`${BASE}${GAME}/`, { waitUntil: 'load' });
   const info = await page.evaluate(() => ({ voice: DATA.play ? DATA.play.voice : null,
-    learnedPool: !!(DATA.play && DATA.play.quiz.pool === 'learned') }));
+    learnedPool: !!(DATA.play && DATA.play.quiz.pool === 'learned'), levels: !!(DATA.play && DATA.play.levels) }));
   R.voice = info.voice;
+  // a game with levels: report.py then wants the level run's sw-<game>-level1.json beside this one
+  R.levels = info.levels;
+  if (LEVEL) await page.evaluate((n) => localStorage.setItem(`${DATA.game}:level`, n), LEVEL);
+  // The ids the page should play, in teaching order: up to LEVEL, or every item.
+  const pool = await page.evaluate((n) => (DATA.words || DATA.players).filter((p) => !n || p.level <= n).map((p) => p.id),
+    Number(LEVEL) || 0);
   if (info.learnedPool) {
-    await page.evaluate((n) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(DATA.words.slice(0, n).map((w) => w.id))),
-      LEARNED_START);
-    await page.reload({ waitUntil: 'load' });
+    await page.evaluate((ids) => localStorage.setItem(`${DATA.game}:learned`, JSON.stringify(ids)), pool.slice(0, LEARNED_START));
   }
+  if (LEVEL || info.learnedPool) await page.reload({ waitUntil: 'load' });
   R.controlled = await controlled(page, WANT || '');
   R.online = { state: await state(page) };
   await play(page);
@@ -195,31 +207,31 @@ async function steps(context, page, R) {
   await sleep(300);
   R.console = R.console.filter((m, i) => i < consoleAt || !m.includes('net::ERR_FAILED'));
   R.http = R.http.filter((h) => !h.includes('/probe-'));
-  const learnedBefore = await page.evaluate(learnedNow);
+  const learnedBefore = await page.evaluate(learnedNow, pool);
   await page.reload({ waitUntil: 'load' });
   await sleep(2000);
   R.offline = { state: await state(page) };
   // What she learned online (the matches, a word game's start) is still learned after the reload.
-  R.offline.learned = { before: learnedBefore, after: await page.evaluate(learnedNow) };
+  R.offline.learned = { before: learnedBefore, after: await page.evaluate(learnedNow, pool) };
   await play(page);
   at = await page.evaluate(() => window.__log.length);
   const g2 = await flips(page, 3);
   R.offline.audio = { ...g2, ...audit((await page.evaluate(() => window.__log)).slice(at), R.voice) };
   R.offline.imgs = await page.evaluate(() => { const i = [...document.querySelectorAll('#board img')]; return [i.length, i.filter((x) => x.complete && x.naturalWidth > 0).length]; });
-  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline.png`) });
+  await page.screenshot({ path: path.join(OUT, `sw-${NAME}-offline.png`) });
   // The quiz offline: every item it can ask has its picture and clips in the cache (a squad's every
-  // player, the backups too; a word game's learned words), and the offline page, from its ↻ confirm,
-  // asks the first question with them.
-  R.offline.quizCache = await page.evaluate(async () => {
+  // player, the backups too; a word game's learned words that it plays), and the offline page, from its
+  // ↻ confirm, asks the first question with them.
+  R.offline.quizCache = await page.evaluate(async (pool) => {
     const learned = JSON.parse(localStorage.getItem(`${DATA.game}:learned`) || '[]');
-    const items = DATA.words ? DATA.words.filter((w) => learned.includes(w.id)) : DATA.players;
+    const items = DATA.words ? DATA.words.filter((w) => learned.includes(w.id) && pool.includes(w.id)) : DATA.players;
     const kinds = Object.keys(DATA.audio).filter((k) => k !== 'ui');
     const urls = [].concat(...items.map((p) => [`img/${p.id}.webp`, ...kinds.map((k) => `audio/${k}/${p.id}.mp3`)]));
     const missing = [];
     // a kept file's copy is keyed by its path plus a hash
     for (const u of urls) if (!(await caches.match(new URL(u, location.href).href, { ignoreSearch: true }))) missing.push(u);
     return { checked: urls.length, missing, backups: (DATA.players || []).filter((p) => p.role === 'backup').map((p) => p.id) };
-  });
+  }, pool);
   await page.tap('#again');
   const quizAt = await page.evaluate(() => window.__log.length);
   await page.tap('#yes-quiz');
@@ -239,7 +251,7 @@ async function steps(context, page, R) {
   }, [answer, quizAt]);
   R.offline.quiz.ok = heard && JSON.stringify(R.offline.quiz.clips) === JSON.stringify(['audio/ui/start.mp3', ...asked])
     && R.offline.quiz.imgs[0] === 4 && R.offline.quiz.imgs[1] === 4;
-  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-quiz.png`) });
+  await page.screenshot({ path: path.join(OUT, `sw-${NAME}-offline-quiz.png`) });
   // Flash cards offline, from the ↻ confirm: the next new one turns up, says its line and is learned.
   // A word game keeps only what she learned and what comes next, so offline the shelf's tiles of words
   // she hasn't met yet ask for pictures that aren't there: expected, counted apart, not a finding.
@@ -249,7 +261,7 @@ async function steps(context, page, R) {
   await page.tap('#yes-cards');
   await sleep(600);
   const cardAt = await page.evaluate(() => window.__log.length);
-  const before = await page.evaluate(learnedNow);
+  const before = await page.evaluate(learnedNow, pool);
   await page.tap('#next-new');
   const id = await page.evaluate(() => document.querySelector('#flash-slot .card').dataset.id);
   const line = clipsOf(R.voice, id, 'card');
@@ -260,16 +272,16 @@ async function steps(context, page, R) {
   R.offline.card = await page.evaluate(([cardId, at]) => {
     const card = document.querySelector('#flash-slot .card');
     const img = card.querySelector('.photo img');
-    const tile = [...document.querySelectorAll('#shelf .tile')].find((t) => (DATA.words || DATA.players)[Number(t.dataset.index)].id === cardId);
+    const tile = [...document.querySelectorAll('#shelf .tile')].find((t) => t.dataset.id === cardId);
     return { id: cardId, state: card.dataset.state, phase: document.getElementById('app').dataset.phase,
       picture: !!img && img.complete && img.naturalWidth > 0, tile: tile && tile.dataset.learned,
       clips: window.__log.slice(at).filter((e) => e.type === 'buf-start' || e.type === 'html-play').map((e) => e.url) };
   }, [id, cardAt]);
-  R.offline.card.learned = { before, after: await page.evaluate(learnedNow) };
+  R.offline.card.learned = { before, after: await page.evaluate(learnedNow, pool) };
   R.offline.card.ok = said && R.offline.card.state === 'up' && R.offline.card.phase === 'card' && R.offline.card.picture
     && R.offline.card.tile === 'true' && JSON.stringify(R.offline.card.clips) === JSON.stringify(line)
     && !before.ids.includes(id) && R.offline.card.learned.after.ids.includes(id);
-  await page.screenshot({ path: path.join(OUT, `sw-${GAME}-offline-card.png`) });
+  await page.screenshot({ path: path.join(OUT, `sw-${NAME}-offline-card.png`) });
   const known = new Set(R.offline.card.learned.after.ids);
   const unmet = (u) => { const m = /\/img\/([\w-]+)\.webp/.exec(u); return !!m && !known.has(m[1]); };
   const failed = R.http.splice(httpAt);
