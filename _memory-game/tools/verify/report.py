@@ -146,8 +146,8 @@ def sw_checks(r):
     imgs = r["offline"]["imgs"]
     cache = r["offline"].get("quizCache") or {}
     kept = r["offline"].get("learned") or {}
-    kept_after = kept.get("after") or {}
-    before, after = (kept.get("before") or {}).get("ids") or [], kept_after.get("ids") or []
+    kept_before, kept_after = kept.get("before") or {}, kept.get("after") or {}
+    before, after = kept_before.get("ids") or [], kept_after.get("ids") or []
     bar = kept_after.get("bar")
     card = r["offline"].get("card") or {}
     return {
@@ -196,9 +196,12 @@ upgraded, ref = [g for g in option("--upgraded").split(",") if g], option("--fro
 values = {option("--upgraded"), ref}
 failed = []
 for game in [a for a in sys.argv[2:] if not a.startswith("--") and a not in values]:
-    sections = {"worker": sw_checks(load(OUT / f"sw-{game}.json"))}
-    # a word game with levels, played up to one (sw_check.js MEMORY_GAME_VERIFY_LEVEL)
-    for path in sorted(OUT.glob(f"sw-{game}-level*.json")):
+    worker = load(OUT / f"sw-{game}.json")
+    sections = {"worker": sw_checks(worker)}
+    # a word game with levels, played up to level 1 too (sw_check.js MEMORY_GAME_VERIFY_LEVEL): a run that wrote
+    # nothing fails
+    levels = sorted(OUT.glob(f"sw-{game}-level*.json")) or ([OUT / f"sw-{game}-level1.json"] if (worker or {}).get("levels") else [])
+    for path in levels:
         sections[f"worker, {path.stem.rsplit('-', 1)[1].replace('level', 'level ')}"] = sw_checks(load(path))
     states_path = OUT / f"states-{game}.txt"
     states = states_path.read_text(encoding="utf-8").strip().splitlines() if states_path.exists() else []

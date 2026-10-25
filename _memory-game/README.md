@@ -229,10 +229,11 @@ _memory-game/tools/verify/verify.sh full [<game>...]     # a deliberate engine-w
   a flash card counting as learned and moving the bar, and what she learned surviving a reload; for every
   game, a face-up card's line and the pair it holds (H1–H6), what she knows (M1–M4: the older list carried
   over, first-try answers from the quiz only, the shelf's levels); a word game's sound-alikes never offered
-  together (A1); a squad's quiz pure random (A2); a word game's levels (L1–L8: the chips and their counts, a
+  together (A1); a squad's quiz pure random (A2); a word game's levels (L1–L9: the chips and their counts, a
   level with no words, or two in a row, joined to the chip before it, the pool of each kept level, a kept value that is no
   level plays every word, a chip that swaps the pool and is kept across a reload, what she met beyond it
-  kept but not counted, the quiz and its cards from the pool) and a game without levels showing no picker
+  kept but not counted, the quiz and its cards from the pool, a chip on a page a newer worker took over
+  reloading it, or with storage blocked swapping in place) and a game without levels showing no picker
   (L0); and a word game's quiz's picks (P1–P4: the simulation's constants, the same quizzes as its own module
   for the same seeds, the group shares, the quiz clock and the demotion);
 - a quick upgrade from `origin/main` (`--from <ref>`), online then offline, for the games that exist there.

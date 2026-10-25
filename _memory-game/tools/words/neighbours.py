@@ -26,7 +26,8 @@ English game runs out of them.
 A word CMUdict doesn't know gets its pronunciation from the game's own <game>/tools/words/cmudict_extra.json,
 when it has one: {word: {"parts": [words CMUdict knows], "why"}} for a compound, said as its parts joined
 (earache: ear + ache), or {word: {"arpabet": ["HH UH1 D IY0", ...], "why"}} by hand. A word there that
-CMUdict knows, a part it doesn't, or a phoneme that isn't CMUdict's fails the run.
+isn't one lowercase word, that CMUdict knows or no card says, a part CMUdict doesn't know, or a phoneme
+not in CMUdict's form fails the run.
 """
 import argparse
 import itertools
@@ -38,8 +39,6 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 REPO = Path(__file__).resolve().parents[3]
 VOWELS = {"AA", "AE", "AH", "AO", "AW", "AY", "EH", "ER", "EY", "IH", "IY", "OW", "OY", "UH", "UW"}
-CONSONANTS = {"B", "CH", "D", "DH", "F", "G", "HH", "JH", "K", "L", "M", "N", "NG", "P", "R", "S", "SH", "T", "TH",
-              "V", "W", "Y", "Z", "ZH"}
 VARIANTS = 3  # pronunciations per word kept from CMUdict
 # A game's pronunciations for the words CMUdict lacks (module docstring).
 EXTRA = "tools/words/cmudict_extra.json"
@@ -61,18 +60,17 @@ def pronunciations(text, cmu):
     return [[ph for part in combo for ph in part] for combo in itertools.product(*(cmu[p][:VARIANTS] for p in parts))]
 
 
-def cmu_phone(ph):
-    """CMUdict's form: a consonant bare, a vowel with its stress digit (0, 1 or 2)."""
-    return ph in CONSONANTS or (ph[:-1] in VOWELS and ph[-1:] in ("0", "1", "2"))
-
-
 def add_extra(cmu, path):
     """The game's own pronunciations (EXTRA) put into cmu; the words added."""
     if not path.is_file():
         return []
     extra = json.loads(path.read_text(encoding="utf-8"))
+    phones = None
     for word, entry in extra.items():
         where = f"{path.name}: {word!r}"
+        # pronunciations() looks up each word of an English text lowercased, split at spaces and hyphens
+        if not re.fullmatch(r"[a-z']+", word):
+            fail(f"{where}: one lowercase word, no spaces or hyphens, as a card's English text is looked up")
         if word in cmu:
             fail(f"{where}: CMUdict already knows it; take it out")
         if not isinstance(entry, dict) or ("parts" in entry) == ("arpabet" in entry):
@@ -83,7 +81,10 @@ def add_extra(cmu, path):
             prons = pronunciations(" ".join(entry["parts"]), cmu)
         else:
             prons = [str(a).split() for a in entry["arpabet"]]
-            bad = [ph for pron in prons for ph in pron if not cmu_phone(ph)]
+            if phones is None:
+                # CMUdict's own phonemes, in its form: a consonant bare, a vowel with its stress digit
+                phones = {ph for known in cmu.values() for pron in known for ph in pron}
+            bad = [ph for pron in prons for ph in pron if ph not in phones]
             if bad or not all(prons):
                 fail(f"{where}: not CMUdict phonemes: {', '.join(bad) or '(empty)'}")
         cmu[word] = prons
@@ -169,6 +170,10 @@ def main():
     words = roster.get("words")
     if not words:
         fail(f"{args.game} is not a word game (its roster has no words)")
+    used = {part for w in words for part in w["en"].lower().replace("-", " ").split()}
+    unused = [word for word in added if word not in used]
+    if unused:
+        fail(f"{EXTRA}: no word of the roster says {', '.join(unused)}; take it out")
     avoid = neighbours(words, cmu)
     (page / "club/avoid.json").write_text(text(avoid, [w["id"] for w in words]), encoding="utf-8")
     counts = sorted(len(v) for v in avoid.values())

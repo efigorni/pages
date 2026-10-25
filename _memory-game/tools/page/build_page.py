@@ -366,8 +366,11 @@ def picture_of(w):
     wid, pic = w["id"], w.get("picture")
     if pic is None and isinstance(w.get("emoji"), dict) and w["emoji"].get("name"):
         pic = {"source": "fluent", "ref": w["emoji"]["name"]}
-    ref = str(pic.get("ref", "")).strip() if isinstance(pic, dict) else ""
-    if not (isinstance(pic, dict) and pic.get("source") in PICTURE_CREDITS and ref and set(pic) <= {"source", "ref"}):
+    raw = pic.get("ref") if isinstance(pic, dict) else None
+    # a text, or an ARASAAC pictogram's number (never null, a bool or a list)
+    ref = str(raw).strip() if isinstance(raw, (str, int)) and not isinstance(raw, bool) else ""
+    if not (isinstance(pic, dict) and isinstance(pic.get("source"), str) and pic["source"] in PICTURE_CREDITS and ref
+            and set(pic) <= {"source", "ref"}):
         fail(f"{wid}: a word needs `picture`: {{\"source\": {' | '.join(PICTURE_CREDITS)}, \"ref\": the Fluent emoji's "
              f"name, the drawing's file or the ARASAAC pictogram's id}}, not {pic!r}")
     return {"source": pic["source"], "ref": ref}
@@ -389,9 +392,12 @@ def check_pictures(game):
     if not path.is_file():
         return [f"{PICTURES} is missing (`build_page.py data <words.json> {game}` writes it)"]
     pictures = json.loads(read(path))
+    if not isinstance(pictures, dict):
+        return [f"{PICTURES} is not an object (run `build_page.py data` again)"]
     ids = [w["id"] for w in items_of(read_roster(game))]
     problems = [f"{PICTURES} is not this roster's (run `build_page.py data` again)" for _ in [1] if list(pictures) != ids]
-    sources = {wid: p.get("source") if isinstance(p, dict) else None for wid, p in pictures.items()}
+    sources = {wid: p.get("source") if isinstance(p, dict) and isinstance(p.get("source"), str) else None
+               for wid, p in pictures.items()}
     problems += [f"{PICTURES}: {wid}'s source {src!r} is none of {', '.join(PICTURE_CREDITS)}"
                  for wid, src in sources.items() if src not in PICTURE_CREDITS]
     credits = read(REPO / game / "CREDITS.md")

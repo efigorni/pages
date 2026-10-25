@@ -771,6 +771,24 @@ async function playToLastPair(h) {
         && got[0][0] === 3 && got[0][1] === `${names[0]}–${names[2]}` && got[1][1] === names[3] && keptMid
         && h.store.get(LKEY) === '4' && h.T.ITEMS.length === words.filter((w) => w.level <= 4).length, JSON.stringify(got.slice(0, 3)));
     }
+    {
+      // a page a newer worker took over: a chip reloads it, the choice kept; with storage blocked nothing would
+      // keep it across the reload, so the pool swaps in place
+      const s = boot({ noClips: true, worker: true });
+      await s.click('play-cards');
+      await s.takeOver();
+      await tapLevel(s, first);
+      const reloaded = s.reloads.length === 1 && s.store.get(LKEY) === String(first) && s.T.ITEMS.length === ALL.length;
+      const b = boot({ noClips: true, worker: true, blocked: true });
+      await b.click('play-cards');
+      await b.takeOver();
+      await tapLevel(b, first);
+      const pool = upTo(first);
+      const swapped = b.reloads.length === 0 && b.T.ITEMS.length === pool.length && b.byId.shelf.children.length === pool.length
+        && JSON.stringify(pressed(b)) === JSON.stringify([first]);
+      check('L9 a chip on a page a newer worker took over reloads it, the choice kept; with storage blocked the pool swaps '
+        + 'in place instead', reloaded && swapped, JSON.stringify({ reloaded, swapped }));
+    }
   }
 
   // ---------- H1-H6 a face-up card in memory says its whole line again (PLAY.voice.card), changing nothing ----------

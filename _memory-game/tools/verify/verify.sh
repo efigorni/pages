@@ -149,7 +149,7 @@ csv() { local IFS=,; echo "$*"; }
 # plays its first level alone in sw_check.js (the seeds, the bar and the cache on that pool).
 leveled() {
   local root="$1" games; shift
-  games="$(python3 -I -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(" ".join(g for g in sys.argv[2:] if build_page.levels_of(g)))' \
+  games="$(python3 -I -B -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(" ".join(g for g in sys.argv[2:] if build_page.levels_of(g)))' \
     "$root/_memory-game/tools/page" "$@")" || die "build_page.py could not read the games' play config"
   echo " $games "
 }
@@ -185,6 +185,8 @@ case "$cmd" in
     dir="$OUT/$(if ((LIVE)); then echo live; else echo sanity; fi)"
     rm -rf "$dir" && mkdir -p "$dir"
     status=0 UPGRADED=()
+    # before any job starts, so a failure here leaves none running
+    levels="$(leveled "$root" "${GAMES[@]}")" || exit 2
     say "$(if ((LIVE)); then echo "the live site"; else echo "$root"; fi): ${GAMES[*]}"
     if ((!LIVE)); then
       if python3 -I "$root/_memory-game/tools/page/build_page.py" assemble --check >"$dir/assemble-check.txt" 2>&1; then
@@ -204,7 +206,7 @@ case "$cmd" in
     fi
     setup_playwright
     if ((LIVE)); then
-      base="$(python3 -I -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(build_page.SITE)' \
+      base="$(python3 -I -B -c 'import sys; sys.path.insert(0, sys.argv[1]); import build_page; print(build_page.SITE)' \
         "$REPO/_memory-game/tools/page")"
       all=()
       while IFS= read -r g; do all+=("$g"); done < <(python3 -I "$REPO/_memory-game/tools/page/build_page.py" list)
@@ -228,7 +230,6 @@ case "$cmd" in
       for g in "${GAMES[@]}"; do job "states-$g" node "$HERE/states/scenarios.js" "$root/$g/index.html"; done
     fi
     job quiz node "$HERE/drive.js" "$dir" "$base" --games "$(csv "${GAMES[@]}")" --vps tab-portrait --modes quiz --questions 1
-    levels="$(leveled "$root" "${GAMES[@]}")" || exit 2
     for g in "${GAMES[@]}"; do
       want=""
       if ((LIVE)); then want="$(sed -n "s/^const VERSION = '\(.*\)';$/\1/p" "$REPO/$g/sw.js")"; fi

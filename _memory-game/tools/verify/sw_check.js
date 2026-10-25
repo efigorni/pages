@@ -165,8 +165,10 @@ function learnedNow(pool) {
 async function steps(context, page, R) {
   await page.goto(`${BASE}${GAME}/`, { waitUntil: 'load' });
   const info = await page.evaluate(() => ({ voice: DATA.play ? DATA.play.voice : null,
-    learnedPool: !!(DATA.play && DATA.play.quiz.pool === 'learned') }));
+    learnedPool: !!(DATA.play && DATA.play.quiz.pool === 'learned'), levels: !!(DATA.play && DATA.play.levels) }));
   R.voice = info.voice;
+  // a game with levels: report.py then wants the level run's sw-<game>-level1.json beside this one
+  R.levels = info.levels;
   if (LEVEL) await page.evaluate((n) => localStorage.setItem(`${DATA.game}:level`, n), LEVEL);
   // The ids the page should play, in teaching order: up to LEVEL, or every item.
   const pool = await page.evaluate((n) => (DATA.words || DATA.players).filter((p) => !n || p.level <= n).map((p) => p.id),

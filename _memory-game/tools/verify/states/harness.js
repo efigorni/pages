@@ -5,7 +5,10 @@
 // boot({ storage: [[key, value]] }) starts with that localStorage (what she has learned, a reload later);
 // boot({ html: <path> }) runs another page than HARNESS_HTML (a game built in a scratch folder);
 // boot({ random: fn }) gives the page fn as Math.random (a seeded source, for repeatable deals and quizzes);
-// boot({ edit: fn }) runs the page with fn(DATA) instead of its DATA (another roster or play config).
+// boot({ edit: fn }) runs the page with fn(DATA) instead of its DATA (another roster or play config);
+// boot({ blocked: true }) makes localStorage throw (private mode, blocked site data);
+// boot({ worker: true }) runs the page under a worker, which takeOver() replaces (controllerchange); every
+// location.reload() it asks for is in `reloads`.
 const fs = require('fs');
 const vm = require('vm');
 
@@ -197,12 +200,20 @@ function boot(opts = {}) {
   };
   const store = new Map(opts.storage || []);
   const winListeners = {};
+  const swListeners = {};
+  const reloads = [];
+  const nav = opts.noWakeLock ? {} : { wakeLock: { request: async () => { const s = new Sentinel(); sentinels.push(s); log.push(`wakelock-acquire@${clock.now}`); return s; } } };
+  if (opts.worker) {
+    nav.serviceWorker = { controller: {}, register: () => Promise.resolve(), addEventListener(t, fn) { (swListeners[t] = swListeners[t] || []).push(fn); } };
+  }
+  const blocked = () => { throw new Error('SecurityError: storage blocked'); };
   const g = {
     console,
     document,
-    navigator: opts.noWakeLock ? {} : { wakeLock: { request: async () => { const s = new Sentinel(); sentinels.push(s); log.push(`wakelock-acquire@${clock.now}`); return s; } } },
-    location: { protocol: opts.protocol || 'https:', hostname: 'efigorni.github.io' },
-    localStorage: { getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)) },
+    navigator: nav,
+    location: { protocol: opts.protocol || 'https:', hostname: 'efigorni.github.io', reload: () => reloads.push(clock.now) },
+    localStorage: opts.blocked ? { getItem: blocked, setItem: blocked }
+      : { getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)) },
     matchMedia: (q) => ({ matches: q.includes('pointer: coarse') ? true : q.includes('landscape') ? !!opts.landscape : false, addEventListener() {} }),
     getComputedStyle: () => ({ columnGap: '8px', rowGap: '8px' }),
     performance: { now: () => clock.now },
@@ -250,8 +261,9 @@ function boot(opts = {}) {
 
   const T = g.__t;
   const api = {
-    g, T, clock, log, synth, audioCtxs, fetches, sentinels, byId, document, fullscreenRequests, docListeners, store,
+    g, T, clock, log, synth, audioCtxs, fetches, sentinels, byId, document, fullscreenRequests, docListeners, store, reloads,
     advance, flush,
+    takeOver: async () => { (swListeners.controllerchange || []).forEach((fn) => fn({})); await flush(); },
     click: async (id) => { byId[id].dispatch('click', { detail: 1 }); await flush(); },
     down: async (card) => { byId.board.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },
     pick: async (card) => { byId.picks.dispatch('pointerdown', { target: card.el, button: 0 }); await flush(); },

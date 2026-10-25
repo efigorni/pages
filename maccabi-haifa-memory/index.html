@@ -2961,31 +2961,29 @@ const CLUB = {
     syncLevels();
   }
 
-  // The pressed chip: the one whose levels hold the chosen one; with none chosen, the top one.
+  // The chip whose levels hold level n; with none (0), the top one. Two levels on one chip play one pool.
+  const chipAt = (n) => LEVEL_CHIPS.find(({ from, n: last }) => from <= n && n <= last) || LEVEL_CHIPS[LEVEL_CHIPS.length - 1];
+
+  // The pressed chip: the chosen level's.
   function syncLevels() {
-    const at = LEVEL_CHIPS.find(({ from, n }) => from <= chosenLevel && chosenLevel <= n) || LEVEL_CHIPS[LEVEL_CHIPS.length - 1];
+    const at = chipAt(chosenLevel);
     LEVEL_CHIPS.forEach((c) => c.el.setAttribute('aria-pressed', String(c === at)));
   }
 
   // The game goes up to level n from now on, on this shelf too: its tiles, the count and the bar, and what
   // the page fetches ahead. A chip whose pool is the one playing changes nothing on the shelf. A page a newer
   // worker took over reloads instead, keeping the choice (reloadIfStale), unless storage can't keep it: then
-  // it swaps in place, for this visit.
+  // it swaps in place, until the page next reloads.
   function setLevel(n) {
-    const pool = poolOf(n);
+    const same = chipAt(n) === chipAt(chosenLevel);
     chosenLevel = n;
     let kept = true;
     try { window.localStorage.setItem(LEVEL_KEY, String(n)); } catch (e) { kept = false; }
-    // the pools nest, so the same size is the same pool
-    if (pool.length === ITEMS.length) {
-      syncLevels();
-      return;
-    }
-    if (kept && reloadIfStale()) return;
-    ITEMS = pool;
+    syncLevels();
+    if (same || (kept && reloadIfStale())) return;
+    ITEMS = poolOf(n);
     rebuildShelf();
     syncLearned();
-    syncLevels();
     scrollToNew();
     fetchAllAhead();
   }
