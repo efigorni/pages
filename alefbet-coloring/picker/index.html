@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>בחירת מילים לדפי הצביעה</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b04d88'/%3E%3Cpath d='M17 33l10 10 20-22' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: Fredoka;
+      font-weight: 300 700;
+      font-display: swap;
+      src: url(../fonts/fredoka-400-700-hebrew.woff2) format("woff2");
+    }
+
+    :root {
+      --berry: #d16ba5; --berry-deep: #b04d88; --berry-soft: #fbeaf3;
+      --ink: #13100e; --ink-2: #4a443f; --ink-3: #847c74;
+      --paper: #ffffff; --ground: #f6f3ef; --line: #e8e2da;
+      --shadow-1: 0 1px 2px rgba(19,16,14,.04), 0 4px 14px rgba(19,16,14,.05);
+      --shadow-sheet: 0 2px 6px rgba(19,16,14,.08), 0 22px 50px rgba(19,16,14,.16);
+      --r: 18px;
+      --gutter: 24px;
+      --display: "Secular One", "Arial Hebrew", "Noto Sans Hebrew", system-ui, sans-serif;
+      --body: "Assistant", "Arial Hebrew", "Noto Sans Hebrew", system-ui, -apple-system, sans-serif;
+      --sheet: Fredoka, "Arial Hebrew", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--ground);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--berry-deep); outline-offset: 2px; border-radius: 8px; }
+    .wrap { max-width: 1320px; margin: 0 auto; padding-inline: var(--gutter); }
+
+    /* ---------- Head ---------- */
+    .head { background: var(--paper); border-bottom: 1px solid var(--line); padding: 18px 0 18px; }
+    .home { font-size: 13.5px; font-weight: 700; color: var(--ink-3); text-decoration: none; }
+    .home:hover { color: var(--berry-deep); }
+    .head h1 { font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1.15; margin: 8px 0 0; }
+    .head .sub { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; max-width: 72ch; }
+    .head-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-top: 14px; }
+    .letters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .letters button {
+      font-family: var(--sheet);
+      font-weight: 600;
+      font-size: 21px;
+      line-height: 1;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--ground);
+      border: 1.5px solid transparent;
+      transition: background .15s, border-color .15s, transform .12s;
+    }
+    .letters button:hover { border-color: var(--berry); transform: translateY(-1px); }
+    .letters button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+    .total { font-size: 14px; font-weight: 700; color: var(--ink-3); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 14.5px;
+      background: var(--berry-soft);
+      color: var(--berry-deep);
+      transition: background .15s, color .15s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: var(--berry-deep); color: #fff; }
+    .btn.primary { background: var(--ink); color: #fff; padding: 10px 20px; font-size: 15.5px; }
+    .btn.primary:hover { background: var(--berry-deep); }
+    .btn.quiet { background: var(--ground); color: var(--ink-2); }
+    .btn.quiet:hover { background: var(--ink); color: #fff; }
+
+    /* ---------- Sticky bar ---------- */
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(255, 255, 255, .93);
+      -webkit-backdrop-filter: saturate(1.4) blur(10px);
+      backdrop-filter: saturate(1.4) blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .bar-in { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding-block: 10px; }
+    .now { display: flex; align-items: center; gap: 10px; }
+    .glyph {
+      font-family: var(--sheet);
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 1;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: #fff;
+      display: grid;
+      place-items: center;
+    }
+    .lname { font-family: var(--sheet); font-weight: 500; font-size: 20px; }
+    .counts { flex: 1; margin: 0; font-size: 16px; font-weight: 800; color: var(--ink); white-space: nowrap; }
+    .counts .s { color: var(--berry-deep); }
+    .counts .of { color: var(--ink-3); font-weight: 700; font-size: 14px; }
+    .seg { display: inline-flex; background: var(--ground); border-radius: 99px; padding: 3px; gap: 2px; }
+    .seg button { padding: 7px 14px; border-radius: 99px; font-size: 14.5px; font-weight: 700; color: var(--ink-2); white-space: nowrap; }
+    .seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
+
+    /* ---------- Cards ---------- */
+    .main { padding-block: 20px 48px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .card {
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+      border-radius: var(--r);
+      padding: 10px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: var(--shadow-1);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .card.kept { border-color: var(--ink); }
+    .card.starred { border-color: var(--berry-deep); box-shadow: 0 0 0 1.5px var(--berry-deep), var(--shadow-1); }
+
+    .tile {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      aspect-ratio: 4 / 3;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .tile img { width: 76%; height: 84%; object-fit: contain; }
+    .tile .ref { display: none; font-size: 12.5px; font-weight: 700; color: var(--berry-deep); padding: 0 10px; text-align: center; word-break: break-all; }
+    .tile.broken img { display: none; }
+    .tile.broken .ref { display: block; }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.6;
+      padding: 0 9px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .tile .cur { position: absolute; top: 7px; inset-inline-start: 7px; background: var(--ink); color: #fff; }
+    .tile .cur.extra { background: var(--ground); color: var(--ink-2); border: 1px solid var(--line); }
+    .pen {
+      position: absolute;
+      top: 5px;
+      inset-inline-end: 5px;
+      width: 30px;
+      height: 30px;
+      border-radius: 99px;
+      border: 1.5px solid var(--line);
+      background: rgba(255, 255, 255, .9);
+      color: var(--ink-3);
+      font-size: 15px;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      transition: border-color .15s, color .15s;
+    }
+    .pen:hover, .pen[aria-expanded="true"] { border-color: var(--berry); color: var(--berry-deep); }
+
+    .opts { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .opt {
+      position: relative;
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      border: 1.5px solid var(--line);
+      background: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+    .opt input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+    .opt img { width: 38px; height: 38px; object-fit: contain; pointer-events: none; }
+    .opt:hover { border-color: var(--berry); }
+    .opt:has(input:checked) { border-color: var(--ink); box-shadow: 0 0 0 1.5px var(--ink); }
+    .opt:has(input:focus-visible) { outline: 3px solid var(--berry-deep); outline-offset: 2px; }
+    .opt.broken { border-style: dashed; border-color: var(--berry-deep); }
+    .opt.broken::after { content: "?"; font-weight: 800; color: var(--berry-deep); }
+    .opt.broken img { display: none; }
+
+    .word { font-family: var(--sheet); font-weight: 500; font-size: 28px; line-height: 1.25; margin: 2px 0 0; text-align: center; }
+    .word b { font-weight: 700; }
+    .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+    .tags .badge { background: var(--ground); color: var(--ink-3); font-weight: 700; }
+    .note { margin: 0; font-size: 13.5px; line-height: 1.4; color: var(--ink-2); text-align: center; }
+
+    .acts { display: flex; gap: 6px; margin-top: auto; padding-top: 2px; }
+    .tog {
+      flex: 1;
+      padding: 7px 6px;
+      border-radius: 99px;
+      border: 1.5px solid var(--line);
+      background: var(--paper);
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--ink-2);
+      white-space: nowrap;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .tog:hover { border-color: var(--berry); }
+    .tog.keep[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+    .tog.star[aria-pressed="true"] { background: var(--berry-deep); border-color: var(--berry-deep); color: #fff; }
+    .mynote {
+      width: 100%;
+      font: inherit;
+      font-size: 14px;
+      padding: 6px 10px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      background: var(--ground);
+      color: var(--ink);
+    }
+    .mynote:focus { outline: none; border-color: var(--berry-deep); background: #fff; }
+
+    .empty { margin: 32px 0; text-align: center; color: var(--ink-3); font-weight: 700; }
+    .problems {
+      margin: 0 0 16px;
+      background: var(--berry-soft);
+      color: var(--berry-deep);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+    .problems summary { font-weight: 800; cursor: pointer; }
+    .problems ul { margin: 8px 0 0; padding-inline-start: 20px; direction: ltr; text-align: left; }
+
+    /* ---------- Export ---------- */
+    dialog {
+      width: min(760px, calc(100vw - 32px));
+      max-height: calc(100vh - 32px);
+      border: 0;
+      border-radius: var(--r);
+      padding: 20px;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: var(--shadow-sheet);
+    }
+    dialog::backdrop { background: rgba(19, 16, 14, .35); }
+    .exp h2 { font-family: var(--display); font-weight: 400; font-size: 24px; margin: 0; }
+    .exp-sum { margin: 4px 0 12px; color: var(--ink-2); font-size: 15px; }
+    #exp-text {
+      display: block;
+      width: 100%;
+      height: min(52vh, 440px);
+      padding: 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      background: var(--ground);
+      color: var(--ink);
+      font: 13.5px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, "Arial Hebrew", monospace;
+      text-align: left;
+      white-space: pre-wrap;
+      resize: vertical;
+    }
+    .exp .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
+    .copied { font-weight: 800; color: var(--berry-deep); font-size: 14.5px; }
+
+    @media (max-width: 600px) {
+      :root { --gutter: 16px; }
+      .head { padding: 14px 0; }
+      .head h1 { font-size: 23px; }
+      .head .sub { font-size: 14px; }
+      .bar-in { gap: 8px 10px; padding-block: 8px; }
+      .glyph { width: 38px; height: 38px; font-size: 23px; }
+      .lname { font-size: 18px; }
+      .counts { font-size: 15px; }
+      .bar .seg { order: 9; flex: 1 1 100%; }
+      .bar .seg button { flex: 1; padding: 6px 8px; }
+      .main { padding-block: 14px 40px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .card { padding: 8px 8px 10px; gap: 6px; border-radius: 14px; }
+      .word { font-size: 23px; }
+      .tog { font-size: 13px; padding: 7px 4px; }
+      .opt { width: 40px; height: 40px; }
+      .opt img { width: 32px; height: 32px; }
+      dialog { padding: 16px; }
+    }
+    @media (max-width: 340px) {
+      .grid { grid-template-columns: minmax(0, 1fr); }
+    }
+  </style>
+
+  <script>
+  /* The picker's logic, apart from the page: candidates in, choices in, export out. */
+  var PICKER_CORE = (() => {
+    "use strict";
+    const ORDER = "אבגדהוזחטיכלמנסעפצקרשת";
+    const NAMES = Object.fromEntries(
+      "alef bet gimel dalet he vav zayin het tet yod kaf lamed mem nun samekh ayin pe tsadi qof resh shin tav"
+        .split(" ").map((name, i) => [ORDER[i], name]));
+    const SOURCES = ["moe-acq", "moe-horaa", "moe-teimot", "en-roster"];
+    const REF = /^(openmoji|custom|draft):([A-Za-z0-9-]+)$/;
+    const OPENMOJI = "https://cdn.jsdelivr.net/npm/openmoji@17.0.0/black/svg/";
+
+    // Where a drawing is drawn from: OpenMoji's black set, our own drawings, or this tool's drafts.
+    function artUrl(ref) {
+      const m = REF.exec(typeof ref === "string" ? ref : "");
+      if (!m) return null;
+      if (m[1] === "openmoji") return `${OPENMOJI}${m[2].toUpperCase()}.svg`;
+      return m[1] === "custom" ? `../art-src/${m[2]}.svg` : `drafts/${m[2]}.svg`;
+    }
+
+    // A candidates file as the page shows it, and what is wrong with it.
+    function cleanLetter(data) {
+      const problems = [];
+      const seen = new Set();
+      const candidates = [];
+      const list = data && Array.isArray(data.candidates) ? data.candidates : [];
+      list.forEach((c, i) => {
+        const w = c && typeof c.w === "string" ? c.w.trim() : "";
+        const at = w ? `#${i + 1} ${w}` : `#${i + 1}`;
+        if (!w) return void problems.push(`${at}: no "w"`);
+        if (seen.has(w)) return void problems.push(`${at}: listed twice; the second is left out`);
+        seen.add(w);
+        const art = [];
+        for (const ref of Array.isArray(c.art) ? c.art : c.art == null ? [] : [c.art]) {
+          if (typeof ref === "string" && REF.test(ref)) { if (!art.includes(ref)) art.push(ref); }
+          else problems.push(`${at}: drawing ${JSON.stringify(ref)} is not openmoji:<HEX>, custom:<name> or draft:<name>`);
+        }
+        if (!art.length) problems.push(`${at}: no drawing`);
+        const src = Array.isArray(c.src) ? c.src.filter((s) => typeof s === "string") : [];
+        for (const s of src) if (!SOURCES.includes(s)) problems.push(`${at}: unknown source ${JSON.stringify(s)}`);
+        const current = c.current === "default" || c.current === "extra" ? c.current : null;
+        if (c.current != null && !current) problems.push(`${at}: current ${JSON.stringify(c.current)} is not "default", "extra" or null`);
+        candidates.push({ w, art, src, current, note: typeof c.note === "string" ? c.note.trim() : "" });
+      });
+      if (!list.length) problems.push("no candidates");
+      return {
+        letter: data && data.letter,
+        name: data && typeof data.name === "string" && data.name ? data.name : data && data.letter,
+        candidates,
+        problems,
+      };
+    }
+
+    // Saved choices, checked against the letter's candidates: words no longer offered are dropped, ★ implies ✓,
+    // and a drawing no longer offered falls back to the first.
+    function cleanChoices(letter, raw) {
+      const saved = raw && typeof raw === "object" && raw.words && typeof raw.words === "object" ? raw.words : {};
+      const words = {};
+      for (const c of letter.candidates) {
+        const r = Object.prototype.hasOwnProperty.call(saved, c.w) ? saved[c.w] : null;
+        if (!r || typeof r !== "object") continue;
+        const first = c.art[0] || null;
+        const star = r.star === true;
+        const keep = star || r.keep === true;
+        const art = c.art.includes(r.art) ? r.art : first;
+        const note = typeof r.note === "string" ? r.note : "";
+        if (keep || note || art !== first) words[c.w] = { keep, star, art, note };
+      }
+      return { v: 1, words };
+    }
+
+    // The export: the kept words in the candidates' order, and today's words left unpicked.
+    function exportData(letter, choices) {
+      const words = (choices && choices.words) || {};
+      const picked = [];
+      const dropped = [];
+      for (const c of letter.candidates) {
+        const ch = Object.prototype.hasOwnProperty.call(words, c.w) ? words[c.w] : null;
+        if (ch && (ch.keep === true || ch.star === true)) {
+          picked.push({
+            w: c.w,
+            art: c.art.includes(ch.art) ? ch.art : c.art[0] || null,
+            default: ch.star === true,
+            note: typeof ch.note === "string" ? ch.note.trim() : "",
+          });
+        } else if (c.current) {
+          dropped.push(c.w);
+        }
+      }
+      return { letter: letter.letter, picked, dropped_current: dropped };
+    }
+
+    // The export as text to paste: valid JSON, one item per line (Hebrew strings side by side on one line
+    // would show in reverse order in a left-to-right box).
+    function exportText(data) {
+      const pair = (k, v) => `${JSON.stringify(k)}: ${JSON.stringify(v)}`;
+      const obj = (o) => `{${Object.keys(o).map((k) => pair(k, o[k])).join(", ")}}`;
+      const list = (items) => (items.length ? `[\n    ${items.join(",\n    ")}\n  ]` : "[]");
+      return `{\n  ${pair("letter", data.letter)},\n`
+        + `  "picked": ${list(data.picked.map(obj))},\n`
+        + `  "dropped_current": ${list(data.dropped_current.map((w) => JSON.stringify(w)))}\n}`;
+    }
+
+    return { ORDER, NAMES, artUrl, cleanLetter, cleanChoices, exportData, exportText };
+  })();
+  </script>
+  <script>
+  /* Each candidates/<letter-name>.js calls PICKER.load({letter, name, candidates: [...]}). */
+  var PICKER = {
+    letters: {},
+    load(data) {
+      const script = document.currentScript;
+      const src = script ? script.getAttribute("src") : "a candidates file";
+      const letter = data && typeof data.letter === "string" ? data.letter : "";
+      if (letter.length !== 1 || !PICKER_CORE.ORDER.includes(letter) || !Array.isArray(data.candidates)) {
+        console.warn(`picker: ${src} does not call PICKER.load({letter, name, candidates: [...]}) with a Hebrew letter`);
+        return;
+      }
+      const expected = `candidates/${PICKER_CORE.NAMES[letter]}.js`;
+      const problems = src === expected ? [] : [`${src} is for ${letter}, which belongs in ${expected}`];
+      PICKER.letters[letter] = { data, src, problems };
+    },
+  };
+  </script>
+</head>
+<body>
+  <header class="head">
+    <div class="wrap">
+      <a class="home" href="../index.html">→ לדפי הצביעה</a>
+      <h1>בחירת מילים לדפי הצביעה</h1>
+      <p class="sub">כלי מקומי: לכל מילה מסמנים ✓ אם אהבתם, ו־★ אם היא אחת המילים שבדף (★ מסמן גם ✓). כשיש כמה ציורים, בוחרים אחד מהקטנים; ✎ מוסיף הערה. בסוף, "ייצוא" נותן JSON מוכן להעתקה. הסימונים נשמרים בדפדפן הזה.</p>
+      <div class="head-row">
+        <div class="letters" id="letters" role="group" aria-label="אות"></div>
+        <span class="total" id="total"></span>
+        <button class="btn quiet" id="reset" type="button">התחלה מחדש</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="bar" id="bar">
+    <div class="wrap bar-in">
+      <div class="now"><span class="glyph" id="glyph"></span><span class="lname" id="lname"></span></div>
+      <p class="counts" id="counts" aria-live="polite"></p>
+      <div class="seg" id="filter" role="group" aria-label="סינון">
+        <button type="button" data-f="all" aria-pressed="true">הכול</button>
+        <button type="button" data-f="keep" aria-pressed="false">✓ אהבתי</button>
+        <button type="button" data-f="open" aria-pressed="false">לא סומנו</button>
+      </div>
+      <button class="btn primary" id="export" type="button">ייצוא</button>
+    </div>
+  </div>
+
+  <main class="wrap main">
+    <details class="problems" id="problems" open hidden></details>
+    <div class="grid" id="grid"></div>
+    <p class="empty" id="empty" hidden></p>
+  </main>
+
+  <dialog id="exp" aria-labelledby="exp-title">
+    <form method="dialog" class="exp">
+      <h2 id="exp-title">ייצוא</h2>
+      <p class="exp-sum" id="exp-sum"></p>
+      <textarea id="exp-text" dir="ltr" readonly spellcheck="false" aria-label="JSON להעתקה"></textarea>
+      <div class="row">
+        <button type="button" class="btn primary" id="copy" autofocus>העתקה</button>
+        <button type="submit" class="btn quiet">סגירה</button>
+        <span class="copied" id="copied" role="status"></span>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Every letter's candidates; a letter without a file is simply not offered. -->
+  <script src="candidates/alef.js"></script>
+  <script src="candidates/bet.js"></script>
+  <script src="candidates/gimel.js"></script>
+  <script src="candidates/dalet.js"></script>
+  <script src="candidates/he.js"></script>
+  <script src="candidates/vav.js"></script>
+  <script src="candidates/zayin.js"></script>
+  <script src="candidates/het.js"></script>
+  <script src="candidates/tet.js"></script>
+  <script src="candidates/yod.js"></script>
+  <script src="candidates/kaf.js"></script>
+  <script src="candidates/lamed.js"></script>
+  <script src="candidates/mem.js"></script>
+  <script src="candidates/nun.js"></script>
+  <script src="candidates/samekh.js"></script>
+  <script src="candidates/ayin.js"></script>
+  <script src="candidates/pe.js"></script>
+  <script src="candidates/tsadi.js"></script>
+  <script src="candidates/qof.js"></script>
+  <script src="candidates/resh.js"></script>
+  <script src="candidates/shin.js"></script>
+  <script src="candidates/tav.js"></script>
+
+  <script>
+  (() => {
+    "use strict";
+    const { ORDER, NAMES, artUrl, cleanLetter, cleanChoices, exportData, exportText } = PICKER_CORE;
+    const STORE = "alefbet-coloring/picker/";
+    const SOURCE_NAMES = {
+      "moe-acq": "תוכנית הלימודים: רכישת הקריאה והכתיבה (2026)",
+      "moe-horaa": "איגרת המפמ״ר: הוראת העברית בכיתה א",
+      "moe-teimot": "טעימות בעברית (קדם יסודי)",
+      "en-roster": "המילים של מִילִּים בְּאַנְגְּלִית",
+    };
+    const MARKS = /^(.[֑-ׇֽֿׁׂׅׄ]*)(.*)$/su;
+
+    const $ = (sel) => document.querySelector(sel);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+    const grid = $("#grid");
+
+    const available = ORDER.split("").filter((l) => PICKER.letters[l]);
+    const session = {}; // each letter's choices this visit, also when the browser keeps nothing
+    const state = { key: null, letter: null, choices: null, filter: "all" };
+
+    // ---------- Keeping choices ----------
+    function readChoices(key) {
+      if (session[key]) return session[key];
+      try {
+        const raw = localStorage.getItem(STORE + NAMES[key]);
+        return raw ? JSON.parse(raw) : null;
+      } catch {
+        return null;
+      }
+    }
+    function saveChoices() {
+      session[state.key] = state.choices;
+      try { localStorage.setItem(STORE + NAMES[state.key], JSON.stringify(state.choices)); } catch { /* kept for this visit only */ }
+    }
+    function forgetChoices() {
+      delete session[state.key];
+      try { localStorage.removeItem(STORE + NAMES[state.key]); } catch { /* nothing kept */ }
+    }
+
+    const candidateOf = (card) => state.letter.candidates[Number(card.dataset.i)];
+    function choiceOf(c) {
+      const ch = state.choices.words[c.w];
+      return ch ? { ...ch } : { keep: false, star: false, art: c.art[0] || null, note: "" };
+    }
+    function setChoice(c, ch) {
+      const plain = !ch.keep && !ch.star && !ch.note && ch.art === (c.art[0] || null);
+      if (plain) delete state.choices.words[c.w];
+      else state.choices.words[c.w] = ch;
+      saveChoices();
+    }
+
+    // ---------- Drawing the page ----------
+    function wordMarkup(w) {
+      const [, first, rest] = w.match(MARKS) || ["", w, ""];
+      return `<b>${esc(first)}</b>${esc(rest)}`;
+    }
+
+    function cardMarkup(c, i) {
+      const ch = choiceOf(c);
+      const url = artUrl(ch.art);
+      const cur = c.current === "default" ? `<span class="badge cur">בדף היום</span>`
+        : c.current === "extra" ? `<span class="badge cur extra">נוספת היום</span>` : "";
+      const opts = c.art.length > 1
+        ? `<div class="opts" role="radiogroup" aria-label="ציור ל${esc(c.w)}">${c.art.map((ref) =>
+            `<label class="opt" title="${esc(ref)}"><input type="radio" name="art-${i}" value="${esc(ref)}"${ref === ch.art ? " checked" : ""}>`
+            + `<img src="${esc(artUrl(ref))}" alt="${esc(ref)}" loading="lazy" decoding="async"></label>`).join("")}</div>`
+        : "";
+      const moe = c.src.filter((s) => s.startsWith("moe-"));
+      const tags = (moe.length ? `<span class="badge" title="${esc(moe.map((s) => SOURCE_NAMES[s] || s).join(" · "))}">משרד החינוך</span>` : "")
+        + (c.src.includes("en-roster") ? `<span class="badge" title="${esc(SOURCE_NAMES["en-roster"])}">מילים באנגלית</span>` : "");
+      return `<article class="card" data-i="${i}">`
+        + `<div class="tile${url ? "" : " broken"}">`
+        + (url ? `<img src="${esc(url)}" alt="" loading="lazy" decoding="async">` : "")
+        + `<span class="ref" dir="ltr">${esc(ch.art || "no drawing")}</span>${cur}`
+        + `<button type="button" class="pen" aria-expanded="false" aria-label="הערה ל${esc(c.w)}" title="הערה">✎</button></div>`
+        + opts
+        + `<h2 class="word">${wordMarkup(c.w)}</h2>`
+        + (tags ? `<div class="tags">${tags}</div>` : "")
+        + (c.note ? `<p class="note" dir="auto">${esc(c.note)}</p>` : "")
+        + `<div class="acts">`
+        + `<button type="button" class="tog keep" aria-pressed="false">✓ אהבתי</button>`
+        + `<button type="button" class="tog star" aria-pressed="false">★ בדף</button></div>`
+        + `<input class="mynote" type="text" maxlength="300" dir="auto" placeholder="הערה למילה" aria-label="הערה ל${esc(c.w)}" value="${esc(ch.note)}" hidden>`
+        + `</article>`;
+    }
+
+    function syncCard(card) {
+      const c = candidateOf(card);
+      const ch = choiceOf(c);
+      card.classList.toggle("kept", ch.keep);
+      card.classList.toggle("starred", ch.star);
+      card.querySelector(".keep").setAttribute("aria-pressed", String(ch.keep));
+      card.querySelector(".star").setAttribute("aria-pressed", String(ch.star));
+      const note = card.querySelector(".mynote");
+      if (ch.note) note.hidden = false;
+      card.querySelector(".pen").setAttribute("aria-expanded", String(!note.hidden));
+      const img = card.querySelector(".tile img");
+      const url = artUrl(ch.art);
+      if (img && url && img.getAttribute("src") !== url) {
+        img.closest(".tile").classList.remove("broken");
+        img.src = url;
+      }
+      card.querySelector(".tile .ref").textContent = ch.art || "no drawing";
+    }
+
+    function syncCounts() {
+      let keep = 0, star = 0;
+      for (const c of state.letter.candidates) {
+        const ch = state.choices.words[c.w];
+        if (ch && ch.keep) keep++;
+        if (ch && ch.star) star++;
+      }
+      $("#counts").innerHTML = `✓ ${keep} · <span class="s">★ ${star}</span> <span class="of">· מתוך ${state.letter.candidates.length}</span>`;
+    }
+
+    function applyFilter() {
+      let shown = 0;
+      for (const card of grid.children) {
+        const keep = choiceOf(candidateOf(card)).keep;
+        const show = state.filter === "all" || (state.filter === "keep" ? keep : !keep);
+        card.hidden = !show;
+        if (show) shown++;
+      }
+      const empty = $("#empty");
+      empty.hidden = shown > 0;
+      empty.textContent = state.filter === "keep" ? "עוד לא סומנה אף מילה ב־✓." : "כל המילים כבר סומנו ✓.";
+      for (const b of document.querySelectorAll("#filter button")) b.setAttribute("aria-pressed", String(b.dataset.f === state.filter));
+    }
+
+    function renderProblems() {
+      const entry = PICKER.letters[state.key];
+      const problems = [...entry.problems, ...state.letter.problems];
+      const box = $("#problems");
+      box.hidden = !problems.length;
+      box.innerHTML = problems.length
+        ? `<summary>בעיות בקובץ ${esc(entry.src)} (${problems.length})</summary><ul>${problems.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>`
+        : "";
+    }
+
+    function render() {
+      $("#letters").innerHTML = available.map((l) =>
+        `<button type="button" data-l="${l}" aria-pressed="${l === state.key}" title="${esc(PICKER.letters[l].data.name || l)}">${l}</button>`).join("");
+      $("#glyph").textContent = state.key;
+      $("#lname").textContent = state.letter.name;
+      $("#total").textContent = `${state.letter.candidates.length} מילים מועמדות`;
+      document.title = `בחירת מילים: ${state.key}`;
+      renderProblems();
+      grid.innerHTML = state.letter.candidates.map(cardMarkup).join("");
+      for (const card of grid.children) syncCard(card);
+      syncCounts();
+      applyFilter();
+    }
+
+    function selectLetter(key) {
+      state.key = key;
+      state.letter = cleanLetter(PICKER.letters[key].data);
+      state.choices = cleanChoices(state.letter, readChoices(key));
+      render();
+      try {
+        const url = new URL(location.href);
+        url.searchParams.set("l", NAMES[key]);
+        history.replaceState(null, "", url);
+      } catch { /* the address just keeps its letter */ }
+    }
+
+    function letterFromAddress() {
+      const q = (new URLSearchParams(location.search).get("l") || "").trim();
+      const key = q.length === 1 && ORDER.includes(q) ? q : ORDER.split("").find((l) => NAMES[l] === q.toLowerCase());
+      return key && PICKER.letters[key] ? key : null;
+    }
+
+    // ---------- Choosing ----------
+    grid.addEventListener("click", (e) => {
+      const card = e.target.closest(".card");
+      if (!card) return;
+      const c = candidateOf(card);
+      const ch = choiceOf(c);
+      if (e.target.closest(".pen")) {
+        const note = card.querySelector(".mynote");
+        if (note.hidden) {
+          note.hidden = false;
+          note.focus();
+        } else if (!note.value.trim()) {
+          note.hidden = true;
+        } else {
+          note.focus();
+        }
+        card.querySelector(".pen").setAttribute("aria-expanded", String(!note.hidden));
+        return;
+      }
+      if (e.target.closest(".keep")) {
+        ch.keep = !ch.keep;
+        if (!ch.keep) ch.star = false;
+      } else if (e.target.closest(".star")) {
+        ch.star = !ch.star;
+        if (ch.star) ch.keep = true;
+      } else {
+        return;
+      }
+      setChoice(c, ch);
+      syncCard(card);
+      syncCounts();
+      applyFilter();
+    });
+
+    grid.addEventListener("change", (e) => {
+      if (!e.target.matches(".opt input")) return;
+      const card = e.target.closest(".card");
+      const c = candidateOf(card);
+      setChoice(c, { ...choiceOf(c), art: e.target.value });
+      syncCard(card);
+    });
+
+    grid.addEventListener("input", (e) => {
+      if (!e.target.matches(".mynote")) return;
+      const c = candidateOf(e.target.closest(".card"));
+      setChoice(c, { ...choiceOf(c), note: e.target.value });
+    });
+    grid.addEventListener("keydown", (e) => {
+      if (e.target.matches(".mynote") && (e.key === "Enter" || e.key === "Escape")) e.target.blur();
+    });
+    grid.addEventListener("focusout", (e) => {
+      if (!e.target.matches(".mynote") || e.target.value.trim()) return;
+      const note = e.target;
+      setTimeout(() => {
+        if (document.activeElement === note || note.value.trim()) return;
+        note.hidden = true;
+        note.closest(".card").querySelector(".pen").setAttribute("aria-expanded", "false");
+      }, 150);
+    });
+
+    // A drawing that does not load shows its reference instead, so a wrong one is easy to spot.
+    grid.addEventListener("error", (e) => {
+      if (e.target.tagName !== "IMG") return;
+      const opt = e.target.closest(".opt");
+      if (opt) opt.classList.add("broken");
+      else e.target.closest(".tile").classList.add("broken");
+    }, true);
+
+    $("#letters").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-l]");
+      if (b && b.dataset.l !== state.key) selectLetter(b.dataset.l);
+    });
+    $("#filter").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-f]");
+      if (!b) return;
+      state.filter = b.dataset.f;
+      applyFilter();
+    });
+    $("#reset").addEventListener("click", () => {
+      let sure = true;
+      try { sure = confirm(`למחוק את כל הסימונים של האות ${state.key}?`); } catch { /* no dialogs: go ahead */ }
+      if (!sure) return;
+      state.choices = { v: 1, words: {} };
+      forgetChoices();
+      render();
+    });
+
+    // ---------- Export ----------
+    $("#export").addEventListener("click", () => {
+      const data = exportData(state.letter, state.choices);
+      const stars = data.picked.filter((p) => p.default).length;
+      $("#exp-title").textContent = `ייצוא: האות ${state.key}`;
+      $("#exp-sum").textContent = `✓ ${data.picked.length} · ★ ${stars}`
+        + (data.dropped_current.length ? ` · לא נבחרו ${data.dropped_current.length} מהמילים של היום: ${data.dropped_current.join(", ")}` : "")
+        + ". מעתיקים ומדביקים לקלוד.";
+      $("#exp-text").value = exportText(data);
+      $("#copied").textContent = "";
+      const dialog = $("#exp");
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else dialog.setAttribute("open", "");
+      $("#exp-text").scrollTop = 0;
+    });
+    $("#copy").addEventListener("click", async () => {
+      const text = $("#exp-text");
+      let done = false;
+      try {
+        await navigator.clipboard.writeText(text.value);
+        done = true;
+      } catch {
+        try {
+          text.focus();
+          text.select();
+          done = document.execCommand("copy");
+        } catch { /* left selected for a manual copy */ }
+      }
+      $("#copied").textContent = done ? "הועתק ✓" : "לא הצלחתי להעתיק: הטקסט מסומן, מעתיקים ידנית";
+      if (!done) { text.focus(); text.select(); }
+    });
+
+    // ---------- Start ----------
+    if (!available.length) {
+      $("#bar").hidden = true;
+      $("#reset").hidden = true;
+      const empty = $("#empty");
+      empty.hidden = false;
+      empty.textContent = "אין עדיין קובצי מועמדות: מוסיפים קובץ candidates/<שם האות>.js (ראו alefbet-coloring/README.md).";
+      return;
+    }
+    selectLetter(letterFromAddress() || available[0]);
+  })();
+  </script>
+</body>
+</html>
