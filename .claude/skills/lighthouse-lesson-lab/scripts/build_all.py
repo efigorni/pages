@@ -80,10 +80,11 @@ def main(argv: list[str]) -> int:
             if not ctx:
                 continue
         L = lessons[d]
-        grades = L.get('grades_served') or [L.get('grade')]
+        grades = inv.get(d.name, {}).get('grades_served') or L.get('grades_served') or [L.get('grade')]
         cards.append({
             'slug': d.name, 'title': L.get('title', d.name), 'question': L.get('question', ''),
-            'grade': L.get('grade'), 'grades': grades, 'grade_label': LL.GRADE_LABEL.get(L.get('grade'), ''),
+            'grade': L.get('grade'), 'grades': grades,
+            'grade_label': ', '.join(LL.GRADE_LABEL[g] for g in grades if g in LL.GRADE_LABEL),
             'month': L.get('month', ''), 'months': LL.months_of(L.get('month', '')),
             'unit': L.get('unit', ''), 'unit_order': L.get('unit_order'), 'unit_size': L.get('unit_size'),
             'lesson_no': LL.lesson_no(L),

@@ -31,13 +31,13 @@ class ForwardBuildTests(unittest.TestCase):
         self.assertNotIn('href="slides.pdf"', plan)
         self.assertEqual(old['core_minutes'], new['core_minutes'])
 
-    def run_builder(self, args):
+    def run_builder(self, args, inventory=None):
         dirs = [Path('/lessons/g4-a'), Path('/lessons/g5-b'), Path('/lessons/g7-c')]
         metadata = {d: {'grade': g, 'title': d.name} for d, g in zip(dirs, [4, 5, 7])}
         report = MagicMock(errors=[], warnings=[])
         with patch.object(LL, 'lesson_dirs', return_value=dirs), \
              patch.object(LL, 'load_lesson', side_effect=metadata.__getitem__), \
-             patch.object(LL, 'inventory', return_value={}), \
+             patch.object(LL, 'inventory', return_value=inventory or {}), \
              patch.object(LL, 'sync_assets') as sync, \
              patch.object(LL, 'Kit') as kit, \
              patch.object(LL, 'write_atomic') as write, \
@@ -69,6 +69,14 @@ class ForwardBuildTests(unittest.TestCase):
         with patch.object(LL, 'slide_fit', return_value=(0, {})) as fit:
             V.check_fit(report, 'slide', 'hidden', 'title')
         self.assertEqual('', fit.call_args.args[0])
+
+    def test_hub_uses_inventory_for_shared_legacy_grade_associations(self):
+        _, _, _, write, build, _ = self.run_builder(
+            ['--hub-only'], {'g7-c': {'grades_served': [4, 5, 7]}})
+        build.assert_not_called()
+        html = write.call_args.args[1]
+        self.assertIn('data-grade="4 5 7"', html)
+        self.assertIn('כיתות ד׳, ה׳, ז׳', html)
 
 
 if __name__ == '__main__':
