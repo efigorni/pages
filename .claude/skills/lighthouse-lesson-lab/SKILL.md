@@ -1,6 +1,6 @@
 ---
 name: lighthouse-lesson-lab
-description: Lesson plans from the Ministry of Education life-skills decks ("הכ״חות שבדרך", שפ״י, grades 6–9) — write a lesson.yaml that re-edits a source lesson around the חותם "חותם על זה" practices and the "המגדלור" spotlights, then build it into המערך (HTML lesson plan) and a reveal.js deck with a PDF backup, and check it visually with headless screenshots; also validating, rebuilding, screenshotting or exporting lessons under lesson-lab/lessons. מערך שיעור מתוך מצגת שפ״י · בנייה, בדיקה, צילום וייצוא של שיעורי lesson-lab.
+description: Lesson plans from the Ministry of Education life-skills decks ("הכ״חות שבדרך", שפ״י, grades 4–9) — write a lesson.yaml that re-edits a source lesson around the חותם "חותם על זה" practices and the "המגדלור" spotlights, then build it into המערך (HTML lesson plan) and a reveal.js deck with a PDF backup, and check it visually with headless screenshots; also validating, rebuilding, screenshotting or exporting lessons under lesson-lab/lessons. מערך שיעור מתוך מצגת שפ״י · בנייה, בדיקה, צילום וייצוא של שיעורי lesson-lab.
 ---
 
 # lighthouse-lesson-lab — מערך שיעור ממצגת שפ״י
@@ -16,6 +16,8 @@ description: Lesson plans from the Ministry of Education life-skills decks ("ה�
 5. המסמך נקרא **"המערך"**. המילה הישנה אסורה בכל מקום, גם בהערות.
 
 ## המתכון — לכל שיעור בחבילה
+
+**שיעורים חדשים (D83):** `slide_kickers: false` ברמת השיעור. הכותרת היא השאלה או המשימה לתלמידים; הקשר נחוץ עובר ל-`title`/`sub`/`points`, ושמות הפרקטיקות נשארים במערך. אין צורך לכתוב `kicker` בבלוקים. בהוספת כיתות ד׳–ה׳ בונים רק את השיעורים החדשים עם `build.py --no-sync-assets`; האיחוד מעדכן את המרכז עם `build_all.py --hub-only`. שיעורים קיימים ו-`_assets/` נשארים ללא שינוי (D84).
 
 1. **קוראים.** פעם אחת לחבילה: `references/style-guide.md` (הנוסח המבצעי של כל ההחלטות — את `picks-summary.md` לא צריך), `references/schema.md`, `assets/art/art-guide.md`, ו-YAML של שלושת הפיילוטים (`lesson-lab/lessons/g7-*/lesson.yaml`). לכל שיעור: הרשומה שלו ב-`lesson-lab/docs/lessons.json` (`src_text`, `digest_ref`, `flags`, `sensitivity`), טקסט המקור וכרטיס התקציר. שקף שבכותרת שלו בטקסט המקור כתוב "(N תמונות)" — מסתכלים גם בתמונות עצמן (`schema.md`, "טקסט שיש במקור רק בתמונה"), עד 10 בכל פעם (שלב 5). *גמור כש*אפשר למנות את הפעילויות המרכזיות של המקור, את **כל** המסרים שלו (מילה במילה; מה נחשב מסרים — מדריך הסגנון §10, D50–D51), את רמת הרגישות, ואם יש עמידה פומבית או "לבחירת המורה".
 2. **מתכננים את הקשת** (לפני שכותבים YAML): מה נשאר, מה מתקצר, מה יוצא; סדר השלבים; דקות לכל שלב (ליבה 35′ בדיוק, הרחבות עד 10′); פרקטיקת הפתיחה; טכניקת הדיון לכל דיון; מסלולים; צורת כרטיס היציאה; שקף אחד או יותר לכל שלב והאיור שלו. *גמור כש*סכום הליבה 35 ויש 6–7 שלבי ליבה.
@@ -34,6 +36,9 @@ description: Lesson plans from the Ministry of Education life-skills decks ("ה�
 | בנייה + בדיקה של שיעור | `uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/build.py lesson-lab/lessons/<slug>` |
 | צילום + בדיקה חזותית (חובה) | `uv run --with playwright python3 .claude/skills/lighthouse-lesson-lab/scripts/shoot.py lesson-lab/lessons/<slug>` |
 | בדיקה בלבד | `uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/validate.py lesson-lab/lessons/<slug>` |
+| בניית שיעור חדש בלי שינוי נכסים משותפים | `uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/build.py --no-sync-assets lesson-lab/lessons/<slug>` |
+| דף המרכז בלבד, בלי בניית שיעורים | `uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/build_all.py --hub-only` |
+| כיתות ד׳–ה׳ בלבד + דף המרכז | `uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/build_all.py --grades 4 5 --no-sync-assets` |
 | PDF (גל הבקרה) | `uv run --with playwright python3 .claude/skills/lighthouse-lesson-lab/scripts/export_pdf.py lesson-lab/lessons/<slug>` |
 | כל השיעורים + דף המרכז (גל הבקרה) | `uv run --with pyyaml --with jinja2 python3 .claude/skills/lighthouse-lesson-lab/scripts/build_all.py --pdf` |
 

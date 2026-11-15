@@ -42,7 +42,7 @@ PRACTICES = {  # the 11 "חותם על זה" practices → colour family of .pr[
 }
 SPOTLIGHTS = ('עניין ורלוונטיות', 'אחריות ובחירה', 'דיפרנציאליות וגיוון', 'שיתופיות בלמידה', 'הערכה ורפלקטיביות')
 MONTHS = ('ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר', 'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני')
-GRADE_LABEL = {6: 'ו׳', 7: 'ז׳', 8: 'ח׳', 9: 'ט׳'}
+GRADE_LABEL = {4: 'ד׳', 5: 'ה׳', 6: 'ו׳', 7: 'ז׳', 8: 'ח׳', 9: 'ט׳'}
 SENSITIVITY = ('low', 'low-med', 'med', 'med-high', 'high')
 SAFE_REQUIRED = {'med', 'med-high', 'high'}
 KINDS = ('core', 'extension', 'messages', 'exit')
@@ -618,7 +618,8 @@ def derive(data: dict, kit: Kit) -> dict:
         n = len(slides) + 1
         slides.append({
             'n': n, 'step': step_id, 'track': track, 'cls': cls, 'h1': h1,
-            'kicker': md(kicker), 'title': md(title), 'sub': md(sub),
+            'kicker': md(kicker) if data.get('slide_kickers', True) else '',
+            'title': md(title), 'sub': md(sub),
             'points': [md(p) for p in (points or [])],
             'art': render_art(art, kit, lesson_dir, alt or title, used),
             'timer': int(timer) if timer else 0,

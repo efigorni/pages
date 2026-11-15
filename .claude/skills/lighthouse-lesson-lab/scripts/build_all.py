@@ -14,6 +14,7 @@ Exit code 1 when any lesson has a validation error or a PDF fails.
 """
 from __future__ import annotations
 
+import argparse
 import shutil
 import subprocess
 import sys
@@ -24,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build as B  # noqa: E402
 import lessonlib as LL  # noqa: E402
 
-GRADE_COLOR = {6: '#3f8f8d', 7: '#e08f36', 8: '#6c60b0', 9: '#4a8571'}
+GRADE_COLOR = {4: '#ad5876', 5: '#4c78a8', 6: '#3f8f8d', 7: '#e08f36', 8: '#6c60b0', 9: '#4a8571'}
 
 
 def motif(i: int, c: str) -> str:
@@ -45,27 +46,44 @@ def motif(i: int, c: str) -> str:
 
 
 def main(argv: list[str]) -> int:
-    quiet = '-q' in argv
+    parser = argparse.ArgumentParser(description=__doc__)
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument('--grades', nargs='+', type=int, choices=LL.GRADE_LABEL,
+                       help='Build only these grades; keep every lesson in the hub.')
+    scope.add_argument('--hub-only', action='store_true', help='Update only the hub from lesson metadata.')
+    parser.add_argument('--no-sync-assets', action='store_true', help='Preserve the published shared assets.')
+    parser.add_argument('--pdf', action='store_true')
+    parser.add_argument('--force-pdf', action='store_true')
+    parser.add_argument('-q', action='store_true')
+    args = parser.parse_args(argv)
+    if args.hub_only and (args.pdf or args.force_pdf):
+        parser.error('--hub-only cannot export PDFs')
     print(LL.skill_version())
-    LL.sync_assets()
-    kit = LL.Kit()
     inv = LL.inventory()
     order = {slug: i for i, slug in enumerate(inv)}
     dirs = LL.lesson_dirs()
+    lessons = {d: LL.load_lesson(d) for d in dirs}
+    selected = [] if args.hub_only else [d for d in dirs if not args.grades or lessons[d].get('grade') in args.grades]
+    if args.grades and not selected:
+        parser.error('No lesson folders match the selected grades')
+    if not args.hub_only and not args.no_sync_assets:
+        LL.sync_assets()
+    kit = LL.Kit() if selected else None
     cards, totals, bad = [], [0, 0], 0
     for d in dirs:
-        rep, ctx = B.build_one(d, kit)
-        rep.print(verbose=not quiet)
-        totals[0] += len(rep.errors)
-        totals[1] += len(rep.warnings)
-        bad += bool(rep.errors)
-        if not ctx:
-            continue
-        L = ctx['L']
+        if d in selected:
+            rep, ctx = B.build_one(d, kit)
+            rep.print(verbose=not args.q)
+            totals[0] += len(rep.errors)
+            totals[1] += len(rep.warnings)
+            bad += bool(rep.errors)
+            if not ctx:
+                continue
+        L = lessons[d]
         grades = L.get('grades_served') or [L.get('grade')]
         cards.append({
             'slug': d.name, 'title': L.get('title', d.name), 'question': L.get('question', ''),
-            'grade': L.get('grade'), 'grades': grades, 'grade_label': ctx['grade_label'],
+            'grade': L.get('grade'), 'grades': grades, 'grade_label': LL.GRADE_LABEL.get(L.get('grade'), ''),
             'month': L.get('month', ''), 'months': LL.months_of(L.get('month', '')),
             'unit': L.get('unit', ''), 'unit_order': L.get('unit_order'), 'unit_size': L.get('unit_size'),
             'lesson_no': LL.lesson_no(L),
@@ -85,13 +103,13 @@ def main(argv: list[str]) -> int:
     print(f'\n→ {LL.LESSONS / "index.html"}: {len(cards)} שיעורים · {totals[0]} שגיאות · {totals[1]} אזהרות · '
           f'{bad} שיעורים עם שגיאות')
 
-    if '--pdf' in argv or '--force-pdf' in argv:
+    if (args.pdf or args.force_pdf) and selected:
         uv = shutil.which('uv')
-        cmd = [uv, 'run', '--with', 'playwright', 'python3', str(Path(__file__).with_name('export_pdf.py'))]
-        cmd += [str(d) for d in dirs] + (['--force'] if '--force-pdf' in argv else [])
         if not uv:
-            print('✗ uv לא נמצא — הריצי ידנית: ' + ' '.join(cmd[1:]))
+            print('✗ uv לא נמצא — התקיני uv כדי לייצא PDF')
             return 1
+        cmd = [uv, 'run', '--with', 'playwright', 'python3', str(Path(__file__).with_name('export_pdf.py'))]
+        cmd += [str(d) for d in selected] + (['--force'] if args.force_pdf else [])
         rc = subprocess.call(cmd)
         if rc:
             bad += 1

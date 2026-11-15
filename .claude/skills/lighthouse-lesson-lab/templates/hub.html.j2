@@ -125,7 +125,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--ink-3);fon
       <div class="deck-num">{{ lessons|length }}</div>
       <div class="deck-txt">
         <h1>מערכי שיעור לכישורי חיים</h1>
-        <p>הכ״חות שבדרך · כיתות ו׳–ט׳ · ברוח חותם והמגדלור</p>
+        <p>הכ״חות שבדרך · כיתות {{ grades[0].label }}–{{ grades[-1].label }} · ברוח חותם והמגדלור</p>
       </div>
     </div>
   </div>

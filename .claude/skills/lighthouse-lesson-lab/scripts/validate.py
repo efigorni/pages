@@ -103,7 +103,7 @@ TOP = {  # key: (type, required)
     'slug': (str, False), 'title': (str, True), 'sub': (str, True), 'grade': (int, True), 'grades_served': (list, False),
     'month': (str, True), 'section': (str, True), 'unit': (str, True), 'unit_order': (int, False),
     'unit_size': (int, False), 'src_text': (str, True), 'src_url': (str, False), 'sensitivity': (str, True),
-    'src_fixes': (list, False), 'latin_ok': (list, False),
+    'src_fixes': (list, False), 'latin_ok': (list, False), 'slide_kickers': (bool, False),
     'format': (str, True), 'question': (str, True), 'takeaways': (list, True), 'prep': (list, True),
     'safe': (list, False), 'time': (dict, True), 'brain_break': (dict, True), 'cover': (dict, True),
     'steps': (list, True),
@@ -168,6 +168,7 @@ FIT_QUOTE = ('ציטוט מילולי ארוך — תוויות קצרות של�
 class Report:
     def __init__(self, slug: str):
         self.slug, self.errors, self.warnings = slug, [], []
+        self.slide_kickers = True
 
     def err(self, code: str, msg: str):
         self.errors.append((code, msg))
@@ -608,6 +609,9 @@ def latin_allowed(r: Report, data: dict) -> list[tuple[str, re.Pattern]]:
 
 def check(data: dict, kit: LL.Kit | None = None) -> Report:
     r = Report(data.get('_slug', '?'))
+    r.slide_kickers = data.get('slide_kickers', True)
+    if data.get('grade') in (4, 5) and data.get('slide_kickers') is not False:
+        r.err('meta', 'בשיעורי ד׳–ה׳ חדשים נדרש slide_kickers: false (D83)')
     kit = kit or LL.Kit()
     for line, kept, cut in comment_cuts(data.get('_raw', '')):
         shown = f'"…{kept[-40:]}"' if len(kept) > 40 else f'"{kept}"' if kept else 'ריק'
@@ -622,7 +626,7 @@ def check(data: dict, kit: LL.Kit | None = None) -> Report:
     if data.get('slug') and data['slug'] != data.get('_slug'):
         r.err('meta', f'slug "{data["slug"]}" שונה משם התיקייה "{data.get("_slug")}"')
     if isinstance(data.get('grade'), int) and data['grade'] not in LL.GRADE_LABEL:
-        r.err('meta', f'grade צריך להיות 6–9, יש {data["grade"]}')
+        r.err('meta', f'grade צריך להיות 4–9, יש {data["grade"]}')
     if isinstance(data.get('month'), str):
         bad = [p for p in re.split(r'\s*[–-]\s*', data['month']) if p not in LL.MONTHS]
         if bad:
@@ -1110,6 +1114,10 @@ def check_slide(r: Report, where: str, v: dict, kit: LL.Kit, lesson_dir: Path, b
     if not budget:
         return
     for k, limit in (('kicker', 45), ('title', 60), ('sub', 90)):
+        if k == 'kicker' and not r.slide_kickers:
+            if v.get(k):
+                r.warn('hidden-kicker', f'{where}.kicker: הטקסט לא יוצג; העבירי הקשר נחוץ לכותרת או לשורת המשנה')
+            continue
         if isinstance(v.get(k), str) and len(v[k]) > limit:
             r.warn('slide-words', f'{where}.{k}: {len(v[k])} תווים — מעט מילים על השקף (עד {limit})')
     pts = v.get('points') or []
@@ -1127,7 +1135,7 @@ def check_fit(r: Report, where: str, kicker=None, title=None, sub=None, points=N
               link: bool = False, hint: str = ''):
     """The height of the words on the slide, estimated from the deck's type (lessonlib.slide_fit, skill-fixes #27).
     The estimate errs low, so the warning comes only when the words really are taller than the text box."""
-    height, lines = LL.slide_fit(kicker, title, sub, points, wide=wide, link=link)
+    height, lines = LL.slide_fit(kicker if r.slide_kickers else '', title, sub, points, wide=wide, link=link)
     if height <= LL.FIT_BOX_H + 1:
         return
     parts = [f'{label} {lines[k]}' for k, label in (('title', 'כותרת'), ('sub', 'שורת משנה')) if lines.get(k)]

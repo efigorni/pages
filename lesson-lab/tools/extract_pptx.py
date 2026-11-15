@@ -23,7 +23,7 @@ from pptx.enum.shapes import MSO_SHAPE_TYPE
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'sources')
-G = {"כיתה ו'": "6", "כיתה ז'": "7", "כיתה ח'": "8", "כיתה ט'": "9"}
+G = {"כיתה ד'": "4", "כיתה ה'": "5", "כיתה ו'": "6", "כיתה ז'": "7", "כיתה ח'": "8", "כיתה ט'": "9"}
 NS = {
     'a': 'http://schemas.openxmlformats.org/drawingml/2006/main',
     'c': 'http://schemas.openxmlformats.org/drawingml/2006/chart',
