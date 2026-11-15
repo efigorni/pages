@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>להיות אדם אכפתי · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-stand" viewBox="0 0 120 240" data-cat="people" data-he="דמות עומדת" data-color="#63b1af">
+    <g fill="currentColor">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" />
+      <rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="chat" viewBox="0 0 220 190" data-cat="talk" data-he="צ׳אט">
+    <path d="M40 10 H120 A30 30 0 0 1 150 40 V66 A30 30 0 0 1 120 96 H64 L28 122 L34.8 95.5 A30 30 0 0 1 10 66 V40 A30 30 0 0 1 40 10 Z" fill="#63b1af" />
+    <path d="M38 42 H122 M38 64 H98" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+    <path d="M100 76 H180 A30 30 0 0 1 210 106 V130 A30 30 0 0 1 185.2 159.5 L204 182 L156 160 H100 A30 30 0 0 1 70 130 V106 A30 30 0 0 1 100 76 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <g fill="#13100e"><circle cx="112" cy="118" r="7" /><circle cx="140" cy="118" r="7" /><circle cx="168" cy="118" r="7" /></g>
+  </symbol>
+
+  
+  <symbol id="heart" viewBox="0 0 200 180" data-cat="feelings" data-he="לב" data-color="#e57373">
+    <path d="M100 168 C40 124 12 92 12 58 C12 30 34 12 58 12 C76 12 90 22 100 38 C110 22 124 12 142 12 C166 12 188 30 188 58 C188 92 160 124 100 168 Z" fill="currentColor" />
+    <path d="M38 58 C38 46 46 37 58 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55" />
+  </symbol>
+
+  <symbol id="face-happy" viewBox="0 0 200 200" data-cat="feelings" data-he="פנים שמחות" data-color="#f7ae4d">
+    <circle cx="100" cy="100" r="86" fill="currentColor" />
+    <g fill="#e57373" opacity=".5"><circle cx="50" cy="120" r="13" /><circle cx="150" cy="120" r="13" /></g>
+    <g fill="#13100e"><circle cx="70" cy="84" r="10" /><circle cx="130" cy="84" r="10" /></g>
+    <path d="M62 118 Q100 160 138 118" fill="none" stroke="#13100e" stroke-width="9" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="red-line" viewBox="0 0 320 92" data-cat="choices" data-he="קו אדום" data-color="#e57373">
+    <path d="M24 34 C84 16 124 52 164 34 C204 16 244 52 300 34 L316 30 L304 46 L316 62 L300 56 C244 74 204 38 164 56 C124 74 84 38 24 56 L6 62 L18 46 L6 30 Z" fill="currentColor" />
+    <path d="M30 41 C86 24 124 59 164 41 C204 24 242 59 292 41" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".4" />
+  </symbol>
+
+  <symbol id="sun" viewBox="0 0 200 200" data-cat="growth" data-he="שמש" data-color="#f7ae4d">
+    <circle cx="100" cy="100" r="46" fill="currentColor" />
+    <g stroke="currentColor" stroke-width="10" stroke-linecap="round">
+      <path d="M162 100 H186 M143.8 143.8 L160.8 160.8 M100 162 V186 M56.2 143.8 L39.2 160.8 M38 100 H14 M56.2 56.2 L39.2 39.2 M100 38 V14 M143.8 56.2 L160.8 39.2" />
+    </g>
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<h1>להיות אדם אכפתי</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="להיות אדם אכפתי"><g filter="url(#rough)"><use href="#heart" x="150.0" y="126.0" width="320.0" height="288.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<h2>כך מרגישה כיתה נעימה</h2><p class="sub">כתבו שתי תחושות שיכולות להיות בכיתה שנעים ללמוד בה</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="כך מרגישה כיתה נעימה"><g filter="url(#rough)"><use href="#face-happy" x="150.0" y="110.0" width="320.0" height="320.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<h2>בתוך האדם האכפתי</h2><p class="sub">כתבו על פתק מעשה רצוי, למשל לעזור להשלים חומר</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בתוך האדם האכפתי"><g filter="url(#rough)"><use href="#kid-stand" x="214.0" y="78.0" width="192.0" height="384.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<h2>מחוץ לדמות</h2><p class="sub">כתבו התנהגות שלא הייתם רוצים בכיתה, ללא שמות</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מחוץ לדמות"><g filter="url(#rough)"><use href="#red-line" x="115.0" y="213.9" width="390.0" height="112.1" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<h2>ממעשה לרגש</h2><p class="sub">בחרו זוג פתקים מנוגדים</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ממעשה לרגש"><g filter="url(#rough)"><use href="#chat" x="134.0" y="118.0" width="352.0" height="304.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<h2>איזה צבע נוסיף?</h2><p class="sub">בחרו פעולה אחת מהדמות שתוכלו לנסות בהפסקה או בשיעור</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="איזה צבע נוסיף?"><g filter="url(#rough)"><use href="#sun" x="150.0" y="110.0" width="320.0" height="320.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<h2>למדנו למפות התנהגויות אכפתיות ולא אכפתיות בכיתה שלנו ולזהות באלו מהן לקחתי חלק.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="למדנו למפות התנהגויות אכפתיות ולא אכפתיות בכיתה שלנו ולזהות באלו מהן לקחתי חלק."><g filter="url(#rough)"><use href="#heart" x="150.0" y="126.0" width="320.0" height="288.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="8">
+  <div class="frame">
+    <div class="txt">
+<h2>התנהגויות אכפתיות ולא אכפתיות משפיעות על ההרגשה שלנו ועל האווירה בכיתה.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="התנהגויות אכפתיות ולא אכפתיות משפיעות על ההרגשה שלנו ועל האווירה בכיתה."><g filter="url(#rough)"><use href="#heart" x="150.0" y="126.0" width="320.0" height="288.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="9">
+  <div class="frame">
+    <div class="txt">
+<h2>מעשים אכפתיים אינם חייבים להיות מורכבים – הם מתרחשים ביום-יום ובמצבים שונים (בהפסקה, בשיעור, אחה&#34;צ ועוד)</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעשים אכפתיים אינם חייבים להיות מורכבים – הם מתרחשים ביום-יום ובמצבים שונים (בהפסקה, בשיעור, אחה&#34;צ ועוד)"><g filter="url(#rough)"><use href="#heart" x="150.0" y="126.0" width="320.0" height="288.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="10">
+  <div class="frame">
+    <div class="txt">
+<h2>מה ניקח מהשיעור?</h2><ol class="pts"><li class="fragment">איזו התנהגות אכפתית אבחר?</li><li class="fragment">על איזו הרגשה היא יכולה להשפיע?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מה ניקח מהשיעור?"><g filter="url(#rough)"><use href="#note" x="182.0" y="110.0" width="256.0" height="320.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

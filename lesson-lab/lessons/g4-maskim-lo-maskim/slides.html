@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>לפעמים אני מסכים ולפעמים אני לא מסכים · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="pair" viewBox="0 0 220 240" data-cat="people" data-he="זוג">
+    <path d="M80 140 L110 186" stroke="#63b1af" stroke-width="15" stroke-linecap="round" />
+    <path d="M140 140 L110 186" stroke="#f7ae4d" stroke-width="15" stroke-linecap="round" />
+    <g fill="#63b1af" transform="translate(-6 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(106 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="chat" viewBox="0 0 220 190" data-cat="talk" data-he="צ׳אט">
+    <path d="M40 10 H120 A30 30 0 0 1 150 40 V66 A30 30 0 0 1 120 96 H64 L28 122 L34.8 95.5 A30 30 0 0 1 10 66 V40 A30 30 0 0 1 40 10 Z" fill="#63b1af" />
+    <path d="M38 42 H122 M38 64 H98" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+    <path d="M100 76 H180 A30 30 0 0 1 210 106 V130 A30 30 0 0 1 185.2 159.5 L204 182 L156 160 H100 A30 30 0 0 1 70 130 V106 A30 30 0 0 1 100 76 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <g fill="#13100e"><circle cx="112" cy="118" r="7" /><circle cx="140" cy="118" r="7" /><circle cx="168" cy="118" r="7" /></g>
+  </symbol>
+
+  
+  <symbol id="heart" viewBox="0 0 200 180" data-cat="feelings" data-he="לב" data-color="#e57373">
+    <path d="M100 168 C40 124 12 92 12 58 C12 30 34 12 58 12 C76 12 90 22 100 38 C110 22 124 12 142 12 C166 12 188 30 188 58 C188 92 160 124 100 168 Z" fill="currentColor" />
+    <path d="M38 58 C38 46 46 37 58 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55" />
+  </symbol>
+
+  <symbol id="shield" viewBox="0 0 180 200" data-cat="safety" data-he="מגן" data-color="#63b1af">
+    <path d="M90 10 L164 36 V96 C164 146 132 178 90 192 C48 178 16 146 16 96 V36 Z" fill="currentColor" />
+    <path d="M90 10 L164 36 V96 C164 146 132 178 90 192 Z" fill="#13100e" opacity=".14" />
+    <path d="M90 30 L146 50 V96 C146 134 122 160 90 172 C58 160 34 134 34 96 V50 Z" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round" opacity=".7" />
+  </symbol>
+
+  <symbol id="hands-help" viewBox="0 0 220 220" data-cat="safety" data-he="ידיים עוזרות">
+   <g transform="translate(110 110) scale(.92) translate(-110 -100)">
+    <g transform="translate(64 158) rotate(40)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#3f8f8d" />
+      <path d="M13 -12 L27 -32" stroke="#63b1af" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#63b1af" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+    <g transform="translate(156 42) rotate(220)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#e08f36" />
+      <path d="M13 -12 L27 -32" stroke="#f7ae4d" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#f7ae4d" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+   </g>
+  </symbol>
+
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="puzzle" viewBox="0 0 200 200" data-cat="learning" data-he="חלק פאזל" data-color="#8c82c1">
+    <path d="M48 48 H87 L91 39 A17 17 0 1 1 109 39 L113 48 H152 V87 L161 91 A17 17 0 1 1 161 109 L152 113 V152 H113 L109 143 A17 17 0 1 0 91 143 L87 152 H48 V113 L57 109 A17 17 0 1 0 57 91 L48 87 Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover len-l" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<h1>לפעמים אני מסכים ולפעמים אני לא מסכים</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="לפעמים אני מסכים ולפעמים אני לא מסכים"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<h2>מה מסתתר בהסכמה?</h2><p class="sub">מצאו מילים בתוך המילה הסכמה</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מה מסתתר בהסכמה?"><g filter="url(#rough)"><use href="#puzzle" x="150.0" y="110.0" width="320.0" height="320.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<h2>שני צבעים של רגש</h2><p class="sub">כתבו שני רגשות: כשבקשה מתאימה לרצון וכשבקשה אינה מתאימה</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שני צבעים של רגש"><g filter="url(#rough)"><use href="#heart" x="150.0" y="126.0" width="320.0" height="288.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<h2>איך יודעים שיש הסכמה?</h2><p class="sub">מיינו תגובות: כן, לא, שתיקה, אולי</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="איך יודעים שיש הסכמה?"><g filter="url(#rough)"><use href="#chat" x="134.0" y="118.0" width="352.0" height="304.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<h2>שואלים ומכבדים</h2><p class="sub">בזוגות תרגלו במילים בלבד בקשת רשות לשבת ליד חבר או להחזיק ביד</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שואלים ומכבדים"><g filter="url(#rough)"><use href="#pair" x="134.0" y="78.0" width="352.0" height="384.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<h2>כשמתעלמים מהסירוב</h2><p class="sub">חשבו על שלושת צעדי העזרה: לומר לא אם אפשר, להתרחק למקום בטוח ולספר למבוגר</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="כשמתעלמים מהסירוב"><g filter="url(#rough)"><use href="#hands-help" x="134.0" y="94.0" width="352.0" height="352.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<h2>על מנת לקבל הסכמה, יש צורך לוודא שהרצון משותף ומוסכם על שני הצדדים ולא רק על צד אחד.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="על מנת לקבל הסכמה, יש צורך לוודא שהרצון משותף ומוסכם על שני הצדדים ולא רק על צד אחד."><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="8">
+  <div class="frame">
+    <div class="txt">
+<h2>האם תרצה חיבוק? האם אני יכול להחזיק ביד שלך? ואם מישהו לא אומר &#34;כן&#34;- אז הם לא נתנו את ההסכמה שלהם.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="האם תרצה חיבוק? האם אני יכול להחזיק ביד שלך? ואם מישהו לא אומר &#34;כן&#34;- אז הם לא נתנו את ההסכמה שלהם."><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="9">
+  <div class="frame">
+    <div class="txt">
+<h2>אמירה של לא באופן ברור</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="אמירה של לא באופן ברור"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="10">
+  <div class="frame">
+    <div class="txt">
+<h2>אם אין תשובה, זה לא אומר שיש הסכמה</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="אם אין תשובה, זה לא אומר שיש הסכמה"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="11">
+  <div class="frame">
+    <div class="txt">
+<h2>יש לוודא הסכמה</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="יש לוודא הסכמה"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="12">
+  <div class="frame">
+    <div class="txt">
+<h2>לשאול בשנית, אם התשובה לא הייתה ברורה דיה</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="לשאול בשנית, אם התשובה לא הייתה ברורה דיה"><g filter="url(#rough)"><use href="#shield" x="166.0" y="110.0" width="288.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="13">
+  <div class="frame">
+    <div class="txt">
+<h2>מה ניקח מהשיעור?</h2><ol class="pts"><li class="fragment">איך אדע שיש הסכמה?</li><li class="fragment">מה אעשה כשלא מכבדים סירוב?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מה ניקח מהשיעור?"><g filter="url(#rough)"><use href="#note" x="182.0" y="110.0" width="256.0" height="320.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>
