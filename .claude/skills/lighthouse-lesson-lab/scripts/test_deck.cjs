@@ -12,6 +12,10 @@ function harness({ phone = false, search = '', hash = '', deferred = false } = {
   const location = { search, hash };
   let scroll = 0, decorations = 0, resolveInit;
   const sections = Array.from({ length: 8 }, (_, i) => ({
+    classList: {
+      values: new Set(),
+      remove(...names) { names.forEach(name => this.values.delete(name)); },
+    },
     getBoundingClientRect: () => ({ top: i * 600 - scroll }),
     scrollIntoView: () => { scroll = i * 600; },
     querySelector: () => null,
@@ -121,8 +125,10 @@ test('breakpoint round trip retains original nodes and current slide, without du
   assert.equal(h.instances.length, 1);
   assert.equal(h.instances[0].index, 4);
   h.instances[0].index = 6;
+  h.sections.forEach(section => section.classList.values.add('future'));
   h.resize(true);
   assert.equal(h.instances[0].destroyed, true);
+  assert.ok(h.sections.every(section => !section.classList.values.has('future')));
   assert.equal(h.scroll, 3600);
   assert.equal(h.location.hash, '#/6');
   h.resize(true);

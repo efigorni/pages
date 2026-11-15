@@ -75,6 +75,8 @@
         deck.destroy();
         deck = null;
       }
+      // Reveal.destroy leaves these classes; RTL transition rules still move their sections offscreen.
+      sections.forEach(function (section) { section.classList.remove('past', 'present', 'future'); });
       reading = true;
       document.documentElement.classList.add('lesson-reading');
       document.querySelector('.reveal').removeAttribute('role');
