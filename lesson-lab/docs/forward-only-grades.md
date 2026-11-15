@@ -8,3 +8,5 @@
 - קובצי PDF נשארים מחוץ לגיט לפי D82.
 
 בדיקות תשתית: `uv run --with pyyaml --with jinja2 python3 -B .claude/skills/lighthouse-lesson-lab/scripts/test_forward_build.py`.
+
+עדכון המשך: לאחר פרסום תוספת ד׳–ה׳, המשתמש אישר בנפרד ניקוי מכני של התוויות גם ב-116 השיעורים הקיימים (D87). ההחלטות וההוכחות של ההוספה לעיל נשארות היסטוריות; הניקוי המאוחר מתועד ב-`legacy-slide-style.md`.
