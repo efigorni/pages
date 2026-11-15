@@ -51,6 +51,6 @@ Each card in `index.html` must follow the aesthetic established by `gibush.html`
 | `waze.html` | `/pages/waze.html` | Class Waze - ניווט וניהול חכם בכיתה | חינוך והוראה |
 | `schedule.html` | `/pages/schedule.html` | מחולל לו״ז יומי מעוצב | חינוך והוראה |
 | `massa_z.html` | `/pages/massa_z.html` | הכ״חות שבדרך - רולטת מסע כיתה ז׳ | פעילויות וגיבוש |
-| `lesson-lab/lessons/index.html` | `/pages/lesson-lab/lessons/index.html` | הכ״חות שבדרך - 116 מערכי שיעור לכישורי חיים, כיתות ו׳–ט׳ (המערך + מצגת לכל שיעור) | חינוך והוראה |
+| `lesson-lab/lessons/index.html` | `/pages/lesson-lab/lessons/index.html` | הכ״חות שבדרך - 173 מערכי שיעור לכישורי חיים, כיתות ד׳–ט׳ (המערך + מצגת לכל שיעור) | חינוך והוראה |
 | `alefbet-coloring/index.html` | `/pages/alefbet-coloring/index.html` | דפי צביעה: אותיות ומילים - אות גדולה וציורים של מילים שמתחילות בה, A4 להדפסה (נבנה מ־`src/`, ראו `alefbet-coloring/README.md`) | חינוך והוראה |
 

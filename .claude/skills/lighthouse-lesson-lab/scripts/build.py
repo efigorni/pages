@@ -14,6 +14,7 @@ The first line is the skill version (lessonlib.skill_version): when it changes m
 """
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -44,12 +45,14 @@ def build_one(lesson_dir: Path, kit: LL.Kit) -> tuple[V.Report, dict | None]:
 
 
 def main(argv: list[str]) -> int:
-    dirs = [Path(a) for a in argv if not a.startswith('-')]
-    if not dirs:
-        print(__doc__)
-        return 2
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('lessons', nargs='+', type=Path)
+    parser.add_argument('--no-sync-assets', action='store_true', help='Preserve the published shared assets.')
+    args = parser.parse_args(argv)
+    dirs = args.lessons
     print(LL.skill_version())
-    LL.sync_assets()
+    if not args.no_sync_assets:
+        LL.sync_assets()
     kit = LL.Kit()
     bad = 0
     for d in dirs:

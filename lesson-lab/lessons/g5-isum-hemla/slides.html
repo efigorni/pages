@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>חמלה · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="pair" viewBox="0 0 220 240" data-cat="people" data-he="זוג">
+    <path d="M80 140 L110 186" stroke="#63b1af" stroke-width="15" stroke-linecap="round" />
+    <path d="M140 140 L110 186" stroke="#f7ae4d" stroke-width="15" stroke-linecap="round" />
+    <g fill="#63b1af" transform="translate(-6 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(106 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="hands-help" viewBox="0 0 220 220" data-cat="safety" data-he="ידיים עוזרות">
+   <g transform="translate(110 110) scale(.92) translate(-110 -100)">
+    <g transform="translate(64 158) rotate(40)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#3f8f8d" />
+      <path d="M13 -12 L27 -32" stroke="#63b1af" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#63b1af" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+    <g transform="translate(156 42) rotate(220)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#e08f36" />
+      <path d="M13 -12 L27 -32" stroke="#f7ae4d" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#f7ae4d" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+   </g>
+  </symbol>
+
+  <symbol id="umbrella" viewBox="0 0 200 200" data-cat="safety" data-he="מטרייה" data-color="#8c82c1">
+    <path d="M100 20 V8" stroke="#13100e" stroke-width="6" stroke-linecap="round" />
+    <path d="M100 104 V172 A13 13 0 0 1 74 172" fill="none" stroke="#13100e" stroke-width="7" stroke-linecap="round" />
+    <path d="M16 104 C16 54 54 20 100 20 C146 20 184 54 184 104 Q163 88 142 104 Q121 88 100 104 Q79 88 58 104 Q37 88 16 104 Z" fill="currentColor" />
+    <path d="M100 20 C80 40 64 70 58 104 Q79 88 100 104 Z M100 20 C150 30 180 60 184 104 Q163 88 142 104 C138 70 124 40 100 20 Z" fill="#13100e" opacity=".13" />
+  </symbol>
+
+  
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="bulb" viewBox="0 0 170 210" data-cat="learning" data-he="נורה (רעיון)" data-color="#f7ae4d">
+    <g stroke="#e08f36" stroke-width="7" stroke-linecap="round">
+      <path d="M85 32 V16 M126 47 L136 35 M44 47 L34 35 M146 86 L161 83 M24 86 L9 83" />
+    </g>
+    <path d="M85 42 C55 42 31 66 31 96 C31 118 44 132 56 146 V162 H114 V146 C126 132 139 118 139 96 C139 66 115 42 85 42 Z" fill="currentColor" />
+    <path d="M54 94 C54 76 64 66 80 63" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".6" />
+    <rect x="56" y="158" width="58" height="30" rx="6" fill="#847c74" />
+    <path d="M60 168 H110 M60 178 H110" stroke="#fff" stroke-width="3" opacity=".6" />
+    <path d="M70 188 H100 L92 200 H78 Z" fill="#13100e" />
+  </symbol>
+
+  <symbol id="sprout" viewBox="0 0 180 210" data-cat="growth" data-he="נבט">
+    <path d="M90 124 C90 100 92 82 90 62" fill="none" stroke="#4a8571" stroke-width="8" stroke-linecap="round" />
+    <path d="M90 84 C70 84 46 70 40 48 C62 44 84 56 90 84 Z" fill="#619f88" />
+    <path d="M90 68 C100 48 124 34 148 40 C140 62 116 74 90 68 Z" fill="#619f88" />
+    <path d="M42 136 H138 L126 198 H54 Z" fill="#f7ae4d" />
+    <rect x="32" y="118" width="116" height="24" rx="6" fill="#e08f36" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<h1>חמלה</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ידיים מושטות"><g filter="url(#rough)"><use href="#hands-help" x="180.0" y="120.0" width="250.0" height="250.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<h2>מה אפשר לעשות כשחבר מתקשה בטיול?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="ידיים מושטות"><g filter="url(#rough)"><use href="#hands-help" x="180.0" y="120.0" width="250.0" height="250.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<h2>מה מרגיש אדם כשהוא רואה את דן?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג"><g filter="url(#rough)"><use href="#pair" x="180.0" y="120.0" width="250.0" height="272.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-source" data-n="4">
+  <div class="frame">
+    <div class="txt">
+<h2>עוברים למצגת המקורית</h2><p class="sub">שקף 10</p><a class="go" href="https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Isum_Hemla.pptx" target="_blank" rel="noopener">למצגת המקורית ←</a>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג"><g filter="url(#rough)"><use href="#pair" x="180.0" y="120.0" width="250.0" height="272.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<h2>איזו הצעה באמת עשויה להקל?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מטרייה"><g filter="url(#rough)"><use href="#umbrella" x="180.0" y="120.0" width="250.0" height="250.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<h2>האם אפשר לדבר אל עצמנו כמו אל חבר?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נבט"><g filter="url(#rough)"><use href="#sprout" x="180.0" y="120.0" width="250.0" height="291.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<h2>רגש החמלה מקרב ומחבר בין ילדים ואנשים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg len-m" data-n="8">
+  <div class="frame">
+    <div class="txt">
+<h2>הדרך לפתח חמלה היא על ידי התייחסות לדומה בינינו, לכך שקשיים וכישלונות הם טבעיים ומשותפים לכולם גם אם לא כולנו התקשינו באותם הדברים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="9">
+  <div class="frame">
+    <div class="txt">
+<h2>חמלה לאחר וחמלה עצמית מניעים אותנו להתמודדות ולצמיחה ועל ידי כך אנחנו מחזקים את החוסן שלנו.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="10">
+  <div class="frame">
+    <div class="txt">
+<h2>מה לוקחים איתנו?</h2><ol class="pts"><li class="fragment">כתבו משפט חומל לחבר שמתקשה.</li><li class="fragment">כתבו משפט לעצמכם וצעד קטן שאפשר לעשות אחרי טעות.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דף לכתיבה"><g filter="url(#rough)"><use href="#note" x="180.0" y="120.0" width="250.0" height="312.5" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

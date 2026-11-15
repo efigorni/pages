@@ -1,6 +1,2063 @@
 {
  "lessons": [
   {
+   "slug": "g4-havila-laderech",
+   "title": "חבילה לדרך",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+   "unit": "פתיחת שנה",
+   "src_text": "sources/text/4/Havila_Laderech.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Havila_Laderech.pptx",
+   "sensitivity": "med",
+   "slides": 15,
+   "status": "built",
+   "seq": 1,
+   "flags": [],
+   "source_message_slides": [],
+   "message_count": 0,
+   "adaptation": "נשמרו רגשות פתיחה, חבילת שאלות, פעולה ובקשה ואיחולים. חבילה עוברת הומרה לפתקים בזוגות כפי שמציע המקור; הוראות לבחור חבר מסוים הושמטו למניעת דירוג חברתי. שיר הסיום מוצג במקור בלבד. אין שקף מסרים מסכם מפורש; סיכום בהערות אינו מועבר לבלוק מסרים.",
+   "load": "balanced",
+   "note": "נשמרו רגשות פתיחה, חבילת שאלות, פעולה ובקשה ואיחולים. חבילה עוברת הומרה לפתקים בזוגות כפי שמציע המקור; הוראות לבחור חבר מסוים הושמטו למניעת דירוג חברתי. שיר הסיום מוצג במקור בלבד. אין שקף מסרים מסכם מפורש; סיכום בהערות אינו מועבר לבלוק מסרים.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 611,
+   "words_notes": 231,
+   "listings": [
+    {
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+     "unit": "פתיחת שנה",
+     "title": "חבילה לדרך",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Havila_Laderech.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-matchilim-shana",
+   "title": "מתחילים את השנה ביחד",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+   "unit": "פתיחת שנה",
+   "src_text": "sources/text/4/Matchilim_Shana.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Matchilim_Shana.pptx",
+   "sensitivity": "low-med",
+   "slides": 23,
+   "status": "built",
+   "seq": 2,
+   "flags": [],
+   "source_message_slides": [
+    22
+   ],
+   "message_count": 3,
+   "adaptation": "נשמרו משאלה, שיח על הקשבה, מיון מצבי חיים וחוזה. הצבעה באדום וירוק הומרה למיון זוגי; שמונה מצבים קוצרו לארבעה. נוספה הבהרת גבול הסודיות.",
+   "load": "balanced",
+   "note": "נשמרו משאלה, שיח על הקשבה, מיון מצבי חיים וחוזה. הצבעה באדום וירוק הומרה למיון זוגי; שמונה מצבים קוצרו לארבעה. נוספה הבהרת גבול הסודיות.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 989,
+   "words_notes": 412,
+   "listings": [
+    {
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+     "unit": "פתיחת שנה",
+     "title": "מתחילים את השנה ביחד",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Matchilim_Shana.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-kita-ichpatit-1",
+   "title": "מעבירים את זה הלאה",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+   "unit": "הכיתה האכפתית",
+   "src_text": "sources/text/4/Kita_Ichpatit_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Kita_Ichpatit_1.pptx",
+   "sensitivity": "low-med",
+   "slides": 26,
+   "status": "built",
+   "seq": 3,
+   "flags": [],
+   "source_message_slides": [
+    23,
+    24
+   ],
+   "message_count": 5,
+   "adaptation": "משחק המראה ובקבוק האכפתיות נשמרו. שני סרטונים מצטברים הומרו ליצירת שרשרת המתבססת על הרעיון שמפורש בהערות המקור; אין תלות בנגן חיצוני. כל חמשת המסרים נשמרו.",
+   "unit_order": 1,
+   "unit_size": 3,
+   "load": "balanced",
+   "note": "משחק המראה ובקבוק האכפתיות נשמרו. שני סרטונים מצטברים הומרו ליצירת שרשרת המתבססת על הרעיון שמפורש בהערות המקור; אין תלות בנגן חיצוני. כל חמשת המסרים נשמרו.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 972,
+   "words_notes": 242,
+   "listings": [
+    {
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+     "unit": "הכיתה האכפתית",
+     "title": "מעבירים את זה הלאה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Kita_Ichpatit_1.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-adam-ichpati-2",
+   "title": "להיות אדם אכפתי",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+   "unit": "הכיתה האכפתית",
+   "src_text": "sources/text/4/Adam_Ichpati_2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Adam_Ichpati_2.pptx",
+   "sensitivity": "med",
+   "slides": 24,
+   "status": "built",
+   "seq": 4,
+   "flags": [],
+   "source_message_slides": [
+    22
+   ],
+   "message_count": 3,
+   "adaptation": "נשמרו סבב רגשות, מיפוי בתוך ומחוץ לדמות והקישור לאווירה. החזרה על הסרטון הקודם והסרטון המשני הוחלפו במיפוי עצמאי ודימוי הצבע שבהערות. אין תלות בתוצר קודם.",
+   "unit_order": 2,
+   "unit_size": 3,
+   "load": "balanced",
+   "note": "נשמרו סבב רגשות, מיפוי בתוך ומחוץ לדמות והקישור לאווירה. החזרה על הסרטון הקודם והסרטון המשני הוחלפו במיפוי עצמאי ודימוי הצבע שבהערות. אין תלות בתוצר קודם.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 741,
+   "words_notes": 364,
+   "listings": [
+    {
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+     "unit": "הכיתה האכפתית",
+     "title": "להיות אדם אכפתי",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Adam_Ichpati_2.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-simcha-lakita-3",
+   "title": "מכניסים שמח\"ה לכיתה",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+   "unit": "הכיתה האכפתית",
+   "src_text": "sources/text/4/Simcha_Lakita_3.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Simcha_Lakita_3.pptx",
+   "sensitivity": "med",
+   "slides": 29,
+   "status": "built",
+   "seq": 5,
+   "flags": [],
+   "source_message_slides": [
+    25
+   ],
+   "message_count": 3,
+   "adaptation": "נשמרו צנצנת מעשים, יעדים כיתתיים וכל ארבעת חלקי שמח״ה. פסטה ופרס כיתתי הוחלפו בפתקים ללא ציוד מיוחד. חזרה על תוצרים קודמים, סיכום יחידה והוראת צעירים הושמטו; מסר כפול בשקפים25/26 נכלל פעם אחת.",
+   "unit_order": 3,
+   "unit_size": 3,
+   "load": "balanced",
+   "note": "נשמרו צנצנת מעשים, יעדים כיתתיים וכל ארבעת חלקי שמח״ה. פסטה ופרס כיתתי הוחלפו בפתקים ללא ציוד מיוחד. חזרה על תוצרים קודמים, סיכום יחידה והוראת צעירים הושמטו; מסר כפול בשקפים25/26 נכלל פעם אחת.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 1003,
+   "words_notes": 514,
+   "listings": [
+    {
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום- פתיחת שנה (ספטמבר)",
+     "unit": "הכיתה האכפתית",
+     "title": "מכניסים שמח\"ה לכיתה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Simcha_Lakita_3.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-yad-alalev",
+   "title": "עם יד על הלב",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "אוקטובר",
+   "section": "חברות, סובלנות ומניעת אלימות - צביטה בלב (אוקטובר)",
+   "unit": "פיתוח רגישות למצבי פגיעה בין חברים",
+   "src_text": "sources/text/4/Yad_Alalev.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Yad_Alalev.pptx",
+   "sensitivity": "med-high",
+   "slides": 32,
+   "status": "built",
+   "seq": 6,
+   "flags": [],
+   "source_message_slides": [
+    26
+   ],
+   "message_count": 4,
+   "adaptation": "נשמרו דמיון ושוני, השיר, מיפוי לעג, מד עצמי וחותם אישי. הסקר הפומבי הוחלף במיון מצבים ללא דיווח אישי. מסרי אמצע שקף22 משמשים בדיון; הסיכום הסופי26 הוא המסרים לפי D68.",
+   "load": "balanced",
+   "note": "נשמרו דמיון ושוני, השיר, מיפוי לעג, מד עצמי וחותם אישי. הסקר הפומבי הוחלף במיון מצבים ללא דיווח אישי. מסרי אמצע שקף22 משמשים בדיון; הסיכום הסופי26 הוא המסרים לפי D68.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 1618,
+   "words_notes": 253,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות - צביטה בלב (אוקטובר)",
+     "unit": "פיתוח רגישות למצבי פגיעה בין חברים",
+     "title": "עם יד על הלב",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Yad_Alalev.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-zvita-balev-1",
+   "title": "צביטה בלב",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "אוקטובר",
+   "section": "חברות, סובלנות ומניעת אלימות - צביטה בלב (אוקטובר)",
+   "unit": "פיתוח רגישות למצבי פגיעה בין חברים",
+   "src_text": "sources/text/4/Zvita_Balev_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Zvita_Balev_1.pptx",
+   "sensitivity": "med-high",
+   "slides": 24,
+   "status": "built",
+   "seq": 7,
+   "flags": [],
+   "source_message_slides": [
+    23
+   ],
+   "message_count": 5,
+   "adaptation": "נשמרו הסיפור, קריעת הלב ואיחויו, רגשות אייל וההשוואה למתנה. הסרטון מתווך בתמצית מתוך הערות המקור ללא תלות חיצונית. העמידה בזמן פגיעה בוטלה; נוספה הבהרה שלב נייר אינו קביעה שאין החלמה.",
+   "unit_order": 1,
+   "unit_size": 3,
+   "load": "balanced",
+   "note": "נשמרו הסיפור, קריעת הלב ואיחויו, רגשות אייל וההשוואה למתנה. הסרטון מתווך בתמצית מתוך הערות המקור ללא תלות חיצונית. העמידה בזמן פגיעה בוטלה; נוספה הבהרה שלב נייר אינו קביעה שאין החלמה.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 1013,
+   "words_notes": 286,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות - צביטה בלב (אוקטובר)",
+     "unit": "פיתוח רגישות למצבי פגיעה בין חברים",
+     "title": "צביטה בלב",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Zvita_Balev_1.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-zvita-balev-2",
+   "title": "כיצד מאחים לב שבור?",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "אוקטובר",
+   "section": "חברות, סובלנות ומניעת אלימות - צביטה בלב (אוקטובר)",
+   "unit": "פיתוח רגישות למצבי פגיעה בין חברים",
+   "src_text": "sources/text/4/Zvita_Balev_2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Zvita_Balev_2.pptx",
+   "sensitivity": "med-high",
+   "slides": 26,
+   "status": "built",
+   "seq": 8,
+   "flags": [],
+   "source_message_slides": [
+    19
+   ],
+   "message_count": 4,
+   "adaptation": "כל פעילות מרכזית נשמרה: דוגמת רן, שינוי הסיפור בזוגות ולב התיקון. הסיפור מוצג מחדש ולכן אין תלות בשיעור קודם. הלב אישי ואינו מועבר אוטומטית לחבר.",
+   "unit_order": 2,
+   "unit_size": 3,
+   "load": "balanced",
+   "note": "כל פעילות מרכזית נשמרה: דוגמת רן, שינוי הסיפור בזוגות ולב התיקון. הסיפור מוצג מחדש ולכן אין תלות בשיעור קודם. הלב אישי ואינו מועבר אוטומטית לחבר.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 1494,
+   "words_notes": 131,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות - צביטה בלב (אוקטובר)",
+     "unit": "פיתוח רגישות למצבי פגיעה בין חברים",
+     "title": "כיצד מאחים לב שבור?",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Zvita_Balev_2.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-zvita-balev-3",
+   "title": "יש לי לב זה\"ב",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "אוקטובר",
+   "section": "חברות, סובלנות ומניעת אלימות - צביטה בלב (אוקטובר)",
+   "unit": "פיתוח רגישות למצבי פגיעה בין חברים",
+   "src_text": "sources/text/4/Zvita_Balev_3.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Zvita_Balev_3.pptx",
+   "sensitivity": "med-high",
+   "slides": 29,
+   "status": "built",
+   "seq": 9,
+   "flags": [],
+   "source_message_slides": [
+    24
+   ],
+   "message_count": 3,
+   "adaptation": "נשמרו דילמת נעמה וניקול, שיחה חלופית, דוגמת אייל וכלי זה״ב. הסרטון הוחלף בתיווך הדילמה המפורשת בהערות. סיכום יחידה וסיירת הפסקה יצאו לטובת שיעור עצמאי ובטוח.",
+   "unit_order": 3,
+   "unit_size": 3,
+   "load": "balanced",
+   "note": "נשמרו דילמת נעמה וניקול, שיחה חלופית, דוגמת אייל וכלי זה״ב. הסרטון הוחלף בתיווך הדילמה המפורשת בהערות. סיכום יחידה וסיירת הפסקה יצאו לטובת שיעור עצמאי ובטוח.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 971,
+   "words_notes": 311,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות - צביטה בלב (אוקטובר)",
+     "unit": "פיתוח רגישות למצבי פגיעה בין חברים",
+     "title": "יש לי לב זה\"ב",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Zvita_Balev_3.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-bead-azmi",
+   "title": "בעד עצמי",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "ינואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר)",
+   "unit": "בעד עצמי",
+   "src_text": "sources/text/4/Bead_Azmi.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Bead_Azmi.pptx",
+   "sensitivity": "med-high",
+   "slides": 86,
+   "status": "built",
+   "seq": 10,
+   "flags": [],
+   "source_message_slides": [],
+   "message_count": 0,
+   "adaptation": "86 שקפים הם תוכנית רב-מפגשית. המערך מסומן כמסע מקוצר: כל ארבע התחנות נשמרו (נהר, ערבה, מחשבות, אגם/אוצר), ושבע דרכי בעד עצמי מוצגות אך מרחיבים שתיים בלבד. מעגלי דאגה בהרחבה; שאלון היגיינה, סרטוני המעבר, חזרות, מפתחות, תרגולי מחשבה נוספים ודיוקן חפצים בבית הושמטו בגלל זמן ופרטיות. אין מסר סגירה מפורש לתלמידים; תמליל סרטון בהערות אינו שקף מסרים.",
+   "load": "balanced",
+   "note": "86 שקפים הם תוכנית רב-מפגשית. המערך מסומן כמסע מקוצר: כל ארבע התחנות נשמרו (נהר, ערבה, מחשבות, אגם/אוצר), ושבע דרכי בעד עצמי מוצגות אך מרחיבים שתיים בלבד. מעגלי דאגה בהרחבה; שאלון היגיינה, סרטוני המעבר, חזרות, מפתחות, תרגולי מחשבה נוספים ודיוקן חפצים בבית הושמטו בגלל זמן ופרטיות. אין מסר סגירה מפורש לתלמידים; תמליל סרטון בהערות אינו שקף מסרים.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 1748,
+   "words_notes": 4183,
+   "listings": [
+    {
+     "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר)",
+     "unit": "",
+     "title": "בעד עצמי",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Bead_Azmi.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-maskim-lo-maskim",
+   "title": "לפעמים אני מסכים ולפעמים אני לא מסכים",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "ינואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר)",
+   "unit": "לפעמים אני מסכים ולפעמים אני לא מסכים",
+   "src_text": "sources/text/4/Maskim_Lo_Maskim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Maskim_Lo_Maskim.pptx",
+   "sensitivity": "high",
+   "slides": 25,
+   "status": "built",
+   "seq": 11,
+   "flags": [],
+   "source_message_slides": [
+    19
+   ],
+   "message_count": 6,
+   "adaptation": "נשמרו חידת הסכמה, רגשות בשני צבעים, מיון תגובות, בירור הסכמה ושלושת הלמדים. הסרטון הומר בתרגול מילולי של הכללים; כרטיסיות תמונה הוחלפו בתגובות פשוטות ללא טענה לתמלול. מסרי19 נאמנים למקור עם תיקוני הקלדה מתועדים.",
+   "load": "balanced",
+   "note": "נשמרו חידת הסכמה, רגשות בשני צבעים, מיון תגובות, בירור הסכמה ושלושת הלמדים. הסרטון הומר בתרגול מילולי של הכללים; כרטיסיות תמונה הוחלפו בתגובות פשוטות ללא טענה לתמלול. מסרי19 נאמנים למקור עם תיקוני הקלדה מתועדים.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 746,
+   "words_notes": 348,
+   "listings": [
+    {
+     "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר)",
+     "unit": "",
+     "title": "לפעמים אני מסכים ולפעמים אני לא מסכים",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Maskim_Lo_Maskim.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-negiot",
+   "title": "נגיעות מתאימות ולא מתאימות",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "ינואר",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר)",
+   "unit": "נגיעות מתאימות ולא מתאימות",
+   "src_text": "sources/text/4/Negiot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Negiot.pptx",
+   "sensitivity": "high",
+   "slides": 29,
+   "status": "built",
+   "seq": 12,
+   "flags": [],
+   "source_message_slides": [
+    21,
+    22
+   ],
+   "message_count": 8,
+   "adaptation": "נשמרו הבחנת נעים/מתאים, סוגי מגע, בירור הסכמה ושלושת הלמדים. סרטון, פינות פומביות ושיתוף מגע אישי הוחלפו בדוגמאות בגוף שלישי ובמיון על דף. שבע פסקאות המסרים וכל שלושת צעדי22 נשמרו עם תיקוני הקלדה.",
+   "load": "balanced",
+   "note": "נשמרו הבחנת נעים/מתאים, סוגי מגע, בירור הסכמה ושלושת הלמדים. סרטון, פינות פומביות ושיתוף מגע אישי הוחלפו בדוגמאות בגוף שלישי ובמיון על דף. שבע פסקאות המסרים וכל שלושת צעדי22 נשמרו עם תיקוני הקלדה.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 1175,
+   "words_notes": 165,
+   "listings": [
+    {
+     "section": "מיניות בריאה ומניעת פגיעה מינית (ינואר)",
+     "unit": "",
+     "title": "נגיעות מתאימות ולא מתאימות",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Negiot.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-keshet-pratyut",
+   "title": "החברים של קשת ופרטיות ברשת",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+   "unit": "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+   "src_text": "sources/text/4/Keshet_Pratyut.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Keshet_Pratyut.pptx",
+   "sensitivity": "med-high",
+   "slides": 41,
+   "status": "built",
+   "seq": 13,
+   "flags": [],
+   "source_message_slides": [
+    29
+   ],
+   "message_count": 6,
+   "adaptation": "נשמרו חדרים/פרופילים, הגדרת פרטיות, כל תשע דמויות המקור בחלוקה מקבילה וסיכום. המליאה ממוקדת בשלוש עצות כדי לעמוד בזמן. אין חשיפה של פרופילים אמיתיים.",
+   "load": "balanced",
+   "note": "נשמרו חדרים/פרופילים, הגדרת פרטיות, כל תשע דמויות המקור בחלוקה מקבילה וסיכום. המליאה ממוקדת בשלוש עצות כדי לעמוד בזמן. אין חשיפה של פרופילים אמיתיים.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 2472,
+   "words_notes": 741,
+   "listings": [
+    {
+     "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+     "unit": "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+     "title": "החברים של קשת ופרטיות ברשת",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Keshet_Pratyut.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-hachamim-bareshet",
+   "title": "חכ\"מים ברש\"ת",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+   "unit": "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+   "src_text": "sources/text/4/Hachamim_Bareshet.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Hachamim_Bareshet.pptx",
+   "sensitivity": "high",
+   "slides": 31,
+   "status": "built",
+   "seq": 14,
+   "flags": [],
+   "source_message_slides": [
+    24
+   ],
+   "message_count": 4,
+   "adaptation": "נשמרו חלופת מוסרים ומשתפים, יומן רני ומילי, שש נורות, תרחישי קבוצה אנונימית וקריאת הצילו, וצעדי סגירה/שיתוף/אי־הפצה. תמונת שירה היא חלופה שלא נבחרה. מסרי הסיכום נשמרו; אין הנחה שקישור יום הולדת בטוח רק מפני שהשולח מוכר.",
+   "load": "balanced",
+   "note": "נשמרו חלופת מוסרים ומשתפים, יומן רני ומילי, שש נורות, תרחישי קבוצה אנונימית וקריאת הצילו, וצעדי סגירה/שיתוף/אי־הפצה. תמונת שירה היא חלופה שלא נבחרה. מסרי הסיכום נשמרו; אין הנחה שקישור יום הולדת בטוח רק מפני שהשולח מוכר.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 1347,
+   "words_notes": 805,
+   "listings": [
+    {
+     "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+     "unit": "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+     "title": "חכ\"מים ברש\"ת",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Hachamim_Bareshet.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-samim-filter",
+   "title": "שמים פילטר ברשת",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+   "unit": "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+   "src_text": "sources/text/4/Samim_Filter.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Samim_Filter.pptx",
+   "sensitivity": "med-high",
+   "slides": 28,
+   "status": "built",
+   "seq": 15,
+   "flags": [],
+   "source_message_slides": [
+    16
+   ],
+   "message_count": 0,
+   "adaptation": "נשמרו טלפון שבור, ארבעת סוגי המקרים בחלוקת עבודה, הסכמה וכלי נאמ״ן. המשל מסופר במילים חדשות. מקור16 הוא מסר ביניים ולכן הועבר לתוכן; בסוף אין מסר סופי נוסף, והכרטיס סוגר.",
+   "load": "balanced",
+   "note": "נשמרו טלפון שבור, ארבעת סוגי המקרים בחלוקת עבודה, הסכמה וכלי נאמ״ן. המשל מסופר במילים חדשות. מקור16 הוא מסר ביניים ולכן הועבר לתוכן; בסוף אין מסר סופי נוסף, והכרטיס סוגר.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 2723,
+   "words_notes": 615,
+   "listings": [
+    {
+     "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+     "unit": "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+     "title": "שמים פילטר ברשת",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Samim_Filter.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-achraim-bareshet",
+   "title": "ברשת נהיה אח(ראי)ם",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "פברואר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+   "unit": "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+   "src_text": "sources/text/4/Achraim_Bareshet.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Achraim_Bareshet.pptx",
+   "sensitivity": "med-high",
+   "slides": 41,
+   "status": "built",
+   "seq": 16,
+   "flags": [],
+   "source_message_slides": [
+    30
+   ],
+   "message_count": 2,
+   "adaptation": "נשמרו קשור אליי, חקר מקרים, מיון אחריות וסלוגן לראי. מתוך ששת המקרים נבחרו אורי, גילי, דן ואליה; מריבת עדי ומאיה ואירוע גיל בגינה יצאו בשל הזמן וחפיפת המיומנויות. אין הצגת קישור Zoom השגוי שמופיע במקור.",
+   "load": "balanced",
+   "note": "נשמרו קשור אליי, חקר מקרים, מיון אחריות וסלוגן לראי. מתוך ששת המקרים נבחרו אורי, גילי, דן ואליה; מריבת עדי ומאיה ואירוע גיל בגינה יצאו בשל הזמן וחפיפת המיומנויות. אין הצגת קישור Zoom השגוי שמופיע במקור.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 1843,
+   "words_notes": 477,
+   "listings": [
+    {
+     "section": "התנהלות מיטבית ברשת ומניעת פגיעה (פברואר)",
+     "unit": "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+     "title": "ברשת נהיה אח(ראי)ם",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Achraim_Bareshet.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-mitbonenim-batmuna",
+   "title": "להביט בתמונה המלאה",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "מרץ",
+   "section": "חברות, סובלנות ומניעת אלימות (מרץ)",
+   "unit": "נקודת מבט",
+   "src_text": "sources/text/4/Mitbonenim_Batmuna.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Mitbonenim_Batmuna.pptx",
+   "sensitivity": "med",
+   "slides": 29,
+   "status": "built",
+   "seq": 17,
+   "flags": [],
+   "source_message_slides": [
+    24
+   ],
+   "message_count": 2,
+   "adaptation": "נשמרו שתי פרשנויות עלילת Runaway, רגשות, מחלוקת ומשחק שאלות. הסרטון מסופר מתוך תקציר המקור; קיפול קווה־קווה הוחלף בכרטיסי שאלות בנושא כדי לצמצם הכנה. מסרי24 מפורשים;25–26 הם חזרה יישומית ולא מסרים נוספים.",
+   "load": "balanced",
+   "note": "נשמרו שתי פרשנויות עלילת Runaway, רגשות, מחלוקת ומשחק שאלות. הסרטון מסופר מתוך תקציר המקור; קיפול קווה־קווה הוחלף בכרטיסי שאלות בנושא כדי לצמצם הכנה. מסרי24 מפורשים;25–26 הם חזרה יישומית ולא מסרים נוספים.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 976,
+   "words_notes": 193,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (מרץ)",
+     "unit": "נקודת מבט",
+     "title": "להביט בתמונה המלאה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Mitbonenim_Batmuna.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-mabat-lemabat",
+   "title": "מבט למבט",
+   "grade": 4,
+   "grades_served": [
+    4
+   ],
+   "month": "מרץ",
+   "section": "חברות, סובלנות ומניעת אלימות (מרץ)",
+   "unit": "נקודת מבט",
+   "src_text": "sources/text/4/Mabat_Lemabat.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Mabat_Lemabat.pptx",
+   "sensitivity": "med",
+   "slides": 31,
+   "status": "built",
+   "seq": 18,
+   "flags": [],
+   "source_message_slides": [
+    27
+   ],
+   "message_count": 3,
+   "adaptation": "נשמרו חידון שלושת החפצים, יצירת חידה, מקרה דנה וימית וכל שש שאלות הכלי. יצירת תמונות הומרה לציור; אין תלות בשיעור הקודם או בטלפונים.",
+   "load": "balanced",
+   "note": "נשמרו חידון שלושת החפצים, יצירת חידה, מקרה דנה וימית וכל שש שאלות הכלי. יצירת תמונות הומרה לציור; אין תלות בשיעור הקודם או בטלפונים.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 731,
+   "words_notes": 191,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (מרץ)",
+     "unit": "נקודת מבט",
+     "title": "מבט למבט",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Mabat_Lemabat.pptx",
+     "grade": 4
+    }
+   ]
+  },
+  {
+   "slug": "g4-shachar-kaduregel",
+   "title": "פנייה לעזרה – שחר וקייטנת הכדורגל",
+   "grade": 4,
+   "grades_served": [
+    4,
+    5
+   ],
+   "month": "יוני",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום - פרידה וסיום שנה (יוני)",
+   "unit": "סיום וסיכום שנה",
+   "src_text": "sources/text/4/Shachar_Kaduregel.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Shachar_Kaduregel.pptx",
+   "sensitivity": "high",
+   "slides": 52,
+   "status": "built",
+   "seq": 19,
+   "flags": [],
+   "source_message_slides": [
+    37
+   ],
+   "message_count": 5,
+   "adaptation": "נשמרו עלילת כרטיס10, שתי הסתעפויות תגובת נדב, פנייה חוזרת ליוסי, בקשת והצעת עזרה ושלט אישי. הסיפור מסופר במילים חדשות כדי לצמצם קריאה ארוכה. חמישה מסרי37 נשמרו;38 הוא מכתב מורה עם הבטחת זמינות שלא ניתן לאמץ,39 שיר רשות ו40 משימת יצירה אינם מסרים נוספים. שיר וקומיקס הושמטו עקב זמן.",
+   "load": "balanced",
+   "note": "נשמרו עלילת כרטיס10, שתי הסתעפויות תגובת נדב, פנייה חוזרת ליוסי, בקשת והצעת עזרה ושלט אישי. הסיפור מסופר במילים חדשות כדי לצמצם קריאה ארוכה. חמישה מסרי37 נשמרו;38 הוא מכתב מורה עם הבטחת זמינות שלא ניתן לאמץ,39 שיר רשות ו40 משימת יצירה אינם מסרים נוספים. שיר וקומיקס הושמטו עקב זמן.",
+   "digest_ref": "sources/digests/4.md",
+   "package": "pkg-g4-a",
+   "words_slides": 2775,
+   "words_notes": 2327,
+   "listings": [
+    {
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום - פרידה וסיום שנה (יוני)",
+     "unit": "סיום וסיכום שנה",
+     "title": "פנייה לעזרה – שחר וקייטנת הכדורגל",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Shachar_Kaduregel.pptx",
+     "grade": 4
+    },
+    {
+     "section": "סיום וסיכום שנה (יוני)",
+     "unit": "",
+     "title": "פנייה לעזרה - שחר וקייטנת הכדורגל",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Shachar_Kaduregel.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-ptichat-shana",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "פתיחת שנה",
+   "unit_order": 1,
+   "unit_size": 2,
+   "title": "וזוהי רק ההתחלה",
+   "src_text": "sources/text/5/Ptichat_Shana.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Ptichat_Shana.pptx",
+   "sensitivity": "low-med",
+   "seq": 1,
+   "slides": 21,
+   "words_slides": 805,
+   "words_notes": 495,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו תעודה, היכרות, ציפיות ושינוי. הרוח הנושבת הותאמה לכתיבה ללא חשיפה פומבית; סקר מלא וקפסולת זמן הושמטו לשם עצמאות השיעור. מסיכום18 נשמרה התובנה, לא דיווח הפעילות או טיזר התוכנית.",
+   "digest_ref": "sources/digests/5b.md:5",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+     "unit": "פתיחת שנה",
+     "title": "וזוהי רק ההתחלה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Ptichat_Shana.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-ptichat-shana-tashpaz",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ספטמבר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+   "unit": "פתיחת שנה",
+   "unit_order": 2,
+   "unit_size": 2,
+   "title": "מעשים קטנים של חסד",
+   "src_text": "sources/text/5/Ptichat_Shana_Tashpaz.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Ptichat_Shana_Tashpaz.pptx",
+   "sensitivity": "low-med",
+   "seq": 2,
+   "slides": 18,
+   "words_slides": 536,
+   "words_notes": 359,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו מזג אוויר, סקר השפעה, חוויית נתינה, מאגר מחוות וכוונה. הסרטון הושמט ללא החלפה בסרט אחר; אותו רעיון מעובד דרך הדוגמאות שבהערות המקור. פעילות המשך שנתית אינה תנאי לשיעור.",
+   "digest_ref": "sources/digests/5b.md:15",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר)",
+     "unit": "פתיחת שנה",
+     "title": "מעשים קטנים של חסד",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Ptichat_Shana_Tashpaz.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-visut-1-yazanu-laderech",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+   "unit": "חוסן – ויסות דרך הגוף",
+   "unit_order": 1,
+   "unit_size": 6,
+   "title": "יוצאים לדרך משותפת",
+   "src_text": "sources/text/5/Visut1YazanuLaderech.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut1YazanuLaderech.pptx",
+   "sensitivity": "med",
+   "seq": 3,
+   "slides": 16,
+   "words_slides": 1010,
+   "words_notes": 1042,
+   "load": "balanced",
+   "flags": [],
+   "note": "היומן הוצג בסיכום נאמן; נשמרו ענן מילים, מאזניים והסכם. אין הסבר רפואי כוללני על חיסונים. מובילי חוסן מוזכרים רק כתזכורת, ללא תלות ברצף שיעורים. המשימה השבועית שולבה בצעד אישי.",
+   "digest_ref": "sources/digests/5b.md:25",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+     "unit": "חוסן – ויסות דרך הגוף",
+     "title": "יוצאים לדרך משותפת",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut1YazanuLaderech.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-visut-2-bhira",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+   "unit": "חוסן – ויסות דרך הגוף",
+   "unit_order": 2,
+   "unit_size": 6,
+   "title": "בחירה היא שליטה",
+   "src_text": "sources/text/5/Visut_2_Bhira.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_2_Bhira.pptx",
+   "sensitivity": "med",
+   "seq": 4,
+   "slides": 18,
+   "words_slides": 818,
+   "words_notes": 1003,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו עוגת התותים, מבחן היד, הגדרת שליטה, אדם והעברה למצבים. היד הותאמה להתנסות עצמית ללא מגע והפלה; סרטון המלך ומשימות המשך הושמטו כדי להעמיק בבחירה עצמה.",
+   "digest_ref": "sources/digests/5b.md:35",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+     "unit": "חוסן – ויסות דרך הגוף",
+     "title": "בחירה היא שליטה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_2_Bhira.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-visut-3-hamelech-amar",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+   "unit": "חוסן – ויסות דרך הגוף",
+   "unit_order": 3,
+   "unit_size": 6,
+   "title": "המלך אמר – אפשר לעבור לנוח",
+   "src_text": "sources/text/5/Visut_3_Hamelech_Amar.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_3_Hamelech_Amar.pptx",
+   "sensitivity": "med",
+   "seq": 5,
+   "slides": 20,
+   "words_slides": 784,
+   "words_notes": 949,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו הצבעה, ארבעת תחומי המתח, סרגל, המלך אמר ותכתובת דנה בסיכום. ניסוי כיווץ כל הגוף לדקה הושמט; במשחק אין הדחה. אין תלות בשיעור הקודם.",
+   "digest_ref": "sources/digests/5b.md:45",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+     "unit": "חוסן – ויסות דרך הגוף",
+     "title": "המלך אמר – אפשר לעבור לנוח",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_3_Hamelech_Amar.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-visut-4-tsumet-lev",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+   "unit": "חוסן – ויסות דרך הגוף",
+   "unit_order": 4,
+   "unit_size": 6,
+   "title": "תשומת לב מודעת",
+   "src_text": "sources/text/5/Visut_4_Tsumet_Lev.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_4_Tsumet_Lev.pptx",
+   "sensitivity": "med",
+   "seq": 6,
+   "slides": 16,
+   "words_slides": 520,
+   "words_notes": 1190,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו שינוי בחדר בגרסת חפצים, מחשבות בדקה, אדם ודנה, תרגיל הסימון וסיסמה. אין צילום הודעות או פרסום מחשבות; המשימות השבועיות וקובץ הקלטה הושמטו.",
+   "digest_ref": "sources/digests/5b.md:55",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+     "unit": "חוסן – ויסות דרך הגוף",
+     "title": "תשומת לב מודעת",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_4_Tsumet_Lev.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-visut-5-mafhid-lo-mesukan",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+   "unit": "חוסן – ויסות דרך הגוף",
+   "unit_order": 5,
+   "unit_size": 6,
+   "title": "מפחיד, אבל לא מסוכן",
+   "src_text": "sources/text/5/Visut_5_Mafhid_Lo_Mesukan.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_5_Mafhid_Lo_Mesukan.pptx",
+   "sensitivity": "med",
+   "seq": 7,
+   "slides": 16,
+   "words_slides": 903,
+   "words_notes": 972,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו אותות הגוף, אדם והכלב, פחד מול סכנה ופעולה. צעקת ההבהלה והאיום במבחן הושמטו לשמירת ביטחון. מסר ראשון הטוען שתגובה לסכנה היא בהכרח הילחם/ברח הושמט לפי D58; תיעוד src_fixes. אין הצעת לחימה, והתווסף ספק כעילה לפנייה למבוגר.",
+   "digest_ref": "sources/digests/5b.md:65",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+     "unit": "חוסן – ויסות דרך הגוף",
+     "title": "מפחיד, אבל לא מסוכן",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_5_Mafhid_Lo_Mesukan.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-visut-6-linshom-leat",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ספטמבר–אוקטובר",
+   "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+   "unit": "חוסן – ויסות דרך הגוף",
+   "unit_order": 6,
+   "unit_size": 6,
+   "title": "לנשום לאט",
+   "src_text": "sources/text/5/Visut_6_Linshom_Leat.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_6_Linshom_Leat.pptx",
+   "sensitivity": "med",
+   "seq": 8,
+   "slides": 14,
+   "words_slides": 583,
+   "words_notes": 685,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו הבועות, תרגול ויומן אדם. כיווץ הברכיים הוחלף בהתבוננות; אין שיתוף פיות, עצירת נשימה או מאמץ. מדחומי ביופידבק והטענה שהנשימה תמיד נפגעת ראשונה הושמטו לפי D58 (src_fixes); נשמר מסר הנשיפה האיטית ללא הבטחת הצלחה אישית.",
+   "digest_ref": "sources/digests/5b.md:75",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "מיומנויות לחיזוק כוחות וחוסן להתנהלות מיטבית בשגרה ובחירום (ספטמבר–אוקטובר)",
+     "unit": "חוסן – ויסות דרך הגוף",
+     "title": "לנשום לאט",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Visut_6_Linshom_Leat.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-golshim-leshinuy",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (נובמבר)",
+   "unit": "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+   "unit_order": 1,
+   "unit_size": 4,
+   "title": "גולשים לשינוי",
+   "src_text": "sources/text/5/Golshim_Leshinuy.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Golshim_Leshinuy.pptx",
+   "sensitivity": "med",
+   "seq": 9,
+   "slides": 26,
+   "words_slides": 862,
+   "words_notes": 787,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו נכון/לא נכון בגרסה אנלוגית, כרטיסי בחירה, ערכים ואמנה. שני כרטיסים מתוך12 הועדפו להעמקה; המשחק והקוד האתי המקוונים הושמטו כתלות לא מאומתת. כרטיסי EMF מוצגים מן המקור ולא תומללו בניחוש.",
+   "digest_ref": "sources/digests/5b.md:85",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "התנהלות מיטבית ברשת ומניעת פגיעה (נובמבר)",
+     "unit": "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+     "title": "גולשים לשינוי",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Golshim_Leshinuy.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-mitkavnim-beregishut-1",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (נובמבר)",
+   "unit": "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+   "unit_order": 2,
+   "unit_size": 4,
+   "title": "מתקוונים ברגישות לאחר – חלק א",
+   "src_text": "sources/text/5/Mitkavnim_Beregishut1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Mitkavnim_Beregishut1.pptx",
+   "sensitivity": "low-med",
+   "seq": 10,
+   "slides": 24,
+   "words_slides": 769,
+   "words_notes": 733,
+   "load": "balanced",
+   "flags": [
+    "no-closing-messages"
+   ],
+   "note": "נבחרה פתיחת הזיכרון ושתי תחנות מקור ללא תלות חיצונית; גורילה, יום בלי טלפונים וקליפ אגם הושמטו ולא הוחלפו בסרטים. סקר עצב של ילדים הושמט. אין במקור מסר מסכם לתלמידים ולכן אין messages; ענן הכוונה הפך לכרטיס יציאה.",
+   "digest_ref": "sources/digests/5b.md:95",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "התנהלות מיטבית ברשת ומניעת פגיעה (נובמבר)",
+     "unit": "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+     "title": "מתקוונים ברגישות לאחר – חלק א",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Mitkavnim_Beregishut1.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-mitkavnim-beregishut-2",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (נובמבר)",
+   "unit": "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+   "unit_order": 3,
+   "unit_size": 4,
+   "title": "מתקוונים ברגישות לאחר – חלק ב",
+   "src_text": "sources/text/5/Mitkavnim_Beregishut2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Mitkavnim_Beregishut2.pptx",
+   "sensitivity": "med",
+   "seq": 11,
+   "slides": 22,
+   "words_slides": 559,
+   "words_notes": 675,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו ההגדרה, ארבעת מאפייני האמפתיה, שני הכיסאות ופוסטים. הסרטון הושמט, ואת מושג האמפתיה לומדים מן ההגדרה והדגמה. שני פוסטים נבחרו מתוך ארבעה; סיכום היחידה התלוי בעבר הושמט.",
+   "digest_ref": "sources/digests/5b.md:105",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "התנהלות מיטבית ברשת ומניעת פגיעה (נובמבר)",
+     "unit": "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+     "title": "מתקוונים ברגישות לאחר – חלק ב",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Mitkavnim_Beregishut2.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-omdim-lezad",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר",
+   "section": "התנהלות מיטבית ברשת ומניעת פגיעה (נובמבר)",
+   "unit": "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+   "unit_order": 4,
+   "unit_size": 4,
+   "title": "עומדים מהצד? לא, עומדים לצד!",
+   "src_text": "sources/text/5/Omdim_Lezad.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Omdim_Lezad.pptx",
+   "sensitivity": "med",
+   "seq": 12,
+   "slides": 29,
+   "words_slides": 1687,
+   "words_notes": 1197,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו שישה תפקידים, מקרה דנה ומקרה המשחק ודרכי התערבות. הסרטון, נתונים מספריים ותיאור סטריאוטיפי של הנפגע הושמטו. מקרי קניון ומסיבת פיגמות הושמטו לטובת עומק. המקור כולל טענה מחקרית כללית; נשמרה כציטוט עם הבהרה למורה שאינה הבטחה לאירוע מסוים.",
+   "digest_ref": "sources/digests/5b.md:115",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "התנהלות מיטבית ברשת ומניעת פגיעה (נובמבר)",
+     "unit": "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+     "title": "עומדים מהצד? לא, עומדים לצד!",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Omdim_Lezad.pptx"
+    }
+   ]
+  },
+  {
+   "slug": "g5-gizanut-hakol-beyachad-1",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר–דצמבר",
+   "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+   "unit": "הכל ביחד זה אנחנו",
+   "unit_order": 1,
+   "unit_size": 5,
+   "title": "הכול ביחד זה אני",
+   "src_text": "sources/text/5/Gizanut_Hakol_Beyachad_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Hakol_Beyachad_1.pptx",
+   "sensitivity": "low-med",
+   "seq": 13,
+   "slides": 17,
+   "words_slides": 658,
+   "words_notes": 211,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו פאזל זהות, רמזים ומעגלי דמיון ושוני. תמונת המקור17 נבדקה; נבחרו שישה פרטים מהותיים, בלי חובה לחשוף משפחה או תאריך לידה. ניחוש שמות פומבי הותאם להזדהות מרצון.",
+   "digest_ref": "sources/digests/5b.md:125",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "הכל ביחד זה אנחנו",
+     "title": "הכול ביחד זה אני",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Hakol_Beyachad_1.pptx"
+    },
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "",
+     "title": "הכול ביחד זה אני",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Hakol_Beyachad_1.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-gizanut-dag-bamaim-2",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר–דצמבר",
+   "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+   "unit": "הכל ביחד זה אנחנו",
+   "unit_order": 2,
+   "unit_size": 5,
+   "title": "כמו דג במים",
+   "src_text": "sources/text/5/Gizanut_Dag_Bamaim_2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Dag_Bamaim_2.pptx",
+   "sensitivity": "low-med",
+   "seq": 14,
+   "slides": 16,
+   "words_slides": 668,
+   "words_notes": 198,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו השיר דרך source_slide, זיהוי תכונות, ציור, תרומה ואקווריום. אין שכפול מלא של שיר מוגן. רפלקציה עצמאית מחליפה את פתיחת נזכרים; אין תיוג חברים כדגים.",
+   "digest_ref": "sources/digests/5b.md:135",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "הכל ביחד זה אנחנו",
+     "title": "כמו דג במים",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Dag_Bamaim_2.pptx"
+    },
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "",
+     "title": "כמו דג במים",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Dag_Bamaim_2.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-gizanut-shayachut-3",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר–דצמבר",
+   "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+   "unit": "הכל ביחד זה אנחנו",
+   "unit_order": 3,
+   "unit_size": 5,
+   "title": "זהות ושייכות",
+   "src_text": "sources/text/5/Gizanut_Shayachut_3.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Shayachut_3.pptx",
+   "sensitivity": "med",
+   "seq": 15,
+   "slides": 20,
+   "words_slides": 570,
+   "words_notes": 204,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו סוגי קבוצות, הגדרה, מפת רגשות והצטרפות עתידית. סרטון הפנדה והטענה שאין לה קרובים הושמטו; אין צורך בתוכן זואולוגי לא מבוסס לשאלת השייכות.",
+   "digest_ref": "sources/digests/5b.md:145",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "הכל ביחד זה אנחנו",
+     "title": "זהות ושייכות",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Shayachut_3.pptx"
+    },
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "",
+     "title": "זהות ושייכות",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Shayachut_3.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-gizanut-hachlala-4",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר–דצמבר",
+   "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+   "unit": "הכל ביחד זה אנחנו",
+   "unit_order": 4,
+   "unit_size": 5,
+   "title": "הכללה ודעה קדומה",
+   "src_text": "sources/text/5/Gizanut_Hachlala_4.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Hachlala_4.pptx",
+   "sensitivity": "med",
+   "seq": 16,
+   "slides": 19,
+   "words_slides": 642,
+   "words_notes": 291,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו תמונות, שתי ההגדרות והקשבה בזוגות. התמונות נבדקו; הנחיות מקור שמעודדות ניחוש זהויות הותאמו לתיאור מול השערה. קשר עין אינו חובה; נזכרים הושמט.",
+   "digest_ref": "sources/digests/5b.md:155",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "הכל ביחד זה אנחנו",
+     "title": "הכללה ודעה קדומה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Hachlala_4.pptx"
+    },
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "",
+     "title": "הכללה ודעה קדומה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Hachlala_4.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-gizanut-zivey-akeshet-5",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "נובמבר–דצמבר",
+   "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+   "unit": "הכל ביחד זה אנחנו",
+   "unit_order": 5,
+   "unit_size": 5,
+   "title": "צבעי הקשת",
+   "src_text": "sources/text/5/Gizanut_Zivey_Akeshet_5.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Zivey_Akeshet_5.pptx",
+   "sensitivity": "low-med",
+   "seq": 17,
+   "slides": 15,
+   "words_slides": 631,
+   "words_notes": 250,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו עלילת סרטון הצבעים מתוך הערות, משחק התוכי, רפלקציה ואמנה. הסרטון עצמו והניקוד הושמטו; סיכום המסע התלוי בשיעורים קודמים אינו בליבה. אין העתקת שיר הסיום.",
+   "digest_ref": "sources/digests/5b.md:165",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "הכל ביחד זה אנחנו",
+     "title": "צבעי הקשת",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Zivey_Akeshet_5.pptx"
+    },
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (נובמבר–דצמבר)",
+     "unit": "",
+     "title": "צבעי הקשת",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Gizanut_Zivey_Akeshet_5.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-meishirim-mabat",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ינואר",
+   "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+   "unit": "במבט רחב: פיתוח רגישות למצבי פגיעה בין חברים",
+   "unit_order": 1,
+   "unit_size": 3,
+   "title": "מישירים מבט לחבר במצוקה",
+   "src_text": "sources/text/5/Meishirim_Mabat.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Meishirim_Mabat.pptx",
+   "sensitivity": "med",
+   "seq": 18,
+   "slides": 22,
+   "words_slides": 1021,
+   "words_notes": 409,
+   "load": "balanced",
+   "flags": [
+    "no-closing-messages"
+   ],
+   "note": "נשמרו נועם ואייל בסיכום, רצף הבחירה, מקרים, אפשרויות עזרה ומב״ט. רצף פומבי הפך לכתיבה פרטית. אין מסרי סיכום במקור: מודל19 הוא כלי תוכן, לא messages. סרטון ומקרי אלימות נוספים הושמטו לצמצום עומס.",
+   "digest_ref": "sources/digests/5b.md:175",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+     "unit": "במבט רחב: פיתוח רגישות למצבי פגיעה בין חברים",
+     "title": "מישירים מבט לחבר במצוקה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Meishirim_Mabat.pptx"
+    },
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+     "unit": "",
+     "title": "מישירים מבט לחבר במצוקה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Meishirim_Mabat.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-tafkid-lekol-tafkid",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ינואר",
+   "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+   "unit": "במבט רחב: פיתוח רגישות למצבי פגיעה בין חברים",
+   "unit_order": 2,
+   "unit_size": 3,
+   "title": "תפקיד לכל תפקיד",
+   "src_text": "sources/text/5/Tafkid_Lekol_Tafkid.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Tafkid_Lekol_Tafkid.pptx",
+   "sensitivity": "med",
+   "seq": 19,
+   "slides": 26,
+   "words_slides": 1475,
+   "words_notes": 810,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו פער כוונה־מעשה, ששת התפקידים, יהלי, כרטיסי מיון ושינוי תפקיד. מקרה מיקה ודניאל הושמט כדי להעמיק במקרה אחד ולמנוע העמסת עלבונות. נבחרו שלושה משפטים בטוחים מהנספח; אין משימת תצפית מתייגת על חברים. מסיכום21 הוסר רק דיווח הכרנו, נשמרו התובנות.",
+   "digest_ref": "sources/digests/5b.md:185",
+   "package": "pkg-g5-b",
+   "listings": [
+    {
+     "grade": 5,
+     "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+     "unit": "במבט רחב: פיתוח רגישות למצבי פגיעה בין חברים",
+     "title": "תפקיד לכל תפקיד",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Tafkid_Lekol_Tafkid.pptx"
+    },
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+     "unit": "",
+     "title": "תפקיד לכל תפקיד",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Tafkid_Lekol_Tafkid.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-sipuru-shel-hagibor",
+   "title": "סיפורו של הגיבור הראשי",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "ינואר",
+   "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+   "unit": "במבט רחב: פיתוח רגישות למצבי פגיעה בין חברים",
+   "src_text": "sources/text/5/Sipuru_Shel_Hagibor.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Sipuru_Shel_Hagibor.pptx",
+   "sensitivity": "med",
+   "seq": 20,
+   "slides": 31,
+   "words_slides": 1389,
+   "words_notes": 1019,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו כוכב הים, פתקים לדמויות, מקרי הפגיעה וכוחות העומד מהצד. קוצרו שיתופים ומקרי הקבוצות. רוח נושבת והחזרה לשיעור הקודם יצאו למניעת חשיפה ותלות; סיכום היחידה הושמט. הסרטון הוחלף בסיפור קצר במילים שלנו מתוך תוכן המקור, ללא העתקת המשל.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "unit_order": 3,
+   "unit_size": 3,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (ינואר)",
+     "unit": "",
+     "title": "סיפורו של הגיבור הראשי",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Sipuru_Shel_Hagibor.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-sipuro-shel-regesh",
+   "title": "סיפורו של רגש",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "פברואר",
+   "section": "תהליכי למידה (פברואר)",
+   "unit": "חוסן - ויסות דרך הקוגניציה",
+   "src_text": "sources/text/5/Sipuro_Shel_Regesh.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Sipuro_Shel_Regesh.pptx",
+   "sensitivity": "med",
+   "seq": 21,
+   "slides": 16,
+   "words_slides": 839,
+   "words_notes": 944,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו שני חלקי יומן אדם, קשת הרגשות ומשחק הרגש הנסתר. נשימות, משימות שבועיות ומובילי החוסן יצאו כדי שהשיעור יעמוד לבדו; הדיון ברגשות מעורבים שולב במשחק. ההסבר המוחי הפשטני לא נכלל.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "תהליכי למידה (פברואר)",
+     "unit": "חוסן - ויסות דרך הקוגניציה",
+     "title": "סיפורו של רגש",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Sipuro_Shel_Regesh.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-zoom",
+   "title": "זום",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "פברואר",
+   "section": "תהליכי למידה (פברואר)",
+   "unit": "חוסן - ויסות דרך הקוגניציה",
+   "src_text": "sources/text/5/Zoom.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Zoom.pptx",
+   "sensitivity": "med",
+   "seq": 22,
+   "slides": 15,
+   "words_slides": 712,
+   "words_notes": 1674,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו ענן המחשבות, הרחבה ומיקוד הקשב ויישום בדוגמאות. בוטל בימוי ענישה כיתתית שעלול לעורר חרדה, ובמקומו גירוי נייר גלוי; ניסוי הדחקה מתייחס ללימון ניטרלי. חלופת ספר זום החיצונית לא נבחרה כי המשאב לא אומת. משפט הסיכום המתאר מה נלמד הושמט לפי D65.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "תהליכי למידה (פברואר)",
+     "unit": "חוסן - ויסות דרך הקוגניציה",
+     "title": "זום",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Zoom.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-lenael-machshavot",
+   "title": "לנהל את המחשבות",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "פברואר",
+   "section": "תהליכי למידה (פברואר)",
+   "unit": "חוסן - ויסות דרך הקוגניציה",
+   "src_text": "sources/text/5/Lenael_Machshavot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Lenael_Machshavot.pptx",
+   "sensitivity": "med",
+   "seq": 23,
+   "slides": 14,
+   "words_slides": 666,
+   "words_notes": 796,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו הלימון, יומן אדם, מחשבה–רגש–התנהגות ועבודת מזכרות. ציור זמין מחליף תלות בחפץ מהבית; יצאו משימות שבועיות ודיווח מובילים.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "תהליכי למידה (פברואר)",
+     "unit": "חוסן - ויסות דרך הקוגניציה",
+     "title": "לנהל את המחשבות",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Lenael_Machshavot.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-mazpen-ishi",
+   "title": "המצפן האישי",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "פברואר",
+   "section": "תהליכי למידה (פברואר)",
+   "unit": "חוסן - ויסות דרך הקוגניציה",
+   "src_text": "sources/text/5/Mazpen_Ishi.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Mazpen_Ishi.pptx",
+   "sensitivity": "low-med",
+   "seq": 24,
+   "slides": 16,
+   "words_slides": 784,
+   "words_notes": 936,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו כף היד, בירור ההתנהגות, יומן הבחירות והמצפן. הורדו תלות במובילים ושיעורי עבר. משפטי סיכום של מה עשינו הושמטו לפי D65; נשמרה התובנה הסוגרת.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "תהליכי למידה (פברואר)",
+     "unit": "חוסן - ויסות דרך הקוגניציה",
+     "title": "המצפן האישי",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Mazpen_Ishi.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-machshava-machshila",
+   "title": "המחשבה שהכשילה אותי",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "פברואר",
+   "section": "תהליכי למידה (פברואר)",
+   "unit": "חוסן - ויסות דרך הקוגניציה",
+   "src_text": "sources/text/5/Machshava_Machshila.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Machshava_Machshila.pptx",
+   "sensitivity": "med",
+   "seq": 25,
+   "slides": 20,
+   "words_slides": 961,
+   "words_notes": 1068,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו אסוציאציות, יומן אדם, ארבעת הצעדים ותרגול דנה. הקומיקס השבועי הועבר ליישום בכיתה. הסיכום שומר את משפטי התובנה ומסיר תיאור פעילות לפי D65; הנוסח המלא של המודל נגיש במקור.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "תהליכי למידה (פברואר)",
+     "unit": "חוסן - ויסות דרך הקוגניציה",
+     "title": "המחשבה שהכשילה אותי",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Machshava_Machshila.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-sholtim-bainyanim-1",
+   "title": "שולטים בעניינים - שלט הפיקוד",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מיניות בריאה ומניעת פגיעה מינית",
+   "src_text": "sources/text/5/Sholtim_Bainyanim_1.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Sholtim_Bainyanim_1.pptx",
+   "sensitivity": "med",
+   "seq": 26,
+   "slides": 22,
+   "words_slides": 1071,
+   "words_notes": 538,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו שלט הפיקוד, עומר, שתי משימות הקבוצות והפתרון. כפתורים מטפוריים הובהרו בלי טענה על קריאת מחשבות או ביטול תוצאה. כל מסרי הסיום נשמרו; הבטחת שליטה תמידית מקבלת הבהרה במערך שהפגיעה אינה באחריות הנפגע.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+     "unit": "",
+     "title": "שולטים בעניינים - שלט הפיקוד",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Sholtim_Bainyanim_1.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-miniyut-reshst-2",
+   "title": "חשיפה לתכנים לא מותאמים ברשת",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מיניות בריאה ומניעת פגיעה מינית",
+   "src_text": "sources/text/5/Miniyut_Reshst_2.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Miniyut_Reshst_2.pptx",
+   "sensitivity": "med-high",
+   "seq": 27,
+   "slides": 25,
+   "words_slides": 1143,
+   "words_notes": 974,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו קופסת מסתורין, הגבלת גיל, ארבעת הסימנים ושלושת תרחישי המקור בניסוח כללי. הוחלפו עמידה פומבית ושאלות על חשיפה אישית בכתיבה על דמויות. אין הצגת תוכן מיני, צילום או פתיחת מצלמות.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+     "unit": "",
+     "title": "חשיפה לתכנים לא מותאמים ברשת",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Miniyut_Reshst_2.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-meniat-afazat-tmunot-poganiyot",
+   "title": "מניעת הפצת תמונות פוגעניות",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מרץ",
+   "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+   "unit": "מיניות בריאה ומניעת פגיעה מינית",
+   "src_text": "sources/text/5/Meniat_Afazat_Tmunot_Poganiyot.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Meniat_Afazat_Tmunot_Poganiyot.pptx",
+   "sensitivity": "med-high",
+   "seq": 28,
+   "slides": 23,
+   "words_slides": 899,
+   "words_notes": 466,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו קומיקס המקור, סריקת רגשות וקולות, הגבר/החלש וגבול השיתוף. מי כמוני האישי הוחלף בשאלה על מצב דמיוני. הקומיקס מוצג מהמקור דרך source_slide; לא הועתקו תמונותיו.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "מיניות בריאה ומניעת פגיעה מינית (מרץ)",
+     "unit": "",
+     "title": "מניעת הפצת תמונות פוגעניות",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Meniat_Afazat_Tmunot_Poganiyot.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-ashan-dak",
+   "title": "עש\"ן ד\"ק",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מרץ–אפריל",
+   "section": "הרגשות שלנו (מרץ–אפריל)",
+   "unit": "חוסן - עיבוד חוויות אישיות",
+   "src_text": "sources/text/5/Ashan_Dak.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Ashan_Dak.pptx",
+   "sensitivity": "med",
+   "seq": 29,
+   "slides": 14,
+   "words_slides": 562,
+   "words_notes": 1331,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו יומן הגביע, דימויי תגובה, חמישה שלבים ומקרה איתמר. בוטלה עמידה בפינות לפי חשיפה אישית; הדימויים נבחנים על דמויות. משימות שבועיות ומובילים יצאו.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "הרגשות שלנו (מרץ–אפריל)",
+     "unit": "חוסן - עיבוד חוויות אישיות",
+     "title": "עש\"ן ד\"ק",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Ashan_Dak.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-etgar-koshi",
+   "title": "עיבוד חוויה של אתגר או קושי",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מרץ–אפריל",
+   "section": "הרגשות שלנו (מרץ–אפריל)",
+   "unit": "חוסן - עיבוד חוויות אישיות",
+   "src_text": "sources/text/5/Etgar_Koshi.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Etgar_Koshi.pptx",
+   "sensitivity": "med-high",
+   "seq": 30,
+   "slides": 14,
+   "words_slides": 731,
+   "words_notes": 1023,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו סיפור טופי בגרסה עדינה, ארבע השאלות, זוגות ואוורור בסיום. בלון בדמיון לפי חלופת המקור, בלי תלות בחומר או רעש פיצוץ. שיתוף אישי הומר לדמות דמיונית; המסרים המקוריים נשמרו והוסבר שאין חובה לחוש הקלה.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "הרגשות שלנו (מרץ–אפריל)",
+     "unit": "חוסן - עיבוד חוויות אישיות",
+     "title": "עיבוד חוויה של אתגר או קושי",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Etgar_Koshi.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-hakshava-peila",
+   "title": "הקשבה פעילה",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מרץ–אפריל",
+   "section": "הרגשות שלנו (מרץ–אפריל)",
+   "unit": "חוסן - עיבוד חוויות אישיות",
+   "src_text": "sources/text/5/Hakshava_Peila.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Hakshava_Peila.pptx",
+   "sensitivity": "med",
+   "seq": 31,
+   "slides": 16,
+   "words_slides": 834,
+   "words_notes": 1349,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו תנוחת ההקשבה, יומן אדם, סימולציית גלי/נטע וארבעת הצעדים. סרטון ההמחשה הושמט לטובת סימולציה המרכזית; משימות שבועיות יצאו. קשר עין הוצע כבחירה נוחה ולא כתנאי להקשבה.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "הרגשות שלנו (מרץ–אפריל)",
+     "unit": "חוסן - עיבוד חוויות אישיות",
+     "title": "הקשבה פעילה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Hakshava_Peila.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-milim-vemaasim",
+   "title": "מילים ומעשים המשאירים סימנים בלב",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מאי",
+   "section": "חברות, סובלנות ומניעת אלימות (מאי)",
+   "unit": "הדרך אל האחר מתחילה בי",
+   "src_text": "sources/text/5/Milim_Vemaasim.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Milim_Vemaasim.pptx",
+   "sensitivity": "med",
+   "seq": 32,
+   "slides": 34,
+   "words_slides": 1380,
+   "words_notes": 1080,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו ניסוי הנייר, פיוס, מדחום, סרגל ושמש כלים. הוחלפו מלחמה בדף וזיכרון אישי קשה בקימוט עדין ובדמות. דמיון מודרך/מוזיקה יצאו. מסרי האמצע נשארים בציטוט במקומם; הסיום כולל תובנות בלבד לפי D65.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "unit_order": 1,
+   "unit_size": 3,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (מאי)",
+     "unit": "הדרך אל האחר/ת מתחילה בי",
+     "title": "מילים ומעשים המשאירים סימנים בלב",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Milim_Vemaasim.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-misrey-ani",
+   "title": "מסרי אני",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מאי",
+   "section": "חברות, סובלנות ומניעת אלימות (מאי)",
+   "unit": "הדרך אל האחר מתחילה בי",
+   "src_text": "sources/text/5/Misrey_Ani.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Misrey_Ani.pptx",
+   "sensitivity": "med",
+   "seq": 33,
+   "slides": 32,
+   "words_slides": 2077,
+   "words_notes": 862,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו השוואת מסרים, יהלי ואגם, ארבעה רכיבים, תרגול ואקווריום מדעים. המחזה תלויה במתנדבים הוחלפה בהקראה קצרה. מקור סיום 27 נשמר; מסרי 25–26 נקראים בציטוט במקומם. נוסחי המקור המוחלטים מסויגים במערך: הכלי מסייע אך אינו מבטיח פתרון.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "unit_order": 2,
+   "unit_size": 3,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (מאי)",
+     "unit": "הדרך אל האחר/ת מתחילה בי",
+     "title": "מסרי אני",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Misrey_Ani.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-mitnaschim-misrey-ani",
+   "title": "מתנסחים במסרי אני",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "מאי",
+   "section": "חברות, סובלנות ומניעת אלימות (מאי)",
+   "unit": "הדרך אל האחר מתחילה בי",
+   "src_text": "sources/text/5/Mitnaschim_Misrey_Ani.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Mitnaschim_Misrey_Ani.pptx",
+   "sensitivity": "med",
+   "seq": 34,
+   "slides": 25,
+   "words_slides": 1222,
+   "words_notes": 316,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו בניית משחק זיכרון, החלפת הקלפים ודיון ביישום. חמשת זוגות המקור צומצמו לשלושה כדי להשאיר זמן להסבר ולתיקון. סיכום יחידה, הוראת כיתה ב ואמנה מתמשכת יצאו; אין תלות בשיעור קודם. כל מסרי 13–14 נשמרו.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "unit_order": 3,
+   "unit_size": 3,
+   "listings": [
+    {
+     "section": "חברות, סובלנות ומניעת אלימות (מאי)",
+     "unit": "הדרך אל האחר/ת מתחילה בי",
+     "title": "מתנסחים במסרי אני",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Mitnaschim_Misrey_Ani.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-isum-hemla",
+   "title": "חמלה",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "יוני",
+   "section": "סיום וסיכום שנה (יוני)",
+   "unit": "חוסן – יישום הכלים בהקשר החברתי",
+   "src_text": "sources/text/5/Isum_Hemla.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Isum_Hemla.pptx",
+   "sensitivity": "med",
+   "seq": 36,
+   "slides": 14,
+   "words_slides": 670,
+   "words_notes": 879,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו יומן דן ואדם, ההגדרה, דוגמאות הטיול והמשחק, וחמלה עצמית. משימות שבועיות ומובילים הושמטו. ההגדרה מוצגת מהמקור ומוסברת; כל מסרי הסיום נשמרו.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "סיום וסיכום שנה (יוני)",
+     "unit": "חוסן – יישום הכלים בהקשר החברתי",
+     "title": "חמלה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Isum_Hemla.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-isum-sikum",
+   "title": "סיכום",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "יוני",
+   "section": "סיום וסיכום שנה (יוני)",
+   "unit": "חוסן – יישום הכלים בהקשר החברתי",
+   "src_text": "sources/text/5/Isum_Sikum.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Isum_Sikum.pptx",
+   "sensitivity": "med",
+   "seq": 37,
+   "slides": 19,
+   "words_slides": 619,
+   "words_notes": 1010,
+   "load": "balanced",
+   "flags": [
+    "unit-summary-lesson"
+   ],
+   "note": "שיעור סיכום עומד בפני עצמו לפי D52: מפת הכלים מוסברת מחדש. נשמרו דני, עש״ן ד״ק, ארבעת הצעדים, שמש המצבים ואוורור בדמיון. אין מסרי סיום במקור: שקף 19 הוא הוראות המשך, ולכן אין messages. סיפור יחידתי ומובילים הושמטו.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "סיום וסיכום שנה (יוני)",
+     "unit": "חוסן – יישום הכלים בהקשר החברתי",
+     "title": "סיכום",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Isum_Sikum.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-sium-shana",
+   "title": "המסע שלי השנה",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "יוני",
+   "section": "סיום וסיכום שנה (יוני)",
+   "unit": "חוסן – יישום הכלים בהקשר החברתי",
+   "src_text": "sources/text/5/Sium_Shana.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Sium_Shana.pptx",
+   "sensitivity": "low-med",
+   "seq": 38,
+   "slides": 23,
+   "words_slides": 766,
+   "words_notes": 281,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו סרטון האפרוח, כוחות המסע, קרוסלה ויעד. הקרוסלה קוצרה לשלושה סבבים ומוגנת בזכות לעבור. קלפי תמונה נשארים במצגת המקורית; אין תמלול מומצא. תיאור נושאי השנה יצא, והתובנה הסוגרת נשמרה לפי D65.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "סיום וסיכום שנה (יוני)",
+     "unit": "חוסן – יישום הכלים בהקשר החברתי",
+     "title": "המסע שלי השנה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Sium_Shana.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
+   "slug": "g5-tarbut-pnai",
+   "title": "תרבות הפנאי והתנהגויות סיכון",
+   "grade": 5,
+   "grades_served": [
+    5
+   ],
+   "month": "יוני",
+   "section": "סיום וסיכום שנה (יוני)",
+   "unit": "חוסן – יישום הכלים בהקשר החברתי",
+   "src_text": "sources/text/5/Tarbut_Pnai.md",
+   "src_url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Tarbut_Pnai.pptx",
+   "sensitivity": "med",
+   "seq": 39,
+   "slides": 22,
+   "words_slides": 752,
+   "words_notes": 885,
+   "load": "balanced",
+   "flags": [],
+   "note": "נשמרו האבנים הגדולות, תכנון חופשה, זמן סיכוי/סיכון, רמזור וגבולות. רעיון הסרטון סופר בקצרה במילים שלנו; לא הועתק המשל. כל מסרי הסיום נשמרו והובהרה אחריות המבוגרים להגנה.",
+   "digest_ref": "sources/digests/5c.md",
+   "package": "pkg-g5-c",
+   "listings": [
+    {
+     "section": "סיום וסיכום שנה (יוני)",
+     "unit": "חוסן – יישום הכלים בהקשר החברתי",
+     "title": "תרבות הפנאי והתנהגויות סיכון",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Tarbut_Pnai.pptx",
+     "grade": 5
+    }
+   ]
+  },
+  {
    "slug": "g6-ptichat-shana-tashpaz",
    "grade": 6,
    "grades_served": [
@@ -926,6 +2983,7 @@
    "slug": "g6-yarid-simanim-lashana-achadasha",
    "grade": 6,
    "grades_served": [
+    5,
     6
    ],
    "seq": 36,
@@ -947,12 +3005,23 @@
    ],
    "note": "נכתב לשכבות ה'–ו' (תיקיית 5Grade).",
    "digest_ref": "sources/digests/6b.md:346",
-   "package": "pkg-g6-11"
+   "package": "pkg-g6-11",
+   "listings": [
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "ראש השנה",
+     "title": "\"יריד סימנים לשנה החדשה\"",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Yarid_Simanim_Lashana_Achadasha.pptx",
+     "grade": 5
+    }
+   ]
   },
   {
    "slug": "g6-marbim-besimcha",
    "grade": 6,
    "grades_served": [
+    4,
+    5,
     6
    ],
    "seq": 37,
@@ -975,12 +3044,29 @@
    ],
    "note": "נכתב לכיתות ד'–ו'.",
    "digest_ref": "sources/digests/6b.md:364",
-   "package": "pkg-g6-11"
+   "package": "pkg-g6-11",
+   "listings": [
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת פורים",
+     "title": "מרבים בשמחה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Marbim_Besimcha.pptx",
+     "grade": 4
+    },
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת פורים",
+     "title": "מרבים בשמחה",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/6Grade/Mamlachti/Marbim_Besimcha.pptx",
+     "grade": 5
+    }
+   ]
   },
   {
    "slug": "g6-hameroz-memitzraim",
    "grade": 6,
    "grades_served": [
+    5,
     6
    ],
    "seq": 38,
@@ -1002,12 +3088,23 @@
    ],
    "note": "מסדרת החירום 'מאגרי כוח' (חרבות ברזל), שכבות ה'–ו'; 9 שקפים, בלי סגירה.",
    "digest_ref": "sources/digests/6b.md:384",
-   "package": "pkg-g6-11"
+   "package": "pkg-g6-11",
+   "listings": [
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת פסח",
+     "title": "המירוץ ממצרים",
+     "url": "https://meyda.education.gov.il/files/shefi/cherum/Haravot_Barzel/Talmidim/Maagarei_Koach/Mamlachti_Hameroz_Memitzraim.pptx",
+     "grade": 5
+    }
+   ]
   },
   {
    "slug": "g6-beikvot-ziurav",
    "grade": 6,
    "grades_served": [
+    4,
+    5,
     6
    ],
    "seq": 39,
@@ -1029,12 +3126,30 @@
    ],
    "note": "נכתב לשכבות ד'–ו' (תיקיית 5Grade).",
    "digest_ref": "sources/digests/6b.md:403",
-   "package": "pkg-g6-12"
+   "package": "pkg-g6-12",
+   "listings": [
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "יום הזיכרון לשואה ולגבורה",
+     "title": "ציורים ליום השואה – בעקבות ציוריו של פאול קור",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Beikvot_Ziurav.pptx",
+     "grade": 4
+    },
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "יום הזיכרון לשואה ולגבורה",
+     "title": "ציורים ליום השואה – בעקבות ציוריו של פאול קור",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Beikvot_Ziurav.pptx",
+     "grade": 5
+    }
+   ]
   },
   {
    "slug": "g6-yom-zikaron",
    "grade": 6,
    "grades_served": [
+    4,
+    5,
     6
    ],
    "seq": 40,
@@ -1056,12 +3171,30 @@
    ],
    "note": "נכתב לשכבות ד'–ו' (תיקיית 4Grade); אינו זהה ל'זיכרון ועצמאות' של ז'–ט'.",
    "digest_ref": "sources/digests/6b.md:423",
-   "package": "pkg-g6-12"
+   "package": "pkg-g6-12",
+   "listings": [
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+     "title": "\"קופסת צבעים\"",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Yom_Zikaron.pptx",
+     "grade": 4
+    },
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+     "title": "\"קופסת צבעים\"",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Yom_Zikaron.pptx",
+     "grade": 5
+    }
+   ]
   },
   {
    "slug": "g6-kita-echpatit-medura-echpatit",
    "grade": 6,
    "grades_served": [
+    4,
+    5,
     6
    ],
    "seq": 41,
@@ -1083,7 +3216,23 @@
    ],
    "note": "נכתב לכיתה ד' (ש' 1, תיקיית 4Grade).",
    "digest_ref": "sources/digests/6b.md:443",
-   "package": "pkg-g6-12"
+   "package": "pkg-g6-12",
+   "listings": [
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת ל\"ג בעומר",
+     "title": "כיתה אכפתית מדורה אכפתית",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Kita_Echpatit_Medura_Echpatit.pptx",
+     "grade": 4
+    },
+    {
+     "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+     "unit": "לקראת ל\"ג בעומר",
+     "title": "כיתה אכפתית מדורה אכפתית",
+     "url": "https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Kita_Echpatit_Medura_Echpatit.pptx",
+     "grade": 5
+    }
+   ]
   },
   {
    "slug": "g7-hatchalot-1",
@@ -3860,6 +6009,119 @@
    "effort_score": 6.4,
    "slides": 96,
    "words": 5914
+  },
+  {
+   "id": "pkg-g4-a",
+   "grade": 4,
+   "unit": "תוספת כיתה 4",
+   "units": [
+    "פתיחת שנה",
+    "הכיתה האכפתית",
+    "פיתוח רגישות למצבי פגיעה בין חברים",
+    "בעד עצמי",
+    "לפעמים אני מסכים ולפעמים אני לא מסכים",
+    "נגיעות מתאימות ולא מתאימות",
+    "שמירה על פרטיות, צמצום חשיפה לתכנים לא מותאמים וחשיבה לפני צילום, שיתוף והפצה",
+    "נקודת מבט",
+    "סיום וסיכום שנה"
+   ],
+   "lessons": [
+    "g4-havila-laderech",
+    "g4-matchilim-shana",
+    "g4-kita-ichpatit-1",
+    "g4-adam-ichpati-2",
+    "g4-simcha-lakita-3",
+    "g4-yad-alalev",
+    "g4-zvita-balev-1",
+    "g4-zvita-balev-2",
+    "g4-zvita-balev-3",
+    "g4-bead-azmi",
+    "g4-maskim-lo-maskim",
+    "g4-negiot",
+    "g4-keshet-pratyut",
+    "g4-hachamim-bareshet",
+    "g4-samim-filter",
+    "g4-achraim-bareshet",
+    "g4-mitbonenim-batmuna",
+    "g4-mabat-lemabat",
+    "g4-shachar-kaduregel"
+   ],
+   "slides": 621,
+   "words": 38737,
+   "effort": "L"
+  },
+  {
+   "id": "pkg-g5-b",
+   "grade": 5,
+   "unit": "תוספת כיתה 5",
+   "units": [
+    "פתיחת שנה",
+    "חוסן – ויסות דרך הגוף",
+    "כללי התנהגות לקידום מרחב חיובי ובטוח ברשת, בדגש על פיתוח רגישות חברתית ואמפתיה",
+    "הכל ביחד זה אנחנו",
+    "במבט רחב: פיתוח רגישות למצבי פגיעה בין חברים"
+   ],
+   "lessons": [
+    "g5-ptichat-shana",
+    "g5-ptichat-shana-tashpaz",
+    "g5-visut-1-yazanu-laderech",
+    "g5-visut-2-bhira",
+    "g5-visut-3-hamelech-amar",
+    "g5-visut-4-tsumet-lev",
+    "g5-visut-5-mafhid-lo-mesukan",
+    "g5-visut-6-linshom-leat",
+    "g5-golshim-leshinuy",
+    "g5-mitkavnim-beregishut-1",
+    "g5-mitkavnim-beregishut-2",
+    "g5-omdim-lezad",
+    "g5-gizanut-hakol-beyachad-1",
+    "g5-gizanut-dag-bamaim-2",
+    "g5-gizanut-shayachut-3",
+    "g5-gizanut-hachlala-4",
+    "g5-gizanut-zivey-akeshet-5",
+    "g5-meishirim-mabat",
+    "g5-tafkid-lekol-tafkid"
+   ],
+   "slides": 375,
+   "words": 27961,
+   "effort": "L"
+  },
+  {
+   "id": "pkg-g5-c",
+   "grade": 5,
+   "unit": "תוספת כיתה 5",
+   "units": [
+    "במבט רחב: פיתוח רגישות למצבי פגיעה בין חברים",
+    "חוסן - ויסות דרך הקוגניציה",
+    "מיניות בריאה ומניעת פגיעה מינית",
+    "חוסן - עיבוד חוויות אישיות",
+    "הדרך אל האחר מתחילה בי",
+    "חוסן – יישום הכלים בהקשר החברתי"
+   ],
+   "lessons": [
+    "g5-sipuru-shel-hagibor",
+    "g5-sipuro-shel-regesh",
+    "g5-zoom",
+    "g5-lenael-machshavot",
+    "g5-mazpen-ishi",
+    "g5-machshava-machshila",
+    "g5-sholtim-bainyanim-1",
+    "g5-miniyut-reshst-2",
+    "g5-meniat-afazat-tmunot-poganiyot",
+    "g5-ashan-dak",
+    "g5-etgar-koshi",
+    "g5-hakshava-peila",
+    "g5-milim-vemaasim",
+    "g5-misrey-ani",
+    "g5-mitnaschim-misrey-ani",
+    "g5-isum-hemla",
+    "g5-isum-sikum",
+    "g5-sium-shana",
+    "g5-tarbut-pnai"
+   ],
+   "slides": 395,
+   "words": 35508,
+   "effort": "L"
   }
  ],
  "gaps": [
@@ -4073,6 +6335,30 @@
    "title": "למצוא את הדרך שלי (שיעור 4) ושיעור 5 (שם לא בטקסט)",
    "urls": [],
    "note": "מפת היחידה ב'דלת למקום בטוח ברשת' ש' 2 מונה 5 שיעורים; באתר 1–3."
+  },
+  {
+   "id": "gap-19",
+   "type": "not-yet-published",
+   "grade": 4,
+   "month": "נובמבר",
+   "unit": "התמודדות",
+   "title": "תכנים יעלו בהמשך",
+   "urls": [
+    "https://shefi.education.gov.il/life-skills/mamlachti-elementary/"
+   ],
+   "note": "האתר מציין שתכנים יעלו בהמשך; אין מספר שיעורים משוער ואין תוכן מומצא."
+  },
+  {
+   "id": "gap-20",
+   "type": "not-yet-published",
+   "grade": 4,
+   "month": "דצמבר",
+   "unit": "חברות, סובלנות ומניעת אלימות",
+   "title": "תכנים יעלו בהמשך",
+   "urls": [
+    "https://shefi.education.gov.il/life-skills/mamlachti-elementary/"
+   ],
+   "note": "האתר מציין שתכנים יעלו בהמשך; אין מספר שיעורים משוער ואין תוכן מומצא."
   }
  ],
  "excluded": [
@@ -4210,6 +6496,105 @@
    "text": "sources/text/9/Osher_2.md",
    "into": "g9-osher-2",
    "why": "same-deck-relisted"
+  },
+  {
+   "grade": 4,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פורים",
+   "title": "מרבים בשמחה",
+   "text": "sources/text/6/Marbim_Besimcha.md",
+   "into": "g6-marbim-besimcha",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 4,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "יום הזיכרון לשואה ולגבורה",
+   "title": "ציורים ליום השואה – בעקבות ציוריו של פאול קור",
+   "text": "sources/text/6/Beikvot_Ziurav.md",
+   "into": "g6-beikvot-ziurav",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 4,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+   "title": "\"קופסת צבעים\"",
+   "text": "sources/text/6/Yom_Zikaron.md",
+   "into": "g6-yom-zikaron",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 4,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת ל\"ג בעומר",
+   "title": "כיתה אכפתית מדורה אכפתית",
+   "text": "sources/text/6/Kita_Echpatit_Medura_Echpatit.md",
+   "into": "g6-kita-echpatit-medura-echpatit",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 5,
+   "section": "סיום וסיכום שנה (יוני)",
+   "unit": "",
+   "title": "פנייה לעזרה - שחר וקייטנת הכדורגל",
+   "text": "sources/text/4/Shachar_Kaduregel.md",
+   "into": "g4-shachar-kaduregel",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 5,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "ראש השנה",
+   "title": "\"יריד סימנים לשנה החדשה\"",
+   "text": "sources/text/6/Yarid_Simanim_Lashana_Achadasha.md",
+   "into": "g6-yarid-simanim-lashana-achadasha",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 5,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פורים",
+   "title": "מרבים בשמחה",
+   "text": "sources/text/6/Marbim_Besimcha.md",
+   "into": "g6-marbim-besimcha",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 5,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת פסח",
+   "title": "המירוץ ממצרים",
+   "text": "sources/text/6/Mamlachti_Hameroz_Memitzraim.md",
+   "into": "g6-hameroz-memitzraim",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 5,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "יום הזיכרון לשואה ולגבורה",
+   "title": "ציורים ליום השואה – בעקבות ציוריו של פאול קור",
+   "text": "sources/text/6/Beikvot_Ziurav.md",
+   "into": "g6-beikvot-ziurav",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 5,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "שיח רגשי לרגל יום הזיכרון לחללי צה\"ל",
+   "title": "\"קופסת צבעים\"",
+   "text": "sources/text/6/Yom_Zikaron.md",
+   "into": "g6-yom-zikaron",
+   "why": "same-source-url; existing output preserved"
+  },
+  {
+   "grade": 5,
+   "section": "בזיקה ללוח השנה – שיעורי הכ\"חות שבדרך למועדים מיוחדים",
+   "unit": "לקראת ל\"ג בעומר",
+   "title": "כיתה אכפתית מדורה אכפתית",
+   "text": "sources/text/6/Kita_Echpatit_Medura_Echpatit.md",
+   "into": "g6-kita-echpatit-medura-echpatit",
+   "why": "same-source-url; existing output preserved"
   }
  ],
  "sequence": {
@@ -4342,6 +6727,78 @@
    "g9-sium-shana",
    "g7-shana-tova",
    "g7-yom-zikaron"
+  ],
+  "4": [
+   "g4-havila-laderech",
+   "g4-matchilim-shana",
+   "g4-kita-ichpatit-1",
+   "g4-adam-ichpati-2",
+   "g4-simcha-lakita-3",
+   "g4-yad-alalev",
+   "g4-zvita-balev-1",
+   "g4-zvita-balev-2",
+   "g4-zvita-balev-3",
+   "g4-bead-azmi",
+   "g4-maskim-lo-maskim",
+   "g4-negiot",
+   "g4-keshet-pratyut",
+   "g4-hachamim-bareshet",
+   "g4-samim-filter",
+   "g4-achraim-bareshet",
+   "g4-mitbonenim-batmuna",
+   "g4-mabat-lemabat",
+   "g4-shachar-kaduregel",
+   "g6-marbim-besimcha",
+   "g6-beikvot-ziurav",
+   "g6-yom-zikaron",
+   "g6-kita-echpatit-medura-echpatit"
+  ],
+  "5": [
+   "g5-ptichat-shana",
+   "g5-ptichat-shana-tashpaz",
+   "g5-visut-1-yazanu-laderech",
+   "g5-visut-2-bhira",
+   "g5-visut-3-hamelech-amar",
+   "g5-visut-4-tsumet-lev",
+   "g5-visut-5-mafhid-lo-mesukan",
+   "g5-visut-6-linshom-leat",
+   "g5-golshim-leshinuy",
+   "g5-mitkavnim-beregishut-1",
+   "g5-mitkavnim-beregishut-2",
+   "g5-omdim-lezad",
+   "g5-gizanut-hakol-beyachad-1",
+   "g5-gizanut-dag-bamaim-2",
+   "g5-gizanut-shayachut-3",
+   "g5-gizanut-hachlala-4",
+   "g5-gizanut-zivey-akeshet-5",
+   "g5-meishirim-mabat",
+   "g5-tafkid-lekol-tafkid",
+   "g5-sipuru-shel-hagibor",
+   "g5-sipuro-shel-regesh",
+   "g5-zoom",
+   "g5-lenael-machshavot",
+   "g5-mazpen-ishi",
+   "g5-machshava-machshila",
+   "g5-sholtim-bainyanim-1",
+   "g5-miniyut-reshst-2",
+   "g5-meniat-afazat-tmunot-poganiyot",
+   "g5-ashan-dak",
+   "g5-etgar-koshi",
+   "g5-hakshava-peila",
+   "g5-milim-vemaasim",
+   "g5-misrey-ani",
+   "g5-mitnaschim-misrey-ani",
+   "g4-shachar-kaduregel",
+   "g5-isum-hemla",
+   "g5-isum-sikum",
+   "g5-sium-shana",
+   "g5-tarbut-pnai",
+   "g6-yarid-simanim-lashana-achadasha",
+   "g6-marbim-besimcha",
+   "g6-hameroz-memitzraim",
+   "g6-beikvot-ziurav",
+   "g6-yom-zikaron",
+   "g6-kita-echpatit-medura-echpatit"
   ]
  },
  "meta": {
@@ -4364,8 +6821,8 @@
   ],
   "effort": "per-lesson weight from words (1.0/1.2/1.4/1.6 at <1000/<1600/<2400/2400+), +0.2 if 35+ slides, load (-0.2..+0.4), sensitivity (high +0.3), double-period +0.3, assets-missing +0.2, grade adaptation +0.2; package S < 4.0 <= M <= 7.0 < L",
   "source_rows": {
-   "manifest": 136,
-   "index": 128
+   "manifest": 204,
+   "index": 196
   },
   "counts": {
    "6": {
@@ -4405,14 +6862,33 @@
     "packages": 8
    },
    "total": {
-    "site_rows": 136,
-    "built": 116,
-    "taught": 122,
-    "merged": 9,
+    "site_rows": 204,
+    "built": 173,
+    "taught": 190,
+    "merged": 20,
     "excluded": 4,
-    "gaps": 18,
-    "packages": 35
+    "gaps": 20,
+    "packages": 38
+   },
+   "4": {
+    "site_rows": 23,
+    "built": 19,
+    "taught": 23,
+    "merged": 4,
+    "excluded": 0,
+    "gaps": 2,
+    "packages": 1
+   },
+   "5": {
+    "site_rows": 45,
+    "built": 38,
+    "taught": 45,
+    "merged": 7,
+    "excluded": 0,
+    "gaps": 0,
+    "packages": 2
    }
-  }
+  },
+  "shared_existing": "Grade 4/5 associations for existing g6 lessons live in this inventory and the hub only. Existing lesson YAML/plans/decks retain their original grade labels and URLs."
  }
 }

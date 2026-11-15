@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מעבירים את זה הלאה · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="pair" viewBox="0 0 220 240" data-cat="people" data-he="זוג">
+    <path d="M80 140 L110 186" stroke="#63b1af" stroke-width="15" stroke-linecap="round" />
+    <path d="M140 140 L110 186" stroke="#f7ae4d" stroke-width="15" stroke-linecap="round" />
+    <g fill="#63b1af" transform="translate(-6 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(106 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="heart" viewBox="0 0 200 180" data-cat="feelings" data-he="לב" data-color="#e57373">
+    <path d="M100 168 C40 124 12 92 12 58 C12 30 34 12 58 12 C76 12 90 22 100 38 C110 22 124 12 142 12 C166 12 188 30 188 58 C188 92 160 124 100 168 Z" fill="currentColor" />
+    <path d="M38 58 C38 46 46 37 58 36" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".55" />
+  </symbol>
+
+  <symbol id="network" viewBox="0 0 220 200" data-cat="screens" data-he="רשת">
+    <g stroke="#13100e" stroke-width="5" stroke-linecap="round">
+      <path d="M110 100 L40 44 M110 100 L180 36 M110 100 L194 128 M110 100 L128 176 M110 100 L28 140 M40 44 L180 36 M40 44 L28 140 M194 128 L128 176 M180 36 L194 128" />
+    </g>
+    <g stroke="#fff" stroke-width="5" paint-order="stroke">
+      <circle cx="110" cy="100" r="26" fill="#f7ae4d" />
+      <circle cx="40" cy="44" r="18" fill="#63b1af" />
+      <circle cx="180" cy="36" r="16" fill="#8c82c1" />
+      <circle cx="194" cy="128" r="18" fill="#619f88" />
+      <circle cx="128" cy="176" r="16" fill="#63b1af" />
+      <circle cx="28" cy="140" r="16" fill="#8c82c1" />
+    </g>
+  </symbol>
+
+  <symbol id="hands-help" viewBox="0 0 220 220" data-cat="safety" data-he="ידיים עוזרות">
+   <g transform="translate(110 110) scale(.92) translate(-110 -100)">
+    <g transform="translate(64 158) rotate(40)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#3f8f8d" />
+      <path d="M13 -12 L27 -32" stroke="#63b1af" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#63b1af" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+    <g transform="translate(156 42) rotate(220)">
+      <rect x="-21" y="2" width="42" height="42" rx="7" fill="#e08f36" />
+      <path d="M13 -12 L27 -32" stroke="#f7ae4d" stroke-width="14" stroke-linecap="round" />
+      <path d="M-18 8 V-44 C-18 -58 -10 -66 0 -66 C10 -66 18 -58 18 -44 V8 Z" fill="#f7ae4d" />
+      <path d="M-9 -62 V-46 M0 -65 V-46 M9 -62 V-46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".85" />
+    </g>
+   </g>
+  </symbol>
+
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="magnifier" viewBox="0 0 200 200" data-cat="learning" data-he="זכוכית מגדלת" data-color="#63b1af">
+    <path d="M138 138 L178 178" stroke="currentColor" stroke-width="26" stroke-linecap="round" />
+    <path d="M122 122 L140 140" stroke="#13100e" stroke-width="14" />
+    <circle cx="84" cy="84" r="58" fill="#e6f2f1" stroke="#13100e" stroke-width="12" />
+    <path d="M52 76 C54 62 64 54 78 52" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="sprout" viewBox="0 0 180 210" data-cat="growth" data-he="נבט">
+    <path d="M90 124 C90 100 92 82 90 62" fill="none" stroke="#4a8571" stroke-width="8" stroke-linecap="round" />
+    <path d="M90 84 C70 84 46 70 40 48 C62 44 84 56 90 84 Z" fill="#619f88" />
+    <path d="M90 68 C100 48 124 34 148 40 C140 62 116 74 90 68 Z" fill="#619f88" />
+    <path d="M42 136 H138 L126 198 H54 Z" fill="#f7ae4d" />
+    <rect x="32" y="118" width="116" height="24" rx="6" fill="#e08f36" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<h1>מעבירים את זה הלאה</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעבירים את זה הלאה"><g filter="url(#rough)"><use href="#hands-help" x="134.0" y="94.0" width="352.0" height="352.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<h2>משחק המראה</h2><p class="sub">בזוגות, אחד מוביל תנועות איטיות והשני משקף</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="משחק המראה"><g filter="url(#rough)"><use href="#pair" x="134.0" y="78.0" width="352.0" height="384.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<h2>לראות את האחר</h2><p class="sub">חשבו לבד מה עזר במראה, השוו בזוג ושתפו דרך להראות בכיתה שאנו קשובים</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="לראות את האחר"><g filter="url(#rough)"><use href="#magnifier" x="150.0" y="110.0" width="320.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<h2>בקבוק האכפתיות</h2><p class="sub">שלפו פתק בתור בקבוצה והשלימו אותו</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בקבוק האכפתיות"><g filter="url(#rough)"><use href="#heart" x="150.0" y="126.0" width="320.0" height="288.0" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<h2>שרשרת של מעשים טובים</h2><p class="sub">בנו שלושה חוליות: מישהו עוזר, המקבל מרגיש אחרת, והוא עושה טוב לאדם נוסף</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שרשרת של מעשים טובים"><g filter="url(#rough)"><use href="#network" x="134.0" y="110.0" width="352.0" height="320.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<h2>מעשה קטן למחר</h2><p class="sub">בחרו מעשה אכפתי שאפשר לעשות בכיתה בלי ציוד מיוחד</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעשה קטן למחר"><g filter="url(#rough)"><use href="#sprout" x="166.0" y="102.0" width="288.0" height="336.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<h2>כשאני עושה טוב לאחרים, ההשפעה החיובית מתרחבת למעגלים נוספים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="כשאני עושה טוב לאחרים, ההשפעה החיובית מתרחבת למעגלים נוספים."><g filter="url(#rough)"><use href="#hands-help" x="134.0" y="94.0" width="352.0" height="352.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="8">
+  <div class="frame">
+    <div class="txt">
+<h2>מעשים מתחשבים כוללים נתינה, עזרה ותשומת לב לזולת ולסביבה.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעשים מתחשבים כוללים נתינה, עזרה ותשומת לב לזולת ולסביבה."><g filter="url(#rough)"><use href="#hands-help" x="134.0" y="94.0" width="352.0" height="352.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="9">
+  <div class="frame">
+    <div class="txt">
+<h2>מעשים אכפתיים אינם חייבים להיות מורכבים - כל אחד/ת יכול/ה לעשותם.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעשים אכפתיים אינם חייבים להיות מורכבים - כל אחד/ת יכול/ה לעשותם."><g filter="url(#rough)"><use href="#hands-help" x="134.0" y="94.0" width="352.0" height="352.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="10">
+  <div class="frame">
+    <div class="txt">
+<h2>מעשי אכפתיות, התחשבות ונדיבות תורמים לאווירה בכיתה, ובכלל.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעשי אכפתיות, התחשבות ונדיבות תורמים לאווירה בכיתה, ובכלל."><g filter="url(#rough)"><use href="#hands-help" x="134.0" y="94.0" width="352.0" height="352.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="11">
+  <div class="frame">
+    <div class="txt">
+<h2>מעשים מתחשבים ואכפתיים מובילים לרגשות חיוביים אצל המעניקים והמקבלים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מעשים מתחשבים ואכפתיים מובילים לרגשות חיוביים אצל המעניקים והמקבלים."><g filter="url(#rough)"><use href="#hands-help" x="134.0" y="94.0" width="352.0" height="352.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="12">
+  <div class="frame">
+    <div class="txt">
+<h2>מה ניקח מהשיעור?</h2><ol class="pts"><li class="fragment">איזה מעשה אכפתי אנסה?</li><li class="fragment">כיצד אבדוק שהוא עוזר למקבל?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מה ניקח מהשיעור?"><g filter="url(#rough)"><use href="#note" x="182.0" y="110.0" width="256.0" height="320.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

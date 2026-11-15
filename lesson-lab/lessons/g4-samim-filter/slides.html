@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שמים פילטר ברשת · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="chat" viewBox="0 0 220 190" data-cat="talk" data-he="צ׳אט">
+    <path d="M40 10 H120 A30 30 0 0 1 150 40 V66 A30 30 0 0 1 120 96 H64 L28 122 L34.8 95.5 A30 30 0 0 1 10 66 V40 A30 30 0 0 1 40 10 Z" fill="#63b1af" />
+    <path d="M38 42 H122 M38 64 H98" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+    <path d="M100 76 H180 A30 30 0 0 1 210 106 V130 A30 30 0 0 1 185.2 159.5 L204 182 L156 160 H100 A30 30 0 0 1 70 130 V106 A30 30 0 0 1 100 76 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <g fill="#13100e"><circle cx="112" cy="118" r="7" /><circle cx="140" cy="118" r="7" /><circle cx="168" cy="118" r="7" /></g>
+  </symbol>
+
+  
+  <symbol id="laptop" viewBox="0 0 240 160" data-cat="screens" data-he="מחשב נייד" data-color="#13100e">
+    <rect x="40" y="12" width="160" height="110" rx="12" fill="currentColor" />
+    <rect x="50" y="22" width="140" height="90" rx="4" fill="#fff" />
+    <path d="M14 124 H226 Q226 142 208 142 H32 Q14 142 14 124 Z" fill="#847c74" />
+    <rect x="98" y="124" width="44" height="6" rx="3" fill="currentColor" />
+  </symbol>
+
+  <symbol id="camera" viewBox="0 0 220 170" data-cat="screens" data-he="מצלמה" data-color="#13100e">
+    <path d="M72 42 L86 18 H134 L148 42 Z" fill="currentColor" />
+    <rect x="12" y="38" width="196" height="120" rx="18" fill="currentColor" />
+    <rect x="28" y="52" width="26" height="14" rx="4" fill="#f7ae4d" />
+    <circle cx="110" cy="98" r="44" fill="#fff" />
+    <circle cx="110" cy="98" r="32" fill="#63b1af" />
+    <circle cx="98" cy="86" r="9" fill="#fff" opacity=".8" />
+  </symbol>
+
+  
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="magnifier" viewBox="0 0 200 200" data-cat="learning" data-he="זכוכית מגדלת" data-color="#63b1af">
+    <path d="M138 138 L178 178" stroke="currentColor" stroke-width="26" stroke-linecap="round" />
+    <path d="M122 122 L140 140" stroke="#13100e" stroke-width="14" />
+    <circle cx="84" cy="84" r="58" fill="#e6f2f1" stroke="#13100e" stroke-width="12" />
+    <path d="M52 76 C54 62 64 54 78 52" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="red-line" viewBox="0 0 320 92" data-cat="choices" data-he="קו אדום" data-color="#e57373">
+    <path d="M24 34 C84 16 124 52 164 34 C204 16 244 52 300 34 L316 30 L304 46 L316 62 L300 56 C244 74 204 38 164 56 C124 74 84 38 24 56 L6 62 L18 46 L6 30 Z" fill="currentColor" />
+    <path d="M30 41 C86 24 124 59 164 41 C204 24 242 59 292 41" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".4" />
+  </symbol>
+
+  <symbol id="scale" viewBox="0 0 240 210" data-cat="choices" data-he="מאזניים">
+    <path d="M76 198 H164 L150 180 H90 Z" fill="#13100e" />
+    <rect x="114" y="40" width="12" height="146" fill="#13100e" />
+    <circle cx="120" cy="34" r="10" fill="#13100e" />
+    <rect x="24" y="50" width="192" height="10" rx="5" fill="#13100e" />
+    <path d="M40 60 L18 128 M40 60 L62 128 M200 60 L178 128 M200 60 L222 128" stroke="#13100e" stroke-width="4" />
+    <path d="M12 126 H68 C66 146 52 156 40 156 C28 156 14 146 12 126 Z" fill="#63b1af" />
+    <path d="M172 126 H228 C226 146 212 156 200 156 C188 156 174 146 172 126 Z" fill="#f7ae4d" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<h1>שמים פילטר ברשת</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שמים פילטר ברשת"><g filter="url(#rough)"><use href="#camera" x="134.0" y="134.0" width="352.0" height="272.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<h2>טלפון שבור</h2><p class="sub">העבירו בקבוצה משפט ניטרלי קצר בלחש ובדקו איך הגיע לאחרון</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="טלפון שבור"><g filter="url(#rough)"><use href="#chat" x="134.0" y="118.0" width="352.0" height="304.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<h2>תמונה אחת וקהל משתנה</h2><p class="sub">במקרה יום ההולדת ילד מועד ומצלמים אותו</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="תמונה אחת וקהל משתנה"><g filter="url(#rough)"><use href="#camera" x="134.0" y="134.0" width="352.0" height="272.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<h2>משווים מקרים</h2><p class="sub">כל קבוצה מקבלת מקרה אחד: סלפי שנשלח לחבר, סרטון שיוחס בטעות לילד או תמונת החלמה</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="משווים מקרים"><g filter="url(#rough)"><use href="#scale" x="118.0" y="102.0" width="384.0" height="336.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-source" data-n="5">
+  <div class="frame">
+    <div class="txt">
+<h2>עוברים למצגת המקורית</h2><p class="sub">שקפים 12, 13, 14</p><a class="go" href="https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/4Grade/Mamlachti/Samim_Filter.pptx" target="_blank" rel="noopener">למצגת המקורית ←</a>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מחשב נייד — עוברים למצגת המקורית"><g filter="url(#rough)"><use href="#laptop" x="118.0" y="142.0" width="384.0" height="256.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<h2>שלוש מסננות</h2><ol class="pts"><li class="fragment">אמת?</li><li class="fragment">מכבד?</li><li class="fragment">נחוץ?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלוש מסננות"><g filter="url(#rough)"><use href="#magnifier" x="150.0" y="110.0" width="320.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="7">
+  <div class="frame">
+    <div class="txt">
+<h2>עוצרים את ההפצה</h2><p class="sub">כתבו תגובה בטוחה כשמקבלים תמונה מביכה של חבר</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="עוצרים את ההפצה"><g filter="url(#rough)"><use href="#red-line" x="115.0" y="213.9" width="390.0" height="112.1" color="#e57373"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="8">
+  <div class="frame">
+    <div class="txt">
+<h2>מה ניקח מהשיעור?</h2><ol class="pts"><li class="fragment">אילו שלוש שאלות אשאל לפני שיתוף?</li><li class="fragment">למה שליחה לחבר אינה הסכמה להפצה?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מה ניקח מהשיעור?"><g filter="url(#rough)"><use href="#note" x="182.0" y="110.0" width="256.0" height="320.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

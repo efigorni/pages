@@ -125,7 +125,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--ink-3);fon
       <div class="deck-num">{{ lessons|length }}</div>
       <div class="deck-txt">
         <h1>מערכי שיעור לכישורי חיים</h1>
-        <p>הכ״חות שבדרך · כיתות ו׳–ט׳ · ברוח חותם והמגדלור</p>
+        <p>הכ״חות שבדרך · כיתות {{ grades[0].label }}–{{ grades[-1].label }} · ברוח חותם והמגדלור</p>
       </div>
     </div>
   </div>
@@ -156,7 +156,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 22px 40px;color:var(--ink-3);fon
 {% for x in lessons %}
     <article class="card" style="--c:{{ x.color }};animation-delay:{{ [loop.index0, 22]|min * 22 }}ms" data-grade="{{ x.grades|join(' ') }}" data-month="{{ x.months|join('|') }}" data-unit="{{ x.unit }}">
       <span class="motif" aria-hidden="true">{{ x.motif }}</span>
-      <span class="card-cat"><span class="dot"></span>כיתה {{ x.grade_label }} · {{ x.month }}</span>
+      <span class="card-cat"><span class="dot"></span>{{ 'כיתות' if x.grades|length > 1 else 'כיתה' }} {{ x.grade_label }} · {{ x.month }}</span>
       <h2 class="card-t"><a href="{{ x.slug }}/index.html">{{ x.title }}</a></h2>
       <p class="card-sub">{{ x.unit }}{% if x.lesson_no %} · {{ x.lesson_no }}{% endif %}</p>
       <p class="card-s">{{ x.question }}</p>
