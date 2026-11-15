@@ -13,6 +13,7 @@ class ForwardBuildTests(unittest.TestCase):
     def test_kicker_option_preserves_every_other_slide_field(self):
         kit = LL.Kit()
         legacy = LL.load_lesson(LL.LESSONS / 'g7-makom-baolam')
+        legacy['slide_kickers'] = True
         legacy['steps'][0]['body'].extend([
             {'video': {'title': 'סרטון', 'url': 'https://example.org/video', 'before': 'מה רואים?', 'art': 'heart'}},
             {'source_slide': {'slides': [1], 'why': 'תמונה', 'art': 'heart'}},
