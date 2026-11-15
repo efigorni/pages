@@ -15,6 +15,8 @@ Exit code 1 when any lesson has a validation error or a PDF fails.
 from __future__ import annotations
 
 import argparse
+import heapq
+import json
 import shutil
 import subprocess
 import sys
@@ -26,6 +28,32 @@ import build as B  # noqa: E402
 import lessonlib as LL  # noqa: E402
 
 GRADE_COLOR = {4: '#ad5876', 5: '#4c78a8', 6: '#3f8f8d', 7: '#e08f36', 8: '#6c60b0', 9: '#4a8571'}
+
+
+def teaching_order(cards: list[dict], sequences: dict) -> list[dict]:
+    """Keep shared lessons in each grade's teaching order, preferring the existing card order."""
+    by_slug = {c['slug']: c for c in cards}
+    following = {slug: set() for slug in by_slug}
+    pending = dict.fromkeys(by_slug, 0)
+    for sequence in sequences.values():
+        present = list(dict.fromkeys(slug for slug in sequence if slug in by_slug))
+        for before, after in zip(present, present[1:]):
+            if after not in following[before]:
+                following[before].add(after)
+                pending[after] += 1
+    ready = [(by_slug[slug]['key'], slug) for slug, count in pending.items() if not count]
+    heapq.heapify(ready)
+    ordered = []
+    while ready:
+        _, slug = heapq.heappop(ready)
+        ordered.append(by_slug[slug])
+        for after in following[slug]:
+            pending[after] -= 1
+            if not pending[after]:
+                heapq.heappush(ready, (by_slug[after]['key'], after))
+    if len(ordered) != len(cards):
+        raise ValueError('Curriculum sequences disagree on the order of shared lessons')
+    return ordered
 
 
 def motif(i: int, c: str) -> str:
@@ -91,7 +119,8 @@ def main(argv: list[str]) -> int:
             'color': GRADE_COLOR.get(L.get('grade'), '#3f8f8d'), 'has_pdf': (d / 'slides.pdf').exists(),
             'key': (order.get(d.name, 10_000), L.get('grade') or 0, d.name),
         })
-    cards.sort(key=lambda c: c['key'])
+    sequences = json.loads(LL.INVENTORY.read_text(encoding='utf-8')).get('sequence', {})
+    cards = teaching_order(cards, sequences)
     for i, c in enumerate(cards):
         c['motif'] = LL.Markup(motif(i, c['color']))
     grades = sorted({g for c in cards for g in c['grades'] if g in LL.GRADE_LABEL})

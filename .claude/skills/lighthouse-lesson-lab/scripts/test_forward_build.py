@@ -78,6 +78,20 @@ class ForwardBuildTests(unittest.TestCase):
         self.assertIn('data-grade="4 5 7"', html)
         self.assertIn('כיתות ד׳, ה׳, ז׳', html)
 
+    def test_shared_lesson_respects_each_grade_sequence(self):
+        cards = [{'slug': slug, 'key': (i,)} for i, slug in enumerate(
+            ['g4-open', 'shared-june', 'g5-open', 'g5-may', 'g5-close'])]
+        sequences = {'4': ['g4-open', 'shared-june'],
+                     '5': ['g5-open', 'g5-may', 'shared-june', 'g5-close']}
+        ordered = [c['slug'] for c in BA.teaching_order(cards, sequences)]
+        for sequence in sequences.values():
+            self.assertEqual(sequence, [slug for slug in ordered if slug in sequence])
+
+    def test_conflicting_sequences_fail_without_silently_reordering(self):
+        cards = [{'slug': slug, 'key': (i,)} for i, slug in enumerate(['a', 'b'])]
+        with self.assertRaises(ValueError):
+            BA.teaching_order(cards, {'4': ['a', 'b'], '5': ['b', 'a']})
+
 
 if __name__ == '__main__':
     unittest.main()
