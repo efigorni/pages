@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>להביט בתמונה המלאה · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="pair" viewBox="0 0 220 240" data-cat="people" data-he="זוג">
+    <path d="M80 140 L110 186" stroke="#63b1af" stroke-width="15" stroke-linecap="round" />
+    <path d="M140 140 L110 186" stroke="#f7ae4d" stroke-width="15" stroke-linecap="round" />
+    <g fill="#63b1af" transform="translate(-6 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(106 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="thought" viewBox="0 0 200 190" data-cat="talk" data-he="ענן מחשבה">
+    <g fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round">
+      <path d="M184 80 A25 25 0 0 1 164.3 116 A32 32 0 0 1 114.6 135.1 A34 34 0 0 1 58 128.5 A28 28 0 0 1 21.1 99.2 A23 23 0 0 1 21.1 60.8 A28 28 0 0 1 58 31.5 A34 34 0 0 1 114.6 24.9 A32 32 0 0 1 164.3 44 A25 25 0 0 1 184 80 Z" />
+      <circle cx="148" cy="160" r="10" />
+      <circle cx="170" cy="178" r="6" />
+    </g>
+  </symbol>
+
+  <symbol id="key" viewBox="0 0 220 120" data-cat="screens" data-he="מפתח" data-color="#f7ae4d">
+    <path fill="currentColor" fill-rule="evenodd" d="M52 22 A38 38 0 1 1 52 98 A38 38 0 1 1 52 22 Z M52 46 A14 14 0 1 0 52 74 A14 14 0 1 0 52 46 Z" />
+    <rect x="84" y="50" width="122" height="20" rx="6" fill="currentColor" />
+    <rect x="160" y="64" width="14" height="28" rx="4" fill="currentColor" />
+    <rect x="184" y="64" width="14" height="20" rx="4" fill="currentColor" />
+  </symbol>
+
+  <symbol id="bridge" viewBox="0 0 260 170" data-cat="places" data-he="גשר" data-color="#8c82c1">
+    <path d="M20 44 H240" stroke="#13100e" stroke-width="5" stroke-linecap="round" />
+    <path d="M26 44 V58 M66 44 V58 M106 44 V58 M146 44 V58 M186 44 V58 M226 44 V58" stroke="#13100e" stroke-width="4" />
+    <path d="M14 58 H246 V142 H208 A78 60 0 0 0 52 142 H14 Z" fill="currentColor" />
+    <path d="M18 156 q16 -10 32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0" fill="none" stroke="#63b1af" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="magnifier" viewBox="0 0 200 200" data-cat="learning" data-he="זכוכית מגדלת" data-color="#63b1af">
+    <path d="M138 138 L178 178" stroke="currentColor" stroke-width="26" stroke-linecap="round" />
+    <path d="M122 122 L140 140" stroke="#13100e" stroke-width="14" />
+    <circle cx="84" cy="84" r="58" fill="#e6f2f1" stroke="#13100e" stroke-width="12" />
+    <path d="M52 76 C54 62 64 54 78 52" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="puzzle" viewBox="0 0 200 200" data-cat="learning" data-he="חלק פאזל" data-color="#8c82c1">
+    <path d="M48 48 H87 L91 39 A17 17 0 1 1 109 39 L113 48 H152 V87 L161 91 A17 17 0 1 1 161 109 L152 113 V152 H113 L109 143 A17 17 0 1 0 91 143 L87 152 H48 V113 L57 109 A17 17 0 1 0 57 91 L48 87 Z" fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linejoin="round" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<h1>להביט בתמונה המלאה</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="להביט בתמונה המלאה"><g filter="url(#rough)"><use href="#magnifier" x="150.0" y="110.0" width="320.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<h2>מה צ׳ילי חושב?</h2><p class="sub">צ׳ילי המקרר רואה תמונה של מקרר חדש אחרי שהידית שלו נשברה</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מה צ׳ילי חושב?"><g filter="url(#rough)"><use href="#thought" x="150.0" y="118.0" width="320.0" height="304.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<h2>הידית החדשה</h2><p class="sub">גלו שהאיש רצה רק לקנות ידית</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="הידית החדשה"><g filter="url(#rough)"><use href="#key" x="134.0" y="174.0" width="352.0" height="192.0" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<h2>שתי נקודות מבט</h2><p class="sub">בחרו מחלוקת דמיונית או אישית ללא שמות</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שתי נקודות מבט"><g filter="url(#rough)"><use href="#pair" x="134.0" y="78.0" width="352.0" height="384.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<h2>קווה־קווה של שאלות</h2><p class="sub">בזוגות שלפו כרטיס שאלה, ענו על המחלוקת והחליפו תפקידים</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="קווה־קווה של שאלות"><g filter="url(#rough)"><use href="#puzzle" x="150.0" y="110.0" width="320.0" height="320.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<h2>מה התמונה הרחבה משנה?</h2><p class="sub">כתבו פתרון אפשרי למחלוקת אחרי ששמעתם עוד נקודת מבט</p>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מה התמונה הרחבה משנה?"><g filter="url(#rough)"><use href="#bridge" x="115.0" y="142.5" width="390.0" height="255.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<h2>שאילת שאלות על עצמנו ועל האחרים מאפשרת לנו לראות יותר ויותר פרטים.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שאילת שאלות על עצמנו ועל האחרים מאפשרת לנו לראות יותר ויותר פרטים."><g filter="url(#rough)"><use href="#magnifier" x="150.0" y="110.0" width="320.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="8">
+  <div class="frame">
+    <div class="txt">
+<h2>כדי להבין טוב יותר את המצב ואת המעורבים בו, חשוב לנסות להרחיב את נקודת המבט שלנו.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="כדי להבין טוב יותר את המצב ואת המעורבים בו, חשוב לנסות להרחיב את נקודת המבט שלנו."><g filter="url(#rough)"><use href="#magnifier" x="150.0" y="110.0" width="320.0" height="320.0" color="#63b1af"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="9">
+  <div class="frame">
+    <div class="txt">
+<h2>מה ניקח מהשיעור?</h2><ol class="pts"><li class="fragment">איזו שאלה תעזור לי בזמן מחלוקת?</li><li class="fragment">איך אבדיל בין עובדה לפרשנות?</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מה ניקח מהשיעור?"><g filter="url(#rough)"><use href="#note" x="182.0" y="110.0" width="256.0" height="320.0" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>
