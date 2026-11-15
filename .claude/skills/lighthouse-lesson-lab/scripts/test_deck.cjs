@@ -36,7 +36,7 @@ function harness({ phone = false, search = '', hash = '', deferred = false } = {
     history: { replaceState: (_, __, hash) => { location.hash = hash; writes.push(hash); } },
     requestAnimationFrame: callback => { frames.push(callback); return frames.length; },
     document: {
-      querySelectorAll: () => sections, querySelector: () => ({}),
+      querySelectorAll: () => sections, querySelector: () => ({ removeAttribute() {} }),
       documentElement: { classList: { add: value => classes.add(value), remove: value => classes.delete(value) } },
     },
     Reveal, matchMedia: () => media,
@@ -52,6 +52,7 @@ function harness({ phone = false, search = '', hash = '', deferred = false } = {
     resize(phone) { media.matches = phone; if (media.change) media.change(); },
     hash(hash) { location.hash = hash; listeners.hashchange(); },
     scrollToSlide(index) { scroll = index * 600; listeners.scroll(); },
+    reflow() { sections.forEach(section => { section.getBoundingClientRect = () => ({ top: -1 }); }); },
     flush() { frames.splice(0).forEach(callback => callback()); },
     resolve() { resolveInit(); },
   };
@@ -141,6 +142,15 @@ test('resize during asynchronous Reveal initialization waits for ready before de
   assert.equal(h.instances[0].destroyed, true);
   assert.ok(h.classes.has('lesson-reading'));
   assert.equal(h.scroll, 1800);
+});
+
+test('leaving reading uses the tracked slide rather than geometry after viewport reflow', async () => {
+  const h = harness({ phone: true, hash: '#/2' });
+  h.scrollToSlide(4); h.flush();
+  h.reflow();
+  h.resize(false);
+  await Promise.resolve();
+  assert.equal(h.instances[0].index, 4);
 });
 
 test('rapid resize returning to desktop during initialization keeps the existing deck', async () => {

@@ -77,10 +77,11 @@
       }
       reading = true;
       document.documentElement.classList.add('lesson-reading');
+      document.querySelector('.reveal').removeAttribute('role');
       if (window.LessonTheme) window.LessonTheme.decorate(document);
       followHash();
     } else if (!deck) {
-      if (reading) remember(visibleIndex());
+      // The viewport has already resized; keep the hash tracked at the previous phone width.
       reading = false;
       document.documentElement.classList.remove('lesson-reading');
       window.scrollTo(0, 0);
