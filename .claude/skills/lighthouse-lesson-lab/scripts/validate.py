@@ -103,7 +103,7 @@ TOP = {  # key: (type, required)
     'slug': (str, False), 'title': (str, True), 'sub': (str, True), 'grade': (int, True), 'grades_served': (list, False),
     'month': (str, True), 'section': (str, True), 'unit': (str, True), 'unit_order': (int, False),
     'unit_size': (int, False), 'src_text': (str, True), 'src_url': (str, False), 'sensitivity': (str, True),
-    'src_fixes': (list, False), 'latin_ok': (list, False), 'slide_kickers': (bool, False),
+    'src_fixes': (list, False), 'latin_ok': (list, False), 'slide_kickers': (bool, False), 'pdf_backup': (bool, False),
     'format': (str, True), 'question': (str, True), 'takeaways': (list, True), 'prep': (list, True),
     'safe': (list, False), 'time': (dict, True), 'brain_break': (dict, True), 'cover': (dict, True),
     'steps': (list, True),

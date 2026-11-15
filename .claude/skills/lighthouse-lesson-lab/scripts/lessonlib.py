@@ -790,8 +790,8 @@ def derive(data: dict, kit: Kit) -> dict:
         })
 
     # prep: the deck first, then the author's lines, then what the steps imply
-    prep = [Markup(f'<a href="slides.html">המצגת</a> ({len(slides)} שקפים), פתוחה במחשב הכיתה לפני השיעור · '
-                   f'גיבוי: <a href="slides.pdf">PDF</a>')]
+    pdf = ' · גיבוי: <a href="slides.pdf">PDF</a>' if data.get('pdf_backup', True) else ''
+    prep = [Markup(f'<a href="slides.html">המצגת</a> ({len(slides)} שקפים), פתוחה במחשב הכיתה לפני השיעור{pdf}')]
     prep += [md(p) for p in (data.get('prep') or [])]
 
     def prep_from(blocks, where, prefix=''):

@@ -20,6 +20,7 @@ class ForwardBuildTests(unittest.TestCase):
         old = LL.derive(legacy, kit)
         clean = copy.deepcopy(legacy)
         clean['slide_kickers'] = False
+        clean['pdf_backup'] = False
         new = LL.derive(clean, kit)
         self.assertTrue(any(s['kicker'] for s in old['slides']))
         self.assertTrue(all(not s['kicker'] for s in new['slides']))
@@ -27,6 +28,7 @@ class ForwardBuildTests(unittest.TestCase):
         plan, slides, _ = LL.render_lesson(clean, kit)
         self.assertNotIn('class="kicker"', slides)
         self.assertNotIn('class="kicker"', plan)
+        self.assertNotIn('href="slides.pdf"', plan)
         self.assertEqual(old['core_minutes'], new['core_minutes'])
 
     def run_builder(self, args):
