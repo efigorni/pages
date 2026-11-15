@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תרבות הפנאי והתנהגויות סיכון · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="bulb" viewBox="0 0 170 210" data-cat="learning" data-he="נורה (רעיון)" data-color="#f7ae4d">
+    <g stroke="#e08f36" stroke-width="7" stroke-linecap="round">
+      <path d="M85 32 V16 M126 47 L136 35 M44 47 L34 35 M146 86 L161 83 M24 86 L9 83" />
+    </g>
+    <path d="M85 42 C55 42 31 66 31 96 C31 118 44 132 56 146 V162 H114 V146 C126 132 139 118 139 96 C139 66 115 42 85 42 Z" fill="currentColor" />
+    <path d="M54 94 C54 76 64 66 80 63" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".6" />
+    <rect x="56" y="158" width="58" height="30" rx="6" fill="#847c74" />
+    <path d="M60 168 H110 M60 178 H110" stroke="#fff" stroke-width="3" opacity=".6" />
+    <path d="M70 188 H100 L92 200 H78 Z" fill="#13100e" />
+  </symbol>
+
+  <symbol id="calendar" viewBox="0 0 200 200" data-cat="learning" data-he="לוח שנה" data-color="#8c82c1">
+    <rect x="18" y="30" width="164" height="154" rx="14" fill="#fff" />
+    <path d="M18 72 V44 A14 14 0 0 1 32 30 H168 A14 14 0 0 1 182 44 V72 Z" fill="currentColor" />
+    <rect x="18" y="30" width="164" height="154" rx="14" fill="none" stroke="#13100e" stroke-width="5" />
+    <g fill="#13100e"><rect x="52" y="14" width="12" height="32" rx="6" /><rect x="136" y="14" width="12" height="32" rx="6" /></g>
+    <g fill="#e8e2da">
+      <rect x="36" y="88" width="24" height="20" rx="4" /><rect x="70" y="88" width="24" height="20" rx="4" /><rect x="106" y="88" width="24" height="20" rx="4" /><rect x="140" y="88" width="24" height="20" rx="4" />
+      <rect x="36" y="118" width="24" height="20" rx="4" /><rect x="70" y="118" width="24" height="20" rx="4" /><rect x="140" y="118" width="24" height="20" rx="4" />
+      <rect x="36" y="148" width="24" height="20" rx="4" /><rect x="70" y="148" width="24" height="20" rx="4" /><rect x="106" y="148" width="24" height="20" rx="4" />
+    </g>
+    <rect x="106" y="118" width="24" height="20" rx="4" fill="#f7ae4d" />
+    <circle cx="118" cy="128" r="18" fill="none" stroke="#e57373" stroke-width="4" />
+  </symbol>
+
+  
+  <symbol id="signpost" viewBox="0 0 200 240" data-cat="choices" data-he="שלט הכוונה">
+    <ellipse cx="100" cy="228" rx="46" ry="8" fill="#619f88" />
+    <rect x="92" y="24" width="16" height="206" rx="4" fill="#4a443f" />
+    <path d="M20 56 L40 36 H150 V76 H40 Z" fill="#63b1af" />
+    <path d="M180 110 L160 90 H50 V130 H160 Z" fill="#f7ae4d" />
+    <path d="M26 164 L46 144 H144 V184 H46 Z" fill="#8c82c1" />
+  </symbol>
+
+  <symbol id="traffic-light" viewBox="0 0 120 240" data-cat="choices" data-he="רמזור">
+    <rect x="52" y="188" width="16" height="46" fill="#4a443f" />
+    <rect x="24" y="8" width="72" height="184" rx="20" fill="#13100e" />
+    <circle cx="60" cy="46" r="22" fill="#e57373" />
+    <circle cx="60" cy="100" r="22" fill="#f7ae4d" />
+    <circle cx="60" cy="154" r="22" fill="#619f88" />
+  </symbol>
+
+  <symbol id="scale" viewBox="0 0 240 210" data-cat="choices" data-he="מאזניים">
+    <path d="M76 198 H164 L150 180 H90 Z" fill="#13100e" />
+    <rect x="114" y="40" width="12" height="146" fill="#13100e" />
+    <circle cx="120" cy="34" r="10" fill="#13100e" />
+    <rect x="24" y="50" width="192" height="10" rx="5" fill="#13100e" />
+    <path d="M40 60 L18 128 M40 60 L62 128 M200 60 L178 128 M200 60 L222 128" stroke="#13100e" stroke-width="4" />
+    <path d="M12 126 H68 C66 146 52 156 40 156 C28 156 14 146 12 126 Z" fill="#63b1af" />
+    <path d="M172 126 H228 C226 146 212 156 200 156 C188 156 174 146 172 126 Z" fill="#f7ae4d" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover len-m" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<h1>תרבות הפנאי והתנהגויות סיכון</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="לוח שנה"><g filter="url(#rough)"><use href="#calendar" x="180.0" y="120.0" width="250.0" height="250.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<h2>מה חשוב לכם שייכנס לחופשה?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="לוח שנה"><g filter="url(#rough)"><use href="#calendar" x="180.0" y="120.0" width="250.0" height="250.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<h2>למה סדר הבחירה משנה?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="מאזניים"><g filter="url(#rough)"><use href="#scale" x="180.0" y="120.0" width="250.0" height="218.8" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<h2>מתי נרצה להציב גבול פנימי?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="רמזור"><g filter="url(#rough)"><use href="#traffic-light" x="180.0" y="120.0" width="180.0" height="360.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="5">
+  <div class="frame">
+    <div class="txt">
+<h2>איך נשאיר מקום גם לכיף וגם לבטיחות?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="שלטי כיוון"><g filter="url(#rough)"><use href="#signpost" x="180.0" y="120.0" width="250.0" height="300.0" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="6">
+  <div class="frame">
+    <div class="txt">
+<h2>מצבי סיכון יכולים להתפתח במהלך זמן פנוי.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<h2>היכולת להגדיר לעצמנו גבול פנימי, היא כוח שלנו !</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="8">
+  <div class="frame">
+    <div class="txt">
+<h2>עלינו להיות ערניים לגבול הפנימי שלנו על מנת להימנע מלהיות חשופים לסיכונים בזמן החופשה.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="9">
+  <div class="frame">
+    <div class="txt">
+<h2>לכל אחד אחריות לשמור על עצמו ולתכנן את הזמן הפנוי שלו כך שיחווה אותו כזמן סיכוי.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="10">
+  <div class="frame">
+    <div class="txt">
+<h2>מה לוקחים איתנו?</h2><ol class="pts"><li class="fragment">כתבו אבן גדולה שתרצו לשמור לה זמן.</li><li class="fragment">כתבו גבול פנימי ועם מי תתייעצו כשלא בטוחים.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דף לכתיבה"><g filter="url(#rough)"><use href="#note" x="180.0" y="120.0" width="250.0" height="312.5" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>

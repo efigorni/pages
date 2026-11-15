@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>הקשבה פעילה · מצגת</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_assets/reveal/reset.css">
+<link rel="stylesheet" href="../_assets/reveal/reveal.css">
+<link rel="stylesheet" href="../_assets/slides.css">
+</head>
+<body>
+<svg class="kit" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs><filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4" result="n" />
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+  <symbol id="kid-sit" viewBox="0 0 160 240" data-cat="people" data-he="דמות יושבת" data-color="#8c82c1">
+    <g fill="#847c74">
+      <rect x="24" y="108" width="12" height="80" rx="5" />
+      <rect x="24" y="176" width="88" height="12" rx="5" />
+      <rect x="28" y="184" width="9" height="48" rx="3" />
+      <rect x="98" y="184" width="9" height="48" rx="3" />
+    </g>
+    <g fill="currentColor">
+      <circle cx="76" cy="82" r="22" />
+      <path d="M44 176 L46 134 C47 118 58 110 72 110 C88 110 98 120 98 136 L98 176 Z" />
+      <rect x="52" y="152" width="84" height="24" rx="12" />
+      <rect x="112" y="156" width="24" height="68" rx="12" />
+      <rect x="112" y="212" width="40" height="20" rx="10" />
+    </g>
+    <path d="M82 128 L104 160 L128 160" fill="none" stroke="#fff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M82 128 L104 160 L128 160" fill="none" stroke="currentColor" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="pair" viewBox="0 0 220 240" data-cat="people" data-he="זוג">
+    <path d="M80 140 L110 186" stroke="#63b1af" stroke-width="15" stroke-linecap="round" />
+    <path d="M140 140 L110 186" stroke="#f7ae4d" stroke-width="15" stroke-linecap="round" />
+    <g fill="#63b1af" transform="translate(-6 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+    <g fill="#f7ae4d" transform="translate(106 0)">
+      <circle cx="60" cy="88" r="22" />
+      <path d="M26 176 C26 138 40 116 60 116 C80 116 94 138 94 176 Q94 182 88 182 H32 Q26 182 26 176 Z" />
+      <rect x="33" y="170" width="23" height="62" rx="11.5" /><rect x="64" y="170" width="23" height="62" rx="11.5" />
+    </g>
+  </symbol>
+
+  <symbol id="speech" viewBox="0 0 200 170" data-cat="talk" data-he="בועת דיבור">
+    <path d="M50 10 H150 A40 40 0 0 1 190 50 V82 A40 40 0 0 1 150 122 H144 L160 160 L116 122 H50 A40 40 0 0 1 10 82 V50 A40 40 0 0 1 50 10 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+  </symbol>
+
+  <symbol id="chat" viewBox="0 0 220 190" data-cat="talk" data-he="צ׳אט">
+    <path d="M40 10 H120 A30 30 0 0 1 150 40 V66 A30 30 0 0 1 120 96 H64 L28 122 L34.8 95.5 A30 30 0 0 1 10 66 V40 A30 30 0 0 1 40 10 Z" fill="#63b1af" />
+    <path d="M38 42 H122 M38 64 H98" stroke="#fff" stroke-width="8" stroke-linecap="round" />
+    <path d="M100 76 H180 A30 30 0 0 1 210 106 V130 A30 30 0 0 1 185.2 159.5 L204 182 L156 160 H100 A30 30 0 0 1 70 130 V106 A30 30 0 0 1 100 76 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <g fill="#13100e"><circle cx="112" cy="118" r="7" /><circle cx="140" cy="118" r="7" /><circle cx="168" cy="118" r="7" /></g>
+  </symbol>
+
+  
+  <symbol id="note" viewBox="0 0 160 200" data-cat="learning" data-he="דף">
+    <path d="M18 12 H112 L142 42 V188 H18 Z" fill="#fff" stroke="#13100e" stroke-width="5" stroke-linejoin="round" />
+    <path d="M112 12 V42 H142" fill="#e8e2da" stroke="#13100e" stroke-width="4" stroke-linejoin="round" />
+    <path d="M40 72 H118 M40 98 H118 M40 124 H118 M40 150 H92" stroke="#847c74" stroke-width="6" stroke-linecap="round" />
+  </symbol>
+
+  <symbol id="bulb" viewBox="0 0 170 210" data-cat="learning" data-he="נורה (רעיון)" data-color="#f7ae4d">
+    <g stroke="#e08f36" stroke-width="7" stroke-linecap="round">
+      <path d="M85 32 V16 M126 47 L136 35 M44 47 L34 35 M146 86 L161 83 M24 86 L9 83" />
+    </g>
+    <path d="M85 42 C55 42 31 66 31 96 C31 118 44 132 56 146 V162 H114 V146 C126 132 139 118 139 96 C139 66 115 42 85 42 Z" fill="currentColor" />
+    <path d="M54 94 C54 76 64 66 80 63" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".6" />
+    <rect x="56" y="158" width="58" height="30" rx="6" fill="#847c74" />
+    <path d="M60 168 H110 M60 178 H110" stroke="#fff" stroke-width="3" opacity=".6" />
+    <path d="M70 188 H100 L92 200 H78 Z" fill="#13100e" />
+  </symbol>
+
+  </defs></svg>
+<div class="reveal"><div class="slides">
+<section class="s-pic s-cover" data-n="1">
+  <div class="frame">
+    <div class="txt">
+<h1>הקשבה פעילה</h1>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות יושבת"><g filter="url(#rough)"><use href="#kid-sit" x="180.0" y="120.0" width="180.0" height="270.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="2">
+  <div class="frame">
+    <div class="txt">
+<h2>מה עוזר לכם להקשיב בנוחות?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דמות יושבת"><g filter="url(#rough)"><use href="#kid-sit" x="180.0" y="120.0" width="180.0" height="270.0" color="#8c82c1"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="3">
+  <div class="frame">
+    <div class="txt">
+<h2>איך אי-הקשבה משנה את השיחה?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בועות שיחה"><g filter="url(#rough)"><use href="#chat" x="180.0" y="120.0" width="250.0" height="215.9" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="4">
+  <div class="frame">
+    <div class="txt">
+<h2>מה צריך כל צד כדי להישמע?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג"><g filter="url(#rough)"><use href="#pair" x="180.0" y="120.0" width="250.0" height="272.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-source" data-n="5">
+  <div class="frame">
+    <div class="txt">
+<h2>עוברים למצגת המקורית</h2><p class="sub">שקף 13</p><a class="go" href="https://meyda.education.gov.il/files/shefi/kishurey_chayim/Hakochot_Shebaderech/5Grade/Mamlachti/Hakshava_Peila.pptx" target="_blank" rel="noopener">למצגת המקורית ←</a>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="זוג"><g filter="url(#rough)"><use href="#pair" x="180.0" y="120.0" width="250.0" height="272.7" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic " data-n="6">
+  <div class="frame">
+    <div class="txt">
+<h2>מה אפשר להבין בלי לפתור הכול?</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="בועת דיבור"><g filter="url(#rough)"><use href="#speech" x="180.0" y="120.0" width="250.0" height="212.5" color="#13100e"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="7">
+  <div class="frame">
+    <div class="txt">
+<h2>לכולנו קשה לעיתים להקשיב, בעיקר בזמן ויכוח עם האחר.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="8">
+  <div class="frame">
+    <div class="txt">
+<h2>בשעת ויכוח או כשאנחנו חושבים שמישהו מתנגד לנו, אנחנו בהרגשה של &#34;איום&#34;, שיכול לגרום לנו שלא להקשיב.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg len-m" data-n="9">
+  <div class="frame">
+    <div class="txt">
+<h2>גם כשאין לנו סבלנות למי שמדבר כי אנחנו עסוקים במשהו אחר, כדאי לשים לב לכך ולעבור למצב של הקשבה, כדי לא להגיב בדרך לא מתאימה.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg" data-n="10">
+  <div class="frame">
+    <div class="txt">
+<h2>ארבעה שלבים פשוטים יכולים לעזור לנו במצב שבו קשה לנו להקשיב, אם זה בזמן עימות או במצב של חוסר פניות.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-msg len-m" data-n="11">
+  <div class="frame">
+    <div class="txt">
+<h2>כאשר אנחנו פעילים בהקשבה, אנחנו רואים את האחר בלי לבטל את עצמנו. בדרך זו יש סיכוי ששני הצדדים ירגישו שהם הרוויחו וכתוצאה מזה, בעיות יכולות להיפתר וקשר בין חברים עשוי להתחזק.</h2>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="נורה דולקת"><g filter="url(#rough)"><use href="#bulb" x="180.0" y="120.0" width="250.0" height="308.8" color="#f7ae4d"/></g></svg></div>
+  </div>
+</section>
+<section class="s-pic s-exit" data-n="12">
+  <div class="frame">
+    <div class="txt">
+<h2>מה לוקחים איתנו?</h2><ol class="pts"><li class="fragment">נסחו משפט שמראה שהבנתם את הצד השני.</li><li class="fragment">נסחו בקשה שמבטאת גם את הצורך שלכם.</li></ol>    </div>
+    <div class="pic"><svg viewBox="0 0 620 540" role="img" aria-label="דף לכתיבה"><g filter="url(#rough)"><use href="#note" x="180.0" y="120.0" width="250.0" height="312.5" color="#13100e"/></g></svg></div>
+<div class="foot"><span>3 דקות</span><span class="timer" data-sec="180"></span></div>  </div>
+</section>
+</div></div>
+<script src="../_assets/reveal/reveal.js"></script>
+<script src="../_assets/lesson.js"></script>
+<script src="../_assets/deck.js"></script>
+</body>
+</html>
